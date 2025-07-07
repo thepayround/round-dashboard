@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { WhiteLogo } from '../../../shared/components/WhiteLogo'
 
 export const AuthLayout = () => {
   return (
@@ -11,16 +12,14 @@ export const AuthLayout = () => {
         <div className="floating-orb"></div>
       </div>
 
-      {/* Round Logo */}
+      {/* White Logo - Top Left */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8, y: -20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.8, x: -20 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="logo-container"
+        className="absolute top-6 left-6 z-20"
       >
-        <div className="round-logo">
-          <div className="round-logo-inner"></div>
-        </div>
+        <WhiteLogo size="md" />
       </motion.div>
 
       {/* Main Content */}

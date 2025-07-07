@@ -133,12 +133,23 @@
   }
   
   .auth-input:focus {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(212, 23, 200, 0.12);
     border-color: rgba(212, 23, 200, 0.6);
     box-shadow: 
       0 0 0 3px rgba(212, 23, 200, 0.1),
       0 8px 25px rgba(212, 23, 200, 0.15);
     transform: translateY(-1px);
+  }
+
+  /* Fix autofill styles */
+  .auth-input:-webkit-autofill,
+  .auth-input:-webkit-autofill:hover,
+  .auth-input:-webkit-autofill:focus,
+  .auth-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgb(216, 140, 211) inset !important;
+    -webkit-text-fill-color: white !important;
+    background-color: transparent !important;
+    background-image: none !important;
   }
   
   .auth-label {
