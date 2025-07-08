@@ -1,8 +1,58 @@
 {
+  /**
+   * Prettier Configuration for Round Dashboard
+   * 
+   * PURPOSE:
+   * Prettier is an opinionated code formatter that enforces consistent code style.
+   * It automatically formats code to follow predefined rules, eliminating style debates.
+   * 
+   * WHEN TO MODIFY:
+   * - Changing team code style preferences
+   * - Integrating with existing codebases with different styles
+   * - Adapting to specific language requirements
+   * - Following company/project style guides
+   * 
+   * CONFIGURATION OPTIONS:
+   * - semi: Add semicolons at end of statements (true/false)
+   * - trailingComma: Add trailing commas ("none", "es5", "all")
+   * - singleQuote: Use single quotes instead of double (true/false)
+   * - printWidth: Line length before wrapping (number)
+   * - tabWidth: Number of spaces per indentation level (number)
+   * - useTabs: Use tabs instead of spaces (true/false)
+   * - bracketSpacing: Print spaces between brackets (true/false)
+   * - arrowParens: Include parentheses around arrow function params ("always", "avoid")
+   * - endOfLine: Line ending style ("lf", "crlf", "cr", "auto")
+   * 
+   * ALTERNATIVE CONFIGURATIONS:
+   * - For larger teams: printWidth: 100 or 120
+   * - For older codebases: semi: true, trailingComma: "none"
+   * - For strict formatting: bracketSpacing: false, arrowParens: "always"
+   * - For cross-platform: endOfLine: "auto"
+   */
+  
+  // Semicolons at end of statements
   "semi": false,
+  
+  // Trailing commas (helps with cleaner git diffs)
   "trailingComma": "es5",
+  
+  // Use single quotes (more common in JS ecosystem)
   "singleQuote": true,
+  
+  // Maximum line length before wrapping
   "printWidth": 80,
+  
+  // Number of spaces per indentation level
   "tabWidth": 2,
+  
+  // Use spaces instead of tabs
   "useTabs": false
+  
+  // Additional options to consider:
+  // "bracketSpacing": true,        // Print spaces between brackets in object literals
+  // "arrowParens": "avoid",        // Avoid parentheses around single arrow function params
+  // "endOfLine": "lf",            // Use LF line endings (Unix style)
+  // "quoteProps": "as-needed",    // Only quote object properties when needed
+  // "jsxSingleQuote": true,       // Use single quotes in JSX
+  // "bracketSameLine": false      // Put closing bracket on new line
 }

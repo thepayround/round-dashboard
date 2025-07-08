@@ -255,7 +255,6 @@ npm run test:coverage # Run tests with coverage
 
 Required environment variables:
 - `VITE_API_BASE_URL` - Backend API base URL
-- `VITE_SENTRY_DSN` - Error tracking (optional)
 
 ## Documentation Rules
 

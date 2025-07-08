@@ -1,31 +1,108 @@
 {
+  /**
+   * TypeScript Configuration for Round Dashboard
+   * 
+   * PURPOSE:
+   * TypeScript configuration controls how TypeScript compiles your code.
+   * It defines compiler options, file inclusion/exclusion, and project references.
+   * 
+   * WHEN TO MODIFY:
+   * - Changing target JavaScript version
+   * - Adding new path mappings or aliases
+   * - Adjusting strictness levels
+   * - Adding new library dependencies
+   * - Integrating with build tools
+   * 
+   * KEY CONFIGURATION AREAS:
+   * - target: JavaScript version to compile to (ES5, ES2020, ES2022, etc.)
+   * - lib: Built-in library definitions to include
+   * - module: Module system (CommonJS, ESNext, AMD, etc.)
+   * - strict: Enable all strict type checking options
+   * - paths: Path mapping for module resolution
+   * - include/exclude: Files to include/exclude from compilation
+   * 
+   * ALTERNATIVE CONFIGURATIONS:
+   * - For Node.js: target: "ES2020", module: "CommonJS"
+   * - For legacy browsers: target: "ES5", lib: ["ES5", "DOM"]
+   * - For libraries: declaration: true, outDir: "dist"
+   * - For monorepos: composite: true, incremental: true
+   */
+  
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    // JavaScript target version
+    "target": "ES2020",              // Compile to ES2020 (modern browsers)
+    
+    // Class field behavior
+    "useDefineForClassFields": true,  // Use standard class field semantics
+    
+    // Built-in library definitions
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // Include ES2020 + DOM APIs
+    
+    // Module system
+    "module": "ESNext",               // Use latest module syntax
+    
+    // Skip type checking for declaration files (faster compilation)
     "skipLibCheck": true,
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
+    /* Bundler mode (optimized for Vite/Webpack) */
+    "moduleResolution": "bundler",     // Use bundler-specific resolution
+    "allowImportingTsExtensions": true, // Allow importing .ts files
+    "resolveJsonModule": true,         // Allow importing JSON files
+    "isolatedModules": true,           // Each file is a separate module
+    "noEmit": true,                    // Don't emit JS files (bundler handles this)
+    "jsx": "react-jsx",               // Modern JSX transform
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+    /* Strict type checking */
+    "strict": true,                    // Enable all strict options
+    "noUnusedLocals": true,            // Error on unused local variables
+    "noUnusedParameters": true,        // Error on unused parameters
+    "noFallthroughCasesInSwitch": true, // Error on switch fallthrough
+    
+    // Additional strict options to consider:
+    // "exactOptionalPropertyTypes": true,  // Stricter optional properties
+    // "noImplicitReturns": true,          // Error on missing return statements
+    // "noUncheckedIndexedAccess": true,   // Stricter array/object access
 
     /* Path mapping */
-    "baseUrl": ".",
+    "baseUrl": ".",                    // Base directory for resolution
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"]              // Map @ to src directory
+      // Add more aliases as needed:
+      // "@/components/*": ["./src/components/*"],
+      // "@/utils/*": ["./src/utils/*"],
+      // "@/types/*": ["./src/types/*"]
     }
+    
+    // Other useful options:
+    // "declaration": true,              // Generate .d.ts files
+    // "outDir": "./dist",              // Output directory
+    // "rootDir": "./src",              // Root source directory
+    // "composite": true,               // Enable project references
+    // "incremental": true,             // Enable incremental compilation
+    // "experimentalDecorators": true,   // Enable decorators
+    // "emitDecoratorMetadata": true,   // Emit metadata for decorators
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  
+  // Files to include in compilation
+  "include": [
+    "src"                             // Include all files in src directory
+    // Add additional patterns:
+    // "src/**/*",
+    // "tests/**/*",
+    // "*.d.ts"
+  ],
+  
+  // Files to exclude from compilation (optional)
+  // "exclude": [
+  //   "node_modules",
+  //   "dist",
+  //   "build",
+  //   "**/*.test.ts",
+  //   "**/*.spec.ts"
+  // ],
+  
+  // Project references (for monorepos or complex builds)
+  "references": [
+    { "path": "./tsconfig.node.json" } // Reference to Node.js config
+  ]
 }

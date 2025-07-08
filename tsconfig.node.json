@@ -1,11 +1,67 @@
 {
+  /**
+   * TypeScript Configuration for Node.js/Build Tools (Round Dashboard)
+   * 
+   * PURPOSE:
+   * This configuration is specifically for Node.js environment files like vite.config.ts.
+   * It's separate from the main tsconfig.json to handle different runtime environments.
+   * 
+   * WHEN TO MODIFY:
+   * - Adding new build configuration files
+   * - Changing Node.js target version
+   * - Adding build tool specific dependencies
+   * - Integrating with different bundlers
+   * 
+   * KEY DIFFERENCES FROM MAIN CONFIG:
+   * - composite: true - Enables project references
+   * - Includes build tools and configuration files
+   * - May have different module resolution
+   * - Different target environment (Node.js vs Browser)
+   * 
+   * ALTERNATIVE CONFIGURATIONS:
+   * - For different Node.js versions: target: "ES2018", "ES2020", "ES2022"
+   * - For CommonJS: module: "CommonJS", moduleResolution: "node"
+   * - For testing: include Jest/Vitest configuration files
+   * - For deployment: include deployment scripts
+   */
+  
   "compilerOptions": {
+    // Enable project references (allows referencing from main tsconfig)
     "composite": true,
+    
+    // Skip type checking for declaration files (faster build)
     "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    
+    // Module system for Node.js environment
+    "module": "ESNext",              // Use latest module syntax
+    
+    // Module resolution strategy
+    "moduleResolution": "bundler",   // Use bundler-specific resolution
+    
+    // Allow synthetic default imports (import React from 'react')
     "allowSyntheticDefaultImports": true,
+    
+    // Enable strict type checking
     "strict": true
+    
+    // Additional Node.js specific options to consider:
+    // "target": "ES2020",             // JavaScript target version
+    // "lib": ["ES2020"],             // Built-in library definitions
+    // "types": ["node"],             // Include Node.js types
+    // "esModuleInterop": true,       // Enable ES module interop
+    // "forceConsistentCasingInFileNames": true, // Enforce consistent casing
   },
-  "include": ["vite.config.ts"]
+  
+  // Files to include in this configuration
+  "include": [
+    "vite.config.ts"                 // Vite configuration file
+    // Add other build/config files:
+    // "vitest.config.ts",
+    // "tailwind.config.js",
+    // "postcss.config.js",
+    // "jest.config.ts",
+    // "webpack.config.js",
+    // "rollup.config.js",
+    // "scripts/**/*.ts"
+  ]
 }
