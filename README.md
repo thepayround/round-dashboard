@@ -1,4 +1,4 @@
-# Round Platform Dashboard
+# Round Dashboard
 
 A modern, AI-powered enterprise billing and customer intelligence platform built with React, TypeScript, and Tailwind CSS.
 
@@ -118,4 +118,4 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 ## 📄 License
 
-Private - Round Platform Dashboard
+Private - Round Dashboard

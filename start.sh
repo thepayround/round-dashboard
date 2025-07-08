@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 Starting Round Platform Dashboard..."
+echo "🚀 Starting Round Dashboard..."
 echo "📦 Installing dependencies..."
 npm install
 

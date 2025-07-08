@@ -1,8 +1,8 @@
 /**
  * Enhanced ESLint Configuration for Round Dashboard
  * 
- * This configuration adds meaningful improvements to code quality while working
- * with your current dependency versions.
+ * This is an improved version with additional rules and plugins for better code quality.
+ * To use this configuration, rename it to .eslintrc.cjs and install the required packages.
  */
 
 module.exports = {
@@ -15,15 +15,20 @@ module.exports = {
     node: true,
   },
   
-  // Extended rule sets
+  // Extended rule sets (order matters - later configs override earlier ones)
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
+    'plugin:react-hooks/recommended',      // React hooks rules
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking', // Stricter TS rules
     'plugin:jsx-a11y/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
+    'plugin:security/recommended',         // Security rules
+    'plugin:sonarjs/recommended',          // Code smell detection
+    'plugin:unicorn/recommended',          // Modern JS best practices
+    'plugin:prettier/recommended',         // Must be last
   ],
   
   parser: '@typescript-eslint/parser',
@@ -34,7 +39,7 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: './tsconfig.json',           // Required for type-aware rules
     tsconfigRootDir: __dirname,
   },
   
@@ -45,6 +50,12 @@ module.exports = {
     '@typescript-eslint',
     'jsx-a11y',
     'import',
+    'security',
+    'sonarjs',
+    'unicorn',
+    'prefer-arrow',                       // Prefer arrow functions
+    'no-loops',                          // Discourage loops (prefer functional)
+    'prettier',
   ],
   
   settings: {
@@ -60,10 +71,13 @@ module.exports = {
   },
   
   rules: {
+    // Prettier integration
+    'prettier/prettier': 'error',
+    
     // React rules
-    'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 'off',
-    'react/jsx-props-no-spreading': 'warn',
+    'react/react-in-jsx-scope': 'off',    // Not needed with new JSX transform
+    'react/prop-types': 'off',            // TypeScript handles this
+    'react/jsx-props-no-spreading': 'warn', // Warn on prop spreading
     'react/jsx-no-useless-fragment': 'warn',
     'react/self-closing-comp': 'warn',
     'react/jsx-boolean-value': ['warn', 'never'],
@@ -81,6 +95,10 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/prefer-nullish-coalescing': 'error',
     '@typescript-eslint/prefer-optional-chain': 'error',
+    '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+    '@typescript-eslint/no-floating-promises': 'error',
+    '@typescript-eslint/await-thenable': 'error',
+    '@typescript-eslint/no-misused-promises': 'error',
     '@typescript-eslint/consistent-type-imports': [
       'warn',
       { prefer: 'type-imports' }
@@ -106,6 +124,7 @@ module.exports = {
       },
     ],
     'import/no-duplicates': 'error',
+    'import/no-cycle': 'error',
     'import/prefer-default-export': 'off',
     
     // General code quality
@@ -118,13 +137,50 @@ module.exports = {
     'prefer-template': 'warn',
     'no-nested-ternary': 'warn',
     'no-unneeded-ternary': 'warn',
+    
+    // Arrow functions
+    'prefer-arrow/prefer-arrow-functions': [
+      'warn',
+      {
+        disallowPrototype: true,
+        singleReturnOnly: false,
+        classPropertiesAllowed: false,
+      },
+    ],
     'arrow-body-style': ['warn', 'as-needed'],
     
-    // Security-related rules (manual implementation)
-    'no-eval': 'error',
-    'no-implied-eval': 'error',
-    'no-new-func': 'error',
-    'no-script-url': 'error',
+    // Discourage loops (prefer functional programming)
+    'no-loops/no-loops': 'warn',
+    
+    // Modern JavaScript practices
+    'unicorn/filename-case': [
+      'error',
+      {
+        cases: {
+          camelCase: true,
+          pascalCase: true,
+        },
+      },
+    ],
+    'unicorn/no-null': 'off',             // Allow null in React
+    'unicorn/prevent-abbreviations': 'off', // Allow common abbreviations
+    'unicorn/no-array-reduce': 'off',     // Allow reduce
+    
+    // Performance
+    'sonarjs/cognitive-complexity': ['warn', 15],
+    'sonarjs/no-duplicate-string': ['warn', 3],
+    
+    // Security
+    'security/detect-object-injection': 'warn',
+    
+    // Accessibility
+    'jsx-a11y/anchor-is-valid': [
+      'error',
+      {
+        components: ['Link'],
+        specialLink: ['to'],
+      },
+    ],
     
     // React Fast Refresh
     'react-refresh/only-export-components': [
@@ -139,7 +195,7 @@ module.exports = {
       files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
       rules: {
         '@typescript-eslint/no-explicit-any': 'off',
-        'no-console': 'off',
+        'sonarjs/no-duplicate-string': 'off',
       },
     },
     {

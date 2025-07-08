@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -34,7 +34,7 @@ export const LoginPage = () => {
     >
       {/* Header */}
       <div className="text-center mb-8">
-        <div className="gradient-header"></div>
+        <div className="gradient-header" />
         <motion.h1 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,7 +49,7 @@ export const LoginPage = () => {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="auth-text-muted text-lg"
         >
-          Sign in to your Round Platform account
+          Sign in to your Round account
         </motion.p>
       </div>
 

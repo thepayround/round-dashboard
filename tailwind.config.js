@@ -46,7 +46,7 @@ export default {
     // Extend default theme (keeps defaults + adds custom)
     extend: {
       colors: {
-        // Round Platform Brand Colors
+        // Round Brand Colors
         primary: '#D417C8',    // Pink - Primary brand color
         secondary: '#14BDEA',  // Cyan - Secondary brand color
         accent: '#7767DA',     // Purple - Accent color

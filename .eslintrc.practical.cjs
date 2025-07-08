@@ -1,8 +1,8 @@
 /**
- * Enhanced ESLint Configuration for Round Dashboard
+ * Enhanced ESLint Configuration for Round Dashboard (Practical Version)
  * 
- * This configuration adds meaningful improvements to code quality while working
- * with your current dependency versions.
+ * This version works with your current ESLint version and adds meaningful improvements
+ * without dependency conflicts.
  */
 
 module.exports = {
@@ -24,6 +24,7 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
+    'plugin:security/recommended',
   ],
   
   parser: '@typescript-eslint/parser',
@@ -34,8 +35,6 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
-    tsconfigRootDir: __dirname,
   },
   
   plugins: [
@@ -45,6 +44,7 @@ module.exports = {
     '@typescript-eslint',
     'jsx-a11y',
     'import',
+    'security',
   ],
   
   settings: {
@@ -120,11 +120,8 @@ module.exports = {
     'no-unneeded-ternary': 'warn',
     'arrow-body-style': ['warn', 'as-needed'],
     
-    // Security-related rules (manual implementation)
-    'no-eval': 'error',
-    'no-implied-eval': 'error',
-    'no-new-func': 'error',
-    'no-script-url': 'error',
+    // Security
+    'security/detect-object-injection': 'warn',
     
     // React Fast Refresh
     'react-refresh/only-export-components': [

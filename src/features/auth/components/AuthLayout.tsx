@@ -1,15 +1,15 @@
-import { Outlet } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { Outlet } from 'react-router-dom'
+
 import { WhiteLogo } from '../../../shared/components/WhiteLogo'
 
-export const AuthLayout = () => {
-  return (
+export const AuthLayout = () => (
     <div className="auth-container">
       {/* Animated Background */}
       <div className="auth-background">
-        <div className="floating-orb"></div>
-        <div className="floating-orb"></div>
-        <div className="floating-orb"></div>
+        <div className="floating-orb" />
+        <div className="floating-orb" />
+        <div className="floating-orb" />
       </div>
 
       {/* White Logo - Top Left */}
@@ -37,4 +37,3 @@ export const AuthLayout = () => {
       </motion.div>
     </div>
   )
-}

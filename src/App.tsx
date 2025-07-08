@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { RegisterPage } from '@/features/auth/pages/RegisterPage'
 
-function App() {
-  return (
+const App = () => (
     <Router>
       <Routes>
         <Route path="/auth/*" element={<AuthLayout />}>
@@ -15,6 +15,5 @@ function App() {
       </Routes>
     </Router>
   )
-}
 
 export default App

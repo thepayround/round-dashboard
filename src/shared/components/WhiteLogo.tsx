@@ -1,4 +1,5 @@
 import React from 'react'
+
 import whiteLogo from '../../assets/logos/white-logo.svg'
 
 interface WhiteLogoProps {

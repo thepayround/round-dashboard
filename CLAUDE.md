@@ -1,7 +1,7 @@
-# Round Platform - AI Context Guide
+# Round - AI Context Guide
 
 ## Project Overview
-Round Platform is a comprehensive AI-powered enterprise billing and customer intelligence platform for B2B SaaS companies. Provides revenue management, customer analytics, and business intelligence to optimize billing operations and maximize revenue growth.
+Round is a comprehensive AI-powered enterprise billing and customer intelligence platform for B2B SaaS companies. Provides revenue management, customer analytics, and business intelligence to optimize billing operations and maximize revenue growth.
 
 ## Core Business Features
 
