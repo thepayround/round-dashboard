@@ -29,7 +29,7 @@ describe('Authentication Integration Tests', () => {
       await user.click(personalCard)
 
       // Verify selection is shown
-      expect(personalCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
+      expect(personalCard).toHaveClass('border-emerald-500')
 
       // Verify continue button is enabled
       const continueButton = getByRole('button', { name: /continue/i })

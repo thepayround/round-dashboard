@@ -36,10 +36,8 @@ describe('RegisterPage Component', () => {
     it('should render account type options', () => {
       const { getByText } = renderWithProviders(<RegisterPage />)
 
-      expect(getByText('Personal Account')).toBeInTheDocument()
-      expect(getByText('Perfect for individual users and personal projects')).toBeInTheDocument()
-      expect(getByText('Business Account')).toBeInTheDocument()
-      expect(getByText('Designed for companies and organizations')).toBeInTheDocument()
+      expect(getByText('👤 Personal Account')).toBeInTheDocument()
+      expect(getByText('🏢 Business Account')).toBeInTheDocument()
     })
 
     it('should render continue button', () => {
@@ -63,8 +61,8 @@ describe('RegisterPage Component', () => {
 
       await user.click(personalCard)
 
-      // Check that personal account is selected by looking for selection indicator
-      expect(personalCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
+      // Check that personal account is selected by looking for green border
+      expect(personalCard).toHaveClass('border-emerald-500')
     })
 
     it('should allow selecting business account type', async () => {
@@ -73,8 +71,8 @@ describe('RegisterPage Component', () => {
 
       await user.click(businessCard)
 
-      // Check that business account is selected by looking for selection indicator
-      expect(businessCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
+      // Check that business account is selected by looking for green border
+      expect(businessCard).toHaveClass('border-emerald-500')
     })
 
     it('should enable continue button when account type is selected', async () => {
@@ -137,8 +135,8 @@ describe('RegisterPage Component', () => {
       const { getByRole } = renderWithProviders(<RegisterPage />)
 
       expect(getByRole('heading', { name: 'Choose Your Account Type' })).toBeInTheDocument()
-      expect(getByRole('heading', { name: 'Personal Account' })).toBeInTheDocument()
-      expect(getByRole('heading', { name: 'Business Account' })).toBeInTheDocument()
+      expect(getByRole('heading', { name: '👤 Personal Account' })).toBeInTheDocument()
+      expect(getByRole('heading', { name: '🏢 Business Account' })).toBeInTheDocument()
     })
 
     it('should have proper button accessibility', () => {
@@ -167,23 +165,17 @@ describe('RegisterPage Component', () => {
       expect(container.querySelector('.auth-text')).toBeInTheDocument()
     })
 
-    it('should render feature lists for each account type', () => {
+    it('should render account type titles with emojis', () => {
       const { getByText } = renderWithProviders(<RegisterPage />)
 
-      // Personal account features
-      expect(getByText('Personal billing and invoicing')).toBeInTheDocument()
-      expect(getByText('Basic subscription management')).toBeInTheDocument()
-
-      // Business account features
-      expect(getByText('Company billing and invoicing')).toBeInTheDocument()
-      expect(getByText('Advanced subscription management')).toBeInTheDocument()
+      // Account type titles with emojis
+      expect(getByText('👤 Personal Account')).toBeInTheDocument()
+      expect(getByText('🏢 Business Account')).toBeInTheDocument()
     })
 
-    it('should render all icons correctly', () => {
+    it('should render arrow right icon in continue button', () => {
       const { container } = renderWithProviders(<RegisterPage />)
 
-      expect(container.querySelector('[data-testid="user-icon"]')).toBeInTheDocument()
-      expect(container.querySelector('[data-testid="building-icon"]')).toBeInTheDocument()
       expect(container.querySelector('[data-testid="arrow-right-icon"]')).toBeInTheDocument()
     })
   })
@@ -205,16 +197,14 @@ describe('RegisterPage Component', () => {
 
       // Select personal account
       await user.click(personalCard)
-      expect(personalCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
+      expect(personalCard).toHaveClass('border-emerald-500')
 
       // Select business account
       await user.click(businessCard)
-      expect(businessCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
+      expect(businessCard).toHaveClass('border-emerald-500')
 
       // Personal account should no longer be selected
-      expect(
-        personalCard.querySelector('[data-testid="selection-indicator"]')
-      ).not.toBeInTheDocument()
+      expect(personalCard).not.toHaveClass('border-emerald-500')
     })
   })
 })

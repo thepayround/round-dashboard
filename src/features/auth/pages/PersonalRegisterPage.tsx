@@ -300,16 +300,6 @@ export const PersonalRegisterPage = () => {
           </span>
         </motion.button>
 
-        {/* Business Account Link */}
-        <div className="text-center">
-          <p className="auth-text-muted">
-            Need a business account?{' '}
-            <Link to="/auth/register/business" className="auth-link">
-              Register for business
-            </Link>
-          </p>
-        </div>
-
         {/* Login Link */}
         <div className="text-center">
           <p className="auth-text-muted">
