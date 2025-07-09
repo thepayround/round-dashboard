@@ -91,12 +91,25 @@ vi.mock('lucide-react', () => ({
     React.createElement('svg', { 'data-testid': 'phone-icon', ...props }),
   ArrowRight: ({ ...props }: any) =>
     React.createElement('svg', { 'data-testid': 'arrow-right-icon', ...props }),
+  ArrowLeft: ({ ...props }: any) =>
+    React.createElement('svg', { 'data-testid': 'arrow-left-icon', ...props }),
   Building: ({ ...props }: any) =>
     React.createElement('svg', { 'data-testid': 'building-icon', ...props }),
   Loader2: ({ ...props }: any) =>
     React.createElement('svg', { 'data-testid': 'loader-icon', ...props }),
   AlertCircle: ({ ...props }: any) =>
     React.createElement('svg', { 'data-testid': 'alert-circle-icon', ...props }),
+  CheckCircle: ({ ...props }: any) =>
+    React.createElement('svg', { 'data-testid': 'check-circle-icon', ...props }),
+  MapPin: ({ ...props }: any) =>
+    React.createElement('svg', { 'data-testid': 'map-pin-icon', ...props }),
+  Hash: ({ ...props }: any) => React.createElement('svg', { 'data-testid': 'hash-icon', ...props }),
+  CreditCard: ({ ...props }: any) =>
+    React.createElement('svg', { 'data-testid': 'credit-card-icon', ...props }),
+  Globe: ({ ...props }: any) =>
+    React.createElement('svg', { 'data-testid': 'globe-icon', ...props }),
+  Users: ({ ...props }: any) =>
+    React.createElement('svg', { 'data-testid': 'users-icon', ...props }),
 }))
 
 // Global test utilities - Custom matchers are provided by @testing-library/jest-dom

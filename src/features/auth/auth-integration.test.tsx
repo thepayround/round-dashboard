@@ -14,51 +14,26 @@ import { renderWithProviders, testHelpers, mockData } from '@/test/utils'
 
 describe('Authentication Integration Tests', () => {
   describe('Complete Registration Flow', () => {
-    it('should complete full registration process', async () => {
-      const { getByRole, user, container } = renderWithProviders(
+    it('should complete account type selection process', async () => {
+      const { getByRole, user, getByTestId } = renderWithProviders(
         <AuthLayout>
           <RegisterPage />
         </AuthLayout>
       )
 
-      // Fill out entire registration form using selectors
-      const firstNameInput = container.querySelector('input[name="firstName"]')!
-      const lastNameInput = container.querySelector('input[name="lastName"]')!
-      const emailInput = container.querySelector('input[name="email"]')!
-      const phoneInput = container.querySelector('input[name="phone"]')!
-      const passwordInput = container.querySelector('input[name="password"]')!
+      // Verify registration page is displayed
+      expect(getByRole('heading', { name: 'Choose Your Account Type' })).toBeInTheDocument()
 
-      await testHelpers.fillInput(
-        user,
-        firstNameInput as HTMLElement,
-        mockData.registrationData.firstName
-      )
-      await testHelpers.fillInput(
-        user,
-        lastNameInput as HTMLElement,
-        mockData.registrationData.lastName
-      )
-      await testHelpers.fillInput(user, emailInput as HTMLElement, mockData.registrationData.email)
-      await testHelpers.fillInput(user, phoneInput as HTMLElement, mockData.registrationData.phone)
-      await testHelpers.fillInput(
-        user,
-        passwordInput as HTMLElement,
-        mockData.registrationData.password
-      )
+      // Select personal account
+      const personalCard = getByTestId('account-type-personal')
+      await user.click(personalCard)
 
-      // Verify all data is entered
-      expect((firstNameInput as HTMLInputElement).value).toBe(mockData.registrationData.firstName)
-      expect((lastNameInput as HTMLInputElement).value).toBe(mockData.registrationData.lastName)
-      expect((emailInput as HTMLInputElement).value).toBe(mockData.registrationData.email)
-      expect((phoneInput as HTMLInputElement).value).toBe(mockData.registrationData.phone)
-      expect((passwordInput as HTMLInputElement).value).toBe(mockData.registrationData.password)
+      // Verify selection is shown
+      expect(personalCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
 
-      // Submit form
-      const submitButton = getByRole('button', { name: /create account/i })
-      await user.click(submitButton)
-
-      // Form should be submitted successfully
-      expect(submitButton).toBeInTheDocument()
+      // Verify continue button is enabled
+      const continueButton = getByRole('button', { name: /continue/i })
+      expect(continueButton).not.toBeDisabled()
     })
 
     it('should navigate between registration and login', async () => {
@@ -168,8 +143,8 @@ describe('Authentication Integration Tests', () => {
       expect(getByRole('img', { name: 'Round Platform' })).toBeInTheDocument()
 
       // Should have register page elements
-      expect(getByRole('heading', { name: 'Create Account' })).toBeInTheDocument()
-      expect(getByRole('button', { name: /create account/i })).toBeInTheDocument()
+      expect(getByRole('heading', { name: 'Choose Your Account Type' })).toBeInTheDocument()
+      expect(getByRole('button', { name: /continue/i })).toBeInTheDocument()
     })
 
     it('should maintain layout consistency across pages', () => {
@@ -215,7 +190,7 @@ describe('Authentication Integration Tests', () => {
       )
 
       // Register page should work on mobile
-      expect(getByRole('button', { name: /create account/i })).toBeInTheDocument()
+      expect(getByRole('button', { name: /continue/i })).toBeInTheDocument()
     })
 
     it('should work on desktop across all auth pages', () => {
@@ -238,7 +213,7 @@ describe('Authentication Integration Tests', () => {
       )
 
       // Register page should work on desktop
-      expect(getByRole('button', { name: /create account/i })).toBeInTheDocument()
+      expect(getByRole('button', { name: /continue/i })).toBeInTheDocument()
     })
   })
 
@@ -286,14 +261,14 @@ describe('Authentication Integration Tests', () => {
       )
 
       // Register page accessibility
-      expect(container.querySelector('form')).toBeInTheDocument()
+      expect(getByRole('heading', { name: 'Choose Your Account Type' })).toBeInTheDocument()
       expect(getByRole('img', { name: 'Round Platform' })).toBeInTheDocument()
     })
   })
 
   describe('Form State Integration', () => {
     it('should maintain independent form states', async () => {
-      const { user, rerender, container } = renderWithProviders(
+      const { user, rerender, container, getByRole } = renderWithProviders(
         <AuthLayout>
           <LoginPage />
         </AuthLayout>
@@ -311,13 +286,9 @@ describe('Authentication Integration Tests', () => {
         </AuthLayout>
       )
 
-      // Register form should be empty
-      const registerEmailInput = container.querySelector('input[name="email"]')!
-      expect((registerEmailInput as HTMLInputElement).value).toBe('')
-
-      // Fill register form
-      await testHelpers.fillInput(user, registerEmailInput as HTMLElement, 'register@example.com')
-      expect((registerEmailInput as HTMLInputElement).value).toBe('register@example.com')
+      // Register page should be in initial state
+      expect(getByRole('heading', { name: 'Choose Your Account Type' })).toBeInTheDocument()
+      expect(getByRole('button', { name: /continue/i })).toBeDisabled()
     })
   })
 
@@ -357,7 +328,7 @@ describe('Authentication Integration Tests', () => {
             <RegisterPage />
           </AuthLayout>
         )
-        expect(getByRole('button', { name: /create account/i })).toBeInTheDocument()
+        expect(getByRole('button', { name: /continue/i })).toBeInTheDocument()
 
         rerender(
           <AuthLayout>

@@ -1,41 +1,51 @@
 /**
  * Tests for RegisterPage component
  *
- * Tests registration form functionality, validation, and user interactions
+ * Tests account type selection functionality and navigation
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 import { RegisterPage } from './RegisterPage'
 
-import { renderWithProviders, testHelpers, mockData } from '@/test/utils'
+import { renderWithProviders } from '@/test/utils'
+
+// Mock useNavigate
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom')
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  }
+})
 
 describe('RegisterPage Component', () => {
+  beforeEach(() => {
+    mockNavigate.mockClear()
+  })
+
   describe('Rendering', () => {
-    it('should render the registration form', () => {
-      const { getByRole, getByText, container } = renderWithProviders(<RegisterPage />)
+    it('should render the account type selector', () => {
+      const { getByRole, getByText } = renderWithProviders(<RegisterPage />)
 
-      expect(getByRole('heading', { name: 'Create Account' })).toBeInTheDocument()
-      expect(getByText('Join the Round community')).toBeInTheDocument()
-      expect(container.querySelector('form')).toBeInTheDocument()
+      expect(getByRole('heading', { name: 'Choose Your Account Type' })).toBeInTheDocument()
+      expect(getByText('Select the account type that best fits your needs')).toBeInTheDocument()
     })
 
-    it('should render all form fields', () => {
-      const { getByLabelText, getByRole } = renderWithProviders(<RegisterPage />)
+    it('should render account type options', () => {
+      const { getByText } = renderWithProviders(<RegisterPage />)
 
-      expect(getByLabelText(/first name/i)).toBeInTheDocument()
-      expect(getByLabelText(/last name/i)).toBeInTheDocument()
-      expect(getByLabelText(/email address/i)).toBeInTheDocument()
-      expect(getByLabelText(/phone number/i)).toBeInTheDocument()
-      expect(getByLabelText(/password/i)).toBeInTheDocument()
-      expect(getByRole('button', { name: /create account/i })).toBeInTheDocument()
+      expect(getByText('Personal Account')).toBeInTheDocument()
+      expect(getByText('Perfect for individual users and personal projects')).toBeInTheDocument()
+      expect(getByText('Business Account')).toBeInTheDocument()
+      expect(getByText('Designed for companies and organizations')).toBeInTheDocument()
     })
 
-    it('should render terms and conditions', () => {
-      const { getByText, getByRole } = renderWithProviders(<RegisterPage />)
+    it('should render continue button', () => {
+      const { getByRole } = renderWithProviders(<RegisterPage />)
 
-      expect(getByText(/by creating an account you accept/i)).toBeInTheDocument()
-      expect(getByRole('link', { name: /terms and conditions/i })).toBeInTheDocument()
+      expect(getByRole('button', { name: /continue/i })).toBeInTheDocument()
     })
 
     it('should render login link', () => {
@@ -46,234 +56,75 @@ describe('RegisterPage Component', () => {
     })
   })
 
-  describe('Form Interactions', () => {
-    it('should allow typing in all form fields', async () => {
-      const { getByLabelText, user } = renderWithProviders(<RegisterPage />)
-      const firstNameInput = getByLabelText(/first name/i) as HTMLInputElement
-      const lastNameInput = getByLabelText(/last name/i) as HTMLInputElement
-      const emailInput = getByLabelText(/email address/i) as HTMLInputElement
-      const phoneInput = getByLabelText(/phone number/i) as HTMLInputElement
-      const passwordInput = getByLabelText(/password/i) as HTMLInputElement
+  describe('Account Type Selection', () => {
+    it('should allow selecting personal account type', async () => {
+      const { getByTestId, user } = renderWithProviders(<RegisterPage />)
+      const personalCard = getByTestId('account-type-personal')
 
-      // Fill all fields
-      await testHelpers.fillInput(user, firstNameInput, mockData.registrationData.firstName)
-      await testHelpers.fillInput(user, lastNameInput, mockData.registrationData.lastName)
-      await testHelpers.fillInput(user, emailInput, mockData.registrationData.email)
-      await testHelpers.fillInput(user, phoneInput, mockData.registrationData.phone)
-      await testHelpers.fillInput(user, passwordInput, mockData.registrationData.password)
+      await user.click(personalCard)
 
-      // Verify values
-      expect(firstNameInput.value).toBe(mockData.registrationData.firstName)
-      expect(lastNameInput.value).toBe(mockData.registrationData.lastName)
-      expect(emailInput.value).toBe(mockData.registrationData.email)
-      expect(phoneInput.value).toBe(mockData.registrationData.phone)
-      expect(passwordInput.value).toBe(mockData.registrationData.password)
+      // Check that personal account is selected by looking for selection indicator
+      expect(personalCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
     })
 
-    it('should toggle password visibility', async () => {
-      const { getByLabelText, getByTestId, user } = renderWithProviders(<RegisterPage />)
-      const passwordInput = getByLabelText(/password/i)
-      const toggleButton = getByTestId('eye-icon').closest('button')!
+    it('should allow selecting business account type', async () => {
+      const { getByTestId, user } = renderWithProviders(<RegisterPage />)
+      const businessCard = getByTestId('account-type-business')
 
-      // Initially password should be hidden
-      expect(passwordInput).toHaveAttribute('type', 'password')
+      await user.click(businessCard)
 
-      // Click toggle button
-      await user.click(toggleButton)
-
-      // Password should now be visible
-      expect(passwordInput).toHaveAttribute('type', 'text')
+      // Check that business account is selected by looking for selection indicator
+      expect(businessCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
     })
 
-    it('should handle form submission', async () => {
-      const { getByLabelText, getByRole, user } = renderWithProviders(<RegisterPage />)
-      const submitButton = getByRole('button', { name: /create account/i })
+    it('should enable continue button when account type is selected', async () => {
+      const { getByTestId, getByRole, user } = renderWithProviders(<RegisterPage />)
+      const continueButton = getByRole('button', { name: /continue/i })
+      const personalCard = getByTestId('account-type-personal')
 
-      // Fill required fields
-      await testHelpers.fillInput(
-        user,
-        getByLabelText(/first name/i),
-        mockData.registrationData.firstName
-      )
-      await testHelpers.fillInput(
-        user,
-        getByLabelText(/last name/i),
-        mockData.registrationData.lastName
-      )
-      await testHelpers.fillInput(
-        user,
-        getByLabelText(/email address/i),
-        mockData.registrationData.email
-      )
-      await testHelpers.fillInput(
-        user,
-        getByLabelText(/phone number/i),
-        mockData.registrationData.phone
-      )
-      await testHelpers.fillInput(
-        user,
-        getByLabelText(/password/i),
-        mockData.registrationData.password
-      )
+      // Initially button should be disabled
+      expect(continueButton).toBeDisabled()
 
-      // Submit form
-      await user.click(submitButton)
+      // Select personal account
+      await user.click(personalCard)
 
-      // Form should have been submitted
-      expect(submitButton).toBeInTheDocument()
+      // Button should now be enabled
+      expect(continueButton).not.toBeDisabled()
     })
   })
 
-  describe('Validation', () => {
-    it('should require all form fields', () => {
-      const { getByLabelText } = renderWithProviders(<RegisterPage />)
+  describe('Navigation', () => {
+    it('should navigate to personal registration when personal account is selected', async () => {
+      const { getByTestId, getByRole, user } = renderWithProviders(<RegisterPage />)
+      const personalCard = getByTestId('account-type-personal')
+      const continueButton = getByRole('button', { name: /continue/i })
 
-      expect(getByLabelText(/first name/i)).toHaveAttribute('required')
-      expect(getByLabelText(/last name/i)).toHaveAttribute('required')
-      expect(getByLabelText(/email address/i)).toHaveAttribute('required')
-      expect(getByLabelText(/phone number/i)).toHaveAttribute('required')
-      expect(getByLabelText(/password/i)).toHaveAttribute('required')
+      // Select personal account
+      await user.click(personalCard)
+
+      // Click continue
+      await user.click(continueButton)
+
+      // Should navigate to personal registration
+      expect(mockNavigate).toHaveBeenCalledWith('/auth/register/personal')
     })
 
-    it('should have proper input types', () => {
-      const { getByLabelText } = renderWithProviders(<RegisterPage />)
+    it('should navigate to business registration when business account is selected', async () => {
+      const { getByTestId, getByRole, user } = renderWithProviders(<RegisterPage />)
+      const businessCard = getByTestId('account-type-business')
+      const continueButton = getByRole('button', { name: /continue/i })
 
-      expect(getByLabelText(/first name/i)).toHaveAttribute('type', 'text')
-      expect(getByLabelText(/last name/i)).toHaveAttribute('type', 'text')
-      expect(getByLabelText(/email address/i)).toHaveAttribute('type', 'email')
-      expect(getByLabelText(/phone number/i)).toHaveAttribute('type', 'tel')
-      expect(getByLabelText(/password/i)).toHaveAttribute('type', 'password')
+      // Select business account
+      await user.click(businessCard)
+
+      // Click continue
+      await user.click(continueButton)
+
+      // Should navigate to business registration
+      expect(mockNavigate).toHaveBeenCalledWith('/auth/register/business')
     })
 
-    it('should have proper placeholders', () => {
-      const { getByLabelText } = renderWithProviders(<RegisterPage />)
-
-      expect(getByLabelText(/first name/i)).toHaveAttribute('placeholder', 'John')
-      expect(getByLabelText(/last name/i)).toHaveAttribute('placeholder', 'Doe')
-      expect(getByLabelText(/email address/i)).toHaveAttribute('placeholder', 'example@gmail.com')
-      expect(getByLabelText(/phone number/i)).toHaveAttribute('placeholder', '+30 698 123 4567')
-      expect(getByLabelText(/password/i)).toHaveAttribute('placeholder', 'Create a strong password')
-    })
-  })
-
-  describe('Layout and Responsive Design', () => {
-    it('should have responsive name fields grid', () => {
-      const { container } = renderWithProviders(<RegisterPage />)
-      const nameFieldsContainer = container.querySelector('.grid-cols-1.md\\:grid-cols-2')
-
-      expect(nameFieldsContainer).toBeInTheDocument()
-    })
-
-    it('should work on mobile viewports', () => {
-      testHelpers.mockViewport(375, 667)
-      const { container } = renderWithProviders(<RegisterPage />)
-
-      expect(container.querySelector('form')).toBeInTheDocument()
-    })
-
-    it('should work on desktop viewports', () => {
-      testHelpers.mockViewport(1920, 1080)
-      const { container } = renderWithProviders(<RegisterPage />)
-
-      expect(container.querySelector('form')).toBeInTheDocument()
-    })
-  })
-
-  describe('Accessibility', () => {
-    it('should have proper form labels', () => {
-      const { getByLabelText } = renderWithProviders(<RegisterPage />)
-
-      expect(getByLabelText(/first name/i)).toBeInTheDocument()
-      expect(getByLabelText(/last name/i)).toBeInTheDocument()
-      expect(getByLabelText(/email address/i)).toBeInTheDocument()
-      expect(getByLabelText(/phone number/i)).toBeInTheDocument()
-      expect(getByLabelText(/password/i)).toBeInTheDocument()
-    })
-
-    it('should support keyboard navigation', async () => {
-      const { getByLabelText, getByRole, user } = renderWithProviders(<RegisterPage />)
-      const firstNameInput = getByLabelText(/first name/i)
-      const lastNameInput = getByLabelText(/last name/i)
-      const emailInput = getByLabelText(/email address/i)
-      const phoneInput = getByLabelText(/phone number/i)
-      const passwordInput = getByLabelText(/password/i)
-      const submitButton = getByRole('button', { name: /create account/i })
-
-      // Tab through form elements
-      await user.tab()
-      expect(firstNameInput).toHaveFocus()
-
-      await user.tab()
-      expect(lastNameInput).toHaveFocus()
-
-      await user.tab()
-      expect(emailInput).toHaveFocus()
-
-      await user.tab()
-      expect(phoneInput).toHaveFocus()
-
-      await user.tab()
-      expect(passwordInput).toHaveFocus()
-
-      // Skip password toggle button and terms link
-      await user.tab()
-      await user.tab()
-      await user.tab()
-      expect(submitButton).toHaveFocus()
-    })
-
-    it('should have proper ARIA attributes', () => {
-      const { getByRole, container } = renderWithProviders(<RegisterPage />)
-
-      expect(container.querySelector('form')).toBeInTheDocument()
-      expect(getByRole('button', { name: /create account/i })).toBeInTheDocument()
-    })
-  })
-
-  describe('Visual Design', () => {
-    it('should have glass morphism styling', () => {
-      const { container } = renderWithProviders(<RegisterPage />)
-      const authCard = container.querySelector('.auth-card')
-
-      expect(authCard).toBeInTheDocument()
-    })
-
-    it('should render all icons correctly', () => {
-      const { getAllByTestId, getByTestId } = renderWithProviders(<RegisterPage />)
-
-      expect(getAllByTestId('user-icon')).toHaveLength(2) // First name and last name
-      expect(getByTestId('mail-icon')).toBeInTheDocument()
-      expect(getByTestId('phone-icon')).toBeInTheDocument()
-      expect(getByTestId('lock-icon')).toBeInTheDocument()
-      expect(getByTestId('eye-icon')).toBeInTheDocument()
-    })
-
-    it('should have gradient header', () => {
-      const { container } = renderWithProviders(<RegisterPage />)
-      const gradientHeader = container.querySelector('.gradient-header')
-
-      expect(gradientHeader).toBeInTheDocument()
-    })
-  })
-
-  describe('Animation and Motion', () => {
-    it('should render with framer-motion animations', () => {
-      const { container } = renderWithProviders(<RegisterPage />)
-
-      // Since we mock framer-motion, just ensure the component renders
-      expect(container.firstChild).toBeInTheDocument()
-    })
-  })
-
-  describe('Integration', () => {
-    it('should link to terms and conditions', () => {
-      const { getByRole } = renderWithProviders(<RegisterPage />)
-      const termsLink = getByRole('link', { name: /terms and conditions/i })
-
-      expect(termsLink).toHaveAttribute('href', '/terms')
-    })
-
-    it('should link to login page', () => {
+    it('should have working login link', () => {
       const { getByRole } = renderWithProviders(<RegisterPage />)
       const loginLink = getByRole('link', { name: /sign in/i })
 
@@ -281,32 +132,89 @@ describe('RegisterPage Component', () => {
     })
   })
 
-  describe('Form State Management', () => {
-    it('should maintain form state during user interaction', async () => {
-      const { getByLabelText, user } = renderWithProviders(<RegisterPage />)
-      const firstNameInput = getByLabelText(/first name/i) as HTMLInputElement
-      const emailInput = getByLabelText(/email address/i) as HTMLInputElement
+  describe('Accessibility', () => {
+    it('should have proper heading structure', () => {
+      const { getByRole } = renderWithProviders(<RegisterPage />)
 
-      // Fill first name
-      await testHelpers.fillInput(user, firstNameInput, 'John')
-      expect(firstNameInput.value).toBe('John')
+      expect(getByRole('heading', { name: 'Choose Your Account Type' })).toBeInTheDocument()
+      expect(getByRole('heading', { name: 'Personal Account' })).toBeInTheDocument()
+      expect(getByRole('heading', { name: 'Business Account' })).toBeInTheDocument()
+    })
 
-      // Fill email - first name should still be there
-      await testHelpers.fillInput(user, emailInput, 'john@example.com')
-      expect(firstNameInput.value).toBe('John')
-      expect(emailInput.value).toBe('john@example.com')
+    it('should have proper button accessibility', () => {
+      const { getByRole } = renderWithProviders(<RegisterPage />)
+      const continueButton = getByRole('button', { name: /continue/i })
+
+      expect(continueButton).toBeInTheDocument()
+      expect(continueButton).toHaveAttribute('disabled')
+    })
+
+    it('should have proper link accessibility', () => {
+      const { getByRole } = renderWithProviders(<RegisterPage />)
+      const loginLink = getByRole('link', { name: /sign in/i })
+
+      expect(loginLink).toBeInTheDocument()
+      expect(loginLink).toHaveAttribute('href', '/auth/login')
     })
   })
 
-  describe('Error Handling', () => {
-    it('should handle empty form submission gracefully', async () => {
-      const { getByRole, user } = renderWithProviders(<RegisterPage />)
-      const submitButton = getByRole('button', { name: /create account/i })
+  describe('Visual Design', () => {
+    it('should have proper styling classes', () => {
+      const { container } = renderWithProviders(<RegisterPage />)
 
-      await user.click(submitButton)
+      expect(container.querySelector('.max-w-4xl')).toBeInTheDocument()
+      expect(container.querySelector('.text-4xl')).toBeInTheDocument()
+      expect(container.querySelector('.auth-text')).toBeInTheDocument()
+    })
 
-      // Form should still be present (browser validation will handle empty fields)
-      expect(submitButton).toBeInTheDocument()
+    it('should render feature lists for each account type', () => {
+      const { getByText } = renderWithProviders(<RegisterPage />)
+
+      // Personal account features
+      expect(getByText('Personal billing and invoicing')).toBeInTheDocument()
+      expect(getByText('Basic subscription management')).toBeInTheDocument()
+
+      // Business account features
+      expect(getByText('Company billing and invoicing')).toBeInTheDocument()
+      expect(getByText('Advanced subscription management')).toBeInTheDocument()
+    })
+
+    it('should render all icons correctly', () => {
+      const { container } = renderWithProviders(<RegisterPage />)
+
+      expect(container.querySelector('[data-testid="user-icon"]')).toBeInTheDocument()
+      expect(container.querySelector('[data-testid="building-icon"]')).toBeInTheDocument()
+      expect(container.querySelector('[data-testid="arrow-right-icon"]')).toBeInTheDocument()
+    })
+  })
+
+  describe('Animation and Motion', () => {
+    it('should render with framer-motion animations', () => {
+      const { container } = renderWithProviders(<RegisterPage />)
+
+      // Check for motion components (they should render as div elements)
+      expect(container.querySelector('div[animate]')).toBeInTheDocument()
+    })
+  })
+
+  describe('Integration', () => {
+    it('should switch selection between account types', async () => {
+      const { getByTestId, user } = renderWithProviders(<RegisterPage />)
+      const personalCard = getByTestId('account-type-personal')
+      const businessCard = getByTestId('account-type-business')
+
+      // Select personal account
+      await user.click(personalCard)
+      expect(personalCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
+
+      // Select business account
+      await user.click(businessCard)
+      expect(businessCard.querySelector('[data-testid="selection-indicator"]')).toBeInTheDocument()
+
+      // Personal account should no longer be selected
+      expect(
+        personalCard.querySelector('[data-testid="selection-indicator"]')
+      ).not.toBeInTheDocument()
     })
   })
 })
