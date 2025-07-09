@@ -1,0 +1,22 @@
+echo "🔍 Running pre-commit checks..."
+
+# Format code with Prettier
+echo "💅 Formatting code..."
+npm run format
+
+# Fix linting issues
+echo "🔧 Fixing linting issues..."
+npm run lint:fix
+
+# Type checking
+echo "🔍 Type checking..."
+npm run type-check
+
+# Run tests without coverage for faster pre-commit
+echo "🧪 Running tests..."
+npm test -- --run
+
+# Add formatted files back to staging
+git add -A
+
+echo "✅ Pre-commit checks passed\!"

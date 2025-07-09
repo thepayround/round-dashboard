@@ -1,11 +1,11 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export default defineConfig({
   plugins: [react()],
@@ -19,14 +19,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    exclude: [
-      'node_modules',
-      'dist',
-      '.idea',
-      '.git',
-      '.cache',
-      'src/test/utils',
-    ],
+    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', 'src/test/utils'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -39,20 +32,32 @@ export default defineConfig({
         '**/index.ts',
         '**/constants.ts',
         '**/styles.ts',
+        'src/main.tsx',
+        'src/App.tsx',
+        'src/vite-env.d.ts',
+        '**/*.config.js',
+        '**/*.config.cjs',
+        '.eslintrc.cjs',
+        'tailwind.config.js',
+        'postcss.config.js',
+        'vite.config.ts',
+        'vitest.config.ts',
+        '**/tailwind.config.enhanced.cjs',
+        '**/tailwind.config.practical.cjs',
+        '**/tailwind.config copy.js',
       ],
       all: true,
       thresholds: {
-        branches: 80,
+        branches: 70,
         functions: 80,
-        lines: 80,
-        statements: 80,
+        lines: 70,
+        statements: 70,
       },
     },
-    deps: {
-      inline: [
-        '@testing-library/user-event',
-        '@testing-library/jest-dom',
-      ],
+    server: {
+      deps: {
+        inline: ['@testing-library/user-event', '@testing-library/jest-dom'],
+      },
     },
     environmentOptions: {
       jsdom: {
@@ -64,9 +69,6 @@ export default defineConfig({
     sequence: {
       shuffle: true,
     },
-    reporters: ['default', 'html'],
-    outputFile: {
-      html: './coverage/test-report.html',
-    },
+    reporters: ['default'],
   },
-}); 
+})

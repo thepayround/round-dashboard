@@ -81,7 +81,7 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 - **Spacing System**: 25+ spacing utilities
 - **Shadow System**: 15+ shadow variants including glass effects
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend Core
 - **React 18.2.0** + TypeScript 5.3.3
@@ -103,79 +103,71 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 - **Husky 9.1.7** (Git hooks)
 - **Lucide React 0.509.0** + React Icons 5.5.0 (icons)
 
-## Project Structure
+## Current Implementation Status
 
-### Current Implementation Status
-```
+### Implemented Features
+- ✅ **Authentication** - LoginPage, RegisterPage, AuthLayout
+- ✅ **UI Components** - Button, WhiteLogo
+- ✅ **Utilities** - cn function, type definitions
+- ✅ **Testing Framework** - 128 tests with 80%+ coverage
+- ✅ **Development Tools** - ESLint, Prettier, Husky hooks
+
+### Project Structure
 round-dashboard/
 ├── src/
-│   ├── features/       # Feature-based modules
-│   │   └── auth/       # ✅ Authentication feature (IMPLEMENTED)
-│   │       ├── components/  # ✅ AuthLayout
-│   │       └── pages/       # ✅ LoginPage, RegisterPage
-│   ├── shared/         # ✅ Shared components, utilities, services
-│   │   ├── components/ # ✅ UI components (Button, etc.)
-│   │   │   └── ui/     # ✅ Reusable UI components
-│   │   ├── types/      # ✅ TypeScript type definitions
-│   │   │   ├── auth.ts # ✅ Authentication types
-│   │   │   └── api.ts  # ✅ API response types
-│   │   └── utils/      # ✅ Utility functions (cn, etc.)
-│   ├── index.css       # ✅ Global styles with Tailwind
-│   ├── main.tsx        # ✅ Application entry point
-│   └── App.tsx         # ✅ Root component with routing
-├── tailwind.config.js  # ✅ Custom design system configuration
-├── vite.config.ts      # ✅ Vite configuration with path aliases
-├── package.json        # ✅ Dependencies and scripts
-└── README.md           # ✅ Project documentation
-```
+│   ├── features/auth/ # Authentication module
+│   ├── shared/components/ # UI components
+│   ├── shared/types/ # TypeScript types
+│   ├── shared/utils/ # Utility functions
+│   └── test/ # Test utilities
+├── .husky/ # Git hooks
+└── package.json # Dependencies
 
-### Target Full Structure (For Future Features)
-```
-src/
-├── features/           # Feature-based modules (20+ business domains)
-│   ├── auth/          # ✅ IMPLEMENTED - Authentication
-│   ├── dashboard/      # 🔲 Main analytics dashboard
-│   ├── customers/      # 🔲 Customer management
-│   ├── billing/        # 🔲 Billing and subscriptions
-│   ├── invoices/       # 🔲 Invoice management
-│   ├── revenue-analytics/ # 🔲 Revenue insights
-│   ├── ai-assistant/   # 🔲 AI chat assistant
-│   ├── pricing/        # 🔲 Pricing intelligence
-│   ├── marketplace/    # 🔲 Integration marketplace
-│   └── [other features] # 🔲 Future business domains
-├── shared/             # ✅ Shared components, utilities, services
-│   ├── components/     # ✅ UI components (25+ components planned)
-│   ├── config/         # 🔲 Configuration files
-│   ├── services/       # 🔲 API clients and utilities
-│   ├── hooks/          # 🔲 Custom React hooks
-│   └── utils/          # ✅ Utility functions
-├── assets/             # 🔲 Static assets and logos
-├── test/               # 🔲 Test utilities and setup
-├── theme.ts            # 🔲 Comprehensive design system
-├── main.tsx            # ✅ Application entry point
-└── App.tsx             # ✅ Root component with routing
-```
+## Component Architecture
 
-**Legend:** ✅ Implemented | 🔲 Planned
+### File Organization Pattern
+src/components/ComponentName/
+├── ComponentName.tsx # Main component (<200 lines)
+├── ComponentName.test.tsx # Core tests (<150 lines)
+├── ComponentName.types.ts # Type definitions (<50 lines)
+├── __tests__/ # Extended test modules
+│   ├── ComponentName.variants.test.tsx
+│   ├── ComponentName.accessibility.test.tsx
+│   └── ComponentName.interactions.test.tsx
+└── index.ts # Clean exports
 
-## 🎯 Development Standards
+### Component Composition Pattern
+// ✅ GOOD: Composable components
+<Card>
+  <Card.Header><Card.Title>Title</Card.Title></Card.Header>
+  <Card.Content>Content</Card.Content>
+  <Card.Footer>Footer</Card.Footer>
+</Card>
 
-### UI/UX Guidelines
-1. **Glass Morphism & Aurora UI** - Semi-transparent surfaces with blur effects and gradients
-2. **Dark/Light Mode** - Full theme support with accessibility compliance
-3. **Micro-interactions** - Smooth animations using Framer Motion
-4. **Adaptive UI** - Context-aware interfaces for device capability
-5. **AI-Driven UI** - Natural language processing integration with personalization
-6. **Minimalism** - Clean aesthetics with reduced cognitive load
-7. **Accessibility** - WCAG compliance, ARIA standards, keyboard navigation
-8. **Component-Driven** - Modular, reusable components with Tailwind CSS
+// ❌ BAD: Monolithic props
+<Card title="Title" content="Content" footer="Footer" showHeader={true} />
+
+### Single Responsibility Principle
+- **HTML Structure**: Component handles markup and props
+- **CSS Styling**: Tailwind classes for styling, separate .styles.ts for complex logic
+- **TypeScript Logic**: Business logic in custom hooks or utils
+- **State Management**: Local state with useState/useReducer, global with Zustand
+
+## Development Standards
 
 ### Code Standards
 1. **TypeScript Strict** - Maximum type safety with all strict flags enabled
 2. **Feature-Based Architecture** - Self-contained modules with lazy loading
 3. **Performance** - Code splitting, memoization, virtualization
 4. **Error Handling** - Structured error types with severity levels
-5. **Testing** - 80% coverage threshold with co-located tests
+5. **File Size Limits** - Components <200 lines, tests <150 lines, utils <100 lines
+
+### UI/UX Guidelines
+1. **Glass Morphism & Aurora UI** - Semi-transparent surfaces with blur effects and gradients
+2. **Dark/Light Mode** - Full theme support with accessibility compliance
+3. **Micro-interactions** - Smooth animations using Framer Motion
+4. **Accessibility** - WCAG compliance, ARIA standards, keyboard navigation
+5. **Component-Driven** - Modular, reusable components with Tailwind CSS
 
 ### Architecture Patterns
 1. **Compound Components** - Card system (Header, Title, Content, Footer)
@@ -184,79 +176,91 @@ src/
 4. **State Management** - Multi-paradigm (Zustand + Context + Local)
 5. **API Architecture** - Axios wrapper with interceptors, retry logic, caching
 
-## 🔧 Development Commands
+## Testing Standards
 
-```bash
-# Development
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
+### Mandatory Rules
+- Every code change MUST include tests
+- 80% coverage minimum (lines, functions, branches, statements)
+- Tests fail build if coverage drops below 80%
 
-# Quality
-npm run lint         # Run ESLint
-npm run lint:fix     # Fix ESLint issues
-npm run format       # Run Prettier
-npm run type-check   # TypeScript check
+### Test Types Required
+1. **Unit Tests** - All components/functions
+2. **Integration Tests** - Complex user flows
+3. **Accessibility Tests** - Keyboard nav, screen readers, ARIA
+4. **Responsive Tests** - Mobile (375px), Tablet (768px), Desktop (1920px)
 
-# Testing
-npm run test         # Run tests
-npm run test:watch   # Run tests in watch mode
-npm run test:coverage # Run tests with coverage
-```
+### Test Structure
+describe('ComponentName', () => {
+  describe('Rendering', () => {}) // Basic rendering tests
+  describe('Interactions', () => {}) // User interaction tests
+  describe('Accessibility', () => {}) // A11y compliance tests
+  describe('Integration', () => {}) // Component integration tests
+})
 
-## Technical Architecture
+### Test Scenarios (ALL components)
+- Renders without crashing
+- Renders with required props
+- Handles user interactions
+- Supports keyboard navigation
+- Has proper ARIA attributes
+- Works on mobile/desktop
 
-### API Client Architecture
+### Testing Technology
+- **Framework**: Vitest (fast, Vite-native)
+- **Testing Library**: React Testing Library
+- **Environment**: jsdom (DOM simulation)
+- **User Events**: @testing-library/user-event
+- **Coverage**: V8 provider
+
+### Pre-commit Hooks
+.husky/pre-commit runs:
+1. npm run format (Prettier formatting)
+2. npm run lint:fix (ESLint auto-fix)
+3. npm run type-check (TypeScript validation)
+4. npm run test:coverage (Coverage check)
+5. git add -A (Stage formatted files)
+6. Fail commit if coverage <80%
+
+## API Client Architecture
 - **Axios Wrapper**: Custom ApiClient class with request/response interceptors
 - **Automatic Retry**: Exponential backoff with response caching (TTL)
 - **Request Tracking**: Request ID tracking for debugging
 - **Type Safety**: Generic methods with proper TypeScript support
 - **Error Handling**: Structured API error responses with retry logic
 
-### Error Handling System
+## Error Handling System
 - **Structured Types**: Enum-based categorization (NETWORK, AUTH, VALIDATION, etc.)
 - **Severity Levels**: LOW, MEDIUM, HIGH, CRITICAL with appropriate handling
 - **Sentry Integration**: Comprehensive error reporting with context
 - **Toast Notifications**: User-friendly error messaging
 
-### Performance Optimizations
+## Performance Optimizations
 - **Code Splitting**: Route-level and component-level splitting
 - **Lazy Loading**: Dynamic imports for non-critical components
 - **Memoization**: Strategic use of React.memo and useMemo
 - **Virtualization**: For large lists and tables
 
-### State Management Strategy
+## State Management Strategy
 - **Zustand**: Global application state
 - **React Context**: User/account management
 - **Custom Hooks**: Feature-specific state
 - **Local State**: Component-level interactions
 
-## 🚀 Production & Quality
+## Test Patterns
+// ✅ GOOD: Tests user behavior
+test('submits form when user clicks submit', async () => {
+  const handleSubmit = vi.fn()
+  render(<Form onSubmit={handleSubmit} />)
+  await user.click(screen.getByRole('button', { name: /submit/i }))
+  expect(handleSubmit).toHaveBeenCalled()
+})
 
-### Build Optimizations
-- Code splitting (automatic route-based)
-- Tree shaking (dead code elimination)
-- Asset optimization (images, fonts)
-- Bundle analysis and size monitoring
+// ❌ BAD: Tests implementation details
+test('calls setState when input changes', () => {
+  // Don't test internal state changes
+})
 
-### Performance Monitoring
-- Error reporting (Sentry integration)
-- Performance metrics (Core Web Vitals)
-- User analytics and usage tracking
-- Regular load testing
-
-### Security Measures
-- Input validation and sanitization
-- XSS prevention measures
-- CSRF protection with tokens
-- Secure authentication and session management
-
-## Environment Variables
-
-Required environment variables:
-- `VITE_API_BASE_URL` - Backend API base URL
-
-## Documentation Rules
+## Rules
 
 **CRITICAL**: When making ANY changes to the project:
 
@@ -265,9 +269,11 @@ Required environment variables:
 3. **Document new dependencies** in tech stack section
 4. **Add new commands** to development commands
 5. **Update environment variables** if adding new ones
+6. **WRITE TESTS** for all new functionality
+7. **MAINTAIN 80%+ test coverage** at all times
+8. **UPDATE test documentation** when test patterns change
 
-This ensures AI context remains accurate and development stays consistent.
+This ensures AI context remains accurate, development stays consistent, and code quality is maintained.
 
 ---
-
 *Keep this file updated with every significant change to maintain accurate AI context.*

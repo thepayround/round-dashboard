@@ -3,23 +3,27 @@
 ## Enhanced Rules Added
 
 ### 🔒 **Security & Code Quality**
+
 - `eslint-plugin-security` - Detects security vulnerabilities
 - `eslint-plugin-sonarjs` - Finds code smells and complexity issues
 - `eslint-plugin-unicorn` - Modern JavaScript best practices
 
 ### ⚛️ **React Best Practices**
+
 - `react-hooks/exhaustive-deps` - Ensures proper dependency arrays
 - `react/jsx-props-no-spreading` - Warns about prop spreading
 - `react/function-component-definition` - Enforces arrow function components
 - `react/jsx-no-useless-fragment` - Removes unnecessary fragments
 
 ### 📝 **TypeScript Enhancements**
+
 - `@typescript-eslint/prefer-nullish-coalescing` - Use ?? instead of ||
 - `@typescript-eslint/prefer-optional-chain` - Use ?. for safe access
 - `@typescript-eslint/consistent-type-imports` - Separate type imports
 - `@typescript-eslint/no-floating-promises` - Handle async properly
 
 ### 🏗️ **Code Structure**
+
 - `prefer-arrow/prefer-arrow-functions` - Prefer arrow functions
 - `no-loops/no-loops` - Encourage functional programming
 - Improved import organization with alphabetical sorting
@@ -27,6 +31,7 @@
 ## Installation Commands
 
 ### Required Dependencies
+
 ```bash
 npm install --save-dev \
   eslint-plugin-security \
@@ -38,6 +43,7 @@ npm install --save-dev \
 ```
 
 ### Optional (Advanced)
+
 ```bash
 npm install --save-dev \
   eslint-plugin-testing-library \
@@ -55,21 +61,25 @@ npm install --save-dev \
 ## Key Improvements
 
 ### 🎯 **Functional Programming**
+
 - Discourages `for` loops in favor of `.map()`, `.filter()`, `.reduce()`
 - Prefers arrow functions over function declarations
 - Encourages immutable patterns
 
 ### 🔧 **Modern JavaScript**
+
 - Enforces optional chaining (`obj?.prop`)
 - Prefers nullish coalescing (`value ?? default`)
 - Consistent file naming (camelCase/PascalCase)
 
 ### 🛡️ **Security**
+
 - Detects potential XSS vulnerabilities
 - Warns about unsafe dynamic property access
 - Identifies security anti-patterns
 
 ### 📊 **Performance**
+
 - Tracks cognitive complexity (warns if functions are too complex)
 - Detects duplicate strings that should be constants
 - Optimizes import organization
@@ -83,6 +93,7 @@ npm install --save-dev \
 ## Testing Override
 
 Special rules for test files that are more lenient:
+
 - Allows `any` type in tests
 - Allows duplicate strings in test descriptions
 - Relaxed complexity rules
@@ -100,7 +111,7 @@ Special rules for test files that are more lenient:
 rules: {
   // Enforce consistent component naming
   'unicorn/filename-case': ['error', { cases: { pascalCase: true } }],
-  
+
   // Prefer specific imports for better tree-shaking
   'no-restricted-imports': [
     'error',

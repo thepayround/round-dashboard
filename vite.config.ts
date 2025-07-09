@@ -1,24 +1,24 @@
 /**
  * Vite Configuration for Round Dashboard
- * 
+ *
  * PURPOSE:
  * Vite is a modern build tool that provides fast development and optimized production builds.
  * This configuration customizes Vite for React development with TypeScript support.
- * 
+ *
  * WHEN TO MODIFY:
  * - Adding new plugins or build optimizations
  * - Configuring environment variables
  * - Setting up proxy for API calls
  * - Adding path aliases or custom resolvers
  * - Configuring build output or chunking
- * 
+ *
  * KEY CONFIGURATION AREAS:
  * - plugins: Extend Vite functionality (React, TypeScript, etc.)
  * - resolve: Configure module resolution and aliases
  * - build: Production build configuration
  * - server: Development server configuration
  * - define: Global constants for build
- * 
+ *
  * ALTERNATIVE CONFIGURATIONS:
  * - For PWA: Add @vite/plugin-pwa
  * - For legacy browsers: Add @vitejs/plugin-legacy
@@ -41,18 +41,18 @@ export default defineConfig({
     // checker({ typescript: true }), // TypeScript type checking
     // { name: 'singleHMR', handleHotUpdate({ modules }) { /* custom HMR */ } }
   ],
-  
+
   // Module resolution configuration
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"), // Map @ to src directory
+      '@': resolve(__dirname, './src'), // Map @ to src directory
       // Add more aliases as needed:
       // "@/components": resolve(__dirname, "./src/components"),
       // "@/utils": resolve(__dirname, "./src/utils"),
       // "@/types": resolve(__dirname, "./src/types"),
     },
   },
-  
+
   // Development server configuration
   // server: {
   //   port: 3000,                    // Custom port
@@ -65,7 +65,7 @@ export default defineConfig({
   //     }
   //   }
   // },
-  
+
   // Production build configuration
   // build: {
   //   outDir: 'dist',                // Output directory
@@ -80,16 +80,16 @@ export default defineConfig({
   //     }
   //   }
   // },
-  
+
   // Global constants
   // define: {
   //   __VERSION__: JSON.stringify(process.env.npm_package_version),
   //   __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
   // },
-  
+
   // Environment variables
   // envPrefix: 'VITE_',              // Environment variable prefix
-  
+
   // CSS configuration
   // css: {
   //   modules: {

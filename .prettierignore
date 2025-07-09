@@ -1,6 +1,12 @@
-node_modules/
-build/
+# Ignore AI context file to preserve token-optimized formatting
+CLAUDE.md
+
+# Ignore generated files
 dist/
+build/
 coverage/
-*.config.js
-*.config.ts 
+node_modules/
+
+# Ignore package files
+package-lock.json
+*.log

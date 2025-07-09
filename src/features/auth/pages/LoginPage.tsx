@@ -1,41 +1,92 @@
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+
+import type { ValidationError } from '@/shared/utils/validation'
+import {
+  validateLoginForm,
+  getFieldError,
+  hasFieldError,
+  validateEmail,
+  validatePassword,
+} from '@/shared/utils/validation'
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
   })
+  const [errors, setErrors] = useState<ValidationError[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+
+    // Clear field error when user starts typing
+    if (hasFieldError(errors, name)) {
+      setErrors(prev => prev.filter(error => error.field !== name))
+    }
+  }
+
+  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+
+    // Validate field when user leaves it
+    if (name === 'email') {
+      const emailValidation = validateEmail(value)
+      if (!emailValidation.isValid) {
+        setErrors(prev => [
+          ...prev.filter(error => error.field !== 'email'),
+          ...emailValidation.errors,
+        ])
+      }
+    } else if (name === 'password') {
+      const passwordValidation = validatePassword(value)
+      if (!passwordValidation.isValid) {
+        setErrors(prev => [
+          ...prev.filter(error => error.field !== 'password'),
+          ...passwordValidation.errors,
+        ])
+      }
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
+
+    // Final validation check before submission
+    const validation = validateLoginForm(formData)
+
+    if (!validation.isValid) {
+      setErrors(validation.errors)
+      setIsSubmitting(false)
+      return
+    }
+
+    setErrors([])
     // TODO: Implement login logic
-    console.log('Login data:', formData)
+    setIsSubmitting(false)
   }
 
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ 
-        duration: 0.6, 
-        ease: "easeOut",
-        delay: 0.1
+      transition={{
+        duration: 0.6,
+        ease: 'easeOut',
+        delay: 0.1,
       }}
       className="auth-card"
     >
       {/* Header */}
       <div className="text-center mb-8">
         <div className="gradient-header" />
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
@@ -43,13 +94,13 @@ export const LoginPage = () => {
         >
           Welcome Back
         </motion.h1>
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.5 }}
           className="auth-text-muted text-lg"
         >
-          Sign in to your Round account
+          Sign in to your Round Platform account
         </motion.p>
       </div>
 
@@ -57,33 +108,51 @@ export const LoginPage = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Email Address */}
         <div>
-          <label className="auth-label">Email Address</label>
+          <label htmlFor="email" className="auth-label">
+            Email Address
+          </label>
           <div className="input-container">
             <Mail className="input-icon-left auth-icon-primary" />
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              onBlur={handleInputBlur}
               placeholder="example@gmail.com"
-              className="auth-input input-with-icon-left"
+              className={`auth-input input-with-icon-left ${hasFieldError(errors, 'email') ? 'auth-input-error' : ''}`}
               required
             />
           </div>
+          {hasFieldError(errors, 'email') && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+            >
+              <AlertCircle className="w-4 h-4" />
+              <span>{getFieldError(errors, 'email')?.message}</span>
+            </motion.div>
+          )}
         </div>
 
         {/* Password */}
         <div>
-          <label className="auth-label">Password</label>
+          <label htmlFor="password" className="auth-label">
+            Password
+          </label>
           <div className="input-container">
             <Lock className="input-icon-left auth-icon-primary" />
             <input
+              id="password"
               type={showPassword ? 'text' : 'password'}
               name="password"
               value={formData.password}
               onChange={handleInputChange}
+              onBlur={handleInputBlur}
               placeholder="Enter your password"
-              className="auth-input input-with-icon-left input-with-icon-right"
+              className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(errors, 'password') ? 'auth-input-error' : ''}`}
               required
             />
             <button
@@ -94,6 +163,16 @@ export const LoginPage = () => {
               {showPassword ? <EyeOff /> : <Eye />}
             </button>
           </div>
+          {hasFieldError(errors, 'password') && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+            >
+              <AlertCircle className="w-4 h-4" />
+              <span>{getFieldError(errors, 'password')?.message}</span>
+            </motion.div>
+          )}
         </div>
 
         {/* Forgot Password */}
@@ -106,16 +185,17 @@ export const LoginPage = () => {
         {/* Submit Button */}
         <motion.button
           type="submit"
+          disabled={isSubmitting}
           whileHover={{ scale: 1.02, y: -2 }}
           whileTap={{ scale: 0.98 }}
-          transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          className="w-full btn-primary text-lg py-4 mt-8"
+          transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+          className={`w-full btn-primary text-lg py-4 mt-8 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <span className="flex items-center justify-center space-x-2">
-            <span>Sign In</span>
+            <span>{isSubmitting ? 'Signing In...' : 'Sign In'}</span>
             <motion.span
               animate={{ x: [0, 4, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+              transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
             >
               →
             </motion.span>
@@ -133,7 +213,7 @@ export const LoginPage = () => {
             type="button"
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             className="w-full btn-secondary flex items-center justify-center space-x-3 py-4"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -161,11 +241,11 @@ export const LoginPage = () => {
             type="button"
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             className="w-full btn-secondary flex items-center justify-center space-x-3 py-4"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
             </svg>
             <span className="font-semibold">Continue with Facebook</span>
           </motion.button>
@@ -174,7 +254,7 @@ export const LoginPage = () => {
         {/* Register Link */}
         <div className="text-center">
           <p className="auth-text-muted">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link to="/auth/register" className="auth-link">
               Create account
             </Link>

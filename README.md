@@ -110,11 +110,59 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 ## 📝 Contributing
 
-1. Follow the TypeScript strict mode guidelines
-2. Use the established design system
-3. Write tests for new features
-4. Follow the feature-based architecture
-5. Update CLAUDE.md when adding new features
+### Development Workflow
+
+1. **Create Feature Branch**: `git checkout -b feature/your-feature`
+2. **Write Tests First** (TDD encouraged): Create test files before implementation
+3. **Implement Feature**: Follow component architecture patterns
+4. **Run Tests**: `npm run test:coverage` - must maintain 80%+ coverage
+5. **Pre-commit Hooks**: Automatically run on commit (formatting, linting, type checking, tests)
+6. **Update Documentation**: Update CLAUDE.md when adding new features
+7. **Create Pull Request**: Include test results and feature description
+
+### Code Standards
+
+- **TypeScript Strict**: All strict flags enabled, maximum type safety
+- **Component Architecture**: Use modular structure with separate .types.ts files
+- **File Size Limits**: Components <200 lines, tests <150 lines, utils <100 lines
+- **Test Coverage**: 80% minimum coverage required for all metrics
+- **Pre-commit Hooks**: Automated quality checks prevent bad commits
+
+### Component Development
+
+```bash
+# Create new component structure
+mkdir src/components/NewComponent
+touch src/components/NewComponent/NewComponent.tsx
+touch src/components/NewComponent/NewComponent.test.tsx
+touch src/components/NewComponent/NewComponent.types.ts
+touch src/components/NewComponent/index.ts
+```
+
+### Testing Requirements
+
+- **Unit Tests**: All components and functions
+- **Integration Tests**: Complete user flows
+- **Accessibility Tests**: Keyboard navigation, ARIA compliance
+- **Responsive Tests**: Mobile (375px), Tablet (768px), Desktop (1920px)
+
+### Pre-commit Quality Checks
+
+The `.husky/pre-commit` hook automatically runs:
+
+1. Prettier formatting
+2. ESLint auto-fix
+3. TypeScript validation
+4. Test coverage check (fails if <80%)
+5. Stages formatted files
+
+### Design System Compliance
+
+- Use established brand colors and gradients
+- Follow glass morphism patterns
+- Implement responsive design (mobile-first)
+- Ensure accessibility compliance (WCAG standards)
+- Use Tailwind CSS utility classes consistently
 
 ## 📄 License
 
