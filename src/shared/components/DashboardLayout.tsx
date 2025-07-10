@@ -14,8 +14,9 @@ import {
   LogOut,
 } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useAuthActions, useAuthState } from '@/shared/contexts/AuthContext'
+import { useAuthActions, useAuthState } from '@/shared/hooks/useAuth'
 import { mockApi } from '@/shared/services/mockApi'
+import ColorLogo from '@/assets/logos/color-logo.svg'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -66,16 +67,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     navigate('/auth/login')
   }
 
-  const LogoText = () => (
-    <div className="flex items-center space-x-1">
-      <span className="text-[#14BDEA] font-bold text-xl">R</span>
-      <span className="text-[#32A1E4] font-bold text-xl">O</span>
-      <span className="text-[#7767DA] font-bold text-xl">U</span>
-      <span className="text-[#BD2CD0] font-bold text-xl">N</span>
-      <span className="text-[#D417C8] font-bold text-xl">D</span>
-    </div>
-  )
-
   return (
     <div className="min-h-screen relative">
       {/* Animated Background - Same as auth pages */}
@@ -90,10 +81,13 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         initial={false}
         animate={{ width: isCollapsed ? 80 : 280 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="fixed left-0 top-0 h-full z-50 auth-card border-r border-white/10"
+        className="fixed left-0 top-0 h-full z-50 bg-white/5 backdrop-blur-xl border-r border-white/10"
       >
         {/* Logo Section */}
-        <div className="h-20 flex items-center justify-center border-b border-white/10 relative">
+        <div
+          className="flex items-center justify-center border-b border-white/10"
+          style={{ height: '97px' }}
+        >
           <AnimatePresence mode="wait">
             {!isCollapsed ? (
               <motion.div
@@ -102,12 +96,16 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="flex items-center space-x-3"
+                className="flex items-center space-x-4"
               >
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                  <div className="w-4 h-4 rounded-full bg-gradient-to-br from-[#D417C8] to-[#14BDEA]" />
+                <img src={ColorLogo} alt="Round Logo" className="w-10 h-10" />
+                <div className="flex items-center space-x-1">
+                  <span className="text-[#14BDEA] font-bold text-3xl">R</span>
+                  <span className="text-[#32A1E4] font-bold text-3xl">O</span>
+                  <span className="text-[#7767DA] font-bold text-3xl">U</span>
+                  <span className="text-[#BD2CD0] font-bold text-3xl">N</span>
+                  <span className="text-[#D417C8] font-bold text-3xl">D</span>
                 </div>
-                <LogoText />
               </motion.div>
             ) : (
               <motion.div
@@ -116,28 +114,16 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+                className="flex items-center justify-center"
               >
-                <div className="w-4 h-4 rounded-full bg-gradient-to-br from-[#D417C8] to-[#14BDEA]" />
+                <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
               </motion.div>
             )}
           </AnimatePresence>
-
-          {/* Toggle Button */}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-10"
-          >
-            {isCollapsed ? (
-              <ChevronRight className="w-4 h-4 text-white" />
-            ) : (
-              <ChevronLeft className="w-4 h-4 text-white" />
-            )}
-          </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 py-6 space-y-2">
+        <nav className="flex-1 px-6 py-6 space-y-2">
           {navItems.map(item => (
             <Link
               key={item.id}
@@ -149,7 +135,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }
-                ${isCollapsed ? 'justify-center px-0' : 'px-4'}
+                ${isCollapsed ? 'justify-center px-0' : 'px-6'}
               `}
             >
               <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
@@ -185,7 +171,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </nav>
 
         {/* Bottom Navigation */}
-        <div className="border-t border-white/10 px-4 py-4 space-y-2">
+        <div className="border-t border-white/10 px-6 py-4 space-y-2">
           {bottomNavItems.map(item => (
             <Link
               key={item.id}
@@ -197,7 +183,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }
-                ${isCollapsed ? 'justify-center px-0' : 'px-4'}
+                ${isCollapsed ? 'justify-center px-0' : 'px-6'}
               `}
             >
               <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
@@ -259,6 +245,21 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </button>
         </div>
       </motion.aside>
+
+      {/* Toggle Button - Outside sidebar */}
+      <motion.button
+        initial={false}
+        animate={{ left: isCollapsed ? 64 : 264 }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="fixed top-20 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-50"
+      >
+        {isCollapsed ? (
+          <ChevronRight className="w-4 h-4 text-white" />
+        ) : (
+          <ChevronLeft className="w-4 h-4 text-white" />
+        )}
+      </motion.button>
 
       {/* Main Content */}
       <motion.main

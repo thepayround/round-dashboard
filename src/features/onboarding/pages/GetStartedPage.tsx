@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { mockApi } from '@/shared/services/mockApi'
-import { useAuthState, useAuthActions } from '@/shared/contexts/AuthContext'
+import { useAuthState, useAuthActions } from '@/shared/hooks/useAuth'
 import { TabNavigation } from '../components/TabNavigation'
 import { UserInfoStep } from '../components/steps/UserInfoStep'
 import { OrganizationStep } from '../components/steps/OrganizationStep'

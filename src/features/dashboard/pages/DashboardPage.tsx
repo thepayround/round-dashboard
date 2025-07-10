@@ -13,7 +13,8 @@ import {
 } from 'lucide-react'
 
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { useAuthState } from '@/shared/contexts/AuthContext'
+import { useAuthState } from '@/shared/hooks/useAuth'
+import type { ProductInfo, TeamSettings } from '@/features/onboarding/types/onboarding'
 
 export const DashboardPage = () => {
   const { user } = useAuthState()
@@ -290,22 +291,24 @@ export const DashboardPage = () => {
                   {onboardingData.products.hasProducts &&
                   onboardingData.products.products.length > 0 ? (
                     <div className="space-y-3">
-                      {onboardingData.products.products.map(product => (
-                        <div
-                          key={product.id}
-                          className="p-4 rounded-xl bg-white/5 border border-white/10"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h3 className="font-medium auth-text">{product.name}</h3>
-                              <p className="text-sm auth-text-muted">{product.description}</p>
-                            </div>
-                            <div className="text-right">
-                              <p className="font-medium auth-text">${product.price}</p>
+                      {onboardingData.products.products.map(
+                        (product: ProductInfo['products'][0]) => (
+                          <div
+                            key={product.id}
+                            className="p-4 rounded-xl bg-white/5 border border-white/10"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <h3 className="font-medium auth-text">{product.name}</h3>
+                                <p className="text-sm auth-text-muted">{product.description}</p>
+                              </div>
+                              <div className="text-right">
+                                <p className="font-medium auth-text">${product.price}</p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      )}
                     </div>
                   ) : (
                     <div className="text-center py-8">
@@ -335,27 +338,29 @@ export const DashboardPage = () => {
               </div>
 
               <div className="space-y-3">
-                {onboardingData.team.invitations.map(invitation => (
-                  <div
-                    key={invitation.id}
-                    className="p-4 rounded-xl bg-white/5 border border-white/10"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium auth-text">{invitation.email}</p>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <span className="text-xs px-2 py-1 rounded-full bg-[#32A1E4]/20 text-[#32A1E4] border border-[#32A1E4]/30">
-                            {invitation.role}
-                          </span>
-                          <span className="text-xs auth-text-muted">
-                            Status: {invitation.status}
-                          </span>
+                {onboardingData.team.invitations.map(
+                  (invitation: TeamSettings['invitations'][0]) => (
+                    <div
+                      key={invitation.id}
+                      className="p-4 rounded-xl bg-white/5 border border-white/10"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium auth-text">{invitation.email}</p>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <span className="text-xs px-2 py-1 rounded-full bg-[#32A1E4]/20 text-[#32A1E4] border border-[#32A1E4]/30">
+                              {invitation.role}
+                            </span>
+                            <span className="text-xs auth-text-muted">
+                              Status: {invitation.status}
+                            </span>
+                          </div>
                         </div>
+                        <Clock className="w-5 h-5 auth-text-muted" />
                       </div>
-                      <Clock className="w-5 h-5 auth-text-muted" />
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             </div>
           </motion.div>

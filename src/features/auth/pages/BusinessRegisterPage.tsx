@@ -27,7 +27,7 @@ import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { BillingAddressForm } from '../components/BillingAddressForm'
 import { useMultiStepForm } from '../hooks/useMultiStepForm'
 import { mockApi } from '@/shared/services/mockApi'
-import { useAuthActions } from '@/shared/contexts/AuthContext'
+import { useAuthActions } from '@/shared/hooks/useAuth'
 
 interface PersonalFormData {
   firstName: string

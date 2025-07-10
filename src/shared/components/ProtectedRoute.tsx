@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { useAuthState } from '@/shared/contexts/AuthContext'
+import { useAuthState } from '@/shared/hooks/useAuth'
 
 interface ProtectedRouteProps {
   children: React.ReactNode

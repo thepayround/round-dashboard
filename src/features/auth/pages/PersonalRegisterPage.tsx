@@ -11,7 +11,7 @@ import {
   validateField,
 } from '@/shared/utils/validation'
 import { mockApi } from '@/shared/services/mockApi'
-import { useAuthActions } from '@/shared/contexts/AuthContext'
+import { useAuthActions } from '@/shared/hooks/useAuth'
 
 export const PersonalRegisterPage = () => {
   const navigate = useNavigate()

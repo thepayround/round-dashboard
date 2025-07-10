@@ -12,7 +12,7 @@ import {
   validatePassword,
 } from '@/shared/utils/validation'
 import { mockApi } from '@/shared/services/mockApi'
-import { useAuthActions } from '@/shared/contexts/AuthContext'
+import { useAuthActions } from '@/shared/hooks/useAuth'
 
 export const LoginPage = () => {
   const navigate = useNavigate()

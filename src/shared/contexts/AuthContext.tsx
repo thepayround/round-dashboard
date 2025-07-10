@@ -1,32 +1,11 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react'
+import React, { useReducer, useEffect } from 'react'
 import type { MockUser } from '@/shared/services/mockApi'
-
-// Types
-interface AuthState {
-  isAuthenticated: boolean
-  user: Omit<MockUser, 'password'> | null
-  token: string | null
-  isLoading: boolean
-  error: string | null
-}
-
-type AuthAction =
-  | { type: 'LOGIN_START' }
-  | { type: 'LOGIN_SUCCESS'; payload: { user: Omit<MockUser, 'password'>; token: string } }
-  | { type: 'LOGIN_FAILURE'; payload: string }
-  | { type: 'LOGOUT' }
-  | { type: 'SET_USER'; payload: Omit<MockUser, 'password'> }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'CLEAR_ERROR' }
-
-interface AuthContextType {
-  state: AuthState
-  login: (user: Omit<MockUser, 'password'>, token: string) => void
-  logout: () => void
-  setUser: (user: Omit<MockUser, 'password'>) => void
-  setLoading: (loading: boolean) => void
-  clearError: () => void
-}
+import {
+  AuthContext,
+  type AuthContextType,
+  type AuthState,
+  type AuthAction,
+} from './AuthContextType'
 
 // Initial state
 const initialState: AuthState = {
@@ -99,9 +78,6 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       return state
   }
 }
-
-// Context
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 // Provider component
 interface AuthProviderProps {
@@ -184,24 +160,4 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-// Hook to use auth context
-export const useAuth = () => {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
-}
-
-// Helper hooks for common patterns
-export const useAuthState = () => {
-  const { state } = useAuth()
-  return state
-}
-
-export const useAuthActions = () => {
-  const { login, logout, setUser, setLoading, clearError } = useAuth()
-  return { login, logout, setUser, setLoading, clearError }
 }
