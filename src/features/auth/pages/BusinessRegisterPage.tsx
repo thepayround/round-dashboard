@@ -12,9 +12,8 @@ import {
   AlertCircle,
 } from 'lucide-react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-import type { AccountType } from '@/shared/types/auth'
 import type { CompanyInfo, BillingAddress } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -27,6 +26,8 @@ import {
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { BillingAddressForm } from '../components/BillingAddressForm'
 import { useMultiStepForm } from '../hooks/useMultiStepForm'
+import { mockApi } from '@/shared/services/mockApi'
+import { useAuthActions } from '@/shared/contexts/AuthContext'
 
 interface PersonalFormData {
   firstName: string
@@ -37,8 +38,10 @@ interface PersonalFormData {
 }
 
 export const BusinessRegisterPage = () => {
-  // Form state
-  const [accountType] = useState<AccountType | null>('business')
+  const navigate = useNavigate()
+  const { login } = useAuthActions()
+
+  // Form state is hardcoded to 'business' for this page
   const [personalData, setPersonalData] = useState<PersonalFormData>({
     firstName: '',
     lastName: '',
@@ -85,6 +88,7 @@ export const BusinessRegisterPage = () => {
   // UI state
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [apiError, setApiError] = useState('')
 
   // Multi-step form management
   const multiStepForm = useMultiStepForm({
@@ -140,22 +144,34 @@ export const BusinessRegisterPage = () => {
   }
 
   // Handle form completion
-  function handleFormComplete() {
+  async function handleFormComplete() {
     setIsSubmitting(true)
+    setApiError('')
 
-    // TODO: Implement API call to register business user
-    console.warn('Business registration data:', {
-      accountType,
-      personal: personalData,
-      company: companyInfo,
-      billing: billingAddress,
-    })
+    try {
+      // Call mock API
+      const response = await mockApi.register({
+        ...personalData,
+        accountType: 'business',
+        companyInfo,
+        billingAddress,
+      })
 
-    // Simulate API call
-    setTimeout(() => {
+      if (response.success && response.data) {
+        // Log the user in automatically
+        login(response.data.user, response.data.token)
+
+        // Navigate to get-started page
+        navigate('/get-started')
+      } else {
+        setApiError(response.error ?? 'Registration failed')
+        setIsSubmitting(false)
+      }
+    } catch (error) {
+      console.error('Registration error:', error)
+      setApiError('An unexpected error occurred. Please try again.')
       setIsSubmitting(false)
-      // TODO: Handle successful registration
-    }, 2000)
+    }
   }
 
   // Handle form submission
@@ -391,7 +407,12 @@ export const BusinessRegisterPage = () => {
 
       case 1:
         return (
-          <div className="auth-card">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="auth-card"
+          >
             <BillingAddressForm
               billingAddress={billingAddress}
               onBillingAddressChange={setBillingAddress}
@@ -400,12 +421,17 @@ export const BusinessRegisterPage = () => {
               onErrorsChange={setBillingErrors}
               isOptional
             />
-          </div>
+          </motion.div>
         )
 
       case 2:
         return (
-          <div className="auth-card">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="auth-card"
+          >
             <CompanyDetailsForm
               companyInfo={companyInfo}
               onCompanyInfoChange={setCompanyInfo}
@@ -413,7 +439,7 @@ export const BusinessRegisterPage = () => {
               errors={companyErrors}
               onErrorsChange={setCompanyErrors}
             />
-          </div>
+          </motion.div>
         )
 
       default:
@@ -422,8 +448,38 @@ export const BusinessRegisterPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="auth-container">
+      {/* Animated Background */}
+      <div className="auth-background">
+        <div className="floating-orb" />
+        <div className="floating-orb" />
+        <div className="floating-orb" />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{
+          duration: 0.8,
+          ease: [0.16, 1, 0.3, 1],
+          delay: 0.2,
+        }}
+        className="w-full max-w-lg relative z-10"
+      >
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="gradient-header" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="relative"
+          >
+            <h1 className="text-4xl font-bold auth-text mb-4 relative">Create Business Account</h1>
+            <p className="auth-text-muted text-lg font-medium">Join Round for business</p>
+          </motion.div>
+        </div>
+
         {/* Progress Bar */}
         {multiStepForm.currentStep >= 0 && (
           <motion.div
@@ -432,10 +488,10 @@ export const BusinessRegisterPage = () => {
             className="mb-8"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-gray-400">
+              <span className="text-sm auth-text-muted">
                 Step {multiStepForm.currentStep + 1} of {multiStepForm.getTotalSteps()}
               </span>
-              <span className="text-sm text-gray-400">
+              <span className="text-sm auth-text-muted">
                 {multiStepForm.getStepProgress()}% Complete
               </span>
             </div>
@@ -446,6 +502,20 @@ export const BusinessRegisterPage = () => {
                 transition={{ duration: 0.5 }}
                 className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] h-2 rounded-full"
               />
+            </div>
+          </motion.div>
+        )}
+
+        {/* API Error Message */}
+        {apiError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+          >
+            <div className="flex items-center space-x-2 text-red-400">
+              <AlertCircle className="w-5 h-5" />
+              <span className="text-sm font-medium">{apiError}</span>
             </div>
           </motion.div>
         )}
@@ -472,7 +542,7 @@ export const BusinessRegisterPage = () => {
                   px-8 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px]
                   ${
                     multiStepForm.canGoPrevious
-                      ? 'bg-white/10 text-white hover:bg-white/20'
+                      ? 'btn-secondary'
                       : 'bg-white/5 text-gray-500 cursor-not-allowed'
                   }
                 `}
@@ -490,7 +560,7 @@ export const BusinessRegisterPage = () => {
                       type="button"
                       onClick={handleSkipBilling}
                       disabled={isSubmitting}
-                      className="px-8 py-3 rounded-lg font-medium transition-all duration-200 bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 min-w-[160px] h-[48px] flex items-center justify-center"
+                      className="btn-secondary px-8 py-3 disabled:opacity-50 min-w-[160px] h-[48px] flex items-center justify-center"
                     >
                       Skip for now
                     </button>
@@ -509,14 +579,14 @@ export const BusinessRegisterPage = () => {
                       (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
                     }
                     className={`
-                      px-8 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px]
+                      px-8 py-3 font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px] rounded-lg
                       ${
                         isSubmitting ||
                         (multiStepForm.currentStep === 0 && !isPersonalValid) ||
                         (multiStepForm.currentStep === 1 && !isBillingComplete) ||
                         (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
-                          ? 'bg-white/10 text-gray-400 cursor-not-allowed'
-                          : 'bg-white/15 text-white hover:bg-white/20 backdrop-blur-sm border border-white/30'
+                          ? 'opacity-50 cursor-not-allowed btn-secondary'
+                          : 'btn-primary'
                       }
                     `}
                   >
@@ -549,7 +619,7 @@ export const BusinessRegisterPage = () => {
             </Link>
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

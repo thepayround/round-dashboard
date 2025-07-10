@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -11,8 +11,14 @@ import {
   validateEmail,
   validatePassword,
 } from '@/shared/utils/validation'
+import { mockApi } from '@/shared/services/mockApi'
+import { useAuthActions } from '@/shared/contexts/AuthContext'
 
 export const LoginPage = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { login } = useAuthActions()
+
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -20,6 +26,7 @@ export const LoginPage = () => {
   })
   const [errors, setErrors] = useState<ValidationError[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [apiError, setApiError] = useState('')
 
   // Form validation helper
   const isFormValid = () => {
@@ -31,7 +38,7 @@ export const LoginPage = () => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && isFormValid()) {
       e.preventDefault()
-      handleSubmit(e as any)
+      handleSubmit(e as React.FormEvent)
     }
   }
 
@@ -68,9 +75,10 @@ export const LoginPage = () => {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setApiError('')
 
     // Final validation check before submission
     const validation = validateLoginForm(formData)
@@ -82,19 +90,37 @@ export const LoginPage = () => {
     }
 
     setErrors([])
-    // TODO: Implement login logic
-    setIsSubmitting(false)
+
+    try {
+      // Call mock API
+      const response = await mockApi.login(formData)
+
+      if (response.success && response.data) {
+        // Log the user in
+        login(response.data.user, response.data.token)
+
+        // Navigate to intended destination or dashboard
+        const from =
+          (location.state as { from?: { pathname?: string } })?.from?.pathname ?? '/dashboard'
+        navigate(from, { replace: true })
+      } else {
+        setApiError(response.error ?? 'Login failed')
+        setIsSubmitting(false)
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      setApiError('An unexpected error occurred. Please try again.')
+      setIsSubmitting(false)
+    }
   }
 
   return (
     <div className="auth-container">
-      {/* Background Layer */}
+      {/* Animated Background */}
       <div className="auth-background">
-        {/* Floating geometric shapes */}
-        <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-[#D417C8]/20 to-[#7767DA]/20 rounded-full blur-2xl animate-pulse" />
-        <div className="absolute bottom-32 right-32 w-24 h-24 bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 rounded-full blur-2xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-gradient-to-br from-[#7767DA]/15 to-[#D417C8]/15 rounded-full blur-xl animate-pulse delay-500" />
-        <div className="absolute bottom-1/4 left-1/4 w-16 h-16 bg-gradient-to-br from-[#14BDEA]/15 to-[#32A1E4]/15 rounded-full blur-xl animate-pulse delay-700" />
+        <div className="floating-orb" />
+        <div className="floating-orb" />
+        <div className="floating-orb" />
       </div>
 
       <motion.div
@@ -121,6 +147,20 @@ export const LoginPage = () => {
             <p className="auth-text-muted text-lg font-medium">Sign in to your Round account</p>
           </motion.div>
         </div>
+
+        {/* API Error Message */}
+        {apiError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+          >
+            <div className="flex items-center space-x-2 text-red-400">
+              <AlertCircle className="w-5 h-5" />
+              <span className="text-sm font-medium">{apiError}</span>
+            </div>
+          </motion.div>
+        )}
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-6">

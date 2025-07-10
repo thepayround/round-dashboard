@@ -1,6 +1,6 @@
 import React from 'react'
 
-import colorLogo from '../../assets/logos/color-empty-logo-blur.svg'
+import colorLogo from '../../assets/logos/color-logo.svg'
 
 interface ColorLogoProps {
   className?: string
