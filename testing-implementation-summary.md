@@ -174,4 +174,4 @@ The Round Dashboard now has a **production-ready testing framework** that ensure
 
 ---
 
-**Testing is now a core part of the Round Platform development workflow** 🎉
+**Testing is now a core part of the Round development workflow** 🎉

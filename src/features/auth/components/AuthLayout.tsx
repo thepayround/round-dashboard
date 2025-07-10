@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 
-import { WhiteLogo } from '../../../shared/components/WhiteLogo'
+import { ColorLogo } from '../../../shared/components/ColorLogo'
 
 interface AuthLayoutProps {
   children?: React.ReactNode
@@ -16,14 +16,16 @@ export const AuthLayout = ({ children }: AuthLayoutProps = {}) => (
       <div className="floating-orb" />
     </div>
 
-    {/* White Logo - Top Left */}
+    {/* Color Logo - Top Left with symmetric spacing */}
     <motion.div
       initial={{ opacity: 0, scale: 0.8, x: -20 }}
       animate={{ opacity: 1, scale: 1, x: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="logo-container absolute top-6 left-6 z-20"
+      className="logo-container absolute top-12 left-12 z-20"
     >
-      <WhiteLogo size="md" />
+      <Link to="/" className="block hover:scale-105 transition-transform duration-200">
+        <ColorLogo size="md" />
+      </Link>
     </motion.div>
 
     {/* Main Content */}

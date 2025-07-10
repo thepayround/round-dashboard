@@ -110,11 +110,11 @@ export const useMultiStepForm = ({
     })
   }, [])
 
-  // Get progress percentage
-  const getStepProgress = useCallback(() => {
-    const completedSteps = steps.filter(step => step.isCompleted).length
-    return Math.round((completedSteps / steps.length) * 100)
-  }, [steps])
+  // Get progress percentage based on current step
+  const getStepProgress = useCallback(
+    () => Math.round(((currentStep + 1) / steps.length) * 100),
+    [currentStep, steps.length]
+  )
 
   // Get number of completed steps
   const getCompletedSteps = useCallback(

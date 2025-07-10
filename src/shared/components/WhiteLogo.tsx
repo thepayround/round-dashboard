@@ -14,7 +14,5 @@ export const WhiteLogo: React.FC<WhiteLogoProps> = ({ className = '', size = 'md
     lg: 'w-32 h-32',
   }
 
-  return (
-    <img src={whiteLogo} alt="Round Platform" className={`${sizeClasses[size]} ${className}`} />
-  )
+  return <img src={whiteLogo} alt="Round" className={`${sizeClasses[size]} ${className}`} />
 }

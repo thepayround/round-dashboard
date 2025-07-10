@@ -11,7 +11,7 @@ import {
   EyeOff,
   AlertCircle,
 } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import type { AccountType } from '@/shared/types/auth'
@@ -65,7 +65,22 @@ export const BusinessRegisterPage = () => {
   const [billingErrors, setBillingErrors] = useState<ValidationError[]>([])
   const [isPersonalValid, setIsPersonalValid] = useState(false)
   const [isCompanyValid, setIsCompanyValid] = useState(false)
-  const [isBillingValid, setIsBillingValid] = useState(true) // Optional step
+  const [, setIsBillingValid] = useState(true) // Optional step
+
+  // Check if billing address is complete
+  const isBillingComplete =
+    billingAddress &&
+    billingAddress.street.trim() !== '' &&
+    billingAddress.city.trim() !== '' &&
+    billingAddress.state.trim() !== '' &&
+    billingAddress.zipCode.trim() !== '' &&
+    billingAddress.country.trim() !== ''
+
+  // Check if company details are complete (required fields only)
+  const isCompanyComplete =
+    companyInfo.companyName.trim() !== '' &&
+    companyInfo.registrationNumber.trim() !== '' &&
+    companyInfo.currency.trim() !== ''
 
   // UI state
   const [showPassword, setShowPassword] = useState(false)
@@ -81,28 +96,21 @@ export const BusinessRegisterPage = () => {
         isCompleted: false,
       },
       {
-        id: 'company-info',
-        title: 'Company Information',
-        description: 'Your company details',
-        isCompleted: false,
-      },
-      {
         id: 'billing-address',
         title: 'Billing Address',
         description: 'Your billing information',
         isCompleted: false,
         isOptional: true,
       },
+      {
+        id: 'company-info',
+        title: 'Company Information',
+        description: 'Your company details',
+        isCompleted: false,
+      },
     ],
     onComplete: handleFormComplete,
   })
-
-  // Update step completion based on validation
-  useEffect(() => {
-    multiStepForm.updateStepCompletion(0, isPersonalValid)
-    multiStepForm.updateStepCompletion(1, isCompanyValid)
-    multiStepForm.updateStepCompletion(2, isBillingValid)
-  }, [isPersonalValid, isCompanyValid, isBillingValid, multiStepForm])
 
   // Handle personal form changes
   const handlePersonalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,15 +173,15 @@ export const BusinessRegisterPage = () => {
       multiStepForm.completeCurrentStep()
       multiStepForm.goToNext()
     } else if (multiStepForm.currentStep === 1) {
-      // Company info step
-      if (isCompanyValid) {
-        multiStepForm.completeCurrentStep()
-        multiStepForm.goToNext()
-      }
-    } else if (multiStepForm.currentStep === 2) {
       // Billing address step (optional)
       multiStepForm.completeCurrentStep()
-      handleFormComplete()
+      multiStepForm.goToNext()
+    } else if (multiStepForm.currentStep === 2) {
+      // Company info step (final step)
+      if (isCompanyValid && isCompanyComplete) {
+        multiStepForm.completeCurrentStep()
+        handleFormComplete()
+      }
     }
   }
 
@@ -181,7 +189,7 @@ export const BusinessRegisterPage = () => {
   const handleSkipBilling = () => {
     setBillingAddress(undefined)
     multiStepForm.completeCurrentStep()
-    handleFormComplete()
+    multiStepForm.goToNext()
   }
 
   // Render step content
@@ -384,19 +392,6 @@ export const BusinessRegisterPage = () => {
       case 1:
         return (
           <div className="auth-card">
-            <CompanyDetailsForm
-              companyInfo={companyInfo}
-              onCompanyInfoChange={setCompanyInfo}
-              onValidationChange={setIsCompanyValid}
-              errors={companyErrors}
-              onErrorsChange={setCompanyErrors}
-            />
-          </div>
-        )
-
-      case 2:
-        return (
-          <div className="auth-card">
             <BillingAddressForm
               billingAddress={billingAddress}
               onBillingAddressChange={setBillingAddress}
@@ -408,6 +403,19 @@ export const BusinessRegisterPage = () => {
           </div>
         )
 
+      case 2:
+        return (
+          <div className="auth-card">
+            <CompanyDetailsForm
+              companyInfo={companyInfo}
+              onCompanyInfoChange={setCompanyInfo}
+              onValidationChange={setIsCompanyValid}
+              errors={companyErrors}
+              onErrorsChange={setCompanyErrors}
+            />
+          </div>
+        )
+
       default:
         return null
     }
@@ -415,7 +423,7 @@ export const BusinessRegisterPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-md">
         {/* Progress Bar */}
         {multiStepForm.currentStep >= 0 && (
           <motion.div
@@ -436,7 +444,7 @@ export const BusinessRegisterPage = () => {
                 initial={{ width: 0 }}
                 animate={{ width: `${multiStepForm.getStepProgress()}%` }}
                 transition={{ duration: 0.5 }}
-                className="bg-gradient-to-r from-emerald-500 to-teal-600 h-2 rounded-full"
+                className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] h-2 rounded-full"
               />
             </div>
           </motion.div>
@@ -456,14 +464,12 @@ export const BusinessRegisterPage = () => {
             {/* Button Container */}
             <div className="flex items-center justify-between w-full">
               {/* Previous Button */}
-              <motion.button
+              <button
                 type="button"
                 onClick={multiStepForm.goToPrevious}
                 disabled={!multiStepForm.canGoPrevious}
-                whileHover={{ scale: multiStepForm.canGoPrevious ? 1.05 : 1 }}
-                whileTap={{ scale: multiStepForm.canGoPrevious ? 0.95 : 1 }}
                 className={`
-                  px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 min-w-[120px]
+                  px-8 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px]
                   ${
                     multiStepForm.canGoPrevious
                       ? 'bg-white/10 text-white hover:bg-white/20'
@@ -473,58 +479,62 @@ export const BusinessRegisterPage = () => {
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Previous</span>
-              </motion.button>
+              </button>
 
               {/* Right side buttons */}
-              <div className="flex items-center space-x-3">
-                {multiStepForm.currentStep === 2 && (
-                  <motion.button
-                    type="button"
-                    onClick={handleSkipBilling}
-                    disabled={isSubmitting}
-                    whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
-                    whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
-                    className="px-8 py-3 rounded-lg font-medium transition-all duration-300 bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 min-w-[120px]"
-                  >
-                    Skip for now
-                  </motion.button>
+              <div className="flex items-center space-x-4">
+                {/* Skip button - only show on billing step when form is NOT complete */}
+                {multiStepForm.currentStep === 1 && !isBillingComplete && (
+                  <div className="relative group">
+                    <button
+                      type="button"
+                      onClick={handleSkipBilling}
+                      disabled={isSubmitting}
+                      className="px-8 py-3 rounded-lg font-medium transition-all duration-200 bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 min-w-[160px] h-[48px] flex items-center justify-center"
+                    >
+                      Skip for now
+                    </button>
+                  </div>
                 )}
 
-                <motion.button
-                  type="submit"
-                  onClick={handleSubmit}
-                  disabled={
-                    isSubmitting ||
-                    (multiStepForm.currentStep === 0 && !isPersonalValid) ||
-                    (multiStepForm.currentStep === 1 && !isCompanyValid)
-                  }
-                  whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
-                  whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
-                  className={`
-                    px-8 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 min-w-[140px]
-                    ${
+                {/* Continue button - show on all steps but with different logic */}
+                {(multiStepForm.currentStep !== 1 || isBillingComplete) && (
+                  <button
+                    type="submit"
+                    onClick={handleSubmit}
+                    disabled={
                       isSubmitting ||
                       (multiStepForm.currentStep === 0 && !isPersonalValid) ||
-                      (multiStepForm.currentStep === 1 && !isCompanyValid)
-                        ? 'bg-white/10 text-gray-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:shadow-lg'
+                      (multiStepForm.currentStep === 1 && !isBillingComplete) ||
+                      (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
                     }
-                  `}
-                >
-                  <span>
-                    {(() => {
-                      if (isSubmitting) return 'Creating Account...'
-                      if (multiStepForm.isLastStep) return 'Create Account'
-                      return 'Continue'
-                    })()}
-                  </span>
-                  {!isSubmitting &&
-                    (multiStepForm.isLastStep ? (
-                      <CheckCircle className="w-4 h-4" />
-                    ) : (
-                      <ArrowRight className="w-4 h-4" />
-                    ))}
-                </motion.button>
+                    className={`
+                      px-8 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px]
+                      ${
+                        isSubmitting ||
+                        (multiStepForm.currentStep === 0 && !isPersonalValid) ||
+                        (multiStepForm.currentStep === 1 && !isBillingComplete) ||
+                        (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
+                          ? 'bg-white/10 text-gray-400 cursor-not-allowed'
+                          : 'bg-white/15 text-white hover:bg-white/20 backdrop-blur-sm border border-white/30'
+                      }
+                    `}
+                  >
+                    <span>
+                      {(() => {
+                        if (isSubmitting) return 'Creating Account...'
+                        if (multiStepForm.isLastStep) return 'Create Account'
+                        return 'Continue'
+                      })()}
+                    </span>
+                    {!isSubmitting &&
+                      (multiStepForm.isLastStep ? (
+                        <CheckCircle className="w-4 h-4" />
+                      ) : (
+                        <ArrowRight className="w-4 h-4" />
+                      ))}
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>
@@ -534,7 +544,7 @@ export const BusinessRegisterPage = () => {
         <div className="text-center mt-8">
           <p className="auth-text-muted">
             Already have an account?{' '}
-            <Link to="/auth/login" className="auth-link">
+            <Link to="/auth/login" className="auth-link brand-primary">
               Sign in
             </Link>
           </p>

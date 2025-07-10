@@ -185,22 +185,15 @@ export const validateCompanyInfo = (companyInfo: CompanyInfo): ValidationResult 
   const companyNameValidation = validateCompanyName(companyInfo.companyName)
   const registrationNumberValidation = validateRegistrationNumber(companyInfo.registrationNumber)
   const currencyValidation = validateCurrency(companyInfo.currency)
-  const businessTypeValidation = validateBusinessType(companyInfo.businessType)
 
   errors.push(...companyNameValidation.errors)
   errors.push(...registrationNumberValidation.errors)
   errors.push(...currencyValidation.errors)
-  errors.push(...businessTypeValidation.errors)
 
   // Validate optional fields if provided
   if (companyInfo.taxId) {
     const taxIdValidation = validateTaxId(companyInfo.taxId)
     errors.push(...taxIdValidation.errors)
-  }
-
-  if (companyInfo.website) {
-    const websiteValidation = validateWebsite(companyInfo.website)
-    errors.push(...websiteValidation.errors)
   }
 
   return { isValid: errors.length === 0, errors }

@@ -1,10 +1,11 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { RegisterPage } from '@/features/auth/pages/RegisterPage'
 import { PersonalRegisterPage } from '@/features/auth/pages/PersonalRegisterPage'
 import { BusinessRegisterPage } from '@/features/auth/pages/BusinessRegisterPage'
+import { HomePage } from '@/features/home/HomePage'
 
 const App = () => (
   <Router>
@@ -15,7 +16,7 @@ const App = () => (
         <Route path="register/personal" element={<PersonalRegisterPage />} />
         <Route path="register/business" element={<BusinessRegisterPage />} />
       </Route>
-      <Route path="/" element={<Navigate to="/auth/login" replace />} />
+      <Route path="/" element={<HomePage />} />
     </Routes>
   </Router>
 )

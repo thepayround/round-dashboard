@@ -1,14 +1,9 @@
 import { motion } from 'framer-motion'
-import { Building, Hash, CreditCard, Globe, Users, AlertCircle } from 'lucide-react'
+import { Building, Hash, CreditCard, AlertCircle } from 'lucide-react'
 
-import type { CompanyInfo, Currency, BusinessType, Industry } from '@/shared/types/business'
+import type { CompanyInfo, Currency } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
-import {
-  INDUSTRY_OPTIONS,
-  BUSINESS_TYPE_OPTIONS,
-  EMPLOYEE_COUNT_OPTIONS,
-  SUPPORTED_COUNTRIES,
-} from '@/shared/types/business'
+import { SUPPORTED_COUNTRIES } from '@/shared/types/business'
 import { validateCompanyField, validateCompanyInfo } from '@/shared/utils/companyValidation'
 import { getFieldError, hasFieldError } from '@/shared/utils/validation'
 
@@ -163,7 +158,7 @@ export const CompanyDetailsForm = ({
         {/* Tax ID */}
         <div>
           <label htmlFor="taxId" className="auth-label">
-            Tax ID (Optional)
+            Tax ID
           </label>
           <div className="input-container">
             <CreditCard className="input-icon-left auth-icon-primary" />
@@ -192,180 +187,40 @@ export const CompanyDetailsForm = ({
         </div>
       </div>
 
-      {/* Currency & Business Type Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Currency */}
-        <div>
-          <label htmlFor="currency" className="auth-label">
-            Currency *
-          </label>
-          <div className="input-container">
-            <CreditCard className="input-icon-left auth-icon-primary" />
-            <select
-              id="currency"
-              value={companyInfo.currency}
-              onChange={e => handleSelectChange('currency', e.target.value as Currency)}
-              className={`auth-input input-with-icon-left ${
-                hasFieldError(errors, 'currency') ? 'auth-input-error' : ''
-              }`}
-              required
-            >
-              <option value="">Select currency</option>
-              {currencyOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.symbol} {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          {hasFieldError(errors, 'currency') && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
-            >
-              <AlertCircle className="w-4 h-4" />
-              <span>{getFieldError(errors, 'currency')?.message}</span>
-            </motion.div>
-          )}
-        </div>
-
-        {/* Business Type */}
-        <div>
-          <label htmlFor="businessType" className="auth-label">
-            Business Type *
-          </label>
-          <div className="input-container">
-            <Building className="input-icon-left auth-icon-primary" />
-            <select
-              id="businessType"
-              value={companyInfo.businessType}
-              onChange={e => handleSelectChange('businessType', e.target.value as BusinessType)}
-              className={`auth-input input-with-icon-left ${
-                hasFieldError(errors, 'businessType') ? 'auth-input-error' : ''
-              }`}
-              required
-            >
-              <option value="">Select business type</option>
-              {BUSINESS_TYPE_OPTIONS.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          {hasFieldError(errors, 'businessType') && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
-            >
-              <AlertCircle className="w-4 h-4" />
-              <span>{getFieldError(errors, 'businessType')?.message}</span>
-            </motion.div>
-          )}
-        </div>
-      </div>
-
-      {/* Industry & Employee Count Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Industry */}
-        <div>
-          <label htmlFor="industry" className="auth-label">
-            Industry (Optional)
-          </label>
-          <div className="input-container">
-            <Building className="input-icon-left auth-icon-primary" />
-            <select
-              id="industry"
-              value={companyInfo.industry ?? ''}
-              onChange={e => handleSelectChange('industry', e.target.value as Industry)}
-              className="auth-input input-with-icon-left"
-            >
-              <option value="">Select industry</option>
-              {INDUSTRY_OPTIONS.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Employee Count */}
-        <div>
-          <label htmlFor="employeeCount" className="auth-label">
-            Company Size (Optional)
-          </label>
-          <div className="input-container">
-            <Users className="input-icon-left auth-icon-primary" />
-            <select
-              id="employeeCount"
-              value={companyInfo.employeeCount ?? ''}
-              onChange={e => handleInputChange('employeeCount', e.target.value)}
-              className="auth-input input-with-icon-left"
-            >
-              <option value="">Select company size</option>
-              {EMPLOYEE_COUNT_OPTIONS.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Website */}
+      {/* Currency */}
       <div>
-        <label htmlFor="website" className="auth-label">
-          Website (Optional)
+        <label htmlFor="currency" className="auth-label">
+          Currency *
         </label>
         <div className="input-container">
-          <Globe className="input-icon-left auth-icon-primary" />
-          <input
-            id="website"
-            type="url"
-            value={companyInfo.website ?? ''}
-            onChange={e => handleInputChange('website', e.target.value)}
-            onBlur={e => handleInputBlur('website', e.target.value)}
-            placeholder="https://www.company.com"
+          <CreditCard className="input-icon-left auth-icon-primary" />
+          <select
+            id="currency"
+            value={companyInfo.currency}
+            onChange={e => handleSelectChange('currency', e.target.value as Currency)}
             className={`auth-input input-with-icon-left ${
-              hasFieldError(errors, 'website') ? 'auth-input-error' : ''
+              hasFieldError(errors, 'currency') ? 'auth-input-error' : ''
             }`}
-          />
+            required
+          >
+            <option value="">Select currency</option>
+            {currencyOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.symbol} {option.label}
+              </option>
+            ))}
+          </select>
         </div>
-        {hasFieldError(errors, 'website') && (
+        {hasFieldError(errors, 'currency') && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
           >
             <AlertCircle className="w-4 h-4" />
-            <span>{getFieldError(errors, 'website')?.message}</span>
+            <span>{getFieldError(errors, 'currency')?.message}</span>
           </motion.div>
         )}
-      </div>
-
-      {/* Description */}
-      <div>
-        <label htmlFor="description" className="auth-label">
-          Company Description (Optional)
-        </label>
-        <div className="input-container">
-          <textarea
-            id="description"
-            value={companyInfo.description ?? ''}
-            onChange={e => handleInputChange('description', e.target.value)}
-            placeholder="Brief description of your company..."
-            rows={3}
-            className="auth-input resize-none"
-            maxLength={500}
-          />
-        </div>
-        <div className="mt-1 text-right text-sm text-gray-400">
-          {(companyInfo.description ?? '').length}/500
-        </div>
       </div>
     </motion.div>
   )

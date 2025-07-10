@@ -92,7 +92,7 @@ export const BillingAddressForm = ({
           transition={{ delay: 0.2 }}
           className="text-2xl font-bold auth-text mb-2"
         >
-          Billing Address {isOptional && '(Optional)'}
+          Billing Address
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 10 }}
@@ -141,7 +141,7 @@ export const BillingAddressForm = ({
       {/* Street Address 2 */}
       <div>
         <label htmlFor="street2" className="auth-label">
-          Street Address 2 (Optional)
+          Street Address 2
         </label>
         <div className="input-container">
           <Building className="input-icon-left auth-icon-primary" />
@@ -294,22 +294,6 @@ export const BillingAddressForm = ({
           )}
         </div>
       </div>
-
-      {/* Optional Note */}
-      {isOptional && (
-        <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-          <div className="flex items-start space-x-3">
-            <AlertCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-            <div>
-              <p className="text-sm text-blue-300 font-medium">Skip for now?</p>
-              <p className="text-sm text-blue-200 mt-1">
-                You can add your billing address later in your account settings or when you make
-                your first payment.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </motion.div>
   )
 }
