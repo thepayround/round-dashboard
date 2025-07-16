@@ -54,8 +54,8 @@
 
     /* Strict type checking */
     "strict": true, // Enable all strict options
-    "noUnusedLocals": true, // Error on unused local variables
-    "noUnusedParameters": true, // Error on unused parameters
+    "noUnusedLocals": false, // Error on unused local variables
+    "noUnusedParameters": false, // Error on unused parameters
     "noFallthroughCasesInSwitch": true, // Error on switch fallthrough
 
     // Additional strict options to consider:

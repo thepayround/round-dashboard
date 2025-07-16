@@ -13,11 +13,12 @@ import {
 } from 'lucide-react'
 
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { useAuthState } from '@/shared/hooks/useAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
 import type { ProductInfo, TeamSettings } from '@/features/onboarding/types/onboarding'
 
 export const DashboardPage = () => {
-  const { user } = useAuthState()
+  const { state } = useAuth()
+  const { user } = state
 
   if (!user) {
     return (
@@ -104,7 +105,7 @@ export const DashboardPage = () => {
                 <div>
                   <p className="auth-text-muted text-sm font-medium">Currency</p>
                   <p className="auth-text text-xl font-bold">
-                    {onboardingData.businessSettings.currency}
+                    {onboardingData.businessSettings?.currency}
                   </p>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 flex items-center justify-center">
@@ -195,34 +196,34 @@ export const DashboardPage = () => {
                   <div>
                     <span className="text-sm font-medium auth-text-muted">Company Name</span>
                     <p className="auth-text font-medium">
-                      {onboardingData.organization.companyName}
+                      {onboardingData.organization?.companyName}
                     </p>
                   </div>
 
                   <div>
                     <span className="text-sm font-medium auth-text-muted">Industry</span>
                     <p className="auth-text font-medium capitalize">
-                      {onboardingData.organization.industry}
+                      {onboardingData.organization?.industry}
                     </p>
                   </div>
 
                   <div>
                     <span className="text-sm font-medium auth-text-muted">Company Size</span>
                     <p className="auth-text font-medium">
-                      {onboardingData.organization.companySize}
+                      {onboardingData.organization?.companySize}
                     </p>
                   </div>
 
-                  {onboardingData.organization.website && (
+                  {onboardingData.organization?.website && (
                     <div>
                       <span className="text-sm font-medium auth-text-muted">Website</span>
                       <a
-                        href={onboardingData.organization.website}
+                        href={onboardingData.organization?.website}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="auth-link brand-primary flex items-center space-x-1"
                       >
-                        <span>{onboardingData.organization.website}</span>
+                        <span>{onboardingData.organization?.website}</span>
                         <ArrowUpRight className="w-4 h-4" />
                       </a>
                     </div>
@@ -253,21 +254,21 @@ export const DashboardPage = () => {
                     <div>
                       <span className="text-sm font-medium auth-text-muted">Currency</span>
                       <p className="auth-text font-medium">
-                        {onboardingData.businessSettings.currency}
+                        {onboardingData.businessSettings?.currency}
                       </p>
                     </div>
 
                     <div>
                       <span className="text-sm font-medium auth-text-muted">Timezone</span>
                       <p className="auth-text font-medium">
-                        {onboardingData.businessSettings.timezone}
+                        {onboardingData.businessSettings?.timezone}
                       </p>
                     </div>
 
                     <div>
                       <span className="text-sm font-medium auth-text-muted">Fiscal Year Start</span>
                       <p className="auth-text font-medium">
-                        {onboardingData.businessSettings.fiscalYearStart}
+                        {onboardingData.businessSettings?.fiscalYearStart}
                       </p>
                     </div>
                   </div>
@@ -288,10 +289,11 @@ export const DashboardPage = () => {
                     <h2 className="text-xl font-bold auth-text">Products & Services</h2>
                   </div>
 
-                  {onboardingData.products.hasProducts &&
+                  {onboardingData.products?.hasProducts &&
+                  onboardingData.products?.products &&
                   onboardingData.products.products.length > 0 ? (
                     <div className="space-y-3">
-                      {onboardingData.products.products.map(
+                      {onboardingData.products?.products?.map(
                         (product: ProductInfo['products'][0]) => (
                           <div
                             key={product.id}
@@ -324,47 +326,48 @@ export const DashboardPage = () => {
         )}
 
         {/* Team Section */}
-        {onboardingData?.team && onboardingData.team.invitations.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="mt-8"
-          >
-            <div className="auth-card">
-              <div className="flex items-center space-x-3 mb-6">
-                <Users className="w-6 h-6 text-[#32A1E4]" />
-                <h2 className="text-xl font-bold auth-text">Team Invitations</h2>
-              </div>
+        {onboardingData?.team?.invitations &&
+          onboardingData.team.invitations.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="mt-8"
+            >
+              <div className="auth-card">
+                <div className="flex items-center space-x-3 mb-6">
+                  <Users className="w-6 h-6 text-[#32A1E4]" />
+                  <h2 className="text-xl font-bold auth-text">Team Invitations</h2>
+                </div>
 
-              <div className="space-y-3">
-                {onboardingData.team.invitations.map(
-                  (invitation: TeamSettings['invitations'][0]) => (
-                    <div
-                      key={invitation.id}
-                      className="p-4 rounded-xl bg-white/5 border border-white/10"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium auth-text">{invitation.email}</p>
-                          <div className="flex items-center space-x-2 mt-1">
-                            <span className="text-xs px-2 py-1 rounded-full bg-[#32A1E4]/20 text-[#32A1E4] border border-[#32A1E4]/30">
-                              {invitation.role}
-                            </span>
-                            <span className="text-xs auth-text-muted">
-                              Status: {invitation.status}
-                            </span>
+                <div className="space-y-3">
+                  {onboardingData.team?.invitations?.map(
+                    (invitation: TeamSettings['invitations'][0]) => (
+                      <div
+                        key={invitation.id}
+                        className="p-4 rounded-xl bg-white/5 border border-white/10"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium auth-text">{invitation.email}</p>
+                            <div className="flex items-center space-x-2 mt-1">
+                              <span className="text-xs px-2 py-1 rounded-full bg-[#32A1E4]/20 text-[#32A1E4] border border-[#32A1E4]/30">
+                                {invitation.role}
+                              </span>
+                              <span className="text-xs auth-text-muted">
+                                Status: {invitation.status}
+                              </span>
+                            </div>
                           </div>
+                          <Clock className="w-5 h-5 auth-text-muted" />
                         </div>
-                        <Clock className="w-5 h-5 auth-text-muted" />
                       </div>
-                    </div>
-                  )
-                )}
+                    )
+                  )}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          )}
       </div>
     </DashboardLayout>
   )

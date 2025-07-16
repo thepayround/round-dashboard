@@ -11,13 +11,13 @@ import {
   validateEmail,
   validatePassword,
 } from '@/shared/utils/validation'
-import { mockApi } from '@/shared/services/mockApi'
-import { useAuthActions } from '@/shared/hooks/useAuth'
+import { apiClient } from '@/shared/services/apiClient'
+import { useAuth } from '@/shared/hooks/useAuth'
 
 export const LoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { login } = useAuthActions()
+  const { login } = useAuth()
 
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -92,8 +92,8 @@ export const LoginPage = () => {
     setErrors([])
 
     try {
-      // Call mock API
-      const response = await mockApi.login(formData)
+      // Call real API
+      const response = await apiClient.login(formData)
 
       if (response.success && response.data) {
         // Log the user in
@@ -159,6 +159,17 @@ export const LoginPage = () => {
               <AlertCircle className="w-5 h-5" />
               <span className="text-sm font-medium">{apiError}</span>
             </div>
+            {apiError.toLowerCase().includes('email') &&
+              apiError.toLowerCase().includes('confirm') && (
+                <div className="mt-3 pt-3 border-t border-red-500/20">
+                  <Link
+                    to="/auth/resend-confirmation"
+                    className="text-sm text-red-300 hover:text-red-200 underline"
+                  >
+                    Resend confirmation email
+                  </Link>
+                </div>
+              )}
           </motion.div>
         )}
 
@@ -302,8 +313,8 @@ export const LoginPage = () => {
             </button>
           </div>
 
-          {/* Register Link */}
-          <div className="text-center">
+          {/* Links */}
+          <div className="text-center space-y-4">
             <p className="auth-text-muted">
               Don&apos;t have an account?{' '}
               <Link to="/auth/register" className="auth-link brand-primary">

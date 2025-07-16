@@ -1,4 +1,5 @@
 import type { CompanyInfo, BillingAddress } from './business'
+import type { OnboardingData } from '@/features/onboarding/types/onboarding'
 
 export type AccountType = 'personal' | 'business'
 
@@ -12,6 +13,8 @@ export interface BaseUser {
   accountType: AccountType
   createdAt: string
   updatedAt: string
+  onboardingCompleted?: boolean
+  onboardingData?: Partial<OnboardingData>
 }
 
 export interface PersonalUser extends BaseUser {

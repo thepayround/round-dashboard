@@ -1,10 +1,10 @@
 import { createContext } from 'react'
-import type { MockUser } from '@/shared/services/mockApi'
+import type { User } from '@/shared/types/auth'
 
 // Types
 export interface AuthState {
   isAuthenticated: boolean
-  user: Omit<MockUser, 'password'> | null
+  user: User | null
   token: string | null
   isLoading: boolean
   error: string | null
@@ -12,18 +12,18 @@ export interface AuthState {
 
 export type AuthAction =
   | { type: 'LOGIN_START' }
-  | { type: 'LOGIN_SUCCESS'; payload: { user: Omit<MockUser, 'password'>; token: string } }
+  | { type: 'LOGIN_SUCCESS'; payload: { user: User; token: string } }
   | { type: 'LOGIN_FAILURE'; payload: string }
   | { type: 'LOGOUT' }
-  | { type: 'SET_USER'; payload: Omit<MockUser, 'password'> }
+  | { type: 'SET_USER'; payload: User }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'CLEAR_ERROR' }
 
 export interface AuthContextType {
   state: AuthState
-  login: (user: Omit<MockUser, 'password'>, token: string) => void
+  login: (user: User, token: string, refreshToken?: string) => void
   logout: () => void
-  setUser: (user: Omit<MockUser, 'password'>) => void
+  setUser: (user: User) => void
   setLoading: (loading: boolean) => void
   clearError: () => void
 }

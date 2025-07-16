@@ -169,6 +169,18 @@ src/components/ComponentName/
 4. **Error Handling** - Structured error types with severity levels
 5. **File Size Limits** - Components <200 lines, tests <150 lines, utils <100 lines
 
+### ESLint/TypeScript Rules
+1. **Nullish Coalescing** - Always use `??` instead of `||` for null/undefined checks
+2. **HTML Entities** - Escape all special characters in JSX text:
+   - `'` → `&apos;`
+   - `"` → `&quot;`
+   - `<` → `&lt;`
+   - `>` → `&gt;`
+3. **Import Statements** - Use proper ES6 imports, avoid `require()` in TypeScript
+4. **Array Destructuring** - Use `const [first] = array` instead of `const first = array[0]`
+5. **Type Safety** - Avoid `any` type, use proper type definitions or `Record<string, unknown>`
+6. **React Fast Refresh** - Keep component files pure (only export components), move hooks to separate files
+
 ### UI/UX Guidelines
 1. **Glass Morphism & Aurora UI** - Semi-transparent surfaces with blur effects and gradients
 2. **Dark/Light Mode** - Full theme support with accessibility compliance

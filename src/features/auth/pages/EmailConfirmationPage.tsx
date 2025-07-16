@@ -1,0 +1,259 @@
+import { motion } from 'framer-motion'
+import { CheckCircle, XCircle, Mail, RefreshCw, AlertCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useSearchParams, useNavigate, Link } from 'react-router-dom'
+import { apiClient } from '@/shared/services/apiClient'
+import { useAuth } from '@/shared/hooks/useAuth'
+
+export const EmailConfirmationPage = () => {
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const { login } = useAuth()
+
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
+  const [message, setMessage] = useState('')
+  const [isResending, setIsResending] = useState(false)
+  const [resendMessage, setResendMessage] = useState('')
+
+  // Get userId and token from URL parameters
+  const userId = searchParams.get('userId')
+  const token = searchParams.get('token')
+
+  useEffect(() => {
+    const confirmEmail = async () => {
+      if (!userId || !token) {
+        console.error('Missing userId or token:', { userId, token })
+        setStatus('error')
+        setMessage('Invalid confirmation link. Please check your email and try again.')
+        return
+      }
+
+      try {
+        // Use the new confirmEmailAndLogin method for automatic login
+        const response = await apiClient.confirmEmailAndLogin(userId, token)
+
+        if (response.success && response.data) {
+          setStatus('success')
+          setMessage(response.message ?? 'Email confirmed and logged in successfully!')
+
+          // Automatically log in the user
+          login(response.data.user, response.data.token, response.data.refreshToken)
+
+          // Redirect to get-started page after 2 seconds
+          setTimeout(() => {
+            navigate('/get-started')
+          }, 2000)
+        } else {
+          console.error('Email confirmation failed:', response.error)
+          setStatus('error')
+          setMessage(response.error ?? 'Email confirmation failed. Please try again.')
+        }
+      } catch (error) {
+        console.error('Email confirmation error:', error)
+        setStatus('error')
+        setMessage('An unexpected error occurred. Please try again.')
+      }
+    }
+
+    confirmEmail()
+  }, [userId, token, navigate, login])
+
+  const handleResendEmail = async () => {
+    if (!userId) {
+      setResendMessage('Cannot resend email: missing user information')
+      return
+    }
+
+    setIsResending(true)
+    setResendMessage('')
+
+    try {
+      // We need the email address to resend confirmation
+      // For now, we'll ask the user to go to login page
+      setResendMessage('Please go to the login page and request a new confirmation email.')
+    } catch (error) {
+      console.error('Resend email error:', error)
+      setResendMessage('Failed to resend email. Please try again.')
+    } finally {
+      setIsResending(false)
+    }
+  }
+
+  const renderContent = () => {
+    switch (status) {
+      case 'loading':
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <div className="flex justify-center mb-6">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                className="w-16 h-16 border-4 border-[#D417C8] border-t-transparent rounded-full"
+              />
+            </div>
+            <h2 className="text-2xl font-bold auth-text mb-4">Confirming Your Email</h2>
+            <p className="auth-text-muted">Please wait while we confirm your email address...</p>
+          </motion.div>
+        )
+
+      case 'success':
+        return (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}
+              className="flex justify-center mb-6"
+            >
+              <CheckCircle className="w-16 h-16 text-green-500" />
+            </motion.div>
+            <h2 className="text-2xl font-bold auth-text mb-4">Email Confirmed!</h2>
+            <p className="auth-text-muted mb-6">{message}</p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="p-4 rounded-xl bg-green-500/10 border border-green-500/20 mb-6"
+            >
+              <p className="text-green-400 text-sm">
+                🎉 Welcome to Round! You&apos;re now logged in and will be redirected to get started
+                in a few seconds...
+              </p>
+            </motion.div>
+
+            <Link to="/get-started" className="btn-primary inline-flex items-center space-x-2">
+              <span>Get Started</span>
+              <motion.span
+                animate={{ x: [0, 4, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+              >
+                →
+              </motion.span>
+            </Link>
+          </motion.div>
+        )
+
+      case 'error':
+        return (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}
+              className="flex justify-center mb-6"
+            >
+              <XCircle className="w-16 h-16 text-red-500" />
+            </motion.div>
+            <h2 className="text-2xl font-bold auth-text mb-4">Confirmation Failed</h2>
+            <p className="auth-text-muted mb-6">{message}</p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+            >
+              <div className="flex items-center space-x-2 text-red-400">
+                <AlertCircle className="w-5 h-5" />
+                <span className="text-sm">
+                  The confirmation link may have expired or is invalid.
+                </span>
+              </div>
+            </motion.div>
+
+            {resendMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 mb-6"
+              >
+                <div className="flex items-center space-x-2 text-blue-400">
+                  <Mail className="w-5 h-5" />
+                  <span className="text-sm">{resendMessage}</span>
+                </div>
+              </motion.div>
+            )}
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={handleResendEmail}
+                disabled={isResending}
+                className="btn-secondary flex items-center space-x-2"
+              >
+                {isResending ? (
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Mail className="w-4 h-4" />
+                )}
+                <span>{isResending ? 'Sending...' : 'Get Help'}</span>
+              </button>
+
+              <Link
+                to="/auth/login"
+                className="btn-primary inline-flex items-center justify-center"
+              >
+                Back to Login
+              </Link>
+            </div>
+          </motion.div>
+        )
+
+      default:
+        return null
+    }
+  }
+
+  return (
+    <div className="auth-container">
+      {/* Animated Background */}
+      <div className="auth-background">
+        <div className="floating-orb" />
+        <div className="floating-orb" />
+        <div className="floating-orb" />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{
+          duration: 0.8,
+          ease: [0.16, 1, 0.3, 1],
+          delay: 0.2,
+        }}
+        className="auth-card"
+      >
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="gradient-header" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="relative"
+          >
+            <h1 className="text-4xl font-bold auth-text mb-4 relative">Email Confirmation</h1>
+            <p className="auth-text-muted text-lg font-medium">Verifying your email address</p>
+          </motion.div>
+        </div>
+
+        {/* Content */}
+        {renderContent()}
+      </motion.div>
+    </div>
+  )
+}

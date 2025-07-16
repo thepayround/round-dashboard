@@ -54,17 +54,12 @@ export default defineConfig({
   },
 
   // Development server configuration
-  // server: {
-  //   port: 3000,                    // Custom port
-  //   open: true,                    // Open browser on start
-  //   proxy: {                       // API proxy
-  //     '/api': {
-  //       target: 'http://localhost:8080',
-  //       changeOrigin: true,
-  //       rewrite: (path) => path.replace(/^\/api/, '')
-  //     }
-  //   }
-  // },
+  server: {
+    port: 3000, // Fixed port for frontend
+    open: false, // Don't auto-open browser
+    host: true, // Allow external connections
+    strictPort: true, // Fail if port is in use (don't try other ports)
+  },
 
   // Production build configuration
   // build: {

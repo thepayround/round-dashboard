@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { useAuthState } from '@/shared/hooks/useAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -9,7 +9,8 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children, requireOnboarding = false }: ProtectedRouteProps) => {
-  const { isAuthenticated, user, isLoading } = useAuthState()
+  const { state } = useAuth()
+  const { isAuthenticated, user, isLoading } = state
   const location = useLocation()
 
   // Show loading spinner while checking authentication

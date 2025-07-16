@@ -26,8 +26,8 @@ import {
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { BillingAddressForm } from '../components/BillingAddressForm'
 import { useMultiStepForm } from '../hooks/useMultiStepForm'
-import { mockApi } from '@/shared/services/mockApi'
-import { useAuthActions } from '@/shared/hooks/useAuth'
+import { apiClient } from '@/shared/services/apiClient'
+// import { useAuth } from '@/shared/contexts/AuthContext'
 
 interface PersonalFormData {
   firstName: string
@@ -39,7 +39,7 @@ interface PersonalFormData {
 
 export const BusinessRegisterPage = () => {
   const navigate = useNavigate()
-  const { login } = useAuthActions()
+  // const { login } = useAuth() // Not used in this component
 
   // Form state is hardcoded to 'business' for this page
   const [personalData, setPersonalData] = useState<PersonalFormData>({
@@ -149,20 +149,18 @@ export const BusinessRegisterPage = () => {
     setApiError('')
 
     try {
-      // Call mock API
-      const response = await mockApi.register({
+      // Call real API
+      const response = await apiClient.register({
         ...personalData,
-        accountType: 'business',
-        companyInfo,
-        billingAddress,
+        phone: personalData.phone,
       })
 
       if (response.success && response.data) {
-        // Log the user in automatically
-        login(response.data.user, response.data.token)
-
-        // Navigate to get-started page
-        navigate('/get-started')
+        // Navigate to confirmation pending page instead of auto-login
+        navigate('/auth/confirmation-pending', {
+          state: { email: personalData.email },
+          replace: true,
+        })
       } else {
         setApiError(response.error ?? 'Registration failed')
         setIsSubmitting(false)

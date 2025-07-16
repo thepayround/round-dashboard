@@ -14,7 +14,7 @@ import {
   LogOut,
 } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useAuthActions, useAuthState } from '@/shared/hooks/useAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
 import { mockApi } from '@/shared/services/mockApi'
 import ColorLogo from '@/assets/logos/color-logo.svg'
 
@@ -52,8 +52,8 @@ const bottomNavItems: NavItem[] = [
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const navigate = useNavigate()
-  const { logout } = useAuthActions()
-  const { token } = useAuthState()
+  const { logout, state } = useAuth()
+  const { token } = state
   const [isCollapsed, setIsCollapsed] = useState(false)
   const location = useLocation()
 

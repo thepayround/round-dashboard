@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { mockApi } from '@/shared/services/mockApi'
-import { useAuthState, useAuthActions } from '@/shared/hooks/useAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
+import type { User } from '@/shared/types/auth'
 import { TabNavigation } from '../components/TabNavigation'
 import { UserInfoStep } from '../components/steps/UserInfoStep'
 import { OrganizationStep } from '../components/steps/OrganizationStep'
@@ -36,8 +37,8 @@ const steps: OnboardingStep[] = [
 
 export const GetStartedPage = () => {
   const navigate = useNavigate()
-  const { token } = useAuthState()
-  const { setUser } = useAuthActions()
+  const { state, setUser } = useAuth()
+  const { token } = state
 
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('userInfo')
   const [completedSteps, setCompletedSteps] = useState<OnboardingStep[]>([])
@@ -224,7 +225,7 @@ export const GetStartedPage = () => {
 
       if (response.success && response.data) {
         // Update user data in context
-        setUser(response.data)
+        setUser(response.data as User)
 
         // Navigate to dashboard
         navigate('/dashboard')

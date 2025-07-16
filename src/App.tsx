@@ -7,6 +7,9 @@ import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { RegisterPage } from '@/features/auth/pages/RegisterPage'
 import { PersonalRegisterPage } from '@/features/auth/pages/PersonalRegisterPage'
 import { BusinessRegisterPage } from '@/features/auth/pages/BusinessRegisterPage'
+import { EmailConfirmationPage } from '@/features/auth/pages/EmailConfirmationPage'
+import { ConfirmationPendingPage } from '@/features/auth/pages/ConfirmationPendingPage'
+import { ResendConfirmationPage } from '@/features/auth/pages/ResendConfirmationPage'
 import { GetStartedPage } from '@/features/onboarding/pages/GetStartedPage'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { HomePage } from '@/features/home/HomePage'
@@ -20,6 +23,9 @@ const App = () => (
           <Route path="register" element={<RegisterPage />} />
           <Route path="register/personal" element={<PersonalRegisterPage />} />
           <Route path="register/business" element={<BusinessRegisterPage />} />
+          <Route path="confirm-email" element={<EmailConfirmationPage />} />
+          <Route path="confirmation-pending" element={<ConfirmationPendingPage />} />
+          <Route path="resend-confirmation" element={<ResendConfirmationPage />} />
         </Route>
         <Route
           path="/get-started"

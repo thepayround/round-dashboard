@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect } from 'react'
-import type { MockUser } from '@/shared/services/mockApi'
+import type { User } from '@/shared/types/auth'
 import {
   AuthContext,
   type AuthContextType,
@@ -98,9 +98,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
 
       try {
-        // Import mockApi here to avoid circular dependency
-        const { mockApi } = await import('@/shared/services/mockApi')
-        const response = await mockApi.getCurrentUser(token)
+        // Import apiClient here to avoid circular dependency
+        const { apiClient } = await import('@/shared/services/apiClient')
+        const response = await apiClient.getCurrentUser()
 
         if (response.success && response.data) {
           dispatch({
@@ -125,8 +125,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     checkExistingSession()
   }, [])
 
-  const login = (user: Omit<MockUser, 'password'>, token: string) => {
+  const login = (user: User, token: string, refreshToken?: string) => {
     localStorage.setItem('auth_token', token)
+    if (refreshToken) {
+      localStorage.setItem('refresh_token', refreshToken)
+    }
     dispatch({
       type: 'LOGIN_SUCCESS',
       payload: { user, token },
@@ -138,7 +141,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     dispatch({ type: 'LOGOUT' })
   }
 
-  const setUser = (user: Omit<MockUser, 'password'>) => {
+  const setUser = (user: User) => {
     dispatch({ type: 'SET_USER', payload: user })
   }
 
