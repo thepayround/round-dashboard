@@ -8,7 +8,7 @@ import axios from 'axios'
 import type { User } from '@/shared/types/auth'
 
 // Base URL for the API - fixed backend port
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 
 // Ensure we don't have double slashes in the URL
 // const formatUrl = (path: string) => {
@@ -63,7 +63,7 @@ interface RegisterResponse {
 
 interface AuthResponse {
   user: User
-  token: string
+  accessToken: string
   refreshToken: string
 }
 
@@ -144,27 +144,21 @@ class ApiClient {
           localStorage.setItem('refresh_token', response.data.refreshToken)
         }
 
-        // Create user object from the response
-        // Note: The backend doesn't return user info in login response,
-        // so we'll need to fetch it separately or modify the backend
-        const user: User = {
-          id: 'temp-id', // This should come from JWT or separate call
-          firstName: '',
-          lastName: '',
-          email: credentials.email,
-          phone: '',
-          accountType: 'personal',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          role: 'admin',
+        // Get user information using the token
+        const userResponse = await this.getCurrentUser()
+        if (!userResponse.success || !userResponse.data) {
+          return {
+            success: false,
+            error: 'Failed to retrieve user information after login',
+          }
         }
 
         return {
           success: true,
           data: {
-            user,
-            token: response.data.token,
-            refreshToken: response.data.refreshToken,
+            user: userResponse.data,
+            accessToken: response.data.token,
+            refreshToken: response.data.refreshToken || '',
           },
           message: 'Login successful',
         }
@@ -419,7 +413,7 @@ class ApiClient {
           success: true,
           data: {
             user,
-            token: response.data.token,
+            accessToken: response.data.token,
             refreshToken: response.data.refreshToken,
           },
           message: 'Email confirmed and logged in successfully',
@@ -505,18 +499,107 @@ class ApiClient {
   /**
    * Get current user profile
    */
+  /**
+   * Decode JWT token to extract user information
+   */
+  private decodeJWT(token: string): Record<string, unknown> | null {
+    try {
+      const [, base64Url] = token.split('.')
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+          .join('')
+      )
+      return JSON.parse(jsonPayload)
+    } catch (error) {
+      console.error('Error decoding JWT:', error)
+      return null
+    }
+  }
+
   async getCurrentUser(): Promise<ApiResponse<User>> {
     try {
-      const response = await this.client.get('/users/profile')
-      return {
-        success: true,
-        data: response.data,
+      const token = this.getStoredToken()
+      if (!token) {
+        return {
+          success: false,
+          error: 'No authentication token found',
+        }
+      }
+
+      // Decode JWT to get userId
+      const payload = this.decodeJWT(token)
+
+      if (!payload) {
+        return {
+          success: false,
+          error: 'Invalid token format - failed to decode',
+        }
+      }
+
+      // Check different possible claim names
+      const userId = payload.UserId ?? payload.sub ?? payload.id ?? payload.userId
+
+      if (!userId) {
+        return {
+          success: false,
+          error: 'Invalid token format - no userId claim found',
+        }
+      }
+
+      // Use the /users/search endpoint with the userId from token
+      const response = await this.client.get(`/users/search?id=${userId}`)
+
+      if (response.data) {
+        const userData = response.data
+
+        // Map backend response to frontend User type
+        const user: User = {
+          id: userData.userId,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+          phone: userData.phoneNumber || '',
+          accountType: 'business', // Default - could be enhanced based on account info
+          role: 'admin', // Default - could be enhanced based on user role
+          companyInfo: {
+            companyName: userData.companyName || 'Default Company',
+            registrationNumber: userData.registrationNumber || '',
+            currency: 'USD',
+            businessType: 'corporation',
+          },
+          createdAt: userData.createdDate
+            ? userData.createdDate.toString()
+            : new Date().toISOString(),
+          updatedAt: userData.modifiedDate
+            ? userData.modifiedDate.toString()
+            : new Date().toISOString(),
+        }
+
+        return {
+          success: true,
+          data: user,
+        }
+      } else {
+        return {
+          success: false,
+          error: 'User not found in search results',
+        }
       }
     } catch (error) {
-      console.error('Get current user error:', error)
+      const axiosError = error as AxiosError
+      if (axiosError.response) {
+        // Server responded with error status
+      } else if (axiosError.request) {
+        // Request was made but no response received
+      } else {
+        // Error in request setup
+      }
       return {
         success: false,
-        error: 'Failed to get user profile',
+        error: `Failed to get user profile: ${axiosError.message || 'Unknown error'}`,
       }
     }
   }

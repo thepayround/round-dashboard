@@ -114,7 +114,8 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 - **Account Type Selection** - Enhanced AccountTypeSelector with brand-consistent colors, minimalist design, and glass morphism effects
 - **Multi-Step Forms** - useMultiStepForm hook for progressive registration with smooth Framer Motion animations
 - **Company Validation** - Business data validation utilities with real-time feedback
-- **UI Components** - Button, WhiteLogo, form components with dark glassmorphism styling and accessibility compliance
+- **Navigation Components** - Glassmorphism breadcrumb system with auto-route generation and smooth animations
+- **UI Components** - Button, WhiteLogo, Breadcrumb, form components with dark glassmorphism styling and accessibility compliance
 - **Utilities** - cn function, type definitions, validation utilities
 - **Development Tools** - ESLint, Prettier, Husky hooks
 - **Dark Glassmorphism UI** - Y Combinator pitch-ready design inspired by Channel Analytics and Spotify dashboards
@@ -123,7 +124,11 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 round-dashboard/
 ├── src/
 │   ├── features/auth/ # Authentication module
+│   ├── features/billing/ # Billing pages
+│   ├── features/dashboard/ # Dashboard pages
 │   ├── shared/components/ # UI components
+│   │   ├── Breadcrumb/ # Navigation breadcrumb system
+│   │   └── DashboardLayout/ # Main layout wrapper
 │   ├── shared/types/ # TypeScript types
 │   ├── shared/utils/ # Utility functions
 │   └── test/ # Test utilities
@@ -169,6 +174,16 @@ src/components/ComponentName/
 4. **Error Handling** - Structured error types with severity levels
 5. **File Size Limits** - Components <200 lines, tests <150 lines, utils <100 lines
 
+### API Naming Conventions
+**CRITICAL: Follow these naming conventions consistently**
+
+3. **API Integration Rules**:
+   - **NEVER use PascalCase in frontend** - this causes undefined values
+   - **Always use camelCase** to match backend JSON serialization
+   - **Backend automatically converts** PascalCase → camelCase in JSON responses
+   - **Frontend must access** camelCase properties from API responses
+
+
 ### ESLint/TypeScript Rules
 1. **Nullish Coalescing** - Always use `??` instead of `||` for null/undefined checks
 2. **HTML Entities** - Escape all special characters in JSX text:
@@ -180,6 +195,10 @@ src/components/ComponentName/
 4. **Array Destructuring** - Use `const [first] = array` instead of `const first = array[0]`
 5. **Type Safety** - Avoid `any` type, use proper type definitions or `Record<string, unknown>`
 6. **React Fast Refresh** - Keep component files pure (only export components), move hooks to separate files
+7. **Error Handling** - Always type caught errors as `AxiosError` or specific types instead of `unknown`
+8. **Type Consistency** - Keep interface property names consistent between local and shared types
+9. **Business User Types** - Always include required properties like `companyInfo` for BusinessUser types
+10. **API Response Mapping** - Ensure backend property names match frontend type expectations (camelCase vs PascalCase)
 
 ### UI/UX Guidelines
 1. **Glass Morphism & Aurora UI** - Semi-transparent surfaces with blur effects and gradients

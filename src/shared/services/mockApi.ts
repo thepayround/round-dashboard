@@ -5,6 +5,7 @@
 
 import type { Currency } from '@/shared/types/business'
 import type { OnboardingData } from '@/features/onboarding/types/onboarding'
+import type { User } from '@/shared/types/auth'
 
 // Mock database in memory
 interface MockUser {
@@ -15,7 +16,9 @@ interface MockUser {
   lastName: string
   phone: string
   accountType: 'personal' | 'business'
+  role: 'admin' | 'user' | 'viewer' | 'member' | 'billing_manager'
   createdAt: string
+  updatedAt: string
   onboardingCompleted: boolean
   onboardingData?: OnboardingData
   companyInfo?: {
@@ -60,7 +63,9 @@ class MockDatabase {
       lastName: 'Doe',
       phone: '+1234567890',
       accountType: 'business',
+      role: 'admin',
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       onboardingCompleted: true,
       onboardingData: {
         userInfo: {
@@ -112,12 +117,15 @@ class MockDatabase {
   }
 
   // User methods
-  createUser(userData: Omit<MockUser, 'id' | 'createdAt'>): MockUser {
+  createUser(userData: Omit<MockUser, 'id' | 'createdAt' | 'updatedAt'>): MockUser {
     const id = `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const now = new Date().toISOString()
     const user: MockUser = {
       ...userData,
       id,
-      createdAt: new Date().toISOString(),
+      createdAt: now,
+      updatedAt: now,
+      role: userData.role || (userData.accountType === 'business' ? 'admin' : 'user'),
     }
 
     this.users.set(user.email, user)
@@ -310,6 +318,7 @@ export const mockApi = {
       phone,
       password,
       accountType,
+      role: accountType === 'business' ? 'admin' : 'user',
       onboardingCompleted: false,
       companyInfo,
       billingAddress,
@@ -339,7 +348,7 @@ export const mockApi = {
     }
   },
 
-  async getCurrentUser(token: string): Promise<ApiResponse<Omit<MockUser, 'password'>>> {
+  async getCurrentUser(token: string): Promise<ApiResponse<User>> {
     await delay(200)
 
     const session = mockDB.getSession(token)
@@ -358,11 +367,13 @@ export const mockApi = {
       }
     }
 
+    // Map MockUser to User type
     const { password: _, ...userWithoutPassword } = user
+    const mappedUser: User = userWithoutPassword as User
 
     return {
       success: true,
-      data: userWithoutPassword,
+      data: mappedUser,
     }
   },
 

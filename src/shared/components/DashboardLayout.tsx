@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import {
   ChevronLeft,
   ChevronRight,
@@ -15,7 +15,8 @@ import {
 } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/shared/hooks/useAuth'
-import { mockApi } from '@/shared/services/mockApi'
+import { apiClient } from '@/shared/services/apiClient'
+import { Breadcrumb } from '@/shared/components/Breadcrumb'
 import ColorLogo from '@/assets/logos/color-logo.svg'
 
 interface DashboardLayoutProps {
@@ -54,14 +55,24 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const navigate = useNavigate()
   const { logout, state } = useAuth()
   const { token } = state
-  const [isCollapsed, setIsCollapsed] = useState(false)
   const location = useLocation()
+
+  // Initialize sidebar state from localStorage
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    const saved = localStorage.getItem('sidebar-collapsed')
+    return saved === 'true'
+  })
+
+  // Persist sidebar state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('sidebar-collapsed', isCollapsed.toString())
+  }, [isCollapsed])
 
   const isActive = (href: string) => location.pathname === href
 
   const handleLogout = async () => {
     if (token) {
-      await mockApi.logout(token)
+      await apiClient.logout()
     }
     logout()
     navigate('/auth/login')
@@ -80,7 +91,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <motion.aside
         initial={false}
         animate={{ width: isCollapsed ? 80 : 280 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
         className="fixed left-0 top-0 h-full z-50 bg-white/5 backdrop-blur-xl border-r border-white/10"
       >
         {/* Logo Section */}
@@ -88,38 +99,22 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           className="flex items-center justify-center border-b border-white/10"
           style={{ height: '97px' }}
         >
-          <AnimatePresence mode="wait">
-            {!isCollapsed ? (
-              <motion.div
-                key="expanded-logo"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center space-x-4"
-              >
-                <img src={ColorLogo} alt="Round Logo" className="w-10 h-10" />
-                <div className="flex items-center space-x-1">
-                  <span className="text-[#14BDEA] font-bold text-3xl">R</span>
-                  <span className="text-[#32A1E4] font-bold text-3xl">O</span>
-                  <span className="text-[#7767DA] font-bold text-3xl">U</span>
-                  <span className="text-[#BD2CD0] font-bold text-3xl">N</span>
-                  <span className="text-[#D417C8] font-bold text-3xl">D</span>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="collapsed-logo"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center justify-center"
-              >
-                <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {!isCollapsed ? (
+            <div className="flex items-center space-x-4">
+              <img src={ColorLogo} alt="Round Logo" className="w-10 h-10" />
+              <div className="flex items-center space-x-1">
+                <span className="text-[#14BDEA] font-bold text-3xl">R</span>
+                <span className="text-[#32A1E4] font-bold text-3xl">O</span>
+                <span className="text-[#7767DA] font-bold text-3xl">U</span>
+                <span className="text-[#BD2CD0] font-bold text-3xl">N</span>
+                <span className="text-[#D417C8] font-bold text-3xl">D</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
+            </div>
+          )}
         </div>
 
         {/* Navigation */}
@@ -140,24 +135,16 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             >
               <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
 
-              <AnimatePresence>
-                {!isCollapsed && (
-                  <motion.div
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: 'auto' }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center justify-between flex-1 overflow-hidden"
-                  >
-                    <span className="font-medium whitespace-nowrap">{item.label}</span>
-                    {item.badge && (
-                      <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
-                        {item.badge}
-                      </span>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {!isCollapsed && (
+                <div className="flex items-center justify-between flex-1 overflow-hidden">
+                  <span className="font-medium whitespace-nowrap">{item.label}</span>
+                  {item.badge && (
+                    <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+              )}
 
               {/* Tooltip for collapsed state */}
               {isCollapsed && (
@@ -188,19 +175,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             >
               <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
 
-              <AnimatePresence>
-                {!isCollapsed && (
-                  <motion.div
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: 'auto' }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden"
-                  >
-                    <span className="font-medium whitespace-nowrap">{item.label}</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {!isCollapsed && (
+                <div className="overflow-hidden">
+                  <span className="font-medium whitespace-nowrap">{item.label}</span>
+                </div>
+              )}
 
               {/* Tooltip for collapsed state */}
               {isCollapsed && (
@@ -217,24 +196,16 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             className={`
               group relative flex items-center rounded-xl transition-all duration-200 h-12 w-full
               text-gray-400 hover:text-red-400 hover:bg-red-400/10
-              ${isCollapsed ? 'justify-center px-0' : 'px-4'}
+              ${isCollapsed ? 'justify-center px-0' : 'px-6'}
             `}
           >
             <LogOut className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
 
-            <AnimatePresence>
-              {!isCollapsed && (
-                <motion.div
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
-                  exit={{ opacity: 0, width: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <span className="font-medium whitespace-nowrap">Logout</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {!isCollapsed && (
+              <div className="overflow-hidden">
+                <span className="font-medium whitespace-nowrap">Logout</span>
+              </div>
+            )}
 
             {/* Tooltip for collapsed state */}
             {isCollapsed && (
@@ -250,7 +221,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <motion.button
         initial={false}
         animate={{ left: isCollapsed ? 64 : 264 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={{ duration: 0, ease: 'linear' }}
         onClick={() => setIsCollapsed(!isCollapsed)}
         className="fixed top-20 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-50"
       >
@@ -265,10 +236,13 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <motion.main
         initial={false}
         animate={{ marginLeft: isCollapsed ? 80 : 280 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
         className="min-h-screen relative z-10"
       >
-        {children}
+        <div className="p-8">
+          <Breadcrumb />
+          {children}
+        </div>
       </motion.main>
     </div>
   )

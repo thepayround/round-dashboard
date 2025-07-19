@@ -12,6 +12,8 @@ import { ConfirmationPendingPage } from '@/features/auth/pages/ConfirmationPendi
 import { ResendConfirmationPage } from '@/features/auth/pages/ResendConfirmationPage'
 import { GetStartedPage } from '@/features/onboarding/pages/GetStartedPage'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
+import { BillingPage } from '@/features/billing/pages/BillingPage'
+import { InvoicesPage } from '@/features/billing/pages/InvoicesPage'
 import { HomePage } from '@/features/home/HomePage'
 
 const App = () => (
@@ -40,6 +42,22 @@ const App = () => (
           element={
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/billing"
+          element={
+            <ProtectedRoute>
+              <BillingPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/billing/invoices"
+          element={
+            <ProtectedRoute>
+              <InvoicesPage />
             </ProtectedRoute>
           }
         />

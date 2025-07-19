@@ -113,11 +113,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         } else {
           // Invalid token, remove from storage
           localStorage.removeItem('auth_token')
+          localStorage.removeItem('refresh_token')
           dispatch({ type: 'SET_LOADING', payload: false })
         }
       } catch (error) {
         console.error('Error checking session:', error)
         localStorage.removeItem('auth_token')
+        localStorage.removeItem('refresh_token')
         dispatch({ type: 'SET_LOADING', payload: false })
       }
     }

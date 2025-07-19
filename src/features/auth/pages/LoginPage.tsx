@@ -97,7 +97,7 @@ export const LoginPage = () => {
 
       if (response.success && response.data) {
         // Log the user in
-        login(response.data.user, response.data.token)
+        login(response.data.user, response.data.accessToken)
 
         // Navigate to intended destination or dashboard
         const from =

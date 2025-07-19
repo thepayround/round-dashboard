@@ -36,7 +36,7 @@ export const DashboardPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
+      <div>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -46,7 +46,13 @@ export const DashboardPage = () => {
           <div className="gradient-header" />
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold auth-text mb-2">Welcome back, {user.firstName}!</h1>
+              <h1 className="text-4xl font-bold auth-text mb-2">
+                Welcome back,{' '}
+                {user.firstName && user.lastName
+                  ? `${user.firstName} ${user.lastName}`
+                  : user.firstName || user.email || 'User'}
+                !
+              </h1>
               <p className="auth-text-muted text-lg">
                 Here&apos;s an overview of your Round account
               </p>
@@ -326,48 +332,47 @@ export const DashboardPage = () => {
         )}
 
         {/* Team Section */}
-        {onboardingData?.team?.invitations &&
-          onboardingData.team.invitations.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mt-8"
-            >
-              <div className="auth-card">
-                <div className="flex items-center space-x-3 mb-6">
-                  <Users className="w-6 h-6 text-[#32A1E4]" />
-                  <h2 className="text-xl font-bold auth-text">Team Invitations</h2>
-                </div>
-
-                <div className="space-y-3">
-                  {onboardingData.team?.invitations?.map(
-                    (invitation: TeamSettings['invitations'][0]) => (
-                      <div
-                        key={invitation.id}
-                        className="p-4 rounded-xl bg-white/5 border border-white/10"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium auth-text">{invitation.email}</p>
-                            <div className="flex items-center space-x-2 mt-1">
-                              <span className="text-xs px-2 py-1 rounded-full bg-[#32A1E4]/20 text-[#32A1E4] border border-[#32A1E4]/30">
-                                {invitation.role}
-                              </span>
-                              <span className="text-xs auth-text-muted">
-                                Status: {invitation.status}
-                              </span>
-                            </div>
-                          </div>
-                          <Clock className="w-5 h-5 auth-text-muted" />
-                        </div>
-                      </div>
-                    )
-                  )}
-                </div>
+        {onboardingData?.team?.invitations && onboardingData.team.invitations.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mt-8"
+          >
+            <div className="auth-card">
+              <div className="flex items-center space-x-3 mb-6">
+                <Users className="w-6 h-6 text-[#32A1E4]" />
+                <h2 className="text-xl font-bold auth-text">Team Invitations</h2>
               </div>
-            </motion.div>
-          )}
+
+              <div className="space-y-3">
+                {onboardingData.team?.invitations?.map(
+                  (invitation: TeamSettings['invitations'][0]) => (
+                    <div
+                      key={invitation.id}
+                      className="p-4 rounded-xl bg-white/5 border border-white/10"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium auth-text">{invitation.email}</p>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <span className="text-xs px-2 py-1 rounded-full bg-[#32A1E4]/20 text-[#32A1E4] border border-[#32A1E4]/30">
+                              {invitation.role}
+                            </span>
+                            <span className="text-xs auth-text-muted">
+                              Status: {invitation.status}
+                            </span>
+                          </div>
+                        </div>
+                        <Clock className="w-5 h-5 auth-text-muted" />
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
       </div>
     </DashboardLayout>
   )

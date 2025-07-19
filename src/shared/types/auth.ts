@@ -38,8 +38,9 @@ export interface AuthResponse {
 }
 
 export interface LoginRequest {
-  email: string
+  identifier: string // Email, phone, or username
   password: string
+  roundAccountId?: string
 }
 
 export interface PersonalRegisterRequest {

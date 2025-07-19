@@ -37,7 +37,7 @@ export const EmailConfirmationPage = () => {
           setMessage(response.message ?? 'Email confirmed and logged in successfully!')
 
           // Automatically log in the user
-          login(response.data.user, response.data.token, response.data.refreshToken)
+          login(response.data.user, response.data.accessToken, response.data.refreshToken)
 
           // Redirect to get-started page after 2 seconds
           setTimeout(() => {
