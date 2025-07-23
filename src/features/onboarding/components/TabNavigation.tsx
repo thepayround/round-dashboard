@@ -5,6 +5,7 @@ import type { OnboardingStep } from '../types/onboarding'
 interface TabNavigationProps {
   currentStep: OnboardingStep
   completedSteps: OnboardingStep[]
+  availableSteps: OnboardingStep[]
   onStepClick: (step: OnboardingStep) => void
 }
 
@@ -14,7 +15,7 @@ interface StepConfig {
   number: number
 }
 
-const steps: StepConfig[] = [
+const allStepConfigs: StepConfig[] = [
   { id: 'userInfo', label: 'User Information', number: 1 },
   { id: 'organization', label: 'Organization', number: 2 },
   { id: 'businessSettings', label: 'Business Settings', number: 3 },
@@ -23,7 +24,20 @@ const steps: StepConfig[] = [
   { id: 'team', label: 'Team', number: 6 },
 ]
 
-export const TabNavigation = ({ currentStep, completedSteps, onStepClick }: TabNavigationProps) => {
+export const TabNavigation = ({
+  currentStep,
+  completedSteps,
+  availableSteps,
+  onStepClick,
+}: TabNavigationProps) => {
+  // Filter steps to only show available ones, with renumbered sequence
+  const steps = allStepConfigs
+    .filter(stepConfig => availableSteps.includes(stepConfig.id))
+    .map((stepConfig, index) => ({
+      ...stepConfig,
+      number: index + 1, // Renumber steps sequentially
+    }))
+
   const isStepCompleted = (stepId: OnboardingStep) => completedSteps.includes(stepId)
   const isStepActive = (stepId: OnboardingStep) => currentStep === stepId
   const getCurrentStepIndex = () => steps.findIndex(step => step.id === currentStep)
@@ -48,9 +62,9 @@ export const TabNavigation = ({ currentStep, completedSteps, onStepClick }: TabN
       return 'bg-gradient-to-r from-[#42E695] to-[#3BB2B8] border-white'
     }
     if (canClickStep(stepId)) {
-      return 'bg-white/10 border-white/30 hover:bg-white/20 hover:border-white/50'
+      return 'bg-gray-700 border-gray-500 hover:bg-gray-600 hover:border-gray-400'
     }
-    return 'bg-white/5 border-white/20 cursor-not-allowed'
+    return 'bg-gray-800 border-gray-600 cursor-not-allowed'
   }
 
   const getStepTextClasses = (stepId: OnboardingStep): string => {
@@ -69,8 +83,9 @@ export const TabNavigation = ({ currentStep, completedSteps, onStepClick }: TabN
   return (
     <div className="w-full">
       {/* Progress Bar */}
-      <div className="relative mb-8">
-        <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+      <div className="relative mb-8 h-12">
+        {/* Progress Bar - positioned first, will be behind step circles */}
+        <div className="absolute top-1/2 left-5 right-5 h-2 bg-white/10 rounded-full overflow-hidden z-10 transform -translate-y-1/2">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${getProgress()}%` }}
@@ -79,23 +94,26 @@ export const TabNavigation = ({ currentStep, completedSteps, onStepClick }: TabN
           />
         </div>
 
-        {/* Step Indicators */}
-        <div className="absolute top-0 left-0 w-full flex justify-between transform -translate-y-1/2">
+        {/* Step Indicators - positioned 4px lower for perfect alignment */}
+        <div
+          className="relative flex justify-between items-center h-full"
+          style={{ marginTop: '4px' }}
+        >
           {steps.map(step => (
             <button
               key={step.id}
               onClick={() => canClickStep(step.id) && onStepClick(step.id)}
               disabled={!canClickStep(step.id)}
               className={`
-                relative w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 z-10
-                ${getStepCircleClasses(step.id)}
-              `}
+                  relative w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 z-20
+                  ${getStepCircleClasses(step.id)}
+                `}
             >
               {isStepCompleted(step.id) ? (
                 <Check className="w-4 h-4 text-white" />
               ) : (
                 <span
-                  className={`text-sm font-medium ${
+                  className={`text-sm font-bold ${
                     isStepActive(step.id) || canClickStep(step.id) ? 'text-white' : 'text-gray-500'
                   }`}
                 >

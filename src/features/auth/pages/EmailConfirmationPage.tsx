@@ -2,13 +2,16 @@ import { motion } from 'framer-motion'
 import { CheckCircle, XCircle, Mail, RefreshCw, AlertCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
-import { apiClient } from '@/shared/services/apiClient'
+import { useAuth as useAuthAPI, useOrganization } from '@/shared/hooks/api'
 import { useAuth } from '@/shared/hooks/useAuth'
+import type { User } from '@/shared/types/auth'
 
 export const EmailConfirmationPage = () => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { login } = useAuth()
+  const { confirmEmailAndLogin, resendConfirmationEmail: _resendConfirmationEmail } = useAuthAPI()
+  const { create: createOrganization } = useOrganization()
 
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [message, setMessage] = useState('')
@@ -28,25 +31,81 @@ export const EmailConfirmationPage = () => {
         return
       }
 
+      // Helper function to create business organization after email confirmation
+      const createBusinessOrganization = async (
+        userId: string,
+        businessData: Record<string, unknown>
+      ) => {
+        try {
+          const companyInfo = businessData.companyInfo as Record<string, unknown>
+          // Create organization
+          const orgResponse = await createOrganization({
+            name: (companyInfo?.companyName as string) ?? '',
+            description: (companyInfo?.description as string) ?? '',
+            website: (companyInfo?.website as string) ?? '',
+            size: companyInfo?.employeeCount?.toString() ?? '',
+            revenue: 0, // Default value
+            category: (companyInfo?.industry as string) ?? 'other',
+            type: (companyInfo?.businessType as string) ?? 'corporation',
+            registrationNumber: companyInfo?.registrationNumber as string,
+            currency: companyInfo?.currency as string,
+            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            country: 'US', // Default, should come from form
+            userId,
+          })
+
+          if (orgResponse.success && orgResponse.data) {
+            // Organization created successfully with address data included
+          }
+        } catch (error) {
+          console.error('Error creating business organization:', error)
+          throw error
+        }
+      }
+
       try {
         // Use the new confirmEmailAndLogin method for automatic login
-        const response = await apiClient.confirmEmailAndLogin(userId, token)
+        const response = await confirmEmailAndLogin(userId, token)
 
-        if (response.success && response.data) {
+        if (response.success && 'data' in response && response.data) {
           setStatus('success')
-          setMessage(response.message ?? 'Email confirmed and logged in successfully!')
+          setMessage(
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+            ('message' in response && response.message) ||
+              'Email confirmed and logged in successfully!'
+          )
 
           // Automatically log in the user
-          login(response.data.user, response.data.accessToken, response.data.refreshToken)
+          login(response.data.user as User, response.data.accessToken, response.data.refreshToken)
+
+          // Check if there's pending business data to process
+          const pendingBusinessData = localStorage.getItem('pendingBusinessData')
+          if (pendingBusinessData) {
+            try {
+              const businessData = JSON.parse(pendingBusinessData)
+              await createBusinessOrganization(response.data.user.id, businessData)
+              localStorage.removeItem('pendingBusinessData')
+            } catch (error) {
+              console.error('Failed to create business organization:', error)
+              // Don't fail the whole flow, user is still logged in
+            }
+          }
 
           // Redirect to get-started page after 2 seconds
           setTimeout(() => {
             navigate('/get-started')
           }, 2000)
         } else {
-          console.error('Email confirmation failed:', response.error)
+          console.error(
+            'Email confirmation failed:',
+            'error' in response ? response.error : 'Unknown error'
+          )
           setStatus('error')
-          setMessage(response.error ?? 'Email confirmation failed. Please try again.')
+          setMessage(
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+            ('error' in response && response.error) ||
+              'Email confirmation failed. Please try again.'
+          )
         }
       } catch (error) {
         console.error('Email confirmation error:', error)
@@ -56,7 +115,7 @@ export const EmailConfirmationPage = () => {
     }
 
     confirmEmail()
-  }, [userId, token, navigate, login])
+  }, [userId, token, navigate, login, confirmEmailAndLogin, createOrganization])
 
   const handleResendEmail = async () => {
     if (!userId) {

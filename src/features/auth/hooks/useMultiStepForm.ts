@@ -32,6 +32,7 @@ export interface UseMultiStepFormReturn {
   goToPrevious: () => void
   goToStep: (stepIndex: number) => void
   completeCurrentStep: () => void
+  completeAndGoToNext: () => void
   updateStepCompletion: (stepIndex: number, isCompleted: boolean) => void
 
   // Utilities
@@ -99,6 +100,21 @@ export const useMultiStepForm = ({
     }
   }, [currentStep, isLastStep, onComplete, steps])
 
+  // Complete current step and go to next in one atomic operation
+  const completeAndGoToNext = useCallback(() => {
+    if (currentStep < steps.length - 1) {
+      setSteps(prevSteps => {
+        const newSteps = [...prevSteps]
+        newSteps[currentStep] = { ...newSteps[currentStep], isCompleted: true }
+        return newSteps
+      })
+
+      const nextStep = currentStep + 1
+      setCurrentStep(nextStep)
+      onStepChange?.(nextStep, steps[nextStep])
+    }
+  }, [currentStep, steps, onStepChange])
+
   // Update step completion status
   const updateStepCompletion = useCallback((stepIndex: number, isCompleted: boolean) => {
     setSteps(prevSteps => {
@@ -139,6 +155,7 @@ export const useMultiStepForm = ({
     goToPrevious,
     goToStep,
     completeCurrentStep,
+    completeAndGoToNext,
     updateStepCompletion,
 
     // Utilities

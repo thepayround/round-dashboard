@@ -18,14 +18,31 @@ import type { ProductInfo, TeamSettings } from '@/features/onboarding/types/onbo
 
 export const DashboardPage = () => {
   const { state } = useAuth()
-  const { user } = state
+  const { user, isLoading } = state
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="p-8">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-3">
+              <div className="w-6 h-6 border-2 border-[#D417C8] border-t-transparent rounded-full animate-spin" />
+              <p className="auth-text-muted">Loading your account...</p>
+            </div>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
+  }
 
   if (!user) {
     return (
       <DashboardLayout>
         <div className="p-8">
           <div className="text-center">
-            <p className="auth-text-muted">Loading user data...</p>
+            <p className="auth-text-muted">
+              Unable to load user data. Please try refreshing the page.
+            </p>
           </div>
         </div>
       </DashboardLayout>

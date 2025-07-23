@@ -85,6 +85,15 @@ class MockDatabase {
           timezone: 'America/New_York',
           fiscalYearStart: 'January',
         },
+        address: {
+          name: 'Headquarters',
+          street: '123 Main St',
+          city: 'New York',
+          state: 'NY',
+          zipCode: '10001',
+          country: 'US',
+          addressType: 'billing' as const,
+        },
         products: {
           hasProducts: true,
           products: [

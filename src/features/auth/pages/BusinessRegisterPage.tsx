@@ -26,7 +26,7 @@ import {
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { BillingAddressForm } from '../components/BillingAddressForm'
 import { useMultiStepForm } from '../hooks/useMultiStepForm'
-import { apiClient } from '@/shared/services/apiClient'
+import { useAuth as useAuthAPI } from '@/shared/hooks/api'
 // import { useAuth } from '@/shared/contexts/AuthContext'
 
 interface PersonalFormData {
@@ -39,6 +39,7 @@ interface PersonalFormData {
 
 export const BusinessRegisterPage = () => {
   const navigate = useNavigate()
+  const { register } = useAuthAPI()
   // const { login } = useAuth() // Not used in this component
 
   // Form state is hardcoded to 'business' for this page
@@ -89,6 +90,56 @@ export const BusinessRegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [apiError, setApiError] = useState('')
+
+  // Calculate progress based on current step and field completion
+  const calculateDetailedProgress = () => {
+    const { currentStep } = multiStepForm
+    const totalSteps = 3
+
+    // Base progress for reaching this step
+    const stepProgress = (currentStep / totalSteps) * 100
+
+    // Additional progress within current step
+    let currentStepProgress = 0
+    const progressPerStep = 100 / totalSteps
+
+    if (currentStep === 0) {
+      // Personal info step - 5 required fields
+      const filledFields = [
+        personalData.firstName.trim(),
+        personalData.lastName.trim(),
+        personalData.email.trim(),
+        personalData.phone.trim(),
+        personalData.password.trim(),
+      ].filter(field => field !== '').length
+
+      currentStepProgress = (filledFields / 5) * progressPerStep
+    } else if (currentStep === 1) {
+      // Billing address step - optional, show as partially complete if any fields filled
+      if (billingAddress) {
+        const filledFields = [
+          billingAddress.street?.trim(),
+          billingAddress.city?.trim(),
+          billingAddress.state?.trim(),
+          billingAddress.zipCode?.trim(),
+          billingAddress.country?.trim(),
+        ].filter(field => field && field !== '').length
+
+        currentStepProgress = Math.min(filledFields / 5, 1) * progressPerStep
+      }
+    } else if (currentStep === 2) {
+      // Company info step - count filled required fields
+      const filledFields = [
+        companyInfo.companyName.trim(),
+        companyInfo.registrationNumber.trim(),
+        companyInfo.currency.trim(),
+      ].filter(field => field !== '').length
+
+      currentStepProgress = (filledFields / 3) * progressPerStep
+    }
+
+    return Math.round(Math.min(stepProgress + currentStepProgress, 100))
+  }
 
   // Multi-step form management
   const multiStepForm = useMultiStepForm({
@@ -145,26 +196,50 @@ export const BusinessRegisterPage = () => {
 
   // Handle form completion
   async function handleFormComplete() {
+    // Prevent multiple submissions
+    if (isSubmitting) {
+      return
+    }
+
     setIsSubmitting(true)
     setApiError('')
 
     try {
-      // Call real API
-      const response = await apiClient.register({
+      // Step 1: Register the user first
+      const userResponse = await register({
         ...personalData,
         phone: personalData.phone,
       })
 
-      if (response.success && response.data) {
-        // Navigate to confirmation pending page instead of auto-login
-        navigate('/auth/confirmation-pending', {
-          state: { email: personalData.email },
-          replace: true,
-        })
-      } else {
-        setApiError(response.error ?? 'Registration failed')
+      if (!userResponse.success) {
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        setApiError(('error' in userResponse && userResponse.error) || 'User registration failed')
         setIsSubmitting(false)
+        return
       }
+
+      // Step 2: Get user ID from JWT token (we need this for organization creation)
+      // For now, we'll need to wait for user confirmation. The organization creation
+      // should happen after email confirmation when we have the actual user ID.
+      // Let's store the business data temporarily and navigate to confirmation
+
+      // Store business data in localStorage for later use after email confirmation
+      const businessData = {
+        companyInfo,
+        billingAddress,
+        email: personalData.email,
+      }
+      localStorage.setItem('pendingBusinessData', JSON.stringify(businessData))
+
+      // Navigate to confirmation pending page
+      navigate('/auth/confirmation-pending', {
+        state: {
+          email: personalData.email,
+          accountType: 'business',
+          hasBusinessData: true,
+        },
+        replace: true,
+      })
     } catch (error) {
       console.error('Registration error:', error)
       setApiError('An unexpected error occurred. Please try again.')
@@ -184,17 +259,15 @@ export const BusinessRegisterPage = () => {
         return
       }
       setPersonalErrors([])
-      multiStepForm.completeCurrentStep()
-      multiStepForm.goToNext()
+      multiStepForm.completeAndGoToNext()
     } else if (multiStepForm.currentStep === 1) {
       // Billing address step (optional)
-      multiStepForm.completeCurrentStep()
-      multiStepForm.goToNext()
+      multiStepForm.goToStep(2)
     } else if (multiStepForm.currentStep === 2) {
       // Company info step (final step)
       if (isCompanyValid && isCompanyComplete) {
+        // completeCurrentStep automatically calls handleFormComplete via onComplete
         multiStepForm.completeCurrentStep()
-        handleFormComplete()
       }
     }
   }
@@ -202,8 +275,7 @@ export const BusinessRegisterPage = () => {
   // Skip billing address
   const handleSkipBilling = () => {
     setBillingAddress(undefined)
-    multiStepForm.completeCurrentStep()
-    multiStepForm.goToNext()
+    multiStepForm.completeAndGoToNext()
   }
 
   // Render step content
@@ -490,14 +562,14 @@ export const BusinessRegisterPage = () => {
                 Step {multiStepForm.currentStep + 1} of {multiStepForm.getTotalSteps()}
               </span>
               <span className="text-sm auth-text-muted">
-                {multiStepForm.getStepProgress()}% Complete
+                {calculateDetailedProgress()}% Complete
               </span>
             </div>
             <div className="w-full bg-white/10 rounded-full h-2">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${multiStepForm.getStepProgress()}%` }}
-                transition={{ duration: 0.5 }}
+                animate={{ width: `${calculateDetailedProgress()}%` }}
+                transition={{ duration: 0.3 }}
                 className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] h-2 rounded-full"
               />
             </div>
@@ -565,28 +637,26 @@ export const BusinessRegisterPage = () => {
                   </div>
                 )}
 
-                {/* Continue button - show on all steps but with different logic */}
+                {/* Continue button - show on step 0, step 2, and step 1 when billing is complete */}
                 {(multiStepForm.currentStep !== 1 || isBillingComplete) && (
                   <button
-                    type="submit"
+                    type="button"
                     onClick={handleSubmit}
                     disabled={
                       isSubmitting ||
                       (multiStepForm.currentStep === 0 && !isPersonalValid) ||
-                      (multiStepForm.currentStep === 1 && !isBillingComplete) ||
                       (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
                     }
                     className={`
-                      px-8 py-3 font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px] rounded-lg
-                      ${
-                        isSubmitting ||
-                        (multiStepForm.currentStep === 0 && !isPersonalValid) ||
-                        (multiStepForm.currentStep === 1 && !isBillingComplete) ||
-                        (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
-                          ? 'opacity-50 cursor-not-allowed btn-secondary'
-                          : 'btn-primary'
-                      }
-                    `}
+                    px-8 py-3 font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px] rounded-lg
+                    ${
+                      isSubmitting ||
+                      (multiStepForm.currentStep === 0 && !isPersonalValid) ||
+                      (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
+                        ? 'opacity-50 cursor-not-allowed btn-secondary'
+                        : 'btn-primary'
+                    }
+                  `}
                   >
                     <span>
                       {(() => {

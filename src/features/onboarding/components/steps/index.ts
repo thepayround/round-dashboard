@@ -1,6 +1,7 @@
 export { UserInfoStep } from './UserInfoStep'
 export { OrganizationStep } from './OrganizationStep'
 export { BusinessSettingsStep } from './BusinessSettingsStep'
+export { AddressStep } from './AddressStep'
 export { ProductsStep } from './ProductsStep'
 export { BillingStep } from './BillingStep'
 export { TeamStep } from './TeamStep'

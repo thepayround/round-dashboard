@@ -529,28 +529,8 @@ class ApiClient {
         }
       }
 
-      // Decode JWT to get userId
-      const payload = this.decodeJWT(token)
-
-      if (!payload) {
-        return {
-          success: false,
-          error: 'Invalid token format - failed to decode',
-        }
-      }
-
-      // Check different possible claim names
-      const userId = payload.UserId ?? payload.sub ?? payload.id ?? payload.userId
-
-      if (!userId) {
-        return {
-          success: false,
-          error: 'Invalid token format - no userId claim found',
-        }
-      }
-
-      // Use the /users/search endpoint with the userId from token
-      const response = await this.client.get(`/users/search?id=${userId}`)
+      // Use the /identities/me endpoint - no need to decode JWT as backend handles it
+      const response = await this.client.get('/identities/me')
 
       if (response.data) {
         const userData = response.data
@@ -605,6 +585,172 @@ class ApiClient {
   }
 
   /**
+   * Create organization
+   */
+  async createOrganization(orgData: {
+    name: string
+    description?: string
+    website?: string
+    size?: string
+    revenue?: number
+    category: string
+    type: string
+    registrationNumber: string
+    currency: string
+    timeZone: string
+    country: string
+    userId: string
+  }): Promise<ApiResponse<OrganizationResponse>> {
+    try {
+      const organizationRequest: OrganizationRequest = {
+        name: orgData.name,
+        description: orgData.description,
+        website: orgData.website,
+        size: orgData.size,
+        revenue: orgData.revenue,
+        category: orgData.category,
+        type: orgData.type,
+        registrationNumber: orgData.registrationNumber,
+        currency: orgData.currency,
+        timeZone: orgData.timeZone,
+        country: orgData.country,
+        userId: orgData.userId,
+      }
+
+      const response = await this.client.post<OrganizationResponse>(
+        '/Organizations',
+        organizationRequest
+      )
+
+      return {
+        success: true,
+        data: response.data,
+        message: 'Organization created successfully',
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return {
+          success: false,
+          error: error.response.data?.message || 'Failed to create organization',
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
+
+  /**
+   * Create address for organization
+   */
+  async createOrganizationAddress(
+    organizationId: string,
+    addressData: {
+      name: string
+      addressLine1: string
+      addressLine2?: string
+      number: string
+      city: string
+      state?: string
+      country: string
+      zipCode: string
+      addressType: string
+      isPrimary: boolean
+    }
+  ): Promise<ApiResponse<AddressResponse>> {
+    try {
+      const addressRequest: AddressRequest = {
+        name: addressData.name,
+        addressLine1: addressData.addressLine1,
+        addressLine2: addressData.addressLine2,
+        number: addressData.number,
+        city: addressData.city,
+        state: addressData.state,
+        country: addressData.country,
+        zipCode: addressData.zipCode,
+        addressType: addressData.addressType,
+        isPrimary: addressData.isPrimary,
+      }
+
+      const response = await this.client.post<AddressResponse>(
+        `/Organizations/${organizationId}/addresses`,
+        addressRequest
+      )
+
+      return {
+        success: true,
+        data: response.data,
+        message: 'Address created successfully',
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return {
+          success: false,
+          error: error.response.data?.message || 'Failed to create address',
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
+
+  /**
+   * Create standalone address
+   */
+  async createAddress(addressData: {
+    name: string
+    addressLine1: string
+    addressLine2?: string
+    number: string
+    city: string
+    state?: string
+    country: string
+    zipCode: string
+    addressType: string
+    isPrimary: boolean
+  }): Promise<ApiResponse<AddressResponse>> {
+    try {
+      const addressRequest: AddressRequest = {
+        name: addressData.name,
+        addressLine1: addressData.addressLine1,
+        addressLine2: addressData.addressLine2,
+        number: addressData.number,
+        city: addressData.city,
+        state: addressData.state,
+        country: addressData.country,
+        zipCode: addressData.zipCode,
+        addressType: addressData.addressType,
+        isPrimary: addressData.isPrimary,
+      }
+
+      const response = await this.client.post<AddressResponse>('/Addresses', addressRequest)
+
+      return {
+        success: true,
+        data: response.data,
+        message: 'Address created successfully',
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return {
+          success: false,
+          error: error.response.data?.message || 'Failed to create address',
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
+
+  /**
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {
@@ -622,5 +768,82 @@ class ApiClient {
 // Export singleton instance
 export const apiClient = new ApiClient()
 
+// Organization and Address interfaces
+interface OrganizationRequest {
+  organizationId?: string
+  name: string
+  description?: string
+  website?: string
+  size?: string
+  revenue?: number
+  category: string
+  type: string
+  registrationNumber: string
+  currency: string
+  timeZone: string
+  country: string
+  userId: string
+  addressId?: string
+}
+
+interface AddressRequest {
+  addressId?: string
+  name: string
+  addressLine1: string
+  addressLine2?: string
+  number: string
+  city: string
+  state?: string
+  country: string
+  zipCode: string
+  addressType: string
+  isPrimary: boolean
+}
+
+interface OrganizationResponse {
+  organizationId: string
+  name: string
+  description?: string
+  website?: string
+  size?: string
+  revenue?: number
+  category: string
+  type: string
+  registrationNumber: string
+  currency: string
+  timeZone: string
+  country: string
+  userId: string
+  addressId?: string
+  createdDate: string
+  modifiedDate: string
+}
+
+interface AddressResponse {
+  addressId: string
+  name: string
+  addressLine1: string
+  addressLine2?: string
+  number: string
+  city: string
+  state?: string
+  country: string
+  zipCode: string
+  addressType: string
+  isPrimary: boolean
+  createdDate: string
+  modifiedDate: string
+}
+
 // Export types for use in components
-export type { ApiResponse, LoginRequest, RegisterRequest, User, AuthResponse }
+export type {
+  ApiResponse,
+  LoginRequest,
+  RegisterRequest,
+  User,
+  AuthResponse,
+  OrganizationRequest,
+  OrganizationResponse,
+  AddressRequest,
+  AddressResponse,
+}

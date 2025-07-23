@@ -6,9 +6,15 @@ interface UserInfoStepProps {
   data: UserInfo
   onChange: (data: UserInfo) => void
   errors?: Record<string, string>
+  isPrePopulated?: boolean
 }
 
-export const UserInfoStep = ({ data, onChange, errors = {} }: UserInfoStepProps) => {
+export const UserInfoStep = ({
+  data,
+  onChange,
+  errors = {},
+  isPrePopulated = false,
+}: UserInfoStepProps) => {
   const handleInputChange = (field: keyof UserInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({
       ...data,
@@ -42,7 +48,23 @@ export const UserInfoStep = ({ data, onChange, errors = {} }: UserInfoStepProps)
 
         <div>
           <h2 className="text-3xl font-bold text-white mb-2">User Information</h2>
-          <p className="text-gray-400 text-lg">Tell us about yourself</p>
+          <p className="text-gray-400 text-lg">
+            {isPrePopulated
+              ? 'Your information has been automatically filled'
+              : 'Tell us about yourself'}
+          </p>
+          {isPrePopulated && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-[#42E695]/20 to-[#3BB2B8]/20 border border-[#42E695]/30"
+            >
+              <span className="text-[#42E695] text-sm font-medium">
+                ✓ Auto-completed from your account
+              </span>
+            </motion.div>
+          )}
         </div>
       </div>
 

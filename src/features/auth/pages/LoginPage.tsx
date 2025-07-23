@@ -99,9 +99,9 @@ export const LoginPage = () => {
         // Log the user in
         login(response.data.user, response.data.accessToken)
 
-        // Navigate to intended destination or dashboard
+        // Navigate to intended destination or get-started page
         const from =
-          (location.state as { from?: { pathname?: string } })?.from?.pathname ?? '/dashboard'
+          (location.state as { from?: { pathname?: string } })?.from?.pathname ?? '/get-started'
         navigate(from, { replace: true })
       } else {
         setApiError(response.error ?? 'Login failed')

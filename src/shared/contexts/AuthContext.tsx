@@ -89,6 +89,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // Check for existing session on mount
   useEffect(() => {
+    let isMounted = true // Prevent duplicate calls
+
     const checkExistingSession = async () => {
       const token = localStorage.getItem('auth_token')
 
@@ -98,11 +100,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
 
       try {
-        // Import apiClient here to avoid circular dependency
-        const { apiClient } = await import('@/shared/services/apiClient')
-        const response = await apiClient.getCurrentUser()
+        // Import authService here to avoid circular dependency
+        const { authService } = await import('@/shared/services/api')
+        const response = await authService.getCurrentUser()
 
-        if (response.success && response.data) {
+        if (response.success && response.data && isMounted) {
           dispatch({
             type: 'LOGIN_SUCCESS',
             payload: {
@@ -110,7 +112,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
               token,
             },
           })
-        } else {
+        } else if (isMounted) {
           // Invalid token, remove from storage
           localStorage.removeItem('auth_token')
           localStorage.removeItem('refresh_token')
@@ -118,13 +120,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
       } catch (error) {
         console.error('Error checking session:', error)
-        localStorage.removeItem('auth_token')
-        localStorage.removeItem('refresh_token')
-        dispatch({ type: 'SET_LOADING', payload: false })
+        if (isMounted) {
+          localStorage.removeItem('auth_token')
+          localStorage.removeItem('refresh_token')
+          dispatch({ type: 'SET_LOADING', payload: false })
+        }
       }
     }
 
     checkExistingSession()
+
+    return () => {
+      isMounted = false // Cleanup to prevent duplicate calls
+    }
   }, [])
 
   const login = (user: User, token: string, refreshToken?: string) => {

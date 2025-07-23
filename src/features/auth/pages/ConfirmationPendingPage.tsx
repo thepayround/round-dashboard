@@ -10,8 +10,10 @@ export const ConfirmationPendingPage = () => {
   const [resendMessage, setResendMessage] = useState('')
   const [resendSuccess, setResendSuccess] = useState(false)
 
-  // Get email from navigation state
+  // Get email and account type from navigation state
   const email = location.state?.email || ''
+  const _accountType = location.state?.accountType || 'personal'
+  const hasBusinessData = location.state?.hasBusinessData || false
 
   const handleResendEmail = async () => {
     if (!email) {
@@ -107,8 +109,18 @@ export const ConfirmationPendingPage = () => {
               {email || 'your email address'}
             </p>
             <p className="auth-text-muted text-sm">
-              Click the link in the email to confirm your account and get started with Round.
+              Click the link in the email to confirm your account
+              {hasBusinessData ? ' and set up your business profile' : ''} and get started with
+              Round.
             </p>
+            {hasBusinessData && (
+              <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-[#32A1E4]/10 to-[#7767DA]/10 border border-[#32A1E4]/20">
+                <p className="text-sm text-[#32A1E4] font-medium">
+                  🏢 Your business information has been saved and will be set up automatically after
+                  email confirmation.
+                </p>
+              </div>
+            )}
           </motion.div>
 
           {/* Instructions */}
@@ -141,7 +153,9 @@ export const ConfirmationPendingPage = () => {
                   <span className="text-white text-sm font-bold">3</span>
                 </div>
                 <p className="auth-text-muted text-sm">
-                  You&apos;ll be redirected to complete your setup
+                  {hasBusinessData
+                    ? "Your business account will be automatically set up and you'll be redirected to your dashboard"
+                    : "You'll be redirected to complete your setup"}
                 </p>
               </div>
             </div>

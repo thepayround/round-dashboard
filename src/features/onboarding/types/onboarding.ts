@@ -10,6 +10,9 @@ export interface OrganizationInfo {
   industry: string
   companySize: string
   website: string
+  description?: string
+  timeZone?: string
+  revenue?: string
 }
 
 export interface BusinessSettings {
@@ -33,6 +36,16 @@ export interface BillingSettings {
   provider: string
 }
 
+export interface AddressInfo {
+  name: string
+  street: string
+  city: string
+  state: string
+  zipCode: string
+  country: string
+  addressType: 'billing' | 'shipping' | 'business'
+}
+
 export interface TeamSettings {
   invitations: Array<{
     id: string
@@ -46,6 +59,7 @@ export interface OnboardingData {
   userInfo: UserInfo
   organization: OrganizationInfo
   businessSettings: BusinessSettings
+  address: AddressInfo
   products: ProductInfo
   billing: BillingSettings
   team: TeamSettings
@@ -55,6 +69,7 @@ export type OnboardingStep =
   | 'userInfo'
   | 'organization'
   | 'businessSettings'
+  | 'address'
   | 'products'
   | 'billing'
   | 'team'

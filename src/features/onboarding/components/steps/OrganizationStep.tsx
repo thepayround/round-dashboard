@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Building, ChevronDown, Globe } from 'lucide-react'
+import { Building, ChevronDown, Globe, FileText, DollarSign } from 'lucide-react'
 import { useState } from 'react'
 import type { OrganizationInfo } from '../../types/onboarding'
 
@@ -7,6 +7,7 @@ interface OrganizationStepProps {
   data: OrganizationInfo
   onChange: (data: OrganizationInfo) => void
   errors?: Record<string, string>
+  isPrePopulated?: boolean
 }
 
 const industryOptions = [
@@ -29,9 +30,28 @@ const companySizeOptions = [
   { value: '1000+', label: '1000+ employees' },
 ]
 
-export const OrganizationStep = ({ data, onChange, errors = {} }: OrganizationStepProps) => {
+const timezoneOptions = [
+  { value: 'UTC', label: 'UTC (Coordinated Universal Time)' },
+  { value: 'America/New_York', label: 'Eastern Time (UTC-5/-4)' },
+  { value: 'America/Chicago', label: 'Central Time (UTC-6/-5)' },
+  { value: 'America/Denver', label: 'Mountain Time (UTC-7/-6)' },
+  { value: 'America/Los_Angeles', label: 'Pacific Time (UTC-8/-7)' },
+  { value: 'Europe/London', label: 'London (UTC+0/+1)' },
+  { value: 'Europe/Paris', label: 'Paris (UTC+1/+2)' },
+  { value: 'Asia/Tokyo', label: 'Tokyo (UTC+9)' },
+  { value: 'Asia/Shanghai', label: 'Shanghai (UTC+8)' },
+  { value: 'Australia/Sydney', label: 'Sydney (UTC+10/+11)' },
+]
+
+export const OrganizationStep = ({
+  data,
+  onChange,
+  errors = {},
+  isPrePopulated = false,
+}: OrganizationStepProps) => {
   const [industryOpen, setIndustryOpen] = useState(false)
   const [companySizeOpen, setCompanySizeOpen] = useState(false)
+  const [timezoneOpen, setTimezoneOpen] = useState(false)
 
   const handleInputChange =
     (field: keyof OrganizationInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,7 +153,23 @@ export const OrganizationStep = ({ data, onChange, errors = {} }: OrganizationSt
 
         <div>
           <h2 className="text-3xl font-bold text-white mb-2">Organization</h2>
-          <p className="text-gray-400 text-lg">Set up your company profile</p>
+          <p className="text-gray-400 text-lg">
+            {isPrePopulated
+              ? 'Review and complete your company profile'
+              : 'Complete your company profile'}
+          </p>
+          {isPrePopulated && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-[#42E695]/20 to-[#3BB2B8]/20 border border-[#42E695]/30"
+            >
+              <span className="text-[#42E695] text-sm font-medium">
+                ✓ Company info loaded from your account
+              </span>
+            </motion.div>
+          )}
         </div>
       </div>
 
@@ -215,6 +251,71 @@ export const OrganizationStep = ({ data, onChange, errors = {} }: OrganizationSt
             />
           </div>
           {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
+        </div>
+
+        {/* Description */}
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-2">
+            Description <span className="text-gray-500">(optional)</span>
+          </label>
+          <div className="relative">
+            <FileText className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
+            <textarea
+              id="description"
+              value={data.description ?? ''}
+              onChange={e => onChange({ ...data, description: e.target.value })}
+              placeholder="Brief description of your company..."
+              rows={3}
+              className={`
+                w-full pl-12 pr-4 py-3 rounded-xl backdrop-blur-xl border transition-all duration-200 resize-none
+                bg-white/5 border-white/10 text-white placeholder-gray-400
+                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
+                ${errors.description ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
+              `}
+            />
+          </div>
+          {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
+        </div>
+
+        {/* Time Zone */}
+        <div>
+          <span className="block text-sm font-medium text-gray-300 mb-2">
+            Time Zone <span className="text-gray-500">(optional)</span>
+          </span>
+          <Dropdown
+            value={data.timeZone ?? ''}
+            options={timezoneOptions}
+            placeholder="Select your time zone"
+            onSelect={value => handleSelectChange('timeZone', value)}
+            isOpen={timezoneOpen}
+            setIsOpen={setTimezoneOpen}
+            error={errors.timeZone}
+          />
+          {errors.timeZone && <p className="mt-1 text-sm text-red-400">{errors.timeZone}</p>}
+        </div>
+
+        {/* Revenue */}
+        <div>
+          <label htmlFor="revenue" className="block text-sm font-medium text-gray-300 mb-2">
+            Annual Revenue <span className="text-gray-500">(optional)</span>
+          </label>
+          <div className="relative">
+            <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              id="revenue"
+              type="number"
+              value={data.revenue ?? ''}
+              onChange={handleInputChange('revenue')}
+              placeholder="1000000"
+              className={`
+                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
+                bg-white/5 border-white/10 text-white placeholder-gray-400
+                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
+                ${errors.revenue ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
+              `}
+            />
+          </div>
+          {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}
         </div>
       </div>
 
