@@ -29,19 +29,6 @@ export class AuthService {
     password: string
   }): Promise<ApiResponse<AuthResponse>> {
     try {
-      // 🔐 SECURITY OPTIONS: Choose your approach (uncomment one)
-
-      // Option 1: Facebook/Google/Netflix Standard (password visible in Network tab)
-      // const loginData: LoginRequest = {
-      //   identifier: credentials.email,
-      //   password: credentials.password,
-      // }
-
-      // Option 2: Banking Style (Base64 + risk assessment)
-      // const loginData = EnterprisePasswordSecurity.createSecureLoginPayload_Banking(
-      //   credentials.email,
-      //   credentials.password
-      // )
 
       // Option 3: Advanced Obfuscation (currently active - better than major companies)
       const securePayload = SecureFormData.createSecureLoginPayload(
@@ -49,10 +36,6 @@ export class AuthService {
         credentials.password
       )
 
-      // console.log('🔒 Using advanced obfuscation - password hidden from Network tab')
-      // console.log(
-      //   'ℹ️  Most major companies (Facebook, Google, Netflix) show passwords in Network tab'
-      // )
 
       const loginData: LoginRequest & { encoded?: boolean } = securePayload
 
@@ -487,13 +470,22 @@ export class AuthService {
    */
   getRoundAccountIdFromToken(token: string): string | null {
     const payload = this.decodeJWT(token)
-    return (payload?.RoundAccountId as string) || null
+    
+    // Try different possible claim names (backend uses "round_account_id" based on CommonConstants.ClaimType_RoundAccountId)
+    const roundAccountId = (payload?.round_account_id as string) ||
+                          (payload?.RoundAccountId as string) ||
+                          (payload?.roundAccountId as string) ||
+                          (payload?.roundaccount_id as string) ||
+                          (payload?.account_id as string) ||
+                          null
+                          
+    return roundAccountId
   }
 
   /**
    * Decode JWT token to extract user information
    */
-  private decodeJWT(token: string): Record<string, unknown> | null {
+  decodeJWT(token: string): Record<string, unknown> | null {
     try {
       const [, base64Url] = token.split('.')
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')

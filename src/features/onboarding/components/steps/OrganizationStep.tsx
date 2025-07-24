@@ -30,6 +30,24 @@ const companySizeOptions = [
   { value: '1000+', label: '1000+ employees' },
 ]
 
+const countryOptions = [
+  { value: 'US', label: 'United States' },
+  { value: 'CA', label: 'Canada' },
+  { value: 'GB', label: 'United Kingdom' },
+  { value: 'DE', label: 'Germany' },
+  { value: 'FR', label: 'France' },
+  { value: 'IT', label: 'Italy' },
+  { value: 'ES', label: 'Spain' },
+  { value: 'NL', label: 'Netherlands' },
+  { value: 'AU', label: 'Australia' },
+  { value: 'JP', label: 'Japan' },
+  { value: 'CN', label: 'China' },
+  { value: 'IN', label: 'India' },
+  { value: 'BR', label: 'Brazil' },
+  { value: 'MX', label: 'Mexico' },
+  { value: 'GR', label: 'Greece' },
+]
+
 const timezoneOptions = [
   { value: 'UTC', label: 'UTC (Coordinated Universal Time)' },
   { value: 'America/New_York', label: 'Eastern Time (UTC-5/-4)' },
@@ -51,6 +69,7 @@ export const OrganizationStep = ({
 }: OrganizationStepProps) => {
   const [industryOpen, setIndustryOpen] = useState(false)
   const [companySizeOpen, setCompanySizeOpen] = useState(false)
+  const [countryOpen, setCountryOpen] = useState(false)
   const [timezoneOpen, setTimezoneOpen] = useState(false)
 
   const handleInputChange =
@@ -69,7 +88,7 @@ export const OrganizationStep = ({
   }
 
   const isFormValid = () =>
-    data.companyName.trim() !== '' && data.industry !== '' && data.companySize !== ''
+    data.companyName.trim() !== '' && data.industry !== '' && data.companySize !== '' && data.country !== ''
 
   const Dropdown = ({
     value,
@@ -197,6 +216,23 @@ export const OrganizationStep = ({
             />
           </div>
           {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
+        </div>
+
+        {/* Country */}
+        <div>
+          <span className="block text-sm font-medium text-gray-300 mb-2">
+            Country <span className="text-red-400">*</span>
+          </span>
+          <Dropdown
+            value={data.country}
+            options={countryOptions}
+            placeholder="Select your country"
+            onSelect={value => handleSelectChange('country', value)}
+            isOpen={countryOpen}
+            setIsOpen={setCountryOpen}
+            error={errors.country}
+          />
+          {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
         </div>
 
         {/* Industry */}

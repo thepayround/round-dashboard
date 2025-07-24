@@ -159,6 +159,60 @@ src/components/ComponentName/
 // ❌ BAD: Monolithic props
 <Card title="Title" content="Content" footer="Footer" showHeader={true} />
 
+### Bad pattern 
+#### Avoiding useEffect Anti-Patterns in React
+
+`useEffect` is useful but often misused. Use it only for real side effects.
+
+##### When useEffect is OK
+- Data fetching (prefer `useQuery`, `SWR`)
+- Event subscriptions, cleanup
+- DOM manipulation
+- Syncing with non-React state (timers, localStorage)
+
+##### Common Anti-Patterns
+
+###### 1. Deriving state from props
+```tsx
+// Bad
+useEffect(() => { setX(a + 1); }, [a]);
+// Good
+const x = a + 1;
+```
+
+###### 2. Manual data fetching
+```tsx
+// Bad
+useEffect(() => {
+  fetch('/api').then(res => res.json()).then(setData);
+}, []);
+// Good
+const { data } = useQuery(['data'], fetchData);
+```
+
+###### 3. Responding to state
+```tsx
+// Bad
+useEffect(() => { if (flag) doSomething(); }, [flag]);
+// Good
+handleAction() {
+  setFlag(true);
+  doSomething();
+}
+```
+
+## Best Practices
+
+| Goal            | Better Approach        |
+|-----------------|------------------------|
+| Derived values  | Inline or `useMemo`    |
+| Fetching data   | `useQuery`, `SWR`      |
+| Layout effects  | `useLayoutEffect` or CSS |
+| Global state    | `useContext`, `zustand` |
+| Event handling  | In handlers, not effects |
+
+Avoid `useEffect` for things React can do declaratively.
+
 ### Single Responsibility Principle
 - **HTML Structure**: Component handles markup and props
 - **CSS Styling**: Tailwind classes for styling, separate .styles.ts for complex logic

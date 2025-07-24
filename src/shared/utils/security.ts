@@ -87,22 +87,6 @@ export class SecurityUtils {
       })
     }
   }
-
-  /**
-   * Warn user about network tab exposure (development only)
-   */
-  static warnAboutNetworkTab(): void {
-    if (import.meta.env.DEV) {
-      console.warn(
-        '%c🔒 SECURITY NOTICE',
-        'color: red; font-weight: bold; font-size: 14px;',
-        '\n\n⚠️  Passwords are visible in Browser Network tab - this is normal browser behavior.\n' +
-          '✅  Passwords are masked in console logs for security.\n' +
-          '🔐  In production, additional security measures are active.\n' +
-          '🚫  Never share screenshots of Network tab containing sensitive data.\n'
-      )
-    }
-  }
 }
 
 /**

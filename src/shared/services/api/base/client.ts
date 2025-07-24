@@ -28,15 +28,6 @@ class BaseHttpClient {
           config.headers.Authorization = `Bearer ${token}`
         }
 
-        // Secure logging (only in development)
-        if (import.meta.env.DEV) {
-          // console.group('🔐 API Request')
-          // console.log('Method:', config.method?.toUpperCase())
-          // console.log('URL:', config.url)
-          // console.log('Data (MASKED):', this.maskSensitiveData(config.data))
-          // console.log('Headers (MASKED):', this.maskSensitiveHeaders(config.headers))
-          // console.groupEnd()
-        }
 
         return config
       },
@@ -45,27 +36,8 @@ class BaseHttpClient {
 
     // Response interceptor to handle errors and secure logging
     this.client.interceptors.response.use(
-      response =>
-        // Secure logging (only in development)
-        // if (import.meta.env.DEV) {
-        //   console.log('✅ API Response:', {
-        //     status: response.status,
-        //     url: response.config.url,
-        //     data: this.maskSensitiveData(response.data),
-        //   })
-        // }
-        response,
+      response => response,
       (error: AxiosError) => {
-        // Secure error logging (only in development)
-        if (import.meta.env.DEV) {
-          console.error('❌ API Error:', {
-            status: error.response?.status,
-            url: error.config?.url,
-            method: error.config?.method?.toUpperCase(),
-            message: error.message,
-            data: this.maskSensitiveData(error.response?.data as Record<string, unknown>),
-          })
-        }
 
         if (error.response?.status === 401) {
           // Token expired or invalid
@@ -77,7 +49,6 @@ class BaseHttpClient {
 
           if (!isAuthPage && hasToken) {
             // Only redirect if user was logged in and got 401
-            console.warn('Session expired, redirecting to login')
             window.location.href = '/auth/login'
           }
         }

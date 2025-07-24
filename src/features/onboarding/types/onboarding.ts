@@ -13,6 +13,7 @@ export interface OrganizationInfo {
   description?: string
   timeZone?: string
   revenue?: string
+  country: string
 }
 
 export interface BusinessSettings {

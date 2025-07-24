@@ -4,6 +4,8 @@ import { ArrowLeft, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { ErrorToast } from '@/shared/components/ErrorToast'
+import { parseBackendError } from '@/shared/utils/errorHandling'
 import { mockApi } from '@/shared/services/mockApi'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
@@ -44,7 +46,26 @@ export const GetStartedPage = () => {
   const navigate = useNavigate()
   const { state, setUser } = useAuth()
   const { token, user } = state
-  const { getCurrentUserOrganization } = useOrganization()
+  const { getCurrentOrganization } = useOrganization()
+
+  // Show error toast function
+  const showErrorToast = (error: unknown) => {
+    const parsedError = parseBackendError(error)
+    setErrorToast({
+      isVisible: true,
+      message: parsedError.message,
+      details: parsedError.details,
+    })
+  }
+
+  // Hide error toast function
+  const hideErrorToast = () => {
+    setErrorToast({
+      isVisible: false,
+      message: '',
+      details: undefined,
+    })
+  }
 
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('userInfo')
   const [completedSteps, setCompletedSteps] = useState<OnboardingStep[]>([])
@@ -53,6 +74,17 @@ export const GetStartedPage = () => {
   const [apiError, setApiError] = useState('')
   const [isLoadingData, setIsLoadingData] = useState(false)
   const loadingRef = useRef(false)
+  
+  // Error toast state
+  const [errorToast, setErrorToast] = useState<{
+    isVisible: boolean
+    message: string
+    details?: Record<string, string>
+  }>({
+    isVisible: false,
+    message: '',
+    details: undefined,
+  })
 
   const [onboardingData, setOnboardingData] = useState<OnboardingData>({
     userInfo: {
@@ -69,6 +101,7 @@ export const GetStartedPage = () => {
       description: '',
       timeZone: '',
       revenue: '',
+      country: '',
     },
     businessSettings: {
       currency: 'USD',
@@ -101,29 +134,25 @@ export const GetStartedPage = () => {
   const loadOnboardingData = useCallback(async () => {
     // Prevent multiple simultaneous calls ONLY (allow calls every time page is visited)
     if (loadingRef.current || isLoadingData) {
-      // Skipping loadOnboardingData - already loading
       return
     }
 
-    // Making exactly two API calls every time page is visited
     loadingRef.current = true
     setIsLoadingData(true)
     setApiError('')
 
     try {
-      const updatedData = { ...onboardingData }
+      // Use functional state updates to avoid depending on current state
+      const updatedData: Partial<OnboardingData> = {}
       const newCompletedSteps: OnboardingStep[] = []
       const stepsToShow: OnboardingStep[] = []
 
-      // *** API CALL 1: Get user data + round account ***
-      // API CALL 1: Getting user data + round account
       let currentUser = null
 
       try {
         const userResponse = await authService.getCurrentUser()
         if (userResponse.success && userResponse.data) {
           currentUser = userResponse.data
-          // API CALL 1 SUCCESS - User + round account data received via /identities/me
 
           // Prefill user info
           updatedData.userInfo = {
@@ -142,24 +171,19 @@ export const GetStartedPage = () => {
           ) {
             newCompletedSteps.push('userInfo')
           }
-        } else {
-          // API CALL 1 FAILED - No user data received
         }
       } catch (userError) {
         console.error('❌ API CALL 1 ERROR:', userError)
         setApiError('Failed to load user data')
       }
 
-      // *** API CALL 2: Get organization + address data (business users only) ***
-      if (currentUser?.accountType === 'business') {
-        // API CALL 2: Getting organization + address data
+      if (currentUser) {
 
         try {
-          const orgResponse = await getCurrentUserOrganization()
+          const orgResponse = await getCurrentOrganization()
 
           if (orgResponse.success && orgResponse.data) {
             const org = orgResponse.data
-            // API CALL 2 SUCCESS - Organization + address data received
 
             // Prefill organization step
             updatedData.organization = {
@@ -170,10 +194,11 @@ export const GetStartedPage = () => {
               description: org.description ?? '',
               timeZone: org.timeZone ?? '',
               revenue: org.revenue?.toString() ?? '',
+              country: org.country ?? '',
             }
 
             // Mark organization as completed if we have required data
-            if (org.name && org.category && org.size) {
+            if (org.name && org.category && org.size && org.country) {
               newCompletedSteps.push('organization')
             }
 
@@ -200,18 +225,17 @@ export const GetStartedPage = () => {
               }
               newCompletedSteps.push('businessSettings')
             }
-          } else {
-            // API CALL 2 FAILED - No organization data received
           }
         } catch (orgError) {
           console.error('❌ API CALL 2 ERROR:', orgError)
+          showErrorToast(orgError)
           setApiError('Failed to load organization data')
         }
       }
 
       // Determine which steps to show
       if (!newCompletedSteps.includes('userInfo')) stepsToShow.push('userInfo')
-      if (currentUser?.accountType === 'business') {
+      if (currentUser) {
         if (!newCompletedSteps.includes('organization')) stepsToShow.push('organization')
         if (!newCompletedSteps.includes('businessSettings')) stepsToShow.push('businessSettings')
         if (!newCompletedSteps.includes('address')) stepsToShow.push('address')
@@ -220,8 +244,8 @@ export const GetStartedPage = () => {
       // Always show optional steps
       stepsToShow.push('products', 'billing', 'team')
 
-      // Update state
-      setOnboardingData(updatedData)
+      // Update state using functional updates to avoid dependencies
+      setOnboardingData(prevData => ({ ...prevData, ...updatedData }))
       setAvailableSteps(stepsToShow)
       setCompletedSteps(newCompletedSteps)
 
@@ -231,7 +255,6 @@ export const GetStartedPage = () => {
         setCurrentStep(nextStep)
       }
 
-      // DATA LOADING COMPLETE - Both API calls finished
     } catch (error) {
       console.error('CRITICAL ERROR in loadOnboardingData:', error)
       setApiError('Failed to load onboarding data')
@@ -239,11 +262,13 @@ export const GetStartedPage = () => {
       loadingRef.current = false
       setIsLoadingData(false)
     }
-  }, [getCurrentUserOrganization, isLoadingData, onboardingData])
+  }, [getCurrentOrganization, isLoadingData]) // Include isLoadingData dependency
 
+  // Initialize data when user is available (proper useEffect usage for side effects)
   useEffect(() => {
-    if (!user) return
-    loadOnboardingData()
+    if (user && !loadingRef.current) {
+      loadOnboardingData()
+    }
   }, [user, loadOnboardingData])
 
   const getCurrentStepIndex = () => availableSteps.indexOf(currentStep)
@@ -311,25 +336,29 @@ export const GetStartedPage = () => {
     switch (step) {
       case 'userInfo': {
         const { userInfo } = onboardingData
+        if (!userInfo) return false
         return (
-          userInfo.firstName.trim() !== '' &&
-          userInfo.lastName.trim() !== '' &&
-          userInfo.email.trim() !== '' &&
-          userInfo.phone.trim() !== ''
+          userInfo.firstName?.trim() !== '' &&
+          userInfo.lastName?.trim() !== '' &&
+          userInfo.email?.trim() !== '' &&
+          userInfo.phone?.trim() !== ''
         )
       }
 
       case 'organization': {
         const { organization } = onboardingData
+        if (!organization) return false
         return (
-          organization.companyName.trim() !== '' &&
+          organization.companyName?.trim() !== '' &&
           organization.industry !== '' &&
-          organization.companySize !== ''
+          organization.companySize !== '' &&
+          organization.country !== ''
         )
       }
 
       case 'businessSettings': {
         const { businessSettings } = onboardingData
+        if (!businessSettings) return false
         return (
           businessSettings.currency !== '' &&
           businessSettings.timezone !== '' &&
@@ -339,12 +368,13 @@ export const GetStartedPage = () => {
 
       case 'address': {
         const { address } = onboardingData
+        if (!address) return false
         return (
-          address.name.trim() !== '' &&
-          address.street.trim() !== '' &&
-          address.city.trim() !== '' &&
-          address.state.trim() !== '' &&
-          address.zipCode.trim() !== '' &&
+          address.name?.trim() !== '' &&
+          address.street?.trim() !== '' &&
+          address.city?.trim() !== '' &&
+          address.state?.trim() !== '' &&
+          address.zipCode?.trim() !== '' &&
           address.country !== ''
         )
       }
@@ -391,7 +421,7 @@ export const GetStartedPage = () => {
               onboardingData.organization.timeZone ??
               onboardingData.businessSettings.timezone ??
               'UTC',
-            country: onboardingData.address?.country ?? 'US', // Get from address if available
+            country: onboardingData.organization.country ?? 'US', // Get from organization form
           }
 
           // For create operations, include userId
@@ -403,38 +433,28 @@ export const GetStartedPage = () => {
           // For update operations, exclude userId (backend validation might reject it)
           const updateOrgData = baseOrgData
 
-          // Saving organization data on next
 
           // Check if user already has an organization using single API call
           let orgResponse
           if (user?.accountType === 'business') {
-            // Check if user already has an organization using single API call
-            // CLEAN WORKFLOW: Use getCurrentUserOrganization method
             try {
               let existingOrg = null
 
               // Use the clean workflow method
-              const currentOrgResponse = await getCurrentUserOrganization()
+              const currentOrgResponse = await getCurrentOrganization()
               if (currentOrgResponse.success && currentOrgResponse.data) {
                 existingOrg = currentOrgResponse.data
-                // Found existing organization
               }
 
               if (existingOrg) {
-                // Update existing organization
-                // Updating existing organization
                 orgResponse = await organizationService.update(
                   existingOrg.organizationId,
                   updateOrgData
                 )
               } else {
-                // Create new organization
-                // No organization found, creating new organization
                 orgResponse = await organizationService.create(createOrgData)
               }
             } catch (fetchError) {
-              // If fetch fails, try to create new organization
-              // Failed to fetch existing organizations, creating new one
               orgResponse = await organizationService.create(createOrgData)
             }
           } else {
@@ -444,15 +464,14 @@ export const GetStartedPage = () => {
 
           if (!orgResponse.success) {
             console.error('Failed to save organization:', orgResponse)
-            setApiError('Failed to save organization data')
+            showErrorToast(orgResponse.error ?? 'Failed to save organization data')
             setIsCompleting(false)
             return
           }
 
-          // Organization saved successfully on next
         } catch (error) {
           console.error('Error saving organization:', error)
-          setApiError('Failed to save organization data')
+          showErrorToast(error)
           setIsCompleting(false)
           return
         }
@@ -461,8 +480,6 @@ export const GetStartedPage = () => {
       }
     }
 
-    // Address data is included in organization response - no separate API calls needed
-    // Address handling: Addresses come with organization data, no separate API calls needed
 
     // Mark current step as completed if valid
     if (isStepValid(currentStep) && !completedSteps.includes(currentStep)) {
@@ -520,7 +537,7 @@ export const GetStartedPage = () => {
       }
     } catch (error) {
       console.error('Onboarding completion error:', error)
-      setApiError('An unexpected error occurred. Please try again.')
+      showErrorToast(error)
       setIsCompleting(false)
     }
   }
@@ -683,6 +700,14 @@ export const GetStartedPage = () => {
           </motion.div>
         </div>
       </div>
+      
+      {/* Error Toast */}
+      <ErrorToast
+        isVisible={errorToast.isVisible}
+        message={errorToast.message}
+        details={errorToast.details}
+        onClose={hideErrorToast}
+      />
     </DashboardLayout>
   )
 }

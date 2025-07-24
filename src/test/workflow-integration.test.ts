@@ -1,18 +1,15 @@
 /**
- * Integration test to verify the GetStartedPage uses the new organization workflow correctly
+ * Integration test to verify the GetStartedPage uses the organization workflow correctly
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
 
 // Mock the API services
 vi.mock('@/shared/services/api', () => ({
   organizationService: {
-    getByRoundAccountId: vi.fn(),
-    create: vi.fn(),
-    update: vi.fn(),
-    createAddress: vi.fn(),
+    getCurrentOrganization: vi.fn(),
   },
   authService: {
     getToken: vi.fn(),
@@ -25,42 +22,30 @@ describe('Organization Workflow Integration', () => {
     vi.clearAllMocks()
   })
 
-  it('should provide getCurrentUserOrganization method', () => {
+  it('should provide getCurrentOrganization method', () => {
     const { result } = renderHook(() => useOrganization())
 
-    expect(result.current.getCurrentUserOrganization).toBeDefined()
-    expect(typeof result.current.getCurrentUserOrganization).toBe('function')
+    expect(result.current.getCurrentOrganization).toBeDefined()
+    expect(typeof result.current.getCurrentOrganization).toBe('function')
   })
 
-  it('should provide getByRoundAccountId method', () => {
+  it('should provide loading and error states', () => {
     const { result } = renderHook(() => useOrganization())
 
-    expect(result.current.getByRoundAccountId).toBeDefined()
-    expect(typeof result.current.getByRoundAccountId).toBe('function')
+    expect(result.current.isLoading).toBeDefined()
+    expect(typeof result.current.isLoading).toBe('boolean')
+    expect(result.current.error).toBeDefined()
+    expect(result.current.error === null || typeof result.current.error === 'string').toBe(true)
   })
 
-  it('should provide getByOrganizationId method', () => {
+  it('should provide all required organization features', () => {
     const { result } = renderHook(() => useOrganization())
 
-    expect(result.current.getByOrganizationId).toBeDefined()
-    expect(typeof result.current.getByOrganizationId).toBe('function')
-  })
-
-  it('should have all the workflow methods available for GetStartedPage', () => {
-    const { result } = renderHook(() => useOrganization())
-
-    // Verify all methods that GetStartedPage needs are available
-    const requiredMethods = [
-      'getCurrentUserOrganization',
-      'getByRoundAccountId',
-      'getByOrganizationId',
-      'create',
-      'update',
-      // NOTE: createAddress removed - addresses are included in organization responses
-    ]
-
-    requiredMethods.forEach(method => {
-      expect(result.current[method as keyof typeof result.current]).toBeDefined()
-    })
+    // Method list should contain only the essential methods
+    const methods = Object.keys(result.current)
+    expect(methods).toContain('getCurrentOrganization')
+    expect(methods).toContain('isLoading')
+    expect(methods).toContain('error')
+    expect(methods.length).toBe(3) // Only these three methods should exist
   })
 })

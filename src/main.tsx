@@ -7,7 +7,6 @@ import { SecurityUtils } from './shared/utils/security'
 
 // Initialize security measures
 SecurityUtils.disableDevToolsInProduction()
-SecurityUtils.warnAboutNetworkTab()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

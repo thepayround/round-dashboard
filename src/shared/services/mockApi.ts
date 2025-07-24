@@ -79,6 +79,7 @@ class MockDatabase {
           industry: 'technology',
           companySize: '11-50',
           website: 'https://test.com',
+          country: 'US',
         },
         businessSettings: {
           currency: 'USD',

@@ -5,8 +5,6 @@
 import axios from 'axios'
 import type {
   ApiResponse,
-  PagedResult,
-  PagedRequest,
   OrganizationRequest,
   OrganizationResponse,
   CreateOrganizationData,
@@ -19,58 +17,25 @@ export class OrganizationService {
   private client = httpClient.getClient()
 
   /**
-   * Get all organizations (paginated)
+   * Get organization by roundAccountId (RESTful approach)
+   * Uses GET /organizations?roundAccountId={roundAccountId}
    */
-  async getAll(request?: PagedRequest): Promise<ApiResponse<PagedResult<OrganizationResponse>>> {
+  async getCurrentOrganization(roundAccountId: string): Promise<ApiResponse<OrganizationResponse>> {
     try {
-      const params = new URLSearchParams()
-
-      if (request?.pageNumber) params.append('pageNumber', request.pageNumber.toString())
-      if (request?.pageSize) params.append('pageSize', request.pageSize.toString())
-      if (request?.filterPropertyName) params.append('filterBy', request.filterPropertyName)
-      if (request?.filterValue) params.append('filterValue', request.filterValue)
-      if (request?.orderBy) params.append('orderBy', request.orderBy)
-      if (request?.isAscending !== undefined)
-        params.append('isAscending', request.isAscending.toString())
-
-      const response = await this.client.get(`${ENDPOINTS.ORGANIZATIONS.BASE}?${params}`)
+      const url = ENDPOINTS.ORGANIZATIONS.BASE
+      const response = await this.client.get(url, {
+        params: {
+          roundAccountId,
+        },
+      })
 
       return {
         success: true,
         data: response.data,
+        message: 'Organization retrieved successfully',
       }
     } catch (error) {
-      return this.handleApiError(error, 'Failed to fetch organizations')
-    }
-  }
-
-  /**
-   * Get organization by roundAccountId (RESTful approach)
-   * Uses GET /organizations?roundAccountId={roundAccountId}
-   */
-  async getByRoundAccountId(roundAccountId: string): Promise<ApiResponse<OrganizationResponse>> {
-    try {
-      const response = await this.client.get(
-        ENDPOINTS.ORGANIZATIONS.FILTERED_BY_ROUND_ACCOUNT(roundAccountId)
-      )
-
-      // Handle single organization response (backend now returns OrganizationResponse directly)
-      if (response.data) {
-        return {
-          success: true,
-          data: response.data,
-          message: 'Organization retrieved successfully',
-        }
-      } else {
-        return {
-          success: false,
-          error: 'No organization found for the given round account ID',
-          message: '',
-          data: null as unknown as OrganizationResponse,
-        }
-      }
-    } catch (error) {
-      return this.handleApiError(error, 'Failed to fetch organization by round account ID')
+      return this.handleApiError(error, 'Failed to fetch organization')
     }
   }
 
@@ -93,27 +58,12 @@ export class OrganizationService {
 
   /**
    * Get current user's organization (backwards compatibility)
-   * @deprecated Use getByAnyId instead for better RESTful design
+   * @deprecated This method is deprecated. All calls should use getCurrentOrganization(roundAccountId) instead.
    */
   async getCurrent(): Promise<ApiResponse<OrganizationResponse>> {
-    try {
-      // Use proper RESTful endpoint with pageSize=1 to get the user's organization
-      // The backend now includes address data in the response
-      const response = await this.client.get(`${ENDPOINTS.ORGANIZATIONS.BASE}?pageSize=1`)
-
-      if (response.data?.items?.length > 0) {
-        return {
-          success: true,
-          data: response.data.items[0],
-        }
-      } else {
-        return {
-          success: false,
-          error: 'No organization found for current user',
-        }
-      }
-    } catch (error) {
-      return this.handleApiError(error, 'Failed to fetch current organization')
+    return {
+      success: false,
+      error: 'getCurrent() is deprecated. Use getCurrentOrganization(roundAccountId) with a valid roundAccountId from JWT token.',
     }
   }
 
