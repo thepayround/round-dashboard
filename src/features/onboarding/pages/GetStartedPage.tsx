@@ -372,7 +372,8 @@ export const GetStartedPage = () => {
         setIsCompleting(true) // Show loading state
 
         try {
-          const orgData = {
+          // Base organization data
+          const baseOrgData = {
             name: onboardingData.organization.companyName,
             description:
               onboardingData.organization.description ??
@@ -391,8 +392,16 @@ export const GetStartedPage = () => {
               onboardingData.businessSettings.timezone ??
               'UTC',
             country: onboardingData.address?.country ?? 'US', // Get from address if available
+          }
+
+          // For create operations, include userId
+          const createOrgData = {
+            ...baseOrgData,
             userId: user?.id ?? '',
           }
+
+          // For update operations, exclude userId (backend validation might reject it)
+          const updateOrgData = baseOrgData
 
           // Saving organization data on next
 
@@ -414,20 +423,23 @@ export const GetStartedPage = () => {
               if (existingOrg) {
                 // Update existing organization
                 // Updating existing organization
-                orgResponse = await organizationService.update(existingOrg.organizationId, orgData)
+                orgResponse = await organizationService.update(
+                  existingOrg.organizationId,
+                  updateOrgData
+                )
               } else {
                 // Create new organization
                 // No organization found, creating new organization
-                orgResponse = await organizationService.create(orgData)
+                orgResponse = await organizationService.create(createOrgData)
               }
             } catch (fetchError) {
               // If fetch fails, try to create new organization
               // Failed to fetch existing organizations, creating new one
-              orgResponse = await organizationService.create(orgData)
+              orgResponse = await organizationService.create(createOrgData)
             }
           } else {
             // Create new organization for non-business users
-            orgResponse = await organizationService.create(orgData)
+            orgResponse = await organizationService.create(createOrgData)
           }
 
           if (!orgResponse.success) {

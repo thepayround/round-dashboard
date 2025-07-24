@@ -2,7 +2,7 @@
  * Organization hooks
  */
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import type {
   ApiResponse,
   PagedResult,
@@ -128,7 +128,9 @@ export const useOrganization = () => {
    * 2. Get organization by roundAccountId
    * This is the preferred method for getting the current user's organization
    */
-  const getCurrentUserOrganization = async (): Promise<ApiResponse<OrganizationResponse>> => {
+  const getCurrentUserOrganization = useCallback(async (): Promise<
+    ApiResponse<OrganizationResponse>
+  > => {
     setIsLoading(true)
     setError(null)
 
@@ -162,7 +164,7 @@ export const useOrganization = () => {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
 
   /**
    * Get organization by roundAccountId (explicit method)

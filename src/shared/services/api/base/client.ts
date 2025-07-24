@@ -20,22 +20,53 @@ class BaseHttpClient {
   }
 
   private setupInterceptors(): void {
-    // Request interceptor to add auth token
+    // Request interceptor to add auth token and secure logging
     this.client.interceptors.request.use(
       config => {
         const token = this.getStoredToken()
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }
+
+        // Secure logging (only in development)
+        if (import.meta.env.DEV) {
+          // console.group('🔐 API Request')
+          // console.log('Method:', config.method?.toUpperCase())
+          // console.log('URL:', config.url)
+          // console.log('Data (MASKED):', this.maskSensitiveData(config.data))
+          // console.log('Headers (MASKED):', this.maskSensitiveHeaders(config.headers))
+          // console.groupEnd()
+        }
+
         return config
       },
       error => Promise.reject(error)
     )
 
-    // Response interceptor to handle errors
+    // Response interceptor to handle errors and secure logging
     this.client.interceptors.response.use(
-      response => response,
+      response =>
+        // Secure logging (only in development)
+        // if (import.meta.env.DEV) {
+        //   console.log('✅ API Response:', {
+        //     status: response.status,
+        //     url: response.config.url,
+        //     data: this.maskSensitiveData(response.data),
+        //   })
+        // }
+        response,
       (error: AxiosError) => {
+        // Secure error logging (only in development)
+        if (import.meta.env.DEV) {
+          console.error('❌ API Error:', {
+            status: error.response?.status,
+            url: error.config?.url,
+            method: error.config?.method?.toUpperCase(),
+            message: error.message,
+            data: this.maskSensitiveData(error.response?.data as Record<string, unknown>),
+          })
+        }
+
         if (error.response?.status === 401) {
           // Token expired or invalid
           this.clearStoredToken()
@@ -78,6 +109,53 @@ class BaseHttpClient {
 
   public getToken(): string | null {
     return this.getStoredToken()
+  }
+
+  /**
+   * Mask sensitive data in request payloads for secure logging
+   */
+  private maskSensitiveData(data: Record<string, unknown>): Record<string, unknown> {
+    if (!data) return data
+
+    const sensitiveFields = [
+      'password',
+      'newPassword',
+      'currentPassword',
+      'confirmPassword',
+      'token',
+      'refreshToken',
+      'accessToken',
+      'secret',
+      'apiKey',
+      'creditCard',
+      'ssn',
+      'socialSecurityNumber',
+    ]
+
+    const maskedData: Record<string, unknown> = { ...data }
+
+    sensitiveFields.forEach(field => {
+      if (Object.prototype.hasOwnProperty.call(maskedData, field)) {
+        maskedData[field] = '***MASKED***'
+      }
+    })
+
+    return maskedData
+  }
+
+  /**
+   * Mask sensitive headers for secure logging
+   */
+  private maskSensitiveHeaders(headers: Record<string, unknown>): Record<string, unknown> {
+    if (!headers) return headers
+
+    const maskedHeaders: Record<string, unknown> = { ...headers }
+
+    if ('Authorization' in maskedHeaders) {
+      maskedHeaders['Authorization'] = 'Bearer ***MASKED***'
+    }
+
+    return maskedHeaders
   }
 }
 

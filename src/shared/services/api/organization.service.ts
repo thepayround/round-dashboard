@@ -54,11 +54,11 @@ export class OrganizationService {
         ENDPOINTS.ORGANIZATIONS.FILTERED_BY_ROUND_ACCOUNT(roundAccountId)
       )
 
-      // Handle RESTful response - organization is in a collection
-      if (response.data?.items && response.data.items.length > 0) {
+      // Handle single organization response (backend now returns OrganizationResponse directly)
+      if (response.data) {
         return {
           success: true,
-          data: response.data.items[0], // Extract the organization from the collection
+          data: response.data,
           message: 'Organization retrieved successfully',
         }
       } else {

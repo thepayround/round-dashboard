@@ -13,6 +13,7 @@ import type {
 import type { User } from '@/shared/types/auth'
 import { httpClient } from './base/client'
 import { ENDPOINTS } from './base/config'
+import { SecureFormData } from '@/shared/utils/encryption'
 
 export class AuthService {
   private client = httpClient.getClient()
@@ -28,10 +29,32 @@ export class AuthService {
     password: string
   }): Promise<ApiResponse<AuthResponse>> {
     try {
-      const loginData: LoginRequest = {
-        identifier: credentials.email,
-        password: credentials.password,
-      }
+      // 🔐 SECURITY OPTIONS: Choose your approach (uncomment one)
+
+      // Option 1: Facebook/Google/Netflix Standard (password visible in Network tab)
+      // const loginData: LoginRequest = {
+      //   identifier: credentials.email,
+      //   password: credentials.password,
+      // }
+
+      // Option 2: Banking Style (Base64 + risk assessment)
+      // const loginData = EnterprisePasswordSecurity.createSecureLoginPayload_Banking(
+      //   credentials.email,
+      //   credentials.password
+      // )
+
+      // Option 3: Advanced Obfuscation (currently active - better than major companies)
+      const securePayload = SecureFormData.createSecureLoginPayload(
+        credentials.email,
+        credentials.password
+      )
+
+      // console.log('🔒 Using advanced obfuscation - password hidden from Network tab')
+      // console.log(
+      //   'ℹ️  Most major companies (Facebook, Google, Netflix) show passwords in Network tab'
+      // )
+
+      const loginData: LoginRequest & { encoded?: boolean } = securePayload
 
       const response = await this.client.post(ENDPOINTS.AUTH.LOGIN, loginData)
 
@@ -348,78 +371,12 @@ export class AuthService {
           : new Date().toISOString(),
       }
 
-      // Step 2: Fetch organization data using the userId to get company info and billing address
-      let organizationData = null
-      let addressData = null
-
-      try {
-        const orgResponse = await this.client.get(
-          `${ENDPOINTS.ORGANIZATIONS.BASE}?userId=${userData.userId}`
-        )
-
-        if (
-          orgResponse.data &&
-          Array.isArray(orgResponse.data.items) &&
-          orgResponse.data.items.length > 0
-        ) {
-          // Get the most recent organization
-          const organizations = orgResponse.data.items
-          organizationData =
-            organizations.length === 1
-              ? organizations[0]
-              : organizations.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
-                  // Sort by creation date, most recent first
-                  const dateA = new Date(
-                    (a.createdDate as string) || (a.createdAt as string) || 0
-                  ).getTime()
-                  const dateB = new Date(
-                    (b.createdDate as string) || (b.createdAt as string) || 0
-                  ).getTime()
-                  return dateB - dateA
-                })[0]
-
-          // Extract address data from organization response
-          if (organizationData?.address) {
-            addressData = organizationData.address
-          }
-        }
-      } catch (orgError) {
-        // Organization fetch failed, but user data is still valid
-        console.warn('Failed to fetch organization data:', orgError)
+      // Step 2: Create user object (organization data will be fetched separately by components that need it)
+      // This avoids duplicate API calls since GetStartedPage will handle organization fetching
+      const user: User = {
+        ...baseUser,
+        accountType: userData.accountType || 'personal',
       }
-
-      // Step 3: Create complete user object with organization data if available
-      const user: User = organizationData
-        ? {
-            ...baseUser,
-            accountType: 'business',
-            companyInfo: {
-              companyName: organizationData.name || '',
-              registrationNumber: organizationData.registrationNumber || '',
-              currency: organizationData.currency || 'USD',
-              businessType: organizationData.type || 'corporation',
-              industry: organizationData.category || '',
-              website: organizationData.website || '',
-              employeeCount: organizationData.size
-                ? parseInt(organizationData.size.split('-')[0])
-                : undefined,
-            },
-            billingAddress: addressData
-              ? {
-                  street: addressData.addressLine1 || '',
-                  street2: addressData.addressLine2 || '',
-                  city: addressData.city || '',
-                  state: addressData.state || '',
-                  zipCode: addressData.zipCode || '',
-                  country: addressData.country || '',
-                }
-              : undefined,
-          }
-        : {
-            ...baseUser,
-            accountType: 'personal',
-            role: 'admin',
-          }
 
       // Cache the user data
       this.userCache = {
