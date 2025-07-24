@@ -72,7 +72,6 @@ export const GetStartedPage = () => {
   const [availableSteps, setAvailableSteps] = useState<OnboardingStep[]>(allSteps)
   const [isCompleting, setIsCompleting] = useState(false)
   const [apiError, setApiError] = useState('')
-  const [isLoadingData, setIsLoadingData] = useState(false)
   const loadingRef = useRef(false)
   
   // Error toast state
@@ -132,20 +131,31 @@ export const GetStartedPage = () => {
 
   // Load data with EXACTLY TWO API CALLS - simplified and clear
   const loadOnboardingData = useCallback(async () => {
-    // Prevent multiple simultaneous calls ONLY (allow calls every time page is visited)
-    if (loadingRef.current || isLoadingData) {
+    // Prevent multiple simultaneous calls using ref (avoids state dependency)
+    if (loadingRef.current) {
       return
     }
 
     loadingRef.current = true
-    setIsLoadingData(true)
     setApiError('')
 
     try {
-      // Use functional state updates to avoid depending on current state
-      const updatedData: Partial<OnboardingData> = {}
-      const newCompletedSteps: OnboardingStep[] = []
-      const stepsToShow: OnboardingStep[] = []
+      // Initialize with current state to avoid losing data
+      setOnboardingData(currentData => {
+        const updatedData = { ...currentData }
+
+        // Set default user info if not already set
+        if (!updatedData.userInfo.firstName) {
+          updatedData.userInfo = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+          }
+        }
+
+        return updatedData
+      })
 
       let currentUser = null
 
@@ -154,13 +164,16 @@ export const GetStartedPage = () => {
         if (userResponse.success && userResponse.data) {
           currentUser = userResponse.data
 
-          // Prefill user info
-          updatedData.userInfo = {
-            firstName: currentUser.firstName || '',
-            lastName: currentUser.lastName || '',
-            email: currentUser.email || '',
-            phone: currentUser.phone || '',
-          }
+          // Update user info with actual data
+          setOnboardingData(currentData => ({
+            ...currentData,
+            userInfo: {
+              firstName: currentUser!.firstName || '',
+              lastName: currentUser!.lastName || '',
+              email: currentUser!.email || '',
+              phone: currentUser!.phone || '',
+            }
+          }))
 
           // Mark user info as completed if we have the required data
           if (
@@ -169,90 +182,82 @@ export const GetStartedPage = () => {
             currentUser.email &&
             currentUser.phone
           ) {
-            newCompletedSteps.push('userInfo')
+            setCompletedSteps(prev => [...prev, 'userInfo'])
           }
         }
       } catch (userError) {
-        console.error('❌ API CALL 1 ERROR:', userError)
         setApiError('Failed to load user data')
       }
 
       if (currentUser) {
-
         try {
           const orgResponse = await getCurrentOrganization()
 
           if (orgResponse.success && orgResponse.data) {
             const org = orgResponse.data
 
-            // Prefill organization step
-            updatedData.organization = {
-              companyName: org.name ?? '',
-              industry: org.category ?? '',
-              companySize: org.size ?? '',
-              website: org.website ?? '',
-              description: org.description ?? '',
-              timeZone: org.timeZone ?? '',
-              revenue: org.revenue?.toString() ?? '',
-              country: org.country ?? '',
-            }
+            // Update organization data
+            setOnboardingData(currentData => ({
+              ...currentData,
+              organization: {
+                companyName: org.name ?? '',
+                industry: org.category ?? '',
+                companySize: org.size ?? '',
+                website: org.website ?? '',
+                description: org.description ?? '',
+                timeZone: org.timeZone ?? '',
+                revenue: org.revenue?.toString() ?? '',
+                country: org.country ?? '',
+              }
+            }))
 
             // Mark organization as completed if we have required data
             if (org.name && org.category && org.size && org.country) {
-              newCompletedSteps.push('organization')
+              setCompletedSteps(prev => [...prev, 'organization'])
             }
 
-            // Prefill address from organization response (addresses come WITH organization)
+            // Update address from organization response (addresses come WITH organization)
             if (org.address?.addressLine1) {
-              updatedData.address = {
-                name: org.address.name || 'Organization Address',
-                street: org.address.addressLine1,
-                city: org.address.city || '',
-                state: org.address.state || '',
-                zipCode: org.address.zipCode || '',
-                country: org.address.country || '',
-                addressType: 'billing' as const,
-              }
-              newCompletedSteps.push('address')
+              const { address } = { address: org.address }
+              setOnboardingData(currentData => ({
+                ...currentData,
+                address: {
+                  name: address.name || 'Organization Address',
+                  street: address.addressLine1,
+                  city: address.city || '',
+                  state: address.state || '',
+                  zipCode: address.zipCode || '',
+                  country: address.country || '',
+                  addressType: 'billing' as const,
+                }
+              }))
+              setCompletedSteps(prev => [...prev, 'address'])
             }
 
-            // Prefill business settings
+            // Update business settings
             if (org.currency) {
-              updatedData.businessSettings = {
-                currency: org.currency,
-                timezone: org.timeZone ?? 'UTC',
-                fiscalYearStart: 'January',
-              }
-              newCompletedSteps.push('businessSettings')
+              setOnboardingData(currentData => ({
+                ...currentData,
+                businessSettings: {
+                  currency: org.currency ?? 'USD',
+                  timezone: org.timeZone ?? 'UTC',
+                  fiscalYearStart: 'January',
+                }
+              }))
+              setCompletedSteps(prev => [...prev, 'businessSettings'])
             }
           }
         } catch (orgError) {
-          console.error('❌ API CALL 2 ERROR:', orgError)
           showErrorToast(orgError)
           setApiError('Failed to load organization data')
         }
       }
 
-      // Determine which steps to show
-      if (!newCompletedSteps.includes('userInfo')) stepsToShow.push('userInfo')
+      // Update available steps based on user authentication
       if (currentUser) {
-        if (!newCompletedSteps.includes('organization')) stepsToShow.push('organization')
-        if (!newCompletedSteps.includes('businessSettings')) stepsToShow.push('businessSettings')
-        if (!newCompletedSteps.includes('address')) stepsToShow.push('address')
-      }
-
-      // Always show optional steps
-      stepsToShow.push('products', 'billing', 'team')
-
-      // Update state using functional updates to avoid dependencies
-      setOnboardingData(prevData => ({ ...prevData, ...updatedData }))
-      setAvailableSteps(stepsToShow)
-      setCompletedSteps(newCompletedSteps)
-
-      // Set current step to first uncompleted step
-      const nextStep = stepsToShow.find(step => !newCompletedSteps.includes(step)) ?? stepsToShow[0]
-      if (nextStep) {
-        setCurrentStep(nextStep)
+        setAvailableSteps(allSteps) // Show all steps for authenticated users
+      } else {
+        setAvailableSteps(['userInfo']) // Only show user info if not authenticated
       }
 
     } catch (error) {
@@ -260,9 +265,8 @@ export const GetStartedPage = () => {
       setApiError('Failed to load onboarding data')
     } finally {
       loadingRef.current = false
-      setIsLoadingData(false)
     }
-  }, [getCurrentOrganization, isLoadingData]) // Include isLoadingData dependency
+  }, [getCurrentOrganization])
 
   // Initialize data when user is available (proper useEffect usage for side effects)
   useEffect(() => {
