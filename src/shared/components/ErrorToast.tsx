@@ -36,7 +36,7 @@ export const ErrorToast = ({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -100, scale: 0.9 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed top-4 right-4 z-50 max-w-md"
+          className="fixed top-4 right-4 z-toast max-w-md"
         >
           <div className="bg-red-500/10 backdrop-blur-xl border border-red-500/20 rounded-xl p-4 shadow-2xl">
             <div className="flex items-start space-x-3">

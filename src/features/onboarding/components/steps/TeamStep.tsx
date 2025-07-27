@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Users, UserPlus, Mail, Trash2, CheckCircle } from 'lucide-react'
 import { useState } from 'react'
 import type { TeamSettings } from '../../types/onboarding'
+import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 
 interface TeamStepProps {
   data: TeamSettings
@@ -114,16 +115,12 @@ export const TeamStep = ({ data, onChange }: TeamStepProps) => {
                   >
                     Role
                   </label>
-                  <select
-                    id="inviteRole"
+                  <ApiDropdown
+                    config={teamRoleDropdownConfig}
                     value={inviteRole}
-                    onChange={e => setInviteRole(e.target.value)}
-                    className="w-full h-12 px-4 rounded-xl backdrop-blur-xl border transition-all duration-200 bg-white/5 border-white/10 text-white focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30"
-                  >
-                    <option value="member">Member</option>
-                    <option value="manager">Manager</option>
-                    <option value="admin">Admin</option>
-                  </select>
+                    onSelect={setInviteRole}
+                    allowClear={false}
+                  />
                 </div>
               </div>
 

@@ -3,12 +3,12 @@ import { MapPin, Building, AlertCircle } from 'lucide-react'
 
 import type { BillingAddress } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
-import { SUPPORTED_COUNTRIES } from '@/shared/types/business'
 import {
   validateBillingAddress,
   validateBillingAddressField,
 } from '@/shared/utils/companyValidation'
 import { getFieldError, hasFieldError } from '@/shared/utils/validation'
+import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 
 interface BillingAddressFormProps {
   billingAddress?: BillingAddress
@@ -262,26 +262,14 @@ export const BillingAddressForm = ({
           <label htmlFor="country" className="auth-label">
             Country {!isOptional && '*'}
           </label>
-          <div className="input-container">
-            <Building className="input-icon-left auth-icon-primary" />
-            <select
-              id="country"
-              value={currentAddress.country}
-              onChange={e => handleInputChange('country', e.target.value)}
-              onBlur={e => handleInputBlur('country', e.target.value)}
-              className={`auth-input input-with-icon-left ${
-                hasFieldError(errors, 'country') ? 'auth-input-error' : ''
-              }`}
-              required={!isOptional}
-            >
-              <option value="">Select country</option>
-              {SUPPORTED_COUNTRIES.map(country => (
-                <option key={country.code} value={country.name}>
-                  {country.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <ApiDropdown
+            config={countryDropdownConfig}
+            value={currentAddress.country}
+            onSelect={value => handleInputChange('country', value)}
+            onClear={() => handleInputChange('country', '')}
+            error={hasFieldError(errors, 'country')}
+            allowClear={isOptional}
+          />
           {hasFieldError(errors, 'country') && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}

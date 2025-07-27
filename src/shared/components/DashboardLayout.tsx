@@ -92,7 +92,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         initial={false}
         animate={{ width: isCollapsed ? 80 : 280 }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="fixed left-0 top-0 h-full z-50 bg-white/5 backdrop-blur-xl border-r border-white/10"
+        className="fixed left-0 top-0 h-full z-base bg-white/5 backdrop-blur-xl border-r border-white/10"
       >
         {/* Logo Section */}
         <div
@@ -223,7 +223,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         animate={{ left: isCollapsed ? 64 : 264 }}
         transition={{ duration: 0, ease: 'linear' }}
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="fixed top-20 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-50"
+        className="fixed top-20 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-base"
       >
         {isCollapsed ? (
           <ChevronRight className="w-4 h-4 text-white" />

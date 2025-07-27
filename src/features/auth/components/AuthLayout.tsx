@@ -21,7 +21,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps = {}) => (
       initial={{ opacity: 0, scale: 0.8, x: -20 }}
       animate={{ opacity: 1, scale: 1, x: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="logo-container absolute top-12 left-12 z-20"
+      className="logo-container absolute top-12 left-12 z-base"
     >
       <Link to="/" className="block hover:scale-105 transition-transform duration-200">
         <ColorLogo size="md" />

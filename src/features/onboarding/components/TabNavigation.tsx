@@ -105,7 +105,7 @@ export const TabNavigation = ({
               onClick={() => canClickStep(step.id) && onStepClick(step.id)}
               disabled={!canClickStep(step.id)}
               className={`
-                  relative w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 z-20
+                  relative w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 z-base
                   ${getStepCircleClasses(step.id)}
                 `}
             >
