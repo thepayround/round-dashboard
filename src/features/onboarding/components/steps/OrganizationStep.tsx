@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Building, ChevronDown, Globe, FileText, DollarSign } from 'lucide-react'
+import { Building, ChevronDown, DollarSign, ExternalLink, AlignLeft } from 'lucide-react'
 import { useState } from 'react'
 import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { OrganizationInfo } from '../../types/onboarding'
@@ -32,18 +32,6 @@ const companySizeOptions = [
 ]
 
 
-const timezoneOptions = [
-  { value: 'UTC', label: 'UTC (Coordinated Universal Time)' },
-  { value: 'America/New_York', label: 'Eastern Time (UTC-5/-4)' },
-  { value: 'America/Chicago', label: 'Central Time (UTC-6/-5)' },
-  { value: 'America/Denver', label: 'Mountain Time (UTC-7/-6)' },
-  { value: 'America/Los_Angeles', label: 'Pacific Time (UTC-8/-7)' },
-  { value: 'Europe/London', label: 'London (UTC+0/+1)' },
-  { value: 'Europe/Paris', label: 'Paris (UTC+1/+2)' },
-  { value: 'Asia/Tokyo', label: 'Tokyo (UTC+9)' },
-  { value: 'Asia/Shanghai', label: 'Shanghai (UTC+8)' },
-  { value: 'Australia/Sydney', label: 'Sydney (UTC+10/+11)' },
-]
 
 export const OrganizationStep = ({
   data,
@@ -53,7 +41,6 @@ export const OrganizationStep = ({
 }: OrganizationStepProps) => {
   const [industryOpen, setIndustryOpen] = useState(false)
   const [companySizeOpen, setCompanySizeOpen] = useState(false)
-  const [timezoneOpen, setTimezoneOpen] = useState(false)
 
   const handleInputChange =
     (field: keyof OrganizationInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,8 +57,6 @@ export const OrganizationStep = ({
     })
   }
 
-  const isFormValid = () =>
-    data.companyName.trim() !== '' && data.industry !== '' && data.companySize !== '' && data.country !== ''
 
   const Dropdown = ({
     value,
@@ -160,18 +145,6 @@ export const OrganizationStep = ({
               ? 'Review and complete your company profile'
               : 'Complete your company profile'}
           </p>
-          {isPrePopulated && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-[#42E695]/20 to-[#3BB2B8]/20 border border-[#42E695]/30"
-            >
-              <span className="text-[#42E695] text-sm font-medium">
-                ✓ Company info loaded from your account
-              </span>
-            </motion.div>
-          )}
         </div>
       </div>
 
@@ -253,7 +226,7 @@ export const OrganizationStep = ({
             Website <span className="text-gray-500">(optional)</span>
           </label>
           <div className="relative">
-            <Globe className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <ExternalLink className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               id="website"
               type="url"
@@ -277,7 +250,7 @@ export const OrganizationStep = ({
             Description <span className="text-gray-500">(optional)</span>
           </label>
           <div className="relative">
-            <FileText className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
+            <AlignLeft className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
             <textarea
               id="description"
               value={data.description ?? ''}
@@ -293,23 +266,6 @@ export const OrganizationStep = ({
             />
           </div>
           {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
-        </div>
-
-        {/* Time Zone */}
-        <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">
-            Time Zone <span className="text-gray-500">(optional)</span>
-          </span>
-          <Dropdown
-            value={data.timeZone ?? ''}
-            options={timezoneOptions}
-            placeholder="Select your time zone"
-            onSelect={value => handleSelectChange('timeZone', value)}
-            isOpen={timezoneOpen}
-            setIsOpen={setTimezoneOpen}
-            error={errors.timeZone}
-          />
-          {errors.timeZone && <p className="mt-1 text-sm text-red-400">{errors.timeZone}</p>}
         </div>
 
         {/* Revenue */}
@@ -337,18 +293,6 @@ export const OrganizationStep = ({
         </div>
       </div>
 
-      {/* Form Validation Status */}
-      {isFormValid() && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="p-4 rounded-xl bg-gradient-to-r from-[#42E695]/10 to-[#3BB2B8]/10 border border-[#42E695]/20"
-        >
-          <p className="text-[#42E695] text-sm font-medium text-center">
-            ✓ Organization profile completed successfully
-          </p>
-        </motion.div>
-      )}
     </motion.div>
   )
 }

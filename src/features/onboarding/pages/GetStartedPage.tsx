@@ -12,8 +12,8 @@ import { useOrganization } from '@/shared/hooks/api/useOrganization'
 import { organizationService } from '@/shared/services/api/organization.service'
 import { authService } from '@/shared/services/api/auth.service'
 import type { User } from '@/shared/types/auth'
+import type { OrganizationResponse, OrganizationRequest } from '@/shared/types/api'
 import { TabNavigation } from '../components/TabNavigation'
-import { UserInfoStep } from '../components/steps/UserInfoStep'
 import { OrganizationStep } from '../components/steps/OrganizationStep'
 import { BusinessSettingsStep } from '../components/steps/BusinessSettingsStep'
 import { AddressStep } from '../components/steps/AddressStep'
@@ -24,7 +24,6 @@ import { TeamStep } from '../components/steps/TeamStep'
 import type {
   OnboardingData,
   OnboardingStep,
-  UserInfo,
   OrganizationInfo,
   BusinessSettings,
   AddressInfo,
@@ -34,7 +33,6 @@ import type {
 } from '../types/onboarding'
 
 const allSteps: OnboardingStep[] = [
-  'userInfo',
   'organization',
   'businessSettings',
   'products',
@@ -67,7 +65,7 @@ export const GetStartedPage = () => {
     })
   }
 
-  const [currentStep, setCurrentStep] = useState<OnboardingStep>('userInfo')
+  const [currentStep, setCurrentStep] = useState<OnboardingStep>('organization')
   const [completedSteps, setCompletedSteps] = useState<OnboardingStep[]>([])
   const [availableSteps, setAvailableSteps] = useState<OnboardingStep[]>(allSteps)
   const [isCompleting, setIsCompleting] = useState(false)
@@ -197,20 +195,22 @@ export const GetStartedPage = () => {
             const org = orgResponse.data
 
             // Update organization data
+            const orgData = {
+              companyName: org.name ?? '',
+              industry: org.category ?? '',
+              companySize: org.size ?? '',
+              website: org.website ?? '',
+              description: org.description ?? '',
+              timeZone: org.timeZone ?? '',
+              revenue: org.revenue?.toString() ?? '',
+              country: org.country ?? '',
+            }
+            
             setOnboardingData(currentData => ({
               ...currentData,
-              organization: {
-                companyName: org.name ?? '',
-                industry: org.category ?? '',
-                companySize: org.size ?? '',
-                website: org.website ?? '',
-                description: org.description ?? '',
-                timeZone: org.timeZone ?? '',
-                revenue: org.revenue?.toString() ?? '',
-                country: org.country ?? '',
-              }
+              organization: orgData
             }))
-
+            
             // Mark organization as completed if we have required data
             if (org.name && org.category && org.size && org.country) {
               setCompletedSteps(prev => [...prev, 'organization'])
@@ -241,7 +241,7 @@ export const GetStartedPage = () => {
                 businessSettings: {
                   currency: org.currency ?? 'USD',
                   timezone: org.timeZone ?? 'UTC',
-                  fiscalYearStart: 'January',
+                  fiscalYearStart: org.fiscalYearStart ?? 'January',
                 }
               }))
               setCompletedSteps(prev => [...prev, 'businessSettings'])
@@ -308,9 +308,6 @@ export const GetStartedPage = () => {
   }
   const isFirstStep = () => getCurrentStepIndex() === 0
 
-  const updateUserInfo = (userInfo: UserInfo) => {
-    setOnboardingData(prev => ({ ...prev, userInfo }))
-  }
 
   const updateOrganization = (organization: OrganizationInfo) => {
     setOnboardingData(prev => ({ ...prev, organization }))
@@ -338,17 +335,6 @@ export const GetStartedPage = () => {
 
   const isStepValid = (step: OnboardingStep): boolean => {
     switch (step) {
-      case 'userInfo': {
-        const { userInfo } = onboardingData
-        if (!userInfo) return false
-        return (
-          userInfo.firstName?.trim() !== '' &&
-          userInfo.lastName?.trim() !== '' &&
-          userInfo.email?.trim() !== '' &&
-          userInfo.phone?.trim() !== ''
-        )
-      }
-
       case 'organization': {
         const { organization } = onboardingData
         if (!organization) return false
@@ -400,14 +386,25 @@ export const GetStartedPage = () => {
   const handleNext = async () => {
     const currentIndex = getCurrentStepIndex()
 
-    // Save organization data to backend when leaving organization step
-    if (currentStep === 'organization' && isStepValid(currentStep)) {
+    // Save complete organization data to backend when leaving business settings step
+    if (currentStep === 'businessSettings' && isStepValid(currentStep)) {
       if (onboardingData.organization.companyName.trim()) {
         setIsCompleting(true) // Show loading state
 
         try {
-          // Base organization data
-          const baseOrgData = {
+          // Check if user already has an organization to determine if this is create or update
+          let existingOrg = null
+          try {
+            const currentOrgResponse = await getCurrentOrganization()
+            if (currentOrgResponse.success && currentOrgResponse.data) {
+              existingOrg = currentOrgResponse.data
+            }
+          } catch (error) {
+            // Will create new organization
+          }
+
+          // Complete organization data including business settings
+          const completeOrgData = {
             name: onboardingData.organization.companyName,
             description:
               onboardingData.organization.description ??
@@ -419,62 +416,60 @@ export const GetStartedPage = () => {
               : 0,
             category: onboardingData.organization.industry ?? '',
             type: 'corporation',
-            registrationNumber: `REG-${Date.now()}`, // Generate a temporary registration number
+            // Use existing registration number for updates, generate new for creates
+            registrationNumber: existingOrg?.registrationNumber ?? `REG-${Date.now()}`,
             currency: onboardingData.businessSettings.currency ?? 'USD',
-            timeZone:
-              onboardingData.organization.timeZone ??
-              onboardingData.businessSettings.timezone ??
-              'UTC',
-            country: onboardingData.organization.country ?? 'US', // Get from organization form
+            timeZone: onboardingData.businessSettings.timezone ?? 'UTC',
+            country: onboardingData.organization.country ?? 'US',
+            fiscalYearStart: onboardingData.businessSettings.fiscalYearStart ?? 'January',
           }
 
           // For create operations, include userId
           const createOrgData = {
-            ...baseOrgData,
+            ...completeOrgData,
             userId: user?.id ?? '',
           }
 
-          // For update operations, exclude userId (backend validation might reject it)
-          const updateOrgData = baseOrgData
+          // For update operations, don't include userId (will be preserved from existing org)
+          const updateOrgData = completeOrgData
 
-
-          // Check if user already has an organization using single API call
+          // Perform create or update based on whether organization exists
           let orgResponse
-          if (user?.accountType === 'business') {
-            try {
-              let existingOrg = null
+          if (existingOrg) {
+            // Check if any fields have actually changed before updating
+            const hasChanges = 
+              existingOrg.name !== updateOrgData.name ||
+              existingOrg.description !== updateOrgData.description ||
+              existingOrg.website !== updateOrgData.website ||
+              existingOrg.size !== updateOrgData.size ||
+              existingOrg.revenue !== updateOrgData.revenue ||
+              existingOrg.category !== updateOrgData.category ||
+              existingOrg.currency !== updateOrgData.currency ||
+              existingOrg.timeZone !== updateOrgData.timeZone ||
+              existingOrg.country !== updateOrgData.country ||
+              ((existingOrg as OrganizationResponse & { fiscalYearStart?: string }).fiscalYearStart ?? '') !== 
+              ((updateOrgData as OrganizationRequest & { fiscalYearStart?: string }).fiscalYearStart ?? '')
 
-              // Use the clean workflow method
-              const currentOrgResponse = await getCurrentOrganization()
-              if (currentOrgResponse.success && currentOrgResponse.data) {
-                existingOrg = currentOrgResponse.data
-              }
-
-              if (existingOrg) {
-                orgResponse = await organizationService.update(
-                  existingOrg.organizationId,
-                  updateOrgData
-                )
-              } else {
-                orgResponse = await organizationService.create(createOrgData)
-              }
-            } catch (fetchError) {
-              orgResponse = await organizationService.create(createOrgData)
+            if (hasChanges) {
+              orgResponse = await organizationService.update(
+                existingOrg.organizationId,
+                updateOrgData
+              )
+            } else {
+              orgResponse = { success: true, message: 'No changes needed' }
             }
           } else {
-            // Create new organization for non-business users
+            // Create new organization - include userId for creates
             orgResponse = await organizationService.create(createOrgData)
           }
 
           if (!orgResponse.success) {
-            console.error('Failed to save organization:', orgResponse)
             showErrorToast(orgResponse.error ?? 'Failed to save organization data')
             setIsCompleting(false)
             return
           }
 
         } catch (error) {
-          console.error('Error saving organization:', error)
           showErrorToast(error)
           setIsCompleting(false)
           return
@@ -548,15 +543,6 @@ export const GetStartedPage = () => {
 
   const renderCurrentStep = () => {
     switch (currentStep) {
-      case 'userInfo':
-        // Only render if the step is in availableSteps (when user data is missing)
-        return availableSteps.includes('userInfo') ? (
-          <UserInfoStep
-            data={onboardingData.userInfo}
-            onChange={updateUserInfo}
-            isPrePopulated={completedSteps.includes('userInfo')}
-          />
-        ) : null
       case 'organization':
         // Only render if the step is in availableSteps (when organization data is missing)
         return availableSteps.includes('organization') ? (
@@ -612,19 +598,6 @@ export const GetStartedPage = () => {
             <p className="text-xl text-gray-400 mb-3">
               Let&apos;s set up your account in just a few steps
             </p>
-            {completedSteps.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#42E695]/10 to-[#3BB2B8]/10 border border-[#42E695]/20"
-              >
-                <span className="text-[#42E695] text-sm font-medium">
-                  ✓ {completedSteps.length} of {availableSteps.length} steps completed automatically
-                  {completedSteps.length !== availableSteps.length &&
-                    ` • ${availableSteps.length - completedSteps.length} steps remaining`}
-                </span>
-              </motion.div>
-            )}
           </motion.div>
 
           {/* Tab Navigation */}

@@ -90,69 +90,13 @@ export interface RefreshTokenResponse {
   refreshToken: string
 }
 
-// Organization types
-export interface OrganizationRequest {
-  name: string
-  description?: string
-  website?: string
-  size?: string
-  revenue?: number
-  category?: string
-  type?: string
-  registrationNumber?: string
-  currency?: string
-  timeZone?: string
-  country?: string
-  userId: string
-}
-
-export interface OrganizationResponse {
-  organizationId: string
-  name: string
-  description?: string
-  website?: string
-  size?: string
-  revenue?: number
-  category?: string
-  type?: string
-  registrationNumber?: string
-  currency?: string
-  timeZone?: string
-  country?: string
-  userId: string
-  address?: AddressResponse
-  createdDate?: string
-  modifiedDate?: string
-}
-
-export interface CreateOrganizationData {
-  name: string
-  description?: string
-  website?: string
-  size?: string
-  revenue?: number
-  category?: string
-  type?: string
-  registrationNumber?: string
-  currency?: string
-  timeZone?: string
-  country?: string
-  userId: string
-}
-
-export interface UpdateOrganizationData {
-  name?: string
-  description?: string
-  website?: string
-  size?: string
-  revenue?: number
-  category?: string
-  type?: string
-  registrationNumber?: string
-  currency?: string
-  timeZone?: string
-  country?: string
-}
+// Organization types - imported from api/organization.ts
+export type {
+  OrganizationRequest,
+  OrganizationResponse,
+  CreateOrganizationData,
+  UpdateOrganizationData,
+} from './api/organization'
 
 // Address types
 export interface AddressRequest {

@@ -1,18 +1,11 @@
 import { Globe, DollarSign, Clock, Calendar, Users } from 'lucide-react'
 import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
-import type { ApiDropdownConfig, ApiDropdownOption } from './ApiDropdown'
+import type { ApiDropdownConfig } from './ApiDropdown'
 import { useMemo } from 'react'
-import type { CountryCurrencyResponse, CurrencyResponse } from '@/shared/types/api/countryCurrency'
+import type { CurrencyResponse } from '@/shared/types/api/countryCurrency'
 import type { TimeZone, Month, Role } from '@/shared/types/countryCurrency'
 
-type GenericDataHookResult<T> = {
-  data: T[]
-  isLoading: boolean
-  isError: boolean
-  refetch: () => Promise<void>
-}
 
-type ApiDropdownHook<T> = () => GenericDataHookResult<T>
 
 // Currency symbol mapping
 const currencySymbols: Record<string, string> = {

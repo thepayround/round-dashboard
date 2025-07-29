@@ -16,12 +16,11 @@ interface StepConfig {
 }
 
 const allStepConfigs: StepConfig[] = [
-  { id: 'userInfo', label: 'User Information', number: 1 },
-  { id: 'organization', label: 'Organization', number: 2 },
-  { id: 'businessSettings', label: 'Business Settings', number: 3 },
-  { id: 'products', label: 'Products', number: 4 },
-  { id: 'billing', label: 'Billing', number: 5 },
-  { id: 'team', label: 'Team', number: 6 },
+  { id: 'organization', label: 'Organization', number: 1 },
+  { id: 'businessSettings', label: 'Business Settings', number: 2 },
+  { id: 'products', label: 'Products', number: 3 },
+  { id: 'billing', label: 'Billing', number: 4 },
+  { id: 'team', label: 'Team', number: 5 },
 ]
 
 export const TabNavigation = ({

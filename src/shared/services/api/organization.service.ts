@@ -102,6 +102,7 @@ export class OrganizationService {
         currency: organizationData.currency,
         timeZone: organizationData.timeZone,
         country: organizationData.country,
+        fiscalYearStart: organizationData.fiscalYearStart,
         userId: organizationData.userId,
       }
 
@@ -125,7 +126,24 @@ export class OrganizationService {
    */
   async update(id: string, organizationData: UpdateOrganizationData): Promise<ApiResponse<void>> {
     try {
-      await this.client.put(ENDPOINTS.ORGANIZATIONS.BY_ID(id), organizationData)
+      // Transform UpdateOrganizationData to OrganizationRequest format
+      const organizationRequest: Partial<OrganizationRequest> = {
+        name: organizationData.name,
+        description: organizationData.description,
+        website: organizationData.website,
+        size: organizationData.size,
+        revenue: organizationData.revenue,
+        category: organizationData.category,
+        type: organizationData.type,
+        registrationNumber: organizationData.registrationNumber,
+        currency: organizationData.currency,
+        timeZone: organizationData.timeZone,
+        country: organizationData.country,
+        fiscalYearStart: organizationData.fiscalYearStart,
+        // Note: Do not include userId for updates to avoid FK constraint issues
+      }
+
+      await this.client.put(ENDPOINTS.ORGANIZATIONS.BY_ID(id), organizationRequest)
 
       return {
         success: true,

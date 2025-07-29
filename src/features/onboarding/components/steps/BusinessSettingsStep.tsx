@@ -27,8 +27,6 @@ export const BusinessSettingsStep = ({
     })
   }
 
-  const isFormValid = () =>
-    data.currency !== '' && data.timezone !== '' && data.fiscalYearStart !== ''
 
   return (
     <motion.div
@@ -97,19 +95,6 @@ export const BusinessSettingsStep = ({
           )}
         </div>
       </div>
-
-      {/* Form Validation Status */}
-      {isFormValid() && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="p-4 rounded-xl bg-gradient-to-r from-[#42E695]/10 to-[#3BB2B8]/10 border border-[#42E695]/20"
-        >
-          <p className="text-[#42E695] text-sm font-medium text-center">
-            ✓ Business settings configured successfully
-          </p>
-        </motion.div>
-      )}
     </motion.div>
   )
 }

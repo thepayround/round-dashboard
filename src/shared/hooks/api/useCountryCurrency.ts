@@ -134,26 +134,93 @@ export const useCountryByCode = (countryCode: string | null) => {
   return { country, loading, error, refetch: () => countryCode && fetchCountry(countryCode) }
 }
 
+// Simple cache to prevent duplicate API calls for currencies
+const currenciesCache: {
+  data: CurrencyResponse[] | null
+  loading: boolean
+  error: string | null
+  promise: Promise<CurrencyResponse[]> | null
+} = {
+  data: null,
+  loading: false,
+  error: null,
+  promise: null
+}
+
 export const useCurrencies = () => {
-  const [currencies, setCurrencies] = useState<CurrencyResponse[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [currencies, setCurrencies] = useState<CurrencyResponse[]>(currenciesCache.data ?? [])
+  const [loading, setLoading] = useState(currenciesCache.loading)
+  const [error, setError] = useState<string | null>(currenciesCache.error)
+  const isMountedRef = useRef(true)
 
   const fetchCurrencies = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const data = await countryCurrencyService.getCurrencies()
-      setCurrencies(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch currencies')
-    } finally {
+    // If we already have data, use it
+    if (currenciesCache.data) {
+      setCurrencies(currenciesCache.data)
       setLoading(false)
+      setError(null)
+      return
+    }
+
+    // If there's already a request in progress, wait for it
+    if (currenciesCache.promise) {
+      try {
+        const data = await currenciesCache.promise
+        if (isMountedRef.current) {
+          setCurrencies(data)
+          setLoading(false)
+          setError(null)
+        }
+      } catch (err) {
+        if (isMountedRef.current) {
+          setError(err instanceof Error ? err.message : 'Failed to fetch currencies')
+          setLoading(false)
+        }
+      }
+      return
+    }
+
+    try {
+      if (isMountedRef.current) {
+        setLoading(true)
+        setError(null)
+      }
+      currenciesCache.loading = true
+      currenciesCache.error = null
+      
+      // Create and cache the promise
+      currenciesCache.promise = countryCurrencyService.getCurrencies()
+      const data = await currenciesCache.promise
+      
+      // Cache the result
+      currenciesCache.data = data
+      currenciesCache.loading = false
+      currenciesCache.promise = null
+      
+      if (isMountedRef.current) {
+        setCurrencies(data)
+        setLoading(false)
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch currencies'
+      currenciesCache.error = errorMessage
+      currenciesCache.loading = false
+      currenciesCache.promise = null
+      
+      if (isMountedRef.current) {
+        setError(errorMessage)
+        setLoading(false)
+      }
     }
   }
 
   useEffect(() => {
+    isMountedRef.current = true
     fetchCurrencies()
+    
+    return () => {
+      isMountedRef.current = false
+    }
   }, [])
 
   return { 
