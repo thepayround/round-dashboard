@@ -46,20 +46,33 @@ export const countryDropdownConfig: ApiDropdownConfig<Record<string, string>> = 
     isError: boolean
     refetch: () => Promise<void>
   },
-  mapToOptions: (countries) => 
-    countries.map(country => ({
-      value: country.countryName,
-      label: country.countryName,
-      searchText: `${country.countryName} ${country.countryCodeAlpha2} ${country.currencyCodeAlpha}`,
-      description: `${country.countryCodeAlpha2} • ${country.currencyCodeAlpha}`,
-      icon: (
-        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
-          <span className="text-xs font-semibold text-white/80">
-            {country.countryCodeAlpha2}
-          </span>
-        </div>
-      ),
-    })),
+  mapToOptions: (countries) => {
+    // Deduplicate countries by countryCodeAlpha2 (ISO country code)
+    const uniqueCountries = countries.reduce((acc, country) => {
+      const key = country.countryCodeAlpha2
+      if (!acc.has(key)) {
+        acc.set(key, country)
+      }
+      return acc
+    }, new Map())
+
+    // Sort countries alphabetically by name
+    return Array.from(uniqueCountries.values())
+      .sort((a, b) => a.countryName.localeCompare(b.countryName))
+      .map(country => ({
+        value: country.countryName,
+        label: country.countryName,
+        searchText: `${country.countryName} ${country.countryCodeAlpha2} ${country.currencyCodeAlpha}`,
+        description: `${country.countryCodeAlpha2} • ${country.currencyCodeAlpha}`,
+        icon: (
+          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+            <span className="text-xs font-semibold text-white/80">
+              {country.countryCodeAlpha2}
+            </span>
+          </div>
+        ),
+      }))
+  },
   icon: <Globe />,
   placeholder: 'Select country',
   searchPlaceholder: 'Search countries...',

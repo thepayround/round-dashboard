@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { MapPin, Building } from 'lucide-react'
 import { useState } from 'react'
+import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { AddressInfo } from '../../types/onboarding'
 
 interface AddressStepProps {
@@ -16,24 +17,6 @@ const addressTypeOptions = [
   { value: 'business', label: 'Business Address' },
 ]
 
-const countryOptions = [
-  { value: 'US', label: 'United States' },
-  { value: 'CA', label: 'Canada' },
-  { value: 'UK', label: 'United Kingdom' },
-  { value: 'AU', label: 'Australia' },
-  { value: 'DE', label: 'Germany' },
-  { value: 'FR', label: 'France' },
-  { value: 'IT', label: 'Italy' },
-  { value: 'ES', label: 'Spain' },
-  { value: 'NL', label: 'Netherlands' },
-  { value: 'SE', label: 'Sweden' },
-  { value: 'NO', label: 'Norway' },
-  { value: 'DK', label: 'Denmark' },
-  { value: 'FI', label: 'Finland' },
-  { value: 'JP', label: 'Japan' },
-  { value: 'SG', label: 'Singapore' },
-  { value: 'HK', label: 'Hong Kong' },
-]
 
 export const AddressStep = ({
   data,
@@ -42,7 +25,6 @@ export const AddressStep = ({
   isPrePopulated = false,
 }: AddressStepProps) => {
   const [addressTypeOpen, setAddressTypeOpen] = useState(false)
-  const [countryOpen, setCountryOpen] = useState(false)
 
   const handleInputChange =
     (field: keyof AddressInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -316,14 +298,13 @@ export const AddressStep = ({
           {/* Country */}
           <div>
             <span className="block text-sm font-medium text-gray-300 mb-2">Country</span>
-            <Dropdown
+            <ApiDropdown
+              config={countryDropdownConfig}
               value={data.country}
-              options={countryOptions}
-              placeholder="Select country"
               onSelect={value => handleSelectChange('country', value)}
-              isOpen={countryOpen}
-              setIsOpen={setCountryOpen}
-              error={errors.country}
+              onClear={() => handleSelectChange('country', '')}
+              error={!!errors.country}
+              allowClear
             />
             {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
           </div>

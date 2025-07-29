@@ -2,7 +2,7 @@
  * Country Currency API hooks
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { countryCurrencyService } from '../../services/api/countryCurrency.service'
 import type {
   CountryCurrencyResponse,
@@ -10,26 +10,93 @@ import type {
   CountryResponse,
 } from '../../types/api/countryCurrency'
 
+// Simple cache to prevent duplicate API calls
+const countriesCache: {
+  data: CountryCurrencyResponse[] | null
+  loading: boolean
+  error: string | null
+  promise: Promise<CountryCurrencyResponse[]> | null
+} = {
+  data: null,
+  loading: false,
+  error: null,
+  promise: null
+}
+
 export const useCountries = () => {
-  const [countries, setCountries] = useState<CountryCurrencyResponse[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [countries, setCountries] = useState<CountryCurrencyResponse[]>(countriesCache.data ?? [])
+  const [loading, setLoading] = useState(countriesCache.loading)
+  const [error, setError] = useState<string | null>(countriesCache.error)
+  const isMountedRef = useRef(true)
 
   const fetchCountries = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const data = await countryCurrencyService.getCountries()
-      setCountries(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch countries')
-    } finally {
+    // If we already have data, use it
+    if (countriesCache.data) {
+      setCountries(countriesCache.data)
       setLoading(false)
+      setError(null)
+      return
+    }
+
+    // If there's already a request in progress, wait for it
+    if (countriesCache.promise) {
+      try {
+        const data = await countriesCache.promise
+        if (isMountedRef.current) {
+          setCountries(data)
+          setLoading(false)
+          setError(null)
+        }
+      } catch (err) {
+        if (isMountedRef.current) {
+          setError(err instanceof Error ? err.message : 'Failed to fetch countries')
+          setLoading(false)
+        }
+      }
+      return
+    }
+
+    try {
+      if (isMountedRef.current) {
+        setLoading(true)
+        setError(null)
+      }
+      countriesCache.loading = true
+      countriesCache.error = null
+      
+      // Create and cache the promise
+      countriesCache.promise = countryCurrencyService.getCountries()
+      const data = await countriesCache.promise
+      
+      // Cache the result
+      countriesCache.data = data
+      countriesCache.loading = false
+      countriesCache.promise = null
+      
+      if (isMountedRef.current) {
+        setCountries(data)
+        setLoading(false)
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch countries'
+      countriesCache.error = errorMessage
+      countriesCache.loading = false
+      countriesCache.promise = null
+      
+      if (isMountedRef.current) {
+        setError(errorMessage)
+        setLoading(false)
+      }
     }
   }
 
   useEffect(() => {
+    isMountedRef.current = true
     fetchCountries()
+    
+    return () => {
+      isMountedRef.current = false
+    }
   }, [])
 
   return { 

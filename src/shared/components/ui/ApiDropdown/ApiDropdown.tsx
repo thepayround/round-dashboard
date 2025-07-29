@@ -11,17 +11,17 @@ export interface ApiDropdownOption {
   description?: string
 }
 
-export interface ApiDropdownConfig<T = unknown> {
+export interface ApiDropdownConfig<TData = Record<string, unknown>> {
   // API Configuration
   useHook: () => {
-    data: T[]
+    data: TData[]
     isLoading: boolean
     isError: boolean
     refetch: () => void | Promise<void>
   }
   
   // Data transformation
-  mapToOptions: (data: T[]) => ApiDropdownOption[]
+  mapToOptions: (data: TData[]) => ApiDropdownOption[]
   
   // UI Configuration
   icon: React.ReactNode
@@ -67,7 +67,7 @@ export const ApiDropdown = <T = unknown>({
   const options = useMemo(() => {
     if (!data) return []
     return config.mapToOptions(data)
-  }, [data, config.mapToOptions])
+  }, [data, config])
 
   const selectedOption = options.find(option => option.value === value)
 
@@ -95,16 +95,28 @@ export const ApiDropdown = <T = unknown>({
     const viewportHeight = window.innerHeight
     const dropdownHeight = 320 // max-h-80 = 320px
     
-    let top = rect.bottom + window.scrollY + 8 // 8px gap
-    const left = rect.left + window.scrollX
+    // Calculate position relative to viewport, not document
+    let top = rect.bottom + 8 // 8px gap below trigger
+    const {left} = rect
     const {width} = rect
 
     // If dropdown would go below viewport, position it above
     if (rect.bottom + dropdownHeight > viewportHeight) {
-      top = rect.top + window.scrollY - dropdownHeight - 8
+      top = rect.top - dropdownHeight - 8
     }
 
-    setDropdownPosition({ top, left, width })
+    // Ensure dropdown stays within viewport bounds
+    if (top < 8) {
+      top = 8 // minimum 8px from top
+    }
+    
+    if (left + width > window.innerWidth) {
+      // If dropdown would go beyond right edge, align it to the right
+      const adjustedLeft = window.innerWidth - width - 8
+      setDropdownPosition({ top, left: Math.max(8, adjustedLeft), width })
+    } else {
+      setDropdownPosition({ top, left, width })
+    }
   }
 
   // Handle click outside to close dropdown
@@ -122,16 +134,22 @@ export const ApiDropdown = <T = unknown>({
       }
     }
 
+    const handleScroll = () => {
+      if (isOpen) {
+        calculatePosition()
+      }
+    }
+
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
-      window.addEventListener('scroll', calculatePosition, true)
       window.addEventListener('resize', calculatePosition)
+      window.addEventListener('scroll', handleScroll, true)
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
-      window.removeEventListener('scroll', calculatePosition, true)
       window.removeEventListener('resize', calculatePosition)
+      window.removeEventListener('scroll', handleScroll, true)
     }
   }, [isOpen])
 
@@ -250,10 +268,13 @@ export const ApiDropdown = <T = unknown>({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[9998] bg-black/5 backdrop-blur-[1px]"
-        onClick={() => {
-          setIsOpen(false)
-          setSearchTerm('')
-          setHighlightedIndex(-1)
+        onMouseDown={(e) => {
+          // Only close on actual clicks, not on scroll or other events
+          if (e.target === e.currentTarget) {
+            setIsOpen(false)
+            setSearchTerm('')
+            setHighlightedIndex(-1)
+          }
         }}
       />
       
@@ -266,9 +287,9 @@ export const ApiDropdown = <T = unknown>({
         transition={{ duration: 0.15, ease: 'easeOut' }}
         className="fixed z-[9999] will-change-transform"
         style={{
-          top: dropdownPosition.top,
-          left: dropdownPosition.left,
-          width: dropdownPosition.width,
+          top: `${dropdownPosition.top}px`,
+          left: `${dropdownPosition.left}px`,
+          width: `${dropdownPosition.width}px`,
           zIndex: 9999,
           minWidth: '280px',
         }}
@@ -291,18 +312,51 @@ export const ApiDropdown = <T = unknown>({
                 onChange={handleSearchChange}
                 placeholder={config.searchPlaceholder}
                 className="
-                  w-full pl-10 pr-4 py-2 
+                  w-full pl-10 pr-10 py-2 
                   bg-white/10 border border-white/20 rounded-xl
                   text-white/95 placeholder-white/60
                   focus:bg-white/15 focus:border-[#14BDEA]/50 focus:outline-none
                   transition-all duration-200
                 "
               />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-white/10 rounded-lg transition-colors duration-200"
+                  type="button"
+                  aria-label="Clear search"
+                >
+                  <X className="w-3 h-3 text-white/60 hover:text-white/90" />
+                </button>
+              )}
             </div>
+            
+            {/* Clear selection button */}
+            {selectedOption && allowClear && (
+              <button
+                onClick={() => {
+                  onClear?.()
+                  setIsOpen(false)
+                  setSearchTerm('')
+                  setHighlightedIndex(-1)
+                }}
+                className="
+                  mt-2 w-full px-3 py-2 text-sm
+                  bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg
+                  text-white/70 hover:text-white/90
+                  transition-all duration-200
+                  flex items-center justify-center space-x-2
+                "
+                type="button"
+              >
+                <X className="w-4 h-4" />
+                <span>Clear selection</span>
+              </button>
+            )}
           </div>
 
           {/* Options list */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto" onScroll={(e) => e.stopPropagation()}>
             {filteredOptions.length === 0 ? (
               <div className="p-4 text-center text-white/60">
                 {config.noResultsText}
@@ -377,11 +431,11 @@ export const ApiDropdown = <T = unknown>({
           }
         }}
         className={`
-          auth-input input-with-icon-left cursor-pointer flex items-center justify-between
-          ${error ? 'auth-input-error' : ''}
-          ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/[0.15]'}
-          ${isOpen ? 'border-[#14BDEA]/50 bg-white/[0.18] shadow-lg shadow-[#14BDEA]/10 ring-1 ring-[#14BDEA]/20' : ''}
-          transition-all duration-300
+          relative w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
+          bg-white/5 border-white/10 text-white cursor-pointer flex items-center justify-between
+          ${error ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
+          ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/10 hover:border-white/20'}
+          ${isOpen ? 'bg-white/10 border-white/30 outline-none ring-2 ring-[#D417C8]/30' : ''}
         `}
         role="combobox"
         aria-expanded={isOpen}
@@ -389,22 +443,17 @@ export const ApiDropdown = <T = unknown>({
         aria-controls="dropdown-options"
         tabIndex={disabled ? -1 : 0}
       >
-        {/* Left icon */}
-        <div className="input-icon-left auth-icon-primary">
-          {config.icon}
+        {/* Left icon - show selected option icon if available, otherwise config icon */}
+        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400">
+          {selectedOption?.icon ?? config.icon}
         </div>
 
         {/* Display value or placeholder */}
-        <div className="flex-1 text-left truncate">
+        <div className="flex-1 h-12 text-left truncate flex items-center">
           {selectedOption ? (
-            <div className="flex items-center space-x-2">
-              {selectedOption.icon && (
-                <span className="flex-shrink-0">{selectedOption.icon}</span>
-              )}
-              <span className="text-white/95 font-medium">{selectedOption.label}</span>
-            </div>
+            <span className="text-white font-medium leading-none">{selectedOption.label}</span>
           ) : (
-            <span className="text-white/60">{config.placeholder}</span>
+            <span className="text-gray-400 font-medium leading-none">{config.placeholder}</span>
           )}
         </div>
 
@@ -426,7 +475,7 @@ export const ApiDropdown = <T = unknown>({
           )}
           
           <ChevronDown 
-            className={`w-5 h-5 text-white/60 transition-transform duration-300 ${
+            className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
               isOpen ? 'rotate-180' : ''
             }`} 
           />

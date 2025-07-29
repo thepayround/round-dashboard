@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Building, ChevronDown, Globe, FileText, DollarSign } from 'lucide-react'
 import { useState } from 'react'
+import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { OrganizationInfo } from '../../types/onboarding'
 
 interface OrganizationStepProps {
@@ -30,23 +31,6 @@ const companySizeOptions = [
   { value: '1000+', label: '1000+ employees' },
 ]
 
-const countryOptions = [
-  { value: 'US', label: 'United States' },
-  { value: 'CA', label: 'Canada' },
-  { value: 'GB', label: 'United Kingdom' },
-  { value: 'DE', label: 'Germany' },
-  { value: 'FR', label: 'France' },
-  { value: 'IT', label: 'Italy' },
-  { value: 'ES', label: 'Spain' },
-  { value: 'NL', label: 'Netherlands' },
-  { value: 'AU', label: 'Australia' },
-  { value: 'JP', label: 'Japan' },
-  { value: 'CN', label: 'China' },
-  { value: 'IN', label: 'India' },
-  { value: 'BR', label: 'Brazil' },
-  { value: 'MX', label: 'Mexico' },
-  { value: 'GR', label: 'Greece' },
-]
 
 const timezoneOptions = [
   { value: 'UTC', label: 'UTC (Coordinated Universal Time)' },
@@ -69,7 +53,6 @@ export const OrganizationStep = ({
 }: OrganizationStepProps) => {
   const [industryOpen, setIndustryOpen] = useState(false)
   const [companySizeOpen, setCompanySizeOpen] = useState(false)
-  const [countryOpen, setCountryOpen] = useState(false)
   const [timezoneOpen, setTimezoneOpen] = useState(false)
 
   const handleInputChange =
@@ -223,14 +206,13 @@ export const OrganizationStep = ({
           <span className="block text-sm font-medium text-gray-300 mb-2">
             Country <span className="text-red-400">*</span>
           </span>
-          <Dropdown
+          <ApiDropdown
+            config={countryDropdownConfig}
             value={data.country}
-            options={countryOptions}
-            placeholder="Select your country"
             onSelect={value => handleSelectChange('country', value)}
-            isOpen={countryOpen}
-            setIsOpen={setCountryOpen}
-            error={errors.country}
+            onClear={() => handleSelectChange('country', '')}
+            error={!!errors.country}
+            allowClear
           />
           {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
         </div>
