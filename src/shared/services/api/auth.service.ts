@@ -123,6 +123,81 @@ export class AuthService {
   }
 
   /**
+   * Register new business user with company information
+   */
+  async registerBusiness(userData: {
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+    password: string
+    userName?: string
+    companyInfo: {
+      companyName: string
+      registrationNumber: string
+      taxId?: string
+      currency?: string
+      industry?: string
+      businessType?: string
+      website?: string
+      employeeCount?: number
+      description?: string
+    }
+    billingAddress?: {
+      street: string
+      city: string
+      state: string
+      zipCode: string
+      country: string
+    }
+  }): Promise<ApiResponse<{ message: string; requiresEmailConfirmation: boolean }>> {
+    try {
+      const registerData = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        userName: userData.userName,
+        password: userData.password,
+        phoneNumber: userData.phone,
+        companyName: userData.companyInfo.companyName,
+        registrationNumber: userData.companyInfo.registrationNumber,
+        taxId: userData.companyInfo.taxId,
+        currency: userData.companyInfo.currency,
+        industry: userData.companyInfo.industry,
+        businessType: userData.companyInfo.businessType,
+        companyWebsite: userData.companyInfo.website,
+        employeeCount: userData.companyInfo.employeeCount,
+        companyDescription: userData.companyInfo.description,
+        addressLine1: userData.billingAddress?.street,
+        city: userData.billingAddress?.city,
+        state: userData.billingAddress?.state,
+        zipCode: userData.billingAddress?.zipCode,
+        country: userData.billingAddress?.country,
+      }
+
+      const response = await this.client.post(ENDPOINTS.AUTH.REGISTER_BUSINESS, registerData)
+
+      if (response.status === 200) {
+        return {
+          success: true,
+          data: {
+            message: response.data.message,
+            requiresEmailConfirmation: true,
+          },
+          message: 'Business registration successful. Please check your email to confirm your account.',
+        }
+      } else {
+        return {
+          success: false,
+          error: 'Business registration failed',
+        }
+      }
+    } catch (error) {
+      return this.handleApiError(error, 'Business registration failed')
+    }
+  }
+
+  /**
    * Logout user
    */
   async logout(): Promise<ApiResponse<null>> {

@@ -53,7 +53,7 @@ export const BusinessSettingsStep = ({
       </div>
 
       {/* Form */}
-      <div className="space-y-6">
+      <div className="max-w-lg mx-auto space-y-6">
         {/* Currency */}
         <div>
           <span className="block text-sm font-medium text-gray-300 mb-2">Currency</span>

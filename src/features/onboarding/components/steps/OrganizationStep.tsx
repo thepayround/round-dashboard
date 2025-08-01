@@ -149,7 +149,7 @@ export const OrganizationStep = ({
       </div>
 
       {/* Form */}
-      <div className="space-y-6">
+      <div className="max-w-lg mx-auto space-y-6">
         {/* Company Name */}
         <div>
           <label htmlFor="companyName" className="block text-sm font-medium text-gray-300 mb-2">

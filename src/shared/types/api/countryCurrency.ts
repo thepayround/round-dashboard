@@ -32,3 +32,19 @@ export interface CountryResponse {
   currencyCodeNumeric: string
   decimalPrecision: number
 }
+
+export interface TimeZone {
+  value: string
+  label: string
+}
+
+export interface Month {
+  value: string
+  label: string
+}
+
+export interface Role {
+  value: string
+  label: string
+  description: string
+}

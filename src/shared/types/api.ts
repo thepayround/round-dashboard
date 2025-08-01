@@ -90,13 +90,74 @@ export interface RefreshTokenResponse {
   refreshToken: string
 }
 
-// Organization types - imported from api/organization.ts
-export type {
-  OrganizationRequest,
-  OrganizationResponse,
-  CreateOrganizationData,
-  UpdateOrganizationData,
-} from './api/organization'
+// Organization types
+export interface OrganizationRequest {
+  name: string
+  description?: string
+  website?: string
+  size?: string
+  revenue?: number
+  category?: string
+  type?: string
+  registrationNumber?: string
+  currency?: string
+  timeZone?: string
+  country?: string
+  userId: string
+  fiscalYearStart?: string
+}
+
+export interface OrganizationResponse {
+  organizationId: string
+  name: string
+  description?: string
+  website?: string
+  size?: string
+  revenue?: number
+  category?: string
+  type?: string
+  registrationNumber?: string
+  currency?: string
+  timeZone?: string
+  country?: string
+  userId: string
+  fiscalYearStart?: string
+  address?: AddressResponse
+  addressId?: string
+  createdDate?: string
+  modifiedDate?: string
+}
+
+export interface CreateOrganizationData {
+  name: string
+  description?: string
+  website?: string
+  size?: string
+  revenue?: number
+  category?: string
+  type?: string
+  registrationNumber?: string
+  currency?: string
+  timeZone?: string
+  country?: string
+  fiscalYearStart?: string
+  userId: string
+}
+
+export interface UpdateOrganizationData {
+  name?: string
+  description?: string
+  website?: string
+  size?: string
+  revenue?: number
+  category?: string
+  type?: string
+  registrationNumber?: string
+  currency?: string
+  timeZone?: string
+  country?: string
+  fiscalYearStart?: string
+}
 
 // Address types
 export interface AddressRequest {
@@ -117,11 +178,13 @@ export interface AddressResponse {
   name: string
   addressLine1: string
   addressLine2?: string
+  number?: string
   city: string
   state: string
   zipCode: string
   country: string
   addressType: 'billing' | 'shipping' | 'business'
+  isPrimary?: boolean
   organizationId?: string
   createdDate?: string
   modifiedDate?: string

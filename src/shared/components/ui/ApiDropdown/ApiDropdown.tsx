@@ -243,8 +243,8 @@ export const ApiDropdown = <T = unknown>({
   // Error state
   if (isError) {
     return (
-      <div className="auth-input input-with-icon-left flex items-center justify-between opacity-50 cursor-not-allowed">
-        <div className="input-icon-left auth-icon-primary">
+      <div className="relative w-full h-12 pl-12 pr-5 rounded-xl backdrop-blur-[16px] border-[1.5px] transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-medium text-[0.95rem] outline-none opacity-50 cursor-not-allowed">
+        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400">
           {config.icon}
         </div>
         <span className="text-white/60">{config.errorText}</span>
@@ -264,6 +264,7 @@ export const ApiDropdown = <T = unknown>({
     <AnimatePresence>
       {/* Backdrop overlay */}
       <motion.div
+        key="backdrop"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -280,6 +281,7 @@ export const ApiDropdown = <T = unknown>({
       
       {/* Dropdown content */}
       <motion.div
+        key="dropdown"
         ref={dropdownRef}
         initial={{ opacity: 0, y: -10, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -296,7 +298,7 @@ export const ApiDropdown = <T = unknown>({
       >
         <div className="
           bg-white/[0.04] backdrop-blur-[32px] border border-white/10 
-          rounded-2xl shadow-2xl overflow-hidden
+          rounded-xl shadow-2xl overflow-hidden
           max-h-80 flex flex-col
           bg-gradient-to-br from-white/[0.08] to-white/[0.02]
           ring-1 ring-white/5
@@ -322,7 +324,7 @@ export const ApiDropdown = <T = unknown>({
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-white/10 rounded-lg transition-colors duration-200"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-white/10 rounded-xl transition-colors duration-200"
                   type="button"
                   aria-label="Clear search"
                 >
@@ -342,7 +344,7 @@ export const ApiDropdown = <T = unknown>({
                 }}
                 className="
                   mt-2 w-full px-3 py-2 text-sm
-                  bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg
+                  bg-white/5 hover:bg-white/10 border border-white/20 rounded-xl
                   text-white/70 hover:text-white/90
                   transition-all duration-200
                   flex items-center justify-center space-x-2
@@ -365,13 +367,13 @@ export const ApiDropdown = <T = unknown>({
               <div className="p-2 space-y-1">
                 {filteredOptions.map((option, index) => (
                   <motion.div
-                    key={option.value}
+                    key={option.value ? `${option.value}-${index}` : `empty-option-${index}`}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.02 }}
                     onClick={() => handleSelect(option.value)}
                     className={`
-                      px-3 py-2.5 rounded-lg cursor-pointer
+                      px-3 py-2.5 rounded-xl cursor-pointer
                       flex items-center justify-between
                       transition-all duration-200
                       ${index === highlightedIndex 
@@ -431,11 +433,14 @@ export const ApiDropdown = <T = unknown>({
           }
         }}
         className={`
-          relative w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-          bg-white/5 border-white/10 text-white cursor-pointer flex items-center justify-between
-          ${error ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-          ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/10 hover:border-white/20'}
-          ${isOpen ? 'bg-white/10 border-white/30 outline-none ring-2 ring-[#D417C8]/30' : ''}
+          relative w-full h-12 pl-12 pr-5 rounded-xl backdrop-blur-[16px] border-[1.5px] transition-all duration-300
+          bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between
+          font-medium text-[0.95rem] outline-none
+          [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]
+          ${error ? 'border-[#ef4444] bg-[rgba(239,68,68,0.12)]' : ''}
+          ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/[0.18] hover:border-white/30'}
+          ${isOpen && !error ? 'bg-white/[0.18] border-[#14BDEA]/50 outline-none ring-0 shadow-[0_0_0_3px_rgba(20,189,234,0.15),0_4px_16px_rgba(20,189,234,0.2)] transform -translate-y-px' : ''}
+          ${isOpen && error ? 'shadow-[0_0_0_3px_rgba(239,68,68,0.25)] transform -translate-y-px' : ''}
         `}
         role="combobox"
         aria-expanded={isOpen}
@@ -449,11 +454,11 @@ export const ApiDropdown = <T = unknown>({
         </div>
 
         {/* Display value or placeholder */}
-        <div className="flex-1 h-12 text-left truncate flex items-center">
+        <div className="flex-1 text-left truncate flex items-center">
           {selectedOption ? (
-            <span className="text-white font-medium leading-none">{selectedOption.label}</span>
+            <span className="text-white/95 font-medium leading-none">{selectedOption.label}</span>
           ) : (
-            <span className="text-gray-400 font-medium leading-none">{config.placeholder}</span>
+            <span className="text-white/60 font-normal leading-none">{config.placeholder}</span>
           )}
         </div>
 
@@ -466,7 +471,7 @@ export const ApiDropdown = <T = unknown>({
           {allowClear && selectedOption && !isLoading && (
             <button
               onClick={handleClear}
-              className="p-1 hover:bg-white/10 rounded-lg transition-colors duration-200"
+              className="p-1 hover:bg-white/10 rounded-xl transition-colors duration-200"
               type="button"
               aria-label="Clear selection"
             >

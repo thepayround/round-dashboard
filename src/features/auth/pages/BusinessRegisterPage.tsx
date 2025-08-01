@@ -11,7 +11,7 @@ import {
   EyeOff,
   AlertCircle,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import type { CompanyInfo, BillingAddress } from '@/shared/types/business'
@@ -22,11 +22,14 @@ import {
   getFieldError,
   hasFieldError,
 } from '@/shared/utils/validation'
+import { validateCompanyInfo } from '@/shared/utils/companyValidation'
 
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { BillingAddressForm } from '../components/BillingAddressForm'
 import { useMultiStepForm } from '../hooks/useMultiStepForm'
 import { useAuth as useAuthAPI } from '@/shared/hooks/api'
+import { useOrganization } from '@/shared/hooks/api'
+// import { useAddress } from '@/shared/hooks/api'
 // import { useAuth } from '@/shared/contexts/AuthContext'
 
 interface PersonalFormData {
@@ -39,7 +42,9 @@ interface PersonalFormData {
 
 export const BusinessRegisterPage = () => {
   const navigate = useNavigate()
-  const { register } = useAuthAPI()
+  const { registerBusiness } = useAuthAPI()
+  const { create: _createOrganization } = useOrganization()
+  // const { createOrganizationAddress } = useAddress()
   // const { login } = useAuth() // Not used in this component
 
   // Form state is hardcoded to 'business' for this page
@@ -54,7 +59,7 @@ export const BusinessRegisterPage = () => {
     companyName: '',
     registrationNumber: '',
     taxId: '',
-    currency: 'USD',
+    currency: undefined, // No preselected currency
     industry: undefined,
     businessType: 'corporation',
     website: '',
@@ -84,7 +89,7 @@ export const BusinessRegisterPage = () => {
   const isCompanyComplete =
     companyInfo.companyName.trim() !== '' &&
     companyInfo.registrationNumber.trim() !== '' &&
-    companyInfo.currency.trim() !== ''
+    companyInfo.currency !== undefined // Check if currency is selected
 
   // UI state
   const [showPassword, setShowPassword] = useState(false)
@@ -132,7 +137,7 @@ export const BusinessRegisterPage = () => {
       const filledFields = [
         companyInfo.companyName.trim(),
         companyInfo.registrationNumber.trim(),
-        companyInfo.currency.trim(),
+        companyInfo.currency ?? '',
       ].filter(field => field !== '').length
 
       currentStepProgress = (filledFields / 3) * progressPerStep
@@ -166,6 +171,13 @@ export const BusinessRegisterPage = () => {
     ],
     onComplete: handleFormComplete,
   })
+
+  // Initialize company validation state on mount and when companyInfo changes
+  useEffect(() => {
+    const validation = validateCompanyInfo(companyInfo)
+    setIsCompanyValid(validation.isValid)
+  }, [companyInfo])
+
 
   // Handle personal form changes
   const handlePersonalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -205,31 +217,20 @@ export const BusinessRegisterPage = () => {
     setApiError('')
 
     try {
-      // Step 1: Register the user first
-      const userResponse = await register({
+      // Register business user with all company information using new endpoint
+      const userResponse = await registerBusiness({
         ...personalData,
         phone: personalData.phone,
+        companyInfo,
+        billingAddress,
       })
 
       if (!userResponse.success) {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        setApiError(('error' in userResponse && userResponse.error) || 'User registration failed')
+        setApiError(('error' in userResponse && userResponse.error) || 'Business registration failed')
         setIsSubmitting(false)
         return
       }
-
-      // Step 2: Get user ID from JWT token (we need this for organization creation)
-      // For now, we'll need to wait for user confirmation. The organization creation
-      // should happen after email confirmation when we have the actual user ID.
-      // Let's store the business data temporarily and navigate to confirmation
-
-      // Store business data in localStorage for later use after email confirmation
-      const businessData = {
-        companyInfo,
-        billingAddress,
-        email: personalData.email,
-      }
-      localStorage.setItem('pendingBusinessData', JSON.stringify(businessData))
 
       // Navigate to confirmation pending page
       navigate('/auth/confirmation-pending', {
@@ -241,7 +242,7 @@ export const BusinessRegisterPage = () => {
         replace: true,
       })
     } catch (error) {
-      console.error('Registration error:', error)
+      console.error('Business registration error:', error)
       setApiError('An unexpected error occurred. Please try again.')
       setIsSubmitting(false)
     }
@@ -609,7 +610,7 @@ export const BusinessRegisterPage = () => {
                 onClick={multiStepForm.goToPrevious}
                 disabled={!multiStepForm.canGoPrevious}
                 className={`
-                  px-8 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px]
+                  px-8 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px]
                   ${
                     multiStepForm.canGoPrevious
                       ? 'btn-secondary'
@@ -630,7 +631,7 @@ export const BusinessRegisterPage = () => {
                       type="button"
                       onClick={handleSkipBilling}
                       disabled={isSubmitting}
-                      className="btn-secondary px-8 py-3 disabled:opacity-50 min-w-[160px] h-[48px] flex items-center justify-center"
+                      className="btn-secondary px-8 py-3 disabled:opacity-50 min-w-[160px] h-[48px] flex items-center justify-center rounded-xl"
                     >
                       Skip for now
                     </button>
@@ -648,7 +649,7 @@ export const BusinessRegisterPage = () => {
                       (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
                     }
                     className={`
-                    px-8 py-3 font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px] rounded-lg
+                    px-8 py-3 font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px] rounded-xl
                     ${
                       isSubmitting ||
                       (multiStepForm.currentStep === 0 && !isPersonalValid) ||

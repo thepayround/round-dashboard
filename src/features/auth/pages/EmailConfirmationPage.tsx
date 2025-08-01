@@ -3,6 +3,7 @@ import { CheckCircle, XCircle, Mail, RefreshCw, AlertCircle } from 'lucide-react
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth as useAuthAPI, useOrganization } from '@/shared/hooks/api'
+import { organizationService } from '@/shared/services/api'
 import { useAuth } from '@/shared/hooks/useAuth'
 import type { User } from '@/shared/types/auth'
 
@@ -38,24 +39,61 @@ export const EmailConfirmationPage = () => {
       ) => {
         try {
           const companyInfo = businessData.companyInfo as Record<string, unknown>
-          // Create organization
+          const billingAddress = businessData.billingAddress as Record<string, unknown> | undefined
+          
+          // Create organization with proper field mapping
           const orgResponse = await createOrganization({
             name: (companyInfo?.companyName as string) ?? '',
             description: (companyInfo?.description as string) ?? '',
             website: (companyInfo?.website as string) ?? '',
             size: companyInfo?.employeeCount?.toString() ?? '',
             revenue: 0, // Default value
-            category: (companyInfo?.industry as string) ?? 'other',
+            category: (companyInfo?.industry as string) ?? 'business', // Default to 'business' 
             type: (companyInfo?.businessType as string) ?? 'corporation',
-            registrationNumber: companyInfo?.registrationNumber as string,
-            currency: companyInfo?.currency as string,
+            registrationNumber: (companyInfo?.registrationNumber as string) ?? '',
+            currency: (companyInfo?.currency as string) ?? '',
             timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            country: 'US', // Default, should come from form
+            country: (billingAddress?.country as string) ?? 'United States', // From billing address or default
             userId,
+            fiscalYearStart: 'January', // Default fiscal year start
           })
 
           if (orgResponse.success && orgResponse.data) {
-            // Organization created successfully with address data included
+            
+            // Create organization address if billing address exists
+            if (billingAddress && orgResponse.data.organizationId) {
+              try {
+                const addressData = {
+                  name: 'Business Address',
+                  addressLine1: (billingAddress.street as string) ?? '',
+                  addressLine2: (billingAddress.street2 as string) ?? '',
+                  number: '', // We don't collect building number separately
+                  city: (billingAddress.city as string) ?? '',
+                  state: (billingAddress.state as string) ?? '',
+                  country: (billingAddress.country as string) ?? '',
+                  zipCode: (billingAddress.zipCode as string) ?? '',
+                  addressType: 'billing' as const,
+                  isPrimary: true,
+                }
+                
+                const addressResult = await organizationService.createOrganizationAddress(
+                  orgResponse.data.organizationId,
+                  addressData
+                )
+                
+                if (addressResult.success) {
+                  // Address created successfully
+                } else {
+                  console.error('Organization address creation failed:', addressResult.error)
+                  // Don't fail the whole flow for address creation failure
+                }
+              } catch (addressError) {
+                console.error('Error creating organization address:', addressError)
+                // Don't fail the whole flow for address creation failure
+              }
+            }
+          } else {
+            console.error('Organization creation failed:', orgResponse.error)
           }
         } catch (error) {
           console.error('Error creating business organization:', error)

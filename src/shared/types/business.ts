@@ -27,7 +27,7 @@ export interface CompanyInfo {
   companyName: string
   registrationNumber: string
   taxId?: string
-  currency: Currency
+  currency: Currency | undefined
   industry?: Industry
   businessType: BusinessType
   website?: string

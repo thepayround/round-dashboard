@@ -3,7 +3,7 @@ import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurren
 import type { ApiDropdownConfig } from './ApiDropdown'
 import { useMemo } from 'react'
 import type { CurrencyResponse } from '@/shared/types/api/countryCurrency'
-import type { TimeZone, Month, Role } from '@/shared/types/countryCurrency'
+import type { TimeZone, Month, Role } from '@/shared/types/api/countryCurrency'
 
 
 

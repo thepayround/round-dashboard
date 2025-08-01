@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
-import { MapPin, Building } from 'lucide-react'
+import { MapPin, Building, Hash, Info } from 'lucide-react'
 import { useState } from 'react'
+import { FormInput } from '@/shared/components/ui/FormInput'
 import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { AddressInfo } from '../../types/onboarding'
 
@@ -16,7 +17,6 @@ const addressTypeOptions = [
   { value: 'shipping', label: 'Shipping Address' },
   { value: 'business', label: 'Business Address' },
 ]
-
 
 export const AddressStep = ({
   data,
@@ -40,7 +40,6 @@ export const AddressStep = ({
       [field]: value,
     })
   }
-
 
   const Dropdown = ({
     value,
@@ -66,8 +65,19 @@ export const AddressStep = ({
         className={`
           w-full h-12 px-4 rounded-xl backdrop-blur-xl border transition-all duration-200 text-left flex items-center justify-between
           bg-white/5 border-white/10 text-white
-          hover:bg-white/10 hover:border-white/20
+          hover:bg-white/8 hover:border-white/15
           focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
+          autofill:bg-white/5 autofill:text-white
+          [&:-webkit-autofill]:bg-white/5 [&:-webkit-autofill]:text-white
+          [&:-webkit-autofill]:shadow-[0_0_0_1000px_rgba(255,255,255,0.05)_inset]
+          [&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)]
+          [&:-webkit-autofill:hover]:shadow-[0_0_0_1000px_rgba(255,255,255,0.08)_inset]
+          [&:-webkit-autofill:focus]:shadow-[0_0_0_1000px_rgba(255,255,255,0.10)_inset]
+          [&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,1)]
+          [&:-internal-autofill-selected]:bg-white/5
+          [&:-internal-autofill-selected]:text-white
+          [&:-internal-autofill-selected]:[-webkit-text-fill-color:rgba(255,255,255,0.95)]
+          [&:-internal-autofill-selected]:shadow-[0_0_0_1000px_rgba(255,255,255,0.05)_inset]
           ${error ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
         `}
       >
@@ -149,36 +159,11 @@ export const AddressStep = ({
       </div>
 
       {/* Form */}
-      <div className="space-y-6">
-        {/* Address Name and Type Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Address Name */}
-          <div>
-            <label htmlFor="addressName" className="block text-sm font-medium text-gray-300 mb-2">
-              Address Name
-            </label>
-            <div className="relative">
-              <Building className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                id="addressName"
-                type="text"
-                value={data.name}
-                onChange={handleInputChange('name')}
-                placeholder="Main Office, Headquarters, etc."
-                className={`
-                  w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                  bg-white/5 border-white/10 text-white placeholder-gray-400
-                  focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                  ${errors.name ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-                `}
-              />
-            </div>
-            {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name}</p>}
-          </div>
-
-          {/* Address Type */}
-          <div>
-            <span className="block text-sm font-medium text-gray-300 mb-2">Address Type</span>
+      <div className="max-w-lg mx-auto space-y-8">
+        {/* Address Type and Name Section */}
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <span className="block text-sm font-medium text-gray-300">Address Type</span>
             <Dropdown
               value={data.addressType}
               options={addressTypeOptions}
@@ -194,103 +179,118 @@ export const AddressStep = ({
               <p className="mt-1 text-sm text-red-400">{errors.addressType}</p>
             )}
           </div>
+
+          <FormInput
+            label="Address Name"
+            value={data.name}
+            onChange={handleInputChange('name')}
+            placeholder="Main Office, Headquarters, etc."
+            leftIcon={Building}
+            error={errors.name}
+          />
         </div>
 
-        {/* Street Address */}
-        <div>
-          <label htmlFor="street" className="block text-sm font-medium text-gray-300 mb-2">
-            Street Address
-          </label>
-          <div className="relative">
-            <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              id="street"
-              type="text"
-              value={data.street}
-              onChange={handleInputChange('street')}
-              placeholder="123 Main Street, Suite 100"
-              className={`
-                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.street ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
-            />
+        {/* Street Address Section */}
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div className="sm:col-span-3">
+              <FormInput
+                label="Street Address"
+                value={data.addressLine1}
+                onChange={handleInputChange('addressLine1')}
+                placeholder="123 Main Street, Suite 100"
+                leftIcon={MapPin}
+                error={errors.addressLine1}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <label htmlFor="unit-number" className="block text-sm font-medium text-gray-300">Unit #</label>
+                <div className="group relative">
+                  <Info className="w-4 h-4 text-gray-400 cursor-help" />
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 backdrop-blur-sm text-white text-xs rounded-lg shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-white/10 z-50">
+                    Building/unit number
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900/95" />
+                  </div>
+                </div>
+              </div>
+              <div className="relative">
+                <Hash className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  id="unit-number"
+                  type="text"
+                  value={data.number}
+                  onChange={handleInputChange('number')}
+                  placeholder="123A"
+                  className={`
+                    w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
+                    bg-white/5 border-white/10 text-white placeholder-gray-400
+                    hover:bg-white/8 hover:border-white/15
+                    focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
+                    [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]
+                    [&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
+                    [&:-webkit-autofill]:[background-color:transparent!important]
+                    [&:-webkit-autofill]:[background-image:none!important]
+                    [&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s!important]
+                    [&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]
+                    [&:-webkit-autofill:hover]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
+                    [&:-webkit-autofill:hover]:[background-color:transparent!important]
+                    [&:-webkit-autofill:hover]:[background-image:none!important]
+                    [&:-webkit-autofill:hover]:[transition:background-color_5000s_ease-in-out_0s!important]
+                    [&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.18)_inset!important]
+                    [&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,1)!important]
+                    [&:-webkit-autofill:focus]:[background-color:transparent!important]
+                    [&:-webkit-autofill:focus]:[transition:background-color_5000s_ease-in-out_0s!important]
+                    [&:-webkit-autofill:active]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]
+                    [&:-webkit-autofill:active]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
+                    [&:-webkit-autofill:active]:[background-color:transparent!important]
+                    [&:-webkit-autofill:active]:[background-image:none!important]
+                    [&:-webkit-autofill:active]:[transition:background-color_5000s_ease-in-out_0s!important]
+                    [&:-internal-autofill-selected]:[background-color:rgba(255,255,255,0.12)!important]
+                    [&:-internal-autofill-selected]:[background-image:none!important]
+                    [&:-internal-autofill-selected]:[color:rgba(255,255,255,0.95)!important]
+                    [&:-internal-autofill-selected]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
+                    [&:-internal-autofill-selected]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]
+                    ${errors.number ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
+                  `}
+                />
+              </div>
+              {errors.number && <p className="mt-1 text-sm text-red-400">{errors.number}</p>}
+            </div>
           </div>
-          {errors.street && <p className="mt-1 text-sm text-red-400">{errors.street}</p>}
         </div>
 
-        {/* City and State Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* City */}
-          <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gray-300 mb-2">
-              City
-            </label>
-            <input
-              id="city"
-              type="text"
-              value={data.city}
-              onChange={handleInputChange('city')}
-              placeholder="San Francisco"
-              className={`
-                w-full h-12 px-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.city ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
-            />
-            {errors.city && <p className="mt-1 text-sm text-red-400">{errors.city}</p>}
-          </div>
+        {/* Location Details Section */}
+        <div className="space-y-6">
+          <FormInput
+            label="City"
+            value={data.city}
+            onChange={handleInputChange('city')}
+            placeholder="San Francisco"
+            error={errors.city}
+          />
 
-          {/* State */}
-          <div>
-            <label htmlFor="state" className="block text-sm font-medium text-gray-300 mb-2">
-              State/Province
-            </label>
-            <input
-              id="state"
-              type="text"
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormInput
+              label="State / Province"
               value={data.state}
               onChange={handleInputChange('state')}
               placeholder="California"
-              className={`
-                w-full h-12 px-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.state ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              error={errors.state}
             />
-            {errors.state && <p className="mt-1 text-sm text-red-400">{errors.state}</p>}
-          </div>
-        </div>
 
-        {/* ZIP Code and Country Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* ZIP Code */}
-          <div>
-            <label htmlFor="zipCode" className="block text-sm font-medium text-gray-300 mb-2">
-              ZIP/Postal Code
-            </label>
-            <input
-              id="zipCode"
-              type="text"
+            <FormInput
+              label="ZIP / Postal Code"
               value={data.zipCode}
               onChange={handleInputChange('zipCode')}
               placeholder="94102"
-              className={`
-                w-full h-12 px-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.zipCode ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              error={errors.zipCode}
             />
-            {errors.zipCode && <p className="mt-1 text-sm text-red-400">{errors.zipCode}</p>}
           </div>
 
-          {/* Country */}
-          <div>
-            <span className="block text-sm font-medium text-gray-300 mb-2">Country</span>
+          <div className="space-y-2">
+            <span className="block text-sm font-medium text-gray-300">Country</span>
             <ApiDropdown
               config={countryDropdownConfig}
               value={data.country}

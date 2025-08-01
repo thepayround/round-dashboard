@@ -58,6 +58,50 @@ export const useAuth = () => {
     }
   }
 
+  const registerBusiness = async (userData: {
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+    password: string
+    userName?: string
+    companyInfo: {
+      companyName: string
+      registrationNumber: string
+      taxId?: string
+      currency?: string
+      industry?: string
+      businessType?: string
+      website?: string
+      employeeCount?: number
+      description?: string
+    }
+    billingAddress?: {
+      street: string
+      city: string
+      state: string
+      zipCode: string
+      country: string
+    }
+  }) => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const result = await authService.registerBusiness(userData)
+      if (!result.success) {
+        setError(result.error ?? 'Business registration failed')
+      }
+      return result
+    } catch (err) {
+      const errorMessage = 'An unexpected error occurred'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const logout = async () => {
     setIsLoading(true)
     setError(null)
@@ -182,6 +226,7 @@ export const useAuth = () => {
     // Methods
     login,
     register,
+    registerBusiness,
     logout,
     confirmEmail,
     confirmEmailAndLogin,

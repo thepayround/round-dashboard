@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Building, Hash, CreditCard, AlertCircle } from 'lucide-react'
+import { useEffect } from 'react'
 
 import type { CompanyInfo, Currency } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
@@ -51,7 +52,18 @@ export const CompanyDetailsForm = ({
 
   const handleSelectChange = (field: keyof CompanyInfo, value: string) => {
     handleInputChange(field, value)
+    
+    // Trigger validation immediately for select fields
+    const updatedCompanyInfo = { ...companyInfo, [field]: value }
+    const validation = validateCompanyInfo(updatedCompanyInfo)
+    onValidationChange(validation.isValid)
   }
+
+  // Run initial validation when component mounts or companyInfo changes
+  useEffect(() => {
+    const validation = validateCompanyInfo(companyInfo)
+    onValidationChange(validation.isValid)
+  }, [companyInfo, onValidationChange])
 
   return (
     <motion.div
@@ -185,8 +197,14 @@ export const CompanyDetailsForm = ({
         </label>
         <ApiDropdown
           config={currencyDropdownConfig}
-          value={companyInfo.currency}
-          onSelect={value => handleSelectChange('currency', value as Currency)}
+          value={companyInfo.currency ?? ''}
+          onSelect={value => {
+            handleSelectChange('currency', value as Currency)
+            // Clear any existing currency error when selection is made
+            if (hasFieldError(errors, 'currency')) {
+              onErrorsChange(errors.filter(error => error.field !== 'currency'))
+            }
+          }}
           error={hasFieldError(errors, 'currency')}
           allowClear={false}
         />

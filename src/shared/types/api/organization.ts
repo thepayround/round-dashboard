@@ -43,11 +43,12 @@ export interface OrganizationResponse {
     name: string
     addressLine1: string
     addressLine2?: string
+    number: string
     city: string
     state: string
     zipCode: string
     country: string
-    addressType: string
+    addressType: 'billing' | 'shipping' | 'business'
   } | null
 }
 
