@@ -1,8 +1,14 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, Search, Filter, Download, Plus, Eye, Edit, Trash2 } from 'lucide-react'
+import { FileText, Download, Eye, Edit, Trash2 } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { CreateButton, Card, SearchFilterToolbar, SectionHeader } from '@/shared/components'
+import type { FilterField } from '@/shared/components'
 
 export const InvoicesPage = () => {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showFilters, setShowFilters] = useState(false)
+  
   const invoices = [
     {
       id: 'INV-001',
@@ -61,69 +67,73 @@ export const InvoicesPage = () => {
     }
   }
 
+  const filterFields: FilterField[] = [
+    {
+      id: 'status',
+      label: 'Status',
+      type: 'select',
+      value: '',
+      onChange: () => {
+        // Status filter changed handler
+      },
+      options: [
+        { id: 'all', name: 'All Statuses' },
+        { id: 'paid', name: 'Paid' },
+        { id: 'pending', name: 'Pending' },
+        { id: 'overdue', name: 'Overdue' },
+        { id: 'draft', name: 'Draft' }
+      ]
+    }
+  ]
+
   return (
     <DashboardLayout>
-      <div>
+      <div className="space-y-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="gradient-header" />
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold auth-text mb-2">Invoices</h1>
-              <p className="auth-text-muted text-lg">
-                Manage and track all your invoices in one place
-              </p>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-primary px-6 py-3 flex items-center space-x-2"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Create Invoice</span>
-            </motion.button>
-          </div>
+          <SectionHeader
+            title="Invoices"
+            subtitle="Manage and track all your invoices in one place"
+            size="main"
+            actions={
+              <CreateButton
+                label="Create Invoice"
+                onClick={() => { /* Create invoice clicked */ }}
+                size="md"
+              />
+            }
+          />
         </motion.div>
 
         {/* Search and Filter Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="auth-card mb-8"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4 flex-1">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/40" />
-                <input
-                  type="text"
-                  placeholder="Search invoices..."
-                  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/50 focus:border-[#D417C8]/50"
-                />
-              </div>
-              <button className="p-3 bg-white/5 border border-white/10 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200">
-                <Filter className="w-5 h-5" />
-              </button>
-            </div>
-            <button className="flex items-center space-x-2 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200">
-              <Download className="w-5 h-5" />
-              <span>Export</span>
+        <SearchFilterToolbar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchPlaceholder="Search invoices..."
+          showFilters={showFilters}
+          onToggleFilters={() => setShowFilters(!showFilters)}
+          filterFields={filterFields}
+          delay={0.1}
+          className="mb-8"
+          additionalActions={
+            <button className="btn-secondary flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              Export
             </button>
-          </div>
-        </motion.div>
+          }
+        />
 
         {/* Invoices Table */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="auth-card"
         >
+          <Card animate={false}>
           <div className="flex items-center space-x-3 mb-6">
             <FileText className="w-6 h-6 text-[#D417C8]" />
             <h2 className="text-xl font-bold auth-text">All Invoices</h2>
@@ -198,6 +208,7 @@ export const InvoicesPage = () => {
               </tbody>
             </table>
           </div>
+          </Card>
         </motion.div>
       </div>
     </DashboardLayout>

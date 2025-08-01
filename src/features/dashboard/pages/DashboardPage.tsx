@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { Card, SectionHeader } from '@/shared/components'
 import { useAuth } from '@/shared/hooks/useAuth'
 import type { ProductInfo, TeamSettings } from '@/features/onboarding/types/onboarding'
 
@@ -53,29 +54,18 @@ export const DashboardPage = () => {
 
   return (
     <DashboardLayout>
-      <div>
+      <div className="space-y-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <div className="gradient-header" />
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold auth-text mb-2">
-                Welcome back,{' '}
-                {user.firstName && user.lastName
-                  ? `${user.firstName} ${user.lastName}`
-                  : user.firstName || user.email || 'User'}
-                !
-              </h1>
-              <p className="auth-text-muted text-lg">
-                Here&apos;s an overview of your Round account
-              </p>
-            </div>
-
-            {user.onboardingCompleted && (
+        <SectionHeader
+          title={`Welcome back, ${
+            user.firstName && user.lastName
+              ? `${user.firstName} ${user.lastName}`
+              : user.firstName || user.email || 'User'
+          }!`}
+          subtitle="Here's an overview of your Round account"
+          size="main"
+          actions={
+            user.onboardingCompleted && (
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -85,9 +75,9 @@ export const DashboardPage = () => {
                 <CheckCircle className="w-5 h-5 text-[#42E695]" />
                 <span className="text-[#42E695] font-medium">Setup Complete</span>
               </motion.div>
-            )}
-          </div>
-        </motion.div>
+            )
+          }
+        />
 
         {/* Quick Stats */}
         <motion.div
@@ -96,61 +86,43 @@ export const DashboardPage = () => {
           transition={{ delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
         >
-          <div className="auth-card">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="auth-text-muted text-sm font-medium">Account Type</p>
-                <p className="auth-text text-xl font-bold capitalize">{user.accountType}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 flex items-center justify-center">
-                <User className="w-6 h-6 text-[#D417C8]" />
-              </div>
-            </div>
-          </div>
+          <Card
+            variant="compact"
+            title="Account Type"
+            value={user.accountType}
+            icon={User}
+            color="primary"
+            animate={false}
+          />
 
-          <div className="auth-card">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="auth-text-muted text-sm font-medium">Member Since</p>
-                <p className="auth-text text-xl font-bold">
-                  {new Date(user.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 flex items-center justify-center">
-                <Clock className="w-6 h-6 text-[#32A1E4]" />
-              </div>
-            </div>
-          </div>
+          <Card
+            variant="compact"
+            title="Member Since"
+            value={new Date(user.createdAt).toLocaleDateString()}
+            icon={Clock}
+            color="secondary"
+            animate={false}
+          />
 
           {onboardingData?.businessSettings && (
-            <div className="auth-card">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="auth-text-muted text-sm font-medium">Currency</p>
-                  <p className="auth-text text-xl font-bold">
-                    {onboardingData.businessSettings?.currency}
-                  </p>
-                </div>
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-[#7767DA]" />
-                </div>
-              </div>
-            </div>
+            <Card
+              variant="compact"
+              title="Currency"
+              value={onboardingData.businessSettings?.currency}
+              icon={DollarSign}
+              color="accent"
+              animate={false}
+            />
           )}
 
-          <div className="auth-card">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="auth-text-muted text-sm font-medium">Setup Status</p>
-                <p className="auth-text text-xl font-bold">
-                  {user.onboardingCompleted ? '100%' : '0%'}
-                </p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#BD2CD0]/20 to-[#D417C8]/20 flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-[#BD2CD0]" />
-              </div>
-            </div>
-          </div>
+          <Card
+            variant="compact"
+            title="Setup Status"
+            value={user.onboardingCompleted ? '100%' : '0%'}
+            icon={TrendingUp}
+            color="success"
+            animate={false}
+          />
         </motion.div>
 
         {/* Main Content Grid */}
@@ -162,7 +134,7 @@ export const DashboardPage = () => {
             transition={{ delay: 0.2 }}
             className="lg:col-span-1"
           >
-            <div className="auth-card">
+            <Card animate={false}>
               <div className="flex items-center space-x-3 mb-6">
                 <User className="w-6 h-6 text-[#D417C8]" />
                 <h2 className="text-xl font-bold auth-text">Profile Information</h2>
@@ -198,7 +170,7 @@ export const DashboardPage = () => {
                   </div>
                 )}
               </div>
-            </div>
+            </Card>
           </motion.div>
 
           {/* Organization Info */}
@@ -209,7 +181,7 @@ export const DashboardPage = () => {
               transition={{ delay: 0.3 }}
               className="lg:col-span-2"
             >
-              <div className="auth-card">
+              <Card animate={false}>
                 <div className="flex items-center space-x-3 mb-6">
                   <Building className="w-6 h-6 text-[#32A1E4]" />
                   <h2 className="text-xl font-bold auth-text">Organization Details</h2>
@@ -252,7 +224,7 @@ export const DashboardPage = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </Card>
             </motion.div>
           )}
         </div>
@@ -267,7 +239,7 @@ export const DashboardPage = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <div className="auth-card">
+                <Card animate={false}>
                   <div className="flex items-center space-x-3 mb-6">
                     <Settings className="w-6 h-6 text-[#7767DA]" />
                     <h2 className="text-xl font-bold auth-text">Business Settings</h2>
@@ -295,7 +267,7 @@ export const DashboardPage = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </Card>
               </motion.div>
             )}
 
@@ -306,7 +278,7 @@ export const DashboardPage = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                <div className="auth-card">
+                <Card animate={false}>
                   <div className="flex items-center space-x-3 mb-6">
                     <Package className="w-6 h-6 text-[#14BDEA]" />
                     <h2 className="text-xl font-bold auth-text">Products & Services</h2>
@@ -342,7 +314,7 @@ export const DashboardPage = () => {
                       <button className="btn-primary mt-4 px-4 py-2">Add Your First Product</button>
                     </div>
                   )}
-                </div>
+                </Card>
               </motion.div>
             )}
           </div>
@@ -356,7 +328,7 @@ export const DashboardPage = () => {
             transition={{ delay: 0.6 }}
             className="mt-8"
           >
-            <div className="auth-card">
+            <Card animate={false}>
               <div className="flex items-center space-x-3 mb-6">
                 <Users className="w-6 h-6 text-[#32A1E4]" />
                 <h2 className="text-xl font-bold auth-text">Team Invitations</h2>
@@ -387,7 +359,7 @@ export const DashboardPage = () => {
                   )
                 )}
               </div>
-            </div>
+            </Card>
           </motion.div>
         )}
       </div>

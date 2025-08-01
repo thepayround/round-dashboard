@@ -14,6 +14,13 @@ import { GetStartedPage } from '@/features/onboarding/pages/GetStartedPage'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { BillingPage } from '@/features/billing/pages/BillingPage'
 import { InvoicesPage } from '@/features/billing/pages/InvoicesPage'
+import { ProductCatalogPage } from '@/features/catalog/pages/ProductCatalogPage'
+import { PlansPage } from '@/features/catalog/pages/PlansPage'
+import { AddonsPage } from '@/features/catalog/pages/AddonsPage'
+import { ChargesPage } from '@/features/catalog/pages/ChargesPage'
+import { CouponsPage } from '@/features/catalog/pages/CouponsPage'
+import CustomersPage from '@/features/customers/pages/CustomersPage'
+import CustomerDetailPage from '@/features/customers/pages/CustomerDetailPage'
 import { HomePage } from '@/features/home/HomePage'
 
 const App = () => (
@@ -54,10 +61,66 @@ const App = () => (
           }
         />
         <Route
-          path="/billing/invoices"
+          path="/invoices"
           element={
             <ProtectedRoute>
               <InvoicesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/catalog"
+          element={
+            <ProtectedRoute>
+              <ProductCatalogPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/catalog/plans"
+          element={
+            <ProtectedRoute>
+              <PlansPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/catalog/addons"
+          element={
+            <ProtectedRoute>
+              <AddonsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/catalog/charges"
+          element={
+            <ProtectedRoute>
+              <ChargesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/catalog/coupons"
+          element={
+            <ProtectedRoute>
+              <CouponsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customers"
+          element={
+            <ProtectedRoute>
+              <CustomersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customers/:id"
+          element={
+            <ProtectedRoute>
+              <CustomerDetailPage />
             </ProtectedRoute>
           }
         />

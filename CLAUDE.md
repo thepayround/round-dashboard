@@ -125,10 +125,18 @@ round-dashboard/
 ├── src/
 │   ├── features/auth/ # Authentication module
 │   ├── features/billing/ # Billing pages
+│   ├── features/catalog/ # Product catalog with reusable components
 │   ├── features/dashboard/ # Dashboard pages
 │   ├── shared/components/ # UI components
 │   │   ├── Breadcrumb/ # Navigation breadcrumb system
-│   │   └── DashboardLayout/ # Main layout wrapper
+│   │   ├── Button/ # Enhanced button with variants and animations
+│   │   ├── DashboardLayout/ # Main layout wrapper
+│   │   ├── FormInput/ # Glassmorphism form input with validation
+│   │   ├── Modal/ # Reusable modal with glassmorphism design
+│   │   ├── Card/ # Universal card component for all card-like elements
+│   │   ├── NavigationCard/ # Card component for navigation items
+│   │   ├── SectionHeader/ # Consistent section headers with accents
+│   │   └── StatsCard/ # Statistics display cards with trends
 │   ├── shared/types/ # TypeScript types
 │   ├── shared/utils/ # Utility functions
 │   └── test/ # Test utilities
@@ -261,6 +269,11 @@ Avoid `useEffect` for things React can do declaratively.
 4. **Accessibility** - WCAG compliance, ARIA standards, keyboard navigation
 5. **Component-Driven** - Modular, reusable components with Tailwind CSS
 
+### Standard Component Patterns
+
+#### CreateButton for Add/Create/New Actions
+**MANDATORY**: Use `CreateButton` component for ALL add/create/new actions
+
 ### Architecture Patterns
 1. **Compound Components** - Card system (Header, Title, Content, Footer)
 2. **Polymorphic Components** - Button with extensive variant system
@@ -366,6 +379,17 @@ test('calls setState when input changes', () => {
 8. **UPDATE test documentation** when test patterns change
 
 This ensures AI context remains accurate, development stays consistent, and code quality is maintained.
+
+## Component Documentation
+
+### Card System (Updated Architecture)
+
+**CRITICAL**: Use the improved card system with composable parts and specialized variants. The card system is now performance-optimized and fully accessible.
+
+### SearchFilterToolbar Component
+
+**CRITICAL**: Always use the SearchFilterToolbar component for any page that needs search and filter functionality. Do not create custom toolbar implementations.
+Any modifications must maintain compatibility with all existing implementations.
 
 ---
 *Keep this file updated with every significant change to maintain accurate AI context.*
