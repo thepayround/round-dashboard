@@ -62,24 +62,7 @@ export const AddressStep = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`
-          w-full h-12 px-4 rounded-xl backdrop-blur-xl border transition-all duration-200 text-left flex items-center justify-between
-          bg-white/5 border-white/10 text-white
-          hover:bg-white/8 hover:border-white/15
-          focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-          autofill:bg-white/5 autofill:text-white
-          [&:-webkit-autofill]:bg-white/5 [&:-webkit-autofill]:text-white
-          [&:-webkit-autofill]:shadow-[0_0_0_1000px_rgba(255,255,255,0.05)_inset]
-          [&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)]
-          [&:-webkit-autofill:hover]:shadow-[0_0_0_1000px_rgba(255,255,255,0.08)_inset]
-          [&:-webkit-autofill:focus]:shadow-[0_0_0_1000px_rgba(255,255,255,0.10)_inset]
-          [&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,1)]
-          [&:-internal-autofill-selected]:bg-white/5
-          [&:-internal-autofill-selected]:text-white
-          [&:-internal-autofill-selected]:[-webkit-text-fill-color:rgba(255,255,255,0.95)]
-          [&:-internal-autofill-selected]:shadow-[0_0_0_1000px_rgba(255,255,255,0.05)_inset]
-          ${error ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-        `}
+        className={`auth-input flex items-center justify-between ${error ? 'auth-input-error' : ''}`}
       >
         <span className={value ? 'text-white' : 'text-gray-400'}>
           {value ? options.find(opt => opt.value === value)?.label : placeholder}
@@ -143,18 +126,6 @@ export const AddressStep = ({
               ? 'Review and complete your address details'
               : 'Add your business or billing address'}
           </p>
-          {isPrePopulated && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-[#42E695]/20 to-[#3BB2B8]/20 border border-[#42E695]/30"
-            >
-              <span className="text-[#42E695] text-sm font-medium">
-                ✓ Address loaded from your account
-              </span>
-            </motion.div>
-          )}
         </div>
       </div>
 
@@ -215,45 +186,15 @@ export const AddressStep = ({
                   </div>
                 </div>
               </div>
-              <div className="relative">
-                <Hash className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <div className="input-container">
+                <Hash className="input-icon-left auth-icon-primary" />
                 <input
                   id="unit-number"
                   type="text"
                   value={data.number}
                   onChange={handleInputChange('number')}
                   placeholder="123A"
-                  className={`
-                    w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                    bg-white/5 border-white/10 text-white placeholder-gray-400
-                    hover:bg-white/8 hover:border-white/15
-                    focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                    [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]
-                    [&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
-                    [&:-webkit-autofill]:[background-color:transparent!important]
-                    [&:-webkit-autofill]:[background-image:none!important]
-                    [&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s!important]
-                    [&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]
-                    [&:-webkit-autofill:hover]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
-                    [&:-webkit-autofill:hover]:[background-color:transparent!important]
-                    [&:-webkit-autofill:hover]:[background-image:none!important]
-                    [&:-webkit-autofill:hover]:[transition:background-color_5000s_ease-in-out_0s!important]
-                    [&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.18)_inset!important]
-                    [&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,1)!important]
-                    [&:-webkit-autofill:focus]:[background-color:transparent!important]
-                    [&:-webkit-autofill:focus]:[transition:background-color_5000s_ease-in-out_0s!important]
-                    [&:-webkit-autofill:active]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]
-                    [&:-webkit-autofill:active]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
-                    [&:-webkit-autofill:active]:[background-color:transparent!important]
-                    [&:-webkit-autofill:active]:[background-image:none!important]
-                    [&:-webkit-autofill:active]:[transition:background-color_5000s_ease-in-out_0s!important]
-                    [&:-internal-autofill-selected]:[background-color:rgba(255,255,255,0.12)!important]
-                    [&:-internal-autofill-selected]:[background-image:none!important]
-                    [&:-internal-autofill-selected]:[color:rgba(255,255,255,0.95)!important]
-                    [&:-internal-autofill-selected]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
-                    [&:-internal-autofill-selected]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]
-                    ${errors.number ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-                  `}
+                  className={`auth-input input-with-icon-left ${errors.number ? 'auth-input-error' : ''}`}
                 />
               </div>
               {errors.number && <p className="mt-1 text-sm text-red-400">{errors.number}</p>}

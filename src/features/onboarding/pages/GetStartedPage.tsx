@@ -6,6 +6,8 @@ import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { TabNavigation } from '../components/TabNavigation'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
+import { useFormChangeDetection } from '@/shared/hooks/useFormChangeDetection'
+import { useDebouncedUpdate } from '@/shared/hooks/useDebouncedUpdate'
 import { organizationService } from '@/shared/services/api/organization.service'
 import { authService } from '@/shared/services/api/auth.service'
 import { addressService } from '@/shared/services/api/address.service'
@@ -57,7 +59,7 @@ interface ErrorToast {
 }
 
 // Constants
-const allSteps: OnboardingStep[] = ['organization', 'businessSettings', 'address', 'products', 'billing', 'team']
+const allSteps: OnboardingStep[] = ['organization', 'businessSettings', 'address', 'team', 'products', 'billing']
 
 const defaultOnboardingData: OnboardingData = {
   userInfo: {
@@ -128,6 +130,10 @@ export const GetStartedPage = () => {
   })
   const [onboardingData, setOnboardingData] = useState<OnboardingData>(defaultOnboardingData)
   
+  // Form change detection hooks
+  const organizationChangeDetection = useFormChangeDetection<OrganizationRequest>()
+  const addressChangeDetection = useFormChangeDetection<CreateAddressData>()
+  
   // Refs
   const loadingRef = useRef(false)
 
@@ -137,7 +143,7 @@ export const GetStartedPage = () => {
     setErrorToast({
       show: true,
       isVisible: true,
-      message: parsedError.message || 'An error occurred',
+      message: parsedError.message ?? 'An error occurred',
       details: parsedError.details
     })
   }, [])
@@ -205,6 +211,40 @@ export const GetStartedPage = () => {
   const isFirstStep = useCallback(() => getCurrentStepIndex() === 0, [getCurrentStepIndex])
   const isLastStep = useCallback(() => getCurrentStepIndex() === availableSteps.length - 1, [getCurrentStepIndex, availableSteps])
 
+  // Debounced save functions (declared first)
+  const saveOrganizationData = useCallback(async (orgData: OrganizationRequest) => {
+    try {
+      setIsCompleting(true)
+      let result = null
+      
+      if (cachedOrgData) {
+        // Update existing organization
+        result = await organizationService.update(cachedOrgData.organizationId, orgData)
+      } else {
+        // Create new organization
+        result = await organizationService.create(orgData)
+        // Cache the created organization for future updates
+        if (result?.success && result.data) {
+          setCachedOrgData(result.data)
+          organizationChangeDetection.resetTracking(orgData)
+        }
+      }
+
+      if (!result?.success) {
+        throw new Error('Failed to save organization')
+      }
+    } catch (error) {
+      showErrorToast(error)
+    } finally {
+      setIsCompleting(false)
+    }
+  }, [cachedOrgData, organizationChangeDetection, showErrorToast])
+
+  const { debouncedFn: _debouncedSaveOrganization, flush: flushOrganizationSave } = useDebouncedUpdate(
+    saveOrganizationData,
+    2000 // 2 second delay
+  )
+
   // Data update functions
   const updateUserInfo = useCallback((userInfo: UserInfo) => {
     setOnboardingData(prev => ({ ...prev, userInfo }))
@@ -247,10 +287,10 @@ export const GetStartedPage = () => {
         if (userResponse.success && userResponse.data) {
           const currentUser = userResponse.data
           updateUserInfo({
-            firstName: currentUser.firstName || '',
-            lastName: currentUser.lastName || '',
-            email: currentUser.email || '',
-            phone: currentUser.phone || '',
+            firstName: currentUser.firstName ?? '',
+            lastName: currentUser.lastName ?? '',
+            email: currentUser.email ?? '',
+            phone: currentUser.phone ?? '',
           })
 
           if (currentUser.firstName && currentUser.lastName && currentUser.email && currentUser.phone) {
@@ -282,8 +322,12 @@ export const GetStartedPage = () => {
             
             updateOrganization(orgData)
             
+            // Determine which steps are completed based on loaded data
+            const completedStepsFromData: OnboardingStep[] = []
+            
+            // Check organization completion
             if (org.name && org.category && org.size && org.country) {
-              setCompletedSteps(prev => [...prev, 'organization'])
+              completedStepsFromData.push('organization')
             }
 
             // Update address from organization
@@ -301,17 +345,30 @@ export const GetStartedPage = () => {
                 addressType: 'billing',
                 isPrimary: true
               })
-              setCompletedSteps(prev => [...prev, 'address'])
+              
+              // Check address completion
+              if (org.address.name && org.address.addressLine1 && org.address.city && org.address.country) {
+                completedStepsFromData.push('address')
+              }
             }
 
             // Update business settings
-            if (org.currency) {
+            if (org.currency ?? org.timeZone ?? org.fiscalYearStart) {
               updateBusinessSettings({
                 currency: org.currency ?? 'USD',
                 timezone: org.timeZone ?? 'UTC',
                 fiscalYearStart: org.fiscalYearStart ?? 'January',
               })
-              setCompletedSteps(prev => [...prev, 'businessSettings'])
+              
+              // Check business settings completion
+              if (org.currency && org.timeZone && org.fiscalYearStart) {
+                completedStepsFromData.push('businessSettings')
+              }
+            }
+            
+            // Set all completed steps at once to avoid race conditions
+            if (completedStepsFromData.length > 0) {
+              setCompletedSteps(completedStepsFromData)
             }
           }
         } catch (orgError) {
@@ -327,7 +384,6 @@ export const GetStartedPage = () => {
       }
 
     } catch (error) {
-      console.error('CRITICAL ERROR in loadOnboardingData:', error)
       setApiError('Failed to load onboarding data')
     } finally {
       loadingRef.current = false
@@ -350,14 +406,6 @@ export const GetStartedPage = () => {
         showErrorToast(new Error('Please fill in all required fields'))
         return
       }
-
-      // Mark current step as completed
-      setCompletedSteps(prev => {
-        if (!prev.includes(currentStep)) {
-          return [...prev, currentStep]
-        }
-        return prev
-      })
 
       // Save data based on current step
       if (isStepValid(currentStep)) {
@@ -384,21 +432,10 @@ export const GetStartedPage = () => {
               fiscalYearStart: onboardingData.businessSettings.fiscalYearStart ?? 'January'
             }
 
-            let result = null
-            if (cachedOrgData) {
-              // Update existing organization
-              result = await organizationService.update(cachedOrgData.organizationId, baseOrgData)
-            } else {
-              // Create new organization
-              result = await organizationService.create(baseOrgData)
-              // Cache the created organization for future updates
-              if (result?.success && result.data) {
-                setCachedOrgData(result.data)
-              }
-            }
-
-            if (!result?.success) {
-              throw new Error('Failed to save organization')
+            // Only save if data has actually changed
+            if (organizationChangeDetection.hasChanged(baseOrgData)) {
+              // Flush any pending debounced saves and save immediately when navigating
+              await flushOrganizationSave(baseOrgData)
             }
           }
 
@@ -409,66 +446,93 @@ export const GetStartedPage = () => {
               throw new Error('Address information is incomplete')
             }
 
-            let addressResult = null
-            if (cachedOrgData?.address?.addressId) {
-              // Update existing address
-              const updateData: UpdateAddressData = {
-                name: addressData.name,
-                addressLine1: addressData.addressLine1,
-                addressLine2: addressData.addressLine2,
-                number: addressData.number,
-                city: addressData.city,
-                state: addressData.state,
-                zipCode: addressData.zipCode,
-                country: addressData.country,
-                addressType: addressData.addressType,
-                isPrimary: addressData.isPrimary
-              }
-              addressResult = await addressService.update(cachedOrgData.address.addressId, updateData)
-            } else {
-              // Create new address
-              const createData: CreateAddressData = {
-                name: addressData.name,
-                addressLine1: addressData.addressLine1,
-                addressLine2: addressData.addressLine2,
-                number: addressData.number,
-                city: addressData.city,
-                state: addressData.state || '',
-                zipCode: addressData.zipCode,
-                country: addressData.country,
-                addressType: addressData.addressType,
-                isPrimary: addressData.isPrimary
-              }
-              addressResult = await addressService.create(createData)
+            // Prepare address data for change detection (using a normalized format)
+            const addressApiData = {
+              name: addressData.name,
+              addressLine1: addressData.addressLine1,
+              addressLine2: addressData.addressLine2,
+              number: addressData.number,
+              city: addressData.city,
+              state: addressData.state ?? '',
+              zipCode: addressData.zipCode,
+              country: addressData.country,
+              addressType: addressData.addressType,
+              isPrimary: addressData.isPrimary
             }
 
-            if (!addressResult?.success) {
-              throw new Error('Failed to save address')
-            }
-
-            // If we have an organization and created a new address, link them
-            if (addressResult.success && addressResult.data && cachedOrgData && !cachedOrgData.addressId) {
-              try {
-                // Update organization with the new address ID
-                const orgUpdateData = {
-                  ...cachedOrgData,
-                  addressId: addressResult.data.addressId
+            // Only save if address data has actually changed
+            if (addressChangeDetection.hasChanged(addressApiData)) {
+              let addressResult = null
+              
+              if (cachedOrgData?.address?.addressId) {
+                // Update existing address
+                const updateData: UpdateAddressData = {
+                  name: addressApiData.name,
+                  addressLine1: addressApiData.addressLine1,
+                  addressLine2: addressApiData.addressLine2,
+                  number: addressApiData.number,
+                  city: addressApiData.city,
+                  state: addressApiData.state,
+                  zipCode: addressApiData.zipCode,
+                  country: addressApiData.country,
+                  addressType: addressApiData.addressType,
+                  isPrimary: addressApiData.isPrimary
                 }
-                await organizationService.update(cachedOrgData.organizationId, orgUpdateData)
-              } catch (linkError) {
-                console.warn('Failed to link address to organization:', linkError)
-                // Don't fail the whole process for this
+                addressResult = await addressService.update(cachedOrgData.address.addressId, updateData)
+              } else {
+                // Create new address
+                const createData: CreateAddressData = {
+                  name: addressApiData.name,
+                  addressLine1: addressApiData.addressLine1,
+                  addressLine2: addressApiData.addressLine2,
+                  number: addressApiData.number,
+                  city: addressApiData.city,
+                  state: addressApiData.state,
+                  zipCode: addressApiData.zipCode,
+                  country: addressApiData.country,
+                  addressType: addressApiData.addressType,
+                  isPrimary: addressApiData.isPrimary
+                }
+                addressResult = await addressService.create(createData)
+              }
+
+              if (!addressResult?.success) {
+                throw new Error('Failed to save address')
+              }
+
+              // If we have an organization and created a new address, link them
+              if (addressResult.success && addressResult.data && cachedOrgData && !cachedOrgData.addressId) {
+                try {
+                  // Update organization with the new address ID
+                  const orgUpdateData = {
+                    ...cachedOrgData,
+                    addressId: addressResult.data.addressId
+                  }
+                  await organizationService.update(cachedOrgData.organizationId, orgUpdateData)
+                } catch (linkError) {
+                  // Don't fail the whole process for this - address linking failed
+                }
               }
             }
           }
 
         } catch (error) {
           showErrorToast(error instanceof Error ? error.message : 'Failed to save data')
-          console.error('Save data error:', error)
           return
         } finally {
           setIsCompleting(false)
         }
+      }
+
+      // Mark current step as completed BEFORE moving to next step
+      // Only mark as completed if the step is actually valid
+      if (isStepValid(currentStep)) {
+        setCompletedSteps(prev => {
+          if (!prev.includes(currentStep)) {
+            return [...prev, currentStep]
+          }
+          return prev
+        })
       }
 
       // Move to next step
@@ -481,7 +545,6 @@ export const GetStartedPage = () => {
         navigate('/dashboard')
       }
     } catch (error) {
-      console.error('Navigation error:', error)
       showErrorToast(error instanceof Error ? error.message : 'Navigation error occurred') 
     }
   }, [
@@ -493,7 +556,10 @@ export const GetStartedPage = () => {
     availableSteps,
     showErrorToast,
     navigate,
-    cachedOrgData
+    cachedOrgData,
+    addressChangeDetection,
+    flushOrganizationSave,
+    organizationChangeDetection
   ])
 
   const handleBack = useCallback(() => {
@@ -521,6 +587,11 @@ export const GetStartedPage = () => {
     if (isLastStep()) return 'Complete Setup'
     return 'Next'
   }
+
+  // Debug: Log current state
+  React.useEffect(() => {
+    // Development logging removed
+  }, [currentStep, completedSteps, isStepValid])
 
   const getButtonIcon = () => {
     if (isCompleting) {

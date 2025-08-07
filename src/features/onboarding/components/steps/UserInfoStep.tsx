@@ -68,46 +68,36 @@ export const UserInfoStep = ({
         {/* Name Fields Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="firstName" className="auth-label">
               First Name
             </label>
-            <div className="relative">
-              <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <div className="input-container">
+              <User className="input-icon-left auth-icon-primary" />
               <input
                 id="firstName"
                 type="text"
                 value={data.firstName}
                 onChange={handleInputChange('firstName')}
                 placeholder="John"
-                className={`
-                  w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                  bg-white/5 border-white/10 text-white placeholder-gray-400
-                  focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                  ${errors.firstName ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-                `}
+                className={`auth-input input-with-icon-left ${errors.firstName ? 'auth-input-error' : ''}`}
               />
             </div>
             {errors.firstName && <p className="mt-1 text-sm text-red-400">{errors.firstName}</p>}
           </div>
 
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="lastName" className="auth-label">
               Last Name
             </label>
-            <div className="relative">
-              <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <div className="input-container">
+              <User className="input-icon-left auth-icon-primary" />
               <input
                 id="lastName"
                 type="text"
                 value={data.lastName}
                 onChange={handleInputChange('lastName')}
                 placeholder="Doe"
-                className={`
-                  w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                  bg-white/5 border-white/10 text-white placeholder-gray-400
-                  focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                  ${errors.lastName ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-                `}
+                className={`auth-input input-with-icon-left ${errors.lastName ? 'auth-input-error' : ''}`}
               />
             </div>
             {errors.lastName && <p className="mt-1 text-sm text-red-400">{errors.lastName}</p>}
@@ -116,23 +106,18 @@ export const UserInfoStep = ({
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="email" className="auth-label">
             Email Address
           </label>
-          <div className="relative">
-            <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <Mail className="input-icon-left auth-icon-primary" />
             <input
               id="email"
               type="email"
               value={data.email}
               onChange={handleInputChange('email')}
               placeholder="john@example.com"
-              className={`
-                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.email ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
@@ -140,23 +125,18 @@ export const UserInfoStep = ({
 
         {/* Phone */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="phone" className="auth-label">
             Phone Number
           </label>
-          <div className="relative">
-            <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <Phone className="input-icon-left auth-icon-primary" />
             <input
               id="phone"
               type="tel"
               value={data.phone}
               onChange={handleInputChange('phone')}
               placeholder="+1 (555) 123-4567"
-              className={`
-                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.phone ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input input-with-icon-left ${errors.phone ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.phone && <p className="mt-1 text-sm text-red-400">{errors.phone}</p>}

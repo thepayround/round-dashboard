@@ -431,9 +431,18 @@ export class AuthService {
 
       // Step 2: Create user object (organization data will be fetched separately by components that need it)
       // This avoids duplicate API calls since GetStartedPage will handle organization fetching
+      
+      // Extract roundAccountId from RoundAccountUsers collection (first account)
+      // Backend sends PascalCase JSON, so we need to check both cases
+      const roundAccountUsers = userData.roundAccountUsers || userData.RoundAccountUsers
+      const roundAccountId = roundAccountUsers?.length > 0 
+        ? roundAccountUsers[0].roundAccountId || roundAccountUsers[0].RoundAccountId
+        : userData.roundAccountId || userData.RoundAccountId
+
       const user: User = {
         ...baseUser,
         accountType: userData.accountType || 'personal',
+        roundAccountId,
       }
 
       // Cache the user data

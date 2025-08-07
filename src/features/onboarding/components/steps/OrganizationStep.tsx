@@ -79,13 +79,7 @@ export const OrganizationStep = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`
-          w-full h-12 px-4 rounded-xl backdrop-blur-xl border transition-all duration-200 text-left flex items-center justify-between
-          bg-white/5 border-white/10 text-white
-          hover:bg-white/10 hover:border-white/20
-          focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-          ${error ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-        `}
+        className={`auth-input flex items-center justify-between ${error ? 'auth-input-error' : ''}`}
       >
         <span className={value ? 'text-white' : 'text-gray-400'}>
           {value ? options.find(opt => opt.value === value)?.label : placeholder}
@@ -152,23 +146,18 @@ export const OrganizationStep = ({
       <div className="max-w-lg mx-auto space-y-6">
         {/* Company Name */}
         <div>
-          <label htmlFor="companyName" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="companyName" className="auth-label">
             Company Name
           </label>
-          <div className="relative">
-            <Building className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <Building className="input-icon-left auth-icon-primary" />
             <input
               id="companyName"
               type="text"
               value={data.companyName}
               onChange={handleInputChange('companyName')}
               placeholder="Acme Corporation"
-              className={`
-                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.companyName ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
@@ -222,23 +211,18 @@ export const OrganizationStep = ({
 
         {/* Website */}
         <div>
-          <label htmlFor="website" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="website" className="auth-label">
             Website <span className="text-gray-500">(optional)</span>
           </label>
-          <div className="relative">
-            <ExternalLink className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <ExternalLink className="input-icon-left auth-icon-primary" />
             <input
               id="website"
               type="url"
               value={data.website}
               onChange={handleInputChange('website')}
               placeholder="https://www.example.com"
-              className={`
-                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.website ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
@@ -246,23 +230,18 @@ export const OrganizationStep = ({
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="description" className="auth-label">
             Description <span className="text-gray-500">(optional)</span>
           </label>
-          <div className="relative">
-            <AlignLeft className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <AlignLeft className="input-icon-left auth-icon-primary" style={{top: '1rem'}} />
             <textarea
               id="description"
               value={data.description ?? ''}
               onChange={e => onChange({ ...data, description: e.target.value })}
               placeholder="Brief description of your company..."
               rows={3}
-              className={`
-                w-full pl-12 pr-4 py-3 rounded-xl backdrop-blur-xl border transition-all duration-200 resize-none
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.description ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input textarea input-with-icon-left resize-none ${errors.description ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
@@ -270,23 +249,18 @@ export const OrganizationStep = ({
 
         {/* Revenue */}
         <div>
-          <label htmlFor="revenue" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="revenue" className="auth-label">
             Annual Revenue <span className="text-gray-500">(optional)</span>
           </label>
-          <div className="relative">
-            <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <DollarSign className="input-icon-left auth-icon-primary" />
             <input
               id="revenue"
               type="number"
               value={data.revenue ?? ''}
               onChange={handleInputChange('revenue')}
               placeholder="1000000"
-              className={`
-                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.revenue ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input input-with-icon-left ${errors.revenue ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}

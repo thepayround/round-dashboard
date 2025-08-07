@@ -15,6 +15,7 @@ export interface BaseUser {
   updatedAt: string
   onboardingCompleted?: boolean
   onboardingData?: Partial<OnboardingData>
+  roundAccountId?: string
 }
 
 export interface PersonalUser extends BaseUser {

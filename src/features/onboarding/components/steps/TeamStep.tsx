@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion'
-import { Users, UserPlus, Mail, Trash2, CheckCircle } from 'lucide-react'
+import { Users, UserPlus, Mail, Trash2, CheckCircle, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import type { TeamSettings } from '../../types/onboarding'
-import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { useTeamInvitation, useTeamRoles } from '@/shared/hooks/api/useTeam'
+import { UserRole } from '@/shared/services/api/team.service'
+import { useAuth } from '@/shared/hooks/useAuth'
+import { ErrorToast } from '@/shared/components/ErrorToast'
 
 interface TeamStepProps {
   data: TeamSettings
@@ -11,24 +14,65 @@ interface TeamStepProps {
 
 export const TeamStep = ({ data, onChange }: TeamStepProps) => {
   const [inviteEmail, setInviteEmail] = useState('')
-  const [inviteRole, setInviteRole] = useState('member')
+  const [inviteRole, setInviteRole] = useState(UserRole.TeamMember)
+  const [roleDropdownOpen, setRoleDropdownOpen] = useState(false)
+  const [errorToast, setErrorToast] = useState<{ isVisible: boolean; message: string; details?: Record<string, string> }>({ isVisible: false, message: '', details: undefined })
+  const [successMessage, setSuccessMessage] = useState('')
+  const { state } = useAuth()
+  const { inviteUser, isLoading } = useTeamInvitation()
+  const { getCommonRoles, getRoleName } = useTeamRoles()
 
-  const handleInviteTeamMember = () => {
-    if (inviteEmail.trim()) {
-      const newInvitation = {
-        id: Date.now().toString(),
+  const showErrorToast = (message: string, details?: Record<string, string>) => {
+    setErrorToast({ isVisible: true, message, details })
+  }
+
+  const hideErrorToast = () => {
+    setErrorToast({ isVisible: false, message: '' })
+  }
+
+  const handleInviteTeamMember = async () => {
+    if (!inviteEmail.trim()) {
+      showErrorToast('Please enter an email address.')
+      return
+    }
+    
+    if (!state.user?.roundAccountId) {
+      showErrorToast('User authentication error. Please refresh and try again.')
+      return
+    }
+
+    try {
+      const result = await inviteUser({
+        roundAccountId: state.user.roundAccountId,
         email: inviteEmail.trim(),
-        role: inviteRole,
-        status: 'pending' as const,
-      }
-
-      onChange({
-        ...data,
-        invitations: [...data.invitations, newInvitation],
+        role: inviteRole
       })
 
-      setInviteEmail('')
-      setInviteRole('member')
+      if (result.success) {
+        setSuccessMessage('Invitation sent successfully!')
+        setTimeout(() => setSuccessMessage(''), 5000)
+        
+        // Add to local state for UI display
+        const newInvitation = {
+          id: Date.now().toString(),
+          email: inviteEmail.trim(),
+          role: getRoleName(inviteRole),
+          status: 'pending' as const,
+        }
+
+        onChange({
+          ...data,
+          invitations: [...data.invitations, newInvitation],
+        })
+
+        // Reset form
+        setInviteEmail('')
+        setInviteRole(UserRole.TeamMember)
+      } else {
+        showErrorToast(result.error ?? 'Failed to send invitation')
+      }
+    } catch (error) {
+      showErrorToast('An unexpected error occurred while sending the invitation.')
     }
   }
 
@@ -40,17 +84,83 @@ export const TeamStep = ({ data, onChange }: TeamStepProps) => {
   }
 
   const getRoleBadgeColor = (role: string) => {
-    switch (role) {
-      case 'admin':
-        return 'bg-[#D417C8]/20 text-[#D417C8] border-[#D417C8]/30'
-      case 'manager':
-        return 'bg-[#7767DA]/20 text-[#7767DA] border-[#7767DA]/30'
-      case 'member':
-        return 'bg-[#14BDEA]/20 text-[#14BDEA] border-[#14BDEA]/30'
-      default:
-        return 'bg-gray-400/20 text-gray-400 border-gray-400/30'
+    const roleLower = role.toLowerCase()
+    
+    if (roleLower.includes('admin')) {
+      return 'bg-[#D417C8]/20 text-[#D417C8] border-[#D417C8]/30'
     }
+    if (roleLower.includes('manager') || roleLower.includes('owner')) {
+      return 'bg-[#7767DA]/20 text-[#7767DA] border-[#7767DA]/30'
+    }
+    if (roleLower.includes('member') || roleLower.includes('developer') || roleLower.includes('designer')) {
+      return 'bg-[#14BDEA]/20 text-[#14BDEA] border-[#14BDEA]/30'
+    }
+    if (roleLower.includes('viewer') || roleLower.includes('guest')) {
+      return 'bg-gray-400/20 text-gray-400 border-gray-400/30'
+    }
+    
+    return 'bg-[#32A1E4]/20 text-[#32A1E4] border-[#32A1E4]/30'
   }
+
+  const Dropdown = ({
+    value,
+    options,
+    placeholder,
+    onSelect,
+    isOpen,
+    setIsOpen,
+    error,
+  }: {
+    value: number
+    options: Array<{ value: number; label: string }>
+    placeholder: string
+    onSelect: (value: number) => void
+    isOpen: boolean
+    setIsOpen: (open: boolean) => void
+    error?: string
+  }) => (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`auth-input flex items-center justify-between ${error ? 'auth-input-error' : ''}`}
+      >
+        <span className={value ? 'text-white' : 'text-gray-400'}>
+          {value ? options.find(opt => opt.value === value)?.label : placeholder}
+        </span>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+          className="w-5 h-5 text-gray-400"
+        >
+          ▼
+        </motion.div>
+      </button>
+
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="absolute top-full left-0 right-0 mt-2 bg-gray-800/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-dropdown max-h-60 overflow-y-auto"
+        >
+          {options.map(option => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => {
+                onSelect(option.value)
+                setIsOpen(false)
+              }}
+              className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors duration-200 first:rounded-t-xl last:rounded-b-xl"
+            >
+              {option.label}
+            </button>
+          ))}
+        </motion.div>
+      )}
+    </div>
+  )
 
   return (
     <motion.div
@@ -89,21 +199,18 @@ export const TeamStep = ({ data, onChange }: TeamStepProps) => {
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2">
-                  <label
-                    htmlFor="inviteEmail"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
+                  <label htmlFor="inviteEmail" className="auth-label">
                     Email Address
                   </label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <div className="input-container">
+                    <Mail className="input-icon-left auth-icon-primary" />
                     <input
                       id="inviteEmail"
                       type="email"
                       value={inviteEmail}
                       onChange={e => setInviteEmail(e.target.value)}
                       placeholder="colleague@example.com"
-                      className="w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200 bg-white/5 border-white/10 text-white placeholder-gray-400 focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30"
+                      className="auth-input input-with-icon-left"
                     />
                   </div>
                 </div>
@@ -111,27 +218,35 @@ export const TeamStep = ({ data, onChange }: TeamStepProps) => {
                 <div>
                   <label
                     htmlFor="inviteRole"
-                    className="block text-sm font-medium text-gray-300 mb-2"
+                    className="auth-label"
                   >
                     Role
                   </label>
-                  <ApiDropdown
-                    config={teamRoleDropdownConfig}
+                  <Dropdown
                     value={inviteRole}
-                    onSelect={setInviteRole}
-                    allowClear={false}
+                    options={getCommonRoles()}
+                    placeholder="Select role"
+                    onSelect={(value) => setInviteRole(value)}
+                    isOpen={roleDropdownOpen}
+                    setIsOpen={setRoleDropdownOpen}
                   />
                 </div>
               </div>
 
               <button
+                type="button"
                 onClick={handleInviteTeamMember}
-                disabled={!inviteEmail.trim()}
+                disabled={!inviteEmail.trim() || isLoading}
                 className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
               >
-                <UserPlus className="w-5 h-5" />
-                <span>Send Invitation</span>
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <UserPlus className="w-5 h-5" />
+                )}
+                <span>{isLoading ? 'Sending...' : 'Send Invitation'}</span>
               </button>
+
             </div>
           </div>
         </div>
@@ -182,22 +297,6 @@ export const TeamStep = ({ data, onChange }: TeamStepProps) => {
           </motion.div>
         )}
 
-        {/* Success Message */}
-        {data.invitations.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="p-4 rounded-xl bg-gradient-to-r from-[#42E695]/10 to-[#3BB2B8]/10 border border-[#42E695]/20"
-          >
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="w-5 h-5 text-[#42E695]" />
-              <p className="text-[#42E695] text-sm font-medium">
-                {data.invitations.length} team member{data.invitations.length !== 1 ? 's' : ''}{' '}
-                invited successfully
-              </p>
-            </div>
-          </motion.div>
-        )}
 
         {/* Skip Option */}
         <div className="text-center">
@@ -206,6 +305,24 @@ export const TeamStep = ({ data, onChange }: TeamStepProps) => {
           </p>
         </div>
       </div>
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-500/90 backdrop-blur-xl text-white p-4 rounded-xl shadow-lg z-50 border border-green-500/20">
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="w-5 h-5" />
+            <span>{successMessage}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Error Toast */}
+      <ErrorToast
+        isVisible={errorToast.isVisible}
+        message={errorToast.message}
+        details={errorToast.details}
+        onClose={hideErrorToast}
+      />
     </motion.div>
   )
 }
