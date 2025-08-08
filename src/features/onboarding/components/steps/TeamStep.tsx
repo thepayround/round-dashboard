@@ -1,56 +1,72 @@
 import { motion } from 'framer-motion'
-import { Users, UserPlus, Mail, Trash2, CheckCircle, Loader2 } from 'lucide-react'
+import { Users, UserPlus, Mail, Trash2, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import type { TeamSettings } from '../../types/onboarding'
 import { useTeamInvitation, useTeamRoles } from '@/shared/hooks/api/useTeam'
 import { UserRole } from '@/shared/services/api/team.service'
 import { useAuth } from '@/shared/hooks/useAuth'
-import { ErrorToast } from '@/shared/components/ErrorToast'
 
 interface TeamStepProps {
   data: TeamSettings
   onChange: (data: TeamSettings) => void
+  showSuccess: (message: string) => void
+  showError: (message: string) => void
 }
 
-export const TeamStep = ({ data, onChange }: TeamStepProps) => {
+export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepProps) => {
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRole, setInviteRole] = useState(UserRole.TeamMember)
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false)
-  const [errorToast, setErrorToast] = useState<{ isVisible: boolean; message: string; details?: Record<string, string> }>({ isVisible: false, message: '', details: undefined })
-  const [successMessage, setSuccessMessage] = useState('')
   const { state } = useAuth()
   const { inviteUser, isLoading } = useTeamInvitation()
   const { getCommonRoles, getRoleName } = useTeamRoles()
 
-  const showErrorToast = (message: string, details?: Record<string, string>) => {
-    setErrorToast({ isVisible: true, message, details })
-  }
-
-  const hideErrorToast = () => {
-    setErrorToast({ isVisible: false, message: '' })
-  }
 
   const handleInviteTeamMember = async () => {
     if (!inviteEmail.trim()) {
-      showErrorToast('Please enter an email address.')
+      showError('Please enter an email address.')
       return
     }
     
+    console.log('Current user state:', state.user)
+    
     if (!state.user?.roundAccountId) {
-      showErrorToast('User authentication error. Please refresh and try again.')
+      showError('User authentication error. Please refresh and try again.')
+      return
+    }
+
+    // Check if user is trying to invite themselves
+    if (state.user.email && inviteEmail.trim().toLowerCase() === state.user.email.toLowerCase()) {
+      showError('You cannot invite yourself to the organization.')
+      return
+    }
+
+    // Check if email is already in pending invitations
+    const existingInvitation = data.invitations.find(
+      inv => inv.email.toLowerCase() === inviteEmail.trim().toLowerCase()
+    )
+    if (existingInvitation) {
+      showError('This email address has already been invited.')
       return
     }
 
     try {
+      console.log('About to call inviteUser with:', {
+        roundAccountId: state.user.roundAccountId,
+        email: inviteEmail.trim(),
+        role: inviteRole
+      })
+      
       const result = await inviteUser({
         roundAccountId: state.user.roundAccountId,
         email: inviteEmail.trim(),
         role: inviteRole
       })
+      
+      console.log('inviteUser result:', result)
 
       if (result.success) {
-        setSuccessMessage('Invitation sent successfully!')
-        setTimeout(() => setSuccessMessage(''), 5000)
+        showSuccess('Invitation sent successfully!')
         
         // Add to local state for UI display
         const newInvitation = {
@@ -69,10 +85,11 @@ export const TeamStep = ({ data, onChange }: TeamStepProps) => {
         setInviteEmail('')
         setInviteRole(UserRole.TeamMember)
       } else {
-        showErrorToast(result.error ?? 'Failed to send invitation')
+        // Backend validation errors will be handled by the API response
+        showError(result.error ?? 'Failed to send invitation')
       }
     } catch (error) {
-      showErrorToast('An unexpected error occurred while sending the invitation.')
+      showError('An unexpected error occurred while sending the invitation.')
     }
   }
 
@@ -306,23 +323,6 @@ export const TeamStep = ({ data, onChange }: TeamStepProps) => {
         </div>
       </div>
 
-      {/* Success Message */}
-      {successMessage && (
-        <div className="fixed top-4 right-4 bg-green-500/90 backdrop-blur-xl text-white p-4 rounded-xl shadow-lg z-50 border border-green-500/20">
-          <div className="flex items-center space-x-2">
-            <CheckCircle className="w-5 h-5" />
-            <span>{successMessage}</span>
-          </div>
-        </div>
-      )}
-
-      {/* Error Toast */}
-      <ErrorToast
-        isVisible={errorToast.isVisible}
-        message={errorToast.message}
-        details={errorToast.details}
-        onClose={hideErrorToast}
-      />
     </motion.div>
   )
 }

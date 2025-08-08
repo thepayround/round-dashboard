@@ -50,6 +50,8 @@ import { AddressStep } from '../components/steps/AddressStep'
 import { ProductsStep } from '../components/steps/ProductsStep'
 import { BillingStep } from '../components/steps/BillingStep'
 import { TeamStep } from '../components/steps/TeamStep'
+import { Toast } from '@/shared/components/Toast'
+import { useToast } from '@/shared/hooks/useToast'
 
 interface ErrorToast {
   show: boolean
@@ -114,6 +116,7 @@ export const GetStartedPage = () => {
   const { state, setUser: _setUser } = useAuth()
   const { token: _token, user } = state
   const { getCurrentOrganization } = useOrganization()
+  const { toast, showSuccess, showError, hideToast } = useToast()
 
   // State
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('organization')
@@ -647,7 +650,14 @@ export const GetStartedPage = () => {
       case 'billing':
         return <BillingStep data={onboardingData.billing} onChange={updateBilling} />
       case 'team':
-        return <TeamStep data={onboardingData.team} onChange={updateTeam} />
+        return (
+          <TeamStep
+            data={onboardingData.team}
+            onChange={updateTeam}
+            showSuccess={showSuccess}
+            showError={showError}
+          />
+        )
       default:
         return null
     }
@@ -752,7 +762,16 @@ export const GetStartedPage = () => {
         </div>
       </div>
       
-      {/* Error Toast - You'll need to create this component or remove if not available */}
+      {/* Toast Notifications - Positioned at page level */}
+      <Toast
+        isVisible={toast.isVisible}
+        type={toast.type}
+        message={toast.message}
+        details={toast.details}
+        onClose={hideToast}
+      />
+      
+      {/* Error Toast for page-level errors */}
       {errorToast.isVisible && (
         <div className="fixed top-4 right-4 bg-red-500/90 text-white p-4 rounded-xl shadow-lg z-50">
           <div className="flex items-center space-x-2">
