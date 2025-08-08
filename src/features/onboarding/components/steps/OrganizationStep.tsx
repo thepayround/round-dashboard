@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
-import { Building, ChevronDown, DollarSign, ExternalLink, AlignLeft } from 'lucide-react'
-import { useState } from 'react'
-import { ApiDropdown, countryDropdownConfig, industryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { Building, DollarSign, ExternalLink, AlignLeft } from 'lucide-react'
+import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { OrganizationInfo } from '../../types/onboarding'
 
 interface OrganizationStepProps {
@@ -12,14 +11,6 @@ interface OrganizationStepProps {
 }
 
 
-const companySizeOptions = [
-  { value: '1-10', label: '1-10 employees' },
-  { value: '11-50', label: '11-50 employees' },
-  { value: '51-200', label: '51-200 employees' },
-  { value: '201-500', label: '201-500 employees' },
-  { value: '501-1000', label: '501-1000 employees' },
-  { value: '1000+', label: '1000+ employees' },
-]
 
 
 
@@ -29,7 +20,6 @@ export const OrganizationStep = ({
   errors = {},
   isPrePopulated = false,
 }: OrganizationStepProps) => {
-  const [companySizeOpen, setCompanySizeOpen] = useState(false)
 
   const handleInputChange =
     (field: keyof OrganizationInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,61 +37,6 @@ export const OrganizationStep = ({
   }
 
 
-  const Dropdown = ({
-    value,
-    options,
-    placeholder,
-    onSelect,
-    isOpen,
-    setIsOpen,
-    error,
-  }: {
-    value: string
-    options: Array<{ value: string; label: string }>
-    placeholder: string
-    onSelect: (value: string) => void
-    isOpen: boolean
-    setIsOpen: (open: boolean) => void
-    error?: string
-  }) => (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className={`auth-input flex items-center justify-between ${error ? 'auth-input-error' : ''}`}
-      >
-        <span className={value ? 'text-white' : 'text-gray-400'}>
-          {value ? options.find(opt => opt.value === value)?.label : placeholder}
-        </span>
-        <ChevronDown
-          className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-        />
-      </button>
-
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="absolute top-full left-0 right-0 mt-2 bg-gray-800/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-dropdown max-h-60 overflow-y-auto"
-        >
-          {options.map(option => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => {
-                onSelect(option.value)
-                setIsOpen(false)
-              }}
-              className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors duration-200 first:rounded-t-xl last:rounded-b-xl"
-            >
-              {option.label}
-            </button>
-          ))}
-        </motion.div>
-      )}
-    </div>
-  )
 
   return (
     <motion.div
@@ -186,15 +121,16 @@ export const OrganizationStep = ({
 
         {/* Company Size */}
         <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">Company Size</span>
-          <Dropdown
+          <span className="block text-sm font-medium text-gray-300 mb-2">
+            Company Size <span className="text-red-400">*</span>
+          </span>
+          <ApiDropdown
+            config={companySizeDropdownConfig}
             value={data.companySize}
-            options={companySizeOptions}
-            placeholder="Select company size"
             onSelect={value => handleSelectChange('companySize', value)}
-            isOpen={companySizeOpen}
-            setIsOpen={setCompanySizeOpen}
-            error={errors.companySize}
+            onClear={() => handleSelectChange('companySize', '')}
+            error={!!errors.companySize}
+            allowClear
           />
           {errors.companySize && <p className="mt-1 text-sm text-red-400">{errors.companySize}</p>}
         </div>

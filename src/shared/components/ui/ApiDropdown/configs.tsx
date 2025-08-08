@@ -1,11 +1,13 @@
-import { Globe, DollarSign, Clock, Calendar, Users, Building } from 'lucide-react'
+import { Globe, DollarSign, Clock, Calendar, Users, Building, User } from 'lucide-react'
 import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 import { useIndustries } from '@/shared/hooks/api/useIndustry'
+import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
 import type { ApiDropdownConfig } from './ApiDropdown'
 import { useMemo } from 'react'
 import type { CurrencyResponse } from '@/shared/types/api/countryCurrency'
 import type { TimeZone, Month, Role } from '@/shared/types/api/countryCurrency'
 import type { IndustryResponse } from '@/shared/types/api/industry'
+import type { CompanySizeResponse } from '@/shared/types/api/companySize'
 
 
 
@@ -271,4 +273,38 @@ export const industryDropdownConfig: ApiDropdownConfig<IndustryResponse> = {
   searchPlaceholder: 'Search industries...',
   noResultsText: 'No industries found',
   errorText: 'Failed to load industries',
+}
+
+// Company size dropdown configuration
+export const companySizeDropdownConfig: ApiDropdownConfig<CompanySizeResponse> = {
+  useHook: useCompanySizes,
+  mapToOptions: (companySizes) =>
+    companySizes.map(size => {
+      const getEmployeeCount = () => {
+        if (size.maxEmployees === null) {
+          return `${size.minEmployees}+ employees`
+        }
+        if (size.minEmployees === size.maxEmployees) {
+          return size.minEmployees === 1 ? '1 employee' : `${size.minEmployees} employees`
+        }
+        return `${size.minEmployees}-${size.maxEmployees} employees`
+      }
+
+      return {
+        value: size.code,
+        label: size.name,
+        searchText: `${size.name} ${size.code} ${size.description} ${getEmployeeCount()}`,
+        description: size.description,
+        icon: (
+          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+            <User className="w-3 h-3 text-white/80" />
+          </div>
+        ),
+      }
+    }),
+  icon: <User />,
+  placeholder: 'Select company size',
+  searchPlaceholder: 'Search company sizes...',
+  noResultsText: 'No company sizes found',
+  errorText: 'Failed to load company sizes',
 }
