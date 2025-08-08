@@ -17,6 +17,7 @@ export interface OrganizationRequest {
   country: string
   userId: string
   addressId?: string
+  fiscalYearStart?: string
 }
 
 export interface OrganizationResponse {
@@ -34,8 +35,21 @@ export interface OrganizationResponse {
   country: string
   userId: string
   addressId?: string
+  fiscalYearStart?: string
   createdDate: string
   modifiedDate: string
+  address?: {
+    addressId: string
+    name: string
+    addressLine1: string
+    addressLine2?: string
+    number: string
+    city: string
+    state: string
+    zipCode: string
+    country: string
+    addressType: 'billing' | 'shipping' | 'business'
+  } | null
 }
 
 export interface CreateOrganizationData {
@@ -50,6 +64,7 @@ export interface CreateOrganizationData {
   currency: string
   timeZone: string
   country: string
+  fiscalYearStart?: string
   userId: string
 }
 
@@ -65,4 +80,5 @@ export interface UpdateOrganizationData {
   currency?: string
   timeZone?: string
   country?: string
+  fiscalYearStart?: string
 }

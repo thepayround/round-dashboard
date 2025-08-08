@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
-import { Building, ChevronDown, Globe, FileText, DollarSign } from 'lucide-react'
+import { Building, ChevronDown, DollarSign, ExternalLink, AlignLeft } from 'lucide-react'
 import { useState } from 'react'
+import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { OrganizationInfo } from '../../types/onboarding'
 
 interface OrganizationStepProps {
@@ -30,36 +31,7 @@ const companySizeOptions = [
   { value: '1000+', label: '1000+ employees' },
 ]
 
-const countryOptions = [
-  { value: 'US', label: 'United States' },
-  { value: 'CA', label: 'Canada' },
-  { value: 'GB', label: 'United Kingdom' },
-  { value: 'DE', label: 'Germany' },
-  { value: 'FR', label: 'France' },
-  { value: 'IT', label: 'Italy' },
-  { value: 'ES', label: 'Spain' },
-  { value: 'NL', label: 'Netherlands' },
-  { value: 'AU', label: 'Australia' },
-  { value: 'JP', label: 'Japan' },
-  { value: 'CN', label: 'China' },
-  { value: 'IN', label: 'India' },
-  { value: 'BR', label: 'Brazil' },
-  { value: 'MX', label: 'Mexico' },
-  { value: 'GR', label: 'Greece' },
-]
 
-const timezoneOptions = [
-  { value: 'UTC', label: 'UTC (Coordinated Universal Time)' },
-  { value: 'America/New_York', label: 'Eastern Time (UTC-5/-4)' },
-  { value: 'America/Chicago', label: 'Central Time (UTC-6/-5)' },
-  { value: 'America/Denver', label: 'Mountain Time (UTC-7/-6)' },
-  { value: 'America/Los_Angeles', label: 'Pacific Time (UTC-8/-7)' },
-  { value: 'Europe/London', label: 'London (UTC+0/+1)' },
-  { value: 'Europe/Paris', label: 'Paris (UTC+1/+2)' },
-  { value: 'Asia/Tokyo', label: 'Tokyo (UTC+9)' },
-  { value: 'Asia/Shanghai', label: 'Shanghai (UTC+8)' },
-  { value: 'Australia/Sydney', label: 'Sydney (UTC+10/+11)' },
-]
 
 export const OrganizationStep = ({
   data,
@@ -69,8 +41,6 @@ export const OrganizationStep = ({
 }: OrganizationStepProps) => {
   const [industryOpen, setIndustryOpen] = useState(false)
   const [companySizeOpen, setCompanySizeOpen] = useState(false)
-  const [countryOpen, setCountryOpen] = useState(false)
-  const [timezoneOpen, setTimezoneOpen] = useState(false)
 
   const handleInputChange =
     (field: keyof OrganizationInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,8 +57,6 @@ export const OrganizationStep = ({
     })
   }
 
-  const isFormValid = () =>
-    data.companyName.trim() !== '' && data.industry !== '' && data.companySize !== '' && data.country !== ''
 
   const Dropdown = ({
     value,
@@ -111,13 +79,7 @@ export const OrganizationStep = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`
-          w-full h-12 px-4 rounded-xl backdrop-blur-xl border transition-all duration-200 text-left flex items-center justify-between
-          bg-white/5 border-white/10 text-white
-          hover:bg-white/10 hover:border-white/20
-          focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-          ${error ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-        `}
+        className={`auth-input flex items-center justify-between ${error ? 'auth-input-error' : ''}`}
       >
         <span className={value ? 'text-white' : 'text-gray-400'}>
           {value ? options.find(opt => opt.value === value)?.label : placeholder}
@@ -132,7 +94,7 @@ export const OrganizationStep = ({
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="absolute top-full left-0 right-0 mt-2 bg-gray-800/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-2 bg-gray-800/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-dropdown max-h-60 overflow-y-auto"
         >
           {options.map(option => (
             <button
@@ -177,42 +139,25 @@ export const OrganizationStep = ({
               ? 'Review and complete your company profile'
               : 'Complete your company profile'}
           </p>
-          {isPrePopulated && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-[#42E695]/20 to-[#3BB2B8]/20 border border-[#42E695]/30"
-            >
-              <span className="text-[#42E695] text-sm font-medium">
-                ✓ Company info loaded from your account
-              </span>
-            </motion.div>
-          )}
         </div>
       </div>
 
       {/* Form */}
-      <div className="space-y-6">
+      <div className="max-w-lg mx-auto space-y-6">
         {/* Company Name */}
         <div>
-          <label htmlFor="companyName" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="companyName" className="auth-label">
             Company Name
           </label>
-          <div className="relative">
-            <Building className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <Building className="input-icon-left auth-icon-primary" />
             <input
               id="companyName"
               type="text"
               value={data.companyName}
               onChange={handleInputChange('companyName')}
               placeholder="Acme Corporation"
-              className={`
-                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.companyName ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
@@ -223,14 +168,13 @@ export const OrganizationStep = ({
           <span className="block text-sm font-medium text-gray-300 mb-2">
             Country <span className="text-red-400">*</span>
           </span>
-          <Dropdown
+          <ApiDropdown
+            config={countryDropdownConfig}
             value={data.country}
-            options={countryOptions}
-            placeholder="Select your country"
             onSelect={value => handleSelectChange('country', value)}
-            isOpen={countryOpen}
-            setIsOpen={setCountryOpen}
-            error={errors.country}
+            onClear={() => handleSelectChange('country', '')}
+            error={!!errors.country}
+            allowClear
           />
           {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
         </div>
@@ -267,23 +211,18 @@ export const OrganizationStep = ({
 
         {/* Website */}
         <div>
-          <label htmlFor="website" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="website" className="auth-label">
             Website <span className="text-gray-500">(optional)</span>
           </label>
-          <div className="relative">
-            <Globe className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <ExternalLink className="input-icon-left auth-icon-primary" />
             <input
               id="website"
               type="url"
               value={data.website}
               onChange={handleInputChange('website')}
               placeholder="https://www.example.com"
-              className={`
-                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.website ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
@@ -291,82 +230,43 @@ export const OrganizationStep = ({
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="description" className="auth-label">
             Description <span className="text-gray-500">(optional)</span>
           </label>
-          <div className="relative">
-            <FileText className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <AlignLeft className="input-icon-left auth-icon-primary" style={{top: '1rem'}} />
             <textarea
               id="description"
               value={data.description ?? ''}
               onChange={e => onChange({ ...data, description: e.target.value })}
               placeholder="Brief description of your company..."
               rows={3}
-              className={`
-                w-full pl-12 pr-4 py-3 rounded-xl backdrop-blur-xl border transition-all duration-200 resize-none
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.description ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input textarea input-with-icon-left resize-none ${errors.description ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
         </div>
 
-        {/* Time Zone */}
-        <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">
-            Time Zone <span className="text-gray-500">(optional)</span>
-          </span>
-          <Dropdown
-            value={data.timeZone ?? ''}
-            options={timezoneOptions}
-            placeholder="Select your time zone"
-            onSelect={value => handleSelectChange('timeZone', value)}
-            isOpen={timezoneOpen}
-            setIsOpen={setTimezoneOpen}
-            error={errors.timeZone}
-          />
-          {errors.timeZone && <p className="mt-1 text-sm text-red-400">{errors.timeZone}</p>}
-        </div>
-
         {/* Revenue */}
         <div>
-          <label htmlFor="revenue" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="revenue" className="auth-label">
             Annual Revenue <span className="text-gray-500">(optional)</span>
           </label>
-          <div className="relative">
-            <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="input-container">
+            <DollarSign className="input-icon-left auth-icon-primary" />
             <input
               id="revenue"
               type="number"
               value={data.revenue ?? ''}
               onChange={handleInputChange('revenue')}
               placeholder="1000000"
-              className={`
-                w-full h-12 pl-12 pr-4 rounded-xl backdrop-blur-xl border transition-all duration-200
-                bg-white/5 border-white/10 text-white placeholder-gray-400
-                focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30
-                ${errors.revenue ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}
-              `}
+              className={`auth-input input-with-icon-left ${errors.revenue ? 'auth-input-error' : ''}`}
             />
           </div>
           {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}
         </div>
       </div>
 
-      {/* Form Validation Status */}
-      {isFormValid() && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="p-4 rounded-xl bg-gradient-to-r from-[#42E695]/10 to-[#3BB2B8]/10 border border-[#42E695]/20"
-        >
-          <p className="text-[#42E695] text-sm font-medium text-center">
-            ✓ Organization profile completed successfully
-          </p>
-        </motion.div>
-      )}
     </motion.div>
   )
 }

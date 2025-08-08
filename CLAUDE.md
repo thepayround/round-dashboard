@@ -106,6 +106,11 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 - **Husky 9.1.7** (Git hooks)
 - **Lucide React 0.509.0** + React Icons 5.5.0 (icons)
 
+### Performance Optimizations
+- **Form Change Detection** - `useFormChangeDetection` hook prevents unnecessary API calls by tracking actual data changes
+- **Debounced Updates** - `useDebouncedUpdate` hook throttles API calls with configurable delays
+- **Countries/Currencies Caching** - Module-level caching with promise deduplication for static data
+
 ## Current Implementation Status
 
 ### Implemented Features
@@ -277,7 +282,7 @@ Avoid `useEffect` for things React can do declaratively.
 ### Architecture Patterns
 1. **Compound Components** - Card system (Header, Title, Content, Footer)
 2. **Polymorphic Components** - Button with extensive variant system
-3. **Custom Hooks** - useUIState, useErrorHandler, usePagination, useTableSort
+3. **Custom Hooks** - useUIState, useErrorHandler, usePagination, useTableSort, useFormChangeDetection, useDebouncedUpdate
 4. **State Management** - Multi-paradigm (Zustand + Context + Local)
 5. **API Architecture** - Axios wrapper with interceptors, retry logic, caching
 

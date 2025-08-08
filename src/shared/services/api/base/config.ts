@@ -15,6 +15,7 @@ export const ENDPOINTS = {
   AUTH: {
     LOGIN: '/identities/login',
     REGISTER: '/identities/register',
+    REGISTER_BUSINESS: '/identities/register-business',
     LOGOUT: '/identities/logout',
     REFRESH_TOKEN: '/identities/refresh-token',
     CONFIRM_EMAIL: '/identities/confirm-email',

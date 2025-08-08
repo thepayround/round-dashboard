@@ -89,11 +89,15 @@ class MockDatabase {
         address: {
           name: 'Headquarters',
           street: '123 Main St',
+          addressLine1: '123 Main St',
+          addressLine2: '',
+          number: '101',
           city: 'New York',
           state: 'NY',
           zipCode: '10001',
           country: 'US',
           addressType: 'billing' as const,
+          isPrimary: true,
         },
         products: {
           hasProducts: true,

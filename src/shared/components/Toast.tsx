@@ -1,9 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, AlertTriangle } from 'lucide-react'
+import { X, AlertTriangle, CheckCircle, Info, AlertCircle } from 'lucide-react'
 import { useEffect } from 'react'
 
-interface ErrorToastProps {
+export type ToastType = 'success' | 'error' | 'warning' | 'info'
+
+interface ToastProps {
   isVisible: boolean
+  type: ToastType
   message: string
   details?: Record<string, string>
   onClose: () => void
@@ -11,14 +14,49 @@ interface ErrorToastProps {
   duration?: number
 }
 
-export const ErrorToast = ({
+const toastStyles = {
+  success: {
+    background: 'bg-green-500/10',
+    border: 'border-green-500/20',
+    icon: CheckCircle,
+    iconColor: 'text-green-400',
+    textColor: 'text-white'
+  },
+  error: {
+    background: 'bg-red-500/10',
+    border: 'border-red-500/20',
+    icon: AlertTriangle,
+    iconColor: 'text-red-400',
+    textColor: 'text-white'
+  },
+  warning: {
+    background: 'bg-yellow-500/10',
+    border: 'border-yellow-500/20',
+    icon: AlertCircle,
+    iconColor: 'text-yellow-400',
+    textColor: 'text-white'
+  },
+  info: {
+    background: 'bg-blue-500/10',
+    border: 'border-blue-500/20',
+    icon: Info,
+    iconColor: 'text-blue-400',
+    textColor: 'text-white'
+  }
+}
+
+export const Toast = ({
   isVisible,
+  type,
   message,
   details,
   onClose,
   autoClose = true,
   duration = 5000,
-}: ErrorToastProps) => {
+}: ToastProps) => {
+  const styles = toastStyles[type]
+  const IconComponent = styles.icon
+
   useEffect(() => {
     if (isVisible && autoClose) {
       const timer = setTimeout(() => {
@@ -38,19 +76,19 @@ export const ErrorToast = ({
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="fixed top-4 right-4 z-toast max-w-md"
         >
-          <div className="bg-red-500/10 backdrop-blur-xl border border-red-500/20 rounded-xl p-4 shadow-2xl">
+          <div className={`${styles.background} backdrop-blur-xl border ${styles.border} rounded-xl p-4 shadow-2xl`}>
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
-                <AlertTriangle className="w-6 h-6 text-red-400" />
+                <IconComponent className={`w-6 h-6 ${styles.iconColor}`} />
               </div>
               
               <div className="flex-1 min-w-0">
-                <p className="text-white font-medium text-sm">{message}</p>
+                <p className={`${styles.textColor} font-medium text-sm`}>{message}</p>
                 
                 {details && Object.keys(details).length > 0 && (
                   <div className="mt-2 space-y-1">
                     {Object.entries(details).map(([field, error]) => (
-                      <p key={field} className="text-red-300 text-xs">
+                      <p key={field} className={`${styles.iconColor} text-xs`}>
                         <span className="font-medium capitalize">{field}:</span> {error}
                       </p>
                     ))}
@@ -60,9 +98,9 @@ export const ErrorToast = ({
               
               <button
                 onClick={onClose}
-                className="flex-shrink-0 w-6 h-6 rounded-full bg-red-500/20 hover:bg-red-500/30 transition-colors duration-200 flex items-center justify-center"
+                className={`flex-shrink-0 w-6 h-6 rounded-full ${styles.background} hover:opacity-80 transition-opacity duration-200 flex items-center justify-center`}
               >
-                <X className="w-4 h-4 text-red-400" />
+                <X className={`w-4 h-4 ${styles.iconColor}`} />
               </button>
             </div>
           </div>

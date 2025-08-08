@@ -9,6 +9,9 @@ import type {
   OrganizationResponse,
   CreateOrganizationData,
   UpdateOrganizationData,
+  AddressResponse,
+  CreateAddressData,
+  UpdateAddressData,
 } from '@/shared/types/api'
 import { httpClient } from './base/client'
 import { ENDPOINTS } from './base/config'
@@ -102,6 +105,7 @@ export class OrganizationService {
         currency: organizationData.currency,
         timeZone: organizationData.timeZone,
         country: organizationData.country,
+        fiscalYearStart: organizationData.fiscalYearStart,
         userId: organizationData.userId,
       }
 
@@ -125,7 +129,24 @@ export class OrganizationService {
    */
   async update(id: string, organizationData: UpdateOrganizationData): Promise<ApiResponse<void>> {
     try {
-      await this.client.put(ENDPOINTS.ORGANIZATIONS.BY_ID(id), organizationData)
+      // Transform UpdateOrganizationData to OrganizationRequest format
+      const organizationRequest: Partial<OrganizationRequest> = {
+        name: organizationData.name,
+        description: organizationData.description,
+        website: organizationData.website,
+        size: organizationData.size,
+        revenue: organizationData.revenue,
+        category: organizationData.category,
+        type: organizationData.type,
+        registrationNumber: organizationData.registrationNumber,
+        currency: organizationData.currency,
+        timeZone: organizationData.timeZone,
+        country: organizationData.country,
+        fiscalYearStart: organizationData.fiscalYearStart,
+        // Note: Do not include userId for updates to avoid FK constraint issues
+      }
+
+      await this.client.put(ENDPOINTS.ORGANIZATIONS.BY_ID(id), organizationRequest)
 
       return {
         success: true,
@@ -152,8 +173,69 @@ export class OrganizationService {
     }
   }
 
-  // NOTE: Address operations removed - addresses are included in organization responses
-  // Use organization CRUD operations instead
+  /**
+   * Get organization address
+   */
+  async getOrganizationAddress(organizationId: string): Promise<ApiResponse<AddressResponse>> {
+    try {
+      const response = await this.client.get(`${ENDPOINTS.ORGANIZATIONS.BY_ID(organizationId)}/addresses`)
+
+      return {
+        success: true,
+        data: response.data,
+      }
+    } catch (error) {
+      return this.handleApiError(error, 'Failed to fetch organization address')
+    }
+  }
+
+  /**
+   * Create organization address
+   */
+  async createOrganizationAddress(organizationId: string, addressData: CreateAddressData): Promise<ApiResponse<void>> {
+    try {
+      await this.client.post(`${ENDPOINTS.ORGANIZATIONS.BY_ID(organizationId)}/addresses`, addressData)
+
+      return {
+        success: true,
+        message: 'Organization address created successfully',
+      }
+    } catch (error) {
+      return this.handleApiError(error, 'Failed to create organization address')
+    }
+  }
+
+  /**
+   * Update organization address
+   */
+  async updateOrganizationAddress(organizationId: string, addressData: UpdateAddressData): Promise<ApiResponse<void>> {
+    try {
+      await this.client.put(`${ENDPOINTS.ORGANIZATIONS.BY_ID(organizationId)}/addresses`, addressData)
+
+      return {
+        success: true,
+        message: 'Organization address updated successfully',
+      }
+    } catch (error) {
+      return this.handleApiError(error, 'Failed to update organization address')
+    }
+  }
+
+  /**
+   * Delete organization address
+   */
+  async deleteOrganizationAddress(organizationId: string): Promise<ApiResponse<void>> {
+    try {
+      await this.client.delete(`${ENDPOINTS.ORGANIZATIONS.BY_ID(organizationId)}/addresses`)
+
+      return {
+        success: true,
+        message: 'Organization address deleted successfully',
+      }
+    } catch (error) {
+      return this.handleApiError(error, 'Failed to delete organization address')
+    }
+  }
 
   private handleApiError(error: unknown, defaultMessage: string): ApiResponse<never> {
     if (axios.isAxiosError(error) && error.response) {

@@ -104,6 +104,7 @@ export interface OrganizationRequest {
   timeZone?: string
   country?: string
   userId: string
+  fiscalYearStart?: string
 }
 
 export interface OrganizationResponse {
@@ -120,7 +121,9 @@ export interface OrganizationResponse {
   timeZone?: string
   country?: string
   userId: string
+  fiscalYearStart?: string
   address?: AddressResponse
+  addressId?: string
   createdDate?: string
   modifiedDate?: string
 }
@@ -137,6 +140,7 @@ export interface CreateOrganizationData {
   currency?: string
   timeZone?: string
   country?: string
+  fiscalYearStart?: string
   userId: string
 }
 
@@ -152,6 +156,7 @@ export interface UpdateOrganizationData {
   currency?: string
   timeZone?: string
   country?: string
+  fiscalYearStart?: string
 }
 
 // Address types
@@ -173,11 +178,13 @@ export interface AddressResponse {
   name: string
   addressLine1: string
   addressLine2?: string
+  number?: string
   city: string
   state: string
   zipCode: string
   country: string
   addressType: 'billing' | 'shipping' | 'business'
+  isPrimary?: boolean
   organizationId?: string
   createdDate?: string
   modifiedDate?: string

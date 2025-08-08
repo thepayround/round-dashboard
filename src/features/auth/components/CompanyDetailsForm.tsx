@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
 import { Building, Hash, CreditCard, AlertCircle } from 'lucide-react'
+import { useEffect } from 'react'
 
 import type { CompanyInfo, Currency } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
-import { SUPPORTED_COUNTRIES } from '@/shared/types/business'
 import { validateCompanyField, validateCompanyInfo } from '@/shared/utils/companyValidation'
 import { getFieldError, hasFieldError } from '@/shared/utils/validation'
+import { ApiDropdown, currencyDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 
 interface CompanyDetailsFormProps {
   companyInfo: CompanyInfo
@@ -51,16 +52,18 @@ export const CompanyDetailsForm = ({
 
   const handleSelectChange = (field: keyof CompanyInfo, value: string) => {
     handleInputChange(field, value)
+    
+    // Trigger validation immediately for select fields
+    const updatedCompanyInfo = { ...companyInfo, [field]: value }
+    const validation = validateCompanyInfo(updatedCompanyInfo)
+    onValidationChange(validation.isValid)
   }
 
-  // Get currency options from supported countries
-  const currencyOptions = Array.from(
-    new Set(SUPPORTED_COUNTRIES.map(country => country.currency))
-  ).map(currency => ({
-    value: currency,
-    label: currency,
-    symbol: getCurrencySymbol(currency),
-  }))
+  // Run initial validation when component mounts or companyInfo changes
+  useEffect(() => {
+    const validation = validateCompanyInfo(companyInfo)
+    onValidationChange(validation.isValid)
+  }, [companyInfo, onValidationChange])
 
   return (
     <motion.div
@@ -192,25 +195,19 @@ export const CompanyDetailsForm = ({
         <label htmlFor="currency" className="auth-label">
           Currency *
         </label>
-        <div className="input-container">
-          <CreditCard className="input-icon-left auth-icon-primary" />
-          <select
-            id="currency"
-            value={companyInfo.currency}
-            onChange={e => handleSelectChange('currency', e.target.value as Currency)}
-            className={`auth-input input-with-icon-left ${
-              hasFieldError(errors, 'currency') ? 'auth-input-error' : ''
-            }`}
-            required
-          >
-            <option value="">Select currency</option>
-            {currencyOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.symbol} {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <ApiDropdown
+          config={currencyDropdownConfig}
+          value={companyInfo.currency ?? ''}
+          onSelect={value => {
+            handleSelectChange('currency', value as Currency)
+            // Clear any existing currency error when selection is made
+            if (hasFieldError(errors, 'currency')) {
+              onErrorsChange(errors.filter(error => error.field !== 'currency'))
+            }
+          }}
+          error={hasFieldError(errors, 'currency')}
+          allowClear={false}
+        />
         {hasFieldError(errors, 'currency') && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -226,15 +223,3 @@ export const CompanyDetailsForm = ({
   )
 }
 
-// Helper function to get currency symbol
-function getCurrencySymbol(currency: Currency): string {
-  const symbols: Record<Currency, string> = {
-    USD: '$',
-    EUR: '€',
-    GBP: '£',
-    CAD: 'C$',
-    AUD: 'A$',
-    JPY: '¥',
-  }
-  return symbols[currency] || currency
-}

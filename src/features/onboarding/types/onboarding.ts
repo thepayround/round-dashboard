@@ -40,11 +40,15 @@ export interface BillingSettings {
 export interface AddressInfo {
   name: string
   street: string
+  addressLine1: string
+  addressLine2?: string
+  number: string
   city: string
   state: string
   zipCode: string
   country: string
   addressType: 'billing' | 'shipping' | 'business'
+  isPrimary?: boolean
 }
 
 export interface TeamSettings {

@@ -128,9 +128,8 @@ export const validateWebsite = (website: string): ValidationResult => {
 }
 
 // Currency validation
-export const validateCurrency = (currency: Currency): ValidationResult => {
+export const validateCurrency = (currency: Currency | undefined): ValidationResult => {
   const errors: ValidationError[] = []
-  const validCurrencies: Currency[] = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY']
 
   if (!currency) {
     errors.push({
@@ -138,13 +137,10 @@ export const validateCurrency = (currency: Currency): ValidationResult => {
       message: 'Currency is required',
       code: 'REQUIRED',
     })
-  } else if (!validCurrencies.includes(currency)) {
-    errors.push({
-      field: 'currency',
-      message: 'Invalid currency selected',
-      code: 'INVALID_VALUE',
-    })
   }
+  // Note: We no longer validate against a hardcoded list since the API provides
+  // dynamic currency options. If the currency is selected from the dropdown,
+  // it's considered valid.
 
   return { isValid: errors.length === 0, errors }
 }

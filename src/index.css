@@ -5,6 +5,22 @@
 @tailwind utilities;
 
 @layer base {
+  /* Z-index layering system */
+  :root {
+    --z-base: 1;
+    --z-dropdown: 1000;
+    --z-tooltip: 1100;
+    --z-popover: 1200;
+    --z-modal: 1300;
+    --z-toast: 1400;
+  }
+
+  .z-dropdown { z-index: var(--z-dropdown); }
+  .z-tooltip { z-index: var(--z-tooltip); }
+  .z-popover { z-index: var(--z-popover); }
+  .z-modal { z-index: var(--z-modal); }
+  .z-toast { z-index: var(--z-toast); }
+
   * {
     @apply border-border;
   }
@@ -230,11 +246,12 @@
 
   .auth-input {
     width: 100%;
-    padding: 1rem 1.25rem;
+    height: 3rem; /* 48px - standardized height */
+    padding: 0 1.25rem;
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(16px);
     border: 1.5px solid rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
+    border-radius: 12px;
     color: rgba(255, 255, 255, 0.95) !important;
     font-weight: 500;
     font-size: 0.95rem;
@@ -247,6 +264,12 @@
   .auth-input::placeholder {
     color: rgba(255, 255, 255, 0.6);
     font-weight: 400;
+  }
+
+  .auth-input.textarea {
+    height: auto;
+    min-height: 5rem; /* 80px for textareas */
+    padding: 1rem 1.25rem;
   }
 
   .auth-input:focus {
@@ -339,8 +362,9 @@
     background: linear-gradient(135deg, #d417c8 0%, #7767da 50%, #14bdea 100%) !important;
     color: white !important;
     font-weight: 700;
-    padding: 1rem 1.5rem;
-    border-radius: 16px;
+    height: 3rem; /* 48px - standardized height */
+    padding: 0 1.5rem;
+    border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     outline: none;
     cursor: pointer;
@@ -355,6 +379,9 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     text-decoration: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .btn-primary:hover {
@@ -373,9 +400,10 @@
     backdrop-filter: blur(16px);
     color: white;
     font-weight: 600;
-    padding: 0.875rem 1.25rem;
+    height: 3rem; /* 48px - standardized height */
+    padding: 0 1.25rem;
     border: 1.5px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
+    border-radius: 12px;
     cursor: pointer;
     transition:
       background 0.2s ease,
@@ -384,6 +412,9 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .btn-secondary:hover {
@@ -601,5 +632,47 @@
   /* Subtle animation for gradient header */
   .gradient-header {
     box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  }
+
+  /* Ensure dropdowns appear above all other content */
+  [data-dropdown-portal] {
+    z-index: 9999 !important;
+    position: relative;
+  }
+
+  /* Form container should have lower z-index */
+  .auth-card form {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Dropdown menu and portal z-indexes */
+  .dropdown-menu {
+    z-index: 1000 !important;
+    position: relative;
+  }
+
+  .dropdown-content {
+    z-index: 1000 !important;
+  }
+
+  /* Ensure dropdowns appear above modals and other overlays */
+  [role="listbox"],
+  [role="menu"],
+  [role="dialog"],
+  .dropdown-overlay {
+    z-index: 9999 !important;
+  }
+
+  /* Dropdown items should be above the dropdown container */
+  [role="option"],
+  .dropdown-item {
+    z-index: 10000 !important;
+    position: relative;
+  }
+
+  /* Modal overlay should be below dropdowns but above other content */
+  .modal-overlay {
+    z-index: 900 !important;
   }
 }

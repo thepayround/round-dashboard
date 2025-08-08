@@ -255,7 +255,7 @@ export const LoginPage = () => {
           <button
             type="submit"
             disabled={isSubmitting || !isFormValid()}
-            className={`w-full btn-primary text-lg py-4 mt-8 ${isSubmitting || !isFormValid() ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`w-full btn-primary text-lg mt-8 ${isSubmitting || !isFormValid() ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <span className="flex items-center justify-center space-x-2">
               <span>{isSubmitting ? 'Signing In...' : 'Sign In'}</span>
@@ -277,7 +277,7 @@ export const LoginPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
               type="button"
-              className="btn-secondary flex items-center justify-center space-x-3 py-4 relative overflow-hidden group"
+              className="btn-secondary flex items-center justify-center space-x-3 relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12" />
               <svg className="w-5 h-5 z-10" viewBox="0 0 24 24">
@@ -303,7 +303,7 @@ export const LoginPage = () => {
 
             <button
               type="button"
-              className="btn-secondary flex items-center justify-center space-x-3 py-4 relative overflow-hidden group"
+              className="btn-secondary flex items-center justify-center space-x-3 relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12" />
               <svg className="w-5 h-5 z-10" fill="currentColor" viewBox="0 0 24 24">

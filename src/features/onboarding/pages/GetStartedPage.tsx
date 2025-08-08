@@ -1,18 +1,48 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowLeft, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { ErrorToast } from '@/shared/components/ErrorToast'
-import { parseBackendError } from '@/shared/utils/errorHandling'
-import { mockApi } from '@/shared/services/mockApi'
+import { TabNavigation } from '../components/TabNavigation'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
+import { useFormChangeDetection } from '@/shared/hooks/useFormChangeDetection'
+import { useDebouncedUpdate } from '@/shared/hooks/useDebouncedUpdate'
 import { organizationService } from '@/shared/services/api/organization.service'
 import { authService } from '@/shared/services/api/auth.service'
-import type { User } from '@/shared/types/auth'
-import { TabNavigation } from '../components/TabNavigation'
+import { addressService } from '@/shared/services/api/address.service'
+
+// Simple error parser utility
+const parseBackendError = (error: unknown) => {
+  if (error instanceof Error) {
+    return { message: error.message, details: error }
+  }
+  if (typeof error === 'string') {
+    return { message: error, details: error }
+  }
+  return { message: 'An unknown error occurred', details: error }
+}
+
+// Import proper types
+import type { 
+  OnboardingData, 
+  OnboardingStep, 
+  UserInfo, 
+  OrganizationInfo, 
+  BusinessSettings, 
+  AddressInfo, 
+  ProductInfo, 
+  BillingSettings, 
+  TeamSettings 
+} from '../types/onboarding'
+import type { 
+  OrganizationResponse, 
+  OrganizationRequest, 
+  CreateAddressData, 
+  UpdateAddressData 
+} from '@/shared/types/api'
+
+// Import Step Components
 import { UserInfoStep } from '../components/steps/UserInfoStep'
 import { OrganizationStep } from '../components/steps/OrganizationStep'
 import { BusinessSettingsStep } from '../components/steps/BusinessSettingsStep'
@@ -20,335 +50,119 @@ import { AddressStep } from '../components/steps/AddressStep'
 import { ProductsStep } from '../components/steps/ProductsStep'
 import { BillingStep } from '../components/steps/BillingStep'
 import { TeamStep } from '../components/steps/TeamStep'
+import { Toast } from '@/shared/components/Toast'
+import { useToast } from '@/shared/hooks/useToast'
 
-import type {
-  OnboardingData,
-  OnboardingStep,
-  UserInfo,
-  OrganizationInfo,
-  BusinessSettings,
-  AddressInfo,
-  ProductInfo,
-  BillingSettings,
-  TeamSettings,
-} from '../types/onboarding'
+interface ErrorToast {
+  show: boolean
+  message: string
+  isVisible: boolean
+  details?: unknown
+}
 
-const allSteps: OnboardingStep[] = [
-  'userInfo',
-  'organization',
-  'businessSettings',
-  'products',
-  'billing',
-  'team',
-]
+// Constants
+const allSteps: OnboardingStep[] = ['organization', 'businessSettings', 'address', 'team', 'products', 'billing']
+
+const defaultOnboardingData: OnboardingData = {
+  userInfo: {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+  },
+  organization: {
+    companyName: '',
+    industry: '',
+    companySize: '',
+    website: '',
+    description: '',
+    timeZone: '',
+    revenue: '',
+    country: '',
+  },
+  businessSettings: {
+    currency: 'USD',
+    timezone: 'UTC',
+    fiscalYearStart: 'January',
+  },
+  address: {
+    name: '',
+    street: '',
+    addressLine1: '',
+    addressLine2: '',
+    number: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: '',
+    addressType: 'billing',
+    isPrimary: true,
+  },
+  products: {
+    hasProducts: false,
+    products: [],
+  },
+  billing: {
+    isConnected: false,
+    provider: '',
+  },
+  team: {
+    invitations: [],
+  },
+}
 
 export const GetStartedPage = () => {
   const navigate = useNavigate()
-  const { state, setUser } = useAuth()
-  const { token, user } = state
+  const { state, setUser: _setUser } = useAuth()
+  const { token: _token, user } = state
   const { getCurrentOrganization } = useOrganization()
+  const { toast, showSuccess, showError, hideToast } = useToast()
 
-  // Show error toast function
-  const showErrorToast = (error: unknown) => {
-    const parsedError = parseBackendError(error)
-    setErrorToast({
-      isVisible: true,
-      message: parsedError.message,
-      details: parsedError.details,
-    })
-  }
-
-  // Hide error toast function
-  const hideErrorToast = () => {
-    setErrorToast({
-      isVisible: false,
-      message: '',
-      details: undefined,
-    })
-  }
-
-  const [currentStep, setCurrentStep] = useState<OnboardingStep>('userInfo')
+  // State
+  const [currentStep, setCurrentStep] = useState<OnboardingStep>('organization')
   const [completedSteps, setCompletedSteps] = useState<OnboardingStep[]>([])
   const [availableSteps, setAvailableSteps] = useState<OnboardingStep[]>(allSteps)
   const [isCompleting, setIsCompleting] = useState(false)
   const [apiError, setApiError] = useState('')
-  const loadingRef = useRef(false)
-  
-  // Error toast state
-  const [errorToast, setErrorToast] = useState<{
-    isVisible: boolean
-    message: string
-    details?: Record<string, string>
-  }>({
+  const [cachedOrgData, setCachedOrgData] = useState<OrganizationResponse | null>(null)
+  const [errorToast, setErrorToast] = useState<ErrorToast>({
+    show: false,
     isVisible: false,
     message: '',
-    details: undefined,
+    details: undefined
   })
+  const [onboardingData, setOnboardingData] = useState<OnboardingData>(defaultOnboardingData)
+  
+  // Form change detection hooks
+  const organizationChangeDetection = useFormChangeDetection<OrganizationRequest>()
+  const addressChangeDetection = useFormChangeDetection<CreateAddressData>()
+  
+  // Refs
+  const loadingRef = useRef(false)
 
-  const [onboardingData, setOnboardingData] = useState<OnboardingData>({
-    userInfo: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-    },
-    organization: {
-      companyName: '',
-      industry: '',
-      companySize: '',
-      website: '',
-      description: '',
-      timeZone: '',
-      revenue: '',
-      country: '',
-    },
-    businessSettings: {
-      currency: 'USD',
-      timezone: 'UTC',
-      fiscalYearStart: 'January',
-    },
-    address: {
-      name: '',
-      street: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: '',
-      addressType: 'billing',
-    },
-    products: {
-      hasProducts: false,
-      products: [],
-    },
-    billing: {
-      isConnected: false,
-      provider: '',
-    },
-    team: {
-      invitations: [],
-    },
-  })
+  // Error handling
+  const showErrorToast = useCallback((error: unknown) => {
+    const parsedError = parseBackendError(error)
+    setErrorToast({
+      show: true,
+      isVisible: true,
+      message: parsedError.message ?? 'An error occurred',
+      details: parsedError.details
+    })
+  }, [])
 
-  // Load data with EXACTLY TWO API CALLS - simplified and clear
-  const loadOnboardingData = useCallback(async () => {
-    // Prevent multiple simultaneous calls using ref (avoids state dependency)
-    if (loadingRef.current) {
-      return
-    }
+  const hideErrorToast = useCallback(() => {
+    setErrorToast({
+      show: false,
+      isVisible: false,
+      message: '',
+      details: undefined
+    })
+  }, [])
 
-    loadingRef.current = true
-    setApiError('')
-
-    try {
-      // Initialize with current state to avoid losing data
-      setOnboardingData(currentData => {
-        const updatedData = { ...currentData }
-
-        // Set default user info if not already set
-        if (!updatedData.userInfo.firstName) {
-          updatedData.userInfo = {
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-          }
-        }
-
-        return updatedData
-      })
-
-      let currentUser = null
-
-      try {
-        const userResponse = await authService.getCurrentUser()
-        if (userResponse.success && userResponse.data) {
-          currentUser = userResponse.data
-
-          // Update user info with actual data
-          setOnboardingData(currentData => ({
-            ...currentData,
-            userInfo: {
-              firstName: currentUser!.firstName || '',
-              lastName: currentUser!.lastName || '',
-              email: currentUser!.email || '',
-              phone: currentUser!.phone || '',
-            }
-          }))
-
-          // Mark user info as completed if we have the required data
-          if (
-            currentUser.firstName &&
-            currentUser.lastName &&
-            currentUser.email &&
-            currentUser.phone
-          ) {
-            setCompletedSteps(prev => [...prev, 'userInfo'])
-          }
-        }
-      } catch (userError) {
-        setApiError('Failed to load user data')
-      }
-
-      if (currentUser) {
-        try {
-          const orgResponse = await getCurrentOrganization()
-
-          if (orgResponse.success && orgResponse.data) {
-            const org = orgResponse.data
-
-            // Update organization data
-            setOnboardingData(currentData => ({
-              ...currentData,
-              organization: {
-                companyName: org.name ?? '',
-                industry: org.category ?? '',
-                companySize: org.size ?? '',
-                website: org.website ?? '',
-                description: org.description ?? '',
-                timeZone: org.timeZone ?? '',
-                revenue: org.revenue?.toString() ?? '',
-                country: org.country ?? '',
-              }
-            }))
-
-            // Mark organization as completed if we have required data
-            if (org.name && org.category && org.size && org.country) {
-              setCompletedSteps(prev => [...prev, 'organization'])
-            }
-
-            // Update address from organization response (addresses come WITH organization)
-            if (org.address?.addressLine1) {
-              const { address } = { address: org.address }
-              setOnboardingData(currentData => ({
-                ...currentData,
-                address: {
-                  name: address.name || 'Organization Address',
-                  street: address.addressLine1,
-                  city: address.city || '',
-                  state: address.state || '',
-                  zipCode: address.zipCode || '',
-                  country: address.country || '',
-                  addressType: 'billing' as const,
-                }
-              }))
-              setCompletedSteps(prev => [...prev, 'address'])
-            }
-
-            // Update business settings
-            if (org.currency) {
-              setOnboardingData(currentData => ({
-                ...currentData,
-                businessSettings: {
-                  currency: org.currency ?? 'USD',
-                  timezone: org.timeZone ?? 'UTC',
-                  fiscalYearStart: 'January',
-                }
-              }))
-              setCompletedSteps(prev => [...prev, 'businessSettings'])
-            }
-          }
-        } catch (orgError) {
-          showErrorToast(orgError)
-          setApiError('Failed to load organization data')
-        }
-      }
-
-      // Update available steps based on user authentication
-      if (currentUser) {
-        setAvailableSteps(allSteps) // Show all steps for authenticated users
-      } else {
-        setAvailableSteps(['userInfo']) // Only show user info if not authenticated
-      }
-
-    } catch (error) {
-      console.error('CRITICAL ERROR in loadOnboardingData:', error)
-      setApiError('Failed to load onboarding data')
-    } finally {
-      loadingRef.current = false
-    }
-  }, [getCurrentOrganization])
-
-  // Initialize data when user is available (proper useEffect usage for side effects)
-  useEffect(() => {
-    if (user && !loadingRef.current) {
-      loadOnboardingData()
-    }
-  }, [user, loadOnboardingData])
-
-  const getCurrentStepIndex = () => availableSteps.indexOf(currentStep)
-  const isLastStep = () => getCurrentStepIndex() === availableSteps.length - 1
-
-  const getNextButtonClasses = (): string => {
-    if (!isStepValid(currentStep) || isCompleting) {
-      return 'bg-white/5 text-gray-500 cursor-not-allowed'
-    }
-    return 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white hover:shadow-lg hover:shadow-[#D417C8]/30 transform hover:scale-105'
-  }
-
-  const getButtonText = (): string => {
-    if (isCompleting) return 'Completing Setup...'
-    if (isLastStep()) return 'Complete Setup'
-    return 'Next'
-  }
-
-  const getButtonIcon = () => {
-    if (isCompleting) {
-      return (
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
-        />
-      )
-    }
-    if (isLastStep()) {
-      return <CheckCircle className="w-5 h-5" />
-    }
-    return <ArrowRight className="w-5 h-5" />
-  }
-  const isFirstStep = () => getCurrentStepIndex() === 0
-
-  const updateUserInfo = (userInfo: UserInfo) => {
-    setOnboardingData(prev => ({ ...prev, userInfo }))
-  }
-
-  const updateOrganization = (organization: OrganizationInfo) => {
-    setOnboardingData(prev => ({ ...prev, organization }))
-  }
-
-  const updateBusinessSettings = (businessSettings: BusinessSettings) => {
-    setOnboardingData(prev => ({ ...prev, businessSettings }))
-  }
-
-  const updateAddress = (address: AddressInfo) => {
-    setOnboardingData(prev => ({ ...prev, address }))
-  }
-
-  const updateProducts = (products: ProductInfo) => {
-    setOnboardingData(prev => ({ ...prev, products }))
-  }
-
-  const updateBilling = (billing: BillingSettings) => {
-    setOnboardingData(prev => ({ ...prev, billing }))
-  }
-
-  const updateTeam = (team: TeamSettings) => {
-    setOnboardingData(prev => ({ ...prev, team }))
-  }
-
-  const isStepValid = (step: OnboardingStep): boolean => {
+  // Step validation
+  const isStepValid = useCallback((step: OnboardingStep): boolean => {
     switch (step) {
-      case 'userInfo': {
-        const { userInfo } = onboardingData
-        if (!userInfo) return false
-        return (
-          userInfo.firstName?.trim() !== '' &&
-          userInfo.lastName?.trim() !== '' &&
-          userInfo.email?.trim() !== '' &&
-          userInfo.phone?.trim() !== ''
-        )
-      }
-
       case 'organization': {
         const { organization } = onboardingData
         if (!organization) return false
@@ -375,7 +189,8 @@ export const GetStartedPage = () => {
         if (!address) return false
         return (
           address.name?.trim() !== '' &&
-          address.street?.trim() !== '' &&
+          address.addressLine1?.trim() !== '' &&
+          address.number?.trim() !== '' &&
           address.city?.trim() !== '' &&
           address.state?.trim() !== '' &&
           address.zipCode?.trim() !== '' &&
@@ -384,196 +199,444 @@ export const GetStartedPage = () => {
       }
 
       case 'products':
-        return true // Products step is optional
-
       case 'billing':
-        return true // Billing step is optional
-
       case 'team':
-        return true // Team step is optional
+        return true // Optional steps
 
       default:
         return false
     }
-  }
+  }, [onboardingData])
 
-  const handleNext = async () => {
-    const currentIndex = getCurrentStepIndex()
+  // Step navigation
+  const getCurrentStepIndex = useCallback(() => availableSteps.indexOf(currentStep), [availableSteps, currentStep])
 
-    // Save organization data to backend when leaving organization step
-    if (currentStep === 'organization' && isStepValid(currentStep)) {
-      if (onboardingData.organization.companyName.trim()) {
-        setIsCompleting(true) // Show loading state
+  const isFirstStep = useCallback(() => getCurrentStepIndex() === 0, [getCurrentStepIndex])
+  const isLastStep = useCallback(() => getCurrentStepIndex() === availableSteps.length - 1, [getCurrentStepIndex, availableSteps])
 
+  // Debounced save functions (declared first)
+  const saveOrganizationData = useCallback(async (orgData: OrganizationRequest) => {
+    try {
+      setIsCompleting(true)
+      let result = null
+      
+      if (cachedOrgData) {
+        // Update existing organization
+        result = await organizationService.update(cachedOrgData.organizationId, orgData)
+      } else {
+        // Create new organization
+        result = await organizationService.create(orgData)
+        // Cache the created organization for future updates
+        if (result?.success && result.data) {
+          setCachedOrgData(result.data)
+          organizationChangeDetection.resetTracking(orgData)
+        }
+      }
+
+      if (!result?.success) {
+        throw new Error('Failed to save organization')
+      }
+    } catch (error) {
+      showErrorToast(error)
+    } finally {
+      setIsCompleting(false)
+    }
+  }, [cachedOrgData, organizationChangeDetection, showErrorToast])
+
+  const { debouncedFn: _debouncedSaveOrganization, flush: flushOrganizationSave } = useDebouncedUpdate(
+    saveOrganizationData,
+    2000 // 2 second delay
+  )
+
+  // Data update functions
+  const updateUserInfo = useCallback((userInfo: UserInfo) => {
+    setOnboardingData(prev => ({ ...prev, userInfo }))
+  }, [])
+
+  const updateOrganization = useCallback((organization: OrganizationInfo) => {
+    setOnboardingData(prev => ({ ...prev, organization }))
+  }, [])
+
+  const updateBusinessSettings = useCallback((businessSettings: BusinessSettings) => {
+    setOnboardingData(prev => ({ ...prev, businessSettings }))
+  }, [])
+
+  const updateAddress = useCallback((address: AddressInfo) => {
+    setOnboardingData(prev => ({ ...prev, address }))
+  }, [])
+
+  const updateProducts = useCallback((products: ProductInfo) => {
+    setOnboardingData(prev => ({ ...prev, products }))
+  }, [])
+
+  const updateBilling = useCallback((billing: BillingSettings) => {
+    setOnboardingData(prev => ({ ...prev, billing }))
+  }, [])
+
+  const updateTeam = useCallback((team: TeamSettings) => {
+    setOnboardingData(prev => ({ ...prev, team }))
+  }, [])
+
+  // Load organization and user data
+  const loadOnboardingData = useCallback(async () => {
+    if (loadingRef.current) return
+    loadingRef.current = true
+    setApiError('')
+
+    try {
+      // Load user data
+      try {
+        const userResponse = await authService.getCurrentUser()
+        if (userResponse.success && userResponse.data) {
+          const currentUser = userResponse.data
+          updateUserInfo({
+            firstName: currentUser.firstName ?? '',
+            lastName: currentUser.lastName ?? '',
+            email: currentUser.email ?? '',
+            phone: currentUser.phone ?? '',
+          })
+
+          if (currentUser.firstName && currentUser.lastName && currentUser.email && currentUser.phone) {
+            setCompletedSteps(prev => [...prev, 'userInfo'])
+          }
+        }
+      } catch (userError) {
+        setApiError('Failed to load user data')
+      }
+
+      // Load organization data
+      if (user) {
         try {
-          // Base organization data
-          const baseOrgData = {
-            name: onboardingData.organization.companyName,
-            description:
-              onboardingData.organization.description ??
-              `${onboardingData.organization.industry} company with ${onboardingData.organization.companySize} employees`,
-            website: onboardingData.organization.website ?? '',
-            size: onboardingData.organization.companySize ?? '',
-            revenue: onboardingData.organization.revenue
-              ? parseFloat(onboardingData.organization.revenue)
-              : 0,
-            category: onboardingData.organization.industry ?? '',
-            type: 'corporation',
-            registrationNumber: `REG-${Date.now()}`, // Generate a temporary registration number
-            currency: onboardingData.businessSettings.currency ?? 'USD',
-            timeZone:
-              onboardingData.organization.timeZone ??
-              onboardingData.businessSettings.timezone ??
-              'UTC',
-            country: onboardingData.organization.country ?? 'US', // Get from organization form
-          }
+          const orgResponse = await getCurrentOrganization()
+          if (orgResponse.success && orgResponse.data) {
+            const org = orgResponse.data
+            setCachedOrgData(org)
 
-          // For create operations, include userId
-          const createOrgData = {
-            ...baseOrgData,
-            userId: user?.id ?? '',
-          }
-
-          // For update operations, exclude userId (backend validation might reject it)
-          const updateOrgData = baseOrgData
-
-
-          // Check if user already has an organization using single API call
-          let orgResponse
-          if (user?.accountType === 'business') {
-            try {
-              let existingOrg = null
-
-              // Use the clean workflow method
-              const currentOrgResponse = await getCurrentOrganization()
-              if (currentOrgResponse.success && currentOrgResponse.data) {
-                existingOrg = currentOrgResponse.data
-              }
-
-              if (existingOrg) {
-                orgResponse = await organizationService.update(
-                  existingOrg.organizationId,
-                  updateOrgData
-                )
-              } else {
-                orgResponse = await organizationService.create(createOrgData)
-              }
-            } catch (fetchError) {
-              orgResponse = await organizationService.create(createOrgData)
+            const orgData: OrganizationInfo = {
+              companyName: org.name ?? '',
+              industry: org.category ?? '',
+              companySize: org.size ?? '',
+              website: org.website ?? '',
+              description: org.description ?? '',
+              timeZone: org.timeZone ?? '',
+              revenue: org.revenue?.toString() ?? '',
+              country: org.country ?? '',
             }
-          } else {
-            // Create new organization for non-business users
-            orgResponse = await organizationService.create(createOrgData)
+            
+            updateOrganization(orgData)
+            
+            // Determine which steps are completed based on loaded data
+            const completedStepsFromData: OnboardingStep[] = []
+            
+            // Check organization completion
+            if (org.name && org.category && org.size && org.country) {
+              completedStepsFromData.push('organization')
+            }
+
+            // Update address from organization
+            if (org.address) {
+              updateAddress({
+                name: org.address.name,
+                street: org.address.addressLine1 ?? '',
+                addressLine1: org.address.addressLine1,
+                addressLine2: org.address.addressLine2 ?? '',
+                number: org.address.number ?? '',
+                city: org.address.city,
+                state: org.address.state ?? '',
+                zipCode: org.address.zipCode,
+                country: org.address.country,
+                addressType: 'billing',
+                isPrimary: true
+              })
+              
+              // Check address completion
+              if (org.address.name && org.address.addressLine1 && org.address.city && org.address.country) {
+                completedStepsFromData.push('address')
+              }
+            }
+
+            // Update business settings
+            if (org.currency ?? org.timeZone ?? org.fiscalYearStart) {
+              updateBusinessSettings({
+                currency: org.currency ?? 'USD',
+                timezone: org.timeZone ?? 'UTC',
+                fiscalYearStart: org.fiscalYearStart ?? 'January',
+              })
+              
+              // Check business settings completion
+              if (org.currency && org.timeZone && org.fiscalYearStart) {
+                completedStepsFromData.push('businessSettings')
+              }
+            }
+            
+            // Set all completed steps at once to avoid race conditions
+            if (completedStepsFromData.length > 0) {
+              setCompletedSteps(completedStepsFromData)
+            }
+          }
+        } catch (orgError) {
+          showErrorToast(orgError)
+          setApiError('Failed to load organization data')
+        }
+      }
+
+      if (user) {
+        setAvailableSteps(allSteps)
+      } else {
+        setAvailableSteps(['userInfo'])
+      }
+
+    } catch (error) {
+      setApiError('Failed to load onboarding data')
+    } finally {
+      loadingRef.current = false
+    }
+  }, [getCurrentOrganization, user, updateUserInfo, updateOrganization, updateAddress, updateBusinessSettings, showErrorToast])
+
+  // Initialize data when user is available
+  useEffect(() => {
+    if (user && !loadingRef.current) {
+      loadOnboardingData()
+    }
+  }, [user, loadOnboardingData])
+
+  // Navigation handlers
+  const handleNext = useCallback(async () => {
+    try {
+      const currentStepValid = isStepValid(currentStep)
+      
+      if (!currentStepValid) {
+        showErrorToast(new Error('Please fill in all required fields'))
+        return
+      }
+
+      // Save data based on current step
+      if (isStepValid(currentStep)) {
+        setIsCompleting(true)
+        try {
+          // Save organization data when leaving organization or businessSettings step
+          if (currentStep === 'organization' || currentStep === 'businessSettings') {
+            const baseOrgData: OrganizationRequest = {
+              name: onboardingData.organization.companyName ?? 'Untitled Company',
+              description: onboardingData.organization.description ?? 
+                `${onboardingData.organization.industry} company`,
+              website: onboardingData.organization.website ?? '',
+              size: onboardingData.organization.companySize ?? '',
+              revenue: onboardingData.organization.revenue 
+                ? parseFloat(onboardingData.organization.revenue) 
+                : 0,
+              category: onboardingData.organization.industry ?? '',
+              type: 'corporation',
+              registrationNumber: cachedOrgData?.registrationNumber ?? `REG-${Date.now()}`,
+              currency: onboardingData.businessSettings.currency ?? 'USD',
+              timeZone: onboardingData.businessSettings.timezone ?? 'UTC',
+              country: onboardingData.organization.country ?? 'US',
+              userId: state.user?.id ?? '',
+              fiscalYearStart: onboardingData.businessSettings.fiscalYearStart ?? 'January'
+            }
+
+            // Only save if data has actually changed
+            if (organizationChangeDetection.hasChanged(baseOrgData)) {
+              // Flush any pending debounced saves and save immediately when navigating
+              await flushOrganizationSave(baseOrgData)
+            }
           }
 
-          if (!orgResponse.success) {
-            console.error('Failed to save organization:', orgResponse)
-            showErrorToast(orgResponse.error ?? 'Failed to save organization data')
-            setIsCompleting(false)
-            return
+          // Save address data when leaving address step
+          if (currentStep === 'address') {
+            const addressData = onboardingData.address
+            if (!addressData.name || !addressData.addressLine1 || !addressData.city || !addressData.country) {
+              throw new Error('Address information is incomplete')
+            }
+
+            // Prepare address data for change detection (using a normalized format)
+            const addressApiData = {
+              name: addressData.name,
+              addressLine1: addressData.addressLine1,
+              addressLine2: addressData.addressLine2,
+              number: addressData.number,
+              city: addressData.city,
+              state: addressData.state ?? '',
+              zipCode: addressData.zipCode,
+              country: addressData.country,
+              addressType: addressData.addressType,
+              isPrimary: addressData.isPrimary
+            }
+
+            // Only save if address data has actually changed
+            if (addressChangeDetection.hasChanged(addressApiData)) {
+              let addressResult = null
+              
+              if (cachedOrgData?.address?.addressId) {
+                // Update existing address
+                const updateData: UpdateAddressData = {
+                  name: addressApiData.name,
+                  addressLine1: addressApiData.addressLine1,
+                  addressLine2: addressApiData.addressLine2,
+                  number: addressApiData.number,
+                  city: addressApiData.city,
+                  state: addressApiData.state,
+                  zipCode: addressApiData.zipCode,
+                  country: addressApiData.country,
+                  addressType: addressApiData.addressType,
+                  isPrimary: addressApiData.isPrimary
+                }
+                addressResult = await addressService.update(cachedOrgData.address.addressId, updateData)
+              } else {
+                // Create new address
+                const createData: CreateAddressData = {
+                  name: addressApiData.name,
+                  addressLine1: addressApiData.addressLine1,
+                  addressLine2: addressApiData.addressLine2,
+                  number: addressApiData.number,
+                  city: addressApiData.city,
+                  state: addressApiData.state,
+                  zipCode: addressApiData.zipCode,
+                  country: addressApiData.country,
+                  addressType: addressApiData.addressType,
+                  isPrimary: addressApiData.isPrimary
+                }
+                addressResult = await addressService.create(createData)
+              }
+
+              if (!addressResult?.success) {
+                throw new Error('Failed to save address')
+              }
+
+              // If we have an organization and created a new address, link them
+              if (addressResult.success && addressResult.data && cachedOrgData && !cachedOrgData.addressId) {
+                try {
+                  // Update organization with the new address ID
+                  const orgUpdateData = {
+                    ...cachedOrgData,
+                    addressId: addressResult.data.addressId
+                  }
+                  await organizationService.update(cachedOrgData.organizationId, orgUpdateData)
+                } catch (linkError) {
+                  // Don't fail the whole process for this - address linking failed
+                }
+              }
+            }
           }
 
         } catch (error) {
-          console.error('Error saving organization:', error)
-          showErrorToast(error)
-          setIsCompleting(false)
+          showErrorToast(error instanceof Error ? error.message : 'Failed to save data')
           return
+        } finally {
+          setIsCompleting(false)
         }
-
-        setIsCompleting(false)
       }
+
+      // Mark current step as completed BEFORE moving to next step
+      // Only mark as completed if the step is actually valid
+      if (isStepValid(currentStep)) {
+        setCompletedSteps(prev => {
+          if (!prev.includes(currentStep)) {
+            return [...prev, currentStep]
+          }
+          return prev
+        })
+      }
+
+      // Move to next step
+      const index = getCurrentStepIndex()
+      const nextStep = availableSteps[index + 1]
+      if (nextStep) {
+        setCurrentStep(nextStep)
+      } else {
+        // Complete onboarding
+        navigate('/dashboard')
+      }
+    } catch (error) {
+      showErrorToast(error instanceof Error ? error.message : 'Navigation error occurred') 
     }
+  }, [
+    currentStep,
+    isStepValid,
+    onboardingData,
+    state.user,
+    getCurrentStepIndex,
+    availableSteps,
+    showErrorToast,
+    navigate,
+    cachedOrgData,
+    addressChangeDetection,
+    flushOrganizationSave,
+    organizationChangeDetection
+  ])
 
-
-    // Mark current step as completed if valid
-    if (isStepValid(currentStep) && !completedSteps.includes(currentStep)) {
-      setCompletedSteps(prev => [...prev, currentStep])
-    }
-
-    if (isLastStep()) {
-      handleComplete()
-    } else {
-      const nextStep = availableSteps[currentIndex + 1]
-      setCurrentStep(nextStep)
-    }
-  }
-
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     if (!isFirstStep()) {
       const currentIndex = getCurrentStepIndex()
       const prevStep = availableSteps[currentIndex - 1]
       setCurrentStep(prevStep)
     }
-  }
+  }, [isFirstStep, getCurrentStepIndex, availableSteps])
 
-  const handleStepClick = (step: OnboardingStep) => {
+  const handleStepClick = useCallback((step: OnboardingStep) => {
     setCurrentStep(step)
+  }, [])
+
+  // UI helpers
+  const getNextButtonClasses = (): string => {
+    if (!isStepValid(currentStep) || isCompleting) {
+      return 'bg-white/5 text-gray-500 cursor-not-allowed'
+    }
+    return 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white hover:shadow-lg hover:shadow-[#D417C8]/30 transform hover:scale-105'
   }
 
-  const handleComplete = async () => {
-    if (!token) {
-      setApiError('No authentication token found')
-      return
-    }
-
-    setIsCompleting(true)
-    setApiError('')
-
-    // Mark final step as completed
-    if (isStepValid(currentStep) && !completedSteps.includes(currentStep)) {
-      setCompletedSteps(prev => [...prev, currentStep])
-    }
-
-    try {
-      // Organization data is already saved when user clicked "Next" from organization step
-      // Just save remaining onboarding data to mock API (for now)
-      const response = await mockApi.saveOnboardingData(token, onboardingData)
-
-      if (response.success && response.data) {
-        // Update user data in context
-        setUser(response.data as User)
-
-        // Navigate to dashboard
-        navigate('/dashboard')
-      } else {
-        setApiError(response.error ?? 'Failed to save onboarding data')
-        setIsCompleting(false)
-      }
-    } catch (error) {
-      console.error('Onboarding completion error:', error)
-      showErrorToast(error)
-      setIsCompleting(false)
-    }
+  const getButtonText = (): string => {
+    if (isCompleting) return 'Saving...'
+    if (isLastStep()) return 'Complete Setup'
+    return 'Next'
   }
 
+  // Debug: Log current state
+  React.useEffect(() => {
+    // Development logging removed
+  }, [currentStep, completedSteps, isStepValid])
+
+  const getButtonIcon = () => {
+    if (isCompleting) {
+      return (
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+        />
+      )
+    }
+    if (isLastStep()) {
+      return <CheckCircle className="w-5 h-5" />
+    }
+    return <ArrowRight className="w-5 h-5" />
+  }
+
+  // Render current step
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 'userInfo':
-        // Only render if the step is in availableSteps (when user data is missing)
-        return availableSteps.includes('userInfo') ? (
+        return (
           <UserInfoStep
             data={onboardingData.userInfo}
             onChange={updateUserInfo}
-            isPrePopulated={completedSteps.includes('userInfo')}
           />
-        ) : null
+        )
       case 'organization':
-        // Only render if the step is in availableSteps (when organization data is missing)
-        return availableSteps.includes('organization') ? (
+        return (
           <OrganizationStep
             data={onboardingData.organization}
             onChange={updateOrganization}
             isPrePopulated={!!onboardingData.organization.companyName}
           />
-        ) : null
+        )
       case 'businessSettings':
-        // Only render if the step is in availableSteps (when business settings data is missing)
-        return availableSteps.includes('businessSettings') ? (
+        return (
           <BusinessSettingsStep
             data={onboardingData.businessSettings}
             onChange={updateBusinessSettings}
           />
-        ) : null
+        )
       case 'address':
         return (
           <AddressStep
@@ -587,7 +650,14 @@ export const GetStartedPage = () => {
       case 'billing':
         return <BillingStep data={onboardingData.billing} onChange={updateBilling} />
       case 'team':
-        return <TeamStep data={onboardingData.team} onChange={updateTeam} />
+        return (
+          <TeamStep
+            data={onboardingData.team}
+            onChange={updateTeam}
+            showSuccess={showSuccess}
+            showError={showError}
+          />
+        )
       default:
         return null
     }
@@ -612,19 +682,6 @@ export const GetStartedPage = () => {
             <p className="text-xl text-gray-400 mb-3">
               Let&apos;s set up your account in just a few steps
             </p>
-            {completedSteps.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#42E695]/10 to-[#3BB2B8]/10 border border-[#42E695]/20"
-              >
-                <span className="text-[#42E695] text-sm font-medium">
-                  ✓ {completedSteps.length} of {availableSteps.length} steps completed automatically
-                  {completedSteps.length !== availableSteps.length &&
-                    ` • ${availableSteps.length - completedSteps.length} steps remaining`}
-                </span>
-              </motion.div>
-            )}
           </motion.div>
 
           {/* Tab Navigation */}
@@ -705,13 +762,27 @@ export const GetStartedPage = () => {
         </div>
       </div>
       
-      {/* Error Toast */}
-      <ErrorToast
-        isVisible={errorToast.isVisible}
-        message={errorToast.message}
-        details={errorToast.details}
-        onClose={hideErrorToast}
+      {/* Toast Notifications - Positioned at page level */}
+      <Toast
+        isVisible={toast.isVisible}
+        type={toast.type}
+        message={toast.message}
+        details={toast.details}
+        onClose={hideToast}
       />
+      
+      {/* Error Toast for page-level errors */}
+      {errorToast.isVisible && (
+        <div className="fixed top-4 right-4 bg-red-500/90 text-white p-4 rounded-xl shadow-lg z-50">
+          <div className="flex items-center space-x-2">
+            <AlertCircle className="w-5 h-5" />
+            <span>{errorToast.message}</span>
+            <button onClick={hideErrorToast} className="ml-2 text-white/70 hover:text-white">
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </DashboardLayout>
   )
 }
