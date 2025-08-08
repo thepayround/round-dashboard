@@ -5,5 +5,6 @@ export {
   currencyDropdownConfig, 
   timezoneDropdownConfig, 
   fiscalYearDropdownConfig,
-  teamRoleDropdownConfig
+  teamRoleDropdownConfig,
+  industryDropdownConfig
 } from './configs'

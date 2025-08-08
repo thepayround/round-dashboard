@@ -1,9 +1,11 @@
-import { Globe, DollarSign, Clock, Calendar, Users } from 'lucide-react'
+import { Globe, DollarSign, Clock, Calendar, Users, Building } from 'lucide-react'
 import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
+import { useIndustries } from '@/shared/hooks/api/useIndustry'
 import type { ApiDropdownConfig } from './ApiDropdown'
 import { useMemo } from 'react'
 import type { CurrencyResponse } from '@/shared/types/api/countryCurrency'
 import type { TimeZone, Month, Role } from '@/shared/types/api/countryCurrency'
+import type { IndustryResponse } from '@/shared/types/api/industry'
 
 
 
@@ -247,4 +249,26 @@ export const teamRoleDropdownConfig: ApiDropdownConfig<Role> = {
   searchPlaceholder: 'Search roles...',
   noResultsText: 'No roles found',
   errorText: 'Failed to load roles',
+}
+
+// Industry dropdown configuration
+export const industryDropdownConfig: ApiDropdownConfig<IndustryResponse> = {
+  useHook: useIndustries,
+  mapToOptions: (industries) =>
+    industries.map(industry => ({
+      value: industry.code,
+      label: industry.name,
+      searchText: `${industry.name} ${industry.code} ${industry.description}`,
+      description: industry.description,
+      icon: (
+        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 border border-white/20 flex items-center justify-center">
+          <Building className="w-3 h-3 text-white/80" />
+        </div>
+      ),
+    })),
+  icon: <Building />,
+  placeholder: 'Select industry',
+  searchPlaceholder: 'Search industries...',
+  noResultsText: 'No industries found',
+  errorText: 'Failed to load industries',
 }

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Building, ChevronDown, DollarSign, ExternalLink, AlignLeft } from 'lucide-react'
 import { useState } from 'react'
-import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { ApiDropdown, countryDropdownConfig, industryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { OrganizationInfo } from '../../types/onboarding'
 
 interface OrganizationStepProps {
@@ -11,16 +11,6 @@ interface OrganizationStepProps {
   isPrePopulated?: boolean
 }
 
-const industryOptions = [
-  { value: 'technology', label: 'Technology' },
-  { value: 'healthcare', label: 'Healthcare' },
-  { value: 'finance', label: 'Finance' },
-  { value: 'education', label: 'Education' },
-  { value: 'retail', label: 'Retail' },
-  { value: 'manufacturing', label: 'Manufacturing' },
-  { value: 'consulting', label: 'Consulting' },
-  { value: 'other', label: 'Other' },
-]
 
 const companySizeOptions = [
   { value: '1-10', label: '1-10 employees' },
@@ -39,7 +29,6 @@ export const OrganizationStep = ({
   errors = {},
   isPrePopulated = false,
 }: OrganizationStepProps) => {
-  const [industryOpen, setIndustryOpen] = useState(false)
   const [companySizeOpen, setCompanySizeOpen] = useState(false)
 
   const handleInputChange =
@@ -181,15 +170,16 @@ export const OrganizationStep = ({
 
         {/* Industry */}
         <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">Industry</span>
-          <Dropdown
+          <span className="block text-sm font-medium text-gray-300 mb-2">
+            Industry <span className="text-red-400">*</span>
+          </span>
+          <ApiDropdown
+            config={industryDropdownConfig}
             value={data.industry}
-            options={industryOptions}
-            placeholder="Select your industry"
             onSelect={value => handleSelectChange('industry', value)}
-            isOpen={industryOpen}
-            setIsOpen={setIndustryOpen}
-            error={errors.industry}
+            onClear={() => handleSelectChange('industry', '')}
+            error={!!errors.industry}
+            allowClear
           />
           {errors.industry && <p className="mt-1 text-sm text-red-400">{errors.industry}</p>}
         </div>
