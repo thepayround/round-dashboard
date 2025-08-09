@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { Button } from '@/shared/components/Button'
 import { TabNavigation } from '../components/TabNavigation'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
@@ -577,14 +578,7 @@ export const GetStartedPage = () => {
     setCurrentStep(step)
   }, [])
 
-  // UI helpers
-  const getNextButtonClasses = (): string => {
-    if (!isStepValid(currentStep) || isCompleting) {
-      return 'bg-white/5 text-gray-500 cursor-not-allowed'
-    }
-    return 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white hover:shadow-lg hover:shadow-[#D417C8]/30 transform hover:scale-105'
-  }
-
+  // UI helpers  
   const getButtonText = (): string => {
     if (isCompleting) return 'Saving...'
     if (isLastStep()) return 'Complete Setup'
@@ -731,33 +725,28 @@ export const GetStartedPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center justify-between"
           >
-            <button
+            <Button
               onClick={handleBack}
               disabled={isFirstStep()}
-              className={`
-                flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-200
-                ${
-                  isFirstStep()
-                    ? 'bg-white/5 text-gray-500 cursor-not-allowed'
-                    : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border border-white/20'
-                }
-              `}
+              variant="ghost"
+              enhanced
+              icon={ArrowLeft}
+              iconPosition="left"
             >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back</span>
-            </button>
+              Back
+            </Button>
 
-            <button
+            <Button
               onClick={handleNext}
               disabled={!isStepValid(currentStep) || isCompleting}
-              className={`
-                flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-200
-                ${getNextButtonClasses()}
-              `}
+              variant={isLastStep() ? "success" : "primary"}
+              enhanced
+              loading={isCompleting}
+              icon={isLastStep() ? CheckCircle : ArrowRight}
+              iconPosition="right"
             >
-              <span>{getButtonText()}</span>
-              {getButtonIcon()}
-            </button>
+              {getButtonText()}
+            </Button>
           </motion.div>
         </div>
       </div>

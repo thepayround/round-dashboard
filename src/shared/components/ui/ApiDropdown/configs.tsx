@@ -1,13 +1,15 @@
-import { Globe, DollarSign, Clock, Calendar, Users, Building, User } from 'lucide-react'
+import { Globe, DollarSign, Clock, Calendar, Users, Building, User, MapPin } from 'lucide-react'
 import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 import { useIndustries } from '@/shared/hooks/api/useIndustry'
 import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
+import { useAddressTypes } from '@/shared/hooks/api/useAddressType'
 import type { ApiDropdownConfig } from './ApiDropdown'
 import { useMemo } from 'react'
 import type { CurrencyResponse } from '@/shared/types/api/countryCurrency'
 import type { TimeZone, Month, Role } from '@/shared/types/api/countryCurrency'
 import type { IndustryResponse } from '@/shared/types/api/industry'
 import type { CompanySizeResponse } from '@/shared/types/api/companySize'
+import type { AddressTypeResponse } from '@/shared/types/api/addressType'
 
 
 
@@ -307,4 +309,28 @@ export const companySizeDropdownConfig: ApiDropdownConfig<CompanySizeResponse> =
   searchPlaceholder: 'Search company sizes...',
   noResultsText: 'No company sizes found',
   errorText: 'Failed to load company sizes',
+}
+
+// Address type dropdown configuration
+export const addressTypeDropdownConfig: ApiDropdownConfig<AddressTypeResponse> = {
+  useHook: useAddressTypes,
+  mapToOptions: (addressTypes) =>
+    addressTypes
+      .filter(type => type.isActive)
+      .map(type => ({
+        value: type.code,
+        label: type.name,
+        searchText: `${type.name} ${type.code} ${type.description}`,
+        description: type.description,
+        icon: (
+          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+            <MapPin className="w-3 h-3 text-white/80" />
+          </div>
+        ),
+      })),
+  icon: <MapPin />,
+  placeholder: 'Select address type',
+  searchPlaceholder: 'Search address types...',
+  noResultsText: 'No address types found',
+  errorText: 'Failed to load address types',
 }

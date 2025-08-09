@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion'
 import { MapPin, Building, Hash, Info } from 'lucide-react'
-import { useState } from 'react'
 import { FormInput } from '@/shared/components/ui/FormInput'
-import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { ApiDropdown, countryDropdownConfig, addressTypeDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { AddressInfo } from '../../types/onboarding'
 
 interface AddressStepProps {
@@ -12,11 +11,6 @@ interface AddressStepProps {
   isPrePopulated?: boolean
 }
 
-const addressTypeOptions = [
-  { value: 'billing', label: 'Billing Address' },
-  { value: 'shipping', label: 'Shipping Address' },
-  { value: 'business', label: 'Business Address' },
-]
 
 export const AddressStep = ({
   data,
@@ -24,7 +18,6 @@ export const AddressStep = ({
   errors = {},
   isPrePopulated = false,
 }: AddressStepProps) => {
-  const [addressTypeOpen, setAddressTypeOpen] = useState(false)
 
   const handleInputChange =
     (field: keyof AddressInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,65 +34,6 @@ export const AddressStep = ({
     })
   }
 
-  const Dropdown = ({
-    value,
-    options,
-    placeholder,
-    onSelect,
-    isOpen,
-    setIsOpen,
-    error,
-  }: {
-    value: string
-    options: Array<{ value: string; label: string }>
-    placeholder: string
-    onSelect: (value: string) => void
-    isOpen: boolean
-    setIsOpen: (open: boolean) => void
-    error?: string
-  }) => (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className={`auth-input flex items-center justify-between ${error ? 'auth-input-error' : ''}`}
-      >
-        <span className={value ? 'text-white' : 'text-gray-400'}>
-          {value ? options.find(opt => opt.value === value)?.label : placeholder}
-        </span>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-          className="w-5 h-5 text-gray-400"
-        >
-          ▼
-        </motion.div>
-      </button>
-
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="absolute top-full left-0 right-0 mt-2 bg-gray-800/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-dropdown max-h-60 overflow-y-auto"
-        >
-          {options.map(option => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => {
-                onSelect(option.value)
-                setIsOpen(false)
-              }}
-              className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors duration-200 first:rounded-t-xl last:rounded-b-xl"
-            >
-              {option.label}
-            </button>
-          ))}
-        </motion.div>
-      )}
-    </div>
-  )
 
   return (
     <motion.div
@@ -134,17 +68,16 @@ export const AddressStep = ({
         {/* Address Type and Name Section */}
         <div className="space-y-6">
           <div className="space-y-2">
-            <span className="block text-sm font-medium text-gray-300">Address Type</span>
-            <Dropdown
+            <span className="block text-sm font-medium text-gray-300">
+              Address Type <span className="text-red-400">*</span>
+            </span>
+            <ApiDropdown
+              config={addressTypeDropdownConfig}
               value={data.addressType}
-              options={addressTypeOptions}
-              placeholder="Select address type"
-              onSelect={value =>
-                handleSelectChange('addressType', value as 'billing' | 'shipping' | 'business')
-              }
-              isOpen={addressTypeOpen}
-              setIsOpen={setAddressTypeOpen}
-              error={errors.addressType}
+              onSelect={value => handleSelectChange('addressType', value)}
+              onClear={() => handleSelectChange('addressType', '')}
+              error={!!errors.addressType}
+              allowClear
             />
             {errors.addressType && (
               <p className="mt-1 text-sm text-red-400">{errors.addressType}</p>

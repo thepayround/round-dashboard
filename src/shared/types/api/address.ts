@@ -12,7 +12,7 @@ export interface AddressRequest {
   state?: string
   country: string
   zipCode: string
-  addressType: 'billing' | 'shipping' | 'business'
+  addressType: string
   isPrimary: boolean
 }
 
@@ -26,7 +26,7 @@ export interface AddressResponse {
   state?: string
   country: string
   zipCode: string
-  addressType: 'billing' | 'shipping' | 'business'
+  addressType: string
   isPrimary: boolean
   createdDate: string
   modifiedDate: string
@@ -41,7 +41,7 @@ export interface CreateAddressData {
   state?: string
   country: string
   zipCode: string
-  addressType: 'billing' | 'shipping' | 'business'
+  addressType: string
   isPrimary: boolean
 }
 

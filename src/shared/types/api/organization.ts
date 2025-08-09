@@ -48,7 +48,7 @@ export interface OrganizationResponse {
     state: string
     zipCode: string
     country: string
-    addressType: 'billing' | 'shipping' | 'business'
+    addressType: string
   } | null
 }
 

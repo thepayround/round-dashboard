@@ -81,73 +81,107 @@ export const TabNavigation = ({
   }
 
   return (
-    <div className="w-full">
-      {/* Progress Bar */}
-      <div className="relative mb-8 h-12">
-        {/* Progress Bar - positioned first, will be behind step circles */}
-        <div className="absolute top-1/2 left-5 right-5 h-2 bg-white/10 rounded-full overflow-hidden z-0 transform -translate-y-1/2">
+    <nav 
+      className="w-full max-w-4xl mx-auto" 
+      role="navigation" 
+      aria-label="Onboarding Progress"
+    >
+      {/* Progress Section */}
+      <div className="relative mb-4 sm:mb-6 lg:mb-8">
+        {/* Background Progress Bar */}
+        <div className="absolute top-1/2 left-0 right-0 h-0.5 sm:h-1 lg:h-1.5 bg-white/10 rounded-full transform -translate-y-1/2 mx-3 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16" />
+        
+        {/* Active Progress Bar */}
+        <div className="absolute top-1/2 left-0 right-0 h-0.5 sm:h-1 lg:h-1.5 transform -translate-y-1/2 mx-3 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16 overflow-hidden rounded-full">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${getProgress()}%` }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
-            className="h-full bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] rounded-full"
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="h-full bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] rounded-full shadow-sm"
           />
         </div>
 
-        {/* Step Indicators - positioned 4px lower for perfect alignment */}
-        <div
-          className="relative flex justify-between items-center h-full"
-          style={{ marginTop: '4px' }}
-        >
-          {steps.map(step => (
-            <button
-              key={step.id}
-              onClick={() => canClickStep(step.id) && onStepClick(step.id)}
-              disabled={!canClickStep(step.id)}
-              className={`
-                  relative w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 z-20
+        {/* Step Indicators Container */}
+        <div className="relative flex px-3 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-2 sm:py-3 lg:py-4">
+          {steps.map((step, index) => (
+            <div 
+              key={step.id} 
+              className="flex-1 flex justify-center"
+            >
+              <button
+                onClick={() => canClickStep(step.id) && onStepClick(step.id)}
+                disabled={!canClickStep(step.id)}
+                aria-current={isStepActive(step.id) ? 'step' : undefined}
+                aria-label={`Step ${step.number}: ${step.label}${isStepCompleted(step.id) ? ' (completed)' : ''}${isStepActive(step.id) ? ' (current)' : ''}`}
+                className={`
+                  relative flex-shrink-0 
+                  w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 xl:w-14 xl:h-14
+                  rounded-full border-2 md:border-3 
+                  flex items-center justify-center 
+                  transition-all duration-300 ease-out
+                  transform hover:scale-110 focus:scale-110 active:scale-95
+                  focus:outline-none focus:ring-2 focus:ring-[#D417C8]/60 focus:ring-offset-1 focus:ring-offset-transparent
                   ${getStepCircleClasses(step.id)}
                 `}
-            >
-              {isStepCompleted(step.id) ? (
-                <Check className="w-4 h-4 text-white" />
-              ) : (
-                <span
-                  className={`text-sm font-bold ${
+              >
+                {isStepCompleted(step.id) ? (
+                  <Check className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 text-white" />
+                ) : (
+                  <span className={`text-xs sm:text-sm md:text-base lg:text-base xl:text-lg font-bold ${
                     isStepActive(step.id) || canClickStep(step.id) ? 'text-white' : 'text-gray-500'
-                  }`}
-                >
-                  {step.number}
-                </span>
-              )}
-            </button>
+                  }`}>
+                    {step.number}
+                  </span>
+                )}
+              </button>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Tab Labels */}
-      <div className="flex justify-between">
-        {steps.map(step => (
-          <button
-            key={step.id}
-            onClick={() => canClickStep(step.id) && onStepClick(step.id)}
-            disabled={!canClickStep(step.id)}
-            className={`
-              text-center transition-all duration-300
-              ${canClickStep(step.id) ? 'hover:scale-105' : 'cursor-not-allowed'}
-            `}
+      {/* Step Labels - Perfectly aligned with numbers above */}
+      <div className="flex px-3 sm:px-6 md:px-8 lg:px-12 xl:px-16 gap-1 sm:gap-3 md:gap-4 lg:gap-6">
+        {steps.map((step, index) => (
+          <div 
+            key={`label-container-${step.id}`} 
+            className="flex-1 flex justify-center min-w-0"
           >
-            <div
+            <button
+              onClick={() => canClickStep(step.id) && onStepClick(step.id)}
+              disabled={!canClickStep(step.id)}
               className={`
-              text-sm font-medium transition-colors duration-300
-              ${getStepTextClasses(step.id)}
-            `}
+                text-center transition-all duration-300 ease-out
+                p-1 sm:p-1.5 md:p-2 rounded-md max-w-full 
+                min-h-[2rem] sm:min-h-[2.5rem] lg:min-h-[3rem]
+                flex items-center justify-center
+                ${canClickStep(step.id) 
+                  ? 'hover:bg-white/5 hover:scale-105 focus:bg-white/8 focus:scale-105 focus:outline-none focus:ring-1 focus:ring-[#D417C8]/40 active:scale-95' 
+                  : 'cursor-not-allowed opacity-75'
+                }
+              `}
+              tabIndex={canClickStep(step.id) ? 0 : -1}
             >
-              {step.label}
-            </div>
-          </button>
+              <div className={`
+                text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-base
+                font-medium leading-tight text-center
+                transition-colors duration-300 
+                px-0.5 sm:px-1 md:px-2
+                ${getStepTextClasses(step.id)}
+              `}>
+                {/* Mobile (< 640px): Show abbreviated first word */}
+                <span className="sm:hidden block">
+                  {step.label.split(' ')[0].substring(0, 4)}
+                  {step.label.split(' ').length > 1 && '...'}
+                </span>
+                {/* Tablet and up (≥ 640px): Show full label with smart wrapping */}
+                <span className="hidden sm:inline break-words hyphens-auto">
+                  {step.label}
+                </span>
+              </div>
+            </button>
+          </div>
         ))}
       </div>
-    </div>
+    </nav>
   )
 }

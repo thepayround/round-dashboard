@@ -169,7 +169,7 @@ export interface AddressRequest {
   state: string
   zipCode: string
   country: string
-  addressType: 'billing' | 'shipping' | 'business'
+  addressType: string
   isPrimary?: boolean
 }
 
@@ -183,7 +183,7 @@ export interface AddressResponse {
   state: string
   zipCode: string
   country: string
-  addressType: 'billing' | 'shipping' | 'business'
+  addressType: string
   isPrimary?: boolean
   organizationId?: string
   createdDate?: string
@@ -199,7 +199,7 @@ export interface CreateAddressData {
   state: string
   zipCode: string
   country: string
-  addressType: 'billing' | 'shipping' | 'business'
+  addressType: string
   isPrimary?: boolean
   organizationId?: string
 }
@@ -213,6 +213,6 @@ export interface UpdateAddressData {
   state?: string
   zipCode?: string
   country?: string
-  addressType?: 'billing' | 'shipping' | 'business'
+  addressType?: string
   isPrimary?: boolean
 }

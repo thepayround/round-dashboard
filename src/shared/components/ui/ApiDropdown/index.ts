@@ -7,5 +7,6 @@ export {
   fiscalYearDropdownConfig,
   teamRoleDropdownConfig,
   industryDropdownConfig,
-  companySizeDropdownConfig
+  companySizeDropdownConfig,
+  addressTypeDropdownConfig
 } from './configs'

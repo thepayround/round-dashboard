@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Button } from '@/shared/components/Button'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -252,21 +253,20 @@ export const LoginPage = () => {
           </div>
 
           {/* Submit Button */}
-          <button
+          <Button
             type="submit"
-            disabled={isSubmitting || !isFormValid()}
-            className={`w-full btn-primary text-lg mt-8 ${isSubmitting || !isFormValid() ? 'opacity-50 cursor-not-allowed' : ''}`}
+            variant="primary"
+            size="lg"
+            fullWidth
+            enhanced
+            loading={isSubmitting}
+            disabled={!isFormValid()}
+            icon={ArrowRight}
+            iconPosition="right"
+            className="mt-8"
           >
-            <span className="flex items-center justify-center space-x-2">
-              <span>{isSubmitting ? 'Signing In...' : 'Sign In'}</span>
-              <motion.span
-                animate={{ x: [0, 4, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-              >
-                →
-              </motion.span>
-            </span>
-          </button>
+            {isSubmitting ? 'Signing In...' : 'Sign In'}
+          </Button>
 
           {/* Divider */}
           <div className="auth-divider">

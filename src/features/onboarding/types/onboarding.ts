@@ -47,7 +47,7 @@ export interface AddressInfo {
   state: string
   zipCode: string
   country: string
-  addressType: 'billing' | 'shipping' | 'business'
+  addressType: string
   isPrimary?: boolean
 }
 
