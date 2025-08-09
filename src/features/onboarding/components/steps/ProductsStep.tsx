@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
-import { Package, Plus } from 'lucide-react'
+import { Package } from 'lucide-react'
+
 import type { ProductInfo } from '../../types/onboarding'
+import { ActionButton } from '@/shared/components'
 
 interface ProductsStepProps {
   data: ProductInfo
@@ -65,13 +67,13 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
                 </p>
               </div>
 
-              <button
+              <ActionButton
+                label="Add Product"
                 onClick={handleAddProduct}
-                className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105"
-              >
-                <Plus className="w-5 h-5" />
-                <span>Add Product</span>
-              </button>
+                size="md"
+                variant="primary"
+                animated={false}
+              />
             </div>
           </div>
         </div>

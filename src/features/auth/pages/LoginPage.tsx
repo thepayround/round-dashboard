@@ -3,6 +3,7 @@ import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@/shared/components/Button'
+import { ActionButton } from '@/shared/components'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -113,6 +114,11 @@ export const LoginPage = () => {
       setApiError('An unexpected error occurred. Please try again.')
       setIsSubmitting(false)
     }
+  }
+
+  const handleButtonClick = () => {
+    const fakeEvent = { preventDefault: () => {} } as React.FormEvent
+    handleSubmit(fakeEvent)
   }
 
   return (
@@ -253,20 +259,17 @@ export const LoginPage = () => {
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            fullWidth
-            enhanced
-            loading={isSubmitting}
+          <ActionButton
+            label={isSubmitting ? 'Signing In...' : 'Sign In'}
+            onClick={handleButtonClick}
             disabled={!isFormValid()}
             icon={ArrowRight}
-            iconPosition="right"
-            className="mt-8"
-          >
-            {isSubmitting ? 'Signing In...' : 'Sign In'}
-          </Button>
+            loading={isSubmitting}
+            size="lg"
+            animated={false}
+            actionType="auth"
+            className="mt-8 w-full"
+          />
 
           {/* Divider */}
           <div className="auth-divider">

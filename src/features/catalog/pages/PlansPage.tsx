@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
 import { PlanCard, CreatePlanModalEnhanced } from '../components'
-import { CreateButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
+import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Plan, CatalogViewMode } from '../types/catalog.types'
 
@@ -210,7 +210,7 @@ export const PlansPage = () => {
                   Back to Catalog
                 </button>
               </Link>
-              <CreateButton
+              <ActionButton
                 label="Create Plan"
                 onClick={() => setShowCreateModal(true)}
                 size="md"
@@ -305,7 +305,7 @@ export const PlansPage = () => {
                 }
               </p>
               {!searchQuery && selectedFamily === 'all' && (
-                <CreateButton
+                <ActionButton
                   label="Create Your First Plan"
                   onClick={() => setShowCreateModal(true)}
                   size="md"

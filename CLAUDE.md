@@ -276,8 +276,8 @@ Avoid `useEffect` for things React can do declaratively.
 
 ### Standard Component Patterns
 
-#### CreateButton for Add/Create/New Actions
-**MANDATORY**: Use `CreateButton` component for ALL add/create/new actions
+#### ActionButton for Add/Create/New Actions
+**MANDATORY**: Use `ActionButton` component for ALL add/create/new actions
 
 ### Architecture Patterns
 1. **Compound Components** - Card system (Header, Title, Content, Footer)

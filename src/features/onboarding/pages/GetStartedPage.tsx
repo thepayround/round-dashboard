@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { Button } from '@/shared/components/Button'
+import { ActionButton } from '@/shared/components'
 import { TabNavigation } from '../components/TabNavigation'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
@@ -743,17 +744,16 @@ export const GetStartedPage = () => {
               Back
             </Button>
 
-            <Button
+            <ActionButton
+              label={getButtonText()}
               onClick={handleNext}
               disabled={!isStepValid(currentStep) || isCompleting}
               variant={isLastStep() ? "success" : "primary"}
-              enhanced
-              loading={isCompleting}
               icon={isLastStep() ? CheckCircle : ArrowRight}
-              iconPosition="right"
-            >
-              {getButtonText()}
-            </Button>
+              loading={isCompleting}
+              animated={false}
+              actionType="navigation"
+            />
           </motion.div>
         </div>
       </div>

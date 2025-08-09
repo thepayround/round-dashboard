@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
 import { CouponCard, CreateCouponModal } from '../components'
-import { CreateButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
+import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Coupon, CatalogViewMode } from '../types/catalog.types'
 
@@ -186,7 +186,7 @@ export const CouponsPage = () => {
                   Back to Catalog
                 </button>
               </Link>
-              <CreateButton
+              <ActionButton
                 label="Create Coupon"
                 onClick={() => setShowCreateModal(true)}
                 size="md"
@@ -281,7 +281,7 @@ export const CouponsPage = () => {
                 }
               </p>
               {!searchQuery && selectedStatus === 'all' && selectedType === 'all' && (
-                <CreateButton
+                <ActionButton
                   label="Create Your First Coupon"
                   onClick={() => setShowCreateModal(true)}
                   size="md"

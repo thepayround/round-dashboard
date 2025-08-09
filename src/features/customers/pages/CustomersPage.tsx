@@ -15,7 +15,7 @@ import {
   Grid3X3
 } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Card, CreateButton, SearchFilterToolbar, SectionHeader } from '@/shared/components'
+import { Card, ActionButton, SearchFilterToolbar, SectionHeader } from '@/shared/components'
 import type { ViewMode, FilterField } from '@/shared/components'
 import type { Customer, CustomerFilters, CustomerMetrics } from '../types/customer.types'
 
@@ -390,10 +390,11 @@ const CustomersPage: React.FC = () => {
                 <Download className="w-4 h-4 mr-2" />
                 Export
               </motion.button>
-              <CreateButton
+              <ActionButton
                 label="Add Customer"
                 onClick={() => { /* Add customer clicked */ }}
                 size="md"
+                animated={false}
               />
             </div>
           }
@@ -647,7 +648,7 @@ const CustomersPage: React.FC = () => {
                 : "Get started by adding your first customer"
               }
             </p>
-            <CreateButton
+            <ActionButton
               label="Add Customer"
               onClick={() => { /* Add customer clicked */ }}
               size="md"

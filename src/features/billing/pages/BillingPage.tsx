@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { CreditCard, TrendingUp, DollarSign, Users, Clock, CheckCircle } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { CreateButton, Card, SectionHeader } from '@/shared/components'
+import { ActionButton, Card, SectionHeader } from '@/shared/components'
 
 export const BillingPage = () => (
   <DashboardLayout>
@@ -12,7 +12,7 @@ export const BillingPage = () => (
         subtitle="Manage your billing, subscriptions, and revenue tracking"
         size="main"
         actions={
-          <CreateButton
+          <ActionButton
             label="Create Invoice"
             onClick={() => { /* Create invoice clicked */ }}
             size="md"

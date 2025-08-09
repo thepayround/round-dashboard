@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { ActionButton } from '@/shared/components'
 
 import type { CompanyInfo, BillingAddress } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
@@ -277,6 +278,11 @@ export const BusinessRegisterPage = () => {
   const handleSkipBilling = () => {
     setBillingAddress(undefined)
     multiStepForm.completeAndGoToNext()
+  }
+
+  const handleButtonClick = () => {
+    const fakeEvent = { preventDefault: () => {} } as React.FormEvent
+    handleSubmit(fakeEvent)
   }
 
   // Render step content
@@ -640,39 +646,25 @@ export const BusinessRegisterPage = () => {
 
                 {/* Continue button - show on step 0, step 2, and step 1 when billing is complete */}
                 {(multiStepForm.currentStep !== 1 || isBillingComplete) && (
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
+                  <ActionButton
+                    label={(() => {
+                      if (isSubmitting) return 'Creating Account...'
+                      if (multiStepForm.isLastStep) return 'Create Account'
+                      return 'Continue'
+                    })()}
+                    onClick={handleButtonClick}
                     disabled={
                       isSubmitting ||
                       (multiStepForm.currentStep === 0 && !isPersonalValid) ||
                       (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
                     }
-                    className={`
-                    px-8 py-3 font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px] rounded-xl
-                    ${
-                      isSubmitting ||
-                      (multiStepForm.currentStep === 0 && !isPersonalValid) ||
-                      (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
-                        ? 'opacity-50 cursor-not-allowed btn-secondary'
-                        : 'btn-primary'
-                    }
-                  `}
-                  >
-                    <span>
-                      {(() => {
-                        if (isSubmitting) return 'Creating Account...'
-                        if (multiStepForm.isLastStep) return 'Create Account'
-                        return 'Continue'
-                      })()}
-                    </span>
-                    {!isSubmitting &&
-                      (multiStepForm.isLastStep ? (
-                        <CheckCircle className="w-4 h-4" />
-                      ) : (
-                        <ArrowRight className="w-4 h-4" />
-                      ))}
-                  </button>
+                    icon={multiStepForm.isLastStep ? CheckCircle : ArrowRight}
+                    loading={isSubmitting}
+                    size="md"
+                    animated={false}
+                    actionType={multiStepForm.isLastStep ? "auth" : "navigation"}
+                    className="min-w-[160px] h-[48px]"
+                  />
                 )}
               </div>
             </div>

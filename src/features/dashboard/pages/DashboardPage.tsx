@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Card, SectionHeader } from '@/shared/components'
+import { Card, SectionHeader, ActionButton } from '@/shared/components'
 import { useAuth } from '@/shared/hooks/useAuth'
 import type { ProductInfo, TeamSettings } from '@/features/onboarding/types/onboarding'
 
@@ -311,7 +311,15 @@ export const DashboardPage = () => {
                     <div className="text-center py-8">
                       <Package className="w-12 h-12 auth-text-muted mx-auto mb-4" />
                       <p className="auth-text-muted">No products added yet</p>
-                      <button className="btn-primary mt-4 px-4 py-2">Add Your First Product</button>
+                      <div className="mt-4">
+                        <ActionButton
+                          label="Add Your First Product"
+                          onClick={() => {/* Navigate to products page */}}
+                          size="md"
+                          variant="primary"
+                          animated={false}
+                        />
+                      </div>
                     </div>
                   )}
                 </Card>

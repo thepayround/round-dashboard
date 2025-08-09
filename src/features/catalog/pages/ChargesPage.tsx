@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
 import { ChargeCard, CreateChargeModal } from '../components'
-import { CreateButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
+import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Charge, CatalogViewMode } from '../types/catalog.types'
 
@@ -191,7 +191,7 @@ export const ChargesPage = () => {
                   Back to Catalog
                 </button>
               </Link>
-              <CreateButton
+              <ActionButton
                 label="Create Charge"
                 onClick={() => setShowCreateModal(true)}
                 size="md"
@@ -286,7 +286,7 @@ export const ChargesPage = () => {
                 }
               </p>
               {!searchQuery && selectedFamily === 'all' && selectedType === 'all' && (
-                <CreateButton
+                <ActionButton
                   label="Create Your First Charge"
                   onClick={() => setShowCreateModal(true)}
                   size="md"

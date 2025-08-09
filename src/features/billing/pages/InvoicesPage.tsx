@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FileText, Download, Eye, Edit, Trash2 } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { CreateButton, Card, SearchFilterToolbar, SectionHeader } from '@/shared/components'
+import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '@/shared/components'
 import type { FilterField } from '@/shared/components'
 
 export const InvoicesPage = () => {
@@ -100,10 +100,11 @@ export const InvoicesPage = () => {
             subtitle="Manage and track all your invoices in one place"
             size="main"
             actions={
-              <CreateButton
+              <ActionButton
                 label="Create Invoice"
                 onClick={() => { /* Create invoice clicked */ }}
                 size="md"
+                animated={false}
               />
             }
           />

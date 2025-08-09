@@ -263,7 +263,7 @@ Planned improvements:
 - Advanced form validation features
 - Internationalization support
 
-### 6. CreateButton Component (`/shared/components/CreateButton`)
+### 6. ActionButton Component (`/shared/components/ActionButton`)
 
 **Purpose**: Universal button for all add/create/new actions across the platform
 
@@ -277,7 +277,7 @@ Planned improvements:
 
 **Usage**:
 ```tsx
-<CreateButton
+<ActionButton
   label="Add Customer"
   onClick={() => handleCreate()}
   size="md"
@@ -298,7 +298,7 @@ Replace instances of:
 
 With:
 ```tsx
-<CreateButton
+<ActionButton
   label="Create Something"
   onClick={handleClick}
   size="md"

@@ -5,6 +5,7 @@ import type { TeamSettings } from '../../types/onboarding'
 import { useTeamInvitation, useTeamRoles } from '@/shared/hooks/api/useTeam'
 import { UserRole } from '@/shared/services/api/team.service'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { ActionButton } from '@/shared/components'
 
 interface TeamStepProps {
   data: TeamSettings
@@ -250,19 +251,16 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                 </div>
               </div>
 
-              <button
-                type="button"
+              <ActionButton
+                label={isLoading ? 'Sending...' : 'Send Invitation'}
                 onClick={handleInviteTeamMember}
                 disabled={!inviteEmail.trim() || isLoading}
-                className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
-              >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <UserPlus className="w-5 h-5" />
-                )}
-                <span>{isLoading ? 'Sending...' : 'Send Invitation'}</span>
-              </button>
+                icon={isLoading ? Loader2 : UserPlus}
+                loading={isLoading}
+                size="md"
+                animated={false}
+                actionType="general"
+              />
 
             </div>
           </div>

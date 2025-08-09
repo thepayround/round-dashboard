@@ -17,12 +17,12 @@ interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
 }
 
 const variants = {
-  primary: 'bg-gradient-to-r from-[#D417C8] to-[#7767DA] border border-[#D417C8]/40 text-white font-bold hover:from-[#BD2CD0] hover:to-[#6B5CE8] hover:border-[#BD2CD0]/50 shadow-lg hover:shadow-[#D417C8]/30 shadow-[#D417C8]/20',
+  primary: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105',
   secondary: 'bg-gradient-to-r from-white/15 to-white/5 border border-white/25 text-white font-semibold hover:from-white/25 hover:to-white/10 hover:border-white/35 backdrop-blur-xl shadow-lg shadow-black/20',
   ghost: 'bg-transparent border border-transparent text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-white/15 hover:to-white/5 backdrop-blur-xl hover:border-white/20',
-  danger: 'bg-gradient-to-r from-red-500 to-pink-500 border border-red-500/40 text-white font-bold hover:from-red-600 hover:to-pink-600 hover:border-red-500/50 shadow-lg hover:shadow-red-500/30 shadow-red-500/20',
-  success: 'bg-gradient-to-r from-green-500 to-emerald-500 border border-green-500/40 text-white font-bold hover:from-green-600 hover:to-emerald-600 hover:border-green-500/50 shadow-lg hover:shadow-green-500/30 shadow-green-500/20',
-  create: 'bg-gradient-to-r from-[#14BDEA] to-[#D417C8] border border-[#14BDEA]/40 text-white font-bold hover:from-[#0EA5E9] hover:to-[#BD2CD0] hover:border-[#14BDEA]/50 shadow-lg hover:shadow-[#14BDEA]/30 shadow-[#14BDEA]/20 relative overflow-hidden'
+  danger: 'bg-gradient-to-r from-red-500 to-pink-500 border border-red-500/40 text-white font-medium hover:from-red-600 hover:to-pink-600 hover:border-red-500/50 shadow-lg hover:shadow-red-500/30 shadow-red-500/20 transition-all duration-200 transform hover:scale-105',
+  success: 'bg-gradient-to-r from-green-500 to-emerald-500 border border-green-500/40 text-white font-medium hover:from-green-600 hover:to-emerald-600 hover:border-green-500/50 shadow-lg hover:shadow-green-500/30 shadow-green-500/20 transition-all duration-200 transform hover:scale-105',
+  create: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105 relative overflow-hidden'
 }
 
 const sizes = {

@@ -13,7 +13,7 @@ import {
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { DashboardLayout, SectionHeader, Button, Card,SearchFilterToolbar, ActionCard } from '@/shared/components'
+import { DashboardLayout, SectionHeader, Button, Card, SearchFilterToolbar, ActionCard, ActionButton } from '@/shared/components'
 import type { ViewMode, FilterField } from '@/shared/components'
 import { ProductFamilyCard, CreateProductFamilyModal } from '../components'
 
@@ -88,12 +88,12 @@ export const ProductCatalogPage = () => {
                   Catalog Settings
                 </Button>
               </Link>
-              <Button
-                icon={Plus}
+              <ActionButton
+                label="Create Product Family"
                 onClick={() => setShowCreateModal(true)}
-              >
-                Create Product Family
-              </Button>
+                size="md"
+                animated={false}
+              />
             </>
           }
         />

@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
 import { AddonCard, CreateAddonModal } from '../components'
-import { CreateButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
+import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Addon, CatalogViewMode } from '../types/catalog.types'
 
@@ -220,7 +220,7 @@ export const AddonsPage = () => {
                   Back to Catalog
                 </button>
               </Link>
-              <CreateButton
+              <ActionButton
                 label="Create Add-on"
                 onClick={() => setShowCreateModal(true)}
                 size="md"
@@ -315,7 +315,7 @@ export const AddonsPage = () => {
                 }
               </p>
               {!searchQuery && selectedFamily === 'all' && selectedType === 'all' && (
-                <CreateButton
+                <ActionButton
                   label="Create Your First Add-on"
                   onClick={() => setShowCreateModal(true)}
                   size="md"

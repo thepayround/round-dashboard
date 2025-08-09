@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { User, Phone, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Button } from '@/shared/components/Button'
+import { ActionButton } from '@/shared/components'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -108,6 +108,11 @@ export const PersonalRegisterPage = () => {
       setApiError('An unexpected error occurred. Please try again.')
       setIsSubmitting(false)
     }
+  }
+
+  const handleButtonClick = () => {
+    const fakeEvent = { preventDefault: () => {} } as React.FormEvent
+    handleSubmit(fakeEvent)
   }
 
   return (
@@ -336,20 +341,17 @@ export const PersonalRegisterPage = () => {
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            fullWidth
-            enhanced
-            loading={isSubmitting}
+          <ActionButton
+            label={isSubmitting ? 'Creating Account...' : 'Create Personal Account'}
+            onClick={handleButtonClick}
             disabled={!isFormValid()}
             icon={ArrowRight}
-            iconPosition="right"
-            className="mt-8"
-          >
-            {isSubmitting ? 'Creating Account...' : 'Create Personal Account'}
-          </Button>
+            loading={isSubmitting}
+            size="lg"
+            animated={false}
+            actionType="auth"
+            className="mt-8 w-full"
+          />
 
           {/* Divider */}
           <div className="auth-divider">
