@@ -484,7 +484,7 @@ export const GetStartedPage = () => {
                 }
                 addressResult = await addressService.update(cachedOrgData.address.addressId, updateData)
               } else {
-                // Create new address
+                // Create new address for organization
                 const createData: CreateAddressData = {
                   name: addressApiData.name,
                   addressLine1: addressApiData.addressLine1,
@@ -497,7 +497,14 @@ export const GetStartedPage = () => {
                   addressType: addressApiData.addressType,
                   isPrimary: addressApiData.isPrimary
                 }
-                addressResult = await addressService.create(createData)
+                
+                if (cachedOrgData?.organizationId) {
+                  console.log('Creating address for organization:', cachedOrgData.organizationId)
+                  addressResult = await organizationService.createOrganizationAddress(cachedOrgData.organizationId, createData)
+                } else {
+                  console.error('No organization data available:', cachedOrgData)
+                  throw new Error('Organization ID not found for address creation')
+                }
               }
 
               if (!addressResult?.success) {

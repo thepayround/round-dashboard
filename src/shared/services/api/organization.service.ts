@@ -178,7 +178,7 @@ export class OrganizationService {
    */
   async getOrganizationAddress(organizationId: string): Promise<ApiResponse<AddressResponse>> {
     try {
-      const response = await this.client.get(`${ENDPOINTS.ORGANIZATIONS.BY_ID(organizationId)}/addresses`)
+      const response = await this.client.get(ENDPOINTS.ORGANIZATIONS.ADDRESSES(organizationId))
 
       return {
         success: true,
@@ -192,12 +192,13 @@ export class OrganizationService {
   /**
    * Create organization address
    */
-  async createOrganizationAddress(organizationId: string, addressData: CreateAddressData): Promise<ApiResponse<void>> {
+  async createOrganizationAddress(organizationId: string, addressData: CreateAddressData): Promise<ApiResponse<AddressResponse>> {
     try {
-      await this.client.post(`${ENDPOINTS.ORGANIZATIONS.BY_ID(organizationId)}/addresses`, addressData)
+      const response = await this.client.post<AddressResponse>(ENDPOINTS.ORGANIZATIONS.ADDRESSES(organizationId), addressData)
 
       return {
         success: true,
+        data: response.data,
         message: 'Organization address created successfully',
       }
     } catch (error) {
@@ -210,7 +211,7 @@ export class OrganizationService {
    */
   async updateOrganizationAddress(organizationId: string, addressData: UpdateAddressData): Promise<ApiResponse<void>> {
     try {
-      await this.client.put(`${ENDPOINTS.ORGANIZATIONS.BY_ID(organizationId)}/addresses`, addressData)
+      await this.client.put(ENDPOINTS.ORGANIZATIONS.ADDRESSES(organizationId), addressData)
 
       return {
         success: true,
@@ -226,7 +227,7 @@ export class OrganizationService {
    */
   async deleteOrganizationAddress(organizationId: string): Promise<ApiResponse<void>> {
     try {
-      await this.client.delete(`${ENDPOINTS.ORGANIZATIONS.BY_ID(organizationId)}/addresses`)
+      await this.client.delete(ENDPOINTS.ORGANIZATIONS.ADDRESSES(organizationId))
 
       return {
         success: true,

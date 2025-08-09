@@ -62,34 +62,13 @@ export class AddressService {
 
   /**
    * Create new address
+   * @deprecated Use organizationService.createOrganizationAddress() instead
+   * Direct address creation is not supported by the API
    */
   async create(addressData: CreateAddressData): Promise<ApiResponse<AddressResponse>> {
-    try {
-      const addressRequest: AddressRequest = {
-        name: addressData.name,
-        addressLine1: addressData.addressLine1,
-        addressLine2: addressData.addressLine2,
-        number: addressData.number,
-        city: addressData.city,
-        state: addressData.state,
-        country: addressData.country,
-        zipCode: addressData.zipCode,
-        addressType: addressData.addressType,
-        isPrimary: addressData.isPrimary,
-      }
-
-      const response = await this.client.post<AddressResponse>(
-        ENDPOINTS.ADDRESSES.BASE,
-        addressRequest
-      )
-
-      return {
-        success: true,
-        data: response.data,
-        message: 'Address created successfully',
-      }
-    } catch (error) {
-      return this.handleApiError(error, 'Failed to create address')
+    return {
+      success: false,
+      error: 'Direct address creation is not supported. Use organizationService.createOrganizationAddress() instead.',
     }
   }
 

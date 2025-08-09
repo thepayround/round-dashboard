@@ -12,6 +12,7 @@ import type {
   UpdateAddressData,
 } from '@/shared/types/api'
 import { addressService } from '@/shared/services/api'
+import { organizationService } from '@/shared/services/api/organization.service'
 
 export const useAddress = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -58,13 +59,21 @@ export const useAddress = () => {
   }
 
   const create = async (addressData: CreateAddressData): Promise<ApiResponse<AddressResponse>> => {
+    setError('Direct address creation is not supported. Use createForOrganization() instead.')
+    return {
+      success: false,
+      error: 'Direct address creation is not supported. Use createForOrganization() instead.',
+    }
+  }
+
+  const createForOrganization = async (organizationId: string, addressData: CreateAddressData): Promise<ApiResponse<AddressResponse>> => {
     setIsLoading(true)
     setError(null)
 
     try {
-      const result = await addressService.create(addressData)
+      const result = await organizationService.createOrganizationAddress(organizationId, addressData)
       if (!result.success) {
-        setError(result.error ?? 'Failed to create address')
+        setError(result.error ?? 'Failed to create organization address')
       }
       return result
     } catch (err) {
@@ -163,6 +172,7 @@ export const useAddress = () => {
     getAll,
     getById,
     create,
+    createForOrganization,
     update,
     remove,
     deleteAll,

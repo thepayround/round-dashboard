@@ -34,6 +34,8 @@ export const ENDPOINTS = {
     // Legacy endpoint (deprecated)
     BY_ROUND_ACCOUNT_ID_LEGACY: (roundAccountId: string) =>
       `/organizations/round-account/${roundAccountId}`,
+    // Organization addresses
+    ADDRESSES: (organizationId: string) => `/organizations/${organizationId}/addresses`,
   },
   // Addresses
   ADDRESSES: {
