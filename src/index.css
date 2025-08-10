@@ -47,6 +47,15 @@
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+    /* Mobile-first font sizing */
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  @media (min-width: 640px) {
+    body {
+      font-size: 16px;
+    }
   }
 
   body::before {
@@ -135,8 +144,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 1rem;
     z-index: 1;
+  }
+
+  @media (min-width: 640px) {
+    .auth-container {
+      padding: 2rem;
+    }
   }
 
   .auth-background {
@@ -198,8 +213,8 @@
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(28px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
-    padding: 3rem;
+    border-radius: 16px;
+    padding: 1.5rem;
     box-shadow:
       0 20px 60px rgba(0, 0, 0, 0.4),
       0 10px 30px rgba(0, 0, 0, 0.25),
@@ -209,8 +224,23 @@
     position: relative;
     overflow: hidden;
     width: 100%;
+    max-width: 100%;
     z-index: 10;
     transition: all 0.3s ease;
+  }
+
+  @media (min-width: 640px) {
+    .auth-card {
+      padding: 2rem;
+      border-radius: 20px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .auth-card {
+      padding: 3rem;
+      border-radius: 24px;
+    }
   }
 
   .auth-card::before {
@@ -674,5 +704,238 @@
   /* Modal overlay should be below dropdowns but above other content */
   .modal-overlay {
     z-index: 900 !important;
+  }
+
+  /* Mobile-first responsive utilities */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  @media (max-width: 1023px) {
+    .touch-target {
+      min-height: 48px;
+      min-width: 48px;
+    }
+  }
+
+  /* Enhanced mobile responsiveness */
+  @media (max-width: 640px) {
+    /* Improve mobile form inputs */
+    input, textarea, select {
+      font-size: 16px !important; /* Prevent iOS zoom */
+      line-height: 1.5;
+    }
+
+    /* Better spacing for mobile */
+    .auth-card {
+      padding: 1.5rem;
+      margin: 1rem;
+      border-radius: 16px;
+    }
+
+    /* Improve mobile button sizing */
+    .btn-primary, .btn-secondary {
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+      min-height: 48px;
+      border-radius: 12px;
+    }
+
+    /* Better mobile navigation */
+    .sidebar-collapsed {
+      transform: translateX(-100%);
+    }
+
+    /* Improve mobile cards */
+    .card-mobile {
+      padding: 1rem;
+      border-radius: 12px;
+    }
+
+    /* Better mobile modals */
+    .modal-mobile {
+      padding: 1rem;
+      margin: 0.5rem;
+      max-height: 95vh;
+    }
+
+    /* Improve mobile typography */
+    h1 { font-size: 1.875rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.25rem; }
+    
+    /* Better mobile scroll behavior */
+    .mobile-scroll {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+  }
+
+  @media (max-width: 475px) {
+    /* Extra small screens */
+    .auth-card {
+      padding: 1rem;
+      margin: 0.5rem;
+    }
+
+    /* Smaller touch targets for very small screens */
+    .touch-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Better typography for small screens */
+    .text-responsive {
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+  }
+
+  /* Safe area support for modern mobile devices */
+  @supports (padding: max(0px)) {
+    .safe-area-inset-top {
+      padding-top: max(1rem, env(safe-area-inset-top));
+    }
+    
+    .safe-area-inset-bottom {
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+    
+    .safe-area-inset-left {
+      padding-left: max(1rem, env(safe-area-inset-left));
+    }
+    
+    .safe-area-inset-right {
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+  }
+
+  /* Improved mobile interactions */
+  @media (hover: none) and (pointer: coarse) {
+    /* Touch device optimizations */
+    .hover\:scale-105:hover {
+      transform: none;
+    }
+    
+    .group:hover .group-hover\:scale-110 {
+      transform: none;
+    }
+    
+    /* Better focus states for touch */
+    button:focus, 
+    a:focus, 
+    input:focus, 
+    textarea:focus, 
+    select:focus {
+      outline: 2px solid rgba(212, 23, 200, 0.6);
+      outline-offset: 2px;
+    }
+  }
+
+  /* Landscape mobile optimization */
+  @media (max-height: 500px) and (orientation: landscape) {
+    .auth-card {
+      padding: 1rem;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-mobile {
+      max-height: 90vh;
+      padding: 0.75rem;
+    }
+  }
+
+  /* Mobile-friendly form spacing */
+  .mobile-form-spacing > * + * {
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .mobile-form-spacing > * + * {
+      margin-top: 1.5rem;
+    }
+  }
+
+  /* Mobile-optimized text sizes */
+  .responsive-text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  @media (max-width: 639px) {
+    .responsive-text-sm {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+  }
+
+  /* Improved mobile focus states */
+  @media (max-width: 1023px) {
+    .focus-mobile:focus {
+      outline: 3px solid rgba(20, 189, 234, 0.6) !important;
+      outline-offset: 3px !important;
+      border-radius: 8px;
+    }
+
+    /* Larger tap targets on mobile */
+    button, .btn, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Improve mobile form inputs */
+    input[type="text"], 
+    input[type="email"], 
+    input[type="password"], 
+    input[type="tel"],
+    textarea, 
+    select {
+      font-size: 16px !important; /* Prevent zoom on iOS */
+      min-height: 44px;
+    }
+  }
+
+  /* Responsive grid utilities */
+  .responsive-grid-1 {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .responsive-grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .responsive-grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .responsive-grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Safe area handling for mobile devices */
+  @supports (padding: max(0px)) {
+    .safe-area-top {
+      padding-top: max(1rem, env(safe-area-inset-top));
+    }
+    
+    .safe-area-bottom {
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+    
+    .safe-area-left {
+      padding-left: max(1rem, env(safe-area-inset-left));
+    }
+    
+    .safe-area-right {
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
   }
 }

@@ -381,14 +381,14 @@ const CustomersPage: React.FC = () => {
           subtitle="Manage and track your customer relationships"
           size="main"
           actions={
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="btn-secondary px-6 py-3 flex items-center"
+                className="btn-secondary px-3 sm:px-6 py-2.5 sm:py-3 flex items-center text-sm touch-target"
               >
-                <Download className="w-4 h-4 mr-2" />
-                Export
+                <Download className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Export</span>
               </motion.button>
               <ActionButton
                 label="Add Customer"
@@ -405,7 +405,7 @@ const CustomersPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 mb-8"
         >
           <Card
             variant="compact"
@@ -499,100 +499,176 @@ const CustomersPage: React.FC = () => {
         >
           <Card animate={false}>
           {viewMode === 'table' ? (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-700/50">
-                    <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">Customer</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">Status</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">MRR</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">LTV</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">Churn Risk</th>
-                    <th className="text-right py-4 px-6 text-sm font-medium auth-text-muted">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredCustomers.map((customer) => (
-                    <tr key={customer.id} className="border-b border-gray-700/30 hover:bg-white/5 transition-colors">
-                      <td className="py-4 px-6">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-[#14BDEA] to-[#7767DA] rounded-full flex items-center justify-center text-white font-semibold">
-                            {customer.firstName[0]}{customer.lastName[0]}
-                          </div>
-                          <div>
-                            <p className="auth-text font-medium">{customer.displayName}</p>
-                            <p className="auth-text-muted text-sm">{customer.email}</p>
-                            {customer.company && (
-                              <div className="text-xs auth-text-muted flex items-center gap-1 mt-1">
-                                <Building2 className="w-3 h-3" />
-                                {customer.company}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6">
-                        {getStatusBadge(customer.status as Customer['status'])}
-                      </td>
-                      <td className="py-4 px-6">
-                        <div>
-                          <p className="auth-text font-semibold">{formatCurrency(customer.totalMRR)}</p>
-                          <p className="auth-text-muted text-sm">
-                            {customer.subscriptions.length} subscription{customer.subscriptions.length !== 1 ? 's' : ''}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6">
-                        <div>
-                          <p className="auth-text font-semibold">{formatCurrency(customer.totalLTV)}</p>
-                          <p className="auth-text-muted text-sm">Since {formatDate(customer.signupDate)}</p>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6">
-                        {getChurnRiskBadge(customer.churnRisk as Customer['churnRisk'])}
-                      </td>
-                      <td className="py-4 px-6 text-right">
-                        <div className="flex items-center justify-end space-x-2">
-                          <Link
-                            to={`/customers/${customer.id}`}
-                            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                          >
-                            <Eye className="w-4 h-4 text-gray-400 hover:text-white" />
-                          </Link>
-                          <button className="p-2 rounded-lg hover:bg-white/10 transition-colors">
-                            <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
-                          </button>
-                          <button className="p-2 rounded-lg hover:bg-white/10 transition-colors">
-                            <MoreHorizontal className="w-4 h-4 text-gray-400 hover:text-white" />
-                          </button>
-                        </div>
-                      </td>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden lg:block overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-700/50">
+                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">Customer</th>
+                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">Status</th>
+                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">MRR</th>
+                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">LTV</th>
+                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">Churn Risk</th>
+                      <th className="text-right py-4 px-6 text-sm font-medium auth-text-muted">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {filteredCustomers.map((customer) => (
+                      <tr key={customer.id} className="border-b border-gray-700/30 hover:bg-white/5 transition-colors">
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-[#14BDEA] to-[#7767DA] rounded-full flex items-center justify-center text-white font-semibold">
+                              {customer.firstName[0]}{customer.lastName[0]}
+                            </div>
+                            <div>
+                              <p className="auth-text font-medium">{customer.displayName}</p>
+                              <p className="auth-text-muted text-sm">{customer.email}</p>
+                              {customer.company && (
+                                <div className="text-xs auth-text-muted flex items-center gap-1 mt-1">
+                                  <Building2 className="w-3 h-3" />
+                                  {customer.company}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6">
+                          {getStatusBadge(customer.status as Customer['status'])}
+                        </td>
+                        <td className="py-4 px-6">
+                          <div>
+                            <p className="auth-text font-semibold">{formatCurrency(customer.totalMRR)}</p>
+                            <p className="auth-text-muted text-sm">
+                              {customer.subscriptions.length} subscription{customer.subscriptions.length !== 1 ? 's' : ''}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6">
+                          <div>
+                            <p className="auth-text font-semibold">{formatCurrency(customer.totalLTV)}</p>
+                            <p className="auth-text-muted text-sm">Since {formatDate(customer.signupDate)}</p>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6">
+                          {getChurnRiskBadge(customer.churnRisk as Customer['churnRisk'])}
+                        </td>
+                        <td className="py-4 px-6 text-right">
+                          <div className="flex items-center justify-end space-x-2">
+                            <Link
+                              to={`/customers/${customer.id}`}
+                              className="p-2 rounded-lg hover:bg-white/10 transition-colors touch-target"
+                            >
+                              <Eye className="w-4 h-4 text-gray-400 hover:text-white" />
+                            </Link>
+                            <button className="p-2 rounded-lg hover:bg-white/10 transition-colors touch-target">
+                              <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
+                            </button>
+                            <button className="p-2 rounded-lg hover:bg-white/10 transition-colors touch-target">
+                              <MoreHorizontal className="w-4 h-4 text-gray-400 hover:text-white" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile/Tablet Card View */}
+              <div className="lg:hidden space-y-4 p-4 sm:p-6">
+                {filteredCustomers.map((customer) => (
+                  <div 
+                    key={customer.id}
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 sm:p-6 hover:bg-white/10 transition-all duration-200"
+                  >
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#14BDEA] to-[#7767DA] rounded-full flex items-center justify-center text-white font-semibold text-sm sm:text-base">
+                          {customer.firstName[0]}{customer.lastName[0]}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="auth-text font-semibold truncate">{customer.displayName}</h3>
+                          <p className="auth-text-muted text-sm truncate">{customer.email}</p>
+                          {customer.company && (
+                            <div className="text-xs auth-text-muted flex items-center gap-1 mt-1">
+                              <Building2 className="w-3 h-3 flex-shrink-0" />
+                              <span className="truncate">{customer.company}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="ml-3 flex-shrink-0">
+                        {getStatusBadge(customer.status as Customer['status'])}
+                      </div>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
+                      <div className="text-center sm:text-left">
+                        <div className="text-xs auth-text-muted mb-1">MRR</div>
+                        <div className="auth-text font-semibold text-sm">{formatCurrency(customer.totalMRR)}</div>
+                        <div className="auth-text-muted text-xs mt-1">
+                          {customer.subscriptions.length} sub{customer.subscriptions.length !== 1 ? 's' : ''}
+                        </div>
+                      </div>
+                      <div className="text-center sm:text-left">
+                        <div className="text-xs auth-text-muted mb-1">LTV</div>
+                        <div className="auth-text font-semibold text-sm">{formatCurrency(customer.totalLTV)}</div>
+                        <div className="auth-text-muted text-xs mt-1">Since {formatDate(customer.signupDate)}</div>
+                      </div>
+                      <div className="col-span-2 sm:col-span-1 text-center sm:text-left">
+                        <div className="text-xs auth-text-muted mb-2">Churn Risk</div>
+                        <div className="flex justify-center sm:justify-start">
+                          {getChurnRiskBadge(customer.churnRisk as Customer['churnRisk'])}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-2 pt-4 border-t border-gray-700/50">
+                      <Link
+                        to={`/customers/${customer.id}`}
+                        className="flex-1 btn-primary text-center flex items-center justify-center gap-2 py-2.5 text-sm"
+                      >
+                        <Eye className="w-4 h-4" />
+                        View Details
+                      </Link>
+                      <button className="btn-secondary p-2.5 touch-target">
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button className="btn-secondary p-2.5 touch-target">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 sm:p-6">
               {filteredCustomers.map((customer) => (
                 <Card key={customer.id} animate={false}>
                   <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div className="w-12 h-12 bg-gradient-to-br from-[#14BDEA] to-[#7767DA] rounded-full flex items-center justify-center text-white font-semibold">
                         {customer.firstName[0]}{customer.lastName[0]}
                       </div>
-                      <div>
-                        <h3 className="auth-text font-semibold">{customer.displayName}</h3>
-                        <p className="auth-text-muted text-sm">{customer.email}</p>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="auth-text font-semibold truncate">{customer.displayName}</h3>
+                        <p className="auth-text-muted text-sm truncate">{customer.email}</p>
                       </div>
                     </div>
-                    {getStatusBadge(customer.status as Customer['status'])}
+                    <div className="ml-3 flex-shrink-0">
+                      {getStatusBadge(customer.status as Customer['status'])}
+                    </div>
                   </div>
 
                   {customer.company && (
                     <div className="flex items-center gap-2 mb-3 text-sm auth-text-muted">
-                      <Building2 className="w-4 h-4" />
-                      {customer.company}
+                      <Building2 className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{customer.company}</span>
                     </div>
                   )}
 
@@ -617,12 +693,12 @@ const CustomersPage: React.FC = () => {
                   <div className="flex items-center gap-2 pt-4 border-t border-gray-700/50">
                     <Link
                       to={`/customers/${customer.id}`}
-                      className="flex-1 btn-primary text-center flex items-center justify-center gap-2"
+                      className="flex-1 btn-primary text-center flex items-center justify-center gap-2 touch-target"
                     >
                       <Eye className="w-4 h-4" />
                       View Details
                     </Link>
-                    <button className="btn-secondary p-3">
+                    <button className="btn-secondary p-3 touch-target">
                       <Edit className="w-4 h-4" />
                     </button>
                   </div>

@@ -26,7 +26,7 @@ export const BillingPage = () => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8"
       >
         <Card
           variant="stats"
@@ -70,7 +70,7 @@ export const BillingPage = () => (
       </motion.div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
         {/* Recent Invoices */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -80,27 +80,27 @@ export const BillingPage = () => (
         >
           <Card animate={false}>
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold auth-text">Recent Invoices</h2>
-              <button className="text-[#D417C8] hover:text-[#BD2CD0] font-medium">View All</button>
+              <h2 className="text-lg sm:text-xl font-bold auth-text">Recent Invoices</h2>
+              <button className="text-[#D417C8] hover:text-[#BD2CD0] font-medium text-sm sm:text-base">View All</button>
             </div>
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map(invoice => (
                 <div
                   key={invoice}
-                  className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10"
+                  className="flex items-center justify-between p-3 sm:p-4 rounded-xl bg-white/5 border border-white/10"
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 flex items-center justify-center">
-                      <CreditCard className="w-5 h-5 text-[#D417C8]" />
+                  <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 flex items-center justify-center flex-shrink-0">
+                      <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-[#D417C8]" />
                     </div>
-                    <div>
-                      <p className="auth-text font-medium">Invoice #{invoice}001</p>
-                      <p className="auth-text-muted text-sm">Customer Name {invoice}</p>
+                    <div className="min-w-0 flex-1">
+                      <p className="auth-text font-medium text-sm sm:text-base truncate">Invoice #{invoice}001</p>
+                      <p className="auth-text-muted text-xs sm:text-sm truncate">Customer Name {invoice}</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="auth-text font-medium">${(invoice * 125).toFixed(2)}</p>
-                    <p className="text-[#42E695] text-sm">Paid</p>
+                  <div className="text-right flex-shrink-0 ml-2">
+                    <p className="auth-text font-medium text-sm sm:text-base">${(invoice * 125).toFixed(2)}</p>
+                    <p className="text-[#42E695] text-xs sm:text-sm">Paid</p>
                   </div>
                 </div>
               ))}
@@ -117,12 +117,12 @@ export const BillingPage = () => (
         >
           <Card animate={false}>
             <div className="flex items-center space-x-3 mb-6">
-              <TrendingUp className="w-6 h-6 text-[#32A1E4]" />
-              <h2 className="text-xl font-bold auth-text">Revenue Trend</h2>
+              <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-[#32A1E4]" />
+              <h2 className="text-lg sm:text-xl font-bold auth-text">Revenue Trend</h2>
             </div>
             <div className="space-y-4">
               <div className="text-center">
-                <p className="auth-text text-3xl font-bold mb-2">$24,500</p>
+                <p className="auth-text text-2xl sm:text-3xl font-bold mb-2">$24,500</p>
                 <p className="auth-text-muted text-sm">This Month</p>
               </div>
               <div className="h-32 bg-gradient-to-t from-[#D417C8]/20 to-[#14BDEA]/20 rounded-xl flex items-end justify-center">

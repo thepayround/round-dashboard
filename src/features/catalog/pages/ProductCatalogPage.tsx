@@ -103,7 +103,7 @@ export const ProductCatalogPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8"
         >
           <Card
             variant="stats"
@@ -187,7 +187,7 @@ export const ProductCatalogPage = () => {
             accent="primary"
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <ActionCard
               title="Manage Plans"
               description="View and manage all pricing plans"
@@ -238,7 +238,7 @@ export const ProductCatalogPage = () => {
             accent="secondary"
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <ActionCard
               title="Create Plan"
               description="Define pricing & billing cycles"

@@ -131,52 +131,64 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       className={className}
     >
       <Card animate={false}>
-        <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-          {/* Search Section */}
-          <div className="flex-1 max-w-md">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder={searchPlaceholder}
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="auth-input pl-10 w-full"
-              />
+        <div className="flex flex-col gap-3 xs:gap-4">
+          {/* Mobile-first layout */}
+          <div className="flex flex-col xs:flex-row gap-3 xs:gap-4">
+            {/* Search Section */}
+            <div className="flex-1 min-w-0">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder={searchPlaceholder}
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  className="auth-input pl-10 w-full"
+                />
+              </div>
             </div>
-          </div>
-          
-          {/* Actions Section */}
-          <div className="flex items-center gap-3">
-            {/* Additional Actions */}
-            {additionalActions}
             
-            {/* Filters Button */}
-            {filterFields.length > 0 && (
-              <button
-                onClick={onToggleFilters}
-                className="btn-secondary flex items-center gap-2"
-              >
-                <Filter className="w-4 h-4" />
-                Filters
-              </button>
-            )}
-            
-            {/* View Mode Toggle */}
-            {viewMode && onViewModeChange && viewModeOptions && (
-              <ViewModeToggle
-                value={viewMode}
-                onChange={onViewModeChange}
-                options={viewModeOptions}
-              />
-            )}
+            {/* Actions Section - Mobile stacked, desktop inline */}
+            <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 xs:gap-3 flex-shrink-0">
+              {/* Additional Actions */}
+              {additionalActions && (
+                <div className="flex items-center justify-center xs:justify-start">
+                  {additionalActions}
+                </div>
+              )}
+              
+              {/* Bottom row on mobile, inline on desktop */}
+              <div className="flex items-center gap-2 xs:gap-3">
+                {/* Filters Button */}
+                {filterFields.length > 0 && (
+                  <button
+                    onClick={onToggleFilters}
+                    className="btn-secondary flex items-center justify-center gap-2 flex-1 xs:flex-none touch-target"
+                  >
+                    <Filter className="w-4 h-4" />
+                    <span className="xs:inline">Filters</span>
+                  </button>
+                )}
+                
+                {/* View Mode Toggle */}
+                {viewMode && onViewModeChange && viewModeOptions && (
+                  <div className="flex-shrink-0">
+                    <ViewModeToggle
+                      value={viewMode}
+                      onChange={onViewModeChange}
+                      options={viewModeOptions}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Advanced Filters */}
+        {/* Advanced Filters - Mobile optimized */}
         {showFilters && filterFields.length > 0 && (
-          <div className="mt-6 pt-6 border-t border-gray-700/50">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="mt-4 xs:mt-6 pt-4 xs:pt-6 border-t border-gray-700/50">
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 xs:gap-4">
               {filterFields.map(renderFilterField)}
             </div>
           </div>

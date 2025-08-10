@@ -142,7 +142,7 @@ export const LoginPage = () => {
         onKeyDown={handleKeyDown}
       >
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-6 sm:mb-8 lg:mb-10">
           <div className="gradient-header" />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -150,8 +150,8 @@ export const LoginPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-4xl font-bold auth-text mb-4 relative">Welcome Back</h1>
-            <p className="auth-text-muted text-lg font-medium">Sign in to your Round account</p>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">Welcome Back</h1>
+            <p className="auth-text-muted text-base sm:text-lg font-medium">Sign in to your Round account</p>
           </motion.div>
         </div>
 
@@ -181,7 +181,7 @@ export const LoginPage = () => {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Email Address */}
           <div>
             <label htmlFor="email" className="auth-label">
@@ -277,7 +277,7 @@ export const LoginPage = () => {
           </div>
 
           {/* Social Login Buttons */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-4">
             <button
               type="button"
               className="btn-secondary flex items-center justify-center space-x-3 relative overflow-hidden group"

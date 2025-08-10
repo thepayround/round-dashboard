@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import { AuthProvider } from '@/shared/contexts/AuthContext'
+import { useMobileOptimizations } from '@/shared/hooks/useMobileOptimizations'
 import { ProtectedRoute } from '@/shared/components/ProtectedRoute'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
@@ -23,9 +24,13 @@ import CustomersPage from '@/features/customers/pages/CustomersPage'
 import CustomerDetailPage from '@/features/customers/pages/CustomerDetailPage'
 import { HomePage } from '@/features/home/HomePage'
 
-const App = () => (
-  <AuthProvider>
-    <Router>
+const App = () => {
+  // Apply mobile optimizations
+  useMobileOptimizations()
+
+  return (
+    <AuthProvider>
+      <Router>
       <Routes>
         <Route path="/auth/*" element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
@@ -126,8 +131,9 @@ const App = () => (
         />
         <Route path="/" element={<HomePage />} />
       </Routes>
-    </Router>
-  </AuthProvider>
-)
+      </Router>
+    </AuthProvider>
+  )
+}
 
 export default App

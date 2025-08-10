@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { useResponsive } from '@/shared/hooks/useResponsive'
 import { apiClient } from '@/shared/services/apiClient'
 import { Breadcrumb } from '@/shared/components/Breadcrumb'
 import ColorLogo from '@/assets/logos/color-logo.svg'
@@ -75,12 +76,18 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const { logout, state } = useAuth()
   const { token } = state
   const location = useLocation()
+  const { isMobile, isTablet } = useResponsive()
 
-  // Initialize sidebar state from localStorage
+  // Initialize sidebar state from localStorage - mobile first
   const [isCollapsed, setIsCollapsed] = useState(() => {
+    if (typeof window === 'undefined') return true
     const saved = localStorage.getItem('sidebar-collapsed')
-    return saved === 'true'
+    // Default to collapsed on mobile, open on desktop
+    return saved ? saved === 'true' : (isMobile || isTablet)
   })
+
+  // Mobile overlay state
+  const [showMobileOverlay, setShowMobileOverlay] = useState(false)
 
   // Track expanded menu items
   const [expandedItems, setExpandedItems] = useState<string[]>(() => {
@@ -94,6 +101,15 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   // Track collapsed sidebar dropdown
   const [collapsedDropdown, setCollapsedDropdown] = useState<string | null>(null)
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
+
+  // Handle responsive behavior
+  useEffect(() => {
+    if ((isMobile || isTablet) && !isCollapsed) {
+      setShowMobileOverlay(true)
+    } else {
+      setShowMobileOverlay(false)
+    }
+  }, [isMobile, isTablet, isCollapsed])
 
   // Persist sidebar state to localStorage whenever it changes
   useEffect(() => {
@@ -170,6 +186,13 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     navigate('/auth/login')
   }
 
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed)
+    if (isMobile || isTablet) {
+      setShowMobileOverlay(!isCollapsed)
+    }
+  }
+
   return (
     <div className="min-h-screen relative">
       {/* Animated Background - Same as auth pages */}
@@ -179,12 +202,29 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <div className="floating-orb" />
       </div>
 
+      {/* Mobile Overlay */}
+      <AnimatePresence>
+        {showMobileOverlay && !isCollapsed && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setIsCollapsed(true)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
       <motion.aside
         initial={false}
-        animate={{ width: isCollapsed ? 80 : 280 }}
+        animate={{ 
+          width: isCollapsed ? 80 : 280,
+          x: (isMobile || isTablet) && isCollapsed ? -80 : 0
+        }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="fixed left-0 top-0 h-full z-base bg-white/5 backdrop-blur-xl border-r border-white/10"
+        className="fixed left-0 top-0 h-full z-50 lg:z-base bg-white/5 backdrop-blur-xl border-r border-white/10"
       >
         {/* Logo Section */}
         <div
@@ -453,29 +493,43 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         )}
       </AnimatePresence>
 
-      {/* Toggle Button - Outside sidebar */}
+      {/* Toggle Button - Responsive positioning */}
       <motion.button
         initial={false}
-        animate={{ left: isCollapsed ? 64 : 264 }}
-        transition={{ duration: 0, ease: 'linear' }}
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="fixed top-20 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-base"
+        animate={{ 
+          left: (() => {
+            if (isMobile || isTablet) {
+              return isCollapsed ? 16 : 264
+            }
+            return isCollapsed ? 64 : 264
+          })()
+        }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
+        onClick={toggleSidebar}
+        className="fixed top-16 lg:top-20 w-10 h-10 lg:w-8 lg:h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-50 lg:z-base"
       >
         {isCollapsed ? (
-          <ChevronRight className="w-4 h-4 text-white" />
+          <ChevronRight className="w-5 h-5 lg:w-4 lg:h-4 text-white" />
         ) : (
-          <ChevronLeft className="w-4 h-4 text-white" />
+          <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4 text-white" />
         )}
       </motion.button>
 
-      {/* Main Content */}
+      {/* Main Content - Responsive margins */}
       <motion.main
         initial={false}
-        animate={{ marginLeft: isCollapsed ? 80 : 280 }}
+        animate={{ 
+          marginLeft: (() => {
+            if (isMobile || isTablet) {
+              return 0
+            }
+            return isCollapsed ? 80 : 280
+          })()
+        }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
         className="min-h-screen relative z-10"
       >
-        <div className="p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
           <Breadcrumb />
           {children}
         </div>

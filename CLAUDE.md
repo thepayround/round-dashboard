@@ -59,6 +59,22 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 
 ## Design System
 
+### Responsive Design System (UPDATED)
+- **Mobile-first approach** with xs (475px), sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px) breakpoints
+- **Touch-friendly interface** with minimum 44px tap targets (48px on mobile)
+- **Adaptive layouts** that gracefully scale from mobile to desktop
+- **Safe area support** for modern mobile devices with notches and rounded corners
+- **Font scaling** - 14px base on mobile, 16px on desktop for optimal readability
+- **Mobile-first CSS utilities** - responsive grids, touch targets, form optimizations
+- **Accessible focus states** - enhanced for mobile with 3px outline offset
+
+### Mobile-Specific Enhancements
+- **Sidebar behavior** - Overlay on mobile/tablet, persistent on desktop
+- **Form inputs** - 16px font size to prevent iOS zoom, improved touch targets  
+- **Button sizing** - Enhanced touch targets with minimum heights
+- **Responsive spacing** - Adaptive padding and margins based on screen size
+- **Safe area handling** - Support for device notches and rounded corners
+
 ### Brand Colors
 - **Primary**: `#D417C8` (Accent Pink)
 - **Secondary**: `#14BDEA` (Accent Cyan)
@@ -282,9 +298,16 @@ Avoid `useEffect` for things React can do declaratively.
 ### Architecture Patterns
 1. **Compound Components** - Card system (Header, Title, Content, Footer)
 2. **Polymorphic Components** - Button with extensive variant system
-3. **Custom Hooks** - useUIState, useErrorHandler, usePagination, useTableSort, useFormChangeDetection, useDebouncedUpdate
+3. **Custom Hooks** - useUIState, useErrorHandler, usePagination, useTableSort, useFormChangeDetection, useDebouncedUpdate, useResponsive
 4. **State Management** - Multi-paradigm (Zustand + Context + Local)
 5. **API Architecture** - Axios wrapper with interceptors, retry logic, caching
+
+### Responsive Hooks (NEW)
+- **useResponsive()** - Comprehensive responsive state with debounced resize handling
+- **useIsMobile()** - Simple mobile detection hook
+- **useIsTablet()** - Tablet-specific detection  
+- **useIsDesktop()** - Desktop detection (includes large desktop)
+- **useViewport(breakpoint)** - Conditional rendering based on viewport size
 
 ## Testing Standards
 

@@ -44,9 +44,9 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     const inputId = id ?? `input-${Math.random().toString(36).substr(2, 9)}`
 
     const sizeClasses = {
-      sm: 'h-10 px-3 text-sm',
-      md: 'h-12 px-4 text-base',
-      lg: 'h-14 px-5 text-lg'
+      sm: 'h-10 sm:h-11 px-3 sm:px-4 text-sm',
+      md: 'h-12 sm:h-13 px-4 sm:px-5 text-base sm:text-lg',
+      lg: 'h-14 sm:h-16 px-5 sm:px-6 text-lg sm:text-xl'
     }
 
     const getInputClasses = () => {
@@ -94,14 +94,17 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       ]
 
       return cn(
-        'w-full rounded-xl backdrop-blur-xl border transition-all duration-200',
+        'w-full rounded-xl sm:rounded-2xl backdrop-blur-xl border transition-all duration-200',
         'bg-white/5 border-white/10 text-white placeholder-gray-400',
         'hover:bg-white/8 hover:border-white/15',
         'focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30',
+        // Mobile-specific improvements
+        'text-base sm:text-sm md:text-base', // Prevent iOS zoom on focus
+        'leading-normal sm:leading-relaxed',
         ...autofillClasses,
         sizeClasses[size],
-        LeftIcon && 'pl-12',
-        RightIcon && 'pr-12',
+        LeftIcon && 'pl-10 sm:pl-12',
+        RightIcon && 'pr-10 sm:pr-12',
         error && 'border-red-400 focus:border-red-400 focus:ring-red-400/30',
         className
       )
@@ -117,7 +120,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         
         <div className="relative">
           {LeftIcon && (
-            <LeftIcon className={variant === 'auth' ? 'input-icon-left auth-icon-primary' : 'absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400'} />
+            <LeftIcon className={variant === 'auth' ? 'input-icon-left auth-icon-primary' : 'absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400'} />
           )}
           
           <input
@@ -139,7 +142,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
           
           {RightIcon && (
             <RightIcon 
-              className={variant === 'auth' ? 'input-icon-right auth-icon' : 'absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer'}
+              className={variant === 'auth' ? 'input-icon-right auth-icon' : 'absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 cursor-pointer touch-target'}
               onClick={onRightIconClick}
             />
           )}

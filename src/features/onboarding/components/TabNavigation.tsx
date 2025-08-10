@@ -114,9 +114,9 @@ export const TabNavigation = ({
                 aria-current={isStepActive(step.id) ? 'step' : undefined}
                 aria-label={`Step ${step.number}: ${step.label}${isStepCompleted(step.id) ? ' (completed)' : ''}${isStepActive(step.id) ? ' (current)' : ''}`}
                 className={`
-                  relative flex-shrink-0 
-                  w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 xl:w-14 xl:h-14
-                  rounded-full border-2 md:border-3 
+                  relative flex-shrink-0 touch-target
+                  w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16
+                  rounded-full border-2 sm:border-3 
                   flex items-center justify-center 
                   transition-all duration-300 ease-out
                   transform hover:scale-110 focus:scale-110 active:scale-95
@@ -125,9 +125,9 @@ export const TabNavigation = ({
                 `}
               >
                 {isStepCompleted(step.id) ? (
-                  <Check className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 text-white" />
+                  <Check className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-white" />
                 ) : (
-                  <span className={`text-xs sm:text-sm md:text-base lg:text-base xl:text-lg font-bold ${
+                  <span className={`text-sm xs:text-base sm:text-lg font-bold ${
                     isStepActive(step.id) || canClickStep(step.id) ? 'text-white' : 'text-gray-500'
                   }`}>
                     {step.number}
@@ -140,7 +140,7 @@ export const TabNavigation = ({
       </div>
 
       {/* Step Labels - Perfectly aligned with numbers above */}
-      <div className="flex px-3 sm:px-6 md:px-8 lg:px-12 xl:px-16 gap-1 sm:gap-3 md:gap-4 lg:gap-6">
+      <div className="flex px-3 sm:px-6 md:px-8 lg:px-12 xl:px-16 gap-1 xs:gap-2 sm:gap-4">
         {steps.map((step, index) => (
           <div 
             key={`label-container-${step.id}`} 
@@ -150,9 +150,9 @@ export const TabNavigation = ({
               onClick={() => canClickStep(step.id) && onStepClick(step.id)}
               disabled={!canClickStep(step.id)}
               className={`
-                text-center transition-all duration-300 ease-out
-                p-1 sm:p-1.5 md:p-2 rounded-md max-w-full 
-                min-h-[2rem] sm:min-h-[2.5rem] lg:min-h-[3rem]
+                text-center transition-all duration-300 ease-out touch-target
+                p-1 xs:p-2 sm:p-3 rounded-md max-w-full 
+                min-h-[2.5rem] xs:min-h-[3rem] sm:min-h-[3.5rem]
                 flex items-center justify-center
                 ${canClickStep(step.id) 
                   ? 'hover:bg-white/5 hover:scale-105 focus:bg-white/8 focus:scale-105 focus:outline-none focus:ring-1 focus:ring-[#D417C8]/40 active:scale-95' 
@@ -162,18 +162,22 @@ export const TabNavigation = ({
               tabIndex={canClickStep(step.id) ? 0 : -1}
             >
               <div className={`
-                text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-base
+                text-xs xs:text-sm sm:text-base
                 font-medium leading-tight text-center
                 transition-colors duration-300 
-                px-0.5 sm:px-1 md:px-2
+                px-1 xs:px-2
                 ${getStepTextClasses(step.id)}
               `}>
-                {/* Mobile (< 640px): Show abbreviated first word */}
-                <span className="sm:hidden block">
-                  {step.label.split(' ')[0].substring(0, 4)}
+                {/* Extra small screens: Show initials */}
+                <span className="xs:hidden block">
+                  {step.label.split(' ').map(word => word[0]).join('').slice(0, 3)}
+                </span>
+                {/* Small screens: Show abbreviated */}
+                <span className="hidden xs:block sm:hidden">
+                  {step.label.split(' ')[0].substring(0, 6)}
                   {step.label.split(' ').length > 1 && '...'}
                 </span>
-                {/* Tablet and up (≥ 640px): Show full label with smart wrapping */}
+                {/* Medium and up: Show full label */}
                 <span className="hidden sm:inline break-words hyphens-auto">
                   {step.label}
                 </span>
