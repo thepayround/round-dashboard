@@ -7,7 +7,7 @@ import {
   TrendingUp,
   Package,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
@@ -15,11 +15,11 @@ import { ChargeCard, CreateChargeModal } from '../components'
 import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Charge, CatalogViewMode } from '../types/catalog.types'
+import { useDebouncedSearch } from '../../../shared/hooks/useDebouncedSearch'
 
 export const ChargesPage = () => {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [viewMode, setViewMode] = useState<CatalogViewMode>('grid')
-  const [searchQuery, setSearchQuery] = useState('')
   const [selectedFamily, setSelectedFamily] = useState<string>('all')
   const [selectedType, setSelectedType] = useState<string>('all')
   const [showFilters, setShowFilters] = useState(false)
@@ -149,6 +149,30 @@ export const ChargesPage = () => {
     { id: 'penalty', name: 'Penalty' }
   ]
 
+  // Search fields extraction function
+  const getChargeSearchFields = useCallback((charge: Charge): string[] => [
+    charge.name || '',
+    charge.description || '',
+    charge.chargeType || '',
+    charge.status || '',
+    charge.amount?.toString() || ''
+  ], [])
+
+  // Use debounced search
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredItems: searchFilteredCharges,
+    isSearching,
+    clearSearch,
+    totalCount,
+    filteredCount
+  } = useDebouncedSearch({
+    items: charges,
+    searchFields: getChargeSearchFields,
+    debounceMs: 300
+  })
+
   const filterFields: FilterField[] = [
     {
       id: 'productFamily',
@@ -168,12 +192,12 @@ export const ChargesPage = () => {
     }
   ]
 
-  const filteredCharges = charges.filter(charge => {
-    const matchesSearch = charge.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         charge.description.toLowerCase().includes(searchQuery.toLowerCase())
+  // Apply additional filters to search results
+  const filteredCharges = searchFilteredCharges.filter(charge => {
     const matchesFamily = selectedFamily === 'all' || charge.productFamilyId === selectedFamily
     const matchesType = selectedType === 'all' || charge.chargeType === selectedType
-    return matchesSearch && matchesFamily && matchesType
+    
+    return matchesFamily && matchesType
   })
 
   return (
@@ -246,11 +270,17 @@ export const ChargesPage = () => {
           />
         </motion.div>
 
-        {/* Toolbar */}
+        {/* Search and Filters */}
         <SearchFilterToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Search charges..."
+          searchPlaceholder="Search charges by name, description, type, or amount..."
+          isSearching={isSearching}
+          onClearSearch={clearSearch}
+          searchResults={{
+            total: totalCount,
+            filtered: filteredCount
+          }}
           showFilters={showFilters}
           onToggleFilters={() => setShowFilters(!showFilters)}
           filterFields={filterFields}
@@ -260,7 +290,7 @@ export const ChargesPage = () => {
             { value: 'grid', icon: Grid3X3, label: 'Grid' },
             { value: 'list', icon: List, label: 'List' }
           ]}
-          delay={0.2}
+          className="mb-6"
         />
 
         {/* Charges Grid/List */}

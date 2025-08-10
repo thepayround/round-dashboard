@@ -247,6 +247,7 @@ export interface CustomerFilters {
   hasFailedPayments?: boolean
   tags?: string[]
   searchQuery?: string
+  [key: string]: unknown
 }
 
 export interface CustomerExport {

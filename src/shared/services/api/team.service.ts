@@ -81,7 +81,9 @@ export class TeamService {
    */
   async inviteUser(request: InviteUserRequest): Promise<ApiResponse<{ message: string }>> {
     try {
-      console.log('TeamService: inviteUser called with:', request)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('TeamService: inviteUser called with:', request)
+      }
       
       // Convert camelCase to PascalCase for backend
       const backendRequest: BackendInviteUserRequest = {
@@ -90,15 +92,19 @@ export class TeamService {
         Role: request.role
       }
       
-      console.log('TeamService: sending backend request:', backendRequest)
-      console.log('TeamService: API endpoint:', `${this.baseUrl}/invite-user`)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('TeamService: sending backend request:', backendRequest)
+        console.log('TeamService: API endpoint:', `${this.baseUrl}/invite-user`)
+      }
       
       const response = await httpClient.getClient().post<{ message: string }>(
         `${this.baseUrl}/invite-user`, 
         backendRequest
       )
       
-      console.log('TeamService: API response received:', response)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('TeamService: API response received:', response)
+      }
       
       return {
         success: true,

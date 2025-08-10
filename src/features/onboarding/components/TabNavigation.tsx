@@ -103,7 +103,7 @@ export const TabNavigation = ({
 
         {/* Step Indicators Container */}
         <div className="relative flex px-3 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-2 sm:py-3 lg:py-4">
-          {steps.map((step, index) => (
+          {steps.map((step, _index) => (
             <div 
               key={step.id} 
               className="flex-1 flex justify-center"
@@ -141,7 +141,7 @@ export const TabNavigation = ({
 
       {/* Step Labels - Perfectly aligned with numbers above */}
       <div className="flex px-3 sm:px-6 md:px-8 lg:px-12 xl:px-16 gap-1 xs:gap-2 sm:gap-4">
-        {steps.map((step, index) => (
+        {steps.map((step, _index) => (
           <div 
             key={`label-container-${step.id}`} 
             className="flex-1 flex justify-center min-w-0"

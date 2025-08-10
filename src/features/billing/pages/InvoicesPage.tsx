@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { FileText, Download, Eye, Edit, Trash2 } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '@/shared/components'
 import type { FilterField } from '@/shared/components'
+import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
 
 export const InvoicesPage = () => {
-  const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   
   const invoices = [
@@ -51,6 +51,29 @@ export const InvoicesPage = () => {
       dueDate: '2024-02-10',
     },
   ]
+
+  // Search fields extraction function
+  const getInvoiceSearchFields = useCallback((invoice: typeof invoices[0]): string[] => [
+    invoice.id || '',
+    invoice.customer || '',
+    invoice.status || '',
+    invoice.amount?.toString() || ''
+  ], [])
+
+  // Use debounced search
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredItems: filteredInvoices,
+    isSearching,
+    clearSearch,
+    totalCount,
+    filteredCount
+  } = useDebouncedSearch({
+    items: invoices,
+    searchFields: getInvoiceSearchFields,
+    debounceMs: 300
+  })
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -114,18 +137,23 @@ export const InvoicesPage = () => {
         <SearchFilterToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Search invoices..."
+          searchPlaceholder="Search invoices by ID, customer, status, or amount..."
+          isSearching={isSearching}
+          onClearSearch={clearSearch}
+          searchResults={{
+            total: totalCount,
+            filtered: filteredCount
+          }}
           showFilters={showFilters}
           onToggleFilters={() => setShowFilters(!showFilters)}
           filterFields={filterFields}
-          delay={0.1}
-          className="mb-8"
           additionalActions={
             <button className="btn-secondary flex items-center gap-2">
               <Download className="w-4 h-4" />
               Export
             </button>
           }
+          className="mb-6"
         />
 
         {/* Invoices Table */}
@@ -154,7 +182,7 @@ export const InvoicesPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {invoices.map((invoice, index) => (
+                {filteredInvoices.map((invoice, index) => (
                   <motion.tr
                     key={invoice.id}
                     initial={{ opacity: 0, x: -20 }}

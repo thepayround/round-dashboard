@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Button } from '@/shared/components/Button'
 import { ActionButton } from '@/shared/components'
 
 import type { ValidationError } from '@/shared/utils/validation'

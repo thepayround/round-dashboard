@@ -500,10 +500,14 @@ export const GetStartedPage = () => {
                 }
                 
                 if (cachedOrgData?.organizationId) {
-                  console.log('Creating address for organization:', cachedOrgData.organizationId)
+                  if (process.env.NODE_ENV === 'development') {
+                    console.log('Creating address for organization:', cachedOrgData.organizationId)
+                  }
                   addressResult = await organizationService.createOrganizationAddress(cachedOrgData.organizationId, createData)
                 } else {
-                  console.error('No organization data available:', cachedOrgData)
+                  if (process.env.NODE_ENV === 'development') {
+                    console.error('No organization data available:', cachedOrgData)
+                  }
                   throw new Error('Organization ID not found for address creation')
                 }
               }
@@ -598,7 +602,7 @@ export const GetStartedPage = () => {
     // Development logging removed
   }, [currentStep, completedSteps, isStepValid])
 
-  const getButtonIcon = () => {
+  const _getButtonIcon = () => {
     if (isCompleting) {
       return (
         <motion.div

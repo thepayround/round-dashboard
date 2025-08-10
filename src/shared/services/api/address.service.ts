@@ -7,7 +7,6 @@ import type {
   ApiResponse,
   PagedResult,
   PagedRequest,
-  AddressRequest,
   AddressResponse,
   CreateAddressData,
   UpdateAddressData,
@@ -65,7 +64,7 @@ export class AddressService {
    * @deprecated Use organizationService.createOrganizationAddress() instead
    * Direct address creation is not supported by the API
    */
-  async create(addressData: CreateAddressData): Promise<ApiResponse<AddressResponse>> {
+  async create(_addressData: CreateAddressData): Promise<ApiResponse<AddressResponse>> {
     return {
       success: false,
       error: 'Direct address creation is not supported. Use organizationService.createOrganizationAddress() instead.',

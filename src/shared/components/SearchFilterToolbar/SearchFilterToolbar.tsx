@@ -1,7 +1,6 @@
 import React from 'react'
-import { motion } from 'framer-motion'
-import { Search, Filter } from 'lucide-react'
-import { Card } from '../Card'
+import { Filter } from 'lucide-react'
+import { SearchInput } from '../SearchInput/SearchInput'
 import { ViewModeToggle } from '../ViewModeToggle'
 import type { ViewMode, ViewModeOption } from '../ViewModeToggle'
 
@@ -23,6 +22,14 @@ export interface SearchFilterToolbarProps {
   onSearchChange: (value: string) => void
   searchPlaceholder?: string
   
+  // Enhanced search features
+  isSearching?: boolean
+  onClearSearch?: () => void
+  searchResults?: {
+    total: number
+    filtered: number
+  }
+  
   // Filter functionality
   showFilters: boolean
   onToggleFilters: () => void
@@ -33,8 +40,7 @@ export interface SearchFilterToolbarProps {
   onViewModeChange?: (mode: ViewMode) => void
   viewModeOptions?: ViewModeOption[]
   
-  // Animation props
-  delay?: number
+  // Styling
   className?: string
   
   // Additional actions (optional)
@@ -45,13 +51,15 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
   searchQuery,
   onSearchChange,
   searchPlaceholder = 'Search...',
+  isSearching = false,
+  onClearSearch,
+  searchResults,
   showFilters,
   onToggleFilters,
   filterFields = [],
   viewMode,
   onViewModeChange,
   viewModeOptions,
-  delay = 0.2,
   className = '',
   additionalActions
 }) => {
@@ -124,28 +132,22 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      className={className}
-    >
-      <Card animate={false}>
+    <div className={className}>
+      {/* Focus-stable toolbar using plain div instead of animated Card component */}
+      <div className="auth-card relative overflow-hidden p-4 sm:p-6">
         <div className="flex flex-col gap-3 xs:gap-4">
-          {/* Mobile-first layout */}
-          <div className="flex flex-col xs:flex-row gap-3 xs:gap-4">
-            {/* Search Section */}
+          {/* Main toolbar - aligned row */}
+          <div className="flex flex-col xs:flex-row gap-3 xs:gap-4 xs:items-center">
+            {/* Search Input - fixed height container */}
             <div className="flex-1 min-w-0">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder={searchPlaceholder}
-                  value={searchQuery}
-                  onChange={(e) => onSearchChange(e.target.value)}
-                  className="auth-input pl-10 w-full"
-                />
-              </div>
+              <SearchInput
+                value={searchQuery}
+                onChange={onSearchChange}
+                onClear={onClearSearch}
+                placeholder={searchPlaceholder}
+                isSearching={isSearching}
+                className="w-full"
+              />
             </div>
             
             {/* Actions Section - Mobile stacked, desktop inline */}
@@ -183,6 +185,30 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Search Results Info - separate row to avoid layout shift */}
+          {searchResults && (searchQuery || searchResults.filtered < searchResults.total) && (
+            <div className="flex items-center gap-2 text-xs -mt-1 px-1">
+              <div className="flex items-center gap-1.5">
+                <div className="w-1 h-1 rounded-full bg-[#14BDEA]" />
+                <span className="text-gray-400">
+                  {searchResults.filtered === searchResults.total 
+                    ? `${searchResults.total} result${searchResults.total !== 1 ? 's' : ''}`
+                    : `${searchResults.filtered} of ${searchResults.total} result${searchResults.total !== 1 ? 's' : ''}`
+                  }
+                </span>
+              </div>
+              {searchQuery && (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-500">•</span>
+                  <span className="text-gray-500">for</span>
+                  <span className="text-[#14BDEA] font-medium bg-[#14BDEA]/10 px-2 py-0.5 rounded-md border border-[#14BDEA]/20">
+                    &quot;{searchQuery}&quot;
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Advanced Filters - Mobile optimized */}
@@ -193,7 +219,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             </div>
           </div>
         )}
-      </Card>
-    </motion.div>
+      </div>
+    </div>
   )
 }

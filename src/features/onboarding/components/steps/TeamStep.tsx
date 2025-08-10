@@ -29,7 +29,10 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
       return
     }
     
-    console.log('Current user state:', state.user)
+    // Debug: Current user state logged in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Current user state:', state.user)
+    }
     
     if (!state.user?.roundAccountId) {
       showError('User authentication error. Please refresh and try again.')
@@ -52,11 +55,14 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
     }
 
     try {
-      console.log('About to call inviteUser with:', {
-        roundAccountId: state.user.roundAccountId,
-        email: inviteEmail.trim(),
-        role: inviteRole
-      })
+      // Debug: inviteUser parameters logged in development
+      if (process.env.NODE_ENV === 'development') {
+        console.log('About to call inviteUser with:', {
+          roundAccountId: state.user.roundAccountId,
+          email: inviteEmail.trim(),
+          role: inviteRole
+        })
+      }
       
       const result = await inviteUser({
         roundAccountId: state.user.roundAccountId,
@@ -64,7 +70,10 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
         role: inviteRole
       })
       
-      console.log('inviteUser result:', result)
+      // Debug: inviteUser result logged in development
+      if (process.env.NODE_ENV === 'development') {
+        console.log('inviteUser result:', result)
+      }
 
       if (result.success) {
         showSuccess('Invitation sent successfully!')

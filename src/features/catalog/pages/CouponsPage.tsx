@@ -7,7 +7,8 @@ import {
   Users,
   Package
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import { useDebouncedSearch } from '../../../shared/hooks/useDebouncedSearch'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
@@ -19,7 +20,6 @@ import type { Coupon, CatalogViewMode } from '../types/catalog.types'
 export const CouponsPage = () => {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [viewMode, setViewMode] = useState<CatalogViewMode>('grid')
-  const [searchQuery, setSearchQuery] = useState('')
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
   const [selectedType, setSelectedType] = useState<string>('all')
   const [showFilters, setShowFilters] = useState(false)
@@ -123,6 +123,30 @@ export const CouponsPage = () => {
     }
   ]
 
+  // Search fields extraction function
+  const getCouponSearchFields = useCallback((coupon: Coupon): string[] => [
+    coupon.couponCode ?? '',
+    coupon.name ?? '',
+    coupon.description ?? '',
+    coupon.status ?? '',
+    coupon.discountType ?? ''
+  ], [])
+
+  // Use debounced search
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredItems: searchFilteredCoupons,
+    isSearching,
+    clearSearch,
+    totalCount,
+    filteredCount
+  } = useDebouncedSearch({
+    items: coupons,
+    searchFields: getCouponSearchFields,
+    debounceMs: 300
+  })
+
   const couponStats = {
     totalCoupons: coupons.length,
     activeCoupons: coupons.filter(c => c.status === 'active').length,
@@ -162,13 +186,11 @@ export const CouponsPage = () => {
     }
   ]
 
-  const filteredCoupons = coupons.filter(coupon => {
-    const matchesSearch = coupon.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         coupon.couponCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         coupon.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  // Apply additional filters to search results
+  const filteredCoupons = searchFilteredCoupons.filter(coupon => {
     const matchesStatus = selectedStatus === 'all' || coupon.status === selectedStatus
     const matchesType = selectedType === 'all' || coupon.discountType === selectedType
-    return matchesSearch && matchesStatus && matchesType
+    return matchesStatus && matchesType
   })
 
   return (
@@ -241,11 +263,17 @@ export const CouponsPage = () => {
           />
         </motion.div>
 
-        {/* Toolbar */}
+        {/* Search and Filters */}
         <SearchFilterToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Search coupons..."
+          searchPlaceholder="Search coupons by code, name, or description..."
+          isSearching={isSearching}
+          onClearSearch={clearSearch}
+          searchResults={{
+            total: totalCount,
+            filtered: filteredCount
+          }}
           showFilters={showFilters}
           onToggleFilters={() => setShowFilters(!showFilters)}
           filterFields={filterFields}
@@ -255,7 +283,7 @@ export const CouponsPage = () => {
             { value: 'grid', icon: Grid3X3, label: 'Grid' },
             { value: 'list', icon: List, label: 'List' }
           ]}
-          delay={0.2}
+          className="mb-6"
         />
 
         {/* Coupons Grid/List */}

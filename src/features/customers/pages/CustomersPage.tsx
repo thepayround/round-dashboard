@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { 
@@ -18,15 +18,15 @@ import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { Card, ActionButton, SearchFilterToolbar, SectionHeader } from '@/shared/components'
 import type { ViewMode, FilterField } from '@/shared/components'
 import type { Customer, CustomerFilters, CustomerMetrics } from '../types/customer.types'
+import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
 
 const CustomersPage: React.FC = () => {
   const [filters, _setFilters] = useState<CustomerFilters>({})
   const [viewMode, setViewMode] = useState<ViewMode>('table')
-  const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
 
   // Mock data
-  const mockCustomers = useMemo(() => [
+  const mockCustomers = useMemo((): Customer[] => [
     {
       id: '1',
       email: 'john.doe@acmecorp.com',
@@ -35,7 +35,7 @@ const CustomersPage: React.FC = () => {
       displayName: 'John Doe',
       company: 'Acme Corporation',
       phone: '+1-555-0123',
-      status: 'active',
+      status: 'active' as const,
       billingAddress: {
         line1: '123 Business St',
         city: 'San Francisco',
@@ -48,13 +48,13 @@ const CustomersPage: React.FC = () => {
           id: 'sub1',
           planId: '1',
           planName: 'Professional Plan',
-          status: 'active',
+          status: 'active' as const,
           currentTermStart: new Date('2024-01-01'),
           currentTermEnd: new Date('2024-12-31'),
           nextBillingDate: new Date('2024-08-01'),
           mrr: 99,
           currency: 'USD',
-          billingPeriod: 'monthly',
+          billingPeriod: 'monthly' as const,
           addons: [],
           coupons: [],
           createdAt: new Date('2024-01-01')
@@ -67,7 +67,7 @@ const CustomersPage: React.FC = () => {
       unbilledCharges: 0,
       signupDate: new Date('2024-01-01'),
       lastActivityDate: new Date('2024-07-20'),
-      churnRisk: 'low',
+      churnRisk: 'low' as const,
       emailPreferences: {
         invoices: true,
         subscriptionUpdates: true,
@@ -92,7 +92,7 @@ const CustomersPage: React.FC = () => {
       displayName: 'Sarah Smith',
       company: 'TechStart.io',
       phone: '+1-555-0456',
-      status: 'active',
+      status: 'active' as const,
       billingAddress: {
         line1: '456 Startup Ave',
         city: 'Austin',
@@ -105,12 +105,12 @@ const CustomersPage: React.FC = () => {
           id: 'sub2',
           planId: '2',
           planName: 'Starter Plan',
-          status: 'trialing',
+          status: 'trialing' as const,
           currentTermStart: new Date('2024-07-15'),
           currentTermEnd: new Date('2024-08-15'),
           mrr: 29,
           currency: 'USD',
-          billingPeriod: 'monthly',
+          billingPeriod: 'monthly' as const,
           addons: [],
           coupons: [],
           trialEnd: new Date('2024-08-15'),
@@ -125,7 +125,7 @@ const CustomersPage: React.FC = () => {
       signupDate: new Date('2024-07-15'),
       trialEndDate: new Date('2024-08-15'),
       lastActivityDate: new Date('2024-07-23'),
-      churnRisk: 'medium',
+      churnRisk: 'medium' as const,
       emailPreferences: {
         invoices: true,
         subscriptionUpdates: true,
@@ -149,7 +149,7 @@ const CustomersPage: React.FC = () => {
       displayName: 'Mike Johnson',
       company: 'GlobalTech Solutions',
       phone: '+1-555-0789',
-      status: 'suspended',
+      status: 'suspended' as const,
       billingAddress: {
         line1: '789 Enterprise Blvd',
         city: 'New York',
@@ -162,12 +162,12 @@ const CustomersPage: React.FC = () => {
           id: 'sub3',
           planId: '3',
           planName: 'Enterprise Plan',
-          status: 'paused',
+          status: 'paused' as const,
           currentTermStart: new Date('2024-01-01'),
           currentTermEnd: new Date('2024-12-31'),
           mrr: 499,
           currency: 'USD',
-          billingPeriod: 'monthly',
+          billingPeriod: 'monthly' as const,
           addons: [],
           coupons: [],
           pausedAt: new Date('2024-06-15'),
@@ -181,7 +181,7 @@ const CustomersPage: React.FC = () => {
       unbilledCharges: 75,
       signupDate: new Date('2024-01-01'),
       lastActivityDate: new Date('2024-06-10'),
-      churnRisk: 'high',
+      churnRisk: 'high' as const,
       emailPreferences: {
         invoices: true,
         subscriptionUpdates: true,
@@ -207,6 +207,44 @@ const CustomersPage: React.FC = () => {
       updatedAt: new Date('2024-06-15')
     }
   ], [])
+
+  // Search fields extraction function - Memoized for stability
+  const getCustomerSearchFields = useCallback((customer: Customer): string[] => [
+    customer.displayName ?? '',
+    customer.email ?? '',
+    customer.company ?? '',
+    customer.id ?? ''
+  ], [])
+
+  // Filter function for additional filters - Stable implementation
+  const customerFilterFn = useCallback((customer: Customer, filters: CustomerFilters): boolean => {
+    if (filters.status?.length && !filters.status.includes(customer.status)) {
+      return false
+    }
+
+    if (filters.churnRisk?.length && !filters.churnRisk.includes(customer.churnRisk)) {
+      return false
+    }
+
+    return true
+  }, [])
+
+  // Focus-safe debounced search
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredItems: filteredCustomers,
+    isSearching,
+    clearSearch,
+    totalCount,
+    filteredCount
+  } = useDebouncedSearch({
+    items: mockCustomers,
+    searchFields: getCustomerSearchFields,
+    debounceMs: 300,
+    filters,
+    filterFn: customerFilterFn
+  })
 
   const customerMetrics: CustomerMetrics = {
     totalCustomers: mockCustomers.length,
@@ -284,30 +322,6 @@ const CustomersPage: React.FC = () => {
       ]
     }
   ]
-
-  const filteredCustomers = useMemo(() => mockCustomers.filter(customer => {
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase()
-        const searchFields = [
-          customer.displayName,
-          customer.email,
-          customer.company ?? '',
-          customer.id
-        ].join(' ').toLowerCase()
-        
-        if (!searchFields.includes(query)) return false
-      }
-
-      if (filters.status?.length && !filters.status.includes(customer.status)) {
-        return false
-      }
-
-      if (filters.churnRisk?.length && !filters.churnRisk.includes(customer.churnRisk)) {
-        return false
-      }
-
-      return true
-    }), [mockCustomers, searchQuery, filters])
 
   const getStatusBadge = (status: Customer['status']) => {
     const statusConfig = {
@@ -477,7 +491,13 @@ const CustomersPage: React.FC = () => {
         <SearchFilterToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Search customers..."
+          searchPlaceholder="Search customers by name, email, or company..."
+          isSearching={isSearching}
+          onClearSearch={clearSearch}
+          searchResults={{
+            total: totalCount,
+            filtered: filteredCount
+          }}
           showFilters={showFilters}
           onToggleFilters={() => setShowFilters(!showFilters)}
           filterFields={filterFields}
@@ -487,7 +507,6 @@ const CustomersPage: React.FC = () => {
             { value: 'table', icon: Table, label: 'Table' },
             { value: 'grid', icon: Grid3X3, label: 'Grid' }
           ]}
-          delay={0.2}
           className="mb-6"
         />
 

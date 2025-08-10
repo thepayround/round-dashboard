@@ -58,7 +58,7 @@ export const useAddress = () => {
     }
   }
 
-  const create = async (addressData: CreateAddressData): Promise<ApiResponse<AddressResponse>> => {
+  const create = async (_addressData: CreateAddressData): Promise<ApiResponse<AddressResponse>> => {
     setError('Direct address creation is not supported. Use createForOrganization() instead.')
     return {
       success: false,

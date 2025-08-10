@@ -7,7 +7,8 @@ import {
   TrendingUp,
   Star
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import { useDebouncedSearch } from '../../../shared/hooks/useDebouncedSearch'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
@@ -19,7 +20,6 @@ import type { Plan, CatalogViewMode } from '../types/catalog.types'
 export const PlansPage = () => {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [viewMode, setViewMode] = useState<CatalogViewMode>('grid')
-  const [searchQuery, setSearchQuery] = useState('')
   const [selectedFamily, setSelectedFamily] = useState<string>('all')
   const [showFilters, setShowFilters] = useState(false)
 
@@ -163,6 +163,29 @@ export const PlansPage = () => {
     }
   ]
 
+  // Search fields extraction function
+  const getPlanSearchFields = useCallback((plan: Plan): string[] => [
+    plan.name || '',
+    plan.description || '',
+    plan.status || '',
+    plan.pricePoints?.[0]?.price?.toString() || ''
+  ], [])
+
+  // Use debounced search
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredItems: searchFilteredPlans,
+    isSearching,
+    clearSearch,
+    totalCount,
+    filteredCount
+  } = useDebouncedSearch({
+    items: plans,
+    searchFields: getPlanSearchFields,
+    debounceMs: 300
+  })
+
   const planStats = {
     totalPlans: plans.length,
     activePlans: plans.filter(p => p.status === 'active').length,
@@ -188,11 +211,10 @@ export const PlansPage = () => {
     }
   ]
 
-  const filteredPlans = plans.filter(plan => {
-    const matchesSearch = plan.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         plan.description.toLowerCase().includes(searchQuery.toLowerCase())
+  // Apply additional filters to search results
+  const filteredPlans = searchFilteredPlans.filter(plan => {
     const matchesFamily = selectedFamily === 'all' || plan.productFamilyId === selectedFamily
-    return matchesSearch && matchesFamily
+    return matchesFamily
   })
 
   return (
@@ -265,11 +287,17 @@ export const PlansPage = () => {
           />
         </motion.div>
 
-        {/* Toolbar */}
+        {/* Search and Filters */}
         <SearchFilterToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Search plans..."
+          searchPlaceholder="Search plans by name, description, or price..."
+          isSearching={isSearching}
+          onClearSearch={clearSearch}
+          searchResults={{
+            total: totalCount,
+            filtered: filteredCount
+          }}
           showFilters={showFilters}
           onToggleFilters={() => setShowFilters(!showFilters)}
           filterFields={filterFields}
@@ -279,7 +307,7 @@ export const PlansPage = () => {
             { value: 'grid', icon: Grid3X3, label: 'Grid' },
             { value: 'list', icon: List, label: 'List' }
           ]}
-          delay={0.2}
+          className="mb-6"
         />
 
         {/* Plans Grid/List */}

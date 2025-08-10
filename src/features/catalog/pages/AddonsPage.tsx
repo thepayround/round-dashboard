@@ -7,7 +7,8 @@ import {
   TrendingUp,
   Package,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import { useDebouncedSearch } from '../../../shared/hooks/useDebouncedSearch'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
@@ -19,7 +20,6 @@ import type { Addon, CatalogViewMode } from '../types/catalog.types'
 export const AddonsPage = () => {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [viewMode, setViewMode] = useState<CatalogViewMode>('grid')
-  const [searchQuery, setSearchQuery] = useState('')
   const [selectedFamily, setSelectedFamily] = useState<string>('all')
   const [selectedType, setSelectedType] = useState<string>('all')
   const [showFilters, setShowFilters] = useState(false)
@@ -157,6 +157,29 @@ export const AddonsPage = () => {
     }
   ]
 
+  // Search fields extraction function
+  const getAddonSearchFields = useCallback((addon: Addon): string[] => [
+    addon.name || '',
+    addon.description || '',
+    addon.type || '',
+    addon.status || ''
+  ], [])
+
+  // Use debounced search
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredItems: searchFilteredAddons,
+    isSearching,
+    clearSearch,
+    totalCount,
+    filteredCount
+  } = useDebouncedSearch({
+    items: addons,
+    searchFields: getAddonSearchFields,
+    debounceMs: 300
+  })
+
   const addonStats = {
     totalAddons: addons.length,
     activeAddons: addons.filter(a => a.status === 'active').length,
@@ -197,12 +220,11 @@ export const AddonsPage = () => {
     }
   ]
 
-  const filteredAddons = addons.filter(addon => {
-    const matchesSearch = addon.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         addon.description.toLowerCase().includes(searchQuery.toLowerCase())
+  // Apply additional filters to search results
+  const filteredAddons = searchFilteredAddons.filter(addon => {
     const matchesFamily = selectedFamily === 'all' || addon.productFamilyId === selectedFamily
     const matchesType = selectedType === 'all' || addon.type === selectedType
-    return matchesSearch && matchesFamily && matchesType
+    return matchesFamily && matchesType
   })
 
   return (
@@ -275,11 +297,17 @@ export const AddonsPage = () => {
           />
         </motion.div>
 
-        {/* Toolbar */}
+        {/* Search and Filters */}
         <SearchFilterToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Search add-ons..."
+          searchPlaceholder="Search add-ons by name, description, or type..."
+          isSearching={isSearching}
+          onClearSearch={clearSearch}
+          searchResults={{
+            total: totalCount,
+            filtered: filteredCount
+          }}
           showFilters={showFilters}
           onToggleFilters={() => setShowFilters(!showFilters)}
           filterFields={filterFields}
@@ -289,7 +317,7 @@ export const AddonsPage = () => {
             { value: 'grid', icon: Grid3X3, label: 'Grid' },
             { value: 'list', icon: List, label: 'List' }
           ]}
-          delay={0.2}
+          className="mb-6"
         />
 
         {/* Add-ons Grid/List */}

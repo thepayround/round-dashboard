@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import { 
   Package, 
-  Plus, 
   Grid3X3,
   List, 
   ShoppingCart,
@@ -10,17 +9,18 @@ import {
   Zap,
   Settings,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout, SectionHeader, Button, Card, SearchFilterToolbar, ActionCard, ActionButton } from '@/shared/components'
+import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
 import type { ViewMode, FilterField } from '@/shared/components'
 import { ProductFamilyCard, CreateProductFamilyModal } from '../components'
+import type { ProductFamily } from '../types/catalog.types'
 
 export const ProductCatalogPage = () => {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-  const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
 
   // Mock data - replace with API calls
@@ -63,6 +63,28 @@ export const ProductCatalogPage = () => {
       revenue: 28900
     }
   ]
+
+  // Search fields extraction for product families - Memoized for stability
+  const getProductFamilySearchFields = useCallback((family: ProductFamily): string[] => [
+    family.name || '',
+    family.description || '',
+    family.category || ''
+  ], [])
+
+  // Use debounced search for product families
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredItems: filteredProductFamilies,
+    isSearching,
+    clearSearch,
+    totalCount,
+    filteredCount
+  } = useDebouncedSearch({
+    items: productFamilies,
+    searchFields: getProductFamilySearchFields,
+    debounceMs: 300
+  })
 
   const filterFields: FilterField[] = [
     // ProductCatalogPage can have minimal filters or none
@@ -147,7 +169,7 @@ export const ProductCatalogPage = () => {
           <Card
             variant="stats"
             title="Product Families"
-            value={productFamilies.length}
+            value={totalCount}
             icon={Tags}
             trend={{
               value: 'Well organized',
@@ -158,11 +180,17 @@ export const ProductCatalogPage = () => {
           />
         </motion.div>
 
-        {/* Enhanced Toolbar */}
+        {/* Search and Filters */}
         <SearchFilterToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Search product families..."
+          searchPlaceholder="Search product families by name, description, or category..."
+          isSearching={isSearching}
+          onClearSearch={clearSearch}
+          searchResults={{
+            total: totalCount,
+            filtered: filteredCount
+          }}
           showFilters={showFilters}
           onToggleFilters={() => setShowFilters(!showFilters)}
           filterFields={filterFields}
@@ -172,7 +200,7 @@ export const ProductCatalogPage = () => {
             { value: 'grid', icon: Grid3X3, label: 'Grid' },
             { value: 'list', icon: List, label: 'List' }
           ]}
-          delay={0.2}
+          className="mb-6"
         />
 
         {/* Enhanced Catalog Management Navigation */}
@@ -293,7 +321,7 @@ export const ProductCatalogPage = () => {
             accent="accent"
             actions={
               <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-xl backdrop-blur-sm">
-                <span className="text-gray-300 font-medium">{productFamilies.length} families</span>
+                <span className="text-gray-300 font-medium">{filteredCount} of {totalCount} families</span>
               </div>
             }
           />
@@ -302,7 +330,7 @@ export const ProductCatalogPage = () => {
             ? 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6' 
             : 'space-y-4'
           }>
-            {productFamilies.map((family, index) => (
+            {filteredProductFamilies.map((family, index) => (
               <motion.div
                 key={family.id}
                 initial={{ opacity: 0, y: 20 }}
