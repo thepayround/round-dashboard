@@ -132,12 +132,13 @@ export const PersonalRegisterPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="auth-card"
+        className="w-full max-w-md mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="gradient-header" />
+        <div className="auth-card">
+          {/* Header */}
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="gradient-header" />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -347,10 +348,10 @@ export const PersonalRegisterPage = () => {
             disabled={!isFormValid()}
             icon={ArrowRight}
             loading={isSubmitting}
-            size="lg"
+            size="md"
             animated={false}
             actionType="auth"
-            className="mt-8 w-full"
+            className="mt-8 w-full h-[48px]"
           />
 
           {/* Divider */}
@@ -399,7 +400,7 @@ export const PersonalRegisterPage = () => {
           </div>
 
           {/* Login Link */}
-          <div className="text-center">
+          <div className="text-center mt-6">
             <p className="auth-text-muted">
               Already have an account?{' '}
               <Link to="/auth/login" className="auth-link brand-primary">
@@ -408,6 +409,7 @@ export const PersonalRegisterPage = () => {
             </p>
           </div>
         </form>
+        </div>
       </motion.div>
     </div>
   )

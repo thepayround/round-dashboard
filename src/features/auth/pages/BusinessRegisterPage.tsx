@@ -544,7 +544,7 @@ export const BusinessRegisterPage = () => {
         className="w-full max-w-lg relative z-10"
       >
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-6 sm:mb-8 lg:mb-10">
           <div className="gradient-header" />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -552,8 +552,8 @@ export const BusinessRegisterPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-4xl font-bold auth-text mb-4 relative">Create Business Account</h1>
-            <p className="auth-text-muted text-lg font-medium">Join Round for business</p>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">Create Business Account</h1>
+            <p className="auth-text-muted text-base sm:text-lg font-medium">Join Round for business</p>
           </motion.div>
         </div>
 
@@ -562,7 +562,7 @@ export const BusinessRegisterPage = () => {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
+            className="mb-6 sm:mb-8"
           >
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm auth-text-muted">
@@ -606,74 +606,71 @@ export const BusinessRegisterPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex items-center justify-between mt-8"
+            className="flex items-center justify-between mt-6 sm:mt-8 gap-4"
           >
-            {/* Button Container */}
-            <div className="flex items-center justify-between w-full">
-              {/* Previous Button */}
-              <button
-                type="button"
-                onClick={multiStepForm.goToPrevious}
-                disabled={!multiStepForm.canGoPrevious}
-                className={`
-                  px-8 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[160px] h-[48px]
-                  ${
-                    multiStepForm.canGoPrevious
-                      ? 'btn-secondary'
-                      : 'bg-white/5 text-gray-500 cursor-not-allowed'
+            {/* Previous Button - Always on left */}
+            <button
+              type="button"
+              onClick={multiStepForm.goToPrevious}
+              disabled={!multiStepForm.canGoPrevious}
+              className={`
+                px-4 sm:px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[100px] sm:min-w-[140px] h-[48px]
+                ${
+                  multiStepForm.canGoPrevious
+                    ? 'btn-secondary'
+                    : 'bg-white/5 text-gray-500 cursor-not-allowed'
+                }
+              `}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Previous</span>
+              <span className="sm:hidden">Prev</span>
+            </button>
+
+            {/* Right side buttons container */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Skip button - only show on billing step when form is NOT complete */}
+              {multiStepForm.currentStep === 1 && !isBillingComplete && (
+                <button
+                  type="button"
+                  onClick={handleSkipBilling}
+                  disabled={isSubmitting}
+                  className="btn-secondary px-3 sm:px-4 py-3 disabled:opacity-50 min-w-[80px] sm:min-w-[100px] h-[48px] flex items-center justify-center rounded-xl text-sm"
+                >
+                  <span className="hidden sm:inline">Skip for now</span>
+                  <span className="sm:hidden">Skip</span>
+                </button>
+              )}
+
+              {/* Continue button - show on step 0, step 2, and step 1 when billing is complete */}
+              {(multiStepForm.currentStep !== 1 || isBillingComplete) && (
+                <ActionButton
+                  label={(() => {
+                    if (isSubmitting) return 'Creating...'
+                    if (multiStepForm.isLastStep) return 'Create Account'
+                    return 'Continue'
+                  })()}
+                  onClick={handleButtonClick}
+                  disabled={
+                    isSubmitting ||
+                    (multiStepForm.currentStep === 0 && !isPersonalValid) ||
+                    (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
                   }
-                `}
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Previous</span>
-              </button>
-
-              {/* Right side buttons */}
-              <div className="flex items-center space-x-4">
-                {/* Skip button - only show on billing step when form is NOT complete */}
-                {multiStepForm.currentStep === 1 && !isBillingComplete && (
-                  <div className="relative group">
-                    <button
-                      type="button"
-                      onClick={handleSkipBilling}
-                      disabled={isSubmitting}
-                      className="btn-secondary px-8 py-3 disabled:opacity-50 min-w-[160px] h-[48px] flex items-center justify-center rounded-xl"
-                    >
-                      Skip for now
-                    </button>
-                  </div>
-                )}
-
-                {/* Continue button - show on step 0, step 2, and step 1 when billing is complete */}
-                {(multiStepForm.currentStep !== 1 || isBillingComplete) && (
-                  <ActionButton
-                    label={(() => {
-                      if (isSubmitting) return 'Creating Account...'
-                      if (multiStepForm.isLastStep) return 'Create Account'
-                      return 'Continue'
-                    })()}
-                    onClick={handleButtonClick}
-                    disabled={
-                      isSubmitting ||
-                      (multiStepForm.currentStep === 0 && !isPersonalValid) ||
-                      (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
-                    }
-                    icon={multiStepForm.isLastStep ? CheckCircle : ArrowRight}
-                    loading={isSubmitting}
-                    size="md"
-                    animated={false}
-                    actionType={multiStepForm.isLastStep ? "auth" : "navigation"}
-                    className="min-w-[160px] h-[48px]"
-                  />
-                )}
-              </div>
+                  icon={multiStepForm.isLastStep ? CheckCircle : ArrowRight}
+                  loading={isSubmitting}
+                  size="md"
+                  animated={false}
+                  actionType={multiStepForm.isLastStep ? "auth" : "navigation"}
+                  className="min-w-[120px] sm:min-w-[160px] h-[48px]"
+                />
+              )}
             </div>
           </motion.div>
         )}
 
         {/* Login Link */}
-        <div className="text-center mt-8">
-          <p className="auth-text-muted">
+        <div className="text-center mt-6 sm:mt-8">
+          <p className="auth-text-muted text-sm sm:text-base">
             Already have an account?{' '}
             <Link to="/auth/login" className="auth-link brand-primary">
               Sign in

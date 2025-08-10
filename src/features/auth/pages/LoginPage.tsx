@@ -137,22 +137,23 @@ export const LoginPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="auth-card"
+        className="w-full max-w-md mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
-        {/* Header */}
-        <div className="text-center mb-6 sm:mb-8 lg:mb-10">
-          <div className="gradient-header" />
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="relative"
-          >
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">Welcome Back</h1>
-            <p className="auth-text-muted text-base sm:text-lg font-medium">Sign in to your Round account</p>
-          </motion.div>
-        </div>
+        <div className="auth-card">
+          {/* Header */}
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="gradient-header" />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="relative"
+            >
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">Welcome Back</h1>
+              <p className="auth-text-muted text-base sm:text-lg font-medium">Sign in to your Round account</p>
+            </motion.div>
+          </div>
 
         {/* API Error Message */}
         {apiError && (
@@ -264,10 +265,10 @@ export const LoginPage = () => {
             disabled={!isFormValid()}
             icon={ArrowRight}
             loading={isSubmitting}
-            size="lg"
+            size="md"
             animated={false}
             actionType="auth"
-            className="mt-8 w-full"
+            className="mt-8 w-full h-[48px]"
           />
 
           {/* Divider */}
@@ -325,6 +326,7 @@ export const LoginPage = () => {
             </p>
           </div>
         </form>
+        </div>
       </motion.div>
     </div>
   )
