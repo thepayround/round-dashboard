@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronLeft,
@@ -18,6 +18,7 @@ import {
   DollarSign,
   Tag,
   Grid3X3,
+  X,
 } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/shared/hooks/useAuth'
@@ -102,6 +103,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [collapsedDropdown, setCollapsedDropdown] = useState<string | null>(null)
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
 
+  // UI state
+  const [showShortcuts, setShowShortcuts] = useState(false)
+
+  // Keyboard navigation
+  const [focusedIndex, setFocusedIndex] = useState(-1)
+  const [isKeyboardNavigating, setIsKeyboardNavigating] = useState(false)
+  const navigationRef = useRef<HTMLElement>(null)
+
   // Handle responsive behavior
   useEffect(() => {
     if ((isMobile || isTablet) && !isCollapsed) {
@@ -136,6 +145,26 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     return isActive(item.href)
   }
 
+  // Get all navigation items (flat list for keyboard navigation)
+  const getAllNavItems = useCallback(() => {
+    const items: (NavItem & { isSubItem?: boolean; parentId?: string })[] = []
+    
+    navItems.forEach(item => {
+      items.push(item)
+      if (item.subItems && (!isCollapsed && expandedItems.includes(item.id))) {
+        item.subItems.forEach(subItem => {
+          items.push({ ...subItem, isSubItem: true, parentId: item.id })
+        })
+      }
+    })
+    
+    bottomNavItems.forEach(item => {
+      items.push(item)
+    })
+    
+    return items
+  }, [isCollapsed, expandedItems])
+
   const toggleExpanded = (itemId: string) => {
     setExpandedItems(prev => {
       const isCurrentlyExpanded = prev.includes(itemId)
@@ -150,12 +179,32 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     if (collapsedDropdown === itemId) {
       setCollapsedDropdown(null)
     } else {
-      // Calculate position based on the clicked button
+      // Calculate position based on the clicked button with viewport awareness
       const buttonRect = (event.currentTarget as HTMLElement).getBoundingClientRect()
-      setDropdownPosition({
-        top: buttonRect.top,
-        left: buttonRect.right + 8 // 8px gap from sidebar
-      })
+      const viewportHeight = window.innerHeight
+      const viewportWidth = window.innerWidth
+      const dropdownMinWidth = 200
+      const dropdownEstimatedHeight = 250 // Estimated height for calculation
+      
+      let {top} = buttonRect
+      let left = buttonRect.right + 8 // 8px gap from sidebar
+      
+      // Check if dropdown would overflow viewport horizontally
+      if (left + dropdownMinWidth > viewportWidth) {
+        left = buttonRect.left - dropdownMinWidth - 8 // Position to the left of sidebar
+      }
+      
+      // Check if dropdown would overflow viewport vertically
+      if (top + dropdownEstimatedHeight > viewportHeight) {
+        top = Math.max(8, viewportHeight - dropdownEstimatedHeight - 8) // 8px margin from top/bottom
+      }
+      
+      // Ensure dropdown doesn't go above viewport
+      if (top < 8) {
+        top = 8
+      }
+      
+      setDropdownPosition({ top, left })
       setCollapsedDropdown(itemId)
     }
   }
@@ -178,19 +227,119 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     }
   }, [collapsedDropdown])
 
+  const toggleSidebar = useCallback(() => {
+    setIsCollapsed(!isCollapsed)
+    if (isMobile || isTablet) {
+      setShowMobileOverlay(!isCollapsed)
+    }
+  }, [isCollapsed, isMobile, isTablet])
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Only handle keyboard navigation when sidebar is focused
+      if (!navigationRef.current?.contains(document.activeElement)) {
+        return
+      }
+
+      const allItems = getAllNavItems()
+      
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault()
+          setIsKeyboardNavigating(true)
+          setFocusedIndex(prev => {
+            const newIndex = prev < allItems.length - 1 ? prev + 1 : 0
+            return newIndex
+          })
+          break
+          
+        case 'ArrowUp':
+          event.preventDefault()
+          setIsKeyboardNavigating(true)
+          setFocusedIndex(prev => {
+            const newIndex = prev > 0 ? prev - 1 : allItems.length - 1
+            return newIndex
+          })
+          break
+          
+        case 'Enter':
+          event.preventDefault()
+          if (focusedIndex >= 0 && focusedIndex < allItems.length) {
+            const item = allItems[focusedIndex]
+            if (item.subItems && !isCollapsed) {
+              toggleExpanded(item.id)
+            } else {
+              navigate(item.href)
+            }
+          }
+          break
+          
+        case 'Escape':
+          if (collapsedDropdown) {
+            setCollapsedDropdown(null)
+          } else {
+            setFocusedIndex(-1)
+            setIsKeyboardNavigating(false)
+          }
+          break
+          
+        // Quick navigation shortcuts
+        case '1':
+          if (event.altKey) {
+            event.preventDefault()
+            navigate('/dashboard')
+          }
+          break
+        case '2':
+          if (event.altKey) {
+            event.preventDefault()
+            navigate('/customers')
+          }
+          break
+        case '3':
+          if (event.altKey) {
+            event.preventDefault()
+            navigate('/billing')
+          }
+          break
+        case '4':
+          if (event.altKey) {
+            event.preventDefault()
+            navigate('/invoices')
+          }
+          break
+        case '5':
+          if (event.altKey) {
+            event.preventDefault()
+            navigate('/catalog')
+          }
+          break
+        case 'b':
+          if (event.ctrlKey && event.shiftKey) {
+            event.preventDefault()
+            toggleSidebar()
+          }
+          break
+        case '?':
+          if (event.shiftKey) {
+            event.preventDefault()
+            setShowShortcuts(!showShortcuts)
+          }
+          break
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [focusedIndex, getAllNavItems, collapsedDropdown, navigate, isCollapsed, showShortcuts, toggleSidebar])
+
   const handleLogout = async () => {
     if (token) {
       await apiClient.logout()
     }
     logout()
     navigate('/auth/login')
-  }
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed)
-    if (isMobile || isTablet) {
-      setShowMobileOverlay(!isCollapsed)
-    }
   }
 
   return (
@@ -250,7 +399,12 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </div>
 
         {/* Navigation */}
-        <nav className={`flex-1 py-6 space-y-2 overflow-y-auto overflow-x-hidden ${isCollapsed ? 'px-2' : 'px-6'}`}>
+        <nav 
+          ref={navigationRef}
+          className={`flex-1 py-6 space-y-2 overflow-y-auto overflow-x-hidden ${isCollapsed ? 'px-2' : 'px-6'}`}
+          role="navigation"
+          aria-label="Main navigation"
+        >
           {navItems.map(item => (
             <div key={item.id}>
               {/* Main Navigation Item */}
@@ -275,7 +429,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
+                    ${isKeyboardNavigating && focusedIndex === getAllNavItems().findIndex(navItem => navItem.id === item.id) 
+                      ? 'ring-2 ring-white/50' : ''
+                    }
                   `}
+                  aria-expanded={expandedItems.includes(item.id)}
+                  aria-haspopup="menu"
+                  aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
+                  tabIndex={isKeyboardNavigating ? -1 : 0}
                 >
                   <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
                   
@@ -316,7 +477,12 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
+                    ${isKeyboardNavigating && focusedIndex === getAllNavItems().findIndex(navItem => navItem.id === item.id) 
+                      ? 'ring-2 ring-white/50' : ''
+                    }
                   `}
+                  aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
+                  tabIndex={isKeyboardNavigating ? -1 : 0}
                 >
                   <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
 
@@ -489,6 +655,90 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </>
               )
             })()}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Keyboard Shortcuts Help Modal */}
+      <AnimatePresence>
+        {showShortcuts && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+            onClick={() => setShowShortcuts(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.2 }}
+              className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl p-6 max-w-md mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Keyboard Shortcuts</h3>
+                <button
+                  onClick={() => setShowShortcuts(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                  aria-label="Close shortcuts help"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="space-y-4 text-sm">
+                <div>
+                  <h4 className="text-white font-medium mb-2">Navigation</h4>
+                  <div className="space-y-1 text-gray-300">
+                    <div className="flex justify-between">
+                      <span>Dashboard</span>
+                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+1</kbd>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Customers</span>
+                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+2</kbd>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Billing</span>
+                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+3</kbd>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Invoices</span>
+                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+4</kbd>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Catalog</span>
+                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+5</kbd>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="text-white font-medium mb-2">Sidebar</h4>
+                  <div className="space-y-1 text-gray-300">
+                    <div className="flex justify-between">
+                      <span>Toggle Sidebar</span>
+                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Ctrl+Shift+B</kbd>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Arrow Navigation</span>
+                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">↑↓</kbd>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Select Item</span>
+                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Enter</kbd>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Close/Escape</span>
+                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Esc</kbd>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
