@@ -10,7 +10,7 @@ interface TeamStepProps {
   data: TeamSettings
   onChange: (data: TeamSettings) => void
   showSuccess: (message: string) => void
-  showError: (message: string) => void
+  showError: (message: string, details?: Record<string, string>) => void
 }
 
 export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepProps) => {
@@ -28,15 +28,32 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
       return
     }
     
-    console.log('Current user state:', state.user)
+    // Debug: Current user state and roundAccountUsers
+    // console.log('Current user state:', state.user)
+    // console.log('User roundAccountUsers:', state.user?.roundAccountUsers)
     
-    if (!state.user?.roundAccountId) {
+    // Get roundAccountId from the user's RoundAccountUsers collection
+    // The user.id is the userId, not the roundAccountId
+    let roundAccountId = state.user?.roundAccountUsers?.[0]?.roundAccountId ?? state.user?.roundAccountId
+    
+    // Fallback: If no round account exists, use the user's ID 
+    // This handles cases where the user account relationship isn't properly set up
+    if (!roundAccountId) {
+      console.warn('No roundAccountId found, using user ID as fallback')
+      roundAccountId = state.user?.id
+    }
+    
+    if (!roundAccountId) {
+      console.error('No ID available for round account')
       showError('User authentication error. Please refresh and try again.')
       return
     }
+    
+    // Debug: Using roundAccountId
+    // console.log('Using roundAccountId:', roundAccountId)
 
     // Check if user is trying to invite themselves
-    if (state.user.email && inviteEmail.trim().toLowerCase() === state.user.email.toLowerCase()) {
+    if (state.user?.email && inviteEmail.trim().toLowerCase() === state.user.email.toLowerCase()) {
       showError('You cannot invite yourself to the organization.')
       return
     }
@@ -51,19 +68,21 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
     }
 
     try {
-      console.log('About to call inviteUser with:', {
-        roundAccountId: state.user.roundAccountId,
-        email: inviteEmail.trim(),
-        role: inviteRole
-      })
+      // Debug: About to call inviteUser
+      // console.log('About to call inviteUser with:', {
+      //   roundAccountId,
+      //   email: inviteEmail.trim(),
+      //   role: inviteRole
+      // })
       
       const result = await inviteUser({
-        roundAccountId: state.user.roundAccountId,
+        roundAccountId,
         email: inviteEmail.trim(),
         role: inviteRole
       })
       
-      console.log('inviteUser result:', result)
+      // Debug: inviteUser result
+      // console.log('inviteUser result:', result)
 
       if (result.success) {
         showSuccess('Invitation sent successfully!')
@@ -86,7 +105,10 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
         setInviteRole(UserRole.TeamMember)
       } else {
         // Backend validation errors will be handled by the API response
-        showError(result.error ?? 'Failed to send invitation')
+        showError(
+          result.error ?? 'Failed to send invitation', 
+          'details' in result ? result.details as Record<string, string> : undefined
+        )
       }
     } catch (error) {
       showError('An unexpected error occurred while sending the invitation.')
