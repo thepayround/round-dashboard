@@ -81,10 +81,6 @@ export class TeamService {
    */
   async inviteUser(request: InviteUserRequest): Promise<ApiResponse<{ message: string }>> {
     try {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('TeamService: inviteUser called with:', request)
-      }
-      
       // Convert camelCase to PascalCase for backend
       const backendRequest: BackendInviteUserRequest = {
         RoundAccountId: request.roundAccountId,
@@ -92,19 +88,10 @@ export class TeamService {
         Role: request.role
       }
       
-      if (process.env.NODE_ENV === 'development') {
-        console.log('TeamService: sending backend request:', backendRequest)
-        console.log('TeamService: API endpoint:', `${this.baseUrl}/invite-user`)
-      }
-      
       const response = await httpClient.getClient().post<{ message: string }>(
         `${this.baseUrl}/invite-user`, 
         backendRequest
       )
-      
-      if (process.env.NODE_ENV === 'development') {
-        console.log('TeamService: API response received:', response)
-      }
       
       return {
         success: true,
@@ -112,13 +99,44 @@ export class TeamService {
         message: 'Invitation sent successfully'
       }
     } catch (error: unknown) {
-      const axiosError = error as { response?: { status?: number; data?: { message?: string } } }
+      const axiosError = error as { 
+        response?: { 
+          status?: number; 
+          data?: string | { message?: string } | Array<{ code: string; description: string }> 
+        } 
+      }
+      
+      let errorMessage = 'Failed to send invitation'
+      let errorDetails: Record<string, string> | undefined
+      
+      if (axiosError.response?.data) {
+        const responseData = axiosError.response.data
+        
+        // Handle array of error objects (like your PendingInvitation case)
+        if (Array.isArray(responseData)) {
+          const [firstError] = responseData
+          if (firstError?.description) {
+            errorMessage = firstError.description
+            // Create details object for additional context
+            errorDetails = { [firstError.code || 'Error']: firstError.description }
+          }
+        }
+        // Handle simple object with message
+        else if (typeof responseData === 'object' && 'message' in responseData) {
+          errorMessage = responseData.message ?? errorMessage
+        }
+        // Handle string response
+        else if (typeof responseData === 'string') {
+          errorMessage = responseData
+        }
+      }
       
       return {
         success: false,
         data: undefined,
-        message: axiosError.response?.data?.message ?? 'Failed to send invitation',
-        error: axiosError.response?.data?.message ?? 'Failed to send invitation'
+        message: errorMessage,
+        error: errorMessage,
+        details: errorDetails
       }
     }
   }

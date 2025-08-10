@@ -3,6 +3,12 @@ import type { OnboardingData } from '@/features/onboarding/types/onboarding'
 
 export type AccountType = 'personal' | 'business'
 
+export interface RoundAccountUser {
+  roundAccountId: string
+  userId: string
+  // Add other fields as needed
+}
+
 export interface BaseUser {
   id: string
   email: string
@@ -15,7 +21,8 @@ export interface BaseUser {
   updatedAt: string
   onboardingCompleted?: boolean
   onboardingData?: Partial<OnboardingData>
-  roundAccountId?: string
+  roundAccountId?: string // For backward compatibility
+  roundAccountUsers?: RoundAccountUser[] // Backend API response format
 }
 
 export interface PersonalUser extends BaseUser {
