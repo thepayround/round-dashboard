@@ -500,9 +500,6 @@ export const GetStartedPage = () => {
                 }
                 
                 if (cachedOrgData?.organizationId) {
-                  if (process.env.NODE_ENV === 'development') {
-                    console.log('Creating address for organization:', cachedOrgData.organizationId)
-                  }
                   addressResult = await organizationService.createOrganizationAddress(cachedOrgData.organizationId, createData)
                 } else {
                   if (process.env.NODE_ENV === 'development') {

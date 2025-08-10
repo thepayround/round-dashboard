@@ -46,9 +46,6 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
       return
     }
     
-    // Debug: Using roundAccountId
-    // console.log('Using roundAccountId:', roundAccountId)
-
     // Check if user is trying to invite themselves
     if (state.user?.email && inviteEmail.trim().toLowerCase() === state.user.email.toLowerCase()) {
       showError('You cannot invite yourself to the organization.')
