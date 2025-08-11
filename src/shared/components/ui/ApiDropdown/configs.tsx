@@ -174,7 +174,7 @@ export const timezoneDropdownConfig: ApiDropdownConfig<TimeZone> = {
         </div>
       ),
     })),
-  icon: <Clock />,
+  icon: <Clock size={20} />,
   placeholder: 'Select timezone',
   searchPlaceholder: 'Search timezones...',
   noResultsText: 'No timezones found',
@@ -195,7 +195,7 @@ export const fiscalYearDropdownConfig: ApiDropdownConfig<Month> = {
         </div>
       ),
     })),
-  icon: <Calendar />,
+  icon: <Calendar size={20} />,
   placeholder: 'Select fiscal year start month',
   searchPlaceholder: 'Search months...',
   noResultsText: 'No months found',
@@ -253,7 +253,7 @@ export const teamRoleDropdownConfig: ApiDropdownConfig<Role> = {
         ),
       }
     }),
-  icon: <Users />,
+  icon: <Users size={20} />,
   placeholder: 'Select role',
   searchPlaceholder: 'Search roles...',
   noResultsText: 'No roles found',
@@ -275,7 +275,7 @@ export const industryDropdownConfig: ApiDropdownConfig<IndustryResponse> = {
         </div>
       ),
     })),
-  icon: <Building />,
+  icon: <Building size={20} />,
   placeholder: 'Select industry',
   searchPlaceholder: 'Search industries...',
   noResultsText: 'No industries found',
@@ -309,7 +309,7 @@ export const companySizeDropdownConfig: ApiDropdownConfig<CompanySizeResponse> =
         ),
       }
     }),
-  icon: <User />,
+  icon: <User size={20} />,
   placeholder: 'Select company size',
   searchPlaceholder: 'Search company sizes...',
   noResultsText: 'No company sizes found',
@@ -333,7 +333,7 @@ export const addressTypeDropdownConfig: ApiDropdownConfig<AddressTypeResponse> =
           </div>
         ),
       })),
-  icon: <MapPin />,
+  icon: <MapPin size={20} />,
   placeholder: 'Select address type',
   searchPlaceholder: 'Search address types...',
   noResultsText: 'No address types found',
