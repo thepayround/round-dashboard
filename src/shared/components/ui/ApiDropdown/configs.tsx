@@ -13,8 +13,9 @@ import type { AddressTypeResponse } from '@/shared/types/api/addressType'
 
 
 
-// Currency symbol mapping
-const currencySymbols: Record<string, string> = {
+// Legacy fallback currency symbols (now replaced by backend data)
+// Only used as fallback if backend doesn't provide symbol
+const fallbackCurrencySymbols: Record<string, string> = {
   USD: '$',
   EUR: '€',
   GBP: '£',
@@ -72,7 +73,7 @@ export const countryDropdownConfig: ApiDropdownConfig<Record<string, string>> = 
         ),
       }))
   },
-  icon: <Globe />,
+  icon: <Globe size={20} />,
   placeholder: 'Select country',
   searchPlaceholder: 'Search countries...',
   noResultsText: 'No countries found',
@@ -83,26 +84,30 @@ export const countryDropdownConfig: ApiDropdownConfig<Record<string, string>> = 
 export const currencyDropdownConfig: ApiDropdownConfig<CurrencyResponse> = {
   useHook: useCurrencies,
   mapToOptions: (currencies) =>
-    currencies.map(currency => {
-      const symbol = currencySymbols[currency.currencyCodeAlpha] || currency.currencyCodeAlpha
-      
-      return {
-        value: currency.currencyCodeAlpha,
-        label: `${symbol} ${currency.currencyName}`,
-        searchText: `${currency.currencyName} ${currency.currencyCodeAlpha} ${currency.countries.map((c: { countryName: string }) => c.countryName).join(', ')}`,
-        description: `${currency.currencyCodeAlpha} • Used in ${currency.countries.length} ${
-          currency.countries.length === 1 ? 'country' : 'countries'
-        }`,
-        icon: (
-          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center">
-            <span className="text-xs font-semibold text-white/80">
-              {symbol}
-            </span>
-          </div>
-        ),
-      }
-    }),
-  icon: <DollarSign />,
+    // Sort currencies alphabetically by name (same as country dropdown)
+    currencies
+      .sort((a, b) => a.currencyName.localeCompare(b.currencyName))
+      .map(currency => {
+        // Use backend currency symbol first, then fallback to currency code only if no symbol
+        const symbol = currency.currencySymbol || currency.currencyCodeAlpha
+        
+        return {
+          value: currency.currencyCodeAlpha,
+          label: currency.currencyName,
+          searchText: `${currency.currencyName} ${currency.currencyCodeAlpha} ${symbol} ${currency.countries.map((c: { countryName: string }) => c.countryName).join(', ')}`,
+          description: `${currency.currencyCodeAlpha} • Used in ${currency.countries.length} ${
+            currency.countries.length === 1 ? 'country' : 'countries'
+          }`,
+          icon: (
+            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center">
+              <span className="text-xs font-semibold text-white/80">
+                {symbol}
+              </span>
+            </div>
+          ),
+        }
+      }),
+  icon: <DollarSign size={20} />,
   placeholder: 'Select currency',
   searchPlaceholder: 'Search currencies...',
   noResultsText: 'No currencies found',

@@ -3,6 +3,7 @@ import { Package, Calendar, Clock, Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { memo } from 'react'
 import { Card } from './Card'
+import { useCurrency } from '@/shared/hooks/useCurrency'
 import type { ActionMenuItem } from '../ActionMenu/ActionMenu'
 
 interface ProductCardProps {
@@ -34,7 +35,8 @@ interface ProductCardProps {
   href?: string
 }
 
-const formatCurrency = (amount: number, currency: string) => new Intl.NumberFormat('en-US', {
+// Legacy fallback currency formatting - now replaced by useCurrency hook
+const legacyFormatCurrency = (amount: number, currency: string) => new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency
   }).format(amount)
@@ -59,6 +61,8 @@ const ProductCardComponent = ({
   className = '',
   href
 }: ProductCardProps) => {
+  const { formatCurrency } = useCurrency()
+  
   const actions: ActionMenuItem[] = [
     ...(href ? [{
       id: 'view',

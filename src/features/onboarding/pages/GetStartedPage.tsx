@@ -631,6 +631,7 @@ export const GetStartedPage = () => {
             data={onboardingData.organization}
             onChange={updateOrganization}
             isPrePopulated={!!onboardingData.organization.companyName}
+            businessSettings={onboardingData.businessSettings}
           />
         )
       case 'businessSettings':

@@ -205,8 +205,9 @@ export const CompanyDetailsForm = ({
               onErrorsChange(errors.filter(error => error.field !== 'currency'))
             }
           }}
+          onClear={() => handleSelectChange('currency', '')}
           error={hasFieldError(errors, 'currency')}
-          allowClear={false}
+          allowClear
         />
         {hasFieldError(errors, 'currency') && (
           <motion.div

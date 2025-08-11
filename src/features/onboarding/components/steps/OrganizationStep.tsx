@@ -1,13 +1,15 @@
 import { motion } from 'framer-motion'
 import { Building, DollarSign, ExternalLink, AlignLeft } from 'lucide-react'
 import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig } from '@/shared/components/ui/ApiDropdown'
-import type { OrganizationInfo } from '../../types/onboarding'
+import { useCurrency } from '@/shared/hooks/useCurrency'
+import type { OrganizationInfo, BusinessSettings } from '../../types/onboarding'
 
 interface OrganizationStepProps {
   data: OrganizationInfo
   onChange: (data: OrganizationInfo) => void
   errors?: Record<string, string>
   isPrePopulated?: boolean
+  businessSettings?: BusinessSettings
 }
 
 
@@ -19,7 +21,14 @@ export const OrganizationStep = ({
   onChange,
   errors = {},
   isPrePopulated = false,
+  businessSettings,
 }: OrganizationStepProps) => {
+  const { getCurrencySymbol, isLoading: currencyLoading } = useCurrency()
+
+  // Get currency symbol based on business settings
+  const currencySymbol = businessSettings?.currency 
+    ? getCurrencySymbol(businessSettings.currency) 
+    : '$'
 
   const handleInputChange =
     (field: keyof OrganizationInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,9 +186,22 @@ export const OrganizationStep = ({
         <div>
           <label htmlFor="revenue" className="auth-label">
             Annual Revenue <span className="text-gray-500">(optional)</span>
+            {businessSettings?.currency && (
+              <span className="text-gray-500 ml-2">
+                ({businessSettings.currency})
+              </span>
+            )}
           </label>
           <div className="input-container">
-            <DollarSign className="input-icon-left auth-icon-primary" />
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
+              {currencyLoading ? (
+                <div className="w-3 h-3 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+              ) : (
+                <span className="text-sm font-semibold text-[#14BDEA]">
+                  {currencySymbol}
+                </span>
+              )}
+            </div>
             <input
               id="revenue"
               type="number"
@@ -187,6 +209,7 @@ export const OrganizationStep = ({
               onChange={handleInputChange('revenue')}
               placeholder="1000000"
               className={`auth-input input-with-icon-left ${errors.revenue ? 'auth-input-error' : ''}`}
+              style={{ paddingLeft: '3rem' }}
             />
           </div>
           {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}
