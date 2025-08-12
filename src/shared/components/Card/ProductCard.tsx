@@ -36,7 +36,7 @@ interface ProductCardProps {
 }
 
 // Legacy fallback currency formatting - now replaced by useCurrency hook
-const legacyFormatCurrency = (amount: number, currency: string) => new Intl.NumberFormat('en-US', {
+const _legacyFormatCurrency = (amount: number, currency: string) => new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency
   }).format(amount)

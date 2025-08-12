@@ -76,6 +76,7 @@ const defaultOnboardingData: OnboardingData = {
     companyName: '',
     industry: '',
     companySize: '',
+    organizationType: '',
     website: '',
     description: '',
     timeZone: '',
@@ -172,6 +173,7 @@ export const GetStartedPage = () => {
           organization.companyName?.trim() !== '' &&
           organization.industry !== '' &&
           organization.companySize !== '' &&
+          organization.organizationType !== '' &&
           organization.country !== ''
         )
       }
@@ -318,6 +320,7 @@ export const GetStartedPage = () => {
               companyName: org.name ?? '',
               industry: org.category ?? '',
               companySize: org.size ?? '',
+              organizationType: org.type ?? '',
               website: org.website ?? '',
               description: org.description ?? '',
               timeZone: org.timeZone ?? '',
@@ -331,7 +334,7 @@ export const GetStartedPage = () => {
             const completedStepsFromData: OnboardingStep[] = []
             
             // Check organization completion
-            if (org.name && org.category && org.size && org.country) {
+            if (org.name && org.category && org.size && org.type && org.country) {
               completedStepsFromData.push('organization')
             }
 
@@ -428,7 +431,7 @@ export const GetStartedPage = () => {
                 ? parseFloat(onboardingData.organization.revenue) 
                 : 0,
               category: onboardingData.organization.industry ?? '',
-              type: 'corporation',
+              type: onboardingData.organization.organizationType ?? '',
               registrationNumber: cachedOrgData?.registrationNumber ?? `REG-${Date.now()}`,
               currency: onboardingData.businessSettings.currency ?? 'USD',
               timeZone: onboardingData.businessSettings.timezone ?? 'UTC',

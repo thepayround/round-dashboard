@@ -3,6 +3,7 @@ import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurren
 import { useIndustries } from '@/shared/hooks/api/useIndustry'
 import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
 import { useAddressTypes } from '@/shared/hooks/api/useAddressType'
+import { useOrganizationTypes } from '@/shared/hooks/api/useOrganizationType'
 import type { ApiDropdownConfig } from './ApiDropdown'
 import { useMemo } from 'react'
 import type { CurrencyResponse } from '@/shared/types/api/countryCurrency'
@@ -10,12 +11,13 @@ import type { TimeZone, Month, Role } from '@/shared/types/api/countryCurrency'
 import type { IndustryResponse } from '@/shared/types/api/industry'
 import type { CompanySizeResponse } from '@/shared/types/api/companySize'
 import type { AddressTypeResponse } from '@/shared/types/api/addressType'
+import type { OrganizationTypeResponse } from '@/shared/types/api/organizationType'
 
 
 
 // Legacy fallback currency symbols (now replaced by backend data)
 // Only used as fallback if backend doesn't provide symbol
-const fallbackCurrencySymbols: Record<string, string> = {
+const _fallbackCurrencySymbols: Record<string, string> = {
   USD: '$',
   EUR: '€',
   GBP: '£',
@@ -112,6 +114,31 @@ export const currencyDropdownConfig: ApiDropdownConfig<CurrencyResponse> = {
   searchPlaceholder: 'Search currencies...',
   noResultsText: 'No currencies found',
   errorText: 'Failed to load currencies',
+}
+
+// Organization Type dropdown configuration
+export const organizationTypeDropdownConfig: ApiDropdownConfig<OrganizationTypeResponse> = {
+  useHook: useOrganizationTypes,
+  mapToOptions: (organizationTypes) =>
+    // Sort organization types alphabetically by name
+    organizationTypes
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(orgType => ({
+        value: orgType.code,
+        label: orgType.name,
+        searchText: `${orgType.name} ${orgType.description}`,
+        description: orgType.description,
+        icon: (
+          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+            <Building size={12} className="text-white/80" />
+          </div>
+        ),
+      })),
+  icon: <Building size={20} />,
+  placeholder: 'Select organization type',
+  searchPlaceholder: 'Search organization types...',
+  noResultsText: 'No organization types found',
+  errorText: 'Failed to load organization types',
 }
 
 // Static data hooks for non-API dropdowns

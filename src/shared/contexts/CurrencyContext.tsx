@@ -3,6 +3,8 @@
  * Provides global currency management and formatting functions
  */
 
+/* eslint-disable react-refresh/only-export-components */
+
 import type { ReactNode } from 'react';
 import React, { createContext, useContext } from 'react'
 import { useCurrency } from '../hooks/useCurrency'
@@ -60,5 +62,3 @@ export const useCurrencyContext = (): CurrencyContextType => {
   
   return context
 }
-
-export default CurrencyContext

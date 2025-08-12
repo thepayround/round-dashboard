@@ -40,3 +40,8 @@ export type {
   CurrencyResponse,
   CountryResponse,
 } from './countryCurrency'
+
+// Organization Type types
+export type {
+  OrganizationTypeResponse,
+} from './organizationType'

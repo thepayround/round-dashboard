@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import { Building, DollarSign, ExternalLink, AlignLeft } from 'lucide-react'
-import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { Building, ExternalLink, AlignLeft } from 'lucide-react'
+import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { useCurrency } from '@/shared/hooks/useCurrency'
 import type { OrganizationInfo, BusinessSettings } from '../../types/onboarding'
 
@@ -142,6 +142,22 @@ export const OrganizationStep = ({
             allowClear
           />
           {errors.companySize && <p className="mt-1 text-sm text-red-400">{errors.companySize}</p>}
+        </div>
+
+        {/* Organization Type */}
+        <div>
+          <span className="block text-sm font-medium text-gray-300 mb-2">
+            Organization Type <span className="text-red-400">*</span>
+          </span>
+          <ApiDropdown
+            config={organizationTypeDropdownConfig}
+            value={data.organizationType}
+            onSelect={value => handleSelectChange('organizationType', value)}
+            onClear={() => handleSelectChange('organizationType', '')}
+            error={!!errors.organizationType}
+            allowClear
+          />
+          {errors.organizationType && <p className="mt-1 text-sm text-red-400">{errors.organizationType}</p>}
         </div>
 
         {/* Website */}

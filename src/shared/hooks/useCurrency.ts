@@ -5,7 +5,6 @@
 
 import { useMemo } from 'react'
 import { useCurrencies } from './api/useCountryCurrency'
-import type { CurrencyResponse } from '../types/api/countryCurrency'
 
 export interface CurrencyInfo {
   code: string

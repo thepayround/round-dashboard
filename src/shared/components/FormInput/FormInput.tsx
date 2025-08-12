@@ -54,9 +54,11 @@ export const FormInput = forwardRef<
 
     switch (inputType) {
       case 'textarea':
+        // eslint-disable-next-line react/jsx-props-no-spreading
         return <textarea rows={rows} {...baseProps} ref={ref as React.ForwardedRef<HTMLTextAreaElement>} />
       case 'select':
         return (
+          // eslint-disable-next-line react/jsx-props-no-spreading
           <select {...baseProps} ref={ref as React.ForwardedRef<HTMLSelectElement>}>
             {options.map((option) => (
               <option key={option.value} value={option.value} className="bg-gray-800 text-white">
@@ -66,6 +68,7 @@ export const FormInput = forwardRef<
           </select>
         )
       default:
+        // eslint-disable-next-line react/jsx-props-no-spreading
         return <input {...baseProps} ref={ref as React.ForwardedRef<HTMLInputElement>} />
     }
   }
