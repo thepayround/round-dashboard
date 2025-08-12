@@ -61,8 +61,9 @@ export const BusinessSettingsStep = ({
             config={currencyDropdownConfig}
             value={data.currency}
             onSelect={value => handleSelectChange('currency', value)}
+            onClear={() => handleSelectChange('currency', '')}
             error={!!errors.currency}
-            allowClear={false}
+            allowClear
           />
           {errors.currency && <p className="mt-1 text-sm text-red-400">{errors.currency}</p>}
         </div>

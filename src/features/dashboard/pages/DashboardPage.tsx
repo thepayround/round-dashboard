@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { useCurrency } from '@/shared/hooks/useCurrency'
 import { Card, SectionHeader, ActionButton } from '@/shared/components'
 import { useAuth } from '@/shared/hooks/useAuth'
 import type { ProductInfo, TeamSettings } from '@/features/onboarding/types/onboarding'
@@ -20,6 +21,7 @@ import type { ProductInfo, TeamSettings } from '@/features/onboarding/types/onbo
 export const DashboardPage = () => {
   const { state } = useAuth()
   const { user, isLoading } = state
+  const { formatCurrency } = useCurrency()
 
   if (isLoading) {
     return (
@@ -300,7 +302,9 @@ export const DashboardPage = () => {
                                 <p className="text-sm auth-text-muted">{product.description}</p>
                               </div>
                               <div className="text-right">
-                                <p className="font-medium auth-text">${product.price}</p>
+                                <p className="font-medium auth-text">
+                                  {formatCurrency(product.price, onboardingData?.businessSettings?.currency ?? 'USD')}
+                                </p>
                               </div>
                             </div>
                           </div>

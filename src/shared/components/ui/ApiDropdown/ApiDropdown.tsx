@@ -244,8 +244,10 @@ export const ApiDropdown = <T = unknown>({
   if (isError) {
     return (
       <div className="relative w-full h-12 pl-12 pr-5 rounded-xl backdrop-blur-[16px] border-[1.5px] transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-medium text-[0.95rem] outline-none opacity-50 cursor-not-allowed">
-        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400">
-          {config.icon}
+        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 flex items-center justify-center">
+          <div className="w-5 h-5 flex items-center justify-center">
+            {config.icon}
+          </div>
         </div>
         <span className="text-white/60">{config.errorText}</span>
         <button 
@@ -449,8 +451,12 @@ export const ApiDropdown = <T = unknown>({
         tabIndex={disabled ? -1 : 0}
       >
         {/* Left icon - show selected option icon if available, otherwise config icon */}
-        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400">
-          {selectedOption?.icon ?? config.icon}
+        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 flex items-center justify-center">
+          {selectedOption?.icon ?? (
+            <div className="w-5 h-5 flex items-center justify-center">
+              {config.icon}
+            </div>
+          )}
         </div>
 
         {/* Display value or placeholder */}

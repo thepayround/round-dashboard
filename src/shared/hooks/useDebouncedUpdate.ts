@@ -6,14 +6,14 @@ import { useCallback, useRef } from 'react'
  * @param delay Delay in milliseconds (default: 1000ms)
  * @returns Debounced function and cancel function
  */
-export function useDebouncedUpdate<T extends (...args: any[]) => any>(
-  fn: T,
+export function useDebouncedUpdate<TArgs extends readonly unknown[], TReturn = void>(
+  fn: (...args: TArgs) => TReturn,
   delay: number = 1000
 ) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const debouncedFn = useCallback(
-    (...args: Parameters<T>) => {
+    (...args: TArgs) => {
       // Cancel previous timeout if it exists
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
@@ -35,7 +35,7 @@ export function useDebouncedUpdate<T extends (...args: any[]) => any>(
   }, [])
 
   const flush = useCallback(
-    (...args: Parameters<T>) => {
+    (...args: TArgs) => {
       cancel()
       fn(...args)
     },

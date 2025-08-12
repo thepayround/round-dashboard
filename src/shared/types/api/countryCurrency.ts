@@ -10,6 +10,9 @@ export interface CountryCurrencyResponse {
   currencyCodeAlpha: string
   currencyCodeNumeric: string
   decimalPrecision: number
+  currencySymbol: string
+  unicodeDecimal?: number[]
+  unicodeHex?: string[]
 }
 
 export interface CurrencyResponse {
@@ -17,6 +20,9 @@ export interface CurrencyResponse {
   currencyCodeAlpha: string
   currencyCodeNumeric: string
   decimalPrecision: number
+  currencySymbol: string
+  unicodeDecimal?: number[]
+  unicodeHex?: string[]
   countries: Array<{
     countryName: string
     countryCodeAlpha2: string
@@ -31,6 +37,9 @@ export interface CountryResponse {
   currencyCodeAlpha: string
   currencyCodeNumeric: string
   decimalPrecision: number
+  currencySymbol: string
+  unicodeDecimal?: number[]
+  unicodeHex?: string[]
 }
 
 export interface TimeZone {
