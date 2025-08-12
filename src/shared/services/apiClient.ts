@@ -47,6 +47,8 @@ interface LoginResponse {
   errors?: { code: string; description: string }[]
 }
 
+
+
 interface RegisterResponse {
   message: string
 }
@@ -535,6 +537,18 @@ class ApiClient {
       if (response.data) {
         const userData = response.data
 
+        // Extract organization information from the response
+        const hasOrganizations = userData.organizations && userData.organizations.length > 0
+        const organization = hasOrganizations ? userData.organizations[0] : null
+        
+        // Extract account information from RoundAccountUsers
+        const hasAccountUsers = userData.roundAccountUsers && userData.roundAccountUsers.length > 0
+        const accountUser = hasAccountUsers ? userData.roundAccountUsers[0] : null
+        const _account = accountUser?.roundAccount || null
+        
+        // Determine account type based on whether user has organizations
+        const accountType = hasOrganizations ? 'business' : 'personal'
+        
         // Map backend response to frontend User type
         const user: User = {
           id: userData.userId,
@@ -542,14 +556,16 @@ class ApiClient {
           lastName: userData.lastName,
           email: userData.email,
           phone: userData.phoneNumber || '',
-          accountType: 'business', // Default - could be enhanced based on account info
-          role: 'admin', // Default - could be enhanced based on user role
-          companyInfo: {
-            companyName: userData.companyName || 'Default Company',
-            registrationNumber: userData.registrationNumber || '',
-            currency: 'USD',
-            businessType: 'corporation',
-          },
+          accountType,
+          role: 'admin', // Default - could be enhanced based on user role from accountUser
+          ...(accountType === 'business' && organization && {
+            companyInfo: {
+              companyName: organization.name,
+              registrationNumber: organization.registrationNumber || '',
+              currency: organization.currency || 'USD',
+              businessType: organization.type || 'corporation',
+            }
+          }),
           createdAt: userData.createdDate
             ? userData.createdDate.toString()
             : new Date().toISOString(),
@@ -763,6 +779,8 @@ class ApiClient {
   getToken(): string | null {
     return this.getStoredToken()
   }
+
+
 }
 
 // Export singleton instance

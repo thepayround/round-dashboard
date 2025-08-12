@@ -19,6 +19,8 @@ import {
   Tag,
   Grid3X3,
   X,
+  User,
+  ChevronUp,
 } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/shared/hooks/useAuth'
@@ -72,6 +74,8 @@ const bottomNavItems: NavItem[] = [
   { id: 'help', label: 'Help & Support', icon: HelpCircle, href: '/help' },
 ]
 
+// User data comes from auth context and API
+
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const navigate = useNavigate()
   const { logout, state } = useAuth()
@@ -105,11 +109,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   // UI state
   const [showShortcuts, setShowShortcuts] = useState(false)
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
+
 
   // Keyboard navigation
   const [focusedIndex, setFocusedIndex] = useState(-1)
   const [isKeyboardNavigating, setIsKeyboardNavigating] = useState(false)
   const navigationRef = useRef<HTMLElement>(null)
+  const profileDropdownRef = useRef<HTMLDivElement>(null)
 
   // Handle responsive behavior
   useEffect(() => {
@@ -215,7 +222,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       if (collapsedDropdown) {
         // Check if click is outside the dropdown
         const target = event.target as Element
-        if (!target.closest('.collapsed-dropdown') && !target.closest('.catalog-button')) {
+        if (!target.closest('.collapsed-dropdown') && 
+            !target.closest('.catalog-button') && 
+            !target.closest('[data-profile-button]')) {
           setCollapsedDropdown(null)
         }
       }
@@ -226,6 +235,24 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       return () => document.removeEventListener('click', handleClickOutside)
     }
   }, [collapsedDropdown])
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showProfileDropdown && profileDropdownRef.current) {
+        const target = event.target as Element
+        if (!profileDropdownRef.current.contains(target)) {
+          setShowProfileDropdown(false)
+        }
+      }
+    }
+
+    if (showProfileDropdown) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showProfileDropdown])
+
 
   const toggleSidebar = useCallback(() => {
     setIsCollapsed(!isCollapsed)
@@ -341,6 +368,15 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     logout()
     navigate('/auth/login')
   }
+
+
+
+  const getInitials = (name: string) => name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2)
 
   return (
     <div className="min-h-screen relative">
@@ -574,30 +610,168 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </Link>
           ))}
 
-          {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className={`
-              group relative flex items-center rounded-xl transition-all duration-200 h-12 w-full
-              text-gray-400 hover:text-red-400 hover:bg-red-400/10
-              ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-            `}
-          >
-            <LogOut className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
-
-            {!isCollapsed && (
-              <div className="overflow-hidden">
-                <span className="font-medium whitespace-nowrap">Logout</span>
+          {/* User Profile Section */}
+          <div className="relative" ref={profileDropdownRef}>
+            <button
+              onClick={(e) => {
+                if (isCollapsed) {
+                  // In collapsed mode, toggle dropdown with positioning
+                  if (collapsedDropdown === 'profile') {
+                    setCollapsedDropdown(null)
+                  } else {
+                    const buttonRect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+                    const viewportHeight = window.innerHeight
+                    const viewportWidth = window.innerWidth
+                    const dropdownMinWidth = 280
+                    const dropdownEstimatedHeight = 300
+                    
+                    let top = buttonRect.top - dropdownEstimatedHeight - 8
+                    let left = buttonRect.right + 8
+                    
+                    // Check horizontal overflow
+                    if (left + dropdownMinWidth > viewportWidth) {
+                      left = buttonRect.left - dropdownMinWidth - 8
+                    }
+                    
+                    // Check vertical overflow - position above button
+                    if (top < 8) {
+                      top = Math.min(buttonRect.bottom + 8, viewportHeight - dropdownEstimatedHeight - 8)
+                    }
+                    
+                    setDropdownPosition({ top, left })
+                    setCollapsedDropdown('profile')
+                  }
+                } else {
+                  // In expanded mode, use regular dropdown
+                  setShowProfileDropdown(!showProfileDropdown)
+                }
+              }}
+              className={`
+                group relative flex items-center rounded-xl transition-all duration-200 w-full
+                text-gray-400 hover:text-white hover:bg-white/5
+                ${isCollapsed ? 'justify-center px-0 h-12' : 'px-3 py-3'}
+                ${(showProfileDropdown && !isCollapsed) || (collapsedDropdown === 'profile' && isCollapsed) ? 'bg-white/10 text-white' : ''}
+              `}
+              aria-label="User profile menu"
+              aria-expanded={showProfileDropdown || collapsedDropdown === 'profile'}
+              data-profile-button={isCollapsed ? 'true' : undefined}
+            >
+              {/* User Avatar */}
+              <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
+                {state.user ? (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white text-sm font-medium">
+                    {getInitials(`${state.user.firstName} ${state.user.lastName}`)}
+                  </div>
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
+                    <User className="w-4 h-4 text-gray-300" />
+                  </div>
+                )}
               </div>
-            )}
 
-            {/* Tooltip for collapsed state */}
-            {isCollapsed && (
-              <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                Logout
-              </div>
-            )}
-          </button>
+              {/* User Info - Only show when expanded */}
+              {!isCollapsed && state.user && (
+                <div className="flex-1 text-left overflow-hidden">
+                  <div className="font-medium text-sm text-white truncate">
+                    {`${state.user.firstName} ${state.user.lastName}`}
+                  </div>
+                  <div className="text-xs text-gray-400 truncate">
+                    {(() => {
+                      if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
+                        return state.user.companyInfo.companyName
+                      }
+                      return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
+                    })()}
+                  </div>
+                </div>
+              )}
+
+              {/* Dropdown Arrow - Only show when expanded */}
+              {!isCollapsed && (
+                <ChevronUp 
+                  className={`w-4 h-4 transition-transform duration-200 flex-shrink-0 ${
+                    showProfileDropdown ? 'rotate-0' : 'rotate-180'
+                  }`} 
+                />
+              )}
+
+              {/* Tooltip for collapsed state (only show when dropdown is not open) */}
+              {isCollapsed && collapsedDropdown !== 'profile' && state.user && (
+                <div className="absolute left-full ml-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 max-w-[200px]">
+                  <div className="font-semibold mb-1">{`${state.user.firstName} ${state.user.lastName}`}</div>
+                  <div className="text-gray-300 text-[10px] leading-tight">
+                    {state.user.role} at {(() => {
+                      if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
+                        return state.user.companyInfo.companyName
+                      }
+                      return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
+                    })()}<br/>
+                    {state.user.email}
+                  </div>
+                </div>
+              )}
+            </button>
+
+            {/* Profile Dropdown */}
+            <AnimatePresence>
+              {showProfileDropdown && !isCollapsed && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute bottom-full left-3 mb-2 bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-xl shadow-2xl overflow-hidden min-w-[320px] max-w-[400px]"
+                >
+                  {/* Current User Info */}
+                  {state.user && (
+                    <div className="px-4 py-3 border-b border-white/10">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-medium">
+                          {getInitials(`${state.user.firstName} ${state.user.lastName}`)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-white truncate">
+                            {`${state.user.firstName} ${state.user.lastName}`}
+                          </div>
+                          <div className="text-sm text-gray-400 break-all">
+                            {state.user.email}
+                          </div>
+                          <div className="text-xs text-gray-500 line-clamp-2">
+                            {state.user.role} • {(() => {
+                              if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
+                                return state.user.companyInfo.companyName
+                              }
+                              return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
+                            })()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+
+                  {/* Profile Actions */}
+                  <div className="p-2">
+                    <Link
+                      to="/profile"
+                      onClick={() => setShowProfileDropdown(false)}
+                      className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 w-full text-left"
+                    >
+                      <User className="w-4 h-4" />
+                      <span className="text-sm">Profile Settings</span>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 w-full text-left"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span className="text-sm">Logout</span>
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </motion.aside>
 
@@ -609,51 +783,111 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.95, x: -10 }}
             transition={{ duration: 0.15 }}
-            className="collapsed-dropdown fixed min-w-[200px] bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-50"
+            className={`collapsed-dropdown fixed bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-xl shadow-2xl z-50 ${
+              collapsedDropdown === 'profile' ? 'min-w-[320px] max-w-[400px]' : 'min-w-[200px]'
+            }`}
             style={{
               top: dropdownPosition.top,
               left: dropdownPosition.left
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Find the catalog item to show its dropdown */}
+            {/* Handle different dropdown types */}
             {(() => {
-              const catalogItem = navItems.find(item => item.id === collapsedDropdown)
-              if (!catalogItem) return null
-              
-              return (
-                <>
-                  {/* Dropdown Header */}
-                  <div className="px-4 py-3 border-b border-white/10">
-                    <div className="flex items-center space-x-3">
-                      <catalogItem.icon className="w-5 h-5 text-white" />
-                      <span className="font-medium text-white">{catalogItem.label}</span>
-                    </div>
-                  </div>
-                  
-                  {/* Dropdown Items */}
-                  <div className="py-2">
-                    {catalogItem.subItems?.map(subItem => (
+              if (collapsedDropdown === 'profile') {
+                // Profile dropdown content
+                return (
+                  <>
+                    {/* Current User Info */}
+                    {state.user && (
+                      <div className="px-4 py-3 border-b border-white/10">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-medium">
+                            {getInitials(`${state.user.firstName} ${state.user.lastName}`)}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-white truncate">
+                              {`${state.user.firstName} ${state.user.lastName}`}
+                            </div>
+                            <div className="text-sm text-gray-400 break-all">
+                              {state.user.email}
+                            </div>
+                            <div className="text-xs text-gray-500 line-clamp-2">
+                              {state.user.role} • {(() => {
+                                if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
+                                  return state.user.companyInfo.companyName
+                                }
+                                return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
+                              })()}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+
+                    {/* Profile Actions */}
+                    <div className="p-2">
                       <Link
-                        key={subItem.id}
-                        to={subItem.href}
+                        to="/profile"
                         onClick={() => setCollapsedDropdown(null)}
-                        className={`
-                          flex items-center px-4 py-3 hover:bg-white/10 transition-colors duration-200
-                          ${
-                            isActive(subItem.href)
-                              ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border-r-2 border-[#D417C8]'
-                              : 'text-gray-300 hover:text-white'
-                          }
-                        `}
+                        className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 w-full text-left"
                       >
-                        <subItem.icon className="w-4 h-4 mr-3 flex-shrink-0" />
-                        <span className="font-medium text-sm">{subItem.label}</span>
+                        <User className="w-4 h-4" />
+                        <span className="text-sm">Profile Settings</span>
                       </Link>
-                    ))}
-                  </div>
-                </>
-              )
+                      <button
+                        onClick={() => {
+                          setCollapsedDropdown(null)
+                          handleLogout()
+                        }}
+                        className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 w-full text-left"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span className="text-sm">Logout</span>
+                      </button>
+                    </div>
+                  </>
+                )
+              } else {
+                // Catalog dropdown content
+                const catalogItem = navItems.find(item => item.id === collapsedDropdown)
+                if (!catalogItem) return null
+                
+                return (
+                  <>
+                    {/* Dropdown Header */}
+                    <div className="px-4 py-3 border-b border-white/10">
+                      <div className="flex items-center space-x-3">
+                        <catalogItem.icon className="w-5 h-5 text-white" />
+                        <span className="font-medium text-white">{catalogItem.label}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Dropdown Items */}
+                    <div className="py-2">
+                      {catalogItem.subItems?.map(subItem => (
+                        <Link
+                          key={subItem.id}
+                          to={subItem.href}
+                          onClick={() => setCollapsedDropdown(null)}
+                          className={`
+                            flex items-center px-4 py-3 hover:bg-white/10 transition-colors duration-200
+                            ${
+                              isActive(subItem.href)
+                                ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border-r-2 border-[#D417C8]'
+                                : 'text-gray-300 hover:text-white'
+                            }
+                          `}
+                        >
+                          <subItem.icon className="w-4 h-4 mr-3 flex-shrink-0" />
+                          <span className="font-medium text-sm">{subItem.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )
+              }
             })()}
           </motion.div>
         )}
@@ -784,6 +1018,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           {children}
         </div>
       </motion.main>
+
     </div>
   )
 }
