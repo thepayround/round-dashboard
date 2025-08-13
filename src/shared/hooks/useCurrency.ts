@@ -5,7 +5,8 @@
 
 import { useMemo } from 'react'
 import { useCurrencies } from './api/useCountryCurrency'
-import type { CurrencyResponse } from '../types/api/countryCurrency'
+// CurrencyResponse is imported but not used directly - it's used for type checking
+// import type { CurrencyResponse } from '../types/api/countryCurrency'
 
 export interface CurrencyInfo {
   code: string

@@ -1,6 +1,7 @@
 // Layout Components
 export { DashboardLayout } from './DashboardLayout'
 export { Breadcrumb } from './Breadcrumb'
+export { WhiteLogo } from './WhiteLogo'
 
 // Form Components
 export { Button } from './Button'

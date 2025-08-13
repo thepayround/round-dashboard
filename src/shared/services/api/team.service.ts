@@ -22,10 +22,22 @@ export interface RegisterWithInvitationRequest {
   firstName: string
   lastName: string
   email: string
-  userName: string
+  userName?: string
   password: string
   phoneNumber: string
   token: string
+}
+
+export interface ValidateInvitationResponse {
+  invitationId: string
+  roundAccountId: string
+  email: string
+  role: UserRole
+  roleName: string
+  expiryDate: string
+  organizationName: string
+  inviterName: string
+  inviterEmail: string
 }
 
 export interface InvitationResponse {
@@ -144,9 +156,9 @@ export class TeamService {
   /**
    * Register a new user with an invitation token
    */
-  async registerWithInvitation(request: RegisterWithInvitationRequest): Promise<ApiResponse<{ message: string }>> {
+  async registerWithInvitation(request: RegisterWithInvitationRequest): Promise<ApiResponse<{ message: string; token: string; refreshToken: string }>> {
     try {
-      const response = await httpClient.getClient().post<{ message: string }>(
+      const response = await httpClient.getClient().post<{ message: string; token: string; refreshToken: string }>(
         `${this.baseUrl}/register-with-invitation`, 
         request
       )
@@ -163,6 +175,31 @@ export class TeamService {
         data: undefined,
         message: axiosError.response?.data?.message ?? 'Failed to register with invitation',
         error: axiosError.response?.data?.message ?? 'Failed to register with invitation'
+      }
+    }
+  }
+
+  /**
+   * Validate an invitation token and get invitation details
+   */
+  async validateInvitation(token: string): Promise<ApiResponse<ValidateInvitationResponse>> {
+    try {
+      const response = await httpClient.getClient().get<ValidateInvitationResponse>(
+        `${this.baseUrl}/validate-invitation?token=${encodeURIComponent(token)}`
+      )
+      
+      return {
+        success: true,
+        data: response.data,
+        message: 'Invitation validated successfully'
+      }
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { status?: number; data?: { message?: string } } }
+      return {
+        success: false,
+        data: undefined,
+        message: axiosError.response?.data?.message ?? 'Invalid or expired invitation',
+        error: axiosError.response?.data?.message ?? 'Invalid or expired invitation'
       }
     }
   }

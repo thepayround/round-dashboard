@@ -15,28 +15,29 @@ import type { AddressTypeResponse } from '@/shared/types/api/addressType'
 
 // Legacy fallback currency symbols (now replaced by backend data)
 // Only used as fallback if backend doesn't provide symbol
-const fallbackCurrencySymbols: Record<string, string> = {
-  USD: '$',
-  EUR: '€',
-  GBP: '£',
-  JPY: '¥',
-  CAD: 'C$',
-  AUD: 'A$',
-  CHF: 'CHF',
-  CNY: '¥',
-  SEK: 'kr',
-  NOK: 'kr',
-  MXN: '$',
-  INR: '₹',
-  KRW: '₩',
-  SGD: 'S$',
-  HKD: 'HK$',
-  NZD: 'NZ$',
-  ZAR: 'R',
-  BRL: 'R$',
-  RUB: '₽',
-  TRY: '₺',
-}
+// Commented out as it's not used but kept for reference
+// const fallbackCurrencySymbols: Record<string, string> = {
+//   USD: '$',
+//   EUR: '€',
+//   GBP: '£',
+//   JPY: '¥',
+//   CAD: 'C$',
+//   AUD: 'A$',
+//   CHF: 'CHF',
+//   CNY: '¥',
+//   SEK: 'kr',
+//   NOK: 'kr',
+//   MXN: '$',
+//   INR: '₹',
+//   KRW: '₩',
+//   SGD: 'S$',
+//   HKD: 'HK$',
+//   NZD: 'NZ$',
+//   ZAR: 'R',
+//   BRL: 'R$',
+//   RUB: '₽',
+//   TRY: '₺',
+// }
 
 // Country dropdown configuration
 export const countryDropdownConfig: ApiDropdownConfig<Record<string, string>> = {

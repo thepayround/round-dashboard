@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Building, DollarSign, ExternalLink, AlignLeft } from 'lucide-react'
+import { Building, ExternalLink, AlignLeft } from 'lucide-react'
 import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { useCurrency } from '@/shared/hooks/useCurrency'
 import type { OrganizationInfo, BusinessSettings } from '../../types/onboarding'

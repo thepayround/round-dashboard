@@ -4,11 +4,11 @@
  */
 
 import type { ReactNode } from 'react';
-import React, { createContext, useContext } from 'react'
+import React, { createContext } from 'react'
 import { useCurrency } from '../hooks/useCurrency'
 import type { CurrencyInfo } from '../hooks/useCurrency'
 
-interface CurrencyContextType {
+export interface CurrencyContextType {
   currencies: CurrencyInfo[]
   getCurrencySymbol: (currencyCode: string) => string
   getCurrencyInfo: (currencyCode: string) => CurrencyInfo | null
@@ -49,16 +49,6 @@ export const CurrencyProvider: React.FC<CurrencyProviderProps> = ({ children }) 
       {children}
     </CurrencyContext.Provider>
   )
-}
-
-export const useCurrencyContext = (): CurrencyContextType => {
-  const context = useContext(CurrencyContext)
-  
-  if (!context) {
-    throw new Error('useCurrencyContext must be used within a CurrencyProvider')
-  }
-  
-  return context
 }
 
 export default CurrencyContext

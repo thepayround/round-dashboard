@@ -470,7 +470,10 @@ class ApiClient {
    */
   async resendConfirmationEmail(email: string): Promise<ApiResponse<{ message: string }>> {
     try {
-      const response = await this.client.post('/identities/resend', { email })
+      // Use longer timeout for email operations (SMTP can be slow)
+      const response = await this.client.post('/identities/resend', { email }, {
+        timeout: 30000 // 30 seconds to match backend SMTP timeout
+      })
 
       return {
         success: true,
@@ -780,7 +783,143 @@ class ApiClient {
     return this.getStoredToken()
   }
 
+  /**
+   * Generic POST method for API calls
+   */
+  async post<T = unknown>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.post<T>(endpoint, data)
+      return {
+        success: true,
+        data: response.data,
+      }
+    } catch (error) {
+      console.error(`POST ${endpoint} error:`, error)
 
+      if (axios.isAxiosError(error) && error.response) {
+        let errorMessage = 'Request failed'
+
+        // Handle IdentityResult.Errors array format from backend
+        if (Array.isArray(error.response.data)) {
+          const [firstError] = error.response.data
+          if (firstError?.description) {
+            errorMessage = firstError.description
+          } else if (typeof firstError === 'string') {
+            errorMessage = firstError
+          }
+        } else if (error.response.data?.message) {
+          errorMessage = error.response.data.message
+        } else if (error.response.data?.error) {
+          errorMessage = error.response.data.error
+        }
+
+        return {
+          success: false,
+          error: errorMessage,
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
+
+  /**
+   * Send forgot password email
+   */
+  async forgotPassword(email: string): Promise<ApiResponse<{ message: string }>> {
+    try {
+      // Use longer timeout for email operations (SMTP can be slow)
+      const response = await this.client.post('/identities/forgot-password', { email }, {
+        timeout: 30000 // 30 seconds to match backend SMTP timeout
+      })
+
+      return {
+        success: true,
+        data: { message: response.data.message || 'Password reset email sent' },
+        message: 'Password reset email sent successfully',
+      }
+    } catch (error) {
+      console.error('Forgot password error:', error)
+
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.message ||
+          error.response.data?.error ||
+          'Failed to send password reset email'
+        return {
+          success: false,
+          error: errorMessage,
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
+
+  /**
+   * Reset password with token
+   */
+  async resetPassword(
+    email: string,
+    token: string,
+    newPassword: string,
+    confirmPassword: string
+  ): Promise<ApiResponse<{ message: string; token?: string; refreshToken?: string }>> {
+    try {
+      const response = await this.client.post('/identities/reset-password', {
+        email,
+        token,
+        newPassword,
+        confirmPassword,
+      })
+
+      return {
+        success: true,
+        data: { 
+          message: response.data.message || 'Password reset successfully',
+          token: response.data.token,
+          refreshToken: response.data.refreshToken
+        },
+        message: 'Password reset successfully',
+      }
+    } catch (error) {
+      console.error('Reset password error:', error)
+
+      if (axios.isAxiosError(error) && error.response) {
+        let errorMessage = 'Failed to reset password'
+
+        // Handle IdentityResult.Errors array format from backend
+        if (Array.isArray(error.response.data)) {
+          const [firstError] = error.response.data
+          if (firstError?.description) {
+            errorMessage = firstError.description
+          } else if (typeof firstError === 'string') {
+            errorMessage = firstError
+          }
+        } else if (error.response.data?.message) {
+          errorMessage = error.response.data.message
+        } else if (error.response.data?.error) {
+          errorMessage = error.response.data.error
+        }
+
+        return {
+          success: false,
+          error: errorMessage,
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
 }
 
 // Export singleton instance

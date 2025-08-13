@@ -36,10 +36,11 @@ interface ProductCardProps {
 }
 
 // Legacy fallback currency formatting - now replaced by useCurrency hook
-const legacyFormatCurrency = (amount: number, currency: string) => new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency
-  }).format(amount)
+// Commented out as it's not used but kept for reference
+// const legacyFormatCurrency = (amount: number, currency: string) => new Intl.NumberFormat('en-US', {
+//     style: 'currency',
+//     currency
+//   }).format(amount)
 
 const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
     month: 'short',
