@@ -25,6 +25,7 @@ import {
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { useResponsive } from '@/shared/hooks/useResponsive'
+import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
 import { apiClient } from '@/shared/services/apiClient'
 import { Breadcrumb } from '@/shared/components/Breadcrumb'
 import ColorLogo from '@/assets/logos/color-logo.svg'
@@ -82,6 +83,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const { token } = state
   const location = useLocation()
   const { isMobile, isTablet } = useResponsive()
+  const { roundAccount, isLoading: isRoundAccountLoading } = useRoundAccount()
 
   // Initialize sidebar state from localStorage - mobile first
   const [isCollapsed, setIsCollapsed] = useState(() => {
@@ -677,6 +679,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   </div>
                   <div className="text-xs text-gray-400 truncate">
                     {(() => {
+                      if (isRoundAccountLoading) return 'Loading...'
+                      if (roundAccount?.accountName) return roundAccount.accountName
+                      if (roundAccount?.organization?.name) return roundAccount.organization.name
                       if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
                         return state.user.companyInfo.companyName
                       }
@@ -701,6 +706,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   <div className="font-semibold mb-1">{`${state.user.firstName} ${state.user.lastName}`}</div>
                   <div className="text-gray-300 text-[10px] leading-tight">
                     {state.user.role} at {(() => {
+                      if (isRoundAccountLoading) return 'Loading...'
+                      if (roundAccount?.accountName) return roundAccount.accountName
+                      if (roundAccount?.organization?.name) return roundAccount.organization.name
                       if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
                         return state.user.companyInfo.companyName
                       }
@@ -738,6 +746,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                           </div>
                           <div className="text-xs text-gray-500 line-clamp-2">
                             {state.user.role} • {(() => {
+                              if (isRoundAccountLoading) return 'Loading...'
+                              if (roundAccount?.accountName) return roundAccount.accountName
+                              if (roundAccount?.organization?.name) return roundAccount.organization.name
                               if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
                                 return state.user.companyInfo.companyName
                               }
@@ -814,6 +825,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                             </div>
                             <div className="text-xs text-gray-500 line-clamp-2">
                               {state.user.role} • {(() => {
+                                if (isRoundAccountLoading) return 'Loading...'
+                                if (roundAccount?.accountName) return roundAccount.accountName
+                                if (roundAccount?.organization?.name) return roundAccount.organization.name
                                 if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
                                   return state.user.companyInfo.companyName
                                 }

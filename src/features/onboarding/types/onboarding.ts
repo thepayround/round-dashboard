@@ -9,6 +9,7 @@ export interface OrganizationInfo {
   companyName: string
   industry: string
   companySize: string
+  organizationType?: string
   website: string
   description?: string
   timeZone?: string
