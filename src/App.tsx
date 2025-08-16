@@ -22,6 +22,7 @@ import { ChargesPage } from '@/features/catalog/pages/ChargesPage'
 import { CouponsPage } from '@/features/catalog/pages/CouponsPage'
 import CustomersPage from '@/features/customers/pages/CustomersPage'
 import CustomerDetailPage from '@/features/customers/pages/CustomerDetailPage'
+import { UserSettingsPage } from '@/features/settings'
 import { HomePage } from '@/features/home/HomePage'
 
 const App = () => {
@@ -126,6 +127,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <CustomerDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user-settings"
+          element={
+            <ProtectedRoute>
+              <UserSettingsPage />
             </ProtectedRoute>
           }
         />

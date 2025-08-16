@@ -12,3 +12,4 @@ export {
   useCurrencyByCode,
   useCountryCurrencySearch,
 } from './useCountryCurrency'
+export { useUserSettings } from './useUserSettings'

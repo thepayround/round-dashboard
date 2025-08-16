@@ -148,6 +148,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     localStorage.removeItem('auth_token')
+    localStorage.removeItem('refresh_token')
+    
+    // Clear round account cache on logout
+    import('@/shared/hooks/useRoundAccount').then(({ clearRoundAccountCache }) => {
+      clearRoundAccountCache()
+    })
+    
     dispatch({ type: 'LOGOUT' })
   }
 
