@@ -243,9 +243,9 @@ export const ApiDropdown = <T = unknown>({
   // Error state
   if (isError) {
     return (
-      <div className="relative w-full h-10 pl-10 md:pl-11 lg:pl-10 pr-4 md:pr-5 lg:pr-4 rounded-lg backdrop-blur-[16px] border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-medium text-sm md:text-base lg:text-sm outline-none opacity-50 cursor-not-allowed">
-        <div className="absolute left-3 md:left-3.5 lg:left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 text-gray-400 flex items-center justify-center">
-          <div className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 flex items-center justify-center">
+      <div className="relative w-full h-11 pl-10 pr-4 rounded-lg backdrop-blur-[16px] border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-medium text-sm md:text-base lg:text-sm outline-none opacity-50 cursor-not-allowed">
+        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 flex items-center justify-center">
+          <div className="w-4 h-4 flex items-center justify-center">
             {config.icon}
           </div>
         </div>
@@ -308,7 +308,7 @@ export const ApiDropdown = <T = unknown>({
           {/* Search input */}
           <div className="p-2.5 md:p-3 lg:p-2.5 border-b border-white/10">
             <div className="relative">
-              <Search className="absolute left-2.5 md:left-3 lg:left-2.5 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 text-white/60" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
               <input
                 ref={searchInputRef}
                 type="text"
@@ -330,7 +330,7 @@ export const ApiDropdown = <T = unknown>({
                   type="button"
                   aria-label="Clear search"
                 >
-                  <X className="w-3 h-3 md:w-3 md:h-3 lg:w-3 lg:h-3 text-white/60 hover:text-white/90" />
+                  <X className="w-3 h-3 text-white/60 hover:text-white/90" />
                 </button>
               )}
             </div>
@@ -353,7 +353,7 @@ export const ApiDropdown = <T = unknown>({
                 "
                 type="button"
               >
-                <X className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5" />
+                <X className="w-4 h-4" />
                 <span>Clear selection</span>
               </button>
             )}
@@ -392,7 +392,7 @@ export const ApiDropdown = <T = unknown>({
                   >
                     <div className="flex items-center space-x-2.5 md:space-x-3 lg:space-x-2.5 flex-1 min-w-0">
                       {option.icon && (
-                        <span className="flex-shrink-0 w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 flex items-center justify-center">
+                        <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
                           {option.icon}
                         </span>
                       )}
@@ -409,7 +409,7 @@ export const ApiDropdown = <T = unknown>({
                     </div>
                     
                     {option.value === value && (
-                      <Check className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 text-[#D417C8] flex-shrink-0" />
+                      <Check className="w-4 h-4 text-[#D417C8] flex-shrink-0" />
                     )}
                   </motion.div>
                 ))}
@@ -435,7 +435,7 @@ export const ApiDropdown = <T = unknown>({
           }
         }}
         className={`
-          relative w-full h-10 pl-10 md:pl-11 lg:pl-10 pr-4 md:pr-5 lg:pr-4 rounded-lg backdrop-blur-[16px] border transition-all duration-300
+          relative w-full h-11 pl-10 pr-4 rounded-lg backdrop-blur-[16px] border transition-all duration-300
           bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between
           font-medium text-sm md:text-base lg:text-sm outline-none
           [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]
@@ -451,9 +451,9 @@ export const ApiDropdown = <T = unknown>({
         tabIndex={disabled ? -1 : 0}
       >
         {/* Left icon - show selected option icon if available, otherwise config icon */}
-        <div className="absolute left-3 md:left-3.5 lg:left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 text-gray-400 flex items-center justify-center">
+        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 flex items-center justify-center">
           {selectedOption?.icon ?? (
-            <div className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 flex items-center justify-center">
+            <div className="w-4 h-4 flex items-center justify-center">
               {config.icon}
             </div>
           )}
@@ -471,7 +471,7 @@ export const ApiDropdown = <T = unknown>({
         {/* Right side icons */}
         <div className="flex items-center space-x-1.5 md:space-x-2 lg:space-x-1.5">
           {isLoading && (
-            <div className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
           )}
           
           {allowClear && selectedOption && !isLoading && (
@@ -481,12 +481,12 @@ export const ApiDropdown = <T = unknown>({
               type="button"
               aria-label="Clear selection"
             >
-              <X className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 text-white/60 hover:text-white/90" />
+              <X className="w-4 h-4 text-white/60 hover:text-white/90" />
             </button>
           )}
           
           <ChevronDown 
-            className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 text-gray-400 transition-transform duration-300 ${
+            className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
               isOpen ? 'rotate-180' : ''
             }`} 
           />

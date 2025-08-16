@@ -100,6 +100,50 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 - **Spacing System**: 25+ spacing utilities
 - **Shadow System**: 15+ shadow variants including glass effects
 
+### Tailwind Standards (MANDATORY)
+
+**CRITICAL**: ALL UI components MUST use Tailwind CSS classes instead of custom CSS for responsiveness and maintainability.
+
+#### Form Element Heights (STRICTLY ENFORCED)
+- **Inputs**: `h-11` (44px) - All text inputs, selects, and form fields
+- **Buttons**: `h-12` (48px) - All buttons including ActionButton, social login, etc.
+- **4px Height Difference**: This 4px difference between inputs and buttons is MANDATORY for visual hierarchy
+
+#### Standard Components
+- **AuthInput**: Use for all authentication forms - `h-11` with proper icon spacing
+- **ActionButton**: Use for all interactive buttons - `h-12` with consistent sizing
+- **FormInput**: Use for general forms - `h-11` with validation states
+
+#### Tailwind Class Standards
+```jsx
+// ✅ CORRECT: Tailwind classes
+<input className="h-11 px-3 py-2.5 bg-white/5 border border-white/20 rounded-lg" />
+<button className="h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500" />
+
+// ❌ INCORRECT: Custom CSS
+<input className="auth-input custom-height" />
+<button style={{height: '40px'}} />
+```
+
+#### Icon Standards
+- **Input Icons**: `w-4 h-4` (16px) positioned with `absolute left-3 top-1/2 transform -translate-y-1/2`
+- **Button Icons**: `w-4 h-4` (16px) for `h-12` buttons, `w-5 h-5` (20px) for larger buttons
+- **Icon Spacing**: `pl-10` for left icons, `pr-10` for right icons in inputs
+
+#### Responsive Design Rules
+- **Mobile-first**: Always start with mobile classes, add responsive variants with `sm:`, `md:`, `lg:` prefixes
+- **Consistent Heights**: Same `h-11`/`h-12` across ALL breakpoints - no responsive height changes
+- **Padding**: Use consistent `px-3` for inputs, `px-4` for buttons across breakpoints
+
+#### Enforcement Rules
+1. **No Custom CSS**: Never create custom height/sizing CSS classes
+2. **Component Usage**: Always use `AuthInput` and `ActionButton` instead of raw HTML elements
+3. **Height Consistency**: Every input must be `h-11`, every button must be `h-12`
+4. **Tailwind Only**: All styling must use Tailwind utility classes
+5. **Icon Alignment**: Use standard positioning classes, never custom positioning
+
+**VIOLATION CONSEQUENCES**: Any deviation from these standards will cause visual inconsistencies and responsive issues across the application.
+
 ## Tech Stack
 
 ### Frontend Core

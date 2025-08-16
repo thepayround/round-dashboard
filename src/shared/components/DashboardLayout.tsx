@@ -420,20 +420,21 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         transition={{ duration: 0.15, ease: 'easeOut' }}
         className="fixed left-0 top-0 h-full z-50 lg:z-base bg-white/5 backdrop-blur-xl border-r border-white/10"
       >
-        {/* Logo Section */}
-        <div
-          className="flex items-center justify-center border-b border-white/10 flex-shrink-0"
+        {/* Logo Section - Clickable */}
+        <Link
+          to="/dashboard"
+          className="flex items-center justify-center border-b border-white/10 flex-shrink-0 hover:bg-white/5 transition-colors duration-200 cursor-pointer"
           style={{ height: '97px' }}
         >
           {!isCollapsed ? (
             <div className="flex items-center space-x-4">
               <img src={ColorLogo} alt="Round Logo" className="w-10 h-10" />
               <div className="flex items-center space-x-1">
-                <span className="text-[#14BDEA] font-bold text-3xl">R</span>
-                <span className="text-[#32A1E4] font-bold text-3xl">O</span>
+                <span className="text-[#D417C8] font-bold text-3xl">R</span>
+                <span className="text-[#BD2CD0] font-bold text-3xl">O</span>
                 <span className="text-[#7767DA] font-bold text-3xl">U</span>
-                <span className="text-[#BD2CD0] font-bold text-3xl">N</span>
-                <span className="text-[#D417C8] font-bold text-3xl">D</span>
+                <span className="text-[#32A1E4] font-bold text-3xl">N</span>
+                <span className="text-[#14BDEA] font-bold text-3xl">D</span>
               </div>
             </div>
           ) : (
@@ -441,7 +442,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
             </div>
           )}
-        </div>
+        </Link>
 
         {/* Navigation */}
         <nav 
@@ -470,7 +471,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     catalog-button group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
                     ${
                       isParentActive(item)
-                        ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
+                        ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border border-white/20'
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
@@ -518,7 +519,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     group relative flex items-center rounded-lg transition-all duration-200 h-10
                     ${
                       isParentActive(item)
-                        ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
+                        ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border border-white/20'
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
@@ -596,7 +597,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 group relative flex items-center rounded-lg transition-all duration-200 h-10
                 ${
                   isActive(item.href)
-                    ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
+                    ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border border-white/20'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
@@ -906,7 +907,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                             flex items-center px-4 py-3 hover:bg-white/10 transition-colors duration-200
                             ${
                               isActive(subItem.href)
-                                ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border-r-2 border-[#D417C8]'
+                                ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border-r-2 border-[#D417C8]'
                                 : 'text-gray-300 hover:text-white'
                             }
                           `}
@@ -1044,7 +1045,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         transition={{ duration: 0.15, ease: 'easeOut' }}
         className="min-h-screen relative z-10"
       >
-        <div className="p-4 sm:p-6 lg:p-8">
+        <div className="p-4 sm:p-8 md:p-16 lg:p-32">
           <Breadcrumb />
           {children}
         </div>

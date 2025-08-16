@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ActionButton } from '@/shared/components'
+import { ActionButton, AuthLogo } from '@/shared/components'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -285,6 +285,9 @@ export const ResetPasswordPage = () => {
         className="w-full max-w-[360px] mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
+        {/* Centered Logo Above Form */}
+        <AuthLogo />
+
         <div className="auth-card">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
@@ -436,23 +439,17 @@ export const ResetPasswordPage = () => {
                 </div>
 
                 {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={!isFormValid() || isSubmitting}
-                  className="mt-8 w-full  btn-primary flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Resetting Password...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Reset Password</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
+                <ActionButton
+                  label={isSubmitting ? 'Resetting Password...' : 'Reset Password'}
+                  onClick={handleButtonClick}
+                  disabled={!isFormValid()}
+                  icon={ArrowRight}
+                  loading={isSubmitting}
+                  size="sm"
+                  animated={false}
+                  actionType="auth"
+                  className="mt-8 w-full"
+                />
 
                 {/* Security Notice */}
                 <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">

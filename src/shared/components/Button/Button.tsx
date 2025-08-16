@@ -26,10 +26,10 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'px-4 py-2.5 text-sm h-10',  // Consistent with new 40px standard
-  md: 'px-6 py-3 text-base h-10',
-  lg: 'px-8 py-4 text-lg h-12',
-  xl: 'px-10 py-5 text-xl h-14'
+  sm: 'px-4 py-2 text-sm h-12',  // 48px - Tailwind standard
+  md: 'px-6 py-2 text-base h-12',  // 48px - Tailwind standard
+  lg: 'px-8 py-2 text-lg h-12',   // 48px - Tailwind standard
+  xl: 'px-10 py-2 text-xl h-16'   // 64px - For prominent actions
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({

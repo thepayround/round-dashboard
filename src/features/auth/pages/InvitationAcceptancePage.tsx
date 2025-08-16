@@ -2,8 +2,7 @@ import { motion } from 'framer-motion'
 import { User, Phone, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, Users, Building, Check } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ActionButton } from '@/shared/components'
-import { WhiteLogo } from '@/shared/components'
+import { ActionButton, AuthLogo } from '@/shared/components'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -225,7 +224,7 @@ export const InvitationAcceptancePage = () => {
             <ActionButton
               label="Go to Login"
               onClick={() => navigate('/auth/login')}
-              size="md"
+              size="sm"
               actionType="auth"
             />
           </div>
@@ -258,6 +257,9 @@ export const InvitationAcceptancePage = () => {
         className="w-full max-w-[420px] mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
+        {/* Centered Logo Above Form */}
+        <AuthLogo />
+
         <div className="auth-card">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
@@ -268,11 +270,6 @@ export const InvitationAcceptancePage = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="relative"
             >
-              {/* Logo and Brand */}
-              <div className="flex items-center justify-center mb-6">
-                <WhiteLogo className="w-8 h-8" />
-                <span className="ml-3 text-2xl font-bold auth-text">Round</span>
-              </div>
 
               <h1 className="text-4xl font-bold auth-text mb-4 relative">You&apos;re Invited!</h1>
               
@@ -480,10 +477,10 @@ export const InvitationAcceptancePage = () => {
               disabled={!isFormValid()}
               icon={ArrowRight}
               loading={isSubmitting}
-              size="md"
+              size="sm"
               animated={false}
               actionType="auth"
-              className="mt-8 w-full "
+              className="mt-8 w-full"
             />
 
             {/* Terms */}

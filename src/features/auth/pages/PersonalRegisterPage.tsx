@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { User, Phone, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ActionButton } from '@/shared/components'
+import { ActionButton, AuthLogo } from '@/shared/components'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -135,20 +135,23 @@ export const PersonalRegisterPage = () => {
         className="w-full max-w-[360px] mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
+        {/* Centered Logo Above Form */}
+        <AuthLogo />
+
         <div className="auth-card">
           {/* Header */}
-          <div className="text-center mb-6 sm:mb-8">
+          <div className="text-center mb-5 md:mb-6 lg:mb-5">
             <div className="gradient-header" />
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="relative"
-          >
-            <h1 className="text-4xl font-bold auth-text mb-4 relative">Create Personal Account</h1>
-            <p className="auth-text-muted text-lg font-medium">Join the Round community</p>
-          </motion.div>
-        </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="relative"
+            >
+              <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">Create Personal Account</h1>
+              <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">Join the Round community</p>
+            </motion.div>
+          </div>
 
         {/* API Error Message */}
         {apiError && (
@@ -165,7 +168,7 @@ export const PersonalRegisterPage = () => {
         )}
 
         {/* Registration Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
           {/* Name Fields Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* First Name */}
@@ -332,7 +335,7 @@ export const PersonalRegisterPage = () => {
           </div>
 
           {/* Terms and Conditions */}
-          <div className="text-center">
+          <div className="text-center mt-8 md:mt-10 lg:mt-8">
             <p className="text-sm auth-text-muted">
               By creating an account you accept Round&apos;s{' '}
               <Link to="/terms" className="auth-link">
@@ -348,10 +351,10 @@ export const PersonalRegisterPage = () => {
             disabled={!isFormValid()}
             icon={ArrowRight}
             loading={isSubmitting}
-            size="md"
+            size="sm"
             animated={false}
             actionType="auth"
-            className="mt-8 w-full "
+            className="mt-6 md:mt-8 lg:mt-6 w-full"
           />
 
           {/* Divider */}
@@ -360,13 +363,19 @@ export const PersonalRegisterPage = () => {
           </div>
 
           {/* Social Login Buttons */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-4">
             <button
               type="button"
-              className="btn-secondary flex items-center justify-center space-x-3 py-4 relative overflow-hidden group"
+              className="w-full h-12 px-4 py-2 
+                         bg-white/8 backdrop-blur-sm border border-white/15 rounded-lg
+                         text-white font-semibold text-sm
+                         hover:bg-white/12 hover:border-white/20
+                         transition-all duration-200 ease-out
+                         flex items-center justify-center gap-2.5
+                         relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12" />
-              <svg className="w-5 h-5 z-10" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 z-10" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -384,18 +393,24 @@ export const PersonalRegisterPage = () => {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              <span className="font-semibold z-10">Google</span>
+              <span className="z-10">Google</span>
             </button>
 
             <button
               type="button"
-              className="btn-secondary flex items-center justify-center space-x-3 py-4 relative overflow-hidden group"
+              className="w-full h-12 px-4 py-2 
+                         bg-white/8 backdrop-blur-sm border border-white/15 rounded-lg
+                         text-white font-semibold text-sm
+                         hover:bg-white/12 hover:border-white/20
+                         transition-all duration-200 ease-out
+                         flex items-center justify-center gap-2.5
+                         relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12" />
-              <svg className="w-5 h-5 z-10" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 z-10" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
               </svg>
-              <span className="font-semibold z-10">Facebook</span>
+              <span className="z-10">Facebook</span>
             </button>
           </div>
 

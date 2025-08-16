@@ -50,22 +50,22 @@ const ActionButton = ({
   
   const DefaultIcon = getDefaultIcon()
   const sizeClasses = {
-    sm: 'px-3 md:px-4 lg:px-3.5 py-2 md:py-2.5 lg:py-2 text-xs md:text-sm lg:text-xs space-x-1.5 md:space-x-2 lg:space-x-1.5 h-10 touch-target',
-    md: 'px-4 md:px-5 lg:px-4.5 py-2.5 md:py-3 lg:py-2.5 text-sm md:text-base lg:text-sm space-x-2 h-10 touch-target',
-    lg: 'px-5 md:px-6 lg:px-5.5 py-3 md:py-3.5 lg:py-3 text-base md:text-lg lg:text-base space-x-2 md:space-x-3 lg:space-x-2.5 h-12 touch-target'
+    sm: 'px-4 py-2 text-sm space-x-2 h-12 font-medium', // 48px - standard button height
+    md: 'px-6 py-3 text-base space-x-2.5 h-12 font-semibold', // 48px - same height, more padding
+    lg: 'px-8 py-4 text-lg space-x-3 h-16 font-bold' // 64px - prominent actions
   }
 
   const iconSizes = {
-    sm: 'w-3 h-3 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5',
-    md: 'w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4', 
-    lg: 'w-5 h-5 md:w-6 md:h-6 lg:w-5 lg:h-5'
+    sm: 'w-4 h-4', // 16px - balanced for 40px buttons
+    md: 'w-5 h-5', // 20px - balanced for 48px buttons  
+    lg: 'w-6 h-6'  // 24px - balanced for 56px buttons
   }
 
   const variants = {
-    primary: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105',
-    secondary: 'bg-gradient-to-r from-white/15 to-white/5 border border-white/25 text-white font-semibold hover:from-white/25 hover:to-white/10 hover:border-white/35 backdrop-blur-xl shadow-lg shadow-black/20',
-    ghost: 'bg-transparent border border-transparent text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-white/15 hover:to-white/5 backdrop-blur-xl hover:border-white/20',
-    success: 'bg-gradient-to-r from-green-500 to-emerald-500 border border-green-500/40 text-white font-medium hover:from-green-600 hover:to-emerald-600 hover:border-green-500/50 shadow-lg hover:shadow-green-500/30 shadow-green-500/20'
+    primary: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-semibold hover:shadow-xl hover:shadow-[#D417C8]/40 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-[#7767DA]/20',
+    secondary: 'bg-gradient-to-r from-white/20 to-white/8 border border-white/30 text-white font-semibold hover:from-white/30 hover:to-white/15 hover:border-white/40 backdrop-blur-xl shadow-xl shadow-black/30 hover:shadow-2xl hover:shadow-black/40',
+    ghost: 'bg-transparent border border-white/20 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-white/20 hover:to-white/8 backdrop-blur-xl hover:border-white/30 hover:shadow-lg hover:shadow-black/20',
+    success: 'bg-gradient-to-r from-green-500 to-emerald-500 border border-green-500/50 text-white font-semibold hover:from-green-600 hover:to-emerald-600 hover:border-green-500/60 shadow-xl hover:shadow-green-500/40 shadow-green-500/25'
   }
 
   const baseClasses = `

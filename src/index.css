@@ -222,7 +222,7 @@
     backdrop-filter: blur(28px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    padding: 1.25rem; /* 20px - more compact */
+    padding: 1.75rem 1.25rem; /* 28px top/bottom, 20px left/right - more spacious */
     box-shadow:
       0 20px 60px rgba(0, 0, 0, 0.4),
       0 10px 30px rgba(0, 0, 0, 0.25),
@@ -239,14 +239,14 @@
 
   @media (min-width: 768px) {
     .auth-card {
-      padding: 1.5rem; /* 24px */
+      padding: 2rem 1.5rem; /* 32px top/bottom, 24px left/right - tablet spacing */
       border-radius: 8px; /* Consistent 8px everywhere */
     }
   }
 
   @media (min-width: 1024px) {
     .auth-card {
-      padding: 1.25rem; /* 20px - more compact on desktop */
+      padding: 2.25rem 1.75rem; /* 36px top/bottom, 28px left/right - desktop luxury spacing */
       border-radius: 8px; /* Consistent 8px everywhere */
     }
   }
@@ -284,15 +284,16 @@
 
   .auth-input {
     width: 100%;
-    height: 2.5rem; /* 40px - optimal touch target and visual balance */
-    padding: 0 1rem;
+    height: 2.75rem; /* 44px - Tailwind h-11 standard */
+    padding: 0 0.875rem; /* Balanced horizontal padding */
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px; /* Consistent 8px everywhere */
     color: rgba(255, 255, 255, 0.95) !important;
     font-weight: 500;
-    font-size: 0.875rem; /* 14px - optimal readability */
+    font-size: 0.875rem; /* 14px - optimal readability for forms */
+    line-height: 1.4; /* Balanced text spacing */
     transition: all 0.3s ease;
     outline: none;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -301,17 +302,17 @@
 
   @media (min-width: 768px) {
     .auth-input {
-      height: 2.5rem; /* 40px - consistent across all screens */
-      padding: 0 1rem;
-      font-size: 0.875rem; /* 14px - consistent */
+      height: 2.75rem; /* 44px - Tailwind h-11 standard */
+      padding: 0 0.875rem; /* Consistent padding */
+      font-size: 0.875rem; /* 14px - optimal for forms */
     }
   }
 
   @media (min-width: 1024px) {
     .auth-input {
-      height: 2.5rem; /* 40px - consistent for better UX */
-      padding: 0 1rem;
-      font-size: 0.875rem; /* 14px - consistent */
+      height: 2.75rem; /* 44px - Tailwind h-11 standard */
+      padding: 0 0.875rem; /* Consistent padding */
+      font-size: 0.875rem; /* 14px - clean and readable */
     }
   }
 
@@ -320,23 +321,38 @@
     font-weight: 400;
   }
 
+  /* Input padding adjustments for icons */
+  .auth-input.input-with-icon-left {
+    padding-left: 2.5rem; /* 40px - space for icon + spacing */
+  }
+
+  .auth-input.input-with-icon-right {
+    padding-right: 2.5rem; /* 40px - space for icon + spacing */
+  }
+
+  .auth-input.input-with-icon-left.input-with-icon-right {
+    padding-left: 2.5rem; /* 40px - space for left icon */
+    padding-right: 2.5rem; /* 40px - space for right icon */
+  }
+
   .auth-input.textarea {
     height: auto;
-    min-height: 4.5rem; /* 72px on mobile */
-    padding: 0.875rem 1rem;
+    min-height: 5rem; /* 80px - more spacious for text areas */
+    padding: 1rem 1.25rem; /* Consistent enhanced padding */
+    line-height: 1.6; /* Better line spacing for multi-line text */
   }
 
   @media (min-width: 640px) {
     .auth-input.textarea {
-      min-height: 4rem; /* 64px on tablet+ */
-      padding: 0.75rem 1rem;
+      min-height: 5.5rem; /* 88px - enhanced spaciousness on tablet+ */
+      padding: 1rem 1.25rem; /* Consistent enhanced padding */
     }
   }
 
   @media (min-width: 1024px) {
     .auth-input.textarea {
-      min-height: 3.5rem; /* 56px on desktop - more compact */
-      padding: 0.625rem 0.875rem;
+      min-height: 6rem; /* 96px - premium spacious feel on desktop */
+      padding: 1.125rem 1.25rem; /* Even more generous padding */
     }
   }
 
@@ -444,8 +460,8 @@
     background: linear-gradient(135deg, #d417c8 0%, #7767da 50%, #14bdea 100%) !important;
     color: white !important;
     font-weight: 600;
-    height: 2.5rem; /* 40px - matches input height perfectly */
-    padding: 0 1.25rem;
+    height: 3rem; /* 48px - Tailwind h-12 standard */
+    padding: 0 1rem;
     border-radius: 8px; /* Consistent 8px everywhere */
     border: 1px solid rgba(255, 255, 255, 0.1);
     outline: none;
@@ -464,21 +480,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.875rem; /* 14px - consistent with inputs */
+    font-size: 0.875rem; /* 14px - balanced typography */
   }
 
   @media (min-width: 768px) {
     .btn-primary {
-      height: 2.5rem; /* 40px - consistent across all screens */
-      padding: 0 1.25rem;
+      height: 3rem; /* 48px - Tailwind h-12 standard */
+      padding: 0 1rem;
       font-size: 0.875rem; /* 14px - consistent */
     }
   }
 
   @media (min-width: 1024px) {
     .btn-primary {
-      height: 2.5rem; /* 40px - consistent for visual harmony */
-      padding: 0 1.25rem;
+      height: 3rem; /* 48px - Tailwind h-12 standard */
+      padding: 0 1rem;
       font-size: 0.875rem; /* 14px - consistent */
     }
   }
@@ -499,8 +515,8 @@
     backdrop-filter: blur(16px);
     color: white;
     font-weight: 600;
-    height: 2.5rem; /* 40px - matches input height perfectly */
-    padding: 0 1.25rem;
+    height: 3rem; /* 48px - Tailwind h-12 standard */
+    padding: 0 1rem;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 8px; /* Consistent 8px everywhere */
     cursor: pointer;
@@ -514,21 +530,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.875rem; /* 14px - consistent with inputs */
+    font-size: 0.875rem; /* 14px - balanced typography */
   }
 
   @media (min-width: 640px) {
     .btn-secondary {
-      height: 2.5rem; /* 40px - consistent across all screens */
-      padding: 0 1.25rem;
+      height: 3rem; /* 48px - Tailwind h-12 standard */
+      padding: 0 1rem;
       font-size: 0.875rem; /* 14px - consistent */
     }
   }
 
   @media (min-width: 1024px) {
     .btn-secondary {
-      height: 2.5rem; /* 40px - consistent for visual harmony */
-      padding: 0 1.25rem;
+      height: 3rem; /* 48px - Tailwind h-12 standard */
+      padding: 0 1rem;
       font-size: 0.875rem; /* 14px - consistent */
     }
   }
@@ -570,15 +586,15 @@
   }
 
   .auth-icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
     color: rgba(255, 255, 255, 0.6);
     z-index: 10;
   }
 
   .auth-icon-primary {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
     color: #c084fc;
     z-index: 10;
   }
@@ -589,10 +605,13 @@
 
   .input-icon-left {
     position: absolute;
-    left: 1rem;
+    left: 0.75rem; /* 12px - optimized for 44px inputs */
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Special positioning for textarea icons to prevent overlap */
@@ -618,12 +637,15 @@
 
   .input-icon-right {
     position: absolute;
-    right: 1rem;
+    right: 0.75rem; /* 12px - optimized for 44px inputs */
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     z-index: 10;
     transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .input-icon-right:hover {
@@ -707,13 +729,17 @@
       radial-gradient(circle at 80% 80%, rgba(20, 189, 234, 0.03) 0%, transparent 60%);
   }
 
-  /* Enhanced visual hierarchy for forms */
+  /* Enhanced visual hierarchy for forms - more spacious */
   .auth-card form > div:not(:last-child) {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem; /* Increased from 1.5rem to 2rem */
   }
 
   .auth-card .space-y-6 > * + * {
-    margin-top: 1.5rem;
+    margin-top: 2rem; /* Increased from 1.5rem to 2rem */
+  }
+  
+  .auth-card .space-y-4 > * + * {
+    margin-top: 1.75rem; /* More generous spacing for space-y-4 */
   }
 
   /* Ensure consistent dark theme across all components */
@@ -836,7 +862,7 @@
 
     /* Better spacing for mobile */
     .auth-card {
-      padding: 1.5rem;
+      padding: 1.75rem 1.5rem; /* 28px top/bottom, 24px left/right - mobile comfort spacing */
       margin: 1rem;
       border-radius: 8px; /* Consistent 8px everywhere */
     }

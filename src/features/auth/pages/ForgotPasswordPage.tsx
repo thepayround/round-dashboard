@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Mail, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ActionButton } from '@/shared/components'
+import { ActionButton, AuthLogo } from '@/shared/components'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -128,6 +128,9 @@ export const ForgotPasswordPage = () => {
         className="w-full max-w-[360px] mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
+        {/* Centered Logo Above Form */}
+        <AuthLogo />
+
         <div className="auth-card">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
@@ -232,10 +235,10 @@ export const ForgotPasswordPage = () => {
                   disabled={!isFormValid()}
                   icon={ArrowRight}
                   loading={isSubmitting}
-                  size="md"
+                  size="sm"
                   animated={false}
                   actionType="auth"
-                  className="mt-8 w-full "
+                  className="mt-8 w-full"
                 />
 
                 {/* Back to Login */}
@@ -267,10 +270,10 @@ export const ForgotPasswordPage = () => {
                     label="Back to Sign In"
                     onClick={handleBackToLogin}
                     icon={ArrowLeft}
-                    size="md"
+                    size="sm"
                     animated={false}
                     actionType="auth"
-                    className="w-full "
+                    className="w-full"
                   />
                   
                   <button

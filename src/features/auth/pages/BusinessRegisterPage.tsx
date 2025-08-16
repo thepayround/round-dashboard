@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ActionButton } from '@/shared/components'
+import { ActionButton, AuthLogo } from '@/shared/components'
 
 import type { CompanyInfo, BillingAddress } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
@@ -294,7 +294,7 @@ export const BusinessRegisterPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="auth-card"
+            className=""
           >
             <div className="text-center mb-8">
               <motion.h2
@@ -488,7 +488,7 @@ export const BusinessRegisterPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="auth-card"
+            className=""
           >
             <BillingAddressForm
               billingAddress={billingAddress}
@@ -507,7 +507,7 @@ export const BusinessRegisterPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="auth-card"
+            className=""
           >
             <CompanyDetailsForm
               companyInfo={companyInfo}
@@ -543,8 +543,12 @@ export const BusinessRegisterPage = () => {
         }}
         className="w-full max-w-[420px] relative z-10"
       >
-        {/* Header */}
-        <div className="text-center mb-6 sm:mb-8 lg:mb-10">
+        {/* Centered Logo Above Form */}
+        <AuthLogo className="sm:mb-10" />
+
+        <div className="auth-card">
+          {/* Header */}
+          <div className="text-center mb-6 sm:mb-8 lg:mb-10">
           <div className="gradient-header" />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -577,7 +581,7 @@ export const BusinessRegisterPage = () => {
                 initial={{ width: 0 }}
                 animate={{ width: `${calculateDetailedProgress()}%` }}
                 transition={{ duration: 0.3 }}
-                className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] h-2 rounded-full"
+                className="bg-gradient-to-r from-[#14BDEA] via-[#7767DA] to-[#D417C8] h-2 rounded-full"
               />
             </div>
           </motion.div>
@@ -606,7 +610,7 @@ export const BusinessRegisterPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex items-center justify-between mt-6 sm:mt-8 gap-4"
+            className="flex items-center justify-between mt-8 sm:mt-10 gap-4"
           >
             {/* Previous Button - Always on left */}
             <button
@@ -614,11 +618,11 @@ export const BusinessRegisterPage = () => {
               onClick={multiStepForm.goToPrevious}
               disabled={!multiStepForm.canGoPrevious}
               className={`
-                px-4 sm:px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[100px] sm:min-w-[140px] 
+                h-12 px-4 sm:px-6 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[100px] sm:min-w-[140px] 
                 ${
                   multiStepForm.canGoPrevious
-                    ? 'btn-secondary'
-                    : 'bg-white/5 text-gray-500 cursor-not-allowed'
+                    ? 'bg-white/8 backdrop-blur-sm border border-white/15 text-white hover:bg-white/12 hover:border-white/20'
+                    : 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/10'
                 }
               `}
             >
@@ -635,7 +639,7 @@ export const BusinessRegisterPage = () => {
                   type="button"
                   onClick={handleSkipBilling}
                   disabled={isSubmitting}
-                  className="btn-secondary px-3 sm:px-4 py-3 disabled:opacity-50 min-w-[80px] sm:min-w-[100px]  flex items-center justify-center rounded-lg text-sm"
+                  className="h-12 px-3 sm:px-4 bg-white/8 backdrop-blur-sm border border-white/15 text-white hover:bg-white/12 hover:border-white/20 disabled:opacity-50 min-w-[80px] sm:min-w-[100px] flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-200"
                 >
                   <span className="hidden sm:inline">Skip for now</span>
                   <span className="sm:hidden">Skip</span>
@@ -658,7 +662,7 @@ export const BusinessRegisterPage = () => {
                   }
                   icon={multiStepForm.isLastStep ? CheckCircle : ArrowRight}
                   loading={isSubmitting}
-                  size="md"
+                  size="sm"
                   animated={false}
                   actionType={multiStepForm.isLastStep ? "auth" : "navigation"}
                   className="min-w-[120px] sm:min-w-[160px] "
@@ -668,14 +672,15 @@ export const BusinessRegisterPage = () => {
           </motion.div>
         )}
 
-        {/* Login Link */}
-        <div className="text-center mt-6 sm:mt-8">
-          <p className="auth-text-muted text-sm sm:text-base">
-            Already have an account?{' '}
-            <Link to="/auth/login" className="auth-link brand-primary">
-              Sign in
-            </Link>
-          </p>
+          {/* Login Link */}
+          <div className="text-center mt-6 sm:mt-8">
+            <p className="auth-text-muted text-sm sm:text-base">
+              Already have an account?{' '}
+              <Link to="/auth/login" className="auth-link brand-primary">
+                Sign in
+              </Link>
+            </p>
+          </div>
         </div>
       </motion.div>
     </div>

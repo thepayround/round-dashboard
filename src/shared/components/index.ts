@@ -2,10 +2,12 @@
 export { DashboardLayout } from './DashboardLayout'
 export { Breadcrumb } from './Breadcrumb'
 export { WhiteLogo } from './WhiteLogo'
+export { AuthLogo } from './AuthLogo'
 
 // Form Components
 export { Button } from './Button'
 export { FormInput } from './FormInput'
+export { AuthInput } from './AuthInput'
 
 // UI Components
 export { Modal } from './Modal'

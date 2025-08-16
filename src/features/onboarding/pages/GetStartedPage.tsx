@@ -746,7 +746,6 @@ export const GetStartedPage = () => {
               icon={ArrowLeft}
               iconPosition="left"
               size="sm"
-              className="h-10"
             >
               Back
             </Button>
@@ -761,7 +760,6 @@ export const GetStartedPage = () => {
               animated={false}
               actionType="navigation"
               size="sm"
-              className="h-10"
             />
           </motion.div>
         </div>
