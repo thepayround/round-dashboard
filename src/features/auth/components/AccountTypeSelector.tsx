@@ -78,19 +78,19 @@ export const AccountTypeSelector = ({
         >
           {/* Glow effect */}
           <div
-            className="absolute inset-0 rounded-2xl blur-xl transition-all duration-500 opacity-20 group-hover:opacity-40"
+            className="absolute inset-0 rounded-lg blur-xl transition-all duration-500 opacity-20 group-hover:opacity-40"
             style={{
               background: `linear-gradient(135deg, ${accountType.gradient.replace('from-[', '').replace('] via-[', ', ').replace('] to-[', ', ').replace(']', '')})`,
             }}
           />
 
           {/* Card */}
-          <div className="relative backdrop-blur-xl rounded-2xl p-8 border transition-all duration-500 bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20">
+          <div className="relative backdrop-blur-xl rounded-lg p-8 border transition-all duration-500 bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20">
             {/* Icon with gradient background */}
             <div className="flex justify-center mb-6">
               <div
                 className={`
-                  w-20 h-20 rounded-2xl flex items-center justify-center relative overflow-hidden
+                  w-20 h-20 rounded-lg flex items-center justify-center relative overflow-hidden
                   ${accountType.iconBg}
                   backdrop-blur-sm border border-white/20
                 `}

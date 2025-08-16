@@ -41,7 +41,7 @@ export const BusinessSettingsStep = ({
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
         >
           <Settings className="w-8 h-8 text-[#7767DA]" />
         </motion.div>
@@ -53,7 +53,7 @@ export const BusinessSettingsStep = ({
       </div>
 
       {/* Form */}
-      <div className="max-w-lg mx-auto space-y-6">
+      <div className="max-w-[420px] mx-auto space-y-6">
         {/* Currency */}
         <div>
           <span className="block text-sm font-medium text-gray-300 mb-2">Currency</span>

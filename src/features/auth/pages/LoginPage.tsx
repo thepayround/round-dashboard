@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
-import { useState } from 'react'
+import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { ActionButton } from '@/shared/components'
 
@@ -28,6 +28,20 @@ export const LoginPage = () => {
   const [errors, setErrors] = useState<ValidationError[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [apiError, setApiError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
+
+  // Handle success message from navigation state (e.g., from password reset)
+  useEffect(() => {
+    const state = location.state as { message?: string; email?: string }
+    if (state?.message) {
+      setSuccessMessage(state.message)
+      if (state.email) {
+        setFormData(prev => ({ ...prev, email: state.email! }))
+      }
+      // Clear the state to prevent showing the message again on refresh
+      navigate(location.pathname, { replace: true, state: {} })
+    }
+  }, [location.state, location.pathname, navigate])
 
   // Form validation helper
   const isFormValid = () => {
@@ -51,6 +65,8 @@ export const LoginPage = () => {
     if (hasFieldError(errors, name)) {
       setErrors(prev => prev.filter(error => error.field !== name))
     }
+    setApiError('')
+    setSuccessMessage('')
   }
 
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -137,12 +153,12 @@ export const LoginPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="w-full max-w-md mx-auto relative z-10"
+        className="w-full max-w-[360px] mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
         <div className="auth-card">
           {/* Header */}
-          <div className="text-center mb-6 sm:mb-8">
+          <div className="text-center mb-5 md:mb-6 lg:mb-5">
             <div className="gradient-header" />
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -150,17 +166,31 @@ export const LoginPage = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="relative"
             >
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">Welcome Back</h1>
-              <p className="auth-text-muted text-base sm:text-lg font-medium">Sign in to your Round account</p>
+              <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">Welcome Back</h1>
+              <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">Sign in to your Round account</p>
             </motion.div>
           </div>
+
+        {/* Success Message */}
+        {successMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 mb-6"
+          >
+            <div className="flex items-center space-x-2 text-green-400">
+              <CheckCircle className="w-5 h-5" />
+              <span className="text-sm font-medium">{successMessage}</span>
+            </div>
+          </motion.div>
+        )}
 
         {/* API Error Message */}
         {apiError && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+            className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
           >
             <div className="flex items-center space-x-2 text-red-400">
               <AlertCircle className="w-5 h-5" />
@@ -181,7 +211,7 @@ export const LoginPage = () => {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
           {/* Email Address */}
           <div>
             <label htmlFor="email" className="auth-label">
@@ -268,7 +298,7 @@ export const LoginPage = () => {
             size="md"
             animated={false}
             actionType="auth"
-            className="mt-8 w-full h-[48px]"
+            className="mt-6 md:mt-8 lg:mt-6 w-full"
           />
 
           {/* Divider */}

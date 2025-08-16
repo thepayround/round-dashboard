@@ -541,7 +541,7 @@ export const BusinessRegisterPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="w-full max-w-lg relative z-10"
+        className="w-full max-w-[420px] relative z-10"
       >
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 lg:mb-10">
@@ -588,7 +588,7 @@ export const BusinessRegisterPage = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+            className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
           >
             <div className="flex items-center space-x-2 text-red-400">
               <AlertCircle className="w-5 h-5" />
@@ -614,7 +614,7 @@ export const BusinessRegisterPage = () => {
               onClick={multiStepForm.goToPrevious}
               disabled={!multiStepForm.canGoPrevious}
               className={`
-                px-4 sm:px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[100px] sm:min-w-[140px] h-[48px]
+                px-4 sm:px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[100px] sm:min-w-[140px] 
                 ${
                   multiStepForm.canGoPrevious
                     ? 'btn-secondary'
@@ -635,7 +635,7 @@ export const BusinessRegisterPage = () => {
                   type="button"
                   onClick={handleSkipBilling}
                   disabled={isSubmitting}
-                  className="btn-secondary px-3 sm:px-4 py-3 disabled:opacity-50 min-w-[80px] sm:min-w-[100px] h-[48px] flex items-center justify-center rounded-xl text-sm"
+                  className="btn-secondary px-3 sm:px-4 py-3 disabled:opacity-50 min-w-[80px] sm:min-w-[100px]  flex items-center justify-center rounded-lg text-sm"
                 >
                   <span className="hidden sm:inline">Skip for now</span>
                   <span className="sm:hidden">Skip</span>
@@ -661,7 +661,7 @@ export const BusinessRegisterPage = () => {
                   size="md"
                   animated={false}
                   actionType={multiStepForm.isLastStep ? "auth" : "navigation"}
-                  className="min-w-[120px] sm:min-w-[160px] h-[48px]"
+                  className="min-w-[120px] sm:min-w-[160px] "
                 />
               )}
             </div>

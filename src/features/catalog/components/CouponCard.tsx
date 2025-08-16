@@ -132,7 +132,7 @@ export const CouponCard = ({
             <div className="flex items-center space-x-4 flex-1">
               {/* Coupon Icon */}
               <div className="relative">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 border border-white/10">
+                <div className="p-3 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 border border-white/10">
                   <Ticket className="w-6 h-6 text-[#14BDEA]" />
                 </div>
                 <div className="absolute -top-1 -right-1">
@@ -198,7 +198,7 @@ export const CouponCard = ({
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-9 h-9 rounded-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:from-white/15 hover:to-white/10 hover:border-white/30"
+                  className="w-9 h-9 rounded-lg bg-gradient-to-br from-white/10 to-white/5 border border-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:from-white/15 hover:to-white/10 hover:border-white/30"
                   onClick={() => setShowActions(!showActions)}
                 >
                   <MoreHorizontal className="w-5 h-5 auth-text" />
@@ -212,7 +212,7 @@ export const CouponCard = ({
                     className="absolute right-0 top-full mt-3 min-w-[200px]"
                     style={{ zIndex: 99999 }}
                   >
-                    <div className="bg-black/90 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden">
+                    <div className="bg-black/90 backdrop-blur-xl border border-white/20 rounded-lg overflow-hidden">
                       <div className="bg-gradient-to-r from-[#14BDEA]/20 to-[#32A1E4]/20 px-4 py-3 border-b border-white/10">
                         <p className="font-medium auth-text text-sm">Coupon Actions</p>
                       </div>
@@ -294,7 +294,7 @@ export const CouponCard = ({
           {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="relative">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 border border-white/10">
+            <div className="p-3 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 border border-white/10">
               <Ticket className="w-7 h-7 text-[#14BDEA]" />
             </div>
             <div className="absolute -top-1 -right-1">
@@ -308,7 +308,7 @@ export const CouponCard = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-9 h-9 rounded-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:from-white/15 hover:to-white/10 hover:border-white/30"
+              className="w-9 h-9 rounded-lg bg-gradient-to-br from-white/10 to-white/5 border border-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:from-white/15 hover:to-white/10 hover:border-white/30"
               onClick={(e) => {
                 e.preventDefault()
                 setShowActions(!showActions)
@@ -325,7 +325,7 @@ export const CouponCard = ({
                 className="absolute right-0 top-full mt-3 min-w-[200px]"
                 style={{ zIndex: 99999 }}
               >
-                <div className="bg-black/90 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden">
+                <div className="bg-black/90 backdrop-blur-xl border border-white/20 rounded-lg overflow-hidden">
                   <div className="bg-gradient-to-r from-[#14BDEA]/20 to-[#32A1E4]/20 px-4 py-3 border-b border-white/10">
                     <p className="font-medium auth-text text-sm">Coupon Actions</p>
                   </div>

@@ -37,18 +37,18 @@ export const SectionHeader = ({
       )}
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h2 className={`${size === 'main' ? 'text-4xl' : 'text-2xl'} font-bold ${size === 'main' ? 'bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent' : 'auth-text'} ${size === 'main' ? 'mb-2' : 'mb-0'}`}>
+          <h2 className={`${size === 'main' ? 'text-2xl md:text-3xl lg:text-2xl' : 'text-lg md:text-xl lg:text-lg'} font-bold ${size === 'main' ? 'bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent' : 'auth-text'} ${size === 'main' ? 'mb-1.5 md:mb-2 lg:mb-1.5' : 'mb-0'}`}>
             {title}
           </h2>
           {subtitle && (
-            <p className={`${size === 'main' ? 'auth-text-muted text-lg' : 'text-gray-400'} mt-2 font-medium`}>
+            <p className={`${size === 'main' ? 'auth-text-muted text-sm md:text-base lg:text-sm' : 'text-gray-400 text-xs md:text-sm lg:text-xs'} mt-1.5 md:mt-2 lg:mt-1.5 font-medium`}>
               {subtitle}
             </p>
           )}
         </div>
         
         {actions && (
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2.5 md:space-x-3 lg:space-x-2.5">
             {actions}
           </div>
         )}

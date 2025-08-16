@@ -47,14 +47,22 @@
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    /* Mobile-first font sizing */
-    font-size: 14px;
-    line-height: 1.5;
+    /* Refined mobile-first font sizing - smaller and more elegant */
+    font-size: 13px;
+    line-height: 1.45;
   }
 
   @media (min-width: 640px) {
     body {
-      font-size: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    body {
+      font-size: 15px;
+      line-height: 1.55;
     }
   }
 
@@ -213,8 +221,8 @@
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(28px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 1.5rem;
+    border-radius: 8px;
+    padding: 1.25rem; /* 20px - more compact */
     box-shadow:
       0 20px 60px rgba(0, 0, 0, 0.4),
       0 10px 30px rgba(0, 0, 0, 0.25),
@@ -229,17 +237,17 @@
     transition: all 0.3s ease;
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 768px) {
     .auth-card {
-      padding: 2rem;
-      border-radius: 20px;
+      padding: 1.5rem; /* 24px */
+      border-radius: 8px; /* Consistent 8px everywhere */
     }
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     .auth-card {
-      padding: 3rem;
-      border-radius: 24px;
+      padding: 1.25rem; /* 20px - more compact on desktop */
+      border-radius: 8px; /* Consistent 8px everywhere */
     }
   }
 
@@ -257,7 +265,7 @@
       rgba(20, 189, 234, 0.6),
       transparent
     );
-    border-radius: 24px 24px 0 0;
+    border-radius: 8px 8px 0 0;
   }
 
   .auth-card::after {
@@ -270,25 +278,41 @@
       transparent 40%,
       rgba(20, 189, 234, 0.01) 100%
     );
-    border-radius: 24px;
+    border-radius: 8px;
     pointer-events: none;
   }
 
   .auth-input {
     width: 100%;
-    height: 3rem; /* 48px - standardized height */
-    padding: 0 1.25rem;
+    height: 2.5rem; /* 40px - optimal touch target and visual balance */
+    padding: 0 1rem;
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(16px);
-    border: 1.5px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px; /* Consistent 8px everywhere */
     color: rgba(255, 255, 255, 0.95) !important;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.875rem; /* 14px - optimal readability */
     transition: all 0.3s ease;
     outline: none;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .auth-input {
+      height: 2.5rem; /* 40px - consistent across all screens */
+      padding: 0 1rem;
+      font-size: 0.875rem; /* 14px - consistent */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .auth-input {
+      height: 2.5rem; /* 40px - consistent for better UX */
+      padding: 0 1rem;
+      font-size: 0.875rem; /* 14px - consistent */
+    }
   }
 
   .auth-input::placeholder {
@@ -298,8 +322,22 @@
 
   .auth-input.textarea {
     height: auto;
-    min-height: 5rem; /* 80px for textareas */
-    padding: 1rem 1.25rem;
+    min-height: 4.5rem; /* 72px on mobile */
+    padding: 0.875rem 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .auth-input.textarea {
+      min-height: 4rem; /* 64px on tablet+ */
+      padding: 0.75rem 1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .auth-input.textarea {
+      min-height: 3.5rem; /* 56px on desktop - more compact */
+      padding: 0.625rem 0.875rem;
+    }
   }
 
   .auth-input:focus {
@@ -351,11 +389,25 @@
 
   .auth-label {
     display: block;
-    font-size: 0.875rem;
+    font-size: 0.8125rem; /* 13px */
     font-weight: 600;
     color: rgba(255, 255, 255, 0.95);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.375rem; /* 6px - tighter spacing */
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (min-width: 768px) {
+    .auth-label {
+      font-size: 0.875rem; /* 14px */
+      margin-bottom: 0.5rem; /* 8px */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .auth-label {
+      font-size: 0.8125rem; /* 13px */
+      margin-bottom: 0.375rem; /* 6px */
+    }
   }
 
   .auth-text {
@@ -385,16 +437,16 @@
   .auth-link:focus-visible {
     outline: 2px solid rgba(20, 189, 234, 0.5);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 8px;
   }
 
   .btn-primary {
     background: linear-gradient(135deg, #d417c8 0%, #7767da 50%, #14bdea 100%) !important;
     color: white !important;
-    font-weight: 700;
-    height: 3rem; /* 48px - standardized height */
-    padding: 0 1.5rem;
-    border-radius: 12px;
+    font-weight: 600;
+    height: 2.5rem; /* 40px - matches input height perfectly */
+    padding: 0 1.25rem;
+    border-radius: 8px; /* Consistent 8px everywhere */
     border: 1px solid rgba(255, 255, 255, 0.1);
     outline: none;
     cursor: pointer;
@@ -404,14 +456,31 @@
     position: relative;
     overflow: hidden;
     box-shadow:
-      0 8px 24px rgba(212, 23, 200, 0.25),
-      0 4px 12px rgba(20, 189, 234, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      0 6px 20px rgba(212, 23, 200, 0.2),
+      0 3px 10px rgba(20, 189, 234, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     text-decoration: none !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 0.875rem; /* 14px - consistent with inputs */
+  }
+
+  @media (min-width: 768px) {
+    .btn-primary {
+      height: 2.5rem; /* 40px - consistent across all screens */
+      padding: 0 1.25rem;
+      font-size: 0.875rem; /* 14px - consistent */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .btn-primary {
+      height: 2.5rem; /* 40px - consistent for visual harmony */
+      padding: 0 1.25rem;
+      font-size: 0.875rem; /* 14px - consistent */
+    }
   }
 
   .btn-primary:hover {
@@ -430,10 +499,10 @@
     backdrop-filter: blur(16px);
     color: white;
     font-weight: 600;
-    height: 3rem; /* 48px - standardized height */
+    height: 2.5rem; /* 40px - matches input height perfectly */
     padding: 0 1.25rem;
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px; /* Consistent 8px everywhere */
     cursor: pointer;
     transition:
       background 0.2s ease,
@@ -445,6 +514,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 0.875rem; /* 14px - consistent with inputs */
+  }
+
+  @media (min-width: 640px) {
+    .btn-secondary {
+      height: 2.5rem; /* 40px - consistent across all screens */
+      padding: 0 1.25rem;
+      font-size: 0.875rem; /* 14px - consistent */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .btn-secondary {
+      height: 2.5rem; /* 40px - consistent for visual harmony */
+      padding: 0 1.25rem;
+      font-size: 0.875rem; /* 14px - consistent */
+    }
   }
 
   .btn-secondary:hover {
@@ -477,7 +563,7 @@
     background: linear-gradient(90deg, #d417c8, #7767da, #14bdea);
     background-size: 200% 200%;
     height: 4px;
-    border-radius: 2px;
+    border-radius: 8px;
     margin-bottom: 2rem;
     animation: gradientShift 3s ease infinite;
     box-shadow: 0 2px 12px rgba(212, 23, 200, 0.4);
@@ -507,6 +593,27 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
+  }
+
+  /* Special positioning for textarea icons to prevent overlap */
+  .input-icon-left.textarea-icon {
+    top: 0.875rem; /* 14px - matches textarea top padding exactly */
+    transform: none;
+    left: 1rem; /* 16px - same as regular inputs for consistency */
+  }
+
+  @media (min-width: 640px) {
+    .input-icon-left.textarea-icon {
+      top: 0.75rem; /* 12px - matches textarea top padding exactly */
+      left: 1rem; /* 16px - same as regular inputs for consistency */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .input-icon-left.textarea-icon {
+      top: 0.625rem; /* 10px - matches textarea top padding exactly */
+      left: 0.875rem; /* 14px - matches responsive left padding of regular inputs */
+    }
   }
 
   .input-icon-right {
@@ -627,7 +734,7 @@
 
   *::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
+    border-radius: 8px;
   }
 
   *::-webkit-scrollbar-thumb:hover {
@@ -649,7 +756,7 @@
   .auth-link:focus {
     outline: 2px solid rgba(20, 189, 234, 0.5);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 8px;
   }
 
   /* Enhanced visual feedback for interactive elements */
@@ -731,15 +838,15 @@
     .auth-card {
       padding: 1.5rem;
       margin: 1rem;
-      border-radius: 16px;
+      border-radius: 8px; /* Consistent 8px everywhere */
     }
 
     /* Improve mobile button sizing */
     .btn-primary, .btn-secondary {
-      padding: 0.875rem 1.5rem;
-      font-size: 1rem;
-      min-height: 48px;
-      border-radius: 12px;
+      height: 2.75rem; /* 44px - optimal touch target on mobile */
+      padding: 0 1.25rem;
+      font-size: 0.875rem; /* 14px - consistent with desktop */
+      border-radius: 8px; /* Consistent 8px everywhere */
     }
 
     /* Better mobile navigation */
@@ -750,7 +857,7 @@
     /* Improve mobile cards */
     .card-mobile {
       padding: 1rem;
-      border-radius: 12px;
+      border-radius: 8px; /* Consistent 8px everywhere */
     }
 
     /* Better mobile modals */
@@ -758,6 +865,7 @@
       padding: 1rem;
       margin: 0.5rem;
       max-height: 95vh;
+      border-radius: 8px; /* Consistent 8px everywhere */
     }
 
     /* Improve mobile typography */
@@ -830,6 +938,7 @@
     select:focus {
       outline: 2px solid rgba(212, 23, 200, 0.6);
       outline-offset: 2px;
+      border-radius: 8px;
     }
   }
 

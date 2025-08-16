@@ -148,7 +148,7 @@ export const CreateCouponModal = ({
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 rounded-xl bg-red-500/10 border border-red-500/20"
+                      className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
                     >
                       <div className="flex items-center space-x-2 text-red-400">
                         <AlertCircle className="w-5 h-5" />

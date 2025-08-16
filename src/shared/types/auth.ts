@@ -73,6 +73,28 @@ export interface BusinessRegisterRequest {
 
 export type RegisterRequest = PersonalRegisterRequest | BusinessRegisterRequest
 
+export interface ForgotPasswordRequest {
+  email: string
+}
+
+export interface ForgotPasswordResponse {
+  succeeded: boolean
+  message: string
+}
+
+export interface ResetPasswordRequest {
+  email: string
+  token: string
+  newPassword: string
+  confirmPassword: string
+}
+
+export interface ResetPasswordResponse {
+  succeeded: boolean
+  message?: string
+  errors?: { code: string; description: string }[]
+}
+
 export interface AuthState {
   user: User | null
   isAuthenticated: boolean

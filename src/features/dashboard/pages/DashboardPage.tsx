@@ -59,9 +59,9 @@ export const DashboardPage = () => {
         {/* Header */}
         <SectionHeader
           title={`Welcome back, ${
-            user.firstName && user.lastName
-              ? `${user.firstName} ${user.lastName}`
-              : user.firstName || user.email || 'User'
+            user.firstName?.trim() && user.lastName?.trim()
+              ? `${user.firstName.trim()} ${user.lastName.trim()}`
+              : user.firstName?.trim() || user.email || 'User'
           }!`}
           subtitle="Here's an overview of your Round account"
           size="main"
@@ -325,7 +325,7 @@ export const DashboardPage = () => {
                 {roundAccount.roundAccountAddresses.map((address) => (
                   <div
                     key={address.addressId}
-                    className="p-4 rounded-xl bg-white/5 border border-white/10"
+                    className="p-4 rounded-lg bg-white/5 border border-white/10"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -371,7 +371,7 @@ export const DashboardPage = () => {
                 {roundAccount.roundAccountUsers.map((accountUser) => (
                   <div
                     key={`${accountUser.roundAccountId}-${accountUser.userId}`}
-                    className="p-4 rounded-xl bg-white/5 border border-white/10"
+                    className="p-4 rounded-lg bg-white/5 border border-white/10"
                   >
                     <div className="flex items-center justify-between">
                       <div>

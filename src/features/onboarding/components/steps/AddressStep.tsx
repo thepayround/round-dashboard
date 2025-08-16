@@ -48,7 +48,7 @@ export const AddressStep = ({
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
         >
           <MapPin className="w-8 h-8 text-[#32A1E4]" />
         </motion.div>
@@ -64,7 +64,7 @@ export const AddressStep = ({
       </div>
 
       {/* Form */}
-      <div className="max-w-lg mx-auto space-y-8">
+      <div className="max-w-[420px] mx-auto space-y-8">
         {/* Address Type and Name Section */}
         <div className="space-y-6">
           <div className="space-y-2">

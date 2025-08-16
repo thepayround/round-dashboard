@@ -36,7 +36,7 @@ export const UserInfoStep = ({
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
         >
           <User className="w-8 h-8 text-[#D417C8]" />
         </motion.div>

@@ -211,7 +211,7 @@ export const CreateCouponModalEnhanced = ({
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-white/10">
             <div className="flex items-center space-x-4">
-              <div className="p-3 bg-gradient-to-br from-[#D417C8] to-[#14BDEA] rounded-xl">
+              <div className="p-3 bg-gradient-to-br from-[#D417C8] to-[#14BDEA] rounded-lg">
                 <Tag className="w-6 h-6 text-white" />
               </div>
               <div>

@@ -599,7 +599,7 @@ const CustomersPage: React.FC = () => {
                 {filteredCustomers.map((customer) => (
                   <div 
                     key={customer.id}
-                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 sm:p-6 hover:bg-white/10 transition-all duration-200"
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4 sm:p-6 hover:bg-white/10 transition-all duration-200"
                   >
                     {/* Header */}
                     <div className="flex items-start justify-between mb-4">

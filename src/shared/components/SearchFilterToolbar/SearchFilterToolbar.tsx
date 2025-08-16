@@ -134,10 +134,10 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
   return (
     <div className={className}>
       {/* Focus-stable toolbar using plain div instead of animated Card component */}
-      <div className="auth-card relative overflow-hidden p-4 sm:p-6">
-        <div className="flex flex-col gap-3 xs:gap-4">
+      <div className="auth-card relative overflow-hidden p-3 md:p-4 lg:p-3.5">
+        <div className="flex flex-col gap-2.5 md:gap-3 lg:gap-2.5">
           {/* Main toolbar - aligned row */}
-          <div className="flex flex-col xs:flex-row gap-3 xs:gap-4 xs:items-center">
+          <div className="flex flex-col xs:flex-row gap-2.5 md:gap-3 lg:gap-2.5 xs:items-center">
             {/* Search Input - fixed height container */}
             <div className="flex-1 min-w-0">
               <SearchInput
@@ -151,7 +151,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             </div>
             
             {/* Actions Section - Mobile stacked, desktop inline */}
-            <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 xs:gap-3 flex-shrink-0">
+            <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 md:gap-2.5 lg:gap-2 flex-shrink-0">
               {/* Additional Actions */}
               {additionalActions && (
                 <div className="flex items-center justify-center xs:justify-start">
@@ -160,14 +160,14 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               )}
               
               {/* Bottom row on mobile, inline on desktop */}
-              <div className="flex items-center gap-2 xs:gap-3">
+              <div className="flex items-center gap-2 md:gap-2.5 lg:gap-2">
                 {/* Filters Button */}
                 {filterFields.length > 0 && (
                   <button
                     onClick={onToggleFilters}
                     className="btn-secondary flex items-center justify-center gap-2 flex-1 xs:flex-none touch-target"
                   >
-                    <Filter className="w-4 h-4" />
+                    <Filter className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5" />
                     <span className="xs:inline">Filters</span>
                   </button>
                 )}
@@ -188,7 +188,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
 
           {/* Search Results Info - separate row to avoid layout shift */}
           {searchResults && (searchQuery || searchResults.filtered < searchResults.total) && (
-            <div className="flex items-center gap-2 text-xs -mt-1 px-1">
+            <div className="flex items-center gap-2 text-xs md:text-xs lg:text-xs -mt-0.5 px-1">
               <div className="flex items-center gap-1.5">
                 <div className="w-1 h-1 rounded-full bg-[#14BDEA]" />
                 <span className="text-gray-400">
@@ -213,8 +213,8 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
 
         {/* Advanced Filters - Mobile optimized */}
         {showFilters && filterFields.length > 0 && (
-          <div className="mt-4 xs:mt-6 pt-4 xs:pt-6 border-t border-gray-700/50">
-            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 xs:gap-4">
+          <div className="mt-3 md:mt-4 lg:mt-3.5 pt-3 md:pt-4 lg:pt-3.5 border-t border-gray-700/50">
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-3 lg:gap-2.5">
               {filterFields.map(renderFilterField)}
             </div>
           </div>

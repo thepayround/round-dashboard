@@ -706,7 +706,7 @@ export const GetStartedPage = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+              className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
             >
               <div className="flex items-center space-x-2 text-red-400">
                 <AlertCircle className="w-5 h-5" />
@@ -717,7 +717,7 @@ export const GetStartedPage = () => {
 
           {/* Step Content */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-12">
-            <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-8">
+            <div className="bg-white/5 backdrop-blur-xl rounded-lg border border-white/10 p-8">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentStep}
@@ -745,6 +745,8 @@ export const GetStartedPage = () => {
               enhanced
               icon={ArrowLeft}
               iconPosition="left"
+              size="sm"
+              className="h-10"
             >
               Back
             </Button>
@@ -758,6 +760,8 @@ export const GetStartedPage = () => {
               loading={isCompleting}
               animated={false}
               actionType="navigation"
+              size="sm"
+              className="h-10"
             />
           </motion.div>
         </div>
@@ -774,7 +778,7 @@ export const GetStartedPage = () => {
       
       {/* Error Toast for page-level errors */}
       {errorToast.isVisible && (
-        <div className="fixed top-4 right-4 bg-red-500/90 text-white p-4 rounded-xl shadow-lg z-50">
+        <div className="fixed top-4 right-4 bg-red-500/90 text-white p-4 rounded-lg shadow-lg z-50">
           <div className="flex items-center space-x-2">
             <AlertCircle className="w-5 h-5" />
             <span>{errorToast.message}</span>
