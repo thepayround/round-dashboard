@@ -225,8 +225,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         // Check if click is outside the dropdown
         const target = event.target as Element
         if (!target.closest('.collapsed-dropdown') && 
-            !target.closest('.catalog-button') && 
-            !target.closest('[data-profile-button]')) {
+            !target.closest('.catalog-button')) {
           setCollapsedDropdown(null)
         }
       }
@@ -444,13 +443,15 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           )}
         </Link>
 
-        {/* Navigation */}
-        <nav 
-          ref={navigationRef}
-          className={`flex-1 py-4 md:py-5 lg:py-4 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}
-          role="navigation"
-          aria-label="Main navigation"
-        >
+        {/* Main Content Area - Flex container for navigation and bottom sections */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Navigation */}
+          <nav 
+            ref={navigationRef}
+            className={`flex-1 py-4 md:py-5 lg:py-4 pb-24 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}
+            role="navigation"
+            aria-label="Main navigation"
+          >
           {navItems.map(item => (
             <div key={item.id}>
               {/* Main Navigation Item */}
@@ -585,10 +586,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               </AnimatePresence>
             </div>
           ))}
-        </nav>
 
-        {/* Bottom Navigation */}
-        <div className={`border-t border-white/10 py-3 md:py-4 lg:py-3 space-y-1.5 md:space-y-2 lg:space-y-1.5 flex-shrink-0 ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}>
+          {/* Bottom Navigation Items - Include in main navigation */}
           {bottomNavItems.map(item => (
             <Link
               key={item.id}
@@ -601,13 +600,18 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
+                ${isKeyboardNavigating && focusedIndex === getAllNavItems().findIndex(navItem => navItem.id === item.id) 
+                  ? 'ring-2 ring-white/50' : ''
+                }
               `}
+              aria-label={item.label}
+              tabIndex={isKeyboardNavigating ? -1 : 0}
             >
-              <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
+              <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
 
               {!isCollapsed && (
                 <div className="overflow-hidden">
-                  <span className="font-medium whitespace-nowrap">{item.label}</span>
+                  <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
                 </div>
               )}
 
@@ -619,17 +623,95 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               )}
             </Link>
           ))}
+        </nav>
 
-          {/* User Profile Section */}
-          <div className="relative" ref={profileDropdownRef}>
+        {/* Fixed User Profile Section at Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 bg-white/5 backdrop-blur-xl">
+          {/* Expandable Profile Menu Items */}
+          <AnimatePresence>
+            {showProfileDropdown && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className={`overflow-hidden border-t border-white/10 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
+              >
+                <Link
+                  to="/user-settings"
+                  onClick={() => setShowProfileDropdown(false)}
+                  className={`
+                    group relative flex items-center rounded-lg transition-all duration-200 h-10
+                    ${
+                      isActive('/user-settings')
+                        ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border border-white/20'
+                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    }
+                    ${isCollapsed ? 'justify-center px-0' : 'px-6'}
+                  `}
+                  aria-label="User Settings"
+                >
+                  <User className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
+
+                  {!isCollapsed && (
+                    <div className="overflow-hidden">
+                      <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">User Settings</span>
+                    </div>
+                  )}
+
+                  {/* Tooltip for collapsed state */}
+                  {isCollapsed && (
+                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      User Settings
+                    </div>
+                  )}
+                </Link>
+
+                <button
+                  onClick={() => {
+                    setShowProfileDropdown(false)
+                    handleLogout()
+                  }}
+                  className={`
+                    group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
+                    text-gray-400 hover:text-red-400 hover:bg-red-400/10
+                    ${isCollapsed ? 'justify-center px-0' : 'px-6'}
+                  `}
+                  aria-label="Logout"
+                >
+                  <LogOut className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
+
+                  {!isCollapsed && (
+                    <div className="overflow-hidden">
+                      <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">Logout</span>
+                    </div>
+                  )}
+
+                  {/* Tooltip for collapsed state */}
+                  {isCollapsed && (
+                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      Logout
+                    </div>
+                  )}
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Divider */}
+          <div className="border-t border-white/10" />
+          
+          {/* User Profile */}
+          <div className={`py-3 md:py-4 lg:py-3 ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}>
+            <div className="relative" ref={profileDropdownRef}>
             <button
-              onClick={(e) => {
+              onClick={() => {
                 if (isCollapsed) {
-                  // In collapsed mode, toggle dropdown with positioning
+                  // In collapsed mode, show tooltip-like dropdown
                   if (collapsedDropdown === 'profile') {
                     setCollapsedDropdown(null)
                   } else {
-                    const buttonRect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+                    const buttonRect = (document.activeElement as HTMLElement).getBoundingClientRect()
                     const viewportHeight = window.innerHeight
                     const viewportWidth = window.innerWidth
                     const dropdownMinWidth = 280
@@ -652,7 +734,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     setCollapsedDropdown('profile')
                   }
                 } else {
-                  // In expanded mode, use regular dropdown
+                  // In expanded mode, toggle inline menu
                   setShowProfileDropdown(!showProfileDropdown)
                 }
               }}
@@ -660,10 +742,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 group relative flex items-center rounded-lg transition-all duration-200 w-full
                 text-gray-400 hover:text-white hover:bg-white/5
                 ${isCollapsed ? 'justify-center px-0 h-10' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
-                ${(showProfileDropdown && !isCollapsed) || (collapsedDropdown === 'profile' && isCollapsed) ? 'bg-white/10 text-white' : ''}
+                ${showProfileDropdown && !isCollapsed ? 'bg-white/10 text-white' : ''}
+                ${collapsedDropdown === 'profile' && isCollapsed ? 'bg-white/10 text-white' : ''}
               `}
               aria-label="User profile menu"
-              aria-expanded={showProfileDropdown || collapsedDropdown === 'profile'}
+              aria-expanded={showProfileDropdown}
               data-profile-button={isCollapsed ? 'true' : undefined}
             >
               {/* User Avatar */}
@@ -733,72 +816,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </div>
               )}
             </button>
-
-            {/* Profile Dropdown */}
-            <AnimatePresence>
-              {showProfileDropdown && !isCollapsed && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute bottom-full left-3 mb-2 bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-lg shadow-2xl overflow-hidden min-w-[320px] max-w-[400px]"
-                >
-                  {/* Current User Info */}
-                  {state.user && (
-                    <div className="px-4 py-3 border-b border-white/10">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-medium">
-                          {getInitials(state.user.firstName, state.user.lastName)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-white truncate">
-                            {state.user.firstName?.trim() && state.user.lastName?.trim()
-                              ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
-                              : state.user.firstName?.trim() || state.user.email || 'User'}
-                          </div>
-                          <div className="text-sm text-gray-400 break-all">
-                            {state.user.email}
-                          </div>
-                          <div className="text-xs text-gray-500 line-clamp-2">
-                            {state.user.role} • {(() => {
-                              if (isRoundAccountLoading) return 'Loading...'
-                              if (roundAccount?.accountName) return roundAccount.accountName
-                              if (roundAccount?.organization?.name) return roundAccount.organization.name
-                              if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
-                                return state.user.companyInfo.companyName
-                              }
-                              return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
-                            })()}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-
-                  {/* Profile Actions */}
-                  <div className="p-2">
-                    <Link
-                      to="/user-settings"
-                      onClick={() => setShowProfileDropdown(false)}
-                      className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 w-full text-left"
-                    >
-                      <User className="w-4 h-4" />
-                      <span className="text-sm">User Settings</span>
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 w-full text-left"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span className="text-sm">Logout</span>
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            </div>
           </div>
+        </div>
         </div>
       </motion.aside>
 
@@ -810,116 +830,51 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.95, x: -10 }}
             transition={{ duration: 0.15 }}
-            className={`collapsed-dropdown fixed bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-lg shadow-2xl z-50 ${
-              collapsedDropdown === 'profile' ? 'min-w-[320px] max-w-[400px]' : 'min-w-[200px]'
-            }`}
+            className="collapsed-dropdown fixed bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-lg shadow-2xl z-50 min-w-[200px]"
             style={{
               top: dropdownPosition.top,
               left: dropdownPosition.left
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Handle different dropdown types */}
+            {/* Catalog dropdown content */}
             {(() => {
-              if (collapsedDropdown === 'profile') {
-                // Profile dropdown content
-                return (
-                  <>
-                    {/* Current User Info */}
-                    {state.user && (
-                      <div className="px-4 py-3 border-b border-white/10">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-medium">
-                            {getInitials(state.user.firstName, state.user.lastName)}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="font-medium text-white truncate">
-                              {state.user.firstName?.trim() && state.user.lastName?.trim()
-                                ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
-                                : state.user.firstName?.trim() || state.user.email || 'User'}
-                            </div>
-                            <div className="text-sm text-gray-400 break-all">
-                              {state.user.email}
-                            </div>
-                            <div className="text-xs text-gray-500 line-clamp-2">
-                              {state.user.role} • {(() => {
-                                if (isRoundAccountLoading) return 'Loading...'
-                                if (roundAccount?.accountName) return roundAccount.accountName
-                                if (roundAccount?.organization?.name) return roundAccount.organization.name
-                                if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
-                                  return state.user.companyInfo.companyName
-                                }
-                                return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
-                              })()}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-
-                    {/* Profile Actions */}
-                    <div className="p-2">
+              const catalogItem = navItems.find(item => item.id === collapsedDropdown)
+              if (!catalogItem) return null
+              
+              return (
+                <>
+                  {/* Dropdown Header */}
+                  <div className="px-4 py-3 border-b border-white/10">
+                    <div className="flex items-center space-x-3">
+                      <catalogItem.icon className="w-5 h-5 text-white" />
+                      <span className="font-medium text-white">{catalogItem.label}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Dropdown Items */}
+                  <div className="py-2">
+                    {catalogItem.subItems?.map(subItem => (
                       <Link
-                        to="/user-settings"
+                        key={subItem.id}
+                        to={subItem.href}
                         onClick={() => setCollapsedDropdown(null)}
-                        className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 w-full text-left"
+                        className={`
+                          flex items-center px-4 py-3 hover:bg-white/10 transition-colors duration-200
+                          ${
+                            isActive(subItem.href)
+                              ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border-r-2 border-[#D417C8]'
+                              : 'text-gray-300 hover:text-white'
+                          }
+                        `}
                       >
-                        <User className="w-4 h-4" />
-                        <span className="text-sm">User Settings</span>
+                        <subItem.icon className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2 flex-shrink-0" />
+                        <span className="font-medium text-sm">{subItem.label}</span>
                       </Link>
-                      <button
-                        onClick={() => {
-                          setCollapsedDropdown(null)
-                          handleLogout()
-                        }}
-                        className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 w-full text-left"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span className="text-sm">Logout</span>
-                      </button>
-                    </div>
-                  </>
-                )
-              } else {
-                // Catalog dropdown content
-                const catalogItem = navItems.find(item => item.id === collapsedDropdown)
-                if (!catalogItem) return null
-                
-                return (
-                  <>
-                    {/* Dropdown Header */}
-                    <div className="px-4 py-3 border-b border-white/10">
-                      <div className="flex items-center space-x-3">
-                        <catalogItem.icon className="w-5 h-5 text-white" />
-                        <span className="font-medium text-white">{catalogItem.label}</span>
-                      </div>
-                    </div>
-                    
-                    {/* Dropdown Items */}
-                    <div className="py-2">
-                      {catalogItem.subItems?.map(subItem => (
-                        <Link
-                          key={subItem.id}
-                          to={subItem.href}
-                          onClick={() => setCollapsedDropdown(null)}
-                          className={`
-                            flex items-center px-4 py-3 hover:bg-white/10 transition-colors duration-200
-                            ${
-                              isActive(subItem.href)
-                                ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border-r-2 border-[#D417C8]'
-                                : 'text-gray-300 hover:text-white'
-                            }
-                          `}
-                        >
-                          <subItem.icon className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2 flex-shrink-0" />
-                          <span className="font-medium text-sm">{subItem.label}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </>
-                )
-              }
+                    ))}
+                  </div>
+                </>
+              )
             })()}
           </motion.div>
         )}
