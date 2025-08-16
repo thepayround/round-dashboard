@@ -780,12 +780,12 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   {/* Profile Actions */}
                   <div className="p-2">
                     <Link
-                      to="/profile"
+                      to="/user-settings"
                       onClick={() => setShowProfileDropdown(false)}
                       className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 w-full text-left"
                     >
                       <User className="w-4 h-4" />
-                      <span className="text-sm">Profile Settings</span>
+                      <span className="text-sm">User Settings</span>
                     </Link>
                     <button
                       onClick={handleLogout}
@@ -861,12 +861,12 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     {/* Profile Actions */}
                     <div className="p-2">
                       <Link
-                        to="/profile"
+                        to="/user-settings"
                         onClick={() => setCollapsedDropdown(null)}
                         className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 w-full text-left"
                       >
                         <User className="w-4 h-4" />
-                        <span className="text-sm">Profile Settings</span>
+                        <span className="text-sm">User Settings</span>
                       </Link>
                       <button
                         onClick={() => {

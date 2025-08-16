@@ -1,17 +1,29 @@
-import { Globe, DollarSign, Clock, Calendar, Users, Building, User, MapPin } from 'lucide-react'
+import { Globe, DollarSign, Clock, Calendar, Users, Building, User, MapPin, Languages } from 'lucide-react'
 import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 import { useIndustries } from '@/shared/hooks/api/useIndustry'
 import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
 import { useAddressTypes } from '@/shared/hooks/api/useAddressType'
 import { useOrganizationTypes } from '@/shared/hooks/api/useOrganizationType'
+import { 
+  useTimezones, 
+  useLanguages, 
+  useDateFormats, 
+  useTimeFormats
+} from '@/shared/hooks/api/useUserSettingsOptions'
 import type { ApiDropdownConfig } from './ApiDropdown'
 import { useMemo } from 'react'
 import type { CurrencyResponse } from '@/shared/types/api/countryCurrency'
-import type { TimeZone, Month, Role } from '@/shared/types/api/countryCurrency'
+import type { Month, Role } from '@/shared/types/api/countryCurrency'
 import type { IndustryResponse } from '@/shared/types/api/industry'
 import type { CompanySizeResponse } from '@/shared/types/api/companySize'
 import type { AddressTypeResponse } from '@/shared/types/api/addressType'
 import type { OrganizationTypeResponse } from '@/shared/types/api/organizationType'
+import type { 
+  TimezoneOption, 
+  LanguageOption, 
+  DateFormatOption, 
+  TimeFormatOption 
+} from '@/shared/hooks/api/useUserSettingsOptions'
 
 
 
@@ -142,27 +154,6 @@ export const organizationTypeDropdownConfig: ApiDropdownConfig<OrganizationTypeR
 }
 
 // Static data hooks for non-API dropdowns
-const useTimezones = () => {
-  const data = useMemo(() => [
-    { value: 'UTC', label: 'UTC (Coordinated Universal Time)' },
-    { value: 'America/New_York', label: 'Eastern Time (EST/EDT)' },
-    { value: 'America/Chicago', label: 'Central Time (CST/CDT)' },
-    { value: 'America/Denver', label: 'Mountain Time (MST/MDT)' },
-    { value: 'America/Los_Angeles', label: 'Pacific Time (PST/PDT)' },
-    { value: 'Europe/London', label: 'Greenwich Mean Time (GMT)' },
-    { value: 'Europe/Paris', label: 'Central European Time (CET)' },
-    { value: 'Asia/Tokyo', label: 'Japan Standard Time (JST)' },
-    { value: 'Australia/Sydney', label: 'Australian Eastern Time (AET)' },
-  ], [])
-
-  return {
-    data,
-    isLoading: false,
-    isError: false,
-    refetch: () => {},
-  }
-}
-
 const useFiscalYearMonths = () => {
   const data = useMemo(() => [
     { value: 'January', label: 'January' },
@@ -188,13 +179,14 @@ const useFiscalYearMonths = () => {
 }
 
 // Timezone dropdown configuration
-export const timezoneDropdownConfig: ApiDropdownConfig<TimeZone> = {
+export const timezoneDropdownConfig: ApiDropdownConfig<TimezoneOption> = {
   useHook: useTimezones,
   mapToOptions: (timezones) =>
     timezones.map(timezone => ({
       value: timezone.value,
       label: timezone.label,
-      searchText: timezone.label,
+      searchText: `${timezone.label} ${timezone.standardName}`,
+      description: timezone.standardName,
       icon: (
         <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#7767DA]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center">
           <Clock className="w-3 h-3 text-white/80" />
@@ -366,3 +358,73 @@ export const addressTypeDropdownConfig: ApiDropdownConfig<AddressTypeResponse> =
   noResultsText: 'No address types found',
   errorText: 'Failed to load address types',
 }
+
+// Language dropdown configuration (English only)
+export const languageDropdownConfig: ApiDropdownConfig<LanguageOption> = {
+  useHook: useLanguages,
+  mapToOptions: (languages) =>
+    languages
+      .filter(language => language.value === 'en') // Only English
+      .map(language => ({
+        value: language.value,
+        label: language.label,
+        searchText: `${language.label} ${language.nativeName}`,
+        description: language.nativeName,
+        icon: (
+          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#D417C8]/20 border border-white/20 flex items-center justify-center">
+            <Languages className="w-3 h-3 text-white/80" />
+          </div>
+        ),
+      })),
+  icon: <Languages size={20} />,
+  placeholder: 'English',
+  searchPlaceholder: 'Search languages...',
+  noResultsText: 'No languages found',
+  errorText: 'Failed to load languages',
+}
+
+
+// Date format dropdown configuration
+export const dateFormatDropdownConfig: ApiDropdownConfig<DateFormatOption> = {
+  useHook: useDateFormats,
+  mapToOptions: (formats) =>
+    formats.map(format => ({
+      value: format.value,
+      label: format.label,
+      searchText: `${format.label} ${format.description}`,
+      description: format.description,
+      icon: (
+        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#7767DA]/20 to-[#32A1E4]/20 border border-white/20 flex items-center justify-center">
+          <Calendar className="w-3 h-3 text-white/80" />
+        </div>
+      ),
+    })),
+  icon: <Calendar size={20} />,
+  placeholder: 'Select date format',
+  searchPlaceholder: 'Search date formats...',
+  noResultsText: 'No date formats found',
+  errorText: 'Failed to load date formats',
+}
+
+// Time format dropdown configuration
+export const timeFormatDropdownConfig: ApiDropdownConfig<TimeFormatOption> = {
+  useHook: useTimeFormats,
+  mapToOptions: (formats) =>
+    formats.map(format => ({
+      value: format.value,
+      label: format.label,
+      searchText: `${format.label} ${format.description}`,
+      description: format.description,
+      icon: (
+        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+          <Clock className="w-3 h-3 text-white/80" />
+        </div>
+      ),
+    })),
+  icon: <Clock size={20} />,
+  placeholder: 'Select time format',
+  searchPlaceholder: 'Search time formats...',
+  noResultsText: 'No time formats found',
+  errorText: 'Failed to load time formats',
+}
+

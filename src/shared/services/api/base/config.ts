@@ -8,6 +8,10 @@ export const API_CONFIG: ApiConfig = {
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000',
   timeout: 10000,
   retries: 3,
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
 }
 
 export const ENDPOINTS = {
@@ -43,6 +47,13 @@ export const ENDPOINTS = {
     BY_ID: (id: string) => `/addresses/${id}`,
     BY_ORGANIZATION: (organizationId: string) => `/addresses?organizationId=${organizationId}`,
     DELETE_MANY: '/addresses/bulk-delete',
+  },
+  // User Settings
+  USER_SETTINGS: {
+    BASE: '/UserSettings',
+    NOTIFICATIONS: '/UserSettings/notifications',
+    NOTIFICATION_BY_TYPE: (notificationType: string) => `/UserSettings/notifications/${notificationType}`,
+    VALIDATE: '/UserSettings/validate',
   },
   // Users (deprecated - use AUTH.ME instead)
   // USERS: {
