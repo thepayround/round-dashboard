@@ -167,7 +167,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="absolute top-full left-0 right-0 mt-2 bg-gray-800/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-dropdown max-h-60 overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-2 bg-gray-800/95 backdrop-blur-xl border border-white/20 rounded-lg shadow-2xl z-dropdown max-h-60 overflow-y-auto"
         >
           {options.map(option => (
             <button
@@ -200,7 +200,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
         >
           <Users className="w-8 h-8 text-[#32A1E4]" />
         </motion.div>
@@ -213,7 +213,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
 
       {/* Invite Team Members Section */}
       <div className="space-y-6">
-        <div className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl">
+        <div className="p-6 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl">
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <UserPlus className="w-6 h-6 text-[#32A1E4]" />
@@ -287,7 +287,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                   key={invitation.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xl"
+                  className="p-4 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">

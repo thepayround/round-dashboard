@@ -52,7 +52,7 @@ export const CardHeader = ({
     <div className={`flex items-start justify-between mb-4 ${className}`}>
       <div className="flex items-center space-x-3 flex-1">
         {Icon && (
-          <div className={`p-3 rounded-xl bg-gradient-to-br ${iconBg} group-hover:opacity-80 transition-all`}>
+          <div className={`p-3 rounded-lg bg-gradient-to-br ${iconBg} group-hover:opacity-80 transition-all`}>
             <Icon className={`w-6 h-6 ${iconColor}`} />
           </div>
         )}

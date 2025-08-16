@@ -132,7 +132,7 @@ export const PersonalRegisterPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="w-full max-w-md mx-auto relative z-10"
+        className="w-full max-w-[360px] mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
         <div className="auth-card">
@@ -155,7 +155,7 @@ export const PersonalRegisterPage = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+            className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
           >
             <div className="flex items-center space-x-2 text-red-400">
               <AlertCircle className="w-5 h-5" />
@@ -351,7 +351,7 @@ export const PersonalRegisterPage = () => {
             size="md"
             animated={false}
             actionType="auth"
-            className="mt-8 w-full h-[48px]"
+            className="mt-8 w-full "
           />
 
           {/* Divider */}

@@ -87,7 +87,7 @@ export const BillingPage = () => (
               {[1, 2, 3, 4, 5].map(invoice => (
                 <div
                   key={invoice}
-                  className="flex items-center justify-between p-3 sm:p-4 rounded-xl bg-white/5 border border-white/10"
+                  className="flex items-center justify-between p-3 sm:p-4 rounded-lg bg-white/5 border border-white/10"
                 >
                   <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 flex items-center justify-center flex-shrink-0">
@@ -125,7 +125,7 @@ export const BillingPage = () => (
                 <p className="auth-text text-2xl sm:text-3xl font-bold mb-2">$24,500</p>
                 <p className="auth-text-muted text-sm">This Month</p>
               </div>
-              <div className="h-32 bg-gradient-to-t from-[#D417C8]/20 to-[#14BDEA]/20 rounded-xl flex items-end justify-center">
+              <div className="h-32 bg-gradient-to-t from-[#D417C8]/20 to-[#14BDEA]/20 rounded-lg flex items-end justify-center">
                 <p className="auth-text-muted text-sm mb-4">Revenue chart would go here</p>
               </div>
             </div>

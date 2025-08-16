@@ -40,7 +40,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
         >
           <Package className="w-8 h-8 text-[#14BDEA]" />
         </motion.div>
@@ -54,9 +54,9 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
       {/* Add Product Section */}
       <div className="space-y-6">
         <div className="text-center space-y-6">
-          <div className="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl">
+          <div className="p-8 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl">
             <div className="space-y-4">
-              <div className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <div className="w-12 h-12 mx-auto rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                 <Package className="w-6 h-6 text-[#14BDEA]" />
               </div>
 
@@ -90,7 +90,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
               {data.products.map(product => (
                 <div
                   key={product.id}
-                  className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xl"
+                  className="p-4 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl"
                 >
                   <div className="flex items-center justify-between">
                     <div>

@@ -125,7 +125,7 @@ export const ForgotPasswordPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="w-full max-w-md mx-auto relative z-10"
+        className="w-full max-w-[360px] mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
         <div className="auth-card">
@@ -182,7 +182,7 @@ export const ForgotPasswordPage = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+                  className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
                 >
                   <div className="flex items-center space-x-2 text-red-400">
                     <AlertCircle className="w-5 h-5" />
@@ -235,7 +235,7 @@ export const ForgotPasswordPage = () => {
                   size="md"
                   animated={false}
                   actionType="auth"
-                  className="mt-8 w-full h-[48px]"
+                  className="mt-8 w-full "
                 />
 
                 {/* Back to Login */}
@@ -254,7 +254,7 @@ export const ForgotPasswordPage = () => {
             <>
               {/* Success State */}
               <div className="space-y-6">
-                <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
+                <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
                   <div className="text-green-400 text-sm font-medium">
                     <p>We&apos;ve sent you a secure password reset link that will expire in <strong>1 hour</strong>.</p>
                     <p className="mt-2">Check your spam folder if you don&apos;t see the email in your inbox.</p>
@@ -270,7 +270,7 @@ export const ForgotPasswordPage = () => {
                     size="md"
                     animated={false}
                     actionType="auth"
-                    className="w-full h-[48px]"
+                    className="w-full "
                   />
                   
                   <button

@@ -42,10 +42,10 @@ export interface CardProps {
 
 const paddingVariants = {
   none: '',
-  sm: 'p-3 sm:p-4',
-  md: 'p-4 sm:p-6',
-  lg: 'p-5 sm:p-6 md:p-8',
-  xl: 'p-6 sm:p-8 md:p-12'
+  sm: 'p-2 md:p-3 lg:p-2.5',
+  md: 'p-3 md:p-4 lg:p-3.5',
+  lg: 'p-4 md:p-5 lg:p-4',
+  xl: 'p-5 md:p-6 lg:p-5'
 }
 
 const colorVariants = {
@@ -145,23 +145,23 @@ const CardComponent = ({
       {variant === 'stats' && title && (
         <div className="flex items-center justify-between">
           <div className="min-w-0 flex-1 pr-3">
-            <p className="auth-text-muted text-xs sm:text-sm font-medium truncate">
+            <p className="auth-text-muted text-xs md:text-sm lg:text-xs font-medium truncate">
               {title}
             </p>
-            <p className="auth-text text-lg sm:text-xl md:text-2xl font-bold">
+            <p className="auth-text text-base md:text-lg lg:text-base font-bold">
               {typeof value === 'number' ? value.toLocaleString() : value}
             </p>
             
             {trend && (
-              <p className={`text-xs sm:text-sm font-medium ${getTrendColor(trend.direction)} truncate`}>
+              <p className={`text-xs md:text-sm lg:text-xs font-medium ${getTrendColor(trend.direction)} truncate`}>
                 {trend.value}{trend.label && ` ${trend.label}`}
               </p>
             )}
           </div>
 
           {Icon && (
-            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
-              <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${colorConfig.iconColor}`} />
+            <div className={`w-8 h-8 md:w-10 md:h-10 lg:w-9 lg:h-9 rounded-lg md:rounded-lg lg:rounded-lg bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
+              <Icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${colorConfig.iconColor}`} />
             </div>
           )}
         </div>
@@ -173,16 +173,16 @@ const CardComponent = ({
           <>
             <div className="flex items-center justify-between mb-4">
               {Icon && (
-                <div className={`p-3 bg-gradient-to-br ${colorConfig.iconBg} rounded-xl border ${colorConfig.border} backdrop-blur-sm`}>
-                  <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
+                <div className={`p-2 md:p-3 lg:p-2.5 bg-gradient-to-br ${colorConfig.iconBg} rounded-lg md:rounded-lg lg:rounded-lg border ${colorConfig.border} backdrop-blur-sm`}>
+                  <Icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${colorConfig.iconColor}`} />
                 </div>
               )}
-              <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-200" />
+              <ChevronRight className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 text-gray-400 group-hover:text-white transition-colors duration-200" />
             </div>
-            <h3 className={`text-base sm:text-lg font-semibold text-white transition-colors duration-200 ${colorConfig.hoverColor} mb-2`}>
+            <h3 className={`text-sm md:text-base lg:text-sm font-semibold text-white transition-colors duration-200 ${colorConfig.hoverColor} mb-1.5 md:mb-2 lg:mb-1.5`}>
               {title}
             </h3>
-            <p className="text-gray-400 text-xs sm:text-sm">
+            <p className="text-gray-400 text-xs md:text-sm lg:text-xs">
               {description}
             </p>
           </>
@@ -191,8 +191,8 @@ const CardComponent = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               {Icon && (
-                <div className={`p-3 bg-gradient-to-br ${colorConfig.iconBg} rounded-xl border ${colorConfig.border} backdrop-blur-sm`}>
-                  <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
+                <div className={`p-2 md:p-3 lg:p-2.5 bg-gradient-to-br ${colorConfig.iconBg} rounded-lg md:rounded-lg lg:rounded-lg border ${colorConfig.border} backdrop-blur-sm`}>
+                  <Icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${colorConfig.iconColor}`} />
                 </div>
               )}
               <div>
@@ -223,8 +223,8 @@ const CardComponent = ({
             )}
           </div>
           {Icon && (
-            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
-              <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${colorConfig.iconColor}`} />
+            <div className={`w-8 h-8 md:w-10 md:h-10 lg:w-9 lg:h-9 rounded-lg md:rounded-lg lg:rounded-lg bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
+              <Icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${colorConfig.iconColor}`} />
             </div>
           )}
         </div>
@@ -233,7 +233,7 @@ const CardComponent = ({
       {variant === 'feature' && title && (
         <div className="text-center">
           {Icon && (
-            <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${colorConfig.iconBg} rounded-2xl border ${colorConfig.border} flex items-center justify-center backdrop-blur-sm`}>
+            <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${colorConfig.iconBg} rounded-lg border ${colorConfig.border} flex items-center justify-center backdrop-blur-sm`}>
               <Icon className={`w-8 h-8 ${colorConfig.iconColor}`} />
             </div>
           )}

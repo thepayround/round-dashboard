@@ -149,42 +149,13 @@ export const ResetPasswordPage = () => {
         formData.confirmPassword
       )
 
-      if (response.success && response.data) {
-        if (response.data.token && response.data.refreshToken) {
-          // Auto-login with the returned tokens
-          const userData = {
-            id: '', // Will be fetched when needed
-            email: formData.email,
-            firstName: '',
-            lastName: '',
-            phone: '',
-            accountType: 'business' as const, // Default assumption for password reset
-            role: 'member' as const,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            companyInfo: {
-              companyName: '',
-              registrationNumber: '',
-              currency: 'USD' as const,
-              businessType: 'corporation' as const,
-              website: '',
-              description: ''
-            }
-          }
-          
-          // Log the user in
-          login(userData, response.data.token, response.data.refreshToken)
-          
-          setIsSuccess(true)
-          // Navigate to dashboard after brief delay for UX
-          setTimeout(() => {
-            navigate('/dashboard', { replace: true })
-          }, 1000)
-        } else {
-          // Fallback to old flow if tokens not returned
-          setIsSuccess(true)
+      if (response.success) {
+        setIsSuccess(true)
+        
+        // Try to auto-login with the new password after a brief delay
+        setTimeout(async () => {
           await handleAutoLogin()
-        }
+        }, 1500) // Give user time to see success message
       } else {
         setApiError(response.error ?? 'Failed to reset password')
         setIsSubmitting(false)
@@ -213,22 +184,30 @@ export const ResetPasswordPage = () => {
       })
 
       if (response.success && response.data) {
-        // Save the authentication data
-        localStorage.setItem('token', response.data.accessToken)
-        if (response.data.refreshToken) {
-          localStorage.setItem('refreshToken', response.data.refreshToken)
-        }
+        // Use the auth context to properly log in the user
+        login(response.data.user, response.data.accessToken, response.data.refreshToken)
         
         // Navigate to dashboard
-        navigate('/dashboard')
+        navigate('/dashboard', { replace: true })
       } else {
-        // If auto-login fails, just go to login page
-        navigate('/auth/login')
+        console.error('Auto-login failed:', response.error)
+        // If auto-login fails, just go to login page with a message
+        navigate('/auth/login', { 
+          state: { 
+            message: 'Password reset successful. Please sign in with your new password.',
+            email: formData.email
+          }
+        })
       }
     } catch (error) {
       console.error('Auto-login failed:', error)
-      // If auto-login fails, just go to login page
-      navigate('/auth/login')
+      // If auto-login fails, just go to login page with a message
+      navigate('/auth/login', { 
+        state: { 
+          message: 'Password reset successful. Please sign in with your new password.',
+          email: formData.email
+        }
+      })
     }
   }
 
@@ -261,7 +240,7 @@ export const ResetPasswordPage = () => {
           initial={{ opacity: 0, scale: 0.95, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="w-full max-w-md mx-auto relative z-10"
+          className="w-full max-w-[360px] mx-auto relative z-10"
         >
           <div className="auth-card">
             <div className="text-center">
@@ -303,7 +282,7 @@ export const ResetPasswordPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="w-full max-w-md mx-auto relative z-10"
+        className="w-full max-w-[360px] mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
         <div className="auth-card">
@@ -334,7 +313,7 @@ export const ResetPasswordPage = () => {
                     Password Reset Successful
                   </h1>
                   <p className="auth-text-muted text-base sm:text-lg font-medium">
-                    Your password has been successfully reset. Logging you in automatically...
+                    Your password has been successfully reset. You will be logged in automatically...
                   </p>
                 </>
               )}
@@ -348,7 +327,7 @@ export const ResetPasswordPage = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+                  className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
                 >
                   <div className="flex items-center space-x-2 text-red-400">
                     <AlertCircle className="w-5 h-5" />
@@ -460,7 +439,7 @@ export const ResetPasswordPage = () => {
                 <button
                   type="submit"
                   disabled={!isFormValid() || isSubmitting}
-                  className="mt-8 w-full h-[48px] btn-primary flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="mt-8 w-full  btn-primary flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
@@ -476,7 +455,7 @@ export const ResetPasswordPage = () => {
                 </button>
 
                 {/* Security Notice */}
-                <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
                   <div className="text-blue-400 text-sm">
                     <p className="font-medium mb-1">Password Requirements:</p>
                     <ul className="text-xs space-y-1 opacity-90">
@@ -492,7 +471,7 @@ export const ResetPasswordPage = () => {
             <>
               {/* Success State */}
               <div className="space-y-6">
-                <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
+                <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
                   <div className="text-green-400 text-sm font-medium">
                     <p>Your password has been successfully reset and all existing sessions have been invalidated for security.</p>
                   </div>
@@ -506,7 +485,7 @@ export const ResetPasswordPage = () => {
                   size="md"
                   animated={false}
                   actionType="auth"
-                  className="w-full h-[48px]"
+                  className="w-full "
                 />
               </div>
             </>

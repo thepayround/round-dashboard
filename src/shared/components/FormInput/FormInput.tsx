@@ -34,14 +34,17 @@ export const FormInput = forwardRef<
   ...props
 }, ref) => {
   const baseInputClasses = `
-    w-full px-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 
+    w-full px-3 py-2.5 md:px-3.5 md:py-2 lg:px-3 lg:py-1.5 
+    bg-white/5 border border-white/10 rounded-lg 
+    text-white placeholder-gray-400 text-sm md:text-sm lg:text-xs
     focus:outline-none focus:border-[#D417C8]/50 focus:bg-white/10 transition-all duration-200
     disabled:opacity-50 disabled:cursor-not-allowed
+    h-10
   `
 
   const iconInputClasses = `
-    ${Icon && iconPosition === 'left' ? 'pl-12' : 'pl-4'} 
-    ${Icon && iconPosition === 'right' ? 'pr-12' : 'pr-4'}
+    ${Icon && iconPosition === 'left' ? 'pl-10 md:pl-11 lg:pl-10' : 'pl-3 md:pl-3.5 lg:pl-3'} 
+    ${Icon && iconPosition === 'right' ? 'pr-10 md:pr-11 lg:pr-10' : 'pr-3 md:pr-3.5 lg:pr-3'}
   `
 
   const errorClasses = error ? 'border-red-500/50 focus:border-red-500/70' : ''
@@ -87,8 +90,8 @@ export const FormInput = forwardRef<
       <div className="relative">
         {/* Left Icon */}
         {Icon && iconPosition === 'left' && (
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10">
-            <Icon className="w-5 h-5 text-gray-400" />
+          <div className="absolute left-3 md:left-3.5 lg:left-3 top-1/2 transform -translate-y-1/2 z-10">
+            <Icon className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 text-gray-400" />
           </div>
         )}
 
@@ -97,15 +100,15 @@ export const FormInput = forwardRef<
 
         {/* Right Icon */}
         {Icon && iconPosition === 'right' && (
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10">
-            <Icon className="w-5 h-5 text-gray-400" />
+          <div className="absolute right-3 md:right-3.5 lg:right-3 top-1/2 transform -translate-y-1/2 z-10">
+            <Icon className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 text-gray-400" />
           </div>
         )}
 
         {/* Error Icon */}
         {error && (
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10">
-            <AlertCircle className="w-5 h-5 text-red-400" />
+          <div className="absolute right-3 md:right-3.5 lg:right-3 top-1/2 transform -translate-y-1/2 z-10">
+            <AlertCircle className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 text-red-400" />
           </div>
         )}
       </div>
@@ -115,16 +118,16 @@ export const FormInput = forwardRef<
         <motion.div
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center space-x-2 text-sm text-red-400"
+          className="flex items-center space-x-2 text-xs md:text-sm lg:text-xs text-red-400"
         >
-          <AlertCircle className="w-4 h-4" />
+          <AlertCircle className="w-3 h-3 md:w-4 md:h-4 lg:w-3 lg:h-3" />
           <span>{error}</span>
         </motion.div>
       )}
 
       {/* Hint Text */}
       {hint && !error && (
-        <p className="text-sm text-gray-500">{hint}</p>
+        <p className="text-xs md:text-sm lg:text-xs text-gray-500">{hint}</p>
       )}
     </div>
   )

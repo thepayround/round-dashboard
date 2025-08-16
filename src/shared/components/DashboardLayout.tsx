@@ -373,12 +373,19 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
 
 
-  const getInitials = (name: string) => name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2)
+  const getInitials = (firstName?: string, lastName?: string) => {
+    const first = firstName?.trim()
+    const last = lastName?.trim()
+    
+    if (first && last) {
+      return `${first[0]}${last[0]}`.toUpperCase()
+    } else if (first) {
+      return first.slice(0, 2).toUpperCase()
+    } else if (last) {
+      return last.slice(0, 2).toUpperCase()
+    }
+    return 'U' // Default fallback
+  }
 
   return (
     <div className="min-h-screen relative">
@@ -439,7 +446,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         {/* Navigation */}
         <nav 
           ref={navigationRef}
-          className={`flex-1 py-6 space-y-2 overflow-y-auto overflow-x-hidden ${isCollapsed ? 'px-2' : 'px-6'}`}
+          className={`flex-1 py-4 md:py-5 lg:py-4 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}
           role="navigation"
           aria-label="Main navigation"
         >
@@ -460,7 +467,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     }
                   }}
                   className={`
-                    catalog-button group relative flex items-center rounded-xl transition-all duration-200 h-12 w-full
+                    catalog-button group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
                     ${
                       isParentActive(item)
                         ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
@@ -476,11 +483,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
                   tabIndex={isKeyboardNavigating ? -1 : 0}
                 >
-                  <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
+                  <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
                   
                   {!isCollapsed && (
                     <div className="flex items-center justify-between flex-1 overflow-hidden">
-                      <span className="font-medium whitespace-nowrap">{item.label}</span>
+                      <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
                       <ChevronDown 
                         className={`w-4 h-4 transition-transform duration-200 ${
                           expandedItems.includes(item.id) ? 'transform rotate-180' : ''
@@ -508,7 +515,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <Link
                   to={item.href}
                   className={`
-                    group relative flex items-center rounded-xl transition-all duration-200 h-12
+                    group relative flex items-center rounded-lg transition-all duration-200 h-10
                     ${
                       isParentActive(item)
                         ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
@@ -522,11 +529,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
                   tabIndex={isKeyboardNavigating ? -1 : 0}
                 >
-                  <item.icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
+                  <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
 
                   {!isCollapsed && (
                     <div className="flex items-center justify-between flex-1 overflow-hidden">
-                      <span className="font-medium whitespace-nowrap">{item.label}</span>
+                      <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
                       {item.badge && (
                         <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
                           {item.badge}
@@ -553,14 +560,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="mt-2 space-y-1 pl-4"
+                    className="mt-1.5 md:mt-2 lg:mt-1.5 space-y-0.5 md:space-y-1 lg:space-y-0.5 pl-3 md:pl-4 lg:pl-3"
                   >
                     {item.subItems.map(subItem => (
                       <Link
                         key={subItem.id}
                         to={subItem.href}
                         className={`
-                          group relative flex items-center rounded-lg transition-all duration-200 h-10 px-4
+                          group relative flex items-center rounded-lg transition-all duration-200 h-9 md:h-8 lg:h-7 px-3 md:px-3.5 lg:px-3
                           ${
                             isActive(subItem.href)
                               ? 'bg-gradient-to-r from-[#D417C8]/30 to-[#14BDEA]/30 text-white border-l-2 border-[#D417C8]'
@@ -568,8 +575,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                           }
                         `}
                       >
-                        <subItem.icon className="w-4 h-4 mr-3 flex-shrink-0" />
-                        <span className="font-medium text-sm whitespace-nowrap">{subItem.label}</span>
+                        <subItem.icon className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2 flex-shrink-0" />
+                        <span className="font-medium text-xs md:text-sm lg:text-xs whitespace-nowrap">{subItem.label}</span>
                       </Link>
                     ))}
                   </motion.div>
@@ -580,13 +587,13 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </nav>
 
         {/* Bottom Navigation */}
-        <div className={`border-t border-white/10 py-4 space-y-2 flex-shrink-0 ${isCollapsed ? 'px-2' : 'px-6'}`}>
+        <div className={`border-t border-white/10 py-3 md:py-4 lg:py-3 space-y-1.5 md:space-y-2 lg:space-y-1.5 flex-shrink-0 ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}>
           {bottomNavItems.map(item => (
             <Link
               key={item.id}
               to={item.href}
               className={`
-                group relative flex items-center rounded-xl transition-all duration-200 h-12
+                group relative flex items-center rounded-lg transition-all duration-200 h-10
                 ${
                   isActive(item.href)
                     ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
@@ -649,9 +656,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 }
               }}
               className={`
-                group relative flex items-center rounded-xl transition-all duration-200 w-full
+                group relative flex items-center rounded-lg transition-all duration-200 w-full
                 text-gray-400 hover:text-white hover:bg-white/5
-                ${isCollapsed ? 'justify-center px-0 h-12' : 'px-3 py-3'}
+                ${isCollapsed ? 'justify-center px-0 h-10' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
                 ${(showProfileDropdown && !isCollapsed) || (collapsedDropdown === 'profile' && isCollapsed) ? 'bg-white/10 text-white' : ''}
               `}
               aria-label="User profile menu"
@@ -662,7 +669,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
                 {state.user ? (
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white text-sm font-medium">
-                    {getInitials(`${state.user.firstName} ${state.user.lastName}`)}
+                    {getInitials(state.user.firstName, state.user.lastName)}
                   </div>
                 ) : (
                   <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
@@ -675,7 +682,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               {!isCollapsed && state.user && (
                 <div className="flex-1 text-left overflow-hidden">
                   <div className="font-medium text-sm text-white truncate">
-                    {`${state.user.firstName} ${state.user.lastName}`}
+                    {state.user.firstName?.trim() && state.user.lastName?.trim()
+                      ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
+                      : state.user.firstName?.trim() || state.user.email || 'User'}
                   </div>
                   <div className="text-xs text-gray-400 truncate">
                     {(() => {
@@ -703,7 +712,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               {/* Tooltip for collapsed state (only show when dropdown is not open) */}
               {isCollapsed && collapsedDropdown !== 'profile' && state.user && (
                 <div className="absolute left-full ml-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 max-w-[200px]">
-                  <div className="font-semibold mb-1">{`${state.user.firstName} ${state.user.lastName}`}</div>
+                  <div className="font-semibold mb-1">
+                    {state.user.firstName?.trim() && state.user.lastName?.trim()
+                      ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
+                      : state.user.firstName?.trim() || state.user.email || 'User'}
+                  </div>
                   <div className="text-gray-300 text-[10px] leading-tight">
                     {state.user.role} at {(() => {
                       if (isRoundAccountLoading) return 'Loading...'
@@ -728,18 +741,20 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute bottom-full left-3 mb-2 bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-xl shadow-2xl overflow-hidden min-w-[320px] max-w-[400px]"
+                  className="absolute bottom-full left-3 mb-2 bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-lg shadow-2xl overflow-hidden min-w-[320px] max-w-[400px]"
                 >
                   {/* Current User Info */}
                   {state.user && (
                     <div className="px-4 py-3 border-b border-white/10">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-medium">
-                          {getInitials(`${state.user.firstName} ${state.user.lastName}`)}
+                          {getInitials(state.user.firstName, state.user.lastName)}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-white truncate">
-                            {`${state.user.firstName} ${state.user.lastName}`}
+                            {state.user.firstName?.trim() && state.user.lastName?.trim()
+                              ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
+                              : state.user.firstName?.trim() || state.user.email || 'User'}
                           </div>
                           <div className="text-sm text-gray-400 break-all">
                             {state.user.email}
@@ -794,7 +809,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.95, x: -10 }}
             transition={{ duration: 0.15 }}
-            className={`collapsed-dropdown fixed bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-xl shadow-2xl z-50 ${
+            className={`collapsed-dropdown fixed bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-lg shadow-2xl z-50 ${
               collapsedDropdown === 'profile' ? 'min-w-[320px] max-w-[400px]' : 'min-w-[200px]'
             }`}
             style={{
@@ -814,11 +829,13 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                       <div className="px-4 py-3 border-b border-white/10">
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-medium">
-                            {getInitials(`${state.user.firstName} ${state.user.lastName}`)}
+                            {getInitials(state.user.firstName, state.user.lastName)}
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="font-medium text-white truncate">
-                              {`${state.user.firstName} ${state.user.lastName}`}
+                              {state.user.firstName?.trim() && state.user.lastName?.trim()
+                                ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
+                                : state.user.firstName?.trim() || state.user.email || 'User'}
                             </div>
                             <div className="text-sm text-gray-400 break-all">
                               {state.user.email}
@@ -894,7 +911,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                             }
                           `}
                         >
-                          <subItem.icon className="w-4 h-4 mr-3 flex-shrink-0" />
+                          <subItem.icon className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2 flex-shrink-0" />
                           <span className="font-medium text-sm">{subItem.label}</span>
                         </Link>
                       ))}
@@ -923,7 +940,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl p-6 max-w-md mx-4"
+              className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg p-6 max-w-md mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">

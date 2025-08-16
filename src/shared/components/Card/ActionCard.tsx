@@ -110,7 +110,7 @@ const ActionCardComponent = ({
             // Default Layout - Vertical Stack (matching original NavigationCard)
             <>
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} border ${colorConfig.border} backdrop-blur-sm`}>
+                <div className={`p-3 rounded-lg bg-gradient-to-br ${colorConfig.iconBg} border ${colorConfig.border} backdrop-blur-sm`}>
                   <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
                 </div>
                 <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
@@ -126,7 +126,7 @@ const ActionCardComponent = ({
             // Horizontal Layout - Compact
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} border ${colorConfig.border} backdrop-blur-sm`}>
+                <div className={`p-3 rounded-lg bg-gradient-to-br ${colorConfig.iconBg} border ${colorConfig.border} backdrop-blur-sm`}>
                   <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
                 </div>
                 <div>

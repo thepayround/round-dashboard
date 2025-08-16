@@ -128,7 +128,7 @@ export const ConfirmationPendingPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.6 }}
-            className="p-6 rounded-xl bg-gradient-to-r from-[#D417C8]/10 to-[#14BDEA]/10 border border-white/10 mb-8"
+            className="p-6 rounded-lg bg-gradient-to-r from-[#D417C8]/10 to-[#14BDEA]/10 border border-white/10 mb-8"
           >
             <h3 className="text-lg font-semibold auth-text mb-4">What to do next:</h3>
             <div className="space-y-3 text-left">
@@ -166,7 +166,7 @@ export const ConfirmationPendingPage = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`p-4 rounded-xl border mb-6 ${
+              className={`p-4 rounded-lg border mb-6 ${
                 resendSuccess
                   ? 'bg-green-500/10 border-green-500/20'
                   : 'bg-red-500/10 border-red-500/20'

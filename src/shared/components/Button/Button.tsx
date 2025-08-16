@@ -26,10 +26,10 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'px-4 py-2.5 text-sm min-h-[40px]',  // Improved touch targets
-  md: 'px-6 py-3 text-base min-h-[44px]',
-  lg: 'px-8 py-4 text-lg min-h-[48px]',
-  xl: 'px-10 py-5 text-xl min-h-[56px]'
+  sm: 'px-4 py-2.5 text-sm h-10',  // Consistent with new 40px standard
+  md: 'px-6 py-3 text-base h-10',
+  lg: 'px-8 py-4 text-lg h-12',
+  xl: 'px-10 py-5 text-xl h-14'
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
@@ -46,7 +46,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   ...props
 }, ref) => {
   const baseClasses = `
-    rounded-xl transition-all duration-300 flex items-center justify-center gap-2
+    rounded-lg transition-all duration-300 flex items-center justify-center gap-2
     focus:outline-none focus:ring-2 focus:ring-[#D417C8]/60 focus:ring-offset-1 focus:ring-offset-transparent
     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
     relative isolate

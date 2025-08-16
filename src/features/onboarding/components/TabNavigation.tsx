@@ -87,12 +87,12 @@ export const TabNavigation = ({
       aria-label="Onboarding Progress"
     >
       {/* Progress Section */}
-      <div className="relative mb-4 sm:mb-6 lg:mb-8">
+      <div className="relative mb-3 md:mb-5 lg:mb-4">
         {/* Background Progress Bar */}
-        <div className="absolute top-1/2 left-0 right-0 h-0.5 sm:h-1 lg:h-1.5 bg-white/10 rounded-full transform -translate-y-1/2 mx-3 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16" />
+        <div className="absolute top-1/2 left-0 right-0 h-0.5 md:h-1 lg:h-0.5 bg-white/10 rounded-full transform -translate-y-1/2 mx-3 md:mx-6 lg:mx-8" />
         
         {/* Active Progress Bar */}
-        <div className="absolute top-1/2 left-0 right-0 h-0.5 sm:h-1 lg:h-1.5 transform -translate-y-1/2 mx-3 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16 overflow-hidden rounded-full">
+        <div className="absolute top-1/2 left-0 right-0 h-0.5 md:h-1 lg:h-0.5 transform -translate-y-1/2 mx-3 md:mx-6 lg:mx-8 overflow-hidden rounded-full">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${getProgress()}%` }}
@@ -102,7 +102,7 @@ export const TabNavigation = ({
         </div>
 
         {/* Step Indicators Container */}
-        <div className="relative flex px-3 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-2 sm:py-3 lg:py-4">
+        <div className="relative flex px-3 md:px-6 lg:px-8 py-2 md:py-2.5 lg:py-2">
           {steps.map((step, _index) => (
             <div 
               key={step.id} 
@@ -115,8 +115,8 @@ export const TabNavigation = ({
                 aria-label={`Step ${step.number}: ${step.label}${isStepCompleted(step.id) ? ' (completed)' : ''}${isStepActive(step.id) ? ' (current)' : ''}`}
                 className={`
                   relative flex-shrink-0 touch-target
-                  w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16
-                  rounded-full border-2 sm:border-3 
+                  w-8 h-8 md:w-10 md:h-10 lg:w-9 lg:h-9
+                  rounded-full border-2 md:border-2 lg:border-2 
                   flex items-center justify-center 
                   transition-all duration-300 ease-out
                   transform hover:scale-110 focus:scale-110 active:scale-95
@@ -125,9 +125,9 @@ export const TabNavigation = ({
                 `}
               >
                 {isStepCompleted(step.id) ? (
-                  <Check className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-white" />
+                  <Check className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 text-white" />
                 ) : (
-                  <span className={`text-sm xs:text-base sm:text-lg font-bold ${
+                  <span className={`text-xs md:text-sm lg:text-xs font-bold ${
                     isStepActive(step.id) || canClickStep(step.id) ? 'text-white' : 'text-gray-500'
                   }`}>
                     {step.number}
@@ -140,7 +140,7 @@ export const TabNavigation = ({
       </div>
 
       {/* Step Labels - Perfectly aligned with numbers above */}
-      <div className="flex px-3 sm:px-6 md:px-8 lg:px-12 xl:px-16 gap-1 xs:gap-2 sm:gap-4">
+      <div className="flex px-3 md:px-6 lg:px-8 gap-1 md:gap-2 lg:gap-1.5">
         {steps.map((step, _index) => (
           <div 
             key={`label-container-${step.id}`} 
@@ -151,8 +151,8 @@ export const TabNavigation = ({
               disabled={!canClickStep(step.id)}
               className={`
                 text-center transition-all duration-300 ease-out touch-target
-                p-1 xs:p-2 sm:p-3 rounded-md max-w-full 
-                min-h-[2.5rem] xs:min-h-[3rem] sm:min-h-[3.5rem]
+                p-1 md:p-2 lg:p-1.5 rounded-md max-w-full 
+                min-h-[2rem] md:min-h-[2.5rem] lg:min-h-[2.25rem]
                 flex items-center justify-center
                 ${canClickStep(step.id) 
                   ? 'hover:bg-white/5 hover:scale-105 focus:bg-white/8 focus:scale-105 focus:outline-none focus:ring-1 focus:ring-[#D417C8]/40 active:scale-95' 
@@ -162,23 +162,19 @@ export const TabNavigation = ({
               tabIndex={canClickStep(step.id) ? 0 : -1}
             >
               <div className={`
-                text-xs xs:text-sm sm:text-base
+                text-xs md:text-sm lg:text-xs
                 font-medium leading-tight text-center
                 transition-colors duration-300 
-                px-1 xs:px-2
+                px-1 md:px-1.5 lg:px-1
                 ${getStepTextClasses(step.id)}
               `}>
-                {/* Extra small screens: Show initials */}
-                <span className="xs:hidden block">
-                  {step.label.split(' ').map(word => word[0]).join('').slice(0, 3)}
-                </span>
-                {/* Small screens: Show abbreviated */}
-                <span className="hidden xs:block sm:hidden">
-                  {step.label.split(' ')[0].substring(0, 6)}
+                {/* Mobile screens: Show abbreviated */}
+                <span className="md:hidden block">
+                  {step.label.split(' ')[0].substring(0, 4)}
                   {step.label.split(' ').length > 1 && '...'}
                 </span>
-                {/* Medium and up: Show full label */}
-                <span className="hidden sm:inline break-words hyphens-auto">
+                {/* Tablet and up: Show full label */}
+                <span className="hidden md:inline break-words hyphens-auto">
                   {step.label}
                 </span>
               </div>

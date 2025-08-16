@@ -220,7 +220,7 @@ export const EmailConfirmationPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="p-4 rounded-xl bg-green-500/10 border border-green-500/20 mb-6"
+              className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 mb-6"
             >
               <p className="text-green-400 text-sm">
                 🎉 Welcome to Round! You&apos;re now logged in and will be redirected to get started
@@ -263,7 +263,7 @@ export const EmailConfirmationPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+              className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
             >
               <div className="flex items-center space-x-2 text-red-400">
                 <AlertCircle className="w-5 h-5" />
@@ -277,7 +277,7 @@ export const EmailConfirmationPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 mb-6"
+                className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 mb-6"
               >
                 <div className="flex items-center space-x-2 text-blue-400">
                   <Mail className="w-5 h-5" />

@@ -195,7 +195,7 @@ export const InvitationAcceptancePage = () => {
           <div className="floating-orb" />
         </div>
         
-        <div className="w-full max-w-md mx-auto relative z-10">
+        <div className="w-full max-w-[360px] mx-auto relative z-10">
           <div className="auth-card text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#14BDEA] mx-auto mb-4" />
             <p className="auth-text-muted">Validating invitation...</p>
@@ -215,7 +215,7 @@ export const InvitationAcceptancePage = () => {
           <div className="floating-orb" />
         </div>
         
-        <div className="w-full max-w-md mx-auto relative z-10">
+        <div className="w-full max-w-[360px] mx-auto relative z-10">
           <div className="auth-card text-center">
             <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertCircle className="w-8 h-8 text-red-400" />
@@ -255,7 +255,7 @@ export const InvitationAcceptancePage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="w-full max-w-lg mx-auto relative z-10"
+        className="w-full max-w-[420px] mx-auto relative z-10"
         onKeyDown={handleKeyDown}
       >
         <div className="auth-card">
@@ -277,7 +277,7 @@ export const InvitationAcceptancePage = () => {
               <h1 className="text-4xl font-bold auth-text mb-4 relative">You&apos;re Invited!</h1>
               
               {/* Invitation Details Card */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-6">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6 mb-6">
                 <div className="flex items-center justify-center mb-4">
                   <div className="w-12 h-12 bg-[#14BDEA]/20 rounded-full flex items-center justify-center">
                     <Building className="w-6 h-6 text-[#14BDEA]" />
@@ -311,7 +311,7 @@ export const InvitationAcceptancePage = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 mb-6"
+              className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
             >
               <div className="flex items-center space-x-2 text-red-400">
                 <AlertCircle className="w-5 h-5" />
@@ -483,7 +483,7 @@ export const InvitationAcceptancePage = () => {
               size="md"
               animated={false}
               actionType="auth"
-              className="mt-8 w-full h-[48px]"
+              className="mt-8 w-full "
             />
 
             {/* Terms */}
