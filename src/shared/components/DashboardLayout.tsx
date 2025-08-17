@@ -706,48 +706,17 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <div className="relative" ref={profileDropdownRef}>
             <button
               onClick={() => {
-                if (isCollapsed) {
-                  // In collapsed mode, show tooltip-like dropdown
-                  if (collapsedDropdown === 'profile') {
-                    setCollapsedDropdown(null)
-                  } else {
-                    const buttonRect = (document.activeElement as HTMLElement).getBoundingClientRect()
-                    const viewportHeight = window.innerHeight
-                    const viewportWidth = window.innerWidth
-                    const dropdownMinWidth = 280
-                    const dropdownEstimatedHeight = 300
-                    
-                    let top = buttonRect.top - dropdownEstimatedHeight - 8
-                    let left = buttonRect.right + 8
-                    
-                    // Check horizontal overflow
-                    if (left + dropdownMinWidth > viewportWidth) {
-                      left = buttonRect.left - dropdownMinWidth - 8
-                    }
-                    
-                    // Check vertical overflow - position above button
-                    if (top < 8) {
-                      top = Math.min(buttonRect.bottom + 8, viewportHeight - dropdownEstimatedHeight - 8)
-                    }
-                    
-                    setDropdownPosition({ top, left })
-                    setCollapsedDropdown('profile')
-                  }
-                } else {
-                  // In expanded mode, toggle inline menu
-                  setShowProfileDropdown(!showProfileDropdown)
-                }
+                // Always use inline menu for both collapsed and expanded states
+                setShowProfileDropdown(!showProfileDropdown)
               }}
               className={`
                 group relative flex items-center rounded-lg transition-all duration-200 w-full
                 text-gray-400 hover:text-white hover:bg-white/5
                 ${isCollapsed ? 'justify-center px-0 h-10' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
-                ${showProfileDropdown && !isCollapsed ? 'bg-white/10 text-white' : ''}
-                ${collapsedDropdown === 'profile' && isCollapsed ? 'bg-white/10 text-white' : ''}
+                ${showProfileDropdown ? 'bg-white/10 text-white' : ''}
               `}
               aria-label="User profile menu"
               aria-expanded={showProfileDropdown}
-              data-profile-button={isCollapsed ? 'true' : undefined}
             >
               {/* User Avatar */}
               <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
@@ -794,7 +763,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               )}
 
               {/* Tooltip for collapsed state (only show when dropdown is not open) */}
-              {isCollapsed && collapsedDropdown !== 'profile' && state.user && (
+              {isCollapsed && !showProfileDropdown && state.user && (
                 <div className="absolute left-full ml-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 max-w-[200px]">
                   <div className="font-semibold mb-1">
                     {state.user.firstName?.trim() && state.user.lastName?.trim()
