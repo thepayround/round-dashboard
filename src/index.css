@@ -583,11 +583,32 @@
   .gradient-header {
     background: linear-gradient(90deg, #d417c8, #7767da, #14bdea);
     background-size: 200% 200%;
-    height: 4px;
-    border-radius: 8px;
-    margin-bottom: 2rem;
+    height: 2px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
     animation: gradientShift 3s ease infinite;
-    box-shadow: 0 2px 12px rgba(212, 23, 200, 0.4);
+    box-shadow: 
+      0 0 8px rgba(212, 23, 200, 0.6),
+      0 0 16px rgba(212, 23, 200, 0.4),
+      0 0 24px rgba(212, 23, 200, 0.2),
+      0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+  
+  .gradient-header::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -2px;
+    right: -2px;
+    bottom: -1px;
+    background: linear-gradient(90deg, #d417c8, #7767da, #14bdea);
+    background-size: 200% 200%;
+    border-radius: 4px;
+    filter: blur(3px);
+    opacity: 0.7;
+    z-index: -1;
+    animation: gradientShift 3s ease infinite;
   }
 
   .auth-icon {
