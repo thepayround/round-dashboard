@@ -969,7 +969,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         transition={{ duration: 0.15, ease: 'easeOut' }}
         className="min-h-screen relative z-10"
       >
-        <div className="p-4 sm:p-8 md:p-16 lg:p-32">
+        <div className="px-4 sm:px-8 md:px-16 lg:px-32 py-6">
           <Breadcrumb />
           {children}
         </div>
