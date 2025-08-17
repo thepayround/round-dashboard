@@ -62,29 +62,69 @@ const ActionButton = ({
   }
 
   const variants = {
-    primary: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-semibold hover:shadow-xl hover:shadow-[#D417C8]/40 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-[#7767DA]/20',
-    secondary: 'bg-gradient-to-r from-white/20 to-white/8 border border-white/30 text-white font-semibold hover:from-white/30 hover:to-white/15 hover:border-white/40 backdrop-blur-xl shadow-xl shadow-black/30 hover:shadow-2xl hover:shadow-black/40',
-    ghost: 'bg-transparent border border-white/20 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-white/20 hover:to-white/8 backdrop-blur-xl hover:border-white/30 hover:shadow-lg hover:shadow-black/20',
-    success: 'bg-gradient-to-r from-green-500 to-emerald-500 border border-green-500/50 text-white font-semibold hover:from-green-600 hover:to-emerald-600 hover:border-green-500/60 shadow-xl hover:shadow-green-500/40 shadow-green-500/25'
+    primary: `
+      bg-gradient-to-r from-[#D417C8]/70 to-[#14BDEA]/70 backdrop-blur-md
+      text-white font-semibold
+      shadow-lg shadow-black/20
+      hover:shadow-[0_0_20px_rgba(212,23,200,0.4),0_0_15px_rgba(20,189,234,0.3)]
+      hover:from-[#D417C8] hover:to-[#14BDEA]
+      transition-all duration-300 ease-out
+      relative overflow-hidden
+    `,
+    secondary: `
+      bg-gradient-to-r from-gray-700/80 to-gray-800/80 backdrop-blur-md
+      text-white font-semibold
+      shadow-lg shadow-black/20
+      hover:shadow-[0_0_20px_rgba(107,114,128,0.5),0_0_15px_rgba(148,163,184,0.3)]
+      hover:from-gray-600/90 hover:to-gray-700/90
+      transition-all duration-300 ease-out
+      relative overflow-hidden
+    `,
+    ghost: `
+      bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md
+      border border-white/20 
+      text-gray-300 hover:text-white
+      hover:bg-gradient-to-r hover:from-white/15 hover:to-white/8
+      hover:border-white/30
+      hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]
+      transition-all duration-300 ease-out
+    `,
+    success: `
+      bg-gradient-to-r from-green-600 to-emerald-600
+      border border-green-500/30 
+      text-white font-semibold
+      shadow-[0_0_25px_rgba(34,197,94,0.4),inset_0_1px_0_rgba(255,255,255,0.2)]
+      hover:shadow-[0_0_35px_rgba(34,197,94,0.6),inset_0_1px_0_rgba(255,255,255,0.3)]
+      hover:from-green-500 hover:to-emerald-500
+      hover:border-green-400/50
+      transition-all duration-300 ease-out
+    `
   }
 
   const baseClasses = `
     rounded-lg inline-flex items-center justify-center
-    focus:outline-none focus:ring-2 focus:ring-[#D417C8]/60 focus:ring-offset-1 focus:ring-offset-transparent
-    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+    focus:outline-none focus:ring-2 focus:ring-pink-400/50 focus:ring-offset-2 focus:ring-offset-transparent
+    disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
+    disabled:hover:bg-gradient-to-r disabled:hover:from-white/8 disabled:hover:to-white/4
     relative isolate overflow-hidden
-    transition-all duration-200 ease-out
+    group
     ${variants[variant]}
     ${sizeClasses[size]} 
     ${className}
-    ${(disabled || loading) ? 'cursor-not-allowed opacity-50' : ''}
   `.trim()
 
   const ButtonComponent = animated ? motion.button : 'button'
   const motionProps = animated ? {
-    whileHover: disabled || loading ? {} : { scale: 1.02, y: -1 },
-    whileTap: disabled || loading ? {} : { scale: 0.98 },
-    transition: { type: "spring" as const, stiffness: 400, damping: 10 }
+    whileHover: disabled || loading ? {} : { 
+      y: -1,
+      transition: { type: "spring" as const, stiffness: 300, damping: 20 }
+    },
+    whileTap: disabled || loading ? {} : { 
+      y: 0,
+      transition: { type: "spring" as const, stiffness: 400, damping: 25 }
+    },
+    initial: { y: 0 },
+    transition: { type: "spring" as const, stiffness: 300, damping: 20 }
   } : {}
 
   return (
@@ -95,15 +135,23 @@ const ActionButton = ({
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...motionProps}
     >
+      {/* Luxury shine effect overlay */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
+      </div>
+      
       {loading ? (
         <>
-          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          <span>Loading...</span>
+          <div className="relative">
+            <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+            <div className="absolute inset-0 w-5 h-5 border-2 border-transparent border-t-pink-400 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }} />
+          </div>
+          <span className="relative z-10">Loading...</span>
         </>
       ) : (
         <>
-          <DefaultIcon className={iconSizes[size]} />
-          <span>{label}</span>
+          <DefaultIcon className={`${iconSizes[size]} relative z-10 drop-shadow-[0_0_4px_rgba(255,255,255,0.3)]`} />
+          <span className="relative z-10 drop-shadow-[0_0_4px_rgba(255,255,255,0.2)]">{label}</span>
         </>
       )}
     </ButtonComponent>
