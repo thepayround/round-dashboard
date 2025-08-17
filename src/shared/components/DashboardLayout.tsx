@@ -108,6 +108,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   // Track collapsed sidebar dropdown
   const [collapsedDropdown, setCollapsedDropdown] = useState<string | null>(null)
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
+  
+  // Track tooltip state
+  const [hoveredTooltip, setHoveredTooltip] = useState<{ id: string; label: string; badge?: string; position: { top: number; left: number }; isUser?: boolean; userInfo?: any } | null>(null)
 
   // UI state
   const [showShortcuts, setShowShortcuts] = useState(false)
@@ -181,6 +184,58 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         ? prev.filter(id => id !== itemId)
         : [...prev, itemId]
       return newState
+    })
+  }
+
+  const handleTooltipEnter = (itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => {
+    if (!isCollapsed) return
+    
+    const buttonRect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+    const tooltipPosition = {
+      top: buttonRect.top + buttonRect.height / 2 - 20, // Center vertically
+      left: buttonRect.right + 12 // Position to the right of sidebar
+    }
+    
+    setHoveredTooltip({ id: itemId, label, badge, position: tooltipPosition })
+  }
+
+  const handleTooltipLeave = () => {
+    setHoveredTooltip(null)
+  }
+
+  const handleUserTooltipEnter = (event: React.MouseEvent) => {
+    if (!isCollapsed || !state.user) return
+    
+    const buttonRect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+    const tooltipPosition = {
+      top: buttonRect.top - 120, // Position above the user button
+      left: buttonRect.right + 12 // Position to the right of sidebar
+    }
+    
+    const userName = state.user.firstName?.trim() && state.user.lastName?.trim()
+      ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
+      : state.user.firstName?.trim() || state.user.email || 'User'
+    
+    const companyName = (() => {
+      if (isRoundAccountLoading) return 'Loading...'
+      if (roundAccount?.accountName) return roundAccount.accountName
+      if (roundAccount?.organization?.name) return roundAccount.organization.name
+      if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
+        return state.user.companyInfo.companyName
+      }
+      return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
+    })()
+    
+    setHoveredTooltip({ 
+      id: 'user-profile', 
+      label: userName, 
+      position: tooltipPosition, 
+      isUser: true,
+      userInfo: {
+        role: state.user.role,
+        company: companyName,
+        email: state.user.email
+      }
     })
   }
 
@@ -468,6 +523,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                       toggleCollapsedDropdown(item.id, e)
                     }
                   }}
+                  onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
+                  onMouseLeave={handleTooltipLeave}
                   className={`
                     catalog-button group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
                     ${
@@ -504,18 +561,13 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     </span>
                   )}
 
-                  {/* Tooltip for collapsed state (only show when dropdown is not open) */}
-                  {isCollapsed && collapsedDropdown !== item.id && (
-                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      {item.label}
-                      {item.badge && <span className="ml-1 text-[#D417C8]">({item.badge})</span>}
-                    </div>
-                  )}
 
                 </button>
               ) : (
                 <Link
                   to={item.href}
+                  onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
+                  onMouseLeave={handleTooltipLeave}
                   className={`
                     group relative flex items-center rounded-lg transition-all duration-200 h-10
                     ${
@@ -544,13 +596,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     </div>
                   )}
 
-                  {/* Tooltip for collapsed state */}
-                  {isCollapsed && (
-                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      {item.label}
-                      {item.badge && <span className="ml-1 text-[#D417C8]">({item.badge})</span>}
-                    </div>
-                  )}
                 </Link>
               )}
 
@@ -592,6 +637,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <Link
               key={item.id}
               to={item.href}
+              onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, undefined, e)}
+              onMouseLeave={handleTooltipLeave}
               className={`
                 group relative flex items-center rounded-lg transition-all duration-200 h-10
                 ${
@@ -615,12 +662,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </div>
               )}
 
-              {/* Tooltip for collapsed state */}
-              {isCollapsed && (
-                <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                  {item.label}
-                </div>
-              )}
             </Link>
           ))}
         </nav>
@@ -659,12 +700,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     </div>
                   )}
 
-                  {/* Tooltip for collapsed state */}
-                  {isCollapsed && (
-                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      User Settings
-                    </div>
-                  )}
                 </Link>
 
                 <button
@@ -687,12 +722,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     </div>
                   )}
 
-                  {/* Tooltip for collapsed state */}
-                  {isCollapsed && (
-                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      Logout
-                    </div>
-                  )}
                 </button>
               </motion.div>
             )}
@@ -709,6 +738,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 // Always use inline menu for both collapsed and expanded states
                 setShowProfileDropdown(!showProfileDropdown)
               }}
+              onMouseEnter={handleUserTooltipEnter}
+              onMouseLeave={handleTooltipLeave}
               className={`
                 group relative flex items-center rounded-lg transition-all duration-200 w-full
                 text-gray-400 hover:text-white hover:bg-white/5
@@ -762,28 +793,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 />
               )}
 
-              {/* Tooltip for collapsed state (only show when dropdown is not open) */}
-              {isCollapsed && !showProfileDropdown && state.user && (
-                <div className="absolute left-full ml-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 max-w-[200px]">
-                  <div className="font-semibold mb-1">
-                    {state.user.firstName?.trim() && state.user.lastName?.trim()
-                      ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
-                      : state.user.firstName?.trim() || state.user.email || 'User'}
-                  </div>
-                  <div className="text-gray-300 text-[10px] leading-tight">
-                    {state.user.role} at {(() => {
-                      if (isRoundAccountLoading) return 'Loading...'
-                      if (roundAccount?.accountName) return roundAccount.accountName
-                      if (roundAccount?.organization?.name) return roundAccount.organization.name
-                      if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
-                        return state.user.companyInfo.companyName
-                      }
-                      return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
-                    })()}<br/>
-                    {state.user.email}
-                  </div>
-                </div>
-              )}
             </button>
             </div>
           </div>
@@ -799,7 +808,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.95, x: -10 }}
             transition={{ duration: 0.15 }}
-            className="collapsed-dropdown fixed bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-lg shadow-2xl z-50 min-w-[200px]"
+            className="collapsed-dropdown fixed bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-lg shadow-2xl z-dropdown min-w-[200px]"
             style={{
               top: dropdownPosition.top,
               left: dropdownPosition.left
@@ -845,6 +854,42 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </>
               )
             })()}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* External Tooltips for Collapsed Sidebar */}
+      <AnimatePresence>
+        {hoveredTooltip && isCollapsed && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.15 }}
+            className={`fixed bg-black/90 backdrop-blur-md border border-white/30 text-white rounded-lg pointer-events-none z-tooltip shadow-xl ${
+              hoveredTooltip.isUser ? 'px-4 py-3 text-xs max-w-[250px]' : 'px-3 py-2 text-sm whitespace-nowrap'
+            }`}
+            style={{
+              top: hoveredTooltip.position.top,
+              left: hoveredTooltip.position.left
+            }}
+          >
+            {hoveredTooltip.isUser ? (
+              <div>
+                <div className="font-semibold mb-2 text-white">
+                  {hoveredTooltip.label}
+                </div>
+                <div className="text-gray-300 text-[11px] leading-relaxed space-y-1">
+                  <div>{hoveredTooltip.userInfo?.role} at {hoveredTooltip.userInfo?.company}</div>
+                  <div className="text-gray-400">{hoveredTooltip.userInfo?.email}</div>
+                </div>
+              </div>
+            ) : (
+              <>
+                {hoveredTooltip.label}
+                {hoveredTooltip.badge && <span className="ml-1 text-[#D417C8]">({hoveredTooltip.badge})</span>}
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
