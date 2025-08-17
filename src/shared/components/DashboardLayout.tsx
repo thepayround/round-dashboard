@@ -681,6 +681,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <Link
                   to="/user-settings"
                   onClick={() => setShowProfileDropdown(false)}
+                  onMouseEnter={(e) => handleTooltipEnter('user-settings', 'User Settings', undefined, e)}
+                  onMouseLeave={handleTooltipLeave}
                   className={`
                     group relative flex items-center rounded-lg transition-all duration-200 h-10
                     ${
@@ -707,6 +709,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     setShowProfileDropdown(false)
                     handleLogout()
                   }}
+                  onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
+                  onMouseLeave={handleTooltipLeave}
                   className={`
                     group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
                     text-gray-400 hover:text-red-400 hover:bg-red-400/10
