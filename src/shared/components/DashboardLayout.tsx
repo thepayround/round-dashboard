@@ -626,7 +626,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </nav>
 
         {/* Fixed User Profile Section at Bottom */}
-        <div className="absolute bottom-0 left-0 right-0 bg-white/5 backdrop-blur-xl">
+        <div className="absolute bottom-0 left-0 right-0">
           {/* Expandable Profile Menu Items */}
           <AnimatePresence>
             {showProfileDropdown && (
@@ -702,7 +702,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <div className="border-t border-white/10" />
           
           {/* User Profile */}
-          <div className={`py-3 md:py-4 lg:py-3 ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}>
+          <div className={`py-2 ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}>
             <div className="relative" ref={profileDropdownRef}>
             <button
               onClick={() => {
