@@ -427,18 +427,18 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         >
           {!isCollapsed ? (
             <div className="flex items-center space-x-4">
-              <img src={ColorLogo} alt="Round Logo" className="w-10 h-10" />
-              <div className="flex items-center space-x-1">
-                <span className="text-[#D417C8] font-bold text-3xl">R</span>
-                <span className="text-[#BD2CD0] font-bold text-3xl">O</span>
-                <span className="text-[#7767DA] font-bold text-3xl">U</span>
-                <span className="text-[#32A1E4] font-bold text-3xl">N</span>
-                <span className="text-[#14BDEA] font-bold text-3xl">D</span>
+              <img src={ColorLogo} alt="Round Logo" className="w-10 h-10 animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_20px_rgba(212,23,200,0.6)]" />
+              <div className="flex items-center space-x-1 animate-[pulse_3s_ease-in-out_infinite]">
+                <span className="text-[#D417C8] font-bold text-3xl drop-shadow-[0_0_15px_rgba(212,23,200,0.7)]">R</span>
+                <span className="text-[#BD2CD0] font-bold text-3xl drop-shadow-[0_0_15px_rgba(189,44,208,0.7)]">O</span>
+                <span className="text-[#7767DA] font-bold text-3xl drop-shadow-[0_0_15px_rgba(119,103,218,0.7)]">U</span>
+                <span className="text-[#32A1E4] font-bold text-3xl drop-shadow-[0_0_15px_rgba(50,161,228,0.7)]">N</span>
+                <span className="text-[#14BDEA] font-bold text-3xl drop-shadow-[0_0_15px_rgba(20,189,234,0.7)]">D</span>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-center">
-              <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
+              <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_16px_rgba(212,23,200,0.6)]" />
             </div>
           )}
         </Link>
@@ -472,7 +472,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     catalog-button group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
                     ${
                       isParentActive(item)
-                        ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border border-white/20'
+                        ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
@@ -520,7 +520,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     group relative flex items-center rounded-lg transition-all duration-200 h-10
                     ${
                       isParentActive(item)
-                        ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border border-white/20'
+                        ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
@@ -572,7 +572,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                           group relative flex items-center rounded-lg transition-all duration-200 h-9 md:h-8 lg:h-7 px-3 md:px-3.5 lg:px-3
                           ${
                             isActive(subItem.href)
-                              ? 'bg-gradient-to-r from-[#D417C8]/30 to-[#14BDEA]/30 text-white border-l-2 border-[#D417C8]'
+                              ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
                               : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent hover:border-white/20'
                           }
                         `}
@@ -596,7 +596,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 group relative flex items-center rounded-lg transition-all duration-200 h-10
                 ${
                   isActive(item.href)
-                    ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border border-white/20'
+                    ? 'bg-white/6 text-white border-l-3 border-l-[#D417C8]'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
@@ -644,7 +644,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     group relative flex items-center rounded-lg transition-all duration-200 h-10
                     ${
                       isActive('/user-settings')
-                        ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border border-white/20'
+                        ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
