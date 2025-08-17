@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import { motion } from 'framer-motion'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Card } from '@/shared/components/Card'
-import { ActionButton } from '@/shared/components/ActionButton'
+import { Card, SectionHeader, ActionButton } from '@/shared/components'
 import { User as UserIcon, Shield, Bell, CreditCard, Loader2, Save, AlertCircle } from 'lucide-react'
 import { useUserSettingsManager } from '@/shared/hooks/useUserSettingsManager'
 import { useAuth } from '@/shared/hooks/useAuth'
@@ -13,6 +13,7 @@ import {
   dateFormatDropdownConfig,
   timeFormatDropdownConfig
 } from '@/shared/components/ui/ApiDropdown/configs'
+import { ChangePasswordModal } from '../components'
 import type { UserSettingsUpdateRequest, UserSettings } from '@/shared/services/api/userSettings.service'
 import type { User } from '@/shared/types/auth'
 
@@ -20,6 +21,7 @@ interface UserSettingsPageProps {}
 
 const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
   const [activeSection, setActiveSection] = useState('profile')
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false)
   const { state } = useAuth()
   const {user} = state
   const {
@@ -48,9 +50,9 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
     // Show loading state
     if ((isLoading && !isInitialized) || isLoadingOptions) {
       return (
-        <Card className="p-6">
+        <Card animate={false}>
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-pink-500" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#D417C8]" />
             <span className="ml-3 text-gray-400">
               {isLoadingOptions ? 'Loading options...' : 'Loading settings...'}
             </span>
@@ -62,18 +64,18 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
     // Show error state
     if (error && !isLoading) {
       return (
-        <Card className="p-6">
+        <Card animate={false}>
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
               <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-white mb-2">Failed to Load Settings</h3>
               <p className="text-gray-400 mb-4">{error}</p>
-              <button
+              <ActionButton
+                label="Dismiss"
                 onClick={clearError}
-                className="px-4 py-2 bg-gradient-to-r from-pink-500 to-cyan-500 text-white rounded-lg hover:from-pink-600 hover:to-cyan-600 transition-all duration-200"
-              >
-                Dismiss
-              </button>
+                variant="primary"
+                size="sm"
+              />
             </div>
           </div>
         </Card>
@@ -85,7 +87,12 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
       case 'profile':
         return <ProfileSection user={user} settings={settings} updateSettings={updateSettings} isSaving={isSaving} />
       case 'security':
-        return <SecuritySection settings={settings} updateSettings={updateSettings} isSaving={isSaving} />
+        return <SecuritySection 
+          settings={settings} 
+          updateSettings={updateSettings} 
+          isSaving={isSaving} 
+          onChangePasswordClick={() => setIsChangePasswordModalOpen(true)}
+        />
       case 'notifications':
         return <NotificationsSection notifications={notifications} updateNotificationPreference={updateNotificationPreference} />
       case 'billing':
@@ -97,43 +104,71 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">User Settings</h1>
-          <p className="text-gray-400">Manage your account preferences and configuration</p>
-        </div>
+      <div className="space-y-8">
+        {/* Header */}
+        <SectionHeader
+          title="User Settings"
+          subtitle="Manage your account preferences and configuration"
+          size="main"
+        />
 
-        {/* Horizontal Navigation */}
-        <div className="mb-8">
-          <Card className="p-6">
-            <nav className="flex flex-wrap gap-2">
-              {settingsSections.map((section) => {
-                const IconComponent = section.icon
-                return (
-                  <button
-                    key={section.id}
-                    onClick={() => setActiveSection(section.id)}
-                    className={`flex items-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 ${
-                      activeSection === section.id
-                        ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <IconComponent className="w-4 h-4" />
-                    <span className="text-sm font-medium hidden sm:inline">{section.label}</span>
-                    <span className="text-sm font-medium sm:hidden">{section.label.split(' ')[0]}</span>
-                  </button>
-                )
-              })}
-            </nav>
-          </Card>
-        </div>
+        {/* Navigation and Content */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Settings Navigation */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="lg:w-64"
+          >
+            <Card animate={false}>
+              <div className="p-4">
+                <nav className="space-y-1">
+                  {settingsSections.map((section) => {
+                    const IconComponent = section.icon
+                    return (
+                      <motion.button
+                        key={section.id}
+                        onClick={() => setActiveSection(section.id)}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
+                          activeSection === section.id
+                            ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-[#D417C8]/30 shadow-lg shadow-[#D417C8]/10'
+                            : 'text-gray-400 hover:text-white hover:bg-white/5 hover:border-white/10 border border-transparent'
+                        }`}
+                      >
+                        <IconComponent className={`w-5 h-5 transition-all duration-200 ${
+                          activeSection === section.id 
+                            ? 'text-[#D417C8]' 
+                            : 'group-hover:text-white'
+                        }`} />
+                        <span className="font-medium text-sm">{section.label}</span>
+                      </motion.button>
+                    )
+                  })}
+                </nav>
+              </div>
+            </Card>
+          </motion.div>
 
-        {/* Main Content */}
-        <div>
-          {renderSectionContent()}
+          {/* Settings Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex-1"
+          >
+            {renderSectionContent()}
+          </motion.div>
         </div>
       </div>
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={isChangePasswordModalOpen}
+        onClose={() => setIsChangePasswordModalOpen(false)}
+      />
     </DashboardLayout>
   )
 }
@@ -237,8 +272,9 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateS
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card className="p-6">
-        <h2 className="text-xl font-semibold text-white mb-6">Profile & Display Settings</h2>
+      <Card animate={false}>
+        <div className="p-6">
+          <h2 className="text-xl font-semibold text-white mb-6">Profile & Display Settings</h2>
         <div className="space-y-6">
           {/* Contact Support Notice */}
           <div className="p-4 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-lg">
@@ -356,17 +392,18 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateS
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <ActionButton
-              label={isSaving ? 'Saving...' : 'Save Changes'}
-              onClick={handleButtonClick}
-              icon={Save}
-              variant="primary"
-              size="md"
-              disabled={isSaving || !hasChanges}
-              loading={isSaving}
-              actionType="general"
-            />
+            <div className="flex justify-end">
+              <ActionButton
+                label={isSaving ? 'Saving...' : 'Save Changes'}
+                onClick={handleButtonClick}
+                icon={Save}
+                variant="primary"
+                size="md"
+                disabled={isSaving || !hasChanges}
+                loading={isSaving}
+                actionType="general"
+              />
+            </div>
           </div>
         </div>
       </Card>
@@ -379,20 +416,25 @@ interface SecuritySectionProps {
   settings: UserSettings | null
   updateSettings: (updates: UserSettingsUpdateRequest) => Promise<boolean>
   isSaving: boolean
+  onChangePasswordClick: () => void
 }
 
-const SecuritySection: React.FC<SecuritySectionProps> = ({ settings: _settings, updateSettings: _updateSettings, isSaving: _isSaving }) => (
-    <Card className="p-6">
-      <h2 className="text-xl font-semibold text-white mb-6">Security & Privacy</h2>
-      <div className="space-y-6">
-        {/* Password */}
-        <div>
-          <h3 className="text-lg font-medium text-white mb-4">Password</h3>
-          <button className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all duration-200">
-            Change Password
-          </button>
+const SecuritySection: React.FC<SecuritySectionProps> = ({ settings: _settings, updateSettings: _updateSettings, isSaving: _isSaving, onChangePasswordClick }) => (
+    <Card animate={false}>
+      <div className="p-6">
+        <h2 className="text-xl font-semibold text-white mb-6">Security & Privacy</h2>
+        <div className="space-y-6">
+          {/* Password */}
+          <div>
+            <h3 className="text-lg font-medium text-white mb-4">Password</h3>
+            <ActionButton
+              label="Change Password"
+              onClick={onChangePasswordClick}
+              variant="secondary"
+              size="sm"
+            />
+          </div>
         </div>
-
       </div>
     </Card>
   )
@@ -412,7 +454,6 @@ interface NotificationsSectionProps {
 }
 
 const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notifications, updateNotificationPreference }) => {
-  // Removed unused function
   const notificationTypes = [
     { 
       id: 'billing', 
@@ -450,38 +491,45 @@ const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notificatio
   }
 
   return (
-    <Card className="p-6">
-      <h2 className="text-xl font-semibold text-white mb-6">Notifications</h2>
-      <div className="space-y-6">
-        {notificationTypes.map((type) => (
-          <div key={type.id} className="p-4 bg-white/5 border border-white/10 rounded-lg">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <p className="text-white font-medium">{type.label}</p>
-                <p className="text-gray-400 text-sm">{type.description}</p>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {['email', 'inApp', 'push', 'sms'].map((channel) => (
-                <div key={channel} className="flex items-center space-x-2">
-                  <label htmlFor={`${type.id}-${channel}`} className="relative inline-flex items-center cursor-pointer">
-                    <input 
-                      id={`${type.id}-${channel}`}
-                      type="checkbox" 
-                      className="sr-only peer" 
-                      checked={getNotificationSetting(type.id, channel as 'email' | 'inApp' | 'push' | 'sms')}
-                      onChange={(e) => updateNotificationPreference(type.id, e.target.checked, channel as 'email' | 'inApp' | 'push' | 'sms')}
-                    />
-                    <div className="w-8 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-500/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-pink-500 peer-checked:to-cyan-500" />
-                    <span className="sr-only">Enable {channel === 'inApp' ? 'In-App' : channel} notifications for {type.label}</span>
-                  </label>
-                  <span className="text-sm text-gray-300 capitalize">{channel === 'inApp' ? 'In-App' : channel}</span>
+    <Card animate={false}>
+      <div className="p-6">
+        <h2 className="text-xl font-semibold text-white mb-6">Notifications</h2>
+        <div className="space-y-6">
+          {notificationTypes.map((type) => (
+            <motion.div 
+              key={type.id} 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 transition-all duration-200"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <p className="text-white font-medium">{type.label}</p>
+                  <p className="text-gray-400 text-sm">{type.description}</p>
                 </div>
-              ))}
-            </div>
-          </div>
-        ))}
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {['email', 'inApp', 'push', 'sms'].map((channel) => (
+                  <div key={channel} className="flex items-center space-x-2">
+                    <label htmlFor={`${type.id}-${channel}`} className="relative inline-flex items-center cursor-pointer">
+                      <input 
+                        id={`${type.id}-${channel}`}
+                        type="checkbox" 
+                        className="sr-only peer" 
+                        checked={getNotificationSetting(type.id, channel as 'email' | 'inApp' | 'push' | 'sms')}
+                        onChange={(e) => updateNotificationPreference(type.id, e.target.checked, channel as 'email' | 'inApp' | 'push' | 'sms')}
+                      />
+                      <div className="w-8 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#D417C8]/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#D417C8] peer-checked:to-[#14BDEA]" />
+                      <span className="sr-only">Enable {channel === 'inApp' ? 'In-App' : channel} notifications for {type.label}</span>
+                    </label>
+                    <span className="text-sm text-gray-300 capitalize">{channel === 'inApp' ? 'In-App' : channel}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </Card>
   )
@@ -489,26 +537,39 @@ const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notificatio
 
 // Billing Section Component  
 const BillingSection = () => (
-  <Card className="p-6">
-    <h2 className="text-xl font-semibold text-white mb-6">Billing & Payments</h2>
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium text-white mb-4">Payment Methods</h3>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-6 bg-gradient-to-r from-pink-500 to-cyan-500 rounded" />
-              <div>
-                <p className="text-white font-medium">•••• •••• •••• 4242</p>
-                <p className="text-gray-400 text-sm">Expires 12/24</p>
+  <Card animate={false}>
+    <div className="p-6">
+      <h2 className="text-xl font-semibold text-white mb-6">Billing & Payments</h2>
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-medium text-white mb-4">Payment Methods</h3>
+          <div className="space-y-3">
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 transition-all duration-200"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-6 bg-gradient-to-r from-[#D417C8] to-[#14BDEA] rounded" />
+                <div>
+                  <p className="text-white font-medium">•••• •••• •••• 4242</p>
+                  <p className="text-gray-400 text-sm">Expires 12/24</p>
+                </div>
               </div>
-            </div>
-            <button className="text-pink-400 hover:text-pink-300 text-sm">Edit</button>
+              <button className="text-[#D417C8] hover:text-[#BD2CD0] text-sm transition-colors duration-200">
+                Edit
+              </button>
+            </motion.div>
+          </div>
+          <div className="mt-3">
+            <ActionButton
+              label="Add Payment Method"
+              onClick={() => { /* Add payment method clicked */ }}
+              variant="secondary"
+              size="sm"
+            />
           </div>
         </div>
-        <button className="mt-3 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all duration-200">
-          Add Payment Method
-        </button>
       </div>
     </div>
   </Card>

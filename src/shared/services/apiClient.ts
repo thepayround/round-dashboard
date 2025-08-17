@@ -920,6 +920,61 @@ class ApiClient {
       }
     }
   }
+
+  /**
+   * Change password for authenticated user
+   */
+  async changePassword(
+    currentPassword: string,
+    newPassword: string,
+    confirmPassword: string
+  ): Promise<ApiResponse<{ message: string }>> {
+    try {
+      const response = await this.client.post('/identities/change-password', {
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      })
+
+      return {
+        success: true,
+        data: { 
+          message: response.data.message || 'Password changed successfully'
+        },
+        message: 'Password changed successfully',
+      }
+    } catch (error) {
+      console.error('Change password error:', error)
+
+      if (axios.isAxiosError(error) && error.response) {
+        let errorMessage = 'Failed to change password'
+
+        // Handle IdentityResult.Errors array format from backend
+        if (Array.isArray(error.response.data)) {
+          const [firstError] = error.response.data
+          if (firstError?.description) {
+            errorMessage = firstError.description
+          } else if (typeof firstError === 'string') {
+            errorMessage = firstError
+          }
+        } else if (error.response.data?.message) {
+          errorMessage = error.response.data.message
+        } else if (error.response.data?.error) {
+          errorMessage = error.response.data.error
+        }
+
+        return {
+          success: false,
+          error: errorMessage,
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
 }
 
 // Export singleton instance

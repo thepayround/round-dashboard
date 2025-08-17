@@ -43,6 +43,23 @@ interface NavItem {
   subItems?: NavItem[]
 }
 
+interface UserInfo {
+  firstName?: string
+  lastName?: string
+  email?: string
+  role?: string
+  company?: string
+}
+
+interface TooltipState {
+  id: string
+  label: string
+  badge?: string
+  position: { top: number; left: number }
+  isUser?: boolean
+  userInfo?: UserInfo
+}
+
 const navItems: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { id: 'customers', label: 'Customers', icon: Users, href: '/customers' },
@@ -80,7 +97,7 @@ const bottomNavItems: NavItem[] = [
 // Memoized sub-item component to prevent unnecessary re-renders
 const CatalogSubItem = memo(({ 
   subItem, 
-  index, 
+  index: _index, 
   isCollapsed, 
   isActive, 
   handleTooltipEnter, 
@@ -94,7 +111,18 @@ const CatalogSubItem = memo(({
   handleTooltipEnter: (itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => void
   handleTooltipLeave: () => void
   isLastItem: boolean
-}) => (
+}) => {
+  // Determine the className for active/inactive states
+  const getActiveStateClasses = () => {
+    if (isActive) {
+      return isCollapsed
+        ? 'bg-gradient-to-br from-pink-500/25 via-purple-500/20 to-cyan-500/25 text-white shadow-[0_0_12px_rgba(212,23,200,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] border border-pink-400/50'
+        : 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
+    }
+    return 'text-gray-400 hover:text-white hover:bg-white/5'
+  }
+
+  return (
   <div className="relative">
     <Link
       to={subItem.href}
@@ -102,15 +130,7 @@ const CatalogSubItem = memo(({
       onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
       className={`
         group relative flex items-center rounded-lg transition-all duration-200
-        ${
-          isActive
-            ? isCollapsed
-              ? 'bg-gradient-to-br from-pink-500/25 via-purple-500/20 to-cyan-500/25 text-white shadow-[0_0_12px_rgba(212,23,200,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] border border-pink-400/50'
-              : 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
-            : isCollapsed
-              ? 'text-gray-300 hover:text-white hover:bg-gradient-to-br hover:from-white/8 hover:to-white/4 hover:shadow-[0_0_8px_rgba(255,255,255,0.1),inset_0_1px_0_rgba(255,255,255,0.1)] border border-transparent hover:border-white/15'
-              : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent hover:border-white/20'
-        }
+        ${getActiveStateClasses()}
         ${
           isCollapsed 
             ? 'justify-center w-8 h-8 px-0 backdrop-blur-sm' 
@@ -139,7 +159,8 @@ const CatalogSubItem = memo(({
       <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/15" />
     )}
   </div>
-))
+  )
+})
 
 CatalogSubItem.displayName = 'CatalogSubItem'
 
@@ -336,7 +357,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
 
   
   // Track tooltip state
-  const [hoveredTooltip, setHoveredTooltip] = useState<{ id: string; label: string; badge?: string; position: { top: number; left: number }; isUser?: boolean; userInfo?: any } | null>(null)
+  const [hoveredTooltip, setHoveredTooltip] = useState<TooltipState | null>(null)
 
   // UI state
   const [showShortcuts, setShowShortcuts] = useState(false)
@@ -598,7 +619,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [focusedIndex, getAllNavItems, navigate, isCollapsed, showShortcuts, toggleSidebar])
+  }, [focusedIndex, getAllNavItems, navigate, isCollapsed, showShortcuts, toggleSidebar, toggleExpanded])
 
   const handleLogout = async () => {
     if (token) {

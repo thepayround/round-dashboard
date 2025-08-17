@@ -68,6 +68,7 @@ export const AuthInput = forwardRef<
       return (
         <textarea 
           rows={rows} 
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...baseProps} 
           ref={ref as React.ForwardedRef<HTMLTextAreaElement>} 
         />
@@ -76,6 +77,7 @@ export const AuthInput = forwardRef<
 
     return (
       <input 
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...baseProps} 
         ref={ref as React.ForwardedRef<HTMLInputElement>} 
       />
