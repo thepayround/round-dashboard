@@ -12,7 +12,7 @@ import { useDebouncedSearch } from '../../../shared/hooks/useDebouncedSearch'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
-import { CouponCard, CreateCouponModal } from '../components'
+import { CouponCard, CreateCouponModalEnhanced } from '../components'
 import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Coupon, CatalogViewMode } from '../types/catalog.types'
@@ -341,7 +341,7 @@ export const CouponsPage = () => {
       </div>
 
       {/* Create Coupon Modal */}
-      <CreateCouponModal 
+      <CreateCouponModalEnhanced 
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
       />
