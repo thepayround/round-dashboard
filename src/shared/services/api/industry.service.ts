@@ -6,7 +6,7 @@ import { httpClient } from './base/client'
 import type { IndustryResponse } from '../../types/api/industry'
 
 export class IndustryService {
-  private readonly baseUrl = '/api/Industries'
+  private readonly baseUrl = '/industries'
 
   async getIndustries(): Promise<IndustryResponse[]> {
     const response = await httpClient.getClient().get<IndustryResponse[]>(`${this.baseUrl}`)

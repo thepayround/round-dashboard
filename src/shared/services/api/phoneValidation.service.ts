@@ -44,7 +44,7 @@ class PhoneValidationApiService {
    * Validates a phone number using backend validation
    */
   async validatePhoneNumber(request: PhoneValidationRequest): Promise<PhoneValidationResponse> {
-    const response = await httpClient.getClient().post('/api/PhoneValidation/validate', request)
+    const response = await httpClient.getClient().post('/phone-validation/validate', request)
     return response.data
   }
 
@@ -52,7 +52,7 @@ class PhoneValidationApiService {
    * Parses and validates an international phone number
    */
   async parseInternationalNumber(request: PhoneParseRequest): Promise<PhoneParseResponse> {
-    const response = await httpClient.getClient().post('/api/PhoneValidation/parse', request)
+    const response = await httpClient.getClient().post('/phone-validation/parse', request)
     return response.data
   }
 
@@ -67,7 +67,7 @@ class PhoneValidationApiService {
     }
 
     try {
-      const response = await httpClient.getClient().get('/api/PhoneValidation/countries')
+      const response = await httpClient.getClient().get('/phone-validation/countries')
       const countries = response.data
       
       // Cache the result

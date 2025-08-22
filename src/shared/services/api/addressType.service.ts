@@ -6,7 +6,7 @@ import { httpClient } from './base/client'
 import type { AddressTypeResponse } from '../../types/api/addressType'
 
 export class AddressTypeService {
-  private readonly baseUrl = '/api/AddressTypes'
+  private readonly baseUrl = '/address-types'
 
   async getAddressTypes(): Promise<AddressTypeResponse[]> {
     const response = await httpClient.getClient().get<AddressTypeResponse[]>(`${this.baseUrl}`)

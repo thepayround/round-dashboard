@@ -637,7 +637,7 @@ class ApiClient {
       }
 
       const response = await this.client.post<OrganizationResponse>(
-        '/Organizations',
+        '/organizations',
         organizationRequest
       )
 
@@ -747,7 +747,7 @@ class ApiClient {
         isPrimary: addressData.isPrimary,
       }
 
-      const response = await this.client.post<AddressResponse>('/Addresses', addressRequest)
+      const response = await this.client.post<AddressResponse>('/addresses', addressRequest)
 
       return {
         success: true,

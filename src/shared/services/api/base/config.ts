@@ -50,10 +50,10 @@ export const ENDPOINTS = {
   },
   // User Settings
   USER_SETTINGS: {
-    BASE: '/UserSettings',
-    NOTIFICATIONS: '/UserSettings/notifications',
-    NOTIFICATION_BY_TYPE: (notificationType: string) => `/UserSettings/notifications/${notificationType}`,
-    VALIDATE: '/UserSettings/validate',
+    BASE: '/user-settings',
+    NOTIFICATIONS: '/user-settings/notifications',
+    NOTIFICATION_BY_TYPE: (notificationType: string) => `/user-settings/notifications/${notificationType}`,
+    VALIDATE: '/user-settings/validate',
   },
   // Users (deprecated - use AUTH.ME instead)
   // USERS: {
