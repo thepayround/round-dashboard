@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { Card } from '@/shared/components/Card'
 import { ActionButton } from '@/shared/components/ActionButton'
-import { User as UserIcon, Shield, Bell, CreditCard, Loader2, Save, AlertCircle } from 'lucide-react'
+import { User as UserIcon, Shield, Bell, CreditCard, Users, Loader2, Save, AlertCircle } from 'lucide-react'
+import { TeamManagementPage } from '../components/TeamManagementPage'
 import { useUserSettingsManager } from '@/shared/hooks/useUserSettingsManager'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { usePreloadAllOptions } from '@/shared/hooks/api/useUserSettingsOptions'
@@ -41,6 +42,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
     { id: 'profile', label: 'Profile & Display', icon: UserIcon },
     { id: 'security', label: 'Security & Privacy', icon: Shield },
     { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'team', label: 'Team Management', icon: Users },
     { id: 'billing', label: 'Billing & Payments', icon: CreditCard },
   ]
 
@@ -88,6 +90,8 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
         return <SecuritySection settings={settings} updateSettings={updateSettings} isSaving={isSaving} />
       case 'notifications':
         return <NotificationsSection notifications={notifications} updateNotificationPreference={updateNotificationPreference} />
+      case 'team':
+        return <TeamManagementPage />
       case 'billing':
         return <BillingSection />
       default:

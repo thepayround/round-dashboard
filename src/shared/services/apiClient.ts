@@ -827,6 +827,111 @@ class ApiClient {
   }
 
   /**
+   * Generic GET method for API calls
+   */
+  async get<T = unknown>(endpoint: string): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.get<T>(endpoint)
+      return {
+        success: true,
+        data: response.data,
+      }
+    } catch (error) {
+      console.error(`GET ${endpoint} error:`, error)
+
+      if (axios.isAxiosError(error) && error.response) {
+        let errorMessage = 'Request failed'
+
+        if (error.response.data?.message) {
+          errorMessage = error.response.data.message
+        } else if (error.response.data?.error) {
+          errorMessage = error.response.data.error
+        }
+
+        return {
+          success: false,
+          error: errorMessage,
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
+
+  /**
+   * Generic PUT method for API calls
+   */
+  async put<T = unknown>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.put<T>(endpoint, data)
+      return {
+        success: true,
+        data: response.data,
+      }
+    } catch (error) {
+      console.error(`PUT ${endpoint} error:`, error)
+
+      if (axios.isAxiosError(error) && error.response) {
+        let errorMessage = 'Request failed'
+
+        if (error.response.data?.message) {
+          errorMessage = error.response.data.message
+        } else if (error.response.data?.error) {
+          errorMessage = error.response.data.error
+        }
+
+        return {
+          success: false,
+          error: errorMessage,
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
+
+  /**
+   * Generic DELETE method for API calls
+   */
+  async delete<T = unknown>(endpoint: string): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.delete<T>(endpoint)
+      return {
+        success: true,
+        data: response.data,
+      }
+    } catch (error) {
+      console.error(`DELETE ${endpoint} error:`, error)
+
+      if (axios.isAxiosError(error) && error.response) {
+        let errorMessage = 'Request failed'
+
+        if (error.response.data?.message) {
+          errorMessage = error.response.data.message
+        } else if (error.response.data?.error) {
+          errorMessage = error.response.data.error
+        }
+
+        return {
+          success: false,
+          error: errorMessage,
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
+
+  /**
    * Send forgot password email
    */
   async forgotPassword(email: string): Promise<ApiResponse<{ message: string }>> {

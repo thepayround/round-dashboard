@@ -110,7 +110,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
   
   // Track tooltip state
-  const [hoveredTooltip, setHoveredTooltip] = useState<{ id: string; label: string; badge?: string; position: { top: number; left: number }; isUser?: boolean; userInfo?: any } | null>(null)
+  const [hoveredTooltip, setHoveredTooltip] = useState<{ id: string; label: string; badge?: string; position: { top: number; left: number }; isUser?: boolean; userInfo?: Record<string, unknown> } | null>(null)
 
   // UI state
   const [showShortcuts, setShowShortcuts] = useState(false)
@@ -139,6 +139,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     if (!isCollapsed) {
       setCollapsedDropdown(null)
     }
+    
+    // Dispatch custom event for gradient-header alignment
+    window.dispatchEvent(new CustomEvent('sidebar-toggle', {
+      detail: { collapsed: isCollapsed }
+    }))
   }, [isCollapsed])
 
   // Auto-expand catalog when navigating to catalog pages
@@ -880,8 +885,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   {hoveredTooltip.label}
                 </div>
                 <div className="text-gray-300 text-[11px] leading-relaxed space-y-1">
-                  <div>{hoveredTooltip.userInfo?.role} at {hoveredTooltip.userInfo?.company}</div>
-                  <div className="text-gray-400">{hoveredTooltip.userInfo?.email}</div>
+                  <div>{hoveredTooltip.userInfo?.role as React.ReactNode} at {hoveredTooltip.userInfo?.company as React.ReactNode}</div>
+                  <div className="text-gray-400">{hoveredTooltip.userInfo?.email as React.ReactNode}</div>
                 </div>
               </div>
             ) : (
