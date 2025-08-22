@@ -18,8 +18,6 @@ export interface ValidationResult {
 const EMAIL_REGEX =
   /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
-// Phone validation regex (international format)
-const PHONE_REGEX = /^[+]?[(]?[0-9\s\-()]{10,}$/
 
 // Password requirements
 const PASSWORD_MIN_LENGTH = 8
@@ -179,7 +177,9 @@ export const validateLastName = (lastName: string): ValidationResult => {
 }
 
 /**
- * Validates phone number
+ * Basic phone validation - only checks if field has content
+ * Real validation is done by backend API
+ * @deprecated Use backend validation instead of client-side validation
  */
 export const validatePhone = (phone: string): ValidationResult => {
   const errors: ValidationError[] = []
@@ -190,19 +190,8 @@ export const validatePhone = (phone: string): ValidationResult => {
       message: 'Phone number is required',
       code: 'REQUIRED',
     })
-  } else if (!PHONE_REGEX.test(phone)) {
-    errors.push({
-      field: 'phone',
-      message: 'Please enter a valid phone number',
-      code: 'INVALID_FORMAT',
-    })
-  } else if (phone.length > 20) {
-    errors.push({
-      field: 'phone',
-      message: 'Phone number is too long',
-      code: 'MAX_LENGTH',
-    })
   }
+  // No other validation - backend is single source of truth
 
   return {
     isValid: errors.length === 0,

@@ -1,17 +1,23 @@
 import { motion } from 'framer-motion'
-import { User, Phone, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
+import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ActionButton, AuthLogo } from '@/shared/components'
+import { ActionButton, AuthLogo, PhoneInput } from '@/shared/components'
 
 import type { ValidationError } from '@/shared/utils/validation'
+import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 import {
   validateRegistrationForm,
   getFieldError,
   hasFieldError,
   validateField,
+  validateEmail,
+  validatePassword,
+  validateFirstName,
+  validateLastName,
 } from '@/shared/utils/validation'
 import { apiClient } from '@/shared/services/apiClient'
+import { phoneValidator } from '@/shared/utils/phoneValidation'
 // import { useAuth } from '@/shared/contexts/AuthContext'
 
 export const PersonalRegisterPage = () => {
@@ -31,14 +37,39 @@ export const PersonalRegisterPage = () => {
 
   // Form validation helper
   const isFormValid = () => {
-    const validation = validateRegistrationForm(formData)
+    // Check if all required fields are filled
+    if (
+      !formData.firstName.trim() ||
+      !formData.lastName.trim() ||
+      !formData.phone.trim() ||
+      !formData.email.trim() ||
+      !formData.password.trim()
+    ) {
+      return false
+    }
+
+    // Simple phone check - use client-side validation
+    if (!phoneValidator.hasMinimumContent(formData.phone)) {
+      return false
+    }
+
+    // Check if there are any validation errors from other fields
+    const nonPhoneErrors = errors.filter(error => error.field !== 'phone')
+    if (nonPhoneErrors.length > 0) {
+      return false
+    }
+
+    // Validate other fields
+    const emailValidation = validateEmail(formData.email)
+    const passwordValidation = validatePassword(formData.password)
+    const firstNameValidation = validateFirstName(formData.firstName)
+    const lastNameValidation = validateLastName(formData.lastName)
+
     return (
-      validation.isValid &&
-      formData.firstName.trim() !== '' &&
-      formData.lastName.trim() !== '' &&
-      formData.phone.trim() !== '' &&
-      formData.email.trim() !== '' &&
-      formData.password.trim() !== ''
+      emailValidation.isValid &&
+      passwordValidation.isValid &&
+      firstNameValidation.isValid &&
+      lastNameValidation.isValid
     )
   }
 
@@ -57,6 +88,51 @@ export const PersonalRegisterPage = () => {
     // Clear field error when user starts typing
     if (hasFieldError(errors, name)) {
       setErrors(prev => prev.filter(error => error.field !== name))
+    }
+  }
+
+  const handlePhoneChange = (phoneNumber: string) => {
+    setFormData(prev => ({ ...prev, phone: phoneNumber }))
+    
+    // Clear phone error when user starts typing (same as other fields)
+    if (hasFieldError(errors, 'phone')) {
+      setErrors(prev => prev.filter(error => error.field !== 'phone'))
+    }
+  }
+
+  const handlePhoneBlur = async (cleanPhoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
+    // Validate phone when user leaves the field (same pattern as other fields)
+    if (!cleanPhoneNumber?.trim()) {
+      return // Don't validate empty fields on blur
+    }
+
+    try {
+      // Use the provided clean phone number and country info
+      const countryCode = countryInfo?.countryCode ?? 'GR'
+
+      // Call backend API for validation
+      const response = await fetch('http://localhost:5000/api/PhoneValidation/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneNumber: cleanPhoneNumber,
+          countryCode
+        }),
+      })
+
+      const result = await response.json()
+      
+      if (!result.isValid && result.error) {
+        setErrors(prev => [
+          ...prev.filter(error => error.field !== 'phone'),
+          { field: 'phone', message: result.error, code: 'INVALID_PHONE' }
+        ])
+      }
+    } catch (error) {
+      console.error('Phone validation failed:', error)
+      // Don't show error for network issues, just log them
     }
   }
 
@@ -267,23 +343,19 @@ export const PersonalRegisterPage = () => {
 
           {/* Phone Number */}
           <div>
-            <label htmlFor="phone" className="auth-label">
-              Phone Number
-            </label>
-            <div className="input-container">
-              <Phone className="input-icon-left auth-icon-primary" />
-              <input
-                id="phone"
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                placeholder="+30 698 123 4567"
-                className={`auth-input input-with-icon-left ${hasFieldError(errors, 'phone') ? 'auth-input-error' : ''}`}
-                required
-              />
-            </div>
+            <PhoneInput
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handlePhoneChange}
+              onBlur={handlePhoneBlur}
+              validateOnBlur={false}
+              label="Phone Number"
+              placeholder="Enter your phone number"
+              error={hasFieldError(errors, 'phone') ? getFieldError(errors, 'phone')?.message : undefined}
+              defaultCountry="GR"
+              showValidation={false}
+            />
             {hasFieldError(errors, 'phone') && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}

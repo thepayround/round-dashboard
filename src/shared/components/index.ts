@@ -8,6 +8,7 @@ export { AuthLogo } from './AuthLogo'
 export { Button } from './Button'
 export { FormInput } from './FormInput'
 export { AuthInput } from './AuthInput'
+export { PhoneInput } from './ui/PhoneInput'
 
 // UI Components
 export { Modal } from './Modal'

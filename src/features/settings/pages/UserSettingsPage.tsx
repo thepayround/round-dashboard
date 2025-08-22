@@ -68,7 +68,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
       id: 'security', 
       label: 'Security & Privacy', 
       icon: Shield,
-      description: 'Password and account security settings'
+      description: 'Password and user security settings'
     },
     { 
       id: 'notifications', 
@@ -272,6 +272,19 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateS
     }
   }, [user, settings])
 
+  // Separate effect to update user fields as soon as user data is available
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        phone: user.phone || '',
+      }))
+    }
+  }, [user])
+
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault()
     
@@ -332,7 +345,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateS
             </div>
             <div>
               <h2 className="text-xl font-semibold text-white">Personal Information</h2>
-              <p className="text-sm text-gray-400">Your account details and contact information</p>
+              <p className="text-sm text-gray-400">Your user details and contact information</p>
             </div>
           </div>
 
@@ -360,7 +373,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateS
                 placeholder="John"
                 disabled
                 leftIcon={UserIcon}
-                variant="default"
+                variant="auth"
                 className="opacity-50 cursor-not-allowed"
               />
               <FormInput
@@ -371,7 +384,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateS
                 placeholder="Doe"
                 disabled
                 leftIcon={UserIcon}
-                variant="default"
+                variant="auth"
                 className="opacity-50 cursor-not-allowed"
               />
               <FormInput
@@ -382,7 +395,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateS
                 placeholder="john.doe@example.com"
                 disabled
                 leftIcon={Mail}
-                variant="default"
+                variant="auth"
                 className="opacity-50 cursor-not-allowed"
               />
               <FormInput
@@ -393,7 +406,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateS
                 placeholder="+1 (555) 123-4567"
                 disabled
                 leftIcon={Phone}
-                variant="default"
+                variant="auth"
                 className="opacity-50 cursor-not-allowed"
               />
             </div>
@@ -517,7 +530,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({ settings: _settings, 
           </div>
           <div>
             <h2 className="text-xl font-semibold text-white">Password & Security</h2>
-            <p className="text-sm text-gray-400">Manage your account password and security settings</p>
+            <p className="text-sm text-gray-400">Manage your user password and security settings</p>
           </div>
         </div>
 
@@ -563,7 +576,7 @@ const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notificatio
     { 
       id: 'security', 
       label: 'Security Alerts', 
-      description: 'Login attempts, password changes, and account security',
+      description: 'Login attempts, password changes, and user security',
       icon: Shield,
       color: 'from-red-500/20 to-pink-500/20 border-red-500/30 text-red-400'
     },
@@ -587,7 +600,7 @@ const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notificatio
     { id: 'email', label: 'Email', icon: Mail },
     { id: 'inApp', label: 'In-App', icon: Bell },
     { id: 'push', label: 'Push', icon: Bell },
-    { id: 'sms', label: 'SMS', icon: Phone }
+    { id: 'sms', label: 'SMS', icon: Bell }
   ]
 
   const getNotificationSetting = (type: string, channel: 'email' | 'inApp' | 'push' | 'sms') => {
@@ -700,7 +713,7 @@ const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notificatio
               <div>
                 <h4 className="text-sm font-medium text-yellow-100 mb-1">Notification Preferences</h4>
                 <p className="text-xs text-yellow-200/80">
-                  You can unsubscribe from marketing emails at any time. Security and billing notifications are required for account safety.
+                  You can unsubscribe from marketing emails at any time. Security and billing notifications are required for user safety.
                 </p>
               </div>
             </div>
