@@ -13,6 +13,12 @@ export interface CountryCurrencyResponse {
   currencySymbol: string
   unicodeDecimal?: number[]
   unicodeHex?: string[]
+  // Phone validation fields
+  phoneCode: string
+  flag: string // Unicode flag emoji
+  phoneFormat: string // Phone number format pattern
+  phoneMinLength: number
+  phoneMaxLength: number
 }
 
 export interface CurrencyResponse {

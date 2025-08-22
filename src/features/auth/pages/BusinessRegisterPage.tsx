@@ -4,7 +4,6 @@ import {
   ArrowRight,
   CheckCircle,
   User,
-  Phone,
   Mail,
   Lock,
   Eye,
@@ -13,17 +12,23 @@ import {
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ActionButton, AuthLogo } from '@/shared/components'
+import { ActionButton, AuthLogo, PhoneInput } from '@/shared/components'
 
 import type { CompanyInfo, BillingAddress } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
+import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 import {
   validateRegistrationForm,
   validateField,
   getFieldError,
   hasFieldError,
+  validateEmail,
+  validatePassword,
+  validateFirstName,
+  validateLastName,
 } from '@/shared/utils/validation'
 import { validateCompanyInfo } from '@/shared/utils/companyValidation'
+import { phoneValidator } from '@/shared/utils/phoneValidation'
 
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { BillingAddressForm } from '../components/BillingAddressForm'
@@ -179,6 +184,13 @@ export const BusinessRegisterPage = () => {
     setIsCompanyValid(validation.isValid)
   }, [companyInfo])
 
+  // Re-validate personal form when data changes
+  useEffect(() => {
+    const isPersonalFormValid = validatePersonalForm(personalData)
+    setIsPersonalValid(isPersonalFormValid)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [personalData, personalErrors])
+
 
   // Handle personal form changes
   const handlePersonalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,10 +202,104 @@ export const BusinessRegisterPage = () => {
       setPersonalErrors(prev => prev.filter(error => error.field !== name))
     }
 
-    // Validate entire form
+    // Validate personal form excluding phone (handled separately)
     const updatedData = { ...personalData, [name]: value }
-    const validation = validateRegistrationForm(updatedData)
-    setIsPersonalValid(validation.isValid)
+    const isPersonalFormValid = validatePersonalForm(updatedData)
+    setIsPersonalValid(isPersonalFormValid)
+  }
+
+  const handlePersonalPhoneChange = (phoneNumber: string) => {
+    setPersonalData(prev => ({ ...prev, phone: phoneNumber }))
+    
+    // Clear phone error when user starts typing (same as other fields)
+    if (hasFieldError(personalErrors, 'phone')) {
+      setPersonalErrors(prev => prev.filter(error => error.field !== 'phone'))
+    }
+
+    // Validate personal form
+    const updatedData = { ...personalData, phone: phoneNumber }
+    const isPersonalFormValid = validatePersonalForm(updatedData)
+    setIsPersonalValid(isPersonalFormValid)
+  }
+
+  const handlePersonalPhoneBlur = async (cleanPhoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
+    // Always validate phone when user leaves the field (same pattern as other fields)
+    
+    // If field is empty and required, show required error immediately
+    if (!cleanPhoneNumber?.trim()) {
+      setPersonalErrors(prev => [
+        ...prev.filter(error => error.field !== 'phone'),
+        { field: 'phone', message: 'Phone number is required', code: 'REQUIRED' }
+      ])
+      return
+    }
+
+    try {
+      // Use the provided clean phone number and country info
+      const countryCode = countryInfo?.countryCode ?? 'GR'
+
+      // Call backend API for validation
+      const response = await fetch('http://localhost:5000/api/PhoneValidation/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneNumber: cleanPhoneNumber,
+          countryCode
+        }),
+      })
+
+      const result = await response.json()
+      
+      if (!result.isValid && result.error) {
+        setPersonalErrors(prev => [
+          ...prev.filter(error => error.field !== 'phone'),
+          { field: 'phone', message: result.error, code: 'INVALID_PHONE' }
+        ])
+      }
+    } catch (error) {
+      console.error('Phone validation failed:', error)
+      // Don't show error for network issues, just log them
+    }
+  }
+
+  // Helper function to validate personal form with simple phone check
+  const validatePersonalForm = (data: PersonalFormData) => {
+    // Check if all required fields are filled
+    if (
+      !data.firstName.trim() ||
+      !data.lastName.trim() ||
+      !data.phone.trim() ||
+      !data.email.trim() ||
+      !data.password.trim()
+    ) {
+      return false
+    }
+
+    // Simple phone check - use client-side validation
+    if (!phoneValidator.hasMinimumContent(data.phone)) {
+      return false
+    }
+
+    // Check if there are any validation errors from other fields
+    const nonPhoneErrors = personalErrors.filter(error => error.field !== 'phone')
+    if (nonPhoneErrors.length > 0) {
+      return false
+    }
+
+    // Validate other fields
+    const emailValidation = validateEmail(data.email)
+    const passwordValidation = validatePassword(data.password)
+    const firstNameValidation = validateFirstName(data.firstName)
+    const lastNameValidation = validateLastName(data.lastName)
+
+    return (
+      emailValidation.isValid &&
+      passwordValidation.isValid &&
+      firstNameValidation.isValid &&
+      lastNameValidation.isValid
+    )
   }
 
   const handlePersonalInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -412,23 +518,19 @@ export const BusinessRegisterPage = () => {
 
               {/* Phone */}
               <div>
-                <label htmlFor="phone" className="auth-label">
-                  Phone Number
-                </label>
-                <div className="input-container">
-                  <Phone className="input-icon-left auth-icon-primary" />
-                  <input
-                    id="phone"
-                    type="tel"
-                    name="phone"
-                    value={personalData.phone}
-                    onChange={handlePersonalInputChange}
-                    onBlur={handlePersonalInputBlur}
-                    placeholder="+1 (555) 123-4567"
-                    className={`auth-input input-with-icon-left ${hasFieldError(personalErrors, 'phone') ? 'auth-input-error' : ''}`}
-                    required
-                  />
-                </div>
+                <PhoneInput
+                  id="phone"
+                  name="phone"
+                  value={personalData.phone}
+                  onChange={handlePersonalPhoneChange}
+                  onBlur={handlePersonalPhoneBlur}
+                  validateOnBlur={false}
+                  label="Phone Number"
+                  placeholder="Enter your phone number"
+                  error={hasFieldError(personalErrors, 'phone') ? getFieldError(personalErrors, 'phone')?.message : undefined}
+                  defaultCountry="GR"
+                  showValidation={false}
+                />
                 {hasFieldError(personalErrors, 'phone') && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}

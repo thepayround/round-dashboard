@@ -637,7 +637,7 @@ class ApiClient {
       }
 
       const response = await this.client.post<OrganizationResponse>(
-        '/Organizations',
+        '/organizations',
         organizationRequest
       )
 
@@ -747,7 +747,7 @@ class ApiClient {
         isPrimary: addressData.isPrimary,
       }
 
-      const response = await this.client.post<AddressResponse>('/Addresses', addressRequest)
+      const response = await this.client.post<AddressResponse>('/addresses', addressRequest)
 
       return {
         success: true,
@@ -998,6 +998,61 @@ class ApiClient {
 
       if (axios.isAxiosError(error) && error.response) {
         let errorMessage = 'Failed to reset password'
+
+        // Handle IdentityResult.Errors array format from backend
+        if (Array.isArray(error.response.data)) {
+          const [firstError] = error.response.data
+          if (firstError?.description) {
+            errorMessage = firstError.description
+          } else if (typeof firstError === 'string') {
+            errorMessage = firstError
+          }
+        } else if (error.response.data?.message) {
+          errorMessage = error.response.data.message
+        } else if (error.response.data?.error) {
+          errorMessage = error.response.data.error
+        }
+
+        return {
+          success: false,
+          error: errorMessage,
+        }
+      }
+
+      return {
+        success: false,
+        error: 'Network error. Please try again.',
+      }
+    }
+  }
+
+  /**
+   * Change password for authenticated user
+   */
+  async changePassword(
+    currentPassword: string,
+    newPassword: string,
+    confirmPassword: string
+  ): Promise<ApiResponse<{ message: string }>> {
+    try {
+      const response = await this.client.post('/identities/change-password', {
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      })
+
+      return {
+        success: true,
+        data: { 
+          message: response.data.message || 'Password changed successfully'
+        },
+        message: 'Password changed successfully',
+      }
+    } catch (error) {
+      console.error('Change password error:', error)
+
+      if (axios.isAxiosError(error) && error.response) {
+        let errorMessage = 'Failed to change password'
 
         // Handle IdentityResult.Errors array format from backend
         if (Array.isArray(error.response.data)) {

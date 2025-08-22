@@ -96,10 +96,10 @@ const useOptionsData = <T>(endpoint: string, cacheKey: keyof OptionsCache) => {
 }
 
 // Specific hooks for each option type with caching
-export const useTimezones = () => useOptionsData<TimezoneOption>('/UserSettings/options/timezones', 'timezones')
-export const useLanguages = () => useOptionsData<LanguageOption>('/UserSettings/options/languages', 'languages')
-export const useDateFormats = () => useOptionsData<DateFormatOption>('/UserSettings/options/dateformats', 'dateFormats')
-export const useTimeFormats = () => useOptionsData<TimeFormatOption>('/UserSettings/options/timeformats', 'timeFormats')
+export const useTimezones = () => useOptionsData<TimezoneOption>('/user-settings/options/timezones', 'timezones')
+export const useLanguages = () => useOptionsData<LanguageOption>('/user-settings/options/languages', 'languages')
+export const useDateFormats = () => useOptionsData<DateFormatOption>('/user-settings/options/dateformats', 'dateFormats')
+export const useTimeFormats = () => useOptionsData<TimeFormatOption>('/user-settings/options/timeformats', 'timeFormats')
 
 // Bulk loader for preloading all options at once
 export const usePreloadAllOptions = () => {

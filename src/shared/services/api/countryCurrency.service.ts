@@ -10,7 +10,7 @@ import type {
 } from '../../types/api/countryCurrency'
 
 export class CountryCurrencyService {
-  private readonly baseUrl = '/api/CountryCurrency'
+  private readonly baseUrl = '/country-currency'
 
   async getCountries(): Promise<CountryCurrencyResponse[]> {
     const response = await httpClient.getClient().get<CountryCurrencyResponse[]>(`${this.baseUrl}/countries`)

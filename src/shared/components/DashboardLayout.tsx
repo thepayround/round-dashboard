@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronLeft,
@@ -43,6 +43,23 @@ interface NavItem {
   subItems?: NavItem[]
 }
 
+interface UserInfo {
+  firstName?: string
+  lastName?: string
+  email?: string
+  role?: string
+  company?: string
+}
+
+interface TooltipState {
+  id: string
+  label: string
+  badge?: string
+  position: { top: number; left: number }
+  isUser?: boolean
+  userInfo?: UserInfo
+}
+
 const navItems: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { id: 'customers', label: 'Customers', icon: Users, href: '/customers' },
@@ -77,7 +94,228 @@ const bottomNavItems: NavItem[] = [
 
 // User data comes from auth context and API
 
-export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+// Memoized sub-item component to prevent unnecessary re-renders
+const CatalogSubItem = memo(({ 
+  subItem, 
+  index: _index, 
+  isCollapsed, 
+  isActive, 
+  handleTooltipEnter, 
+  handleTooltipLeave,
+  isLastItem 
+}: {
+  subItem: NavItem
+  index: number
+  isCollapsed: boolean
+  isActive: boolean
+  handleTooltipEnter: (itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => void
+  handleTooltipLeave: () => void
+  isLastItem: boolean
+}) => {
+  // Determine the className for active/inactive states
+  const getActiveStateClasses = () => {
+    if (isActive) {
+      return isCollapsed
+        ? 'bg-gradient-to-br from-pink-500/25 via-purple-500/20 to-cyan-500/25 text-white shadow-[0_0_12px_rgba(212,23,200,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] border border-pink-400/50'
+        : 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
+    }
+    return 'text-gray-400 hover:text-white hover:bg-white/5'
+  }
+
+  return (
+  <div className="relative">
+    <Link
+      to={subItem.href}
+      onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
+      onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
+      className={`
+        group relative flex items-center rounded-lg transition-all duration-200
+        ${getActiveStateClasses()}
+        ${
+          isCollapsed 
+            ? 'justify-center w-8 h-8 px-0 backdrop-blur-sm' 
+            : 'h-9 md:h-8 lg:h-7 px-3 md:px-3.5 lg:px-3'
+        }
+      `}
+    >
+      <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${
+        isCollapsed 
+          ? 'w-3.5 h-3.5 drop-shadow-sm group-hover:scale-105' 
+          : 'w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2'
+      }`} />
+      
+      {!isCollapsed && (
+        <span className="font-medium text-xs md:text-sm lg:text-xs whitespace-nowrap">{subItem.label}</span>
+      )}
+
+      {/* Subtle inner glow for active state in collapsed mode */}
+      {isCollapsed && isActive && (
+        <div className="absolute inset-0.5 rounded-md bg-gradient-to-br from-pink-500/10 to-cyan-500/10 -z-10" />
+      )}
+    </Link>
+
+    {/* Connection indicator for collapsed mode */}
+    {isCollapsed && !isLastItem && (
+      <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/15" />
+    )}
+  </div>
+  )
+})
+
+CatalogSubItem.displayName = 'CatalogSubItem'
+
+// Memoized navigation item component
+const NavigationItem = memo(({ 
+  item, 
+  isCollapsed, 
+  expandedItems, 
+  isParentActive, 
+  isActive,
+  toggleExpanded,
+  handleTooltipEnter,
+  handleTooltipLeave,
+  getAllNavItems,
+  focusedIndex,
+  isKeyboardNavigating
+}: {
+  item: NavItem
+  isCollapsed: boolean
+  expandedItems: string[]
+  isParentActive: (item: NavItem) => boolean
+  isActive: (href: string) => boolean
+  toggleExpanded: (itemId: string) => void
+  handleTooltipEnter: (itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => void
+  handleTooltipLeave: () => void
+  getAllNavItems: (NavItem & { isSubItem?: boolean; parentId?: string })[]
+  focusedIndex: number
+  isKeyboardNavigating: boolean
+}) => (
+  <div>
+    {/* Main Navigation Item */}
+    {item.subItems ? (
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          toggleExpanded(item.id)
+        }}
+        onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
+        onMouseLeave={handleTooltipLeave}
+        className={`
+          group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
+          ${
+            isParentActive(item)
+              ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
+              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          }
+          ${isCollapsed ? 'justify-center px-0' : 'px-6'}
+          ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
+            ? 'ring-2 ring-white/50' : ''
+          }
+        `}
+        aria-expanded={expandedItems.includes(item.id)}
+        aria-haspopup="menu"
+        aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
+        tabIndex={isKeyboardNavigating ? -1 : 0}
+      >
+        <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
+        
+        {!isCollapsed && (
+          <div className="flex items-center justify-between flex-1 overflow-hidden">
+            <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
+            <ChevronDown 
+              className={`w-4 h-4 transition-transform duration-200 ${
+                expandedItems.includes(item.id) ? 'transform rotate-180' : ''
+              }`} 
+            />
+          </div>
+        )}
+        
+        {!isCollapsed && item.badge && (
+          <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
+            {item.badge}
+          </span>
+        )}
+      </button>
+    ) : (
+      <Link
+        to={item.href}
+        onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
+        onMouseLeave={handleTooltipLeave}
+        className={`
+          group relative flex items-center rounded-lg transition-all duration-200 h-10
+          ${
+            isParentActive(item)
+              ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
+              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          }
+          ${isCollapsed ? 'justify-center px-0' : 'px-6'}
+          ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
+            ? 'ring-2 ring-white/50' : ''
+          }
+        `}
+        aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
+        tabIndex={isKeyboardNavigating ? -1 : 0}
+      >
+        <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
+
+        {!isCollapsed && (
+          <div className="flex items-center justify-between flex-1 overflow-hidden">
+            <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
+            {item.badge && (
+              <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
+                {item.badge}
+              </span>
+            )}
+          </div>
+        )}
+      </Link>
+    )}
+
+    {/* Sub-items */}
+    <AnimatePresence>
+      {item.subItems && expandedItems.includes(item.id) && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.2 }}
+          className={`mt-1 ${
+            isCollapsed 
+              ? 'flex flex-col items-center space-y-1 py-1' 
+              : 'pl-3 md:pl-4 lg:pl-3 space-y-0.5'
+          }`}
+        >
+          {isCollapsed && (
+            <div className="w-8 h-px bg-gradient-to-r from-pink-500/30 via-white/20 to-cyan-500/30 mb-1" />
+          )}
+
+          {item.subItems.map((subItem, index) => (
+            <CatalogSubItem
+              key={subItem.id}
+              subItem={subItem}
+              index={index}
+              isCollapsed={isCollapsed}
+              isActive={isActive(subItem.href)}
+              handleTooltipEnter={handleTooltipEnter}
+              handleTooltipLeave={handleTooltipLeave}
+              isLastItem={index === (item.subItems?.length ?? 0) - 1}
+            />
+          ))}
+
+          {isCollapsed && (
+            <div className="w-6 h-px bg-gradient-to-r from-pink-500/20 via-white/15 to-cyan-500/20 mt-1" />
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+))
+
+NavigationItem.displayName = 'NavigationItem'
+
+export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
   const navigate = useNavigate()
   const { logout, state } = useAuth()
   const { token } = state
@@ -99,18 +337,27 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   // Track expanded menu items
   const [expandedItems, setExpandedItems] = useState<string[]>(() => {
     // Auto-expand catalog if user is on a catalog page
+    const savedExpanded = localStorage.getItem('sidebar-expanded-items')
+    if (savedExpanded) {
+      try {
+        const parsed = JSON.parse(savedExpanded)
+        if (Array.isArray(parsed)) {
+          return parsed
+        }
+      } catch (e) {
+        // Fallback to default behavior
+      }
+    }
+    
     if (location.pathname.startsWith('/catalog')) {
       return ['catalog']
     }
     return []
   })
 
-  // Track collapsed sidebar dropdown
-  const [collapsedDropdown, setCollapsedDropdown] = useState<string | null>(null)
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
   
   // Track tooltip state
-  const [hoveredTooltip, setHoveredTooltip] = useState<{ id: string; label: string; badge?: string; position: { top: number; left: number }; isUser?: boolean; userInfo?: Record<string, unknown> } | null>(null)
+  const [hoveredTooltip, setHoveredTooltip] = useState<TooltipState | null>(null)
 
   // UI state
   const [showShortcuts, setShowShortcuts] = useState(false)
@@ -135,23 +382,29 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   // Persist sidebar state to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('sidebar-collapsed', isCollapsed.toString())
-    // Close collapsed dropdown when sidebar is expanded
-    if (!isCollapsed) {
-      setCollapsedDropdown(null)
-    }
-    
-    // Dispatch custom event for gradient-header alignment
-    window.dispatchEvent(new CustomEvent('sidebar-toggle', {
-      detail: { collapsed: isCollapsed }
-    }))
   }, [isCollapsed])
 
-  // Auto-expand catalog when navigating to catalog pages
+  // Persist expanded items to localStorage
   useEffect(() => {
-    if (location.pathname.startsWith('/catalog') && !expandedItems.includes('catalog')) {
-      setExpandedItems(prev => [...prev, 'catalog'])
+    localStorage.setItem('sidebar-expanded-items', JSON.stringify(expandedItems))
+  }, [expandedItems])
+
+  // Auto-expand catalog when navigating to catalog pages (only run once per path change)
+  const lastPathRef = useRef<string>('')
+  useEffect(() => {
+    if (location.pathname !== lastPathRef.current) {
+      lastPathRef.current = location.pathname
+      
+      if (location.pathname.startsWith('/catalog')) {
+        setExpandedItems(prev => {
+          if (!prev.includes('catalog')) {
+            return [...prev, 'catalog']
+          }
+          return prev
+        })
+      }
     }
-  }, [location.pathname, expandedItems])
+  }, [location.pathname])
 
   const isActive = (href: string) => location.pathname === href
 
@@ -163,7 +416,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }
 
   // Get all navigation items (flat list for keyboard navigation)
-  const getAllNavItems = useCallback(() => {
+  const getAllNavItems = useMemo(() => {
     const items: (NavItem & { isSubItem?: boolean; parentId?: string })[] = []
     
     navItems.forEach(item => {
@@ -182,15 +435,16 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     return items
   }, [isCollapsed, expandedItems])
 
-  const toggleExpanded = (itemId: string) => {
+  const toggleExpanded = useCallback((itemId: string) => {
     setExpandedItems(prev => {
       const isCurrentlyExpanded = prev.includes(itemId)
-      const newState = isCurrentlyExpanded 
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
-      return newState
+      if (isCurrentlyExpanded) {
+        return prev.filter(id => id !== itemId)
+      } else {
+        return [...prev, itemId]
+      }
     })
-  }
+  }, [])
 
   const handleTooltipEnter = (itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => {
     if (!isCollapsed) return
@@ -244,58 +498,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     })
   }
 
-  const toggleCollapsedDropdown = (itemId: string, event: React.MouseEvent) => {
-    if (collapsedDropdown === itemId) {
-      setCollapsedDropdown(null)
-    } else {
-      // Calculate position based on the clicked button with viewport awareness
-      const buttonRect = (event.currentTarget as HTMLElement).getBoundingClientRect()
-      const viewportHeight = window.innerHeight
-      const viewportWidth = window.innerWidth
-      const dropdownMinWidth = 200
-      const dropdownEstimatedHeight = 250 // Estimated height for calculation
-      
-      let {top} = buttonRect
-      let left = buttonRect.right + 8 // 8px gap from sidebar
-      
-      // Check if dropdown would overflow viewport horizontally
-      if (left + dropdownMinWidth > viewportWidth) {
-        left = buttonRect.left - dropdownMinWidth - 8 // Position to the left of sidebar
-      }
-      
-      // Check if dropdown would overflow viewport vertically
-      if (top + dropdownEstimatedHeight > viewportHeight) {
-        top = Math.max(8, viewportHeight - dropdownEstimatedHeight - 8) // 8px margin from top/bottom
-      }
-      
-      // Ensure dropdown doesn't go above viewport
-      if (top < 8) {
-        top = 8
-      }
-      
-      setDropdownPosition({ top, left })
-      setCollapsedDropdown(itemId)
-    }
-  }
 
-  // Close collapsed dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (collapsedDropdown) {
-        // Check if click is outside the dropdown
-        const target = event.target as Element
-        if (!target.closest('.collapsed-dropdown') && 
-            !target.closest('.catalog-button')) {
-          setCollapsedDropdown(null)
-        }
-      }
-    }
-
-    if (collapsedDropdown) {
-      document.addEventListener('click', handleClickOutside)
-      return () => document.removeEventListener('click', handleClickOutside)
-    }
-  }, [collapsedDropdown])
 
   // Close profile dropdown when clicking outside
   useEffect(() => {
@@ -330,7 +533,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         return
       }
 
-      const allItems = getAllNavItems()
+      const allItems = getAllNavItems
       
       switch (event.key) {
         case 'ArrowDown':
@@ -364,12 +567,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           break
           
         case 'Escape':
-          if (collapsedDropdown) {
-            setCollapsedDropdown(null)
-          } else {
-            setFocusedIndex(-1)
-            setIsKeyboardNavigating(false)
-          }
+          setFocusedIndex(-1)
+          setIsKeyboardNavigating(false)
           break
           
         // Quick navigation shortcuts
@@ -420,7 +619,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [focusedIndex, getAllNavItems, collapsedDropdown, navigate, isCollapsed, showShortcuts, toggleSidebar])
+  }, [focusedIndex, getAllNavItems, navigate, isCollapsed, showShortcuts, toggleSidebar, toggleExpanded])
 
   const handleLogout = async () => {
     if (token) {
@@ -508,133 +707,25 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           {/* Navigation */}
           <nav 
             ref={navigationRef}
-            className={`flex-1 py-4 md:py-5 lg:py-4 pb-24 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}
+            className={`hide-scrollbar flex-1 py-4 md:py-5 lg:py-4 pb-24 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}
             role="navigation"
             aria-label="Main navigation"
           >
           {navItems.map(item => (
-            <div key={item.id}>
-              {/* Main Navigation Item */}
-              {item.subItems ? (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    if (!isCollapsed) {
-                      toggleExpanded(item.id)
-                    } else {
-                      // In collapsed mode, toggle dropdown
-                      toggleCollapsedDropdown(item.id, e)
-                    }
-                  }}
-                  onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
-                  onMouseLeave={handleTooltipLeave}
-                  className={`
-                    catalog-button group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
-                    ${
-                      isParentActive(item)
-                        ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
-                    }
-                    ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-                    ${isKeyboardNavigating && focusedIndex === getAllNavItems().findIndex(navItem => navItem.id === item.id) 
-                      ? 'ring-2 ring-white/50' : ''
-                    }
-                  `}
-                  aria-expanded={expandedItems.includes(item.id)}
-                  aria-haspopup="menu"
-                  aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
-                  tabIndex={isKeyboardNavigating ? -1 : 0}
-                >
-                  <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
-                  
-                  {!isCollapsed && (
-                    <div className="flex items-center justify-between flex-1 overflow-hidden">
-                      <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
-                      <ChevronDown 
-                        className={`w-4 h-4 transition-transform duration-200 ${
-                          expandedItems.includes(item.id) ? 'transform rotate-180' : ''
-                        }`} 
-                      />
-                    </div>
-                  )}
-                  
-                  {!isCollapsed && item.badge && (
-                    <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
-                      {item.badge}
-                    </span>
-                  )}
-
-
-                </button>
-              ) : (
-                <Link
-                  to={item.href}
-                  onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
-                  onMouseLeave={handleTooltipLeave}
-                  className={`
-                    group relative flex items-center rounded-lg transition-all duration-200 h-10
-                    ${
-                      isParentActive(item)
-                        ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
-                    }
-                    ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-                    ${isKeyboardNavigating && focusedIndex === getAllNavItems().findIndex(navItem => navItem.id === item.id) 
-                      ? 'ring-2 ring-white/50' : ''
-                    }
-                  `}
-                  aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
-                  tabIndex={isKeyboardNavigating ? -1 : 0}
-                >
-                  <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
-
-                  {!isCollapsed && (
-                    <div className="flex items-center justify-between flex-1 overflow-hidden">
-                      <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
-                      {item.badge && (
-                        <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
-                          {item.badge}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                </Link>
-              )}
-
-              {/* Sub-items for expanded sidebar */}
-              <AnimatePresence>
-                {item.subItems && !isCollapsed && expandedItems.includes(item.id) && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="mt-1.5 md:mt-2 lg:mt-1.5 space-y-0.5 md:space-y-1 lg:space-y-0.5 pl-3 md:pl-4 lg:pl-3"
-                  >
-                    {item.subItems.map(subItem => (
-                      <Link
-                        key={subItem.id}
-                        to={subItem.href}
-                        className={`
-                          group relative flex items-center rounded-lg transition-all duration-200 h-9 md:h-8 lg:h-7 px-3 md:px-3.5 lg:px-3
-                          ${
-                            isActive(subItem.href)
-                              ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
-                              : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent hover:border-white/20'
-                          }
-                        `}
-                      >
-                        <subItem.icon className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2 flex-shrink-0" />
-                        <span className="font-medium text-xs md:text-sm lg:text-xs whitespace-nowrap">{subItem.label}</span>
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            <NavigationItem
+              key={item.id}
+              item={item}
+              isCollapsed={isCollapsed}
+              expandedItems={expandedItems}
+              isParentActive={isParentActive}
+              isActive={isActive}
+              toggleExpanded={toggleExpanded}
+              handleTooltipEnter={handleTooltipEnter}
+              handleTooltipLeave={handleTooltipLeave}
+              getAllNavItems={getAllNavItems}
+              focusedIndex={focusedIndex}
+              isKeyboardNavigating={isKeyboardNavigating}
+            />
           ))}
 
           {/* Bottom Navigation Items - Include in main navigation */}
@@ -652,7 +743,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-                ${isKeyboardNavigating && focusedIndex === getAllNavItems().findIndex(navItem => navItem.id === item.id) 
+                ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
                   ? 'ring-2 ring-white/50' : ''
                 }
               `}
@@ -686,6 +777,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <Link
                   to="/user-settings"
                   onClick={() => setShowProfileDropdown(false)}
+                  onMouseEnter={(e) => handleTooltipEnter('user-settings', 'User Settings', undefined, e)}
+                  onMouseLeave={handleTooltipLeave}
                   className={`
                     group relative flex items-center rounded-lg transition-all duration-200 h-10
                     ${
@@ -712,6 +805,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     setShowProfileDropdown(false)
                     handleLogout()
                   }}
+                  onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
+                  onMouseLeave={handleTooltipLeave}
                   className={`
                     group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
                     text-gray-400 hover:text-red-400 hover:bg-red-400/10
@@ -805,63 +900,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </div>
       </motion.aside>
 
-      {/* Collapsed Sidebar Dropdown - Outside sidebar to avoid clipping */}
-      <AnimatePresence>
-        {isCollapsed && collapsedDropdown && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, x: -10 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.95, x: -10 }}
-            transition={{ duration: 0.15 }}
-            className="collapsed-dropdown fixed bg-gray-900/95 backdrop-blur-xl border border-white/30 rounded-lg shadow-2xl z-dropdown min-w-[200px]"
-            style={{
-              top: dropdownPosition.top,
-              left: dropdownPosition.left
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Catalog dropdown content */}
-            {(() => {
-              const catalogItem = navItems.find(item => item.id === collapsedDropdown)
-              if (!catalogItem) return null
-              
-              return (
-                <>
-                  {/* Dropdown Header */}
-                  <div className="px-4 py-3 border-b border-white/10">
-                    <div className="flex items-center space-x-3">
-                      <catalogItem.icon className="w-5 h-5 text-white" />
-                      <span className="font-medium text-white">{catalogItem.label}</span>
-                    </div>
-                  </div>
-                  
-                  {/* Dropdown Items */}
-                  <div className="py-2">
-                    {catalogItem.subItems?.map(subItem => (
-                      <Link
-                        key={subItem.id}
-                        to={subItem.href}
-                        onClick={() => setCollapsedDropdown(null)}
-                        className={`
-                          flex items-center px-4 py-3 hover:bg-white/10 transition-colors duration-200
-                          ${
-                            isActive(subItem.href)
-                              ? 'bg-gradient-to-r from-[#14BDEA]/20 to-[#D417C8]/20 text-white border-r-2 border-[#D417C8]'
-                              : 'text-gray-300 hover:text-white'
-                          }
-                        `}
-                      >
-                        <subItem.icon className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2 flex-shrink-0" />
-                        <span className="font-medium text-sm">{subItem.label}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )
-            })()}
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* External Tooltips for Collapsed Sidebar */}
       <AnimatePresence>
@@ -1027,4 +1065,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
     </div>
   )
-}
+})
+
+DashboardLayout.displayName = 'DashboardLayout'

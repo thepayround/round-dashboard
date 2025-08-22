@@ -23,7 +23,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       rightIcon: RightIcon,
       onRightIconClick,
       helpText,
-      variant = 'default',
+      variant = 'auth', // Changed default to 'auth' for better consistency
       size = 'md',
       className,
       id,

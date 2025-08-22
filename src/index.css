@@ -18,6 +18,18 @@
   .z-dropdown { z-index: var(--z-dropdown); }
   .z-tooltip { z-index: var(--z-tooltip); }
   .z-popover { z-index: var(--z-popover); }
+
+  /* Hide scrollbars completely */
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+    width: 0;
+    height: 0;
+  }
   .z-modal { z-index: var(--z-modal); }
   .z-toast { z-index: var(--z-toast); }
 

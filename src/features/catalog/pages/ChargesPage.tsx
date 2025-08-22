@@ -11,7 +11,7 @@ import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
-import { ChargeCard, CreateChargeModal } from '../components'
+import { ChargeCard, CreateChargeModalEnhanced } from '../components'
 import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Charge, CatalogViewMode } from '../types/catalog.types'
@@ -348,7 +348,7 @@ export const ChargesPage = () => {
       </div>
 
       {/* Create Charge Modal */}
-      <CreateChargeModal 
+      <CreateChargeModalEnhanced 
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
       />
