@@ -42,6 +42,7 @@ interface PersonalFormData {
   firstName: string
   lastName: string
   phone: string
+  countryPhoneCode: string
   email: string
   password: string
 }
@@ -58,6 +59,7 @@ export const BusinessRegisterPage = () => {
     firstName: '',
     lastName: '',
     phone: '',
+    countryPhoneCode: '',
     email: '',
     password: '',
   })
@@ -223,6 +225,11 @@ export const BusinessRegisterPage = () => {
   }
 
   const handlePersonalPhoneBlur = async (cleanPhoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
+    // Store the country phone code for backend submission
+    if (countryInfo?.phoneCode) {
+      setPersonalData(prev => ({ ...prev, countryPhoneCode: countryInfo.phoneCode }))
+    }
+
     // Always validate phone when user leaves the field (same pattern as other fields)
     
     // If field is empty and required, show required error immediately
@@ -236,10 +243,10 @@ export const BusinessRegisterPage = () => {
 
     try {
       // Use the provided clean phone number and country info
-      const countryCode = countryInfo?.countryCode ?? 'GR'
+      const countryCode = countryInfo?.countryCode
 
       // Call backend API for validation
-      const response = await fetch('http://localhost:5000/api/PhoneValidation/validate', {
+      const response = await fetch('http://localhost:5000/phone-validation/validate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -326,8 +333,12 @@ export const BusinessRegisterPage = () => {
     try {
       // Register business user with all company information using new endpoint
       const userResponse = await registerBusiness({
-        ...personalData,
-        phone: personalData.phone,
+        firstName: personalData.firstName,
+        lastName: personalData.lastName,
+        email: personalData.email,
+        password: personalData.password,
+        phoneNumber: personalData.phone,
+        countryPhoneCode: personalData.countryPhoneCode,
         companyInfo,
         billingAddress,
       })

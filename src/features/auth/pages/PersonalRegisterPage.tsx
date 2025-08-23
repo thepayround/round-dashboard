@@ -28,6 +28,7 @@ export const PersonalRegisterPage = () => {
     firstName: '',
     lastName: '',
     phone: '',
+    countryPhoneCode: '', 
     email: '',
     password: '',
   })
@@ -101,6 +102,11 @@ export const PersonalRegisterPage = () => {
   }
 
   const handlePhoneBlur = async (cleanPhoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
+    // Store the country phone code for backend submission
+    if (countryInfo?.phoneCode) {
+      setFormData(prev => ({ ...prev, countryPhoneCode: countryInfo.phoneCode }))
+    }
+
     // Validate phone when user leaves the field (same pattern as other fields)
     if (!cleanPhoneNumber?.trim()) {
       return // Don't validate empty fields on blur
@@ -111,7 +117,7 @@ export const PersonalRegisterPage = () => {
       const countryCode = countryInfo?.countryCode ?? 'GR'
 
       // Call backend API for validation
-      const response = await fetch('http://localhost:5000/api/PhoneValidation/validate', {
+      const response = await fetch('http://localhost:5000/phone-validation/validate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,8 +171,12 @@ export const PersonalRegisterPage = () => {
     try {
       // Call real API
       const response = await apiClient.register({
-        ...formData,
-        phone: formData.phone,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phone,
+        countryPhoneCode: formData.countryPhoneCode,
       })
 
       if (response.success && response.data) {

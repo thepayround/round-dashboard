@@ -129,7 +129,8 @@ export class AuthService {
     firstName: string
     lastName: string
     email: string
-    phone: string
+    phoneNumber: string
+    countryPhoneCode: string
     password: string
     userName?: string
     companyInfo: {
@@ -158,7 +159,8 @@ export class AuthService {
         email: userData.email,
         userName: userData.userName,
         password: userData.password,
-        phoneNumber: userData.phone,
+        phoneNumber: userData.phoneNumber,
+        countryPhoneCode: userData.countryPhoneCode,
         companyName: userData.companyInfo.companyName,
         registrationNumber: userData.companyInfo.registrationNumber,
         taxId: userData.companyInfo.taxId,

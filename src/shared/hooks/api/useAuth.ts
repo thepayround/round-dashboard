@@ -62,7 +62,8 @@ export const useAuth = () => {
     firstName: string
     lastName: string
     email: string
-    phone: string
+    phoneNumber: string
+    countryPhoneCode: string
     password: string
     userName?: string
     companyInfo: {
