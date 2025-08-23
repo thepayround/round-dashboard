@@ -31,6 +31,7 @@ interface RegisterRequest {
   userName?: string
   password: string
   phoneNumber: string
+  countryPhoneCode: string
 }
 
 interface ApiResponse<T> {
@@ -211,7 +212,8 @@ class ApiClient {
     firstName: string
     lastName: string
     email: string
-    phone: string
+    phoneNumber: string
+    countryPhoneCode: string
     password: string
     userName?: string
   }): Promise<ApiResponse<{ message: string; requiresEmailConfirmation: boolean }>> {
@@ -222,7 +224,8 @@ class ApiClient {
         email: userData.email,
         userName: userData.userName,
         password: userData.password,
-        phoneNumber: userData.phone,
+        phoneNumber: userData.phoneNumber,
+        countryPhoneCode: userData.countryPhoneCode,
       }
 
       const response = await this.client.post<RegisterResponse>(
@@ -694,7 +697,7 @@ class ApiClient {
       }
 
       const response = await this.client.post<AddressResponse>(
-        `/Organizations/${organizationId}/addresses`,
+        `/organizations/${organizationId}/addresses`,
         addressRequest
       )
 

@@ -118,10 +118,10 @@ export const usePreloadAllOptions = () => {
 
     try {
       const endpoints = [
-        { key: 'timezones' as const, url: '/UserSettings/options/timezones' },
-        { key: 'languages' as const, url: '/UserSettings/options/languages' },
-        { key: 'dateFormats' as const, url: '/UserSettings/options/dateformats' },
-        { key: 'timeFormats' as const, url: '/UserSettings/options/timeformats' }
+        { key: 'timezones' as const, url: '/user-settings/options/timezones' },
+        { key: 'languages' as const, url: '/user-settings/options/languages' },
+        { key: 'dateFormats' as const, url: '/user-settings/options/dateformats' },
+        { key: 'timeFormats' as const, url: '/user-settings/options/timeformats' }
       ]
 
       // Only fetch endpoints that haven't been loaded yet
