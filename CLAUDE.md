@@ -100,47 +100,121 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 - **Spacing System**: 25+ spacing utilities
 - **Shadow System**: 15+ shadow variants including glass effects
 
-### Tailwind Standards (MANDATORY)
+### Ultra-Premium Business Design System (MANDATORY - FINAL)
 
-**CRITICAL**: ALL UI components MUST use Tailwind CSS classes instead of custom CSS for responsiveness and maintainability.
+**CRITICAL**: ALL UI components MUST follow the new ultra-premium business design standards optimized for maximum elegance, information density, and refined visual hierarchy.
 
-#### Form Element Heights (STRICTLY ENFORCED)
-- **Inputs**: `h-11` (44px) - All text inputs, selects, and form fields
-- **Buttons**: `h-12` (48px) - All buttons including ActionButton, social login, etc.
-- **4px Height Difference**: This 4px difference between inputs and buttons is MANDATORY for visual hierarchy
+#### Ultra-Premium Typography Scale (LINER BUSINESS)
+- **Liner Elegance**: Ultra-compact, sophisticated fonts with lighter weights
+  - Main Page Title: `text-base font-medium` (16px/400) - Refined sophistication
+  - Section Headers: `text-sm font-medium` (14px/425) - Clean hierarchy
+  - Card Titles: `text-xs font-medium` (12px/400) - Ultra compact elegance  
+  - Form Labels: `text-[11px] font-medium uppercase tracking-wider` - Business precision
+  - Body Text: `text-xs font-normal` (12px/375) - Dense, readable content
+  - Table Text: `text-xs font-light` (12px/350) - Ultra compact data
+  - Captions/Meta: `text-[10px] font-light` (10px/325) - Minimal annotations
 
-#### Standard Components
-- **AuthInput**: Use for all authentication forms - `h-11` with proper icon spacing
-- **ActionButton**: Use for all interactive buttons - `h-12` with consistent sizing
-- **FormInput**: Use for general forms - `h-11` with validation states
+#### Premium Responsive Component Sizing (PROPER HIERARCHY)
+- **Mobile (≤767px)**: Compact sizing for space efficiency
+  - Input Fields: `h-7` (28px) - Compact data entry
+  - Buttons: `h-10` (40px) - Larger interaction targets
+  - Social Buttons: `h-10` (40px) - Consistent with action buttons
+  - Dropdowns: `h-7` (28px) - Match inputs for form consistency
 
-#### Tailwind Class Standards
+- **Tablet+ (≥768px)**: Optimal sizing for better usability
+  - Input Fields: `h-9` (36px) - Better usability, not too small
+  - Buttons: `h-11` (44px) - Optimal interaction targets
+  - Social Buttons: `h-11` (44px) - Consistent with action buttons  
+  - Dropdowns: `h-9` (36px) - Match inputs for form consistency
+
+- **Text Areas**: `min-h-14` (56px) - Functional across all screens
+
+#### Premium Sizing & Spacing Standards  
+- **Border Radius**: `rounded-lg` (8px) EVERYWHERE - Perfect consistency
+- **Card Padding**: Ultra-compact hierarchy for information density
+  - Tight: `p-2` (8px) - Table cells, inline elements
+  - Compact: `p-3` (12px) - List items, small cards  
+  - Standard: `p-4` (16px) - Main cards, forms
+  - Spacious: `p-5` (20px) - Feature sections only
+- **Icons**: Smaller, refined sizes for elegance
+  - Table/Form Icons: `w-3 h-3` (12px) - Ultra compact
+  - Card Icons: `w-3.5 h-3.5` (14px) - Refined elegance
+  - Button Icons: Match button size for perfect alignment
+
+#### Premium Business Spacing System
+- **Compact Layout Philosophy**: Reduced spacing for information density
+- **Card Padding**: Business-optimized hierarchy
+  - Compact: `p-2` (8px) - Table cells, inline elements  
+  - Small: `p-3` (12px) - List items, compact cards
+  - Medium: `p-4` (16px) - Standard cards, forms
+  - Large: `p-5` (20px) - Feature sections only
+- **Grid Gaps**: `gap-4` to `gap-6` based on content density
+- **Form Spacing**: `space-y-4` to `space-y-6` for optimal form flow
+
+#### Enhanced Premium Glassmorphism
+- **Ultra-Subtle Backgrounds**: `rgba(255, 255, 255, 0.04)` for refined transparency
+- **Minimal Borders**: `border-white/8` to `border-white/12` for clean separation
+- **Sophisticated Shadows**: Multi-layered business-grade shadows
+  - `shadow-glass-sm`: Subtle card elevation
+  - `shadow-glass-md`: Standard component depth
+  - `shadow-btn-premium`: Refined button shadows
+- **Premium Blur Effects**: `backdrop-blur-xl` (24px+) for professional depth
+- **Micro-Interactions**: Subtle hover states with minimal transform effects
+
+#### Premium Responsive Business Utility Classes
 ```jsx
-// ✅ CORRECT: Tailwind classes
-<input className="h-11 px-3 py-2.5 bg-white/5 border border-white/20 rounded-lg" />
-<button className="h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500" />
+// ✅ PREMIUM RESPONSIVE: Proper hierarchy with responsive sizing
+<div className="premium-card"> {/* Ultra-subtle glass card */}
+<input className="premium-input" /> {/* 28px→36px responsive inputs */}
+<button className="premium-button"> {/* 40px→44px responsive buttons */}
+<select className="premium-dropdown"> {/* 28px→36px responsive dropdowns */}
+<tr className="premium-table-row"> {/* Ultra-compact table rows */}
+<th className="premium-table-header"> {/* Minimal table headers */}
 
-// ❌ INCORRECT: Custom CSS
-<input className="auth-input custom-height" />
-<button style={{height: '40px'}} />
+// ✅ CORRECT: Responsive Tailwind classes (8px radius, proper hierarchy)
+<input className="h-7 md:h-9 px-3 md:px-4 bg-white/6 border border-white/10 rounded-lg text-xs md:text-sm" />
+<button className="h-10 md:h-11 px-4 md:px-5 text-sm md:text-base font-medium rounded-lg" />
+<select className="h-7 md:h-9 px-3 md:px-4 bg-white/6 border border-white/10 rounded-lg text-xs md:text-sm" />
+
+// ❌ INCORRECT: Fixed sizing without responsive hierarchy
+<input className="h-8 px-3 py-1.5 bg-white/6 border border-white/10 rounded-lg text-xs" />
+<button className="h-8 px-3 py-1.5 text-xs font-medium rounded-lg" />
 ```
 
-#### Icon Standards
-- **Input Icons**: `w-4 h-4` (16px) positioned with `absolute left-3 top-1/2 transform -translate-y-1/2`
-- **Button Icons**: `w-4 h-4` (16px) for `h-12` buttons, `w-5 h-5` (20px) for larger buttons
-- **Icon Spacing**: `pl-10` for left icons, `pr-10` for right icons in inputs
+#### Ultra-Premium Typography Classes
+```jsx
+// ✅ LINER TYPOGRAPHY: Ultra-compact elegant hierarchy
+<h1 className="premium-text-2xl"> {/* 16px/500 - Main titles */}
+<h2 className="premium-text-xl"> {/* 14px/450 - Section headers */}
+<h3 className="premium-text-lg"> {/* 13px/425 - Subsection headers */}
+<p className="premium-text-base"> {/* 12px/400 - Body text */}
+<label className="premium-text-sm uppercase tracking-wider"> {/* 11px/375 - Form labels */}
+<span className="premium-text-xs"> {/* 10px/350 - Captions */}
+```
 
-#### Responsive Design Rules
-- **Mobile-first**: Always start with mobile classes, add responsive variants with `sm:`, `md:`, `lg:` prefixes
-- **Consistent Heights**: Same `h-11`/`h-12` across ALL breakpoints - no responsive height changes
-- **Padding**: Use consistent `px-3` for inputs, `px-4` for buttons across breakpoints
+#### Ultra-Premium Icon Standards (8px RADIUS)
+- **Input Icons**: `w-3.5 h-3.5` (14px) positioned with `absolute left-3 top-1/2 transform -translate-y-1/2`
+- **Button Icons**: `w-3 h-3` (12px) for `h-8` buttons - perfectly proportioned
+- **Card Icons**: `w-3 h-3` (12px) to `w-3.5 h-3.5` (14px) for ultra-compact layouts
+- **Table Icons**: `w-2.5 h-2.5` (10px) to `w-3 h-3` (12px) for dense data display
+- **Icon Containers**: All use `rounded-lg` (8px) for perfect consistency
+- **Icon Spacing**: `pl-9` for left icons, `pr-9` for right icons in compact inputs
 
-#### Enforcement Rules
-1. **No Custom CSS**: Never create custom height/sizing CSS classes
-2. **Component Usage**: Always use `AuthInput` and `ActionButton` instead of raw HTML elements
-3. **Height Consistency**: Every input must be `h-11`, every button must be `h-12`
-4. **Tailwind Only**: All styling must use Tailwind utility classes
-5. **Icon Alignment**: Use standard positioning classes, never custom positioning
+#### Ultra-Premium Responsive Design Rules
+- **Mobile-first**: Start with mobile classes, add responsive variants with `sm:`, `md:`, `lg:` prefixes
+- **Universal Height**: Same `h-8` (32px) for ALL interactive elements across breakpoints
+- **Consistent Padding**: Use `px-3` for all form elements and buttons
+- **8px Radius**: `rounded-lg` everywhere - inputs, buttons, cards, dropdowns
+
+#### Premium Responsive Business Enforcement Rules (FINAL)
+1. **Proper Visual Hierarchy**: Inputs MUST be smaller than buttons on all screen sizes
+   - Mobile: Inputs `h-7` (28px), Buttons `h-10` (40px) 
+   - Tablet+: Inputs `h-9` (36px), Buttons `h-11` (44px)
+2. **8px Radius**: `rounded-lg` everywhere - no exceptions, perfect visual consistency  
+3. **Responsive Typography**: Scale text sizes appropriately across breakpoints
+4. **Social Button Consistency**: Google/Facebook buttons MUST match primary action buttons
+5. **Component Consistency**: Always use updated `AuthInput`, `Button`, and `Card` components
+6. **Minimum Usability**: Inputs ≥36px on tablet+ for proper touch targets
 
 **VIOLATION CONSEQUENCES**: Any deviation from these standards will cause visual inconsistencies and responsive issues across the application.
 

@@ -438,7 +438,7 @@ export const PersonalRegisterPage = () => {
           <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-4">
             <button
               type="button"
-              className="w-full h-12 px-4 py-2 
+              className="w-full h-11 md:h-9 px-4 py-2 
                          bg-white/8 backdrop-blur-sm border border-white/15 rounded-lg
                          text-white font-semibold text-sm
                          hover:bg-white/12 hover:border-white/20
@@ -470,7 +470,7 @@ export const PersonalRegisterPage = () => {
 
             <button
               type="button"
-              className="w-full h-12 px-4 py-2 
+              className="w-full h-11 md:h-9 px-4 py-2 
                          bg-white/8 backdrop-blur-sm border border-white/15 rounded-lg
                          text-white font-semibold text-sm
                          hover:bg-white/12 hover:border-white/20

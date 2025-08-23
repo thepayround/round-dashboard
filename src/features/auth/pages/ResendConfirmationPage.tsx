@@ -170,7 +170,7 @@ export const ResendConfirmationPage = () => {
           <button
             type="submit"
             disabled={isSubmitting || !email.trim()}
-            className={`w-full btn-primary text-lg py-4 ${
+            className={`w-full btn-primary ${
               isSubmitting || !email.trim() ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >

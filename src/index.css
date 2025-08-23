@@ -59,22 +59,25 @@
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    /* Refined mobile-first font sizing - smaller and more elegant */
-    font-size: 13px;
-    line-height: 1.45;
+    /* Ultra-premium liner typography */
+    font-size: 11px;
+    line-height: 1.35;
+    font-weight: 350; /* Lighter weight for premium feel */
   }
 
   @media (min-width: 640px) {
     body {
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 375;
     }
   }
 
   @media (min-width: 1024px) {
     body {
-      font-size: 15px;
-      line-height: 1.55;
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 400;
     }
   }
 
@@ -231,35 +234,35 @@
 
   .auth-card {
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(28px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 1.75rem 1.25rem; /* 28px top/bottom, 20px left/right - more spacious */
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px; /* Consistent 8px radius everywhere */
+    padding: 1.25rem 1rem; /* 20px top/bottom, 16px left/right - ultra compact */
     box-shadow:
-      0 20px 60px rgba(0, 0, 0, 0.4),
-      0 10px 30px rgba(0, 0, 0, 0.25),
-      0 4px 15px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+      0 4px 24px rgba(0, 0, 0, 0.15),
+      0 2px 12px rgba(0, 0, 0, 0.1),
+      0 1px 4px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.02);
     position: relative;
     overflow: hidden;
     width: 100%;
     max-width: 100%;
     z-index: 10;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
   }
 
   @media (min-width: 768px) {
     .auth-card {
-      padding: 2rem 1.5rem; /* 32px top/bottom, 24px left/right - tablet spacing */
-      border-radius: 8px; /* Consistent 8px everywhere */
+      padding: 1.5rem 1.25rem; /* 24px top/bottom, 20px left/right - compact tablet */
+      border-radius: 8px; /* Consistent 8px radius */
     }
   }
 
   @media (min-width: 1024px) {
     .auth-card {
-      padding: 2.25rem 1.75rem; /* 36px top/bottom, 28px left/right - desktop luxury spacing */
-      border-radius: 8px; /* Consistent 8px everywhere */
+      padding: 1.75rem 1.5rem; /* 28px top/bottom, 24px left/right - refined desktop */
+      border-radius: 8px; /* Consistent 8px radius */
     }
   }
 
@@ -296,35 +299,37 @@
 
   .auth-input {
     width: 100%;
-    height: 2.75rem; /* 44px - Tailwind h-11 standard */
-    padding: 0 0.875rem; /* Balanced horizontal padding */
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px; /* Consistent 8px everywhere */
+    height: 2.625rem; /* 42px - mobile inputs */
+    padding: 0 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px; /* Consistent 8px radius */
     color: rgba(255, 255, 255, 0.95) !important;
-    font-weight: 500;
-    font-size: 0.875rem; /* 14px - optimal readability for forms */
-    line-height: 1.4; /* Balanced text spacing */
-    transition: all 0.3s ease;
+    font-weight: 350; /* Light weight for premium feel */
+    font-size: 0.6875rem; /* 11px - smaller everywhere */
+    line-height: 1.2;
+    transition: all 0.15s ease;
     outline: none;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     position: relative;
   }
 
   @media (min-width: 768px) {
     .auth-input {
-      height: 2.75rem; /* 44px - Tailwind h-11 standard */
-      padding: 0 0.875rem; /* Consistent padding */
-      font-size: 0.875rem; /* 14px - optimal for forms */
+      height: 2.25rem; /* 36px - desktop inputs */
+      padding: 0 0.875rem;
+      font-size: 0.75rem; /* 12px - slightly larger on tablets */
+      font-weight: 375;
     }
   }
 
   @media (min-width: 1024px) {
     .auth-input {
-      height: 2.75rem; /* 44px - Tailwind h-11 standard */
-      padding: 0 0.875rem; /* Consistent padding */
-      font-size: 0.875rem; /* 14px - clean and readable */
+      height: 2.25rem; /* 36px - desktop inputs */
+      padding: 0 1rem;
+      font-size: 0.75rem; /* 12px - consistent */
+      font-weight: 400;
     }
   }
 
@@ -350,21 +355,21 @@
   .auth-input.textarea {
     height: auto;
     min-height: 5rem; /* 80px - more spacious for text areas */
-    padding: 1rem 1.25rem; /* Consistent enhanced padding */
+    padding: 1rem 2.5rem; /* Consistent enhanced padding */
     line-height: 1.6; /* Better line spacing for multi-line text */
   }
 
   @media (min-width: 640px) {
     .auth-input.textarea {
       min-height: 5.5rem; /* 88px - enhanced spaciousness on tablet+ */
-      padding: 1rem 1.25rem; /* Consistent enhanced padding */
+      padding: 1rem 2.5rem; /* Consistent enhanced padding */
     }
   }
 
   @media (min-width: 1024px) {
     .auth-input.textarea {
       min-height: 6rem; /* 96px - premium spacious feel on desktop */
-      padding: 1.125rem 1.25rem; /* Even more generous padding */
+      padding: 1.125rem 2.5rem; /* Even more generous padding */
     }
   }
 
@@ -417,24 +422,28 @@
 
   .auth-label {
     display: block;
-    font-size: 0.8125rem; /* 13px */
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.95);
-    margin-bottom: 0.375rem; /* 6px - tighter spacing */
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    font-size: 0.625rem; /* 10px - very small premium labels */
+    font-weight: 450; /* Medium weight for readability */
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.25rem; /* 4px - tight spacing */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 0.075em; /* More tracking for elegance */
   }
 
   @media (min-width: 768px) {
     .auth-label {
-      font-size: 0.875rem; /* 14px */
-      margin-bottom: 0.5rem; /* 8px */
+      font-size: 0.625rem; /* 10px - consistent small */
+      margin-bottom: 0.25rem; /* 4px - consistent */
+      font-weight: 475;
     }
   }
 
   @media (min-width: 1024px) {
     .auth-label {
-      font-size: 0.8125rem; /* 13px */
-      margin-bottom: 0.375rem; /* 6px */
+      font-size: 0.6875rem; /* 11px - slightly larger on desktop */
+      margin-bottom: 0.25rem; /* 4px - consistent */
+      font-weight: 500;
     }
   }
 
@@ -471,43 +480,45 @@
   .btn-primary {
     background: linear-gradient(135deg, #d417c8 0%, #7767da 50%, #14bdea 100%) !important;
     color: white !important;
-    font-weight: 600;
-    height: 3rem; /* 48px - Tailwind h-12 standard */
+    font-weight: 400; /* Light weight for premium feel */
+    height: 2.75rem; /* 44px - mobile buttons */
     padding: 0 1rem;
-    border-radius: 8px; /* Consistent 8px everywhere */
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px; /* Consistent 8px radius */
+    border: 1px solid rgba(255, 255, 255, 0.08);
     outline: none;
     cursor: pointer;
     transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
     position: relative;
     overflow: hidden;
     box-shadow:
-      0 6px 20px rgba(212, 23, 200, 0.2),
-      0 3px 10px rgba(20, 189, 234, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      0 2px 8px rgba(212, 23, 200, 0.12),
+      0 1px 4px rgba(20, 189, 234, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     text-decoration: none !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.875rem; /* 14px - balanced typography */
+    font-size: 0.6875rem; /* 11px - smaller button text */
   }
 
   @media (min-width: 768px) {
     .btn-primary {
-      height: 3rem; /* 48px - Tailwind h-12 standard */
-      padding: 0 1rem;
-      font-size: 0.875rem; /* 14px - consistent */
+      height: 2.25rem; /* 36px - desktop buttons */
+      padding: 0 1.25rem;
+      font-size: 0.75rem; /* 12px - consistent smaller text */
+      font-weight: 425;
     }
   }
 
   @media (min-width: 1024px) {
     .btn-primary {
-      height: 3rem; /* 48px - Tailwind h-12 standard */
-      padding: 0 1rem;
-      font-size: 0.875rem; /* 14px - consistent */
+      height: 2.25rem; /* 36px - desktop buttons */
+      padding: 0 1.5rem;
+      font-size: 0.75rem; /* 12px - consistent smaller text */
+      font-weight: 450;
     }
   }
 
@@ -523,40 +534,42 @@
   }
 
   .btn-secondary {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(24px);
     color: white;
-    font-weight: 600;
-    height: 3rem; /* 48px - Tailwind h-12 standard */
+    font-weight: 350; /* Light weight for premium feel */
+    height: 2.75rem; /* 44px - mobile buttons */
     padding: 0 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px; /* Consistent 8px everywhere */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px; /* Consistent 8px radius */
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
     outline: none;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.875rem; /* 14px - balanced typography */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 0.6875rem; /* 11px - smaller text */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 768px) {
     .btn-secondary {
-      height: 3rem; /* 48px - Tailwind h-12 standard */
-      padding: 0 1rem;
-      font-size: 0.875rem; /* 14px - consistent */
+      height: 2.25rem; /* 36px - desktop buttons */
+      padding: 0 1.25rem;
+      font-size: 0.75rem; /* 12px - consistent smaller text */
+      font-weight: 375;
     }
   }
 
   @media (min-width: 1024px) {
     .btn-secondary {
-      height: 3rem; /* 48px - Tailwind h-12 standard */
-      padding: 0 1rem;
-      font-size: 0.875rem; /* 14px - consistent */
+      height: 2.25rem; /* 36px - desktop buttons */
+      padding: 0 1.5rem;
+      font-size: 0.75rem; /* 12px - consistent smaller text */
+      font-weight: 400;
     }
   }
 
@@ -715,17 +728,19 @@
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
   }
 
-  /* Enhanced auth container hover effects */
-  .auth-card:hover {
-    transform: translateY(-2px);
+  /* Enhanced premium auth container hover effects */
+  /* .auth-card:hover {
+    transform: translateY(-1px);
     box-shadow:
-      0 20px 60px rgba(0, 0, 0, 0.2),
-      0 12px 30px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.12);
-    transition: all 0.3s ease;
-  }
+      0 12px 40px rgba(0, 0, 0, 0.25),
+      0 6px 20px rgba(0, 0, 0, 0.18),
+      0 3px 10px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+  } */
 
   /* Improved input focus ring */
   .auth-input:focus-visible {
@@ -769,7 +784,7 @@
 
   /* Enhanced visual hierarchy for forms - more spacious */
   .auth-card form > div:not(:last-child) {
-    margin-bottom: 2rem; /* Increased from 1.5rem to 2rem */
+    margin-bottom: 0rem; /* Increased from 1.5rem to 2rem */
   }
 
   .auth-card .space-y-6 > * + * {
@@ -1092,6 +1107,120 @@
       grid-template-columns: repeat(4, 1fr);
     }
   }
+
+  /* Ultra-premium business component utilities */
+  .premium-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(32px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px; /* Consistent 8px radius */
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: all 0.15s ease;
+  }
+
+  .premium-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+    transform: translateY(-0.5px);
+  }
+
+  .premium-table-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 0.375rem 0.75rem; /* Ultra compact 6px top/bottom, 12px left/right */
+    font-size: 0.75rem; /* 12px - ultra compact table text */
+    font-weight: 375; /* Lighter weight for elegance */
+    line-height: 1.3;
+    transition: all 0.12s ease;
+  }
+
+  .premium-table-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .premium-table-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.375rem 0.75rem;
+    font-size: 0.6875rem; /* 11px - ultra compact header text */
+    font-weight: 550;
+    text-transform: uppercase;
+    letter-spacing: 0.075em; /* More tracking for elegance */
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .premium-input {
+    height: 1.75rem; /* 28px mobile - compact but usable */
+    padding: 0 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px; /* Consistent 8px radius */
+    font-size: 0.75rem; /* 12px - compact and readable */
+    font-weight: 375; /* Lighter for premium feel */
+    color: rgba(255, 255, 255, 0.95);
+    transition: all 0.15s ease;
+  }
+
+  @media (min-width: 768px) {
+    .premium-input {
+      height: 2.25rem; /* 36px tablet+ - better usability */
+      padding: 0 1rem;
+      font-size: 0.8125rem; /* 13px - readable on larger screens */
+    }
+  }
+
+  .premium-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(20, 189, 234, 0.3);
+    box-shadow: 0 0 0 1px rgba(20, 189, 234, 0.12);
+  }
+
+  .premium-button {
+    height: 2.5rem; /* 40px mobile - larger than inputs */
+    padding: 0 1rem;
+    font-size: 0.8125rem; /* 13px - readable button text */
+    font-weight: 450; /* Medium weight for clarity */
+    border-radius: 8px; /* Consistent 8px radius */
+    transition: all 0.12s ease;
+  }
+
+  @media (min-width: 768px) {
+    .premium-button {
+      height: 2.75rem; /* 44px tablet+ - optimal interaction target */
+      padding: 0 1.5rem;
+      font-size: 0.875rem; /* 14px - clear on larger screens */
+    }
+  }
+
+  .premium-dropdown {
+    height: 1.75rem; /* 28px mobile - same as inputs */
+    padding: 0 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px; /* Consistent 8px radius */
+    font-size: 0.75rem; /* 12px - consistent with inputs */
+    font-weight: 375;
+    color: rgba(255, 255, 255, 0.95);
+    transition: all 0.15s ease;
+  }
+
+  @media (min-width: 768px) {
+    .premium-dropdown {
+      height: 2.25rem; /* 36px tablet+ - consistent with inputs */
+      padding: 0 1rem;
+      font-size: 0.8125rem; /* 13px - readable */
+    }
+  }
+
+  /* Ultra-premium liner text hierarchy */
+  .premium-text-xs { font-size: 0.625rem; font-weight: 350; } /* 10px - ultra compact */
+  .premium-text-sm { font-size: 0.6875rem; font-weight: 375; } /* 11px - compact */
+  .premium-text-base { font-size: 0.75rem; font-weight: 400; } /* 12px - standard */
+  .premium-text-lg { font-size: 0.8125rem; font-weight: 425; } /* 13px - medium */
+  .premium-text-xl { font-size: 0.875rem; font-weight: 450; } /* 14px - large */
+  .premium-text-2xl { font-size: 1rem; font-weight: 500; } /* 16px - headings only */
 
   /* Safe area handling for mobile devices */
   @supports (padding: max(0px)) {

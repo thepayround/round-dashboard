@@ -399,7 +399,7 @@ const CustomersPage: React.FC = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="btn-secondary px-3 sm:px-6 py-2.5 sm:py-3 flex items-center text-sm touch-target"
+                className="btn-secondary flex items-center gap-2"
               >
                 <Download className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Export</span>
@@ -524,18 +524,18 @@ const CustomersPage: React.FC = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-700/50">
-                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">Customer</th>
-                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">Status</th>
-                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">MRR</th>
-                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">LTV</th>
-                      <th className="text-left py-4 px-6 text-sm font-medium auth-text-muted">Churn Risk</th>
-                      <th className="text-right py-4 px-6 text-sm font-medium auth-text-muted">Actions</th>
+                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">Customer</th>
+                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">Status</th>
+                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">MRR</th>
+                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">LTV</th>
+                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">Churn Risk</th>
+                      <th className="text-right py-2 px-6 text-sm font-medium auth-text-muted">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredCustomers.map((customer) => (
                       <tr key={customer.id} className="border-b border-gray-700/30 hover:bg-white/5 transition-colors">
-                        <td className="py-4 px-6">
+                        <td className="py-2 px-6">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-gradient-to-br from-[#14BDEA] to-[#7767DA] rounded-full flex items-center justify-center text-white font-semibold">
                               {customer.firstName[0]}{customer.lastName[0]}
@@ -552,10 +552,10 @@ const CustomersPage: React.FC = () => {
                             </div>
                           </div>
                         </td>
-                        <td className="py-4 px-6">
+                        <td className="py-2 px-6">
                           {getStatusBadge(customer.status as Customer['status'])}
                         </td>
-                        <td className="py-4 px-6">
+                        <td className="py-2 px-6">
                           <div>
                             <p className="auth-text font-semibold">{formatCurrency(customer.totalMRR)}</p>
                             <p className="auth-text-muted text-sm">
@@ -563,16 +563,16 @@ const CustomersPage: React.FC = () => {
                             </p>
                           </div>
                         </td>
-                        <td className="py-4 px-6">
+                        <td className="py-2 px-6">
                           <div>
                             <p className="auth-text font-semibold">{formatCurrency(customer.totalLTV)}</p>
                             <p className="auth-text-muted text-sm">Since {formatDate(customer.signupDate)}</p>
                           </div>
                         </td>
-                        <td className="py-4 px-6">
+                        <td className="py-2 px-6">
                           {getChurnRiskBadge(customer.churnRisk as Customer['churnRisk'])}
                         </td>
-                        <td className="py-4 px-6 text-right">
+                        <td className="py-2 px-6 text-right">
                           <div className="flex items-center justify-end space-x-2">
                             <Link
                               to={`/customers/${customer.id}`}
@@ -649,15 +649,15 @@ const CustomersPage: React.FC = () => {
                     <div className="flex items-center gap-2 pt-4 border-t border-gray-700/50">
                       <Link
                         to={`/customers/${customer.id}`}
-                        className="flex-1 btn-primary text-center flex items-center justify-center gap-2 py-2.5 text-sm"
+                        className="flex-1 btn-primary text-center flex items-center justify-center gap-2"
                       >
                         <Eye className="w-4 h-4" />
                         View Details
                       </Link>
-                      <button className="btn-secondary p-2.5 touch-target">
+                      <button className="btn-secondary">
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button className="btn-secondary p-2.5 touch-target">
+                      <button className="btn-secondary">
                         <MoreHorizontal className="w-4 h-4" />
                       </button>
                     </div>
@@ -712,12 +712,12 @@ const CustomersPage: React.FC = () => {
                   <div className="flex items-center gap-2 pt-4 border-t border-gray-700/50">
                     <Link
                       to={`/customers/${customer.id}`}
-                      className="flex-1 btn-primary text-center flex items-center justify-center gap-2 touch-target"
+                      className="flex-1 btn-primary text-center flex items-center justify-center gap-2"
                     >
                       <Eye className="w-4 h-4" />
                       View Details
                     </Link>
-                    <button className="btn-secondary p-3 touch-target">
+                    <button className="btn-secondary">
                       <Edit className="w-4 h-4" />
                     </button>
                   </div>

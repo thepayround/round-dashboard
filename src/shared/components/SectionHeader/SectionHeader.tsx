@@ -32,23 +32,20 @@ export const SectionHeader = ({
 
   const HeaderContent = () => (
     <div className={className}>
-      {size === 'main' && (
-        <div className="gradient-header mb-4" />
-      )}
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h2 className={`${size === 'main' ? 'text-2xl md:text-3xl lg:text-2xl' : 'text-lg md:text-xl lg:text-lg'} font-bold ${size === 'main' ? 'bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent' : 'auth-text'} ${size === 'main' ? 'mb-1.5 md:mb-2 lg:mb-1.5' : 'mb-0'}`}>
+          <h2 className={`${size === 'main' ? 'text-base' : 'text-sm'} font-medium ${size === 'main' ? 'bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent' : 'auth-text'} ${size === 'main' ? 'mb-1.5' : 'mb-0'}`}>
             {title}
           </h2>
           {subtitle && (
-            <p className={`${size === 'main' ? 'auth-text-muted text-sm md:text-base lg:text-sm' : 'text-gray-400 text-xs md:text-sm lg:text-xs'} mt-1.5 md:mt-2 lg:mt-1.5 font-medium`}>
+            <p className={`${size === 'main' ? 'auth-text-muted text-xs' : 'text-gray-400 text-xs'} mt-1.5 font-light`}>
               {subtitle}
             </p>
           )}
         </div>
         
         {actions && (
-          <div className="flex items-center space-x-2.5 md:space-x-3 lg:space-x-2.5">
+          <div className="flex items-center space-x-2.5">
             {actions}
           </div>
         )}

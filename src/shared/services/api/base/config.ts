@@ -57,14 +57,14 @@ export const ENDPOINTS = {
   },
   // Team Management (RESTful resource-based design)
   TEAM: {
-    BASE: '/api/team',
-    MEMBERS: '/api/team/members',
-    MEMBER_BY_ID: (userId: string) => `/api/team/members/${userId}`,
-    MEMBER_ROLE: (userId: string) => `/api/team/members/${userId}/role`,
-    INVITATIONS: '/api/team/invitations',
-    INVITATION_BY_ID: (invitationId: string) => `/api/team/invitations/${invitationId}`,
-    INVITATION_RESEND: (invitationId: string) => `/api/team/invitations/${invitationId}/resend`,
-    INVITE: '/api/team/invite',
+    BASE: '/team',
+    MEMBERS: '/team/members',
+    MEMBER_BY_ID: (userId: string) => `/team/members/${userId}`,
+    MEMBER_ROLE: (userId: string) => `/team/members/${userId}/role`,
+    INVITATIONS: '/team/invitations',
+    INVITATION_BY_ID: (invitationId: string) => `/team/invitations/${invitationId}`,
+    INVITATION_RESEND: (invitationId: string) => `/team/invitations/${invitationId}/resend`,
+    INVITE: '/team/invite',
   },
   // Users (deprecated - use AUTH.ME instead)
   // USERS: {

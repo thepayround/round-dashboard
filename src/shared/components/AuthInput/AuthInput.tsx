@@ -31,22 +31,22 @@ export const AuthInput = forwardRef<
   className = '',
   ...props
 }, ref) => {
-  // Tailwind classes for auth inputs - 44px height (h-11)
+  // Responsive inputs - 42px mobile -> 36px desktop, smaller than buttons
   const baseInputClasses = `
-    w-full h-11 px-3 py-2.5 
-    bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg 
-    text-white placeholder-white/60 text-sm font-medium
-    focus:outline-none focus:border-[#14BDEA]/50 focus:bg-white/10 
-    transition-all duration-300 ease-out
+    w-full h-[42px] md:h-9 px-3 py-1.5
+    bg-white/6 backdrop-blur-xl border border-white/10 rounded-lg 
+    text-white placeholder-white/50 text-xs font-light
+    focus:outline-none focus:border-[#14BDEA]/30 focus:bg-white/8 
+    transition-all duration-150 ease-out
     disabled:opacity-50 disabled:cursor-not-allowed
   `
 
   const textareaClasses = `
-    w-full min-h-20 px-3 py-3 resize-none
-    bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg 
-    text-white placeholder-white/60 text-sm font-medium
-    focus:outline-none focus:border-[#14BDEA]/50 focus:bg-white/10 
-    transition-all duration-300 ease-out
+    w-full min-h-14 px-3 py-2 resize-none
+    bg-white/6 backdrop-blur-xl border border-white/10 rounded-lg 
+    text-white placeholder-white/50 text-xs font-normal
+    focus:outline-none focus:border-[#14BDEA]/30 focus:bg-white/8 
+    transition-all duration-150 ease-out
     disabled:opacity-50 disabled:cursor-not-allowed
   `
 
@@ -88,7 +88,7 @@ export const AuthInput = forwardRef<
     <div className={`space-y-2 ${containerClassName}`}>
       {/* Label */}
       {label && (
-        <label className="block text-sm font-medium text-white/90">
+        <label className="block text-[0.625rem] font-medium text-white/75 uppercase tracking-widest">
           {label}
           {props.required && <span className="text-red-400 ml-1">*</span>}
         </label>

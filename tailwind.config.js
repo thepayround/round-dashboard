@@ -91,14 +91,20 @@ export default {
           text: '#32A1E4', // Text color
         },
 
-        // Glass morphism effect colors
+        // Premium glass morphism effect colors
         glass: {
-          bg: 'rgba(255, 255, 255, 0.08)', // Background
-          border: 'rgba(255, 255, 255, 0.15)', // Border
-          hover: 'rgba(255, 255, 255, 0.12)', // Hover state
-          'hover-border': 'rgba(255, 255, 255, 0.2)', // Hover border
-          disabled: 'rgba(150, 150, 150, 0.1)', // Disabled state
-          'disabled-text': 'rgba(150, 150, 150, 0.5)', // Disabled text
+          bg: 'rgba(255, 255, 255, 0.04)', // Subtle premium background
+          'bg-light': 'rgba(255, 255, 255, 0.06)', // Slightly more visible
+          'bg-medium': 'rgba(255, 255, 255, 0.08)', // Medium visibility
+          border: 'rgba(255, 255, 255, 0.1)', // Subtle border
+          'border-light': 'rgba(255, 255, 255, 0.12)', // Light border
+          'border-medium': 'rgba(255, 255, 255, 0.15)', // Medium border
+          hover: 'rgba(255, 255, 255, 0.08)', // Hover state
+          'hover-border': 'rgba(255, 255, 255, 0.18)', // Hover border
+          focus: 'rgba(255, 255, 255, 0.12)', // Focus state
+          'focus-border': 'rgba(20, 189, 234, 0.3)', // Focus border with brand color
+          disabled: 'rgba(150, 150, 150, 0.08)', // Disabled state
+          'disabled-text': 'rgba(150, 150, 150, 0.4)', // Disabled text
         },
       },
       // Custom background gradients
@@ -135,12 +141,22 @@ export default {
         '2xl': '24px', // 2x large blur
         '3xl': '40px', // 3x large blur
       },
-      // Custom box shadows for glass morphism
+      // Premium box shadows for glass morphism
       boxShadow: {
-        glass: '0 8px 32px 0 rgba(31, 38, 135, 0.37)', // Default glass shadow
-        'glass-sm': '0 4px 16px 0 rgba(31, 38, 135, 0.25)', // Small glass shadow
-        'glass-lg': '0 16px 64px 0 rgba(31, 38, 135, 0.5)', // Large glass shadow
-        'inner-glass': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.1)', // Inner glass effect
+        // Refined glass shadows - more subtle and premium
+        glass: '0 4px 20px 0 rgba(0, 0, 0, 0.15)', // Default premium glass shadow
+        'glass-sm': '0 2px 8px 0 rgba(0, 0, 0, 0.08)', // Small premium shadow
+        'glass-md': '0 4px 12px 0 rgba(0, 0, 0, 0.12)', // Medium premium shadow
+        'glass-lg': '0 8px 24px 0 rgba(0, 0, 0, 0.18)', // Large premium shadow
+        'glass-xl': '0 12px 32px 0 rgba(0, 0, 0, 0.22)', // Extra large premium shadow
+        'inner-glass': 'inset 0 1px 2px 0 rgba(255, 255, 255, 0.06)', // Subtle inner glow
+        'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.1)', // Top inner glow
+        // Business card shadows
+        'card-premium': '0 2px 12px 0 rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04)',
+        'card-hover': '0 4px 20px 0 rgba(0, 0, 0, 0.12), 0 2px 6px 0 rgba(0, 0, 0, 0.06)',
+        // Button shadows
+        'btn-premium': '0 2px 6px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+        'btn-hover': '0 4px 12px 0 rgba(0, 0, 0, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.12)',
       },
       // Custom animations
       animation: {

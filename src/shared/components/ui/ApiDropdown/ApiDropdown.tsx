@@ -243,7 +243,7 @@ export const ApiDropdown = <T = unknown>({
   // Error state
   if (isError) {
     return (
-      <div className="relative w-full h-11 pl-10 pr-4 rounded-lg backdrop-blur-[16px] border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-medium text-sm md:text-base lg:text-sm outline-none opacity-50 cursor-not-allowed">
+      <div className="relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg backdrop-blur-[16px] border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-light text-xs outline-none opacity-50 cursor-not-allowed">
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 flex items-center justify-center">
           <div className="w-4 h-4 flex items-center justify-center">
             {config.icon}
@@ -252,7 +252,7 @@ export const ApiDropdown = <T = unknown>({
         <span className="text-white/60">{config.errorText}</span>
         <button 
           onClick={() => refetch()}
-          className="text-[#14BDEA] hover:text-[#14BDEA]/80 text-xs md:text-sm lg:text-xs font-medium"
+          className="text-[#14BDEA] hover:text-[#14BDEA]/80 text-xs font-medium"
           type="button"
         >
           Retry
@@ -306,7 +306,7 @@ export const ApiDropdown = <T = unknown>({
           ring-1 ring-white/5
         ">
           {/* Search input */}
-          <div className="p-2.5 md:p-3 lg:p-2.5 border-b border-white/10">
+          <div className="p-2.5 border-b border-white/10">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
               <input
@@ -316,9 +316,9 @@ export const ApiDropdown = <T = unknown>({
                 onChange={handleSearchChange}
                 placeholder={config.searchPlaceholder}
                 className="
-                  w-full pl-9 md:pl-10 lg:pl-9 pr-8 md:pr-10 lg:pr-8 py-1.5 md:py-2 lg:py-1.5 
+                  w-full pl-9 pr-8 py-1.5 
                   bg-white/10 border border-white/20 rounded-lg
-                  text-white/95 placeholder-white/60 text-xs md:text-sm lg:text-xs
+                  text-white/95 placeholder-white/60 text-xs
                   focus:bg-white/15 focus:border-[#14BDEA]/50 focus:outline-none
                   transition-all duration-200
                 "
@@ -326,7 +326,7 @@ export const ApiDropdown = <T = unknown>({
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-2.5 md:right-3 lg:right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 md:p-1 lg:p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
+                  className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
                   type="button"
                   aria-label="Clear search"
                 >
@@ -345,11 +345,11 @@ export const ApiDropdown = <T = unknown>({
                   setHighlightedIndex(-1)
                 }}
                 className="
-                  mt-1.5 md:mt-2 lg:mt-1.5 w-full px-2.5 md:px-3 lg:px-2.5 py-1.5 md:py-2 lg:py-1.5 text-xs md:text-sm lg:text-xs
+                  mt-1.5 w-full px-2.5 py-1.5 text-xs
                   bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg
                   text-white/70 hover:text-white/90
                   transition-all duration-200
-                  flex items-center justify-center space-x-1.5 md:space-x-2 lg:space-x-1.5
+                  flex items-center justify-center space-x-1.5
                 "
                 type="button"
               >
@@ -362,11 +362,11 @@ export const ApiDropdown = <T = unknown>({
           {/* Options list */}
           <div className="flex-1 overflow-y-auto" onScroll={(e) => e.stopPropagation()}>
             {filteredOptions.length === 0 ? (
-              <div className="p-3 md:p-4 lg:p-3 text-center text-white/60 text-xs md:text-sm lg:text-xs">
+              <div className="p-3 text-center text-white/60 text-xs">
                 {config.noResultsText}
               </div>
             ) : (
-              <div className="p-1.5 md:p-2 lg:p-1.5 space-y-0.5 md:space-y-1 lg:space-y-0.5">
+              <div className="p-1.5 space-y-0.5">
                 {filteredOptions.map((option, index) => (
                   <motion.div
                     key={option.value ? `${option.value}-${index}` : `empty-option-${index}`}
@@ -375,7 +375,7 @@ export const ApiDropdown = <T = unknown>({
                     transition={{ delay: index * 0.02 }}
                     onClick={() => handleSelect(option.value)}
                     className={`
-                      px-2.5 md:px-3 lg:px-2.5 py-2 md:py-2.5 lg:py-2 rounded-lg cursor-pointer
+                      px-2.5 py-2 rounded-lg cursor-pointer
                       flex items-center justify-between
                       transition-all duration-200
                       ${index === highlightedIndex 
@@ -390,18 +390,18 @@ export const ApiDropdown = <T = unknown>({
                     role="option"
                     aria-selected={option.value === value}
                   >
-                    <div className="flex items-center space-x-2.5 md:space-x-3 lg:space-x-2.5 flex-1 min-w-0">
+                    <div className="flex items-center space-x-2.5 flex-1 min-w-0">
                       {option.icon && (
                         <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
                           {option.icon}
                         </span>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="text-white/95 font-medium truncate text-xs md:text-sm lg:text-xs">
+                        <div className="text-white/95 font-light truncate text-xs">
                           {option.label}
                         </div>
                         {option.description && (
-                          <div className="text-white/60 text-xs md:text-sm lg:text-xs truncate">
+                          <div className="text-white/60 text-xs truncate">
                             {option.description}
                           </div>
                         )}
@@ -435,9 +435,9 @@ export const ApiDropdown = <T = unknown>({
           }
         }}
         className={`
-          relative w-full h-11 pl-10 pr-4 rounded-lg backdrop-blur-[16px] border transition-all duration-300
+          relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg backdrop-blur-[16px] border transition-all duration-300
           bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between
-          font-medium text-sm md:text-base lg:text-sm outline-none
+          font-light text-xs outline-none
           [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]
           ${error ? 'border-[#ef4444] bg-[rgba(239,68,68,0.12)]' : ''}
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/[0.18] hover:border-white/30'}
@@ -469,7 +469,7 @@ export const ApiDropdown = <T = unknown>({
         </div>
 
         {/* Right side icons */}
-        <div className="flex items-center space-x-1.5 md:space-x-2 lg:space-x-1.5">
+        <div className="flex items-center space-x-1.5">
           {isLoading && (
             <div className="w-4 h-4 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
           )}
@@ -477,7 +477,7 @@ export const ApiDropdown = <T = unknown>({
           {allowClear && selectedOption && !isLoading && (
             <button
               onClick={handleClear}
-              className="p-0.5 md:p-1 lg:p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
+              className="p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
               type="button"
               aria-label="Clear selection"
             >

@@ -61,6 +61,12 @@ interface TooltipState {
 }
 
 const navItems: NavItem[] = [
+  {
+    id: 'get-started',
+    label: 'Get Started',
+    icon: PlusCircle,
+    href: '/get-started',
+  },
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { id: 'customers', label: 'Customers', icon: Users, href: '/customers' },
   { id: 'billing', label: 'Billing', icon: CreditCard, href: '/billing' },
@@ -77,13 +83,6 @@ const navItems: NavItem[] = [
       { id: 'charges', label: 'Charges', icon: DollarSign, href: '/catalog/charges' },
       { id: 'coupons', label: 'Coupons', icon: Tag, href: '/catalog/coupons' }
     ]
-  },
-  {
-    id: 'get-started',
-    label: 'Get Started',
-    icon: PlusCircle,
-    href: '/get-started',
-    badge: 'Setup',
   },
 ]
 
@@ -134,7 +133,7 @@ const CatalogSubItem = memo(({
         ${
           isCollapsed 
             ? 'justify-center w-8 h-8 px-0 backdrop-blur-sm' 
-            : 'h-9 md:h-8 lg:h-7 px-3 md:px-3.5 lg:px-3'
+            : 'h-11 md:h-9 px-3 md:px-3.5'
         }
       `}
     >
@@ -203,7 +202,7 @@ const NavigationItem = memo(({
         onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={`
-          group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
+          group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9 w-full
           ${
             isParentActive(item)
               ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
@@ -244,7 +243,7 @@ const NavigationItem = memo(({
         onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={`
-          group relative flex items-center rounded-lg transition-all duration-200 h-10
+          group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
           ${
             isParentActive(item)
               ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
@@ -686,7 +685,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         >
           {!isCollapsed ? (
             <div className="flex items-center space-x-4">
-              <img src={ColorLogo} alt="Round Logo" className="w-10 h-10 animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_20px_rgba(212,23,200,0.6)]" />
+              <img src={ColorLogo} alt="Round Logo" className="w-10 h-11 md:h-9 animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_20px_rgba(212,23,200,0.6)]" />
               <div className="flex items-center space-x-0.5 animate-[pulse_3s_ease-in-out_infinite]">
                 <span className="text-[#D417C8] font-extralight text-3xl tracking-wider drop-shadow-[0_0_15px_rgba(212,23,200,0.7)] transition-all duration-300">R</span>
                 <span className="text-[#BD2CD0] font-extralight text-3xl tracking-wider drop-shadow-[0_0_15px_rgba(189,44,208,0.7)] transition-all duration-300">O</span>
@@ -736,7 +735,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, undefined, e)}
               onMouseLeave={handleTooltipLeave}
               className={`
-                group relative flex items-center rounded-lg transition-all duration-200 h-10
+                group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
                 ${
                   isActive(item.href)
                     ? 'bg-white/6 text-white border-l-3 border-l-[#D417C8]'
@@ -780,7 +779,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                   onMouseEnter={(e) => handleTooltipEnter('user-settings', 'User Settings', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
                   className={`
-                    group relative flex items-center rounded-lg transition-all duration-200 h-10
+                    group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
                     ${
                       isActive('/user-settings')
                         ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
@@ -808,7 +807,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                   onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
                   className={`
-                    group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full
+                    group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9 w-full
                     text-gray-400 hover:text-red-400 hover:bg-red-400/10
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                   `}
@@ -843,7 +842,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               className={`
                 group relative flex items-center rounded-lg transition-all duration-200 w-full
                 text-gray-400 hover:text-white hover:bg-white/5
-                ${isCollapsed ? 'justify-center px-0 h-10' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
+                ${isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
                 ${showProfileDropdown ? 'bg-white/10 text-white' : ''}
               `}
               aria-label="User profile menu"
@@ -1034,7 +1033,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
         onClick={toggleSidebar}
-        className="fixed top-16 lg:top-20 w-10 h-10 lg:w-8 lg:h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-50 lg:z-base"
+        className="fixed top-16 lg:top-20 w-10 h-11 md:h-9 lg:w-8 lg:h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-50 lg:z-base"
       >
         {isCollapsed ? (
           <ChevronRight className="w-5 h-5 lg:w-4 lg:h-4 text-white" />

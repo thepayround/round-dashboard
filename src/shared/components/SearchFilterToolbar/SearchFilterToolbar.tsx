@@ -165,7 +165,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
                 {filterFields.length > 0 && (
                   <button
                     onClick={onToggleFilters}
-                    className="btn-secondary flex items-center justify-center gap-2 flex-1 xs:flex-none touch-target"
+                    className="btn-secondary flex items-center justify-center gap-2 flex-1 xs:flex-none"
                   >
                     <Filter className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5" />
                     <span className="xs:inline">Filters</span>

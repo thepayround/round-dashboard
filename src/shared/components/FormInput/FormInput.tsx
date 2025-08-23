@@ -34,12 +34,12 @@ export const FormInput = forwardRef<
   ...props
 }, ref) => {
   const baseInputClasses = `
-    w-full px-3 py-2.5 
+    w-full px-3 py-1.5 
     bg-white/5 border border-white/10 rounded-lg 
-    text-white placeholder-gray-400 text-sm
+    text-white placeholder-gray-400 text-xs
     focus:outline-none focus:border-[#D417C8]/50 focus:bg-white/10 transition-all duration-200
     disabled:opacity-50 disabled:cursor-not-allowed
-    h-11
+    h-[42px] md:h-9
   `
 
   const iconInputClasses = `

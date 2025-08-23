@@ -93,20 +93,25 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, className }) => {
 
   // Always show breadcrumbs, even for single items like dashboard
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-      className={cn('mb-6', className)}
-    >
-      <div className="flex items-center flex-wrap">
-        {breadcrumbItems.map((item, index) => (
-          <React.Fragment key={`${item.label}-${index}`}>
-            <BreadcrumbItem item={item} index={index} />
-            {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
-          </React.Fragment>
-        ))}
-      </div>
-    </motion.nav>
+    <div>
+      <motion.nav
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className={cn('mb-4', className)}
+      >
+        <div className="flex items-center flex-wrap">
+          {breadcrumbItems.map((item, index) => (
+            <React.Fragment key={`${item.label}-${index}`}>
+              <BreadcrumbItem item={item} index={index} />
+              {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
+            </React.Fragment>
+          ))}
+        </div>
+      </motion.nav>
+      
+      {/* Gradient header - below breadcrumbs, above page content */}
+      <div className="gradient-header mb-4" />
+    </div>
   )
 }

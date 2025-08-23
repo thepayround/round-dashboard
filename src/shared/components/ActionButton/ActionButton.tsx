@@ -50,54 +50,48 @@ const ActionButton = ({
   
   const DefaultIcon = getDefaultIcon()
   const sizeClasses = {
-    sm: 'px-4 py-2 text-sm space-x-2 h-12 font-medium', // 48px - standard button height
-    md: 'px-6 py-3 text-base space-x-2.5 h-12 font-semibold', // 48px - same height, more padding
-    lg: 'px-8 py-4 text-lg space-x-3 h-16 font-bold' // 64px - prominent actions
+    sm: 'px-3 py-2 text-xs space-x-1.5 h-11 md:h-9 font-medium', // 44px mobile -> 36px desktop
+    md: 'px-4 py-2.5 text-sm space-x-2 h-11 md:h-9 font-medium', // 44px mobile -> 36px desktop
+    lg: 'px-5 py-3 text-sm space-x-2.5 h-11 md:h-9 font-semibold' // 44px mobile -> 36px desktop
   }
 
   const iconSizes = {
-    sm: 'w-4 h-4', // 16px - balanced for 40px buttons
-    md: 'w-5 h-5', // 20px - balanced for 48px buttons  
-    lg: 'w-6 h-6'  // 24px - balanced for 56px buttons
+    sm: 'w-3.5 h-3.5', // 14px - balanced for 36px buttons
+    md: 'w-4 h-4', // 16px - balanced for 40px buttons  
+    lg: 'w-4 h-4'  // 16px - consistent small icons for premium feel
   }
 
   const variants = {
     primary: `
-      bg-gradient-to-r from-[#D417C8]/70 to-[#14BDEA]/70 backdrop-blur-md
-      text-white font-semibold
-      shadow-lg shadow-black/20
-      hover:shadow-[0_0_20px_rgba(212,23,200,0.4),0_0_15px_rgba(20,189,234,0.3)]
-      hover:from-[#D417C8] hover:to-[#14BDEA]
-      transition-all duration-300 ease-out
-      relative overflow-hidden
+      bg-gradient-to-r from-[#D417C8]/60 to-[#14BDEA]/60 backdrop-blur-md
+      text-white
+      shadow-md shadow-black/10
+      hover:shadow-[0_0_12px_rgba(212,23,200,0.25)]
+      hover:from-[#D417C8]/70 hover:to-[#14BDEA]/70
+      transition-all duration-200 ease-out
     `,
     secondary: `
-      bg-gradient-to-r from-gray-700/80 to-gray-800/80 backdrop-blur-md
-      text-white font-semibold
-      shadow-lg shadow-black/20
-      hover:shadow-[0_0_20px_rgba(107,114,128,0.5),0_0_15px_rgba(148,163,184,0.3)]
-      hover:from-gray-600/90 hover:to-gray-700/90
-      transition-all duration-300 ease-out
-      relative overflow-hidden
+      bg-white/4 backdrop-blur-md
+      text-gray-200 hover:text-white
+      shadow-md shadow-black/10
+      border border-white/8 hover:border-white/15
+      hover:bg-white/8
+      transition-all duration-200 ease-out
     `,
     ghost: `
-      bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md
-      border border-white/20 
+      bg-transparent
+      border border-white/10 hover:border-white/20
       text-gray-300 hover:text-white
-      hover:bg-gradient-to-r hover:from-white/15 hover:to-white/8
-      hover:border-white/30
-      hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]
-      transition-all duration-300 ease-out
+      hover:bg-white/5
+      transition-all duration-200 ease-out
     `,
     success: `
-      bg-gradient-to-r from-green-600 to-emerald-600
-      border border-green-500/30 
-      text-white font-semibold
-      shadow-[0_0_25px_rgba(34,197,94,0.4),inset_0_1px_0_rgba(255,255,255,0.2)]
-      hover:shadow-[0_0_35px_rgba(34,197,94,0.6),inset_0_1px_0_rgba(255,255,255,0.3)]
-      hover:from-green-500 hover:to-emerald-500
-      hover:border-green-400/50
-      transition-all duration-300 ease-out
+      bg-gradient-to-r from-emerald-600/80 to-green-600/80
+      text-white
+      shadow-md shadow-emerald-500/10
+      hover:shadow-[0_0_12px_rgba(34,197,94,0.25)]
+      hover:from-emerald-600/90 hover:to-green-600/90
+      transition-all duration-200 ease-out
     `
   }
 
@@ -135,18 +129,17 @@ const ActionButton = ({
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...motionProps}
     >
-      {/* Luxury shine effect overlay */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
+      {/* Luxury shine effect overlay - constrained to avoid border artifacts */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
       </div>
       
       {loading ? (
         <>
           <div className="relative">
-            <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-            <div className="absolute inset-0 w-5 h-5 border-2 border-transparent border-t-pink-400 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }} />
+            <div className="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin" />
           </div>
-          <span className="relative z-10">Loading...</span>
+          <span className="relative z-10 text-xs">Loading...</span>
         </>
       ) : (
         <>

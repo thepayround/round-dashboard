@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/services/apiClient'
+import { ENDPOINTS } from '@/shared/services/api/base/config'
 import type { 
   TeamMember, 
   TeamInvitation, 
@@ -8,11 +9,10 @@ import type {
 import type { ApiResponse } from '@/shared/types/api'
 
 class TeamService {
-  private readonly baseUrl = '/api/team'
   
   async getTeamMembers(): Promise<ApiResponse<TeamMember[]>> {
     try {
-      const response = await apiClient.get<TeamMember[]>(`${this.baseUrl}/members`)
+      const response = await apiClient.get<TeamMember[]>(ENDPOINTS.TEAM.MEMBERS)
       return response
     } catch (error) {
       console.error('Failed to fetch team members:', error)
@@ -26,7 +26,7 @@ class TeamService {
 
   async getInvitations(): Promise<ApiResponse<TeamInvitation[]>> {
     try {
-      const response = await apiClient.get<TeamInvitation[]>(`${this.baseUrl}/invitations`)
+      const response = await apiClient.get<TeamInvitation[]>(ENDPOINTS.TEAM.INVITATIONS)
       return response
     } catch (error) {
       console.error('Failed to fetch invitations:', error)
@@ -40,7 +40,7 @@ class TeamService {
 
   async inviteMember(request: InviteMemberRequest): Promise<ApiResponse<TeamInvitation>> {
     try {
-      const response = await apiClient.post<TeamInvitation>(`${this.baseUrl}/invite`, request)
+      const response = await apiClient.post<TeamInvitation>(ENDPOINTS.TEAM.INVITE, request)
       return response
     } catch (error) {
       console.error('Failed to invite member:', error)
@@ -54,7 +54,7 @@ class TeamService {
 
   async updateMemberRole(userId: string, request: UpdateMemberRoleRequest): Promise<ApiResponse<TeamMember>> {
     try {
-      const response = await apiClient.put<TeamMember>(`${this.baseUrl}/members/${userId}/role`, request)
+      const response = await apiClient.put<TeamMember>(ENDPOINTS.TEAM.MEMBER_ROLE(userId), request)
       return response
     } catch (error) {
       console.error('Failed to update member role:', error)
@@ -68,7 +68,7 @@ class TeamService {
 
   async removeMember(userId: string): Promise<ApiResponse<void>> {
     try {
-      await apiClient.delete<void>(`${this.baseUrl}/members/${userId}`)
+      await apiClient.delete<void>(ENDPOINTS.TEAM.MEMBER_BY_ID(userId))
       return {
         success: true,
         data: undefined,
@@ -86,7 +86,7 @@ class TeamService {
 
   async resendInvitation(invitationId: string): Promise<ApiResponse<TeamInvitation>> {
     try {
-      const response = await apiClient.post<TeamInvitation>(`${this.baseUrl}/invitations/${invitationId}/resend`)
+      const response = await apiClient.post<TeamInvitation>(ENDPOINTS.TEAM.INVITATION_RESEND(invitationId))
       return response
     } catch (error) {
       console.error('Failed to resend invitation:', error)
@@ -100,7 +100,7 @@ class TeamService {
 
   async cancelInvitation(invitationId: string): Promise<ApiResponse<void>> {
     try {
-      await apiClient.delete<void>(`${this.baseUrl}/invitations/${invitationId}`)
+      await apiClient.delete<void>(ENDPOINTS.TEAM.INVITATION_BY_ID(invitationId))
       return {
         success: true,
         data: undefined,

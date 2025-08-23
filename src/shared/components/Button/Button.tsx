@@ -17,19 +17,19 @@ interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
 }
 
 const variants = {
-  primary: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105',
-  secondary: 'bg-gradient-to-r from-white/15 to-white/5 border border-white/25 text-white font-semibold hover:from-white/25 hover:to-white/10 hover:border-white/35 backdrop-blur-xl shadow-lg shadow-black/20',
-  ghost: 'bg-transparent border border-transparent text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-white/15 hover:to-white/5 backdrop-blur-xl hover:border-white/20',
-  danger: 'bg-gradient-to-r from-red-500 to-pink-500 border border-red-500/40 text-white font-medium hover:from-red-600 hover:to-pink-600 hover:border-red-500/50 shadow-lg hover:shadow-red-500/30 shadow-red-500/20 transition-all duration-200 transform hover:scale-105',
-  success: 'bg-gradient-to-r from-green-500 to-emerald-500 border border-green-500/40 text-white font-medium hover:from-green-600 hover:to-emerald-600 hover:border-green-500/50 shadow-lg hover:shadow-green-500/30 shadow-green-500/20 transition-all duration-200 transform hover:scale-105',
-  create: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105 relative overflow-hidden'
+  primary: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium shadow-btn-premium hover:shadow-btn-hover transition-all duration-150',
+  secondary: 'bg-glass-bg-light border border-glass-border-light text-white font-medium hover:bg-glass-hover hover:border-glass-hover-border backdrop-blur-xl shadow-glass-sm',
+  ghost: 'bg-transparent border border-transparent text-gray-300 hover:text-white hover:bg-glass-bg backdrop-blur-xl hover:border-glass-border',
+  danger: 'bg-gradient-to-r from-red-500 to-pink-500 text-white font-medium hover:from-red-600 hover:to-pink-600 shadow-glass-sm hover:shadow-glass-md transition-all duration-150',
+  success: 'bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium hover:from-green-600 hover:to-emerald-600 shadow-glass-sm hover:shadow-glass-md transition-all duration-150',
+  create: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium shadow-btn-premium hover:shadow-btn-hover transition-all duration-150 relative overflow-hidden'
 }
 
 const sizes = {
-  sm: 'px-4 py-2 text-sm h-12',  // 48px - Tailwind standard
-  md: 'px-6 py-2 text-base h-12',  // 48px - Tailwind standard
-  lg: 'px-8 py-2 text-lg h-12',   // 48px - Tailwind standard
-  xl: 'px-10 py-2 text-xl h-16'   // 64px - For prominent actions
+  sm: 'px-3 py-1.5 text-xs h-11 md:h-9',     // 44px mobile -> 36px desktop
+  md: 'px-4 py-1.5 text-xs h-11 md:h-9',     // 44px mobile -> 36px desktop
+  lg: 'px-5 py-1.5 text-xs h-11 md:h-9',     // 44px mobile -> 36px desktop
+  xl: 'px-6 py-1.5 text-sm h-11 md:h-9'      // 44px mobile -> 36px desktop
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
@@ -46,10 +46,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   ...props
 }, ref) => {
   const baseClasses = `
-    rounded-lg transition-all duration-300 flex items-center justify-center gap-2
-    focus:outline-none focus:ring-2 focus:ring-[#D417C8]/60 focus:ring-offset-1 focus:ring-offset-transparent
+    rounded-lg transition-all duration-150 flex items-center justify-center gap-1.5
+    focus:outline-none focus:ring-1 focus:ring-[#D417C8]/30 focus:ring-offset-1 focus:ring-offset-transparent
     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-    relative isolate
+    relative isolate font-medium
   `
 
   const variantClasses = variants[variant]
@@ -108,8 +108,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       
       {/* Enhanced shine effects for create and primary variants */}
       {enhanced && (variant === 'primary' || variant === 'create') && (
-        <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 animate-pulse" />
+        <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/4 to-transparent transform -skew-x-12 animate-pulse" />
         </div>
       )}
     </motion.button>

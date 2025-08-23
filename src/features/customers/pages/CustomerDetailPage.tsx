@@ -227,7 +227,7 @@ const CustomerDetailPage: React.FC = () => {
         <Users className="empty-state-icon" />
         <h3 className="empty-state-title">Customer not found</h3>
         <p className="empty-state-description">The customer you&apos;re looking for doesn&apos;t exist.</p>
-        <Link to="/customers" className="btn-primary-enhanced">
+        <Link to="/customers" className="btn-primary">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Customers
         </Link>
@@ -341,11 +341,11 @@ const CustomerDetailPage: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-3">
-          <button className="btn-secondary-enhanced flex items-center gap-2">
+          <button className="btn-secondary flex items-center gap-2">
             <Download className="w-4 h-4" />
             Export Data
           </button>
-          <button className="btn-primary-enhanced flex items-center gap-2">
+          <button className="btn-primary flex items-center gap-2">
             <Edit className="w-4 h-4" />
             Edit Customer
           </button>
@@ -557,7 +557,7 @@ const CustomerDetailPage: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-white">Invoices</h3>
-                    <button className="btn-primary-enhanced flex items-center gap-2">
+                    <button className="btn-primary flex items-center gap-2">
                       <Plus className="w-4 h-4" />
                       Create Invoice
                     </button>
@@ -582,7 +582,7 @@ const CustomerDetailPage: React.FC = () => {
                         
                         {invoice.downloadUrl && (
                           <div className="mt-3 pt-3 border-t border-gray-700/30">
-                            <button className="btn-secondary-enhanced text-sm flex items-center gap-2">
+                            <button className="btn-secondary text-sm flex items-center gap-2">
                               <Download className="w-3 h-3" />
                               Download PDF
                             </button>
@@ -599,7 +599,7 @@ const CustomerDetailPage: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-white">Payment History</h3>
-                    <button className="btn-primary-enhanced flex items-center gap-2">
+                    <button className="btn-primary flex items-center gap-2">
                       <Plus className="w-4 h-4" />
                       Record Payment
                     </button>
@@ -650,7 +650,7 @@ const CustomerDetailPage: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-white">Customer Notes</h3>
-                    <button className="btn-primary-enhanced flex items-center gap-2">
+                    <button className="btn-primary flex items-center gap-2">
                       <Plus className="w-4 h-4" />
                       Add Note
                     </button>
@@ -686,19 +686,19 @@ const CustomerDetailPage: React.FC = () => {
           <div className="card-enhanced p-6">
             <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
             <div className="space-y-3">
-              <button className="w-full btn-secondary-enhanced flex items-center justify-center gap-2">
+              <button className="w-full btn-secondary flex items-center justify-center gap-2">
                 <Mail className="w-4 h-4" />
                 Send Email
               </button>
-              <button className="w-full btn-secondary-enhanced flex items-center justify-center gap-2">
+              <button className="w-full btn-secondary flex items-center justify-center gap-2">
                 <CreditCard className="w-4 h-4" />
                 Update Payment Method
               </button>
-              <button className="w-full btn-secondary-enhanced flex items-center justify-center gap-2">
+              <button className="w-full btn-secondary flex items-center justify-center gap-2">
                 <DollarSign className="w-4 h-4" />
                 Apply Credit
               </button>
-              <button className="w-full btn-secondary-enhanced flex items-center justify-center gap-2">
+              <button className="w-full btn-secondary flex items-center justify-center gap-2">
                 <FileText className="w-4 h-4" />
                 Generate Invoice
               </button>

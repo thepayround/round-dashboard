@@ -172,13 +172,13 @@ export const InvoicesPage = () => {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-left py-4 px-4 auth-text-muted font-medium">Invoice ID</th>
-                  <th className="text-left py-4 px-4 auth-text-muted font-medium">Customer</th>
-                  <th className="text-left py-4 px-4 auth-text-muted font-medium">Amount</th>
-                  <th className="text-left py-4 px-4 auth-text-muted font-medium">Status</th>
-                  <th className="text-left py-4 px-4 auth-text-muted font-medium">Date</th>
-                  <th className="text-left py-4 px-4 auth-text-muted font-medium">Due Date</th>
-                  <th className="text-left py-4 px-4 auth-text-muted font-medium">Actions</th>
+                  <th className="text-left py-2 px-4 auth-text-muted font-medium">Invoice ID</th>
+                  <th className="text-left py-2 px-4 auth-text-muted font-medium">Customer</th>
+                  <th className="text-left py-2 px-4 auth-text-muted font-medium">Amount</th>
+                  <th className="text-left py-2 px-4 auth-text-muted font-medium">Status</th>
+                  <th className="text-left py-2 px-4 auth-text-muted font-medium">Date</th>
+                  <th className="text-left py-2 px-4 auth-text-muted font-medium">Due Date</th>
+                  <th className="text-left py-2 px-4 auth-text-muted font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -190,10 +190,10 @@ export const InvoicesPage = () => {
                     transition={{ delay: 0.1 * index }}
                     className="border-b border-white/5 hover:bg-white/5 transition-all duration-200"
                   >
-                    <td className="py-4 px-4">
+                    <td className="py-2 px-4">
                       <span className="font-medium auth-text">{invoice.id}</span>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-2 px-4">
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 flex items-center justify-center">
                           <span className="text-xs font-medium auth-text">
@@ -203,23 +203,23 @@ export const InvoicesPage = () => {
                         <span className="auth-text">{invoice.customer}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-2 px-4">
                       <span className="font-medium auth-text">${invoice.amount.toFixed(2)}</span>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-2 px-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(invoice.status)}`}
                       >
                         {invoice.status}
                       </span>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-2 px-4">
                       <span className="auth-text-muted">{invoice.date}</span>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-2 px-4">
                       <span className="auth-text-muted">{invoice.dueDate}</span>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-2 px-4">
                       <div className="flex items-center space-x-2">
                         <button className="p-2 text-white/70 hover:text-[#32A1E4] hover:bg-[#32A1E4]/20 rounded-lg transition-all duration-200">
                           <Eye className="w-4 h-4" />

@@ -720,7 +720,7 @@ export const BusinessRegisterPage = () => {
               onClick={multiStepForm.goToPrevious}
               disabled={!multiStepForm.canGoPrevious}
               className={`
-                h-12 px-4 sm:px-6 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[100px] sm:min-w-[140px] 
+                h-11 md:h-9 px-4 sm:px-6 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2 min-w-[100px] sm:min-w-[140px] 
                 ${
                   multiStepForm.canGoPrevious
                     ? 'bg-white/8 backdrop-blur-sm border border-white/15 text-white hover:bg-white/12 hover:border-white/20'
@@ -741,7 +741,7 @@ export const BusinessRegisterPage = () => {
                   type="button"
                   onClick={handleSkipBilling}
                   disabled={isSubmitting}
-                  className="h-12 px-3 sm:px-4 bg-white/8 backdrop-blur-sm border border-white/15 text-white hover:bg-white/12 hover:border-white/20 disabled:opacity-50 min-w-[80px] sm:min-w-[100px] flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-200"
+                  className="h-11 md:h-9 px-3 sm:px-4 bg-white/8 backdrop-blur-sm border border-white/15 text-white hover:bg-white/12 hover:border-white/20 disabled:opacity-50 min-w-[80px] sm:min-w-[100px] flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-200"
                 >
                   <span className="hidden sm:inline">Skip for now</span>
                   <span className="sm:hidden">Skip</span>
