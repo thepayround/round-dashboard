@@ -55,10 +55,10 @@ export default defineConfig({
 
   // Development server configuration
   server: {
-    port: 3000, // Fixed port for frontend
+    port: 3000, // Preferred port for frontend
     open: false, // Don't auto-open browser
     host: true, // Allow external connections
-    strictPort: true, // Fail if port is in use (don't try other ports)
+    strictPort: false, // Try next available port if 3000 is in use
   },
 
   // Production build configuration

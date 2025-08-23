@@ -923,8 +923,8 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                   {hoveredTooltip.label}
                 </div>
                 <div className="text-gray-300 text-[11px] leading-relaxed space-y-1">
-                  <div>{hoveredTooltip.userInfo?.role} at {hoveredTooltip.userInfo?.company}</div>
-                  <div className="text-gray-400">{hoveredTooltip.userInfo?.email}</div>
+                  <div>{hoveredTooltip.userInfo?.role as React.ReactNode} at {hoveredTooltip.userInfo?.company as React.ReactNode}</div>
+                  <div className="text-gray-400">{hoveredTooltip.userInfo?.email as React.ReactNode}</div>
                 </div>
               </div>
             ) : (

@@ -55,6 +55,17 @@ export const ENDPOINTS = {
     NOTIFICATION_BY_TYPE: (notificationType: string) => `/user-settings/notifications/${notificationType}`,
     VALIDATE: '/user-settings/validate',
   },
+  // Team Management (RESTful resource-based design)
+  TEAM: {
+    BASE: '/api/team',
+    MEMBERS: '/api/team/members',
+    MEMBER_BY_ID: (userId: string) => `/api/team/members/${userId}`,
+    MEMBER_ROLE: (userId: string) => `/api/team/members/${userId}/role`,
+    INVITATIONS: '/api/team/invitations',
+    INVITATION_BY_ID: (invitationId: string) => `/api/team/invitations/${invitationId}`,
+    INVITATION_RESEND: (invitationId: string) => `/api/team/invitations/${invitationId}/resend`,
+    INVITE: '/api/team/invite',
+  },
   // Users (deprecated - use AUTH.ME instead)
   // USERS: {
   //   SEARCH: '/users/search', // Deprecated: use ENDPOINTS.AUTH.ME instead

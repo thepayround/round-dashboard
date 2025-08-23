@@ -8,6 +8,7 @@ import {
   Shield, 
   Bell, 
   CreditCard, 
+  Users,
   Loader2, 
   Save, 
   AlertCircle,
@@ -22,6 +23,7 @@ import {
   Lock,
   ChevronRight
 } from 'lucide-react'
+import { TeamManagementPage } from '../components/TeamManagementPage'
 import { useUserSettingsManager } from '@/shared/hooks/useUserSettingsManager'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { usePreloadAllOptions } from '@/shared/hooks/api/useUserSettingsOptions'
@@ -75,6 +77,12 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
       label: 'Notifications', 
       icon: Bell,
       description: 'Communication and alert preferences'
+    },
+    { 
+      id: 'team', 
+      label: 'Team Management', 
+      icon: Users,
+      description: 'Manage team members and roles'
     },
     { 
       id: 'billing', 
@@ -136,6 +144,8 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
         />
       case 'notifications':
         return <NotificationsSection notifications={notifications} updateNotificationPreference={updateNotificationPreference} />
+      case 'team':
+        return <TeamManagementPage />
       case 'billing':
         return <BillingSection />
       default:
