@@ -361,7 +361,7 @@ export const PersonalRegisterPage = () => {
               onBlur={handlePhoneBlur}
               validateOnBlur={false}
               label="Phone Number"
-              placeholder="Enter your phone number"
+              placeholder="Phone number"
               error={hasFieldError(errors, 'phone') ? getFieldError(errors, 'phone')?.message : undefined}
               defaultCountry="GR"
               showValidation={false}

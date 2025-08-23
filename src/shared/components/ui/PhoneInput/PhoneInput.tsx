@@ -516,9 +516,11 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
       {/* Phone Input Container */}
       <div className={cn(
-        "relative flex h-11 w-full rounded-lg transition-all duration-300 overflow-hidden",
+        "relative flex w-full rounded-lg transition-all duration-300 overflow-hidden",
+        // Match auth-input responsive height exactly
+        "h-[42px] md:h-9",
         // Use consistent auth-input styling
-        "bg-white/[0.12] backdrop-blur-[16px] border",
+        "bg-white/[0.06] backdrop-blur-[24px] border",
         (() => {
           // Exactly match auth-input CSS cascade: .auth-input:focus then .auth-input-error:focus
           if ((isFocused || isDropdownOpen) && hasError) {
@@ -533,7 +535,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             // Error state without focus
             return "border-[#ef4444] bg-[rgba(239,68,68,0.12)]"
           }
-          return "border-white/20"
+          return "border-white/10"
         })(),
         disabled && "opacity-50 cursor-not-allowed"
       )}>
@@ -548,11 +550,14 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             }
           }}
           className={cn(
-            'relative flex items-center gap-2 px-3 h-full min-w-[120px] border-r cursor-pointer transition-all duration-300',
-            'text-white font-medium text-sm outline-none',
-            '[text-shadow:0_1px_2px_rgba(0,0,0,0.3)]',
+            'relative flex items-center gap-2 h-full min-w-[120px] border-r cursor-pointer transition-all duration-150',
+            // Match auth-input responsive padding exactly  
+            'px-3 md:px-4',
+            // Match auth-input text styling exactly
+            'text-white/95 text-xs md:text-xs font-normal outline-none',
+            '[text-shadow:0_1px_1px_rgba(0,0,0,0.2)]',
             // Use consistent border color from auth-input
-            'border-white/20',
+            'border-white/10',
             // Match auth-input CSS cascade exactly
             (() => {
               if (isDropdownOpen && hasError) {
@@ -587,11 +592,11 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                   <span className="text-base flex-shrink-0" role="img" aria-label={selectedCountry.countryName}>
                     {selectedCountry.flag}
                   </span>
-                  <span className="text-sm text-white/95 truncate">+{selectedCountry.phoneCode}</span>
+                  <span className="text-xs md:text-xs text-white/95 truncate">+{selectedCountry.phoneCode}</span>
                 </>
               )
             }
-            return <span className="text-sm text-white/60">Select</span>
+            return <span className="text-xs md:text-xs text-white/60">Select</span>
           })()}
           <ChevronDown 
             className={cn(
@@ -618,13 +623,16 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             placeholder={getPlaceholder()}
             disabled={disabled}
             className={cn(
-              'w-full h-full pl-3 pr-3 bg-transparent placeholder-gray-400 text-sm focus:outline-none',
-              // Match auth-input text color states 
+              'w-full h-full bg-transparent focus:outline-none',
+              // Match auth-input responsive padding exactly
+              'pl-3 pr-3 md:pl-4 md:pr-4',
+              // Match auth-input text color and size exactly
               isFocused ? 'text-white' : 'text-white/95',
-              'transition-all duration-300 font-medium',
-              '[text-shadow:0_1px_2px_rgba(0,0,0,0.3)]',
-              // Match auth-input placeholder styling
-              'placeholder:text-white/60',
+              'text-xs md:text-xs font-normal', // Match auth-input font size/weight
+              'transition-all duration-150', // Match auth-input transition
+              '[text-shadow:0_1px_1px_rgba(0,0,0,0.2)]', // Match auth-input text shadow
+              // Match auth-input placeholder styling exactly
+              'placeholder:text-white/60 placeholder:font-normal',
               // Autofill/autocomplete styling fixes (same as FormInput)
               '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
               '[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',

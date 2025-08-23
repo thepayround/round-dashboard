@@ -537,7 +537,7 @@ export const BusinessRegisterPage = () => {
                   onBlur={handlePersonalPhoneBlur}
                   validateOnBlur={false}
                   label="Phone Number"
-                  placeholder="Enter your phone number"
+                  placeholder="Phone number"
                   error={hasFieldError(personalErrors, 'phone') ? getFieldError(personalErrors, 'phone')?.message : undefined}
                   defaultCountry="GR"
                   showValidation={false}
