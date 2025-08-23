@@ -694,7 +694,7 @@ class ApiClient {
       }
 
       const response = await this.client.post<AddressResponse>(
-        `/Organizations/${organizationId}/addresses`,
+        `/organizations/${organizationId}/addresses`,
         addressRequest
       )
 
