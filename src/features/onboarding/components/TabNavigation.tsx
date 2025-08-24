@@ -116,7 +116,7 @@ export const TabNavigation = ({
                 className={`
                   relative flex-shrink-0 touch-target
                   w-8 h-8 md:w-10 md:h-10 lg:w-9 lg:h-9
-                  rounded-full border-2 md:border-2 lg:border-2 
+                  rounded-full
                   flex items-center justify-center 
                   transition-all duration-300 ease-out
                   transform hover:scale-110 focus:scale-110 active:scale-95

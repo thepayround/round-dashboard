@@ -25,6 +25,7 @@ export const ENDPOINTS = {
     CONFIRM_EMAIL: '/identities/confirm-email',
     CONFIRM_EMAIL_AND_LOGIN: '/identities/confirm-email-and-login',
     RESEND_CONFIRMATION: '/identities/resend',
+    GOOGLE_AUTH: '/identities/google-auth',
     ME: '/identities/me',
   },
   // Organizations (addresses are included in organization responses)

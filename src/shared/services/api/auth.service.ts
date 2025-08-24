@@ -463,6 +463,55 @@ export class AuthService {
   }
 
   /**
+   * Google OAuth authentication
+   */
+  async googleAuth(request: {
+    accessToken: string
+  }): Promise<ApiResponse<AuthResponse>> {
+    try {
+      const response = await this.client.post(ENDPOINTS.AUTH.GOOGLE_AUTH, {
+        accessToken: request.accessToken
+      })
+
+      if (response.data.succeeded && response.data.token) {
+        // Store tokens
+        httpClient.setStoredToken(response.data.token)
+        if (response.data.refreshToken) {
+          localStorage.setItem('refresh_token', response.data.refreshToken)
+        }
+
+        // Get user information using the token
+        const userResponse = await this.getCurrentUser()
+        if (!userResponse.success || !userResponse.data) {
+          return {
+            success: false,
+            error: 'Failed to retrieve user information after Google login',
+            data: null as never,
+            message: '',
+          }
+        }
+
+        return {
+          success: true,
+          data: {
+            user: userResponse.data,
+            accessToken: response.data.token,
+            refreshToken: response.data.refreshToken || '',
+          },
+          message: 'Google authentication successful',
+        }
+      } else {
+        return {
+          success: false,
+          error: response.data.errors?.[0]?.description ?? 'Google authentication failed',
+        }
+      }
+    } catch (error) {
+      return this.handleApiError(error, 'Google authentication failed')
+    }
+  }
+
+  /**
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {

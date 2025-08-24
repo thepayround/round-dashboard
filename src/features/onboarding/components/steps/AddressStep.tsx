@@ -108,29 +108,26 @@ export const AddressStep = ({
               />
             </div>
             
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <label htmlFor="unit-number" className="block text-sm font-medium text-gray-300">Unit #</label>
-                <div className="group relative">
-                  <Info className="w-4 h-4 text-gray-400 cursor-help" />
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 backdrop-blur-sm text-white text-xs rounded-lg shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-white/10 z-50">
-                    Building/unit number
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900/95" />
+            <div>
+              <FormInput
+                label={
+                  <div className="flex items-center space-x-2">
+                    <span>Unit #</span>
+                    <div className="group relative">
+                      <Info className="w-4 h-4 text-gray-400 cursor-help" />
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 backdrop-blur-sm text-white text-xs rounded-lg shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-white/10 z-50">
+                        Building/unit number
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900/95" />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="input-container">
-                <Hash className="input-icon-left auth-icon-primary" />
-                <input
-                  id="unit-number"
-                  type="text"
-                  value={data.number}
-                  onChange={handleInputChange('number')}
-                  placeholder="123A"
-                  className={`auth-input input-with-icon-left ${errors.number ? 'auth-input-error' : ''}`}
-                />
-              </div>
-              {errors.number && <p className="mt-1 text-sm text-red-400">{errors.number}</p>}
+                }
+                value={data.number}
+                onChange={handleInputChange('number')}
+                placeholder="123A"
+                leftIcon={Hash}
+                error={errors.number}
+              />
             </div>
           </div>
         </div>

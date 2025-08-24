@@ -4,7 +4,7 @@ import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 
 interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  label?: string
+  label?: string | React.ReactNode
   error?: string
   leftIcon?: LucideIcon
   rightIcon?: LucideIcon

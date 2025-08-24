@@ -8,7 +8,7 @@ export const useTeamManagement = (): TeamManagementState & TeamManagementActions
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const refresh = useCallback(async (roundAccountId: string) => {
+  const refresh = useCallback(async (_roundAccountId: string) => {
     try {
       setIsLoading(true)
       setError(null)
