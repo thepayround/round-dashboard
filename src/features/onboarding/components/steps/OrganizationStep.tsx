@@ -75,161 +75,222 @@ export const OrganizationStep = ({
         </div>
       </div>
 
-      {/* Form */}
-      <div className="max-w-[420px] mx-auto space-y-6">
-        {/* Company Name */}
-        <div>
-          <label htmlFor="companyName" className="auth-label">
-            Company Name
-          </label>
-          <div className="input-container">
-            <Building className="input-icon-left auth-icon-primary" />
-            <input
-              id="companyName"
-              type="text"
-              value={data.companyName}
-              onChange={handleInputChange('companyName')}
-              placeholder="Acme Corporation"
-              className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
-            />
-          </div>
-          {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
-        </div>
-
-        {/* Country */}
-        <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">
-            Country <span className="text-red-400">*</span>
-          </span>
-          <ApiDropdown
-            config={countryDropdownConfig}
-            value={data.country}
-            onSelect={value => handleSelectChange('country', value)}
-            onClear={() => handleSelectChange('country', '')}
-            error={!!errors.country}
-            allowClear
-          />
-          {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
-        </div>
-
-        {/* Industry */}
-        <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">
-            Industry <span className="text-red-400">*</span>
-          </span>
-          <ApiDropdown
-            config={industryDropdownConfig}
-            value={data.industry}
-            onSelect={value => handleSelectChange('industry', value)}
-            onClear={() => handleSelectChange('industry', '')}
-            error={!!errors.industry}
-            allowClear
-          />
-          {errors.industry && <p className="mt-1 text-sm text-red-400">{errors.industry}</p>}
-        </div>
-
-        {/* Company Size */}
-        <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">
-            Company Size <span className="text-red-400">*</span>
-          </span>
-          <ApiDropdown
-            config={companySizeDropdownConfig}
-            value={data.companySize}
-            onSelect={value => handleSelectChange('companySize', value)}
-            onClear={() => handleSelectChange('companySize', '')}
-            error={!!errors.companySize}
-            allowClear
-          />
-          {errors.companySize && <p className="mt-1 text-sm text-red-400">{errors.companySize}</p>}
-        </div>
-
-        {/* Organization Type */}
-        <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">
-            Organization Type <span className="text-red-400">*</span>
-          </span>
-          <ApiDropdown
-            config={organizationTypeDropdownConfig}
-            value={data.organizationType}
-            onSelect={value => handleSelectChange('organizationType', value)}
-            onClear={() => handleSelectChange('organizationType', '')}
-            error={!!errors.organizationType}
-            allowClear
-          />
-          {errors.organizationType && <p className="mt-1 text-sm text-red-400">{errors.organizationType}</p>}
-        </div>
-
-        {/* Website */}
-        <div>
-          <label htmlFor="website" className="auth-label">
-            Website <span className="text-gray-500">(optional)</span>
-          </label>
-          <div className="input-container">
-            <ExternalLink className="input-icon-left auth-icon-primary" />
-            <input
-              id="website"
-              type="url"
-              value={data.website}
-              onChange={handleInputChange('website')}
-              placeholder="https://www.example.com"
-              className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
-            />
-          </div>
-          {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
-        </div>
-
-        {/* Description */}
-        <div>
-          <label htmlFor="description" className="auth-label">
-            Description <span className="text-gray-500">(optional)</span>
-          </label>
-          <div className="input-container">
-            <AlignLeft className="input-icon-left textarea-icon auth-icon-primary" />
-            <textarea
-              id="description"
-              value={data.description ?? ''}
-              onChange={e => onChange({ ...data, description: e.target.value })}
-              placeholder="Brief description of your company..."
-              rows={3}
-              className={`auth-input textarea input-with-icon-left resize-none ${errors.description ? 'auth-input-error' : ''}`}
-            />
-          </div>
-          {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
-        </div>
-
-        {/* Revenue */}
-        <div>
-          <label htmlFor="revenue" className="auth-label">
-            Annual Revenue <span className="text-gray-500">(optional)</span>
-            {businessSettings?.currency && (
-              <span className="text-gray-500 ml-2">
-                ({businessSettings.currency})
-              </span>
-            )}
-          </label>
-          <div className="input-container">
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
-              {currencyLoading ? (
-                <div className="w-3 h-3 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
-              ) : (
-                <span className="text-sm font-semibold text-[#14BDEA]">
-                  {currencySymbol}
-                </span>
-              )}
+      {/* Form - Card-based Layout */}
+      <div className="max-w-5xl mx-auto space-y-6">
+        
+        {/* Company Identity Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+        >
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <Building className="w-4 h-4 text-[#32A1E4]" />
             </div>
-            <input
-              id="revenue"
-              type="number"
-              value={data.revenue ?? ''}
-              onChange={handleInputChange('revenue')}
-              placeholder="1000000"
-              className={`auth-input input-with-icon-left ${errors.revenue ? 'auth-input-error' : ''}`}
-              style={{ paddingLeft: '3rem' }}
-            />
+            <div>
+              <h3 className="text-sm font-medium text-white">Company Identity</h3>
+              <p className="text-xs text-gray-400">Basic company information</p>
+            </div>
           </div>
-          {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}
-        </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Company Name */}
+            <div>
+              <label htmlFor="companyName" className="auth-label">
+                Company Name <span className="text-red-400">*</span>
+              </label>
+              <div className="input-container">
+                <Building className="input-icon-left auth-icon-primary" />
+                <input
+                  id="companyName"
+                  type="text"
+                  value={data.companyName}
+                  onChange={handleInputChange('companyName')}
+                  placeholder="Acme Corporation"
+                  className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
+                />
+              </div>
+              {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
+            </div>
+
+            {/* Website */}
+            <div>
+              <label htmlFor="website" className="auth-label">
+                Website <span className="text-gray-500">(optional)</span>
+              </label>
+              <div className="input-container">
+                <ExternalLink className="input-icon-left auth-icon-primary" />
+                <input
+                  id="website"
+                  type="url"
+                  value={data.website}
+                  onChange={handleInputChange('website')}
+                  placeholder="https://www.example.com"
+                  className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
+                />
+              </div>
+              {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
+            </div>
+
+            {/* Description - Full Width */}
+            <div className="md:col-span-2">
+              <label htmlFor="description" className="auth-label">
+                Description <span className="text-gray-500">(optional)</span>
+              </label>
+              <div className="input-container">
+                <AlignLeft className="input-icon-left textarea-icon auth-icon-primary" />
+                <textarea
+                  id="description"
+                  value={data.description ?? ''}
+                  onChange={e => onChange({ ...data, description: e.target.value })}
+                  placeholder="Brief description of your company..."
+                  rows={3}
+                  className={`auth-input textarea input-with-icon-left resize-none ${errors.description ? 'auth-input-error' : ''}`}
+                />
+              </div>
+              {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Business Details Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+        >
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <Building className="w-4 h-4 text-[#14BDEA]" />
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-white">Business Details</h3>
+              <p className="text-xs text-gray-400">Industry and company classification</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Country */}
+            <div>
+              <span className="block text-sm font-medium text-gray-300 mb-2">
+                Country <span className="text-red-400">*</span>
+              </span>
+              <ApiDropdown
+                config={countryDropdownConfig}
+                value={data.country}
+                onSelect={value => handleSelectChange('country', value)}
+                onClear={() => handleSelectChange('country', '')}
+                error={!!errors.country}
+                allowClear
+              />
+              {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
+            </div>
+
+            {/* Industry */}
+            <div>
+              <span className="block text-sm font-medium text-gray-300 mb-2">
+                Industry <span className="text-red-400">*</span>
+              </span>
+              <ApiDropdown
+                config={industryDropdownConfig}
+                value={data.industry}
+                onSelect={value => handleSelectChange('industry', value)}
+                onClear={() => handleSelectChange('industry', '')}
+                error={!!errors.industry}
+                allowClear
+              />
+              {errors.industry && <p className="mt-1 text-sm text-red-400">{errors.industry}</p>}
+            </div>
+
+            {/* Company Size */}
+            <div>
+              <span className="block text-sm font-medium text-gray-300 mb-2">
+                Company Size <span className="text-red-400">*</span>
+              </span>
+              <ApiDropdown
+                config={companySizeDropdownConfig}
+                value={data.companySize}
+                onSelect={value => handleSelectChange('companySize', value)}
+                onClear={() => handleSelectChange('companySize', '')}
+                error={!!errors.companySize}
+                allowClear
+              />
+              {errors.companySize && <p className="mt-1 text-sm text-red-400">{errors.companySize}</p>}
+            </div>
+
+            {/* Organization Type */}
+            <div>
+              <span className="block text-sm font-medium text-gray-300 mb-2">
+                Organization Type <span className="text-red-400">*</span>
+              </span>
+              <ApiDropdown
+                config={organizationTypeDropdownConfig}
+                value={data.organizationType}
+                onSelect={value => handleSelectChange('organizationType', value)}
+                onClear={() => handleSelectChange('organizationType', '')}
+                error={!!errors.organizationType}
+                allowClear
+              />
+              {errors.organizationType && <p className="mt-1 text-sm text-red-400">{errors.organizationType}</p>}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Financial Information Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+        >
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <span className="text-sm font-semibold text-[#7767DA]">{currencySymbol}</span>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-white">Financial Information</h3>
+              <p className="text-xs text-gray-400">Revenue details <span className="text-gray-500">(optional)</span></p>
+            </div>
+          </div>
+
+          <div className="max-w-md">
+            {/* Revenue */}
+            <div>
+              <label htmlFor="revenue" className="auth-label">
+                Annual Revenue <span className="text-gray-500">(optional)</span>
+                {businessSettings?.currency && (
+                  <span className="text-gray-500 ml-2">
+                    ({businessSettings.currency})
+                  </span>
+                )}
+              </label>
+              <div className="input-container">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
+                  {currencyLoading ? (
+                    <div className="w-3 h-3 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+                  ) : (
+                    <span className="text-sm font-semibold text-[#14BDEA]">
+                      {currencySymbol}
+                    </span>
+                  )}
+                </div>
+                <input
+                  id="revenue"
+                  type="number"
+                  value={data.revenue ?? ''}
+                  onChange={handleInputChange('revenue')}
+                  placeholder="1000000"
+                  className={`auth-input input-with-icon-left ${errors.revenue ? 'auth-input-error' : ''}`}
+                  style={{ paddingLeft: '3rem' }}
+                />
+              </div>
+              {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}
+            </div>
+          </div>
+        </motion.div>
       </div>
 
     </motion.div>
