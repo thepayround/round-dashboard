@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion'
-import { User, Phone, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, Users, Building, Check } from 'lucide-react'
+import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, Users, Building, Check } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ActionButton, AuthLogo } from '@/shared/components'
+import { ActionButton, AuthLogo, PhoneInput } from '@/shared/components'
 
 import type { ValidationError } from '@/shared/utils/validation'
+import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
+import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
 import {
   validateRegistrationForm,
   getFieldError,
@@ -27,6 +29,7 @@ export const InvitationAcceptancePage = () => {
     lastName: '',
     phone: '',
     password: '',
+    countryPhoneCode: '',
   })
   const [errors, setErrors] = useState<ValidationError[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -101,6 +104,82 @@ export const InvitationAcceptancePage = () => {
     }
   }
 
+  const handlePhoneChange = (phoneNumber: string) => {
+    setFormData(prev => ({ ...prev, phone: phoneNumber }))
+    
+    // Clear phone error when user starts typing (same as other fields)
+    if (hasFieldError(errors, 'phone')) {
+      setErrors(prev => prev.filter(error => error.field !== 'phone'))
+    }
+  }
+
+  const handlePhoneBlur = async (phoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
+    // Store the country phone code for backend submission
+    if (countryInfo?.phoneCode) {
+      setFormData(prev => ({ ...prev, countryPhoneCode: countryInfo.phoneCode }))
+    }
+
+    // Check if field is empty and required, show required error immediately
+    if (!phoneNumber?.trim()) {
+      setErrors(prev => [
+        ...prev.filter(error => error.field !== 'phone'),
+        { field: 'phone', message: 'Phone number is required', code: 'REQUIRED' }
+      ])
+      return
+    }
+
+    try {
+      // Use the provided phone number and country info
+      const countryCode = countryInfo?.countryCode ?? 'US'
+
+      // Call backend API for validation using the service
+      const validationResult = await phoneValidationService.validatePhoneNumber({
+        phoneNumber,
+        countryCode,
+      })
+
+      if (!validationResult.isValid) {
+        const phoneError: ValidationError = {
+          field: 'phone',
+          message: validationResult.error ?? 'Invalid phone number format',
+          code: 'INVALID_PHONE'
+        }
+        setErrors(prev => [...prev.filter(error => error.field !== 'phone'), phoneError])
+      } else {
+        // Clear phone error if validation passed
+        setErrors(prev => prev.filter(error => error.field !== 'phone'))
+      }
+    } catch (error: unknown) {
+      console.error('Phone validation failed:', error)
+      
+      // Check if this is a validation response in the error
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { error?: string } } }
+        if (axiosError.response?.data) {
+          const validationResult = axiosError.response.data
+          if (validationResult.error) {
+            // Use the specific error from backend
+            const phoneError: ValidationError = {
+              field: 'phone',
+              message: validationResult.error,
+              code: 'INVALID_PHONE'
+            }
+            setErrors(prev => [...prev.filter(error => error.field !== 'phone'), phoneError])
+            return
+          }
+        }
+      }
+      
+      // Only show generic error if we can't get specific error from backend
+      const phoneError: ValidationError = {
+        field: 'phone',
+        message: 'Phone validation service unavailable',
+        code: 'SERVICE_ERROR'
+      }
+      setErrors(prev => [...prev.filter(error => error.field !== 'phone'), phoneError])
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -133,38 +212,18 @@ export const InvitationAcceptancePage = () => {
         email: invitation.email,
         password: formData.password,
         phoneNumber: formData.phone.trim(),
+        countryPhoneCode: formData.countryPhoneCode,
         token,
       }
 
       const response = await teamService.registerWithInvitation(registrationRequest)
 
       if (response.success && response.data) {
-        // Auto-login with the returned tokens
-        const { token, refreshToken } = response.data
+        // Auto-login with the returned tokens and user data
+        const { token, refreshToken, user } = response.data
         
-        // Create user object for login
-        const userData = {
-          id: '', // Will be fetched when needed
-          email: invitation.email,
-          firstName: formData.firstName.trim(),
-          lastName: formData.lastName.trim(),
-          phone: formData.phone.trim(),
-          accountType: 'business' as const,
-          role: 'member' as const, // Default role for invited users
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          companyInfo: {
-            companyName: invitation.organizationName,
-            registrationNumber: '',
-            currency: 'USD' as const,
-            businessType: 'corporation' as const,
-            website: '',
-            description: ''
-          }
-        }
-        
-        // Log the user in
-        login(userData, token, refreshToken)
+        // Log the user in with complete data from API (includes formatted phone number)
+        login(user, token, refreshToken)
         
         // Navigate to dashboard
         navigate('/dashboard', { replace: true })
@@ -403,23 +462,21 @@ export const InvitationAcceptancePage = () => {
 
             {/* Phone Number */}
             <div>
-              <label htmlFor="phone" className="auth-label">
-                Phone Number
-              </label>
-              <div className="input-container">
-                <Phone className="input-icon-left auth-icon-primary" />
-                <input
-                  id="phone"
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur}
-                  placeholder="+1 (555) 123-4567"
-                  className={`auth-input input-with-icon-left ${hasFieldError(errors, 'phone') ? 'auth-input-error' : ''}`}
-                  required
-                />
-              </div>
+              <PhoneInput
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handlePhoneChange}
+                onBlur={handlePhoneBlur}
+                validateOnBlur={false}
+                label="Phone Number"
+                placeholder="Phone number"
+                error={hasFieldError(errors, 'phone') ? getFieldError(errors, 'phone')?.message : undefined}
+                defaultCountry="US"
+                showValidation={false}
+                required
+                className="auth-phone-input"
+              />
               {hasFieldError(errors, 'phone') && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}

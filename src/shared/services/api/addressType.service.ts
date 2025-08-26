@@ -6,7 +6,7 @@ import { httpClient } from './base/client'
 import type { AddressTypeResponse } from '../../types/api/addressType'
 
 export class AddressTypeService {
-  private readonly baseUrl = '/address-types'
+  private readonly baseUrl = '/addresses/types'
 
   async getAddressTypes(): Promise<AddressTypeResponse[]> {
     const response = await httpClient.getClient().get<AddressTypeResponse[]>(`${this.baseUrl}`)
@@ -15,6 +15,13 @@ export class AddressTypeService {
 
   async getAddressTypeByCode(code: string): Promise<AddressTypeResponse> {
     const response = await httpClient.getClient().get<AddressTypeResponse>(`${this.baseUrl}/${code}`)
+    return response.data
+  }
+
+  async searchAddressTypes(query: string): Promise<AddressTypeResponse[]> {
+    const response = await httpClient.getClient().get<AddressTypeResponse[]>(`${this.baseUrl}/search`, {
+      params: { query }
+    })
     return response.data
   }
 }

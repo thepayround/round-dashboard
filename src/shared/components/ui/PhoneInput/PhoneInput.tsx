@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Search, AlertCircle, X, Check } from 'lucide-react'
 import { phoneValidationService, type CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
-import { PhoneNumberValidator } from '@/shared/utils/phoneValidation'
+import { phoneValidator } from '@/shared/utils/phoneValidation'
 import { cn } from '@/shared/utils/cn'
 
 interface PhoneInputProps {
@@ -69,7 +69,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         setCountries(allCountries)
 
         // Set default country
-        const defaultCountryInfo = allCountries.find(c => c.countryCode === defaultCountry) ?? allCountries[0]
+        const defaultCountryInfo = allCountries.find((c: CountryPhoneInfo) => c.countryCode === defaultCountry) ?? allCountries[0]
         if (defaultCountryInfo && !selectedCountry) {
           setSelectedCountry(defaultCountryInfo)
         }
@@ -81,17 +81,27 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     }
 
     loadCountries()
-  }, [defaultCountry, selectedCountry])
+  }, [defaultCountry, selectedCountry]) // Add missing dependencies
+
+  // Set default country when countries are loaded
+  useEffect(() => {
+    if (countries.length > 0 && !selectedCountry) {
+      const defaultCountryInfo = countries.find((c: CountryPhoneInfo) => c.countryCode === defaultCountry) ?? countries[0]
+      if (defaultCountryInfo) {
+        setSelectedCountry(defaultCountryInfo)
+      }
+    }
+  }, [countries, defaultCountry, selectedCountry])
 
   // Parse initial value only once on mount when value is provided
   useEffect(() => {
     const parseInitialValue = async () => {
       if (value && countries.length > 0 && !phoneNumber) {
         try {
-          const parsed = await PhoneNumberValidator.parseInternational(value)
+          const parsed = await phoneValidator.parseInternational(value)
           if (parsed.isValid && parsed.country) {
             setSelectedCountry(parsed.country)
-            setPhoneNumber(parsed.number)
+            setPhoneNumber(parsed.localNumber ?? value)
           }
         } catch (error) {
           console.error('Failed to parse initial phone value:', error)
@@ -124,7 +134,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     const timeoutId = setTimeout(async () => {
       setIsValidating(true)
       try {
-        const validation = await PhoneNumberValidator.validate(phoneNum, country)
+        const validation = await phoneValidator.validate(phoneNum, country)
         setValidationError(validation.isValid ? undefined : validation.error)
         onValidationChange?.(validation.isValid, validation.error)
       } catch (error) {
@@ -148,7 +158,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
     setIsValidating(true)
     try {
-      const validation = await PhoneNumberValidator.validate(phoneNum, country)
+      const validation = await phoneValidator.validate(phoneNum, country)
       setValidationError(validation.isValid ? undefined : validation.error)
       onValidationChange?.(validation.isValid, validation.error)
       return { isValid: validation.isValid, error: validation.error }
@@ -337,11 +347,15 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
     // Only provide validation feedback if validation is enabled
     if (!validateOnBlur && showValidation) {
-      const basicValidation = PhoneNumberValidator.validateBasic(inputValue)
-      onValidationChange?.(basicValidation.isValid, basicValidation.error)
+      const hasContent = phoneValidator.hasMinimumContent(inputValue)
+      const validationResult = {
+        isValid: hasContent,
+        error: hasContent ? undefined : 'Phone number is too short'
+      }
+      onValidationChange?.(validationResult.isValid, validationResult.error)
       
-      if (basicValidation.error) {
-        setValidationError(basicValidation.error)
+      if (validationResult.error) {
+        setValidationError(validationResult.error)
       }
     } else if (validateOnBlur && selectedCountry && inputValue.trim()) {
       // Use debounced validation for real-time feedback while typing
@@ -369,7 +383,11 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
       }
       
       // Do basic client-side validation immediately (just like other fields)
-      const basicValidation = PhoneNumberValidator.validateBasic(phoneNumber)
+      const hasContent = phoneValidator.hasMinimumContent(phoneNumber)
+      const basicValidation = {
+        isValid: hasContent,
+        error: hasContent ? undefined : 'Phone number is too short'
+      }
       
       if (!basicValidation.isValid) {
         setValidationError(basicValidation.error)

@@ -129,3 +129,35 @@ export const useAddressTypeByCode = (code: string | null) => {
 
   return { addressType, loading, error, refetch: () => code && fetchAddressType(code) }
 }
+
+export const useAddressTypeSearch = () => {
+  const [results, setResults] = useState<AddressTypeResponse[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const search = async (query: string) => {
+    if (!query.trim()) {
+      setResults([])
+      return
+    }
+
+    try {
+      setLoading(true)
+      setError(null)
+      const data = await addressTypeService.searchAddressTypes(query)
+      setResults(data)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to search')
+      setResults([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const clearResults = () => {
+    setResults([])
+    setError(null)
+  }
+
+  return { results, loading, error, search, clearResults }
+}

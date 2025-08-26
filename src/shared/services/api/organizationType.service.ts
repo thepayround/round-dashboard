@@ -12,7 +12,7 @@ export class OrganizationTypeService {
    */
   async getOrganizationTypes(): Promise<ApiResponse<OrganizationTypeResponse[]>> {
     try {
-      const response = await httpClient.getClient().get<OrganizationTypeResponse[]>('/organization-types')
+      const response = await httpClient.getClient().get<OrganizationTypeResponse[]>('/organizations/types')
 
       return {
         success: true,

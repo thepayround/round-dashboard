@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card } from '@/shared/components/Card'
 import { ActionButton } from '@/shared/components/ActionButton'
+import { SearchFilterToolbar } from '@/shared/components/SearchFilterToolbar'
+import type { FilterField } from '@/shared/components'
 import { 
   Users, 
   UserPlus, 
   Mail, 
   Shield, 
   MoreHorizontal, 
-  Search,
-
   Loader2,
   AlertCircle,
   Clock,
@@ -22,6 +22,7 @@ import {
 import { motion } from 'framer-motion'
 import { useTeamManagement } from '../hooks/useTeamManagement'
 import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
+import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
 import { InviteMemberModal } from '../components/InviteMemberModal'
 import { EditMemberModal } from '../components/EditMemberModal'
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
@@ -29,8 +30,8 @@ import type { TeamMember, TeamInvitation, UserRole } from '../types/team.types'
 
 export const TeamManagementPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'members' | 'invitations'>('members')
-  const [searchTerm, setSearchTerm] = useState('')
   const [roleFilter, setRoleFilter] = useState<UserRole | 'all'>('all')
+  const [showFilters, setShowFilters] = useState(false)
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -59,6 +60,82 @@ export const TeamManagementPage: React.FC = () => {
     }
   }, [refresh, roundAccountId])
 
+  // Search fields extraction functions - Memoized for stability
+  const getMemberSearchFields = useCallback((member: TeamMember): string[] => [
+    member.firstName || '',
+    member.lastName || '',
+    member.fullName || '',
+    member.email || '',
+    member.roleName || ''
+  ], [])
+
+  const getInvitationSearchFields = useCallback((invitation: TeamInvitation): string[] => [
+    invitation.email || '',
+    invitation.roleName || '',
+    invitation.invitedByName || ''
+  ], [])
+
+  // Filter function for role filtering - Stable implementation
+  const memberFilterFn = useCallback((member: TeamMember, filters: { roleFilter?: UserRole | 'all' }): boolean => {
+    if (filters.roleFilter && filters.roleFilter !== 'all' && member.role !== filters.roleFilter) {
+      return false
+    }
+    return true
+  }, [])
+
+  const invitationFilterFn = useCallback((invitation: TeamInvitation, filters: { roleFilter?: UserRole | 'all' }): boolean => {
+    if (filters.roleFilter && filters.roleFilter !== 'all' && invitation.role !== filters.roleFilter) {
+      return false
+    }
+    return true
+  }, [])
+
+  // Debounced search for members
+  const {
+    searchQuery: memberSearchQuery,
+    setSearchQuery: setMemberSearchQuery,
+    filteredItems: searchFilteredMembers,
+    isSearching: isMemberSearching,
+    clearSearch: clearMemberSearch,
+    totalCount: memberTotalCount,
+    filteredCount: memberFilteredCount
+  } = useDebouncedSearch({
+    items: members,
+    searchFields: getMemberSearchFields,
+    debounceMs: 300,
+    filters: { roleFilter },
+    filterFn: memberFilterFn
+  })
+
+  // Debounced search for invitations
+  const {
+    searchQuery: invitationSearchQuery,
+    setSearchQuery: setInvitationSearchQuery,
+    filteredItems: searchFilteredInvitations,
+    isSearching: isInvitationSearching,
+    clearSearch: clearInvitationSearch,
+    totalCount: invitationTotalCount,
+    filteredCount: invitationFilteredCount
+  } = useDebouncedSearch({
+    items: invitations,
+    searchFields: getInvitationSearchFields,
+    debounceMs: 300,
+    filters: { roleFilter },
+    filterFn: invitationFilterFn
+  })
+
+  // Get current search values based on active tab
+  const currentSearchQuery = activeTab === 'members' ? memberSearchQuery : invitationSearchQuery
+  const setCurrentSearchQuery = activeTab === 'members' ? setMemberSearchQuery : setInvitationSearchQuery
+  const isCurrentSearching = activeTab === 'members' ? isMemberSearching : isInvitationSearching
+  const clearCurrentSearch = activeTab === 'members' ? clearMemberSearch : clearInvitationSearch
+  const currentTotalCount = activeTab === 'members' ? memberTotalCount : invitationTotalCount
+  const currentFilteredCount = activeTab === 'members' ? memberFilteredCount : invitationFilteredCount
+
+  // Final filtered results
+  const filteredMembers = searchFilteredMembers
+  const filteredInvitations = searchFilteredInvitations
+
   const tabs = [
     { id: 'members' as const, label: 'Team Members', icon: Users, count: members.length },
     { id: 'invitations' as const, label: 'Invitations', icon: Mail, count: invitations.length }
@@ -86,19 +163,23 @@ export const TeamManagementPage: React.FC = () => {
     Guest: { label: 'Guest', color: 'text-gray-500', icon: Users }
   }
 
-  const filteredMembers = members.filter(member => {
-    const matchesSearch = member.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         member.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         member.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesRole = roleFilter === 'all' || member.role === roleFilter
-    return matchesSearch && matchesRole
-  })
-
-  const filteredInvitations = invitations.filter(invitation => {
-    const matchesSearch = invitation.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesRole = roleFilter === 'all' || invitation.role === roleFilter
-    return matchesSearch && matchesRole
-  })
+  // Filter fields configuration
+  const filterFields: FilterField[] = [
+    {
+      id: 'roleFilter',
+      label: 'Role',
+      type: 'select',
+      value: roleFilter,
+      onChange: (value: string) => setRoleFilter(value as UserRole | 'all'),
+      options: [
+        { id: 'all', name: 'All Roles' },
+        ...Object.entries(roleLabels).map(([role, config]) => ({
+          id: role,
+          name: config.label
+        }))
+      ]
+    }
+  ]
 
   const handleInviteMember = async (email: string, role: UserRole): Promise<boolean> => {
     if (!roundAccountId) return false
@@ -265,42 +346,22 @@ export const TeamManagementPage: React.FC = () => {
           </Card>
         </div>
 
-        {/* Filters */}
-        <div>
-          <Card className="p-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/* Search */}
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder={`Search ${activeTab}...`}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500/50"
-                  />
-                </div>
-              </div>
-
-              {/* Role Filter */}
-              <div className="sm:w-48">
-                <select
-                  value={roleFilter}
-                  onChange={(e) => setRoleFilter(e.target.value as UserRole | 'all')}
-                  className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500/50"
-                >
-                  <option value="all">All Roles</option>
-                  {Object.entries(roleLabels).map(([role, config]) => (
-                    <option key={role} value={role}>
-                      {config.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </Card>
-        </div>
+        {/* Search and Filters */}
+        <SearchFilterToolbar
+          searchQuery={currentSearchQuery}
+          onSearchChange={setCurrentSearchQuery}
+          searchPlaceholder={`Search ${activeTab} by ${activeTab === 'members' ? 'name, email, or role' : 'email or role'}...`}
+          isSearching={isCurrentSearching}
+          onClearSearch={clearCurrentSearch}
+          searchResults={{
+            total: currentTotalCount,
+            filtered: currentFilteredCount
+          }}
+          showFilters={showFilters}
+          onToggleFilters={() => setShowFilters(!showFilters)}
+          filterFields={filterFields}
+          className="mb-6"
+        />
 
         {/* Content */}
         <Card className="p-6">
@@ -314,15 +375,15 @@ export const TeamManagementPage: React.FC = () => {
                 <div className="text-center py-12">
                   <Users className="w-16 h-16 text-gray-500 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-white mb-2">
-                    {members.length === 0 ? 'No team members yet' : 'No members found'}
+                    {currentSearchQuery || roleFilter !== 'all' ? 'No members found' : 'No team members yet'}
                   </h3>
                   <p className="text-gray-400 mb-6">
-                    {members.length === 0 
-                      ? 'Start building your team by inviting members'
-                      : 'Try adjusting your search or filter criteria'
+                    {currentSearchQuery || roleFilter !== 'all'
+                      ? 'Try adjusting your search or filter criteria'
+                      : 'Start building your team by inviting members'
                     }
                   </p>
-                  {members.length === 0 && (
+                  {!currentSearchQuery && roleFilter === 'all' && (
                     <ActionButton
                       label="Invite First Member"
                       onClick={() => setShowInviteModal(true)}
@@ -422,12 +483,12 @@ export const TeamManagementPage: React.FC = () => {
                 <div className="text-center py-12">
                   <Mail className="w-16 h-16 text-gray-500 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-white mb-2">
-                    {invitations.length === 0 ? 'No pending invitations' : 'No invitations found'}
+                    {currentSearchQuery || roleFilter !== 'all' ? 'No invitations found' : 'No pending invitations'}
                   </h3>
                   <p className="text-gray-400 mb-6">
-                    {invitations.length === 0 
-                      ? 'All team members are already active'
-                      : 'Try adjusting your search or filter criteria'
+                    {currentSearchQuery || roleFilter !== 'all'
+                      ? 'Try adjusting your search or filter criteria'
+                      : 'All team members are already active'
                     }
                   </p>
                 </div>

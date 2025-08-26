@@ -4,6 +4,7 @@
 
 import { httpClient } from './base/client'
 import type { ApiResponse } from '../../types/api'
+import type { User } from '../../types/auth'
 
 export interface InviteUserRequest {
   roundAccountId: string
@@ -25,6 +26,7 @@ export interface RegisterWithInvitationRequest {
   userName?: string
   password: string
   phoneNumber: string
+  countryPhoneCode?: string
   token: string
 }
 
@@ -156,9 +158,9 @@ export class TeamService {
   /**
    * Register a new user with an invitation token
    */
-  async registerWithInvitation(request: RegisterWithInvitationRequest): Promise<ApiResponse<{ message: string; token: string; refreshToken: string }>> {
+  async registerWithInvitation(request: RegisterWithInvitationRequest): Promise<ApiResponse<{ message: string; token: string; refreshToken: string; user: User }>> {
     try {
-      const response = await httpClient.getClient().post<{ message: string; token: string; refreshToken: string }>(
+      const response = await httpClient.getClient().post<{ message: string; token: string; refreshToken: string; user: User }>(
         `${this.baseUrl}/register-with-invitation`, 
         request
       )

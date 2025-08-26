@@ -303,7 +303,26 @@ describe('InvitationAcceptancePage', () => {
         data: { 
           message: 'Registration successful',
           token: 'mock-token',
-          refreshToken: 'mock-refresh-token'
+          refreshToken: 'mock-refresh-token',
+          user: {
+            id: 'mock-user-id',
+            email: 'test@example.com',
+            firstName: 'Test',
+            lastName: 'User',
+            phone: '+1234567890',
+            accountType: 'business' as const,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            companyInfo: {
+              companyName: 'Test Company',
+              registrationNumber: '123456789',
+              currency: 'USD',
+              industry: 'technology',
+              businessType: 'llc',
+              employeeCount: 25
+            },
+            role: 'admin' as const
+          }
         },
         message: 'Registration successful'
       })
@@ -346,7 +365,26 @@ describe('InvitationAcceptancePage', () => {
         data: { 
           message: 'Registration successful',
           token: 'mock-token',
-          refreshToken: 'mock-refresh-token'
+          refreshToken: 'mock-refresh-token',
+          user: {
+            id: 'mock-user-id',
+            email: 'test@example.com',
+            firstName: 'Test',
+            lastName: 'User',
+            phone: '+1234567890',
+            accountType: 'business' as const,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            companyInfo: {
+              companyName: 'Test Company',
+              registrationNumber: '123456789',
+              currency: 'USD',
+              industry: 'technology',
+              businessType: 'llc',
+              employeeCount: 25
+            },
+            role: 'admin' as const
+          }
         },
         message: 'Registration successful'
       })
@@ -443,7 +481,26 @@ describe('InvitationAcceptancePage', () => {
         data: { 
           message: 'Registration successful',
           token: 'mock-token',
-          refreshToken: 'mock-refresh-token'
+          refreshToken: 'mock-refresh-token',
+          user: {
+            id: 'mock-user-id',
+            email: 'test@example.com',
+            firstName: 'Test',
+            lastName: 'User',
+            phone: '+1234567890',
+            accountType: 'business' as const,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            companyInfo: {
+              companyName: 'Test Company',
+              registrationNumber: '123456789',
+              currency: 'USD',
+              industry: 'technology',
+              businessType: 'llc',
+              employeeCount: 25
+            },
+            role: 'admin' as const
+          }
         },
         message: 'Registration successful'
       })

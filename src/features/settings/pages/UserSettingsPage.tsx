@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Card, SectionHeader, ActionButton } from '@/shared/components'
+import { Card, SectionHeader, ActionButton, PhoneDisplay } from '@/shared/components'
 import { FormInput } from '@/shared/components/ui/FormInput'
 import { 
   User as UserIcon, 
@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import { useUserSettingsManager } from '@/shared/hooks/useUserSettingsManager'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { usePhoneFormatting } from '@/shared/hooks/usePhoneFormatting'
 import { usePreloadAllOptions } from '@/shared/hooks/api/useUserSettingsOptions'
 import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
 import { 
@@ -54,6 +55,9 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
     clearError,
   } = useUserSettingsManager()
   
+  // Handle phone formatting at the page level - single API call
+  const _phoneFormatting = usePhoneFormatting(user?.phoneNumberFormatted ?? user?.phone)
+    
   // Preload all dropdown options once when page loads
   const { isLoading: isLoadingOptions } = usePreloadAllOptions()
 
@@ -214,7 +218,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="lg:col-span-3"
+            className="lg:col-span-3 relative"
           >
             {renderSectionContent()}
           </motion.div>
@@ -233,7 +237,7 @@ interface ProfileSectionProps {
   isSaving: boolean
 }
 
-const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateSettings, isSaving }) => {
+const ProfileSectionContent: React.FC<ProfileSectionProps> = ({ user, settings, updateSettings, isSaving }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -400,17 +404,32 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user, settings, updateS
                 variant="auth"
                 className="opacity-50 cursor-not-allowed"
               />
-              <FormInput
-                label="Phone Number"
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
-                placeholder="+1 (555) 123-4567"
-                disabled
-                leftIcon={Phone}
-                variant="auth"
-                className="opacity-50 cursor-not-allowed"
-              />
+              <div className="relative">
+                <FormInput
+                  id="profile-phone-input"
+                  label="Phone Number"
+                  type="tel"
+                  value={user?.phoneNumberFormatted ?? user?.phone ?? ""}
+                  onChange={() => {}} // No-op for disabled field
+                  placeholder="No phone number provided"
+                  disabled
+                  leftIcon={Phone}
+                  variant="auth"
+                  className="opacity-50 cursor-not-allowed"
+                />
+                {/* Phone display - optimized with single API call at page level */}
+                {(user?.phoneNumberFormatted ?? user?.phone) && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 mt-3 z-10">
+                    <PhoneDisplay
+                      phoneNumber={user?.phoneNumberFormatted ?? user?.phone ?? ''}
+                      copyButtonOnly
+                      showCopyButton
+                      showCountryFlag={false}
+                      className="opacity-70 hover:opacity-100"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </form>
         </div>
@@ -725,6 +744,20 @@ const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notificatio
     </Card>
   )
 }
+
+// Memoize with custom comparison to prevent re-renders when only isSaving changes
+const ProfileSection = React.memo(ProfileSectionContent, (prevProps, nextProps) => 
+  // Only re-render if user, settings, or updateSettings change
+  // Ignore isSaving changes to prevent phone display re-rendering
+   (
+    prevProps.user === nextProps.user &&
+    prevProps.settings === nextProps.settings &&
+    prevProps.updateSettings === nextProps.updateSettings
+  )
+);
+
+ProfileSection.displayName = 'ProfileSection';
+
 
 // Billing Section Component  
 const BillingSection = () => (

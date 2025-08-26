@@ -1,58 +1,57 @@
 /**
- * Simplified Phone Validation - Backend as Single Source of Truth
+ * Streamlined Phone Validation - Backend as Single Source of Truth
  * 
- * This module provides only essential phone validation:
- * 1. Content check for form enablement (no validation logic)
- * 2. Backend validation (authoritative)
+ * This module provides minimal phone validation that relies entirely on backend:
+ * 1. Simple content check for UI enablement
+ * 2. Direct backend API calls without frontend caching (backend handles caching)
+ * 3. Clean error handling without retry complexity
  */
 
 import { phoneValidationService, type CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
+
+// Simple validation constants
+const MIN_CONTENT_LENGTH = 6
 
 export interface PhoneValidationResult {
   isValid: boolean
   error?: string
 }
 
+export interface PhoneParseResult {
+  isValid: boolean
+  country?: CountryPhoneInfo
+  localNumber?: string
+  error?: string
+}
+
 /**
- * Simple phone validator that defers to backend
+ * Simplified phone validator - backend does the heavy lifting
  */
 export class PhoneValidator {
-  private cache = new Map<string, { result: PhoneValidationResult; timestamp: number }>()
-  private readonly CACHE_TIMEOUT = 5 * 60 * 1000 // 5 minutes
-
   /**
-   * Check if phone has minimum content for form enablement
-   * NO VALIDATION LOGIC - just content presence
+   * Check if phone has minimum content for UI enablement
+   * Fast, client-side only validation for UX
    */
   hasMinimumContent(phoneNumber: string): boolean {
-    // Just check if there's meaningful content - backend handles the rest
-    return phoneNumber.trim().length >= 6 // Minimum characters to enable form
+    if (!phoneNumber?.trim()) return false
+    
+    // Remove all non-digit characters and check length
+    const digits = phoneNumber.replace(/\D/g, '')
+    return digits.length >= MIN_CONTENT_LENGTH
   }
 
   /**
-   * Validate phone number using backend API (single source of truth)
+   * Validate phone number using backend API (no frontend caching)
+   * Backend handles caching, retry logic, and all validation business logic
    */
   async validate(phoneNumber: string, country: CountryPhoneInfo): Promise<PhoneValidationResult> {
+    // Quick client-side validation for immediate feedback
     if (!phoneNumber?.trim()) {
-      return {
-        isValid: false,
-        error: 'Phone number is required'
-      }
+      return { isValid: false, error: 'Phone number is required' }
     }
 
-    if (!country) {
-      return {
-        isValid: false,
-        error: 'Country information is required'
-      }
-    }
-
-    // Check cache first
-    const cacheKey = `${phoneNumber}-${country.countryCode}`
-    const cached = this.cache.get(cacheKey)
-    
-    if (cached && Date.now() - cached.timestamp < this.CACHE_TIMEOUT) {
-      return cached.result
+    if (!country?.countryCode) {
+      return { isValid: false, error: 'Country information is required' }
     }
 
     try {
@@ -61,18 +60,12 @@ export class PhoneValidator {
         countryCode: country.countryCode
       })
 
-      const result: PhoneValidationResult = {
+      return {
         isValid: response.isValid,
         error: response.error
       }
-
-      // Cache the result
-      this.cache.set(cacheKey, { result, timestamp: Date.now() })
-      
-      return result
     } catch (error) {
-      console.error('Phone validation API error:', error)
-      
+      console.error('Phone validation failed:', error)
       return {
         isValid: false,
         error: 'Unable to validate phone number. Please try again.'
@@ -82,13 +75,9 @@ export class PhoneValidator {
 
   /**
    * Parse international phone number using backend API
+   * Backend handles all parsing logic and caching
    */
-  async parseInternational(phoneNumber: string): Promise<{
-    isValid: boolean
-    country?: CountryPhoneInfo
-    localNumber?: string
-    error?: string
-  }> {
+  async parseInternational(phoneNumber: string): Promise<PhoneParseResult> {
     if (!phoneNumber?.trim()) {
       return { isValid: false, error: 'Phone number is required' }
     }
@@ -100,12 +89,12 @@ export class PhoneValidator {
 
       return {
         isValid: response.isValid,
-        country: response.countryInfo ?? undefined,
-        localNumber: response.localNumber ?? undefined,
+        country: response.countryInfo,
+        localNumber: response.localNumber,
         error: response.error
       }
     } catch (error) {
-      console.error('Phone parsing error:', error)
+      console.error('Phone parsing failed:', error)
       return {
         isValid: false,
         error: 'Unable to parse phone number. Please try again.'
@@ -114,51 +103,13 @@ export class PhoneValidator {
   }
 
   /**
-   * Get country display name for UI
+   * Get formatted country display name
    */
   getCountryDisplayName(country: CountryPhoneInfo): string {
     if (!country) return ''
     return `${country.flag} ${country.countryName} (+${country.phoneCode})`
   }
-
-  /**
-   * Clear validation cache
-   */
-  clearCache(): void {
-    this.cache.clear()
-  }
 }
 
 // Export singleton instance
 export const phoneValidator = new PhoneValidator()
-
-// Legacy exports for backward compatibility - all deprecated
-export class PhoneNumberValidator {
-  /** @deprecated Use phoneValidator.validate() instead */
-  static async validate(phoneNumber: string, country: CountryPhoneInfo): Promise<PhoneValidationResult> {
-    return phoneValidator.validate(phoneNumber, country)
-  }
-
-  /** @deprecated Use phoneValidator.parseInternational() instead */
-  static async parseInternational(phoneNumber: string) {
-    const result = await phoneValidator.parseInternational(phoneNumber)
-    return {
-      country: result.country ?? null,
-      number: result.localNumber ?? phoneNumber,
-      isValid: result.isValid,
-      error: result.error
-    }
-  }
-
-  /** @deprecated Use phoneValidator.getCountryDisplayName() instead */
-  static getCountryDisplayName(country: CountryPhoneInfo): string {
-    return phoneValidator.getCountryDisplayName(country)
-  }
-
-  /** @deprecated Use phoneValidator.hasMinimumContent() instead */
-  static validateBasic(phoneNumber: string): PhoneValidationResult {
-    return {
-      isValid: phoneValidator.hasMinimumContent(phoneNumber)
-    }
-  }
-}

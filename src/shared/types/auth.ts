@@ -1,5 +1,6 @@
 import type { CompanyInfo, BillingAddress } from './business'
 import type { OnboardingData } from '@/features/onboarding/types/onboarding'
+import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 
 export type AccountType = 'personal' | 'business'
 
@@ -15,6 +16,9 @@ export interface BaseUser {
   firstName: string
   lastName: string
   phone: string
+  countryPhoneCode?: string
+  phoneNumberFormatted?: string
+  phoneCountryInfo?: CountryPhoneInfo
   avatar?: string
   accountType: AccountType
   createdAt: string
@@ -57,6 +61,7 @@ export interface PersonalRegisterRequest {
   lastName: string
   email: string
   phone: string
+  countryPhoneCode?: string
   password: string
 }
 
@@ -66,6 +71,7 @@ export interface BusinessRegisterRequest {
   lastName: string
   email: string
   phone: string
+  countryPhoneCode?: string
   password: string
   companyInfo: CompanyInfo
   billingAddress?: BillingAddress

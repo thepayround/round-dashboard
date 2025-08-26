@@ -9,6 +9,8 @@ export { Button } from './Button'
 export { FormInput } from './FormInput'
 export { AuthInput } from './AuthInput'
 export { PhoneInput } from './ui/PhoneInput'
+export { PhoneDisplay } from './ui/PhoneDisplay'
+export type { PhoneDisplayProps, CountryInfo } from './ui/PhoneDisplay'
 
 // UI Components
 export { Modal } from './Modal'

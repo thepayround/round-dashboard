@@ -122,7 +122,6 @@ const CatalogSubItem = memo(({
   }
 
   return (
-  <div className="relative">
     <Link
       to={subItem.href}
       onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
@@ -133,7 +132,7 @@ const CatalogSubItem = memo(({
         ${
           isCollapsed 
             ? 'justify-center w-8 h-8 px-0 backdrop-blur-sm' 
-            : 'h-11 md:h-9 px-3 md:px-3.5'
+            : 'h-8 px-4 mx-2'
         }
       `}
     >
@@ -144,20 +143,19 @@ const CatalogSubItem = memo(({
       }`} />
       
       {!isCollapsed && (
-        <span className="font-medium text-xs md:text-sm lg:text-xs whitespace-nowrap">{subItem.label}</span>
+        <span className="font-normal text-xs text-gray-300 whitespace-nowrap">{subItem.label}</span>
       )}
 
       {/* Subtle inner glow for active state in collapsed mode */}
       {isCollapsed && isActive && (
         <div className="absolute inset-0.5 rounded-md bg-gradient-to-br from-pink-500/10 to-cyan-500/10 -z-10" />
       )}
-    </Link>
 
-    {/* Connection indicator for collapsed mode */}
-    {isCollapsed && !isLastItem && (
-      <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/15" />
-    )}
-  </div>
+      {/* Connection indicator for collapsed mode */}
+      {isCollapsed && !isLastItem && (
+        <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/15" />
+      )}
+    </Link>
   )
 })
 
@@ -283,11 +281,11 @@ const NavigationItem = memo(({
           className={`mt-1 ${
             isCollapsed 
               ? 'flex flex-col items-center space-y-1 py-1' 
-              : 'pl-3 md:pl-4 lg:pl-3 space-y-0.5'
+              : 'ml-6 space-y-1 bg-white/[0.03] border-l-2 border-pink-500/20 py-2 rounded-r-lg'
           }`}
         >
           {isCollapsed && (
-            <div className="w-8 h-px bg-gradient-to-r from-pink-500/30 via-white/20 to-cyan-500/30 mb-1" />
+            <div className="w-8 h-px bg-pink-500/20 mb-1" />
           )}
 
           {item.subItems.map((subItem, index) => (
@@ -304,7 +302,7 @@ const NavigationItem = memo(({
           ))}
 
           {isCollapsed && (
-            <div className="w-6 h-px bg-gradient-to-r from-pink-500/20 via-white/15 to-cyan-500/20 mt-1" />
+            <div className="w-6 h-px bg-pink-500/20 mt-1" />
           )}
         </motion.div>
       )}

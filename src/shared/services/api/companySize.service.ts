@@ -6,7 +6,7 @@ import { httpClient } from './base/client'
 import type { CompanySizeResponse } from '../../types/api/companySize'
 
 export class CompanySizeService {
-  private readonly baseUrl = '/company-sizes'
+  private readonly baseUrl = '/organizations/company-sizes'
 
   async getCompanySizes(): Promise<CompanySizeResponse[]> {
     const response = await httpClient.getClient().get<CompanySizeResponse[]>(`${this.baseUrl}`)
