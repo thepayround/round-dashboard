@@ -11,6 +11,7 @@ import {
   Globe
 } from 'lucide-react'
 import { TeamManagementPage } from '../components/TeamManagementPage'
+import { OrganizationSettingsForm } from '../components/OrganizationSettingsForm'
 
 interface TabItem {
   id: string
@@ -73,16 +74,9 @@ export const OrganizationSettingsPage: React.FC = () => {
         return <TeamManagementPage />
       case 'general':
         return (
-          <Card title="Organization Settings" description="Manage your organization&apos;s basic information">
-            <div className="space-y-6">
-              <div className="text-center py-12">
-                <Building2 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Organization Settings</h3>
-                <p className="text-gray-400">Configure your organization&apos;s basic information and settings.</p>
-                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
-              </div>
-            </div>
-          </Card>
+          <div className="max-w-4xl">
+            <OrganizationSettingsForm />
+          </div>
         )
       case 'billing':
         return (
