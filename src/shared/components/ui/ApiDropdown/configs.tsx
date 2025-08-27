@@ -1,9 +1,10 @@
-import { Globe, DollarSign, Clock, Calendar, Users, Building, User, MapPin, Languages } from 'lucide-react'
+import { Globe, DollarSign, Clock, Calendar, Users, Building, User, MapPin, Languages, Shield } from 'lucide-react'
 import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 import { useIndustries } from '@/shared/hooks/api/useIndustry'
 import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
 import { useAddressTypes } from '@/shared/hooks/api/useAddressType'
 import { useOrganizationTypes } from '@/shared/hooks/api/useOrganizationType'
+import { useTeamRoles } from '@/shared/hooks/api/useTeamRoles'
 import { 
   useTimezones, 
   useLanguages, 
@@ -221,35 +222,29 @@ export const fiscalYearDropdownConfig: ApiDropdownConfig<Month> = {
   errorText: 'Failed to load months',
 }
 
-// Team roles hook
-const useTeamRoles = () => {
-  const data = useMemo(() => [
-    { value: 'member', label: 'Member', description: 'Basic access to team features' },
-    { value: 'manager', label: 'Manager', description: 'Can manage team members and settings' },
-    { value: 'admin', label: 'Admin', description: 'Full administrative access' },
-  ], [])
-
-  return {
-    data,
-    isLoading: false,
-    isError: false,
-    refetch: () => {},
-  }
-}
-
-// Team role dropdown configuration
-export const teamRoleDropdownConfig: ApiDropdownConfig<Role> = {
+// Team role dropdown configuration - updated to use API
+export const teamRoleDropdownConfig: ApiDropdownConfig<{ value: string; label: string; description: string }> = {
   useHook: useTeamRoles,
   mapToOptions: (roles) =>
     roles.map(role => {
       const getRoleColor = (roleValue: string) => {
         switch (roleValue) {
-          case 'admin':
-            return { bg: '#D417C8', text: '#D417C8' }
-          case 'manager':
-            return { bg: '#7767DA', text: '#7767DA' }
-          case 'member':
-            return { bg: '#14BDEA', text: '#14BDEA' }
+          case 'SuperAdmin':
+            return { bg: '#ef4444', text: '#ef4444' } // red
+          case 'Admin':
+            return { bg: '#D417C8', text: '#D417C8' } // pink
+          case 'TeamManager':
+            return { bg: '#7767DA', text: '#7767DA' } // purple
+          case 'Sales':
+            return { bg: '#10b981', text: '#10b981' } // green
+          case 'Finance':
+            return { bg: '#f59e0b', text: '#f59e0b' } // yellow
+          case 'Support':
+            return { bg: '#3b82f6', text: '#3b82f6' } // blue
+          case 'TeamMember':
+            return { bg: '#14BDEA', text: '#14BDEA' } // cyan
+          case 'Viewer':
+            return { bg: '#6B7280', text: '#6B7280' } // gray
           default:
             return { bg: '#6B7280', text: '#6B7280' }
         }
@@ -267,12 +262,12 @@ export const teamRoleDropdownConfig: ApiDropdownConfig<Role> = {
             className="w-5 h-5 rounded-full border border-white/20 flex items-center justify-center"
             style={{ backgroundColor: `${colors.bg}20` }}
           >
-            <Users className="w-3 h-3" style={{ color: colors.text }} />
+            <Shield className="w-3 h-3" style={{ color: colors.text }} />
           </div>
         ),
       }
     }),
-  icon: <Users size={20} />,
+  icon: <Shield size={20} />,
   placeholder: 'Select role',
   searchPlaceholder: 'Search roles...',
   noResultsText: 'No roles found',

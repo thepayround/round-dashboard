@@ -66,7 +66,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
     } finally {
       setIsLoading(false)
     }
-  }, [getCurrentOrganization, showError])
+  }, [getCurrentOrganization])
 
   // Load data on mount
   useEffect(() => {

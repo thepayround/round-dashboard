@@ -144,23 +144,12 @@ export const TeamManagementPage: React.FC = () => {
   const roleLabels: Record<UserRole, { label: string; color: string; icon: React.ElementType }> = {
     SuperAdmin: { label: 'Super Admin', color: 'text-red-400', icon: Crown },
     Admin: { label: 'Admin', color: 'text-orange-400', icon: Shield },
-    TeamOwner: { label: 'Team Owner', color: 'text-purple-400', icon: Crown },
     TeamManager: { label: 'Team Manager', color: 'text-blue-400', icon: Shield },
     TeamMember: { label: 'Team Member', color: 'text-green-400', icon: Users },
-    SalesManager: { label: 'Sales Manager', color: 'text-cyan-400', icon: Shield },
-    SalesRepresentative: { label: 'Sales Rep', color: 'text-cyan-300', icon: Users },
-    MarketingManager: { label: 'Marketing Manager', color: 'text-pink-400', icon: Shield },
-    MarketingAnalyst: { label: 'Marketing Analyst', color: 'text-pink-300', icon: Users },
-    SupportAdmin: { label: 'Support Admin', color: 'text-yellow-400', icon: Shield },
-    SupportAgent: { label: 'Support Agent', color: 'text-yellow-300', icon: Users },
-    ProductManager: { label: 'Product Manager', color: 'text-indigo-400', icon: Shield },
-    Developer: { label: 'Developer', color: 'text-indigo-300', icon: Users },
-    QAEngineer: { label: 'QA Engineer', color: 'text-teal-400', icon: Users },
-    Designer: { label: 'Designer', color: 'text-rose-400', icon: Users },
-    FinanceManager: { label: 'Finance Manager', color: 'text-emerald-400', icon: Shield },
-    BillingSpecialist: { label: 'Billing Specialist', color: 'text-emerald-300', icon: Users },
-    Viewer: { label: 'Viewer', color: 'text-gray-400', icon: Users },
-    Guest: { label: 'Guest', color: 'text-gray-500', icon: Users }
+    Sales: { label: 'Sales', color: 'text-cyan-400', icon: Shield },
+    Finance: { label: 'Finance', color: 'text-yellow-400', icon: Shield },
+    Support: { label: 'Support', color: 'text-indigo-400', icon: Shield },
+    Viewer: { label: 'Viewer', color: 'text-gray-400', icon: Users }
   }
 
   // Filter fields configuration

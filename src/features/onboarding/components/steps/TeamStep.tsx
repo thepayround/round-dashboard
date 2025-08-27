@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Users, UserPlus, Mail, Trash2, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import type { TeamSettings } from '../../types/onboarding'
-import { useTeamInvitation, useTeamRoles } from '@/shared/hooks/api/useTeam'
+import { useTeamInvitation, useTeamRoleUtils } from '@/shared/hooks/api/useTeam'
 import { UserRole } from '@/shared/services/api/team.service'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { ActionButton } from '@/shared/components'
@@ -20,7 +20,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false)
   const { state } = useAuth()
   const { inviteUser, isLoading } = useTeamInvitation()
-  const { getCommonRoles, getRoleName } = useTeamRoles()
+  const { getCommonRoles, getRoleName } = useTeamRoleUtils()
 
 
   const handleInviteTeamMember = async () => {
