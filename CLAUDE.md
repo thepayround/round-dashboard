@@ -306,6 +306,50 @@ src/components/ComponentName/
 // ❌ BAD: Monolithic props
 <Card title="Title" content="Content" footer="Footer" showHeader={true} />
 
+### Global Toast System (MANDATORY)
+
+**CRITICAL**: Always use the global toast system for all user notifications. Never create local toast implementations.
+
+#### Usage Rules
+- **MANDATORY**: Use `useGlobalToast()` for ALL user notifications
+- **NEVER**: Create local toast state or components
+- **ALWAYS**: Import from `@/shared/contexts/ToastContext`
+
+#### Implementation
+```tsx
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
+
+const MyComponent = () => {
+  const { showSuccess, showError, showWarning, showInfo } = useGlobalToast()
+  
+  // ✅ CORRECT: Use global toast
+  const handleSuccess = () => {
+    showSuccess('Operation completed successfully!')
+    showError('Something went wrong', { field: 'Validation error' })
+    showWarning('Please check your input')
+    showInfo('Processing your request...')
+  }
+  
+  // ❌ NEVER DO: Local toast state
+  const [apiError, setApiError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
+  <Toast isVisible={localToast.isVisible} .../> // DON'T DO THIS
+}
+```
+
+#### Toast Features
+- **Types**: success (green), error (red), warning (yellow), info (blue)
+- **Position**: Always top-right corner globally
+- **Auto-close**: 5 seconds with manual close option
+- **Details**: Support for additional error details object
+- **Animations**: Consistent Framer Motion animations
+
+#### Architecture
+- **ToastProvider**: Wraps entire app in App.tsx
+- **Single Toast**: One toast component globally positioned
+- **Global State**: Centralized toast state management
+- **Consistent UX**: Same behavior across entire application
+
 ### Bad pattern 
 #### Avoiding useEffect Anti-Patterns in React
 
@@ -374,6 +418,7 @@ Avoid `useEffect` for things React can do declaratively.
 3. **Performance** - Code splitting, memoization, virtualization
 4. **Error Handling** - Structured error types with severity levels
 5. **File Size Limits** - Components <200 lines, tests <150 lines, utils <100 lines
+6. **Global Toast System** - **MANDATORY**: Always use `useGlobalToast()` for notifications, never create local toast implementations
 
 ### API Naming Conventions
 **CRITICAL: Follow these naming conventions consistently**

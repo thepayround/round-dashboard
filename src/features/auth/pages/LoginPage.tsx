@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { ActionButton, AuthLogo } from '@/shared/components'
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -20,6 +21,7 @@ export const LoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { login } = useAuth()
+  const { showSuccess, showError } = useGlobalToast()
 
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -28,21 +30,19 @@ export const LoginPage = () => {
   })
   const [errors, setErrors] = useState<ValidationError[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [apiError, setApiError] = useState('')
-  const [successMessage, setSuccessMessage] = useState('')
 
   // Handle success message from navigation state (e.g., from password reset)
   useEffect(() => {
     const state = location.state as { message?: string; email?: string }
     if (state?.message) {
-      setSuccessMessage(state.message)
+      showSuccess(state.message)
       if (state.email) {
         setFormData(prev => ({ ...prev, email: state.email! }))
       }
       // Clear the state to prevent showing the message again on refresh
       navigate(location.pathname, { replace: true, state: {} })
     }
-  }, [location.state, location.pathname, navigate])
+  }, [location.state, location.pathname, navigate, showSuccess])
 
   // Form validation helper
   const isFormValid = () => {
@@ -66,8 +66,6 @@ export const LoginPage = () => {
     if (hasFieldError(errors, name)) {
       setErrors(prev => prev.filter(error => error.field !== name))
     }
-    setApiError('')
-    setSuccessMessage('')
   }
 
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -96,7 +94,6 @@ export const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    setApiError('')
 
     // Final validation check before submission
     const validation = validateLoginForm(formData)
@@ -122,12 +119,12 @@ export const LoginPage = () => {
           (location.state as { from?: { pathname?: string } })?.from?.pathname ?? '/get-started'
         navigate(from, { replace: true })
       } else {
-        setApiError(response.error ?? 'Login failed')
+        showError(response.error ?? 'Login failed')
         setIsSubmitting(false)
       }
     } catch (error) {
       console.error('Login error:', error)
-      setApiError('An unexpected error occurred. Please try again.')
+      showError('An unexpected error occurred. Please try again.')
       setIsSubmitting(false)
     }
   }
@@ -175,44 +172,6 @@ export const LoginPage = () => {
             </motion.div>
           </div>
 
-        {/* Success Message */}
-        {successMessage && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 mb-6"
-          >
-            <div className="flex items-center space-x-2 text-green-400">
-              <CheckCircle className="w-5 h-5" />
-              <span className="text-sm font-medium">{successMessage}</span>
-            </div>
-          </motion.div>
-        )}
-
-        {/* API Error Message */}
-        {apiError && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
-          >
-            <div className="flex items-center space-x-2 text-red-400">
-              <AlertCircle className="w-5 h-5" />
-              <span className="text-sm font-medium">{apiError}</span>
-            </div>
-            {apiError.toLowerCase().includes('email') &&
-              apiError.toLowerCase().includes('confirm') && (
-                <div className="mt-3 pt-3 border-t border-red-500/20">
-                  <Link
-                    to="/auth/resend-confirmation"
-                    className="text-sm text-red-300 hover:text-red-200 underline"
-                  >
-                    Resend confirmation email
-                  </Link>
-                </div>
-              )}
-          </motion.div>
-        )}
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
@@ -313,8 +272,8 @@ export const LoginPage = () => {
           {/* Social Login Buttons */}
           <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-4">
             <GoogleLoginButton 
-              onSuccess={() => setSuccessMessage('Successfully signed in with Google!')}
-              onError={(error) => setApiError(error)}
+              onSuccess={() => showSuccess('Successfully signed in with Google!')}
+              onError={(error) => showError(error)}
             />
 
             <button
