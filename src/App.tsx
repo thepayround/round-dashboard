@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import { AuthProvider } from '@/shared/contexts/AuthContext'
+import { ToastProvider } from '@/shared/contexts/ToastContext'
 import { useMobileOptimizations } from '@/shared/hooks/useMobileOptimizations'
 import { ProtectedRoute } from '@/shared/components/ProtectedRoute'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
@@ -33,8 +34,9 @@ const App = () => {
   useMobileOptimizations()
 
   return (
-    <AuthProvider>
-      <Router>
+    <ToastProvider>
+      <AuthProvider>
+        <Router>
       <Routes>
         <Route path="/auth/*" element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
@@ -154,8 +156,9 @@ const App = () => {
         />
         <Route path="/" element={<HomePage />} />
       </Routes>
-      </Router>
-    </AuthProvider>
+        </Router>
+      </AuthProvider>
+    </ToastProvider>
   )
 }
 

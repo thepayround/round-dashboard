@@ -69,7 +69,7 @@ export const useTeamInvitation = () => {
   }
 }
 
-export const useTeamRoles = () => {
+export const useTeamRoleUtils = () => {
   const getAvailableRoles = () => teamService.getAvailableRoles()
   const getCommonRoles = () => teamService.getCommonRoles()
   const getRoleName = (role: UserRole) => teamService.getRoleName(role)
@@ -81,3 +81,4 @@ export const useTeamRoles = () => {
     UserRole
   }
 }
+

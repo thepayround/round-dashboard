@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Modal } from '@/shared/components/Modal/Modal'
 import { ActionButton } from '@/shared/components/ActionButton'
-import { Edit, Crown, Shield, Users } from 'lucide-react'
+import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { Edit } from 'lucide-react'
 import type { UserRole, TeamMember } from '../types/team.types'
 
 interface EditMemberModalProps {
@@ -12,62 +13,6 @@ interface EditMemberModalProps {
   isLoading?: boolean
 }
 
-const roleOptions: { value: UserRole; label: string; description: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  {
-    value: 'Admin',
-    label: 'Administrator',
-    description: 'Full access to manage organization, settings, billing, and team members',
-    icon: Crown
-  },
-  {
-    value: 'TeamManager',
-    label: 'Team Manager',
-    description: 'Manage team members, view reports, and handle team operations',
-    icon: Shield
-  },
-  {
-    value: 'TeamMember',
-    label: 'Team Member',
-    description: 'Standard access to collaborate and work with the team',
-    icon: Users
-  },
-  {
-    value: 'SalesManager',
-    label: 'Sales Manager',
-    description: 'Manage sales operations, leads, and sales team performance',
-    icon: Shield
-  },
-  {
-    value: 'SalesRepresentative',
-    label: 'Sales Representative',
-    description: 'Handle sales activities, customer relationships, and deals',
-    icon: Users
-  },
-  {
-    value: 'MarketingManager',
-    label: 'Marketing Manager',
-    description: 'Manage marketing campaigns, analytics, and marketing team',
-    icon: Shield
-  },
-  {
-    value: 'SupportAdmin',
-    label: 'Support Administrator',
-    description: 'Manage support operations and customer service team',
-    icon: Shield
-  },
-  {
-    value: 'SupportAgent',
-    label: 'Support Agent',
-    description: 'Provide customer support and handle support tickets',
-    icon: Users
-  },
-  {
-    value: 'Viewer',
-    label: 'Viewer',
-    description: 'Read-only access to view data and reports',
-    icon: Users
-  }
-]
 
 export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoading = false }: EditMemberModalProps) => {
   const [selectedRole, setSelectedRole] = useState<UserRole>('TeamMember')
@@ -156,69 +101,20 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
 
         {/* Role Selection */}
         <div>
-          <div className="block text-sm font-medium text-gray-300 mb-3">
+          <div className="block text-sm font-medium text-gray-300 mb-2">
             Select New Role
           </div>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
-            {roleOptions.map((role) => {
-              const IconComponent = role.icon
-              const isCurrentRole = role.value === member.role
-              
-              // Determine classes based on state
-              let containerClasses = 'relative flex items-start p-3 cursor-pointer rounded-lg border transition-all duration-200 '
-              if (selectedRole === role.value) {
-                containerClasses += 'border-purple-500 bg-purple-500/10'
-              } else if (isCurrentRole) {
-                containerClasses += 'border-blue-500 bg-blue-500/5'
-              } else {
-                containerClasses += 'border-gray-600 hover:border-gray-500 hover:bg-gray-800/50'
-              }
-
-              let radioClasses = 'flex-shrink-0 w-2 h-2 border-2 rounded-full mr-3 '
-              if (selectedRole === role.value) {
-                radioClasses += 'border-purple-500 bg-purple-500'
-              } else if (isCurrentRole) {
-                radioClasses += 'border-blue-500 bg-blue-500'
-              } else {
-                radioClasses += 'border-gray-400'
-              }
-
-              return (
-                <label
-                  key={role.value}
-                  className={containerClasses}
-                >
-                  <input
-                    type="radio"
-                    name="role"
-                    value={role.value}
-                    checked={selectedRole === role.value}
-                    onChange={(e) => setSelectedRole(e.target.value as UserRole)}
-                    className="sr-only"
-                  />
-                  <div className="flex items-center w-full">
-                    <div className={radioClasses} />
-                    <IconComponent className="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center">
-                        <span className="text-sm font-medium text-white">
-                          {role.label}
-                        </span>
-                        {isCurrentRole && (
-                          <span className="ml-2 px-2 py-1 text-xs bg-blue-500/20 text-blue-300 rounded-md">
-                            Current
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-xs text-gray-400 mt-1">
-                        {role.description}
-                      </div>
-                    </div>
-                  </div>
-                </label>
-              )
-            })}
+          <div className="mb-2">
+            <span className="text-xs text-gray-400">
+              Current: <span className="text-gray-300">{member.roleName}</span>
+            </span>
           </div>
+          <ApiDropdown
+            config={teamRoleDropdownConfig}
+            value={selectedRole}
+            onSelect={(value) => setSelectedRole(value as UserRole)}
+            className="w-full"
+          />
         </div>
 
         {/* Error Message */}

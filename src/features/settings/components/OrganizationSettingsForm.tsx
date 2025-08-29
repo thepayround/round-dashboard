@@ -1,8 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { Save } from 'lucide-react'
 import { Button } from '@/shared/components/Button'
-import { Toast } from '@/shared/components/Toast'
-import { useToast } from '@/shared/hooks/useToast'
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
 import { organizationService } from '@/shared/services/api/organization.service'
 import type { OrganizationFormData } from '@/shared/components/forms/OrganizationForm';
@@ -15,7 +14,7 @@ interface OrganizationSettingsFormProps {
 
 export const OrganizationSettingsForm = ({ className = '' }: OrganizationSettingsFormProps) => {
   const { getCurrentOrganization } = useOrganization()
-  const { toast, showSuccess, showError, hideToast } = useToast()
+  const { showSuccess, showError } = useGlobalToast()
 
   // State
   const [isLoading, setIsLoading] = useState(true)
@@ -70,7 +69,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
     } finally {
       setIsLoading(false)
     }
-  }, [getCurrentOrganization, showError])
+  }, [getCurrentOrganization])
 
   // Load data on mount
   useEffect(() => {
@@ -215,14 +214,6 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
         showRegionalSettings
       />
 
-      {/* Toast Notifications */}
-      <Toast
-        isVisible={toast.isVisible}
-        type={toast.type}
-        message={toast.message}
-        details={toast.details}
-        onClose={hideToast}
-      />
     </div>
   )
 }

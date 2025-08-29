@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Modal } from '@/shared/components/Modal/Modal'
 import { ActionButton } from '@/shared/components/ActionButton'
-import { Mail, UserPlus, Crown, Shield, Users } from 'lucide-react'
+import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { Mail, UserPlus } from 'lucide-react'
 import type { UserRole } from '../types/team.types'
 
 interface InviteMemberModalProps {
@@ -11,62 +12,6 @@ interface InviteMemberModalProps {
   isLoading?: boolean
 }
 
-const roleOptions: { value: UserRole; label: string; description: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  {
-    value: 'Admin',
-    label: 'Administrator',
-    description: 'Full access to manage organization, settings, billing, and team members',
-    icon: Crown
-  },
-  {
-    value: 'TeamManager',
-    label: 'Team Manager',
-    description: 'Manage team members, view reports, and handle team operations',
-    icon: Shield
-  },
-  {
-    value: 'TeamMember',
-    label: 'Team Member',
-    description: 'Standard access to collaborate and work with the team',
-    icon: Users
-  },
-  {
-    value: 'SalesManager',
-    label: 'Sales Manager',
-    description: 'Manage sales operations, leads, and sales team performance',
-    icon: Shield
-  },
-  {
-    value: 'SalesRepresentative',
-    label: 'Sales Representative',
-    description: 'Handle sales activities, customer relationships, and deals',
-    icon: Users
-  },
-  {
-    value: 'MarketingManager',
-    label: 'Marketing Manager',
-    description: 'Manage marketing campaigns, analytics, and marketing team',
-    icon: Shield
-  },
-  {
-    value: 'SupportAdmin',
-    label: 'Support Administrator',
-    description: 'Manage support operations and customer service team',
-    icon: Shield
-  },
-  {
-    value: 'SupportAgent',
-    label: 'Support Agent',
-    description: 'Provide customer support and handle support tickets',
-    icon: Users
-  },
-  {
-    value: 'Viewer',
-    label: 'Viewer',
-    description: 'Read-only access to view data and reports',
-    icon: Users
-  }
-]
 
 export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false }: InviteMemberModalProps) => {
   const [email, setEmail] = useState('')
@@ -153,47 +98,15 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
 
         {/* Role Selection */}
         <div>
-          <div className="block text-sm font-medium text-gray-300 mb-3">
+          <div className="block text-sm font-medium text-gray-300 mb-2">
             Select Role
           </div>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
-            {roleOptions.map((role) => {
-              const IconComponent = role.icon
-              return (
-                <label
-                  key={role.value}
-                  className={`relative flex items-start p-3 cursor-pointer rounded-lg border transition-all duration-200 ${
-                    selectedRole === role.value
-                      ? 'border-purple-500 bg-purple-500/10'
-                      : 'border-gray-600 hover:border-gray-500 hover:bg-gray-800/50'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="role"
-                    value={role.value}
-                    checked={selectedRole === role.value}
-                    onChange={(e) => setSelectedRole(e.target.value as UserRole)}
-                    className="sr-only"
-                  />
-                  <div className="flex items-center">
-                    <div className={`flex-shrink-0 w-2 h-2 border-2 rounded-full mr-3 ${
-                      selectedRole === role.value ? 'border-purple-500 bg-purple-500' : 'border-gray-400'
-                    }`} />
-                    <IconComponent className="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" />
-                    <div className="min-w-0 flex-1">
-                      <div className="text-sm font-medium text-white">
-                        {role.label}
-                      </div>
-                      <div className="text-xs text-gray-400 mt-1">
-                        {role.description}
-                      </div>
-                    </div>
-                  </div>
-                </label>
-              )
-            })}
-          </div>
+          <ApiDropdown
+            config={teamRoleDropdownConfig}
+            value={selectedRole}
+            onSelect={(value) => setSelectedRole(value as UserRole)}
+            className="w-full"
+          />
         </div>
 
         {/* Error Message */}

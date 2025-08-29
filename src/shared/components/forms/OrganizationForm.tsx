@@ -144,7 +144,7 @@ export const OrganizationForm = ({
             {/* Website */}
             <div>
               <label htmlFor="website" className="auth-label">
-                Website <span className="text-gray-500">(optional)</span>
+                Website
               </label>
               <div className="input-container">
                 <ExternalLink className="input-icon-left auth-icon-primary" />
@@ -163,7 +163,7 @@ export const OrganizationForm = ({
             {/* Description - Full Width */}
             <div className="md:col-span-2">
               <label htmlFor="description" className="auth-label">
-                Description <span className="text-gray-500">(optional)</span>
+                Description
               </label>
               <div className="input-container">
                 <AlignLeft className="input-icon-left textarea-icon auth-icon-primary" />

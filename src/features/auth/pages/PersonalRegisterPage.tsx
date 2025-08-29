@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ActionButton, AuthLogo, PhoneInput } from '@/shared/components'
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
@@ -23,6 +24,7 @@ import { phoneValidator } from '@/shared/utils/phoneValidation'
 
 export const PersonalRegisterPage = () => {
   const navigate = useNavigate()
+  const { showSuccess, showError } = useGlobalToast()
   // const { login } = useAuth() // Not used in this component
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -35,8 +37,6 @@ export const PersonalRegisterPage = () => {
   })
   const [errors, setErrors] = useState<ValidationError[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [apiError, setApiError] = useState('')
-  const [_successMessage, setSuccessMessage] = useState('')
 
   // Form validation helper
   const isFormValid = () => {
@@ -157,7 +157,6 @@ export const PersonalRegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    setApiError('')
 
     // Final validation check before submission
     const validation = validateRegistrationForm(formData)
@@ -188,12 +187,12 @@ export const PersonalRegisterPage = () => {
           replace: true,
         })
       } else {
-        setApiError(response.error ?? 'Registration failed')
+        showError(response.error ?? 'Registration failed')
         setIsSubmitting(false)
       }
     } catch (error) {
       console.error('Registration error:', error)
-      setApiError('An unexpected error occurred. Please try again.')
+      showError('An unexpected error occurred. Please try again.')
       setIsSubmitting(false)
     }
   }
@@ -241,19 +240,6 @@ export const PersonalRegisterPage = () => {
             </motion.div>
           </div>
 
-        {/* API Error Message */}
-        {apiError && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
-          >
-            <div className="flex items-center space-x-2 text-red-400">
-              <AlertCircle className="w-5 h-5" />
-              <span className="text-sm font-medium">{apiError}</span>
-            </div>
-          </motion.div>
-        )}
 
         {/* Registration Form */}
         <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
@@ -450,11 +436,11 @@ export const PersonalRegisterPage = () => {
           <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-4">
             <GoogleLoginButton 
               onSuccess={() => {
-                setSuccessMessage('Successfully registered with Google!')
+                showSuccess('Successfully registered with Google!')
                 // Redirect to dashboard or profile completion
                 navigate('/dashboard')
               }}
-              onError={(error) => setApiError(error)}
+              onError={(error) => showError(error)}
             />
 
             <button

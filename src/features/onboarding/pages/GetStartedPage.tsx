@@ -52,8 +52,7 @@ import { AddressStep } from '../components/steps/AddressStep'
 import { ProductsStep } from '../components/steps/ProductsStep'
 import { BillingStep } from '../components/steps/BillingStep'
 import { TeamStep } from '../components/steps/TeamStep'
-import { Toast } from '@/shared/components/Toast'
-import { useToast } from '@/shared/hooks/useToast'
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
 
 interface ErrorToast {
   show: boolean
@@ -121,7 +120,7 @@ export const GetStartedPage = () => {
   const { state, setUser: _setUser } = useAuth()
   const { token: _token, user } = state
   const { getCurrentOrganization } = useOrganization()
-  const { toast, showSuccess, showError, hideToast } = useToast()
+  const { showSuccess, showError } = useGlobalToast()
 
   // State
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('organization')
@@ -784,14 +783,6 @@ export const GetStartedPage = () => {
         </div>
       </div>
       
-      {/* Toast Notifications - Positioned at page level */}
-      <Toast
-        isVisible={toast.isVisible}
-        type={toast.type}
-        message={toast.message}
-        details={toast.details}
-        onClose={hideToast}
-      />
       
       {/* Error Toast for page-level errors */}
       {errorToast.isVisible && (
