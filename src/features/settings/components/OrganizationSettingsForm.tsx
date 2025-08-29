@@ -29,9 +29,11 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
     description: '',
     revenue: '',
     country: '',
-    currency: 'USD',
+    currency: '',
     timeZone: 'UTC',
-    fiscalYearStart: 'January'
+    fiscalYearStart: '',
+    registrationNumber: '',
+    taxId: ''
   })
   const [cachedOrgData, setCachedOrgData] = useState<OrganizationResponse | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -55,9 +57,11 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
           description: org.description ?? '',
           revenue: org.revenue?.toString() ?? '',
           country: org.country ?? '',
-          currency: org.currency ?? 'USD',
+          currency: org.currency ?? '',
           timeZone: org.timeZone ?? 'UTC',
-          fiscalYearStart: org.fiscalYearStart ?? 'January'
+          fiscalYearStart: org.fiscalYearStart ?? '',
+          registrationNumber: org.registrationNumber ?? '',
+          taxId: org.taxId ?? ''
         })
       }
     } catch (error) {

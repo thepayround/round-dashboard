@@ -15,10 +15,12 @@ export interface OrganizationInfo {
   timeZone?: string
   revenue?: string
   country: string
+  currency: string
+  registrationNumber?: string
+  taxId?: string
 }
 
 export interface BusinessSettings {
-  currency: string
   timezone: string
   fiscalYearStart: string
 }

@@ -3,7 +3,7 @@
  * Provides easy access to currency symbols and formatting functions
  */
 
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import { useCurrencies } from './api/useCountryCurrency'
 export interface CurrencyInfo {
   code: string
@@ -20,7 +20,7 @@ export const useCurrency = () => {
   // Create a map for fast currency lookup by code
   const currencyMap = useMemo(() => {
     const map = new Map<string, CurrencyInfo>()
-    
+        
     if (currencies) {
       currencies.forEach(currency => {
         map.set(currency.currencyCodeAlpha, {
@@ -34,17 +34,21 @@ export const useCurrency = () => {
       })
     }
     
+    // console.log('Currency map built:', { mapSize: map.size, sampleEntries: Array.from(map.entries()).slice(0, 3) })
     return map
   }, [currencies])
 
-  const getCurrencySymbol = (currencyCode: string): string => {
+  const getCurrencySymbol = useCallback((currencyCode: string): string => {
     const currency = currencyMap.get(currencyCode)
-    return currency?.symbol ?? currencyCode
-  }
+    const symbol = currency?.symbol ?? currencyCode
+    // console.log('getCurrencySymbol:', { currencyCode, currency, symbol, mapSize: currencyMap.size })
+    return symbol
+  }, [currencyMap])
 
-  const getCurrencyInfo = (currencyCode: string): CurrencyInfo | null => currencyMap.get(currencyCode) ?? null
+  const getCurrencyInfo = useCallback((currencyCode: string): CurrencyInfo | null => 
+    currencyMap.get(currencyCode) ?? null, [currencyMap])
 
-  const formatCurrency = (
+  const formatCurrency = useCallback((
     amount: number | string, 
     currencyCode: string, 
     options?: {
@@ -87,9 +91,10 @@ export const useCurrency = () => {
     }
 
     return result
-  }
+  }, [currencyMap])
 
-  const getCurrenciesList = (): CurrencyInfo[] => Array.from(currencyMap.values()).sort((a, b) => a.name.localeCompare(b.name))
+  const getCurrenciesList = useCallback((): CurrencyInfo[] => 
+    Array.from(currencyMap.values()).sort((a, b) => a.name.localeCompare(b.name)), [currencyMap])
 
   return {
     currencies: getCurrenciesList(),

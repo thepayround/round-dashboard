@@ -93,24 +93,24 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
       {/* Header Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 group"
+        className="w-full flex items-center justify-between p-3 md:p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 group"
       >
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-blue-500/20 border border-blue-400/30 group-hover:bg-blue-500/30 transition-colors">
-            <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="p-1.5 md:p-2 rounded-lg bg-blue-500/20 border border-blue-400/30 group-hover:bg-blue-500/30 transition-colors">
+            <svg className="w-3 h-3 md:w-4 md:h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
           <div className="text-left">
-            <h3 className="text-white font-medium">Change Password</h3>
-            <p className="text-gray-400 text-sm">Update your account password</p>
+            <h3 className="text-white font-medium text-xs md:text-sm">Change Password</h3>
+            <p className="text-gray-400 text-[10px] md:text-xs">Update your account password</p>
           </div>
         </div>
         <motion.div
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <ChevronDown className="w-5 h-5 text-gray-400" />
+          <ChevronDown className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
         </motion.div>
       </button>
 
@@ -124,19 +124,19 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="mt-4 p-6 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10">
+            <div className="mt-4 p-4 md:p-6 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10">
               {/* Success State */}
               {isSuccess && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="mb-6 p-4 rounded-lg bg-green-500/20 border border-green-400/30"
+                  className="mb-6 p-3 md:p-4 rounded-lg bg-green-500/20 border border-green-400/30"
                 >
                   <div className="flex items-center gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-green-400 flex-shrink-0" />
                     <div>
-                      <h4 className="text-green-400 font-medium">Password Updated Successfully!</h4>
-                      <p className="text-green-300/80 text-sm mt-1">
+                      <h4 className="text-green-400 font-medium text-xs md:text-sm">Password Updated Successfully!</h4>
+                      <p className="text-green-300/80 text-[10px] md:text-xs mt-1">
                         Your password has been changed. For security, you&apos;ll need to sign in again on other devices.
                       </p>
                     </div>
@@ -149,21 +149,21 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="mb-6 p-4 rounded-lg bg-red-500/20 border border-red-400/30"
+                  className="mb-6 p-3 md:p-4 rounded-lg bg-red-500/20 border border-red-400/30"
                 >
                   <div className="flex items-center gap-3">
-                    <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                    <AlertCircle className="w-4 h-4 md:w-5 md:h-5 text-red-400 flex-shrink-0" />
                     <div>
-                      <h4 className="text-red-400 font-medium">Password Change Failed</h4>
-                      <p className="text-red-300/80 text-sm mt-1">{error}</p>
+                      <h4 className="text-red-400 font-medium text-xs md:text-sm">Password Change Failed</h4>
+                      <p className="text-red-300/80 text-[10px] md:text-xs mt-1">{error}</p>
                     </div>
                   </div>
                 </motion.div>
               )}
 
               {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                <div className="space-y-3 md:space-y-4">
                   {/* Current Password */}
                   <AuthInput
                     label="Current Password"
@@ -228,9 +228,9 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
               </form>
 
               {/* Security Tips */}
-              <div className="mt-6 p-4 rounded-lg bg-blue-500/10 border border-blue-400/20">
-                <h4 className="text-blue-400 font-medium mb-2">Security Tips</h4>
-                <ul className="text-blue-300/80 text-sm space-y-1">
+              <div className="mt-4 md:mt-6 p-3 md:p-4 rounded-lg bg-blue-500/10 border border-blue-400/20">
+                <h4 className="text-blue-400 font-medium mb-2 text-xs md:text-sm">Security Tips</h4>
+                <ul className="text-blue-300/80 text-[10px] md:text-xs space-y-1">
                   <li>• Use a unique password you don&apos;t use elsewhere</li>
                   <li>• Include uppercase, lowercase, numbers, and special characters</li>
                   <li>• Avoid common words or personal information</li>

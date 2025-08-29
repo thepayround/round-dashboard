@@ -153,25 +153,25 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
         {/* Header */}
         <SectionHeader
           title="Settings"
-          subtitle="Manage your preferences and profile"
+          subtitle="Manage your account preferences and security settings"
           size="main"
         />
 
         {/* Content Grid */}
-        <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8">
           {/* Settings Navigation */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className="lg:col-span-1"
+            className="lg:col-span-1 lg:sticky lg:top-6 lg:self-start"
           >
             <Card animate={false} padding="sm">
               <div className="space-y-1">
-                <div className="flex items-center gap-2 mb-6">
-                  <Settings className="w-3.5 h-3.5 text-gray-400" />
-                  <span className="text-xs font-medium text-gray-300 uppercase tracking-wider">Navigation</span>
+                <div className="flex items-center gap-2 mb-4">
+                  <Settings className="w-3 h-3 text-gray-400" />
+                  <span className="text-[10px] font-medium text-gray-300 uppercase tracking-wider">Navigation</span>
                 </div>
                 <nav className="space-y-0.5">
                   {settingsSections.map((section) => {
@@ -183,24 +183,24 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
                         onClick={() => setActiveSection(section.id)}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md transition-all duration-200 group text-left ${
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-200 group text-left ${
                           isActive
                             ? 'bg-gradient-to-r from-[#D417C8]/15 to-[#14BDEA]/15 text-white border border-[#D417C8]/20'
-                            : 'text-gray-400 hover:text-white hover:bg-white/3 border border-transparent'
+                            : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
                         }`}
                       >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <IconComponent className={`w-3.5 h-3.5 flex-shrink-0 transition-all duration-200 ${
+                        <div className="flex items-center gap-2 min-w-0">
+                          <IconComponent className={`w-3 h-3 flex-shrink-0 transition-all duration-200 ${
                             isActive 
                               ? 'text-[#D417C8]' 
                               : 'group-hover:text-white'
                           }`} />
                           <div className="min-w-0">
-                            <p className="font-medium text-sm truncate">{section.label}</p>
-                            <p className="text-xs text-gray-500 truncate leading-tight">{section.description}</p>
+                            <p className="font-medium text-xs truncate">{section.label}</p>
+                            <p className="text-[10px] text-gray-500 truncate leading-tight">{section.description}</p>
                           </div>
                         </div>
-                        <ChevronRight className={`w-3.5 h-3.5 flex-shrink-0 transition-all duration-200 ${
+                        <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-all duration-200 ${
                           isActive 
                             ? 'text-[#D417C8]' 
                             : 'text-gray-500 group-hover:text-gray-300'
@@ -218,7 +218,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="lg:col-span-3 relative"
+            className="lg:col-span-4 relative"
           >
             {renderSectionContent()}
           </motion.div>
@@ -345,23 +345,23 @@ const ProfileSectionContent: React.FC<ProfileSectionProps> = ({ user, settings, 
       <Card animate={false} padding="md">
         <div className="space-y-8">
           {/* Header */}
-          <div className="flex items-center gap-3 pb-6 border-b border-white/5">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#D417C8]/15 to-[#14BDEA]/15 rounded-lg flex items-center justify-center border border-[#D417C8]/20">
-              <UserIcon className="w-4 h-4 text-[#D417C8]" />
+          <div className="flex items-center gap-3 pb-4 border-b border-white/5">
+            <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-br from-[#D417C8]/15 to-[#14BDEA]/15 rounded-lg flex items-center justify-center border border-[#D417C8]/20">
+              <UserIcon className="w-3 h-3 md:w-4 md:h-4 text-[#D417C8]" />
             </div>
             <div>
-              <h2 className="text-sm font-medium text-white">Personal Information</h2>
-              <p className="text-xs text-gray-400">Your user details and contact information</p>
+              <h2 className="text-xs md:text-sm font-medium text-white">Personal Information</h2>
+              <p className="text-[10px] md:text-xs text-gray-400">Your user details and contact information</p>
             </div>
           </div>
 
           {/* Info Notice */}
-          <div className="p-4 bg-gradient-to-r from-blue-500/5 to-cyan-500/5 border border-blue-500/10 rounded-md">
-            <div className="flex items-start gap-2.5">
-              <Info className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+          <div className="p-3 md:p-4 bg-gradient-to-r from-blue-500/5 to-cyan-500/5 border border-blue-500/10 rounded-lg">
+            <div className="flex items-start gap-2">
+              <Info className="w-3 h-3 md:w-4 md:h-4 text-blue-400 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-medium text-blue-100 mb-1">Protected Information</h4>
-                <p className="text-xs text-blue-200/70 leading-relaxed">
+                <h4 className="text-[10px] md:text-xs font-medium text-blue-100 mb-1">Protected Information</h4>
+                <p className="text-[10px] md:text-xs text-blue-200/70 leading-relaxed">
                   Personal information fields are protected for security. Contact support to update your name, email, or phone number.
                 </p>
               </div>
@@ -369,8 +369,8 @@ const ProfileSectionContent: React.FC<ProfileSectionProps> = ({ user, settings, 
           </div>
 
           {/* Personal Information Form */}
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <FormInput
                 label="First Name"
                 type="text"
@@ -439,23 +439,23 @@ const ProfileSectionContent: React.FC<ProfileSectionProps> = ({ user, settings, 
       <Card animate={false} padding="md">
         <div className="space-y-8">
           {/* Header */}
-          <div className="flex items-center gap-3 pb-6 border-b border-white/5">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#7767DA]/15 to-[#D417C8]/15 rounded-lg flex items-center justify-center border border-[#7767DA]/20">
-              <Globe className="w-4 h-4 text-[#7767DA]" />
+          <div className="flex items-center gap-3 pb-4 border-b border-white/5">
+            <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-br from-[#7767DA]/15 to-[#D417C8]/15 rounded-lg flex items-center justify-center border border-[#7767DA]/20">
+              <Globe className="w-3 h-3 md:w-4 md:h-4 text-[#7767DA]" />
             </div>
             <div>
-              <h2 className="text-sm font-medium text-white">Display & Localization</h2>
-              <p className="text-xs text-gray-400">Customize how dates, times, and content are displayed</p>
+              <h2 className="text-xs md:text-sm font-medium text-white">Display & Localization</h2>
+              <p className="text-[10px] md:text-xs text-gray-400">Customize how dates, times, and content are displayed</p>
             </div>
           </div>
 
           {/* Preferences Form */}
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
-              <div className="space-y-3">
-                <label htmlFor="timezone" className="block text-xs font-medium text-gray-300">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              <div className="space-y-2">
+                <label htmlFor="timezone" className="block text-[11px] font-medium text-gray-300 uppercase tracking-wider">
                   <div className="flex items-center gap-2">
-                    <Globe className="w-3.5 h-3.5" />
+                    <Globe className="w-3 h-3" />
                     Timezone
                   </div>
                 </label>
@@ -467,10 +467,10 @@ const ProfileSectionContent: React.FC<ProfileSectionProps> = ({ user, settings, 
                 />
               </div>
               
-              <div className="space-y-3">
-                <label htmlFor="language" className="block text-xs font-medium text-gray-300">
+              <div className="space-y-2">
+                <label htmlFor="language" className="block text-[11px] font-medium text-gray-300 uppercase tracking-wider">
                   <div className="flex items-center gap-2">
-                    <Languages className="w-3.5 h-3.5" />
+                    <Languages className="w-3 h-3" />
                     Language
                   </div>
                 </label>
@@ -483,10 +483,10 @@ const ProfileSectionContent: React.FC<ProfileSectionProps> = ({ user, settings, 
                 />
               </div>
               
-              <div className="space-y-3">
-                <label htmlFor="dateFormat" className="block text-xs font-medium text-gray-300">
+              <div className="space-y-2">
+                <label htmlFor="dateFormat" className="block text-[11px] font-medium text-gray-300 uppercase tracking-wider">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-3.5 h-3.5" />
+                    <Calendar className="w-3 h-3" />
                     Date Format
                   </div>
                 </label>
@@ -498,10 +498,10 @@ const ProfileSectionContent: React.FC<ProfileSectionProps> = ({ user, settings, 
                 />
               </div>
               
-              <div className="space-y-3">
-                <label htmlFor="timeFormat" className="block text-xs font-medium text-gray-300">
+              <div className="space-y-2">
+                <label htmlFor="timeFormat" className="block text-[11px] font-medium text-gray-300 uppercase tracking-wider">
                   <div className="flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5" />
+                    <Clock className="w-3 h-3" />
                     Time Format
                   </div>
                 </label>
@@ -515,7 +515,15 @@ const ProfileSectionContent: React.FC<ProfileSectionProps> = ({ user, settings, 
             </div>
 
             {/* Save Button */}
-            <div className="flex justify-end pt-6 border-t border-white/5">
+            <div className="flex justify-between items-center pt-4 border-t border-white/5">
+              <div className="flex items-center">
+                {hasChanges && (
+                  <div className="flex items-center gap-2 text-orange-400">
+                    <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
+                    <span className="text-[10px] font-medium">Unsaved changes</span>
+                  </div>
+                )}
+              </div>
               <ActionButton
                 label={isSaving ? 'Saving...' : 'Save Changes'}
                 onClick={handleButtonClick}
@@ -545,13 +553,13 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({ settings: _settings, 
     <Card animate={false} padding="md">
       <div className="space-y-8">
         {/* Header */}
-        <div className="flex items-center gap-3 pb-6 border-b border-white/5">
-          <div className="w-8 h-8 bg-gradient-to-br from-[#FF4E50]/15 to-[#F44336]/15 rounded-lg flex items-center justify-center border border-[#FF4E50]/20">
-            <Lock className="w-4 h-4 text-[#FF4E50]" />
+        <div className="flex items-center gap-3 pb-4 border-b border-white/5">
+          <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-br from-[#FF4E50]/15 to-[#F44336]/15 rounded-lg flex items-center justify-center border border-[#FF4E50]/20">
+            <Lock className="w-3 h-3 md:w-4 md:h-4 text-[#FF4E50]" />
           </div>
           <div>
-            <h2 className="text-sm font-medium text-white">Password & Security</h2>
-            <p className="text-xs text-gray-400">Manage your user password and security settings</p>
+            <h2 className="text-xs md:text-sm font-medium text-white">Password & Security</h2>
+            <p className="text-[10px] md:text-xs text-gray-400">Manage your account password and security settings</p>
           </div>
         </div>
 
@@ -665,13 +673,13 @@ const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notificatio
     <Card animate={false} padding="md">
       <div className="space-y-8">
         {/* Header */}
-        <div className="flex items-center gap-3 pb-6 border-b border-white/5">
-          <div className="w-8 h-8 bg-gradient-to-br from-[#14BDEA]/15 to-[#7767DA]/15 rounded-lg flex items-center justify-center border border-[#14BDEA]/20">
-            <Bell className="w-4 h-4 text-[#14BDEA]" />
+        <div className="flex items-center gap-3 pb-4 border-b border-white/5">
+          <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-br from-[#14BDEA]/15 to-[#7767DA]/15 rounded-lg flex items-center justify-center border border-[#14BDEA]/20">
+            <Bell className="w-3 h-3 md:w-4 md:h-4 text-[#14BDEA]" />
           </div>
           <div>
-            <h2 className="text-sm font-medium text-white">Notification Preferences</h2>
-            <p className="text-xs text-gray-400">Control how and when you receive notifications</p>
+            <h2 className="text-xs md:text-sm font-medium text-white">Notification Preferences</h2>
+            <p className="text-[10px] md:text-xs text-gray-400">Control how and when you receive notifications</p>
           </div>
         </div>
 
@@ -686,24 +694,24 @@ const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notificatio
             >
               {/* Notification Type Header */}
               <div className="flex items-start gap-3">
-                <div className={`w-8 h-8 bg-gradient-to-br ${type.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                  <type.icon className="w-4 h-4" />
+                <div className={`w-7 h-7 md:w-8 md:h-8 bg-gradient-to-br ${type.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                  <type.icon className="w-3 h-3 md:w-4 md:h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-medium text-white mb-1">{type.label}</h3>
-                  <p className="text-xs text-gray-400 leading-relaxed">{type.description}</p>
+                  <h3 className="text-xs md:text-sm font-medium text-white mb-1">{type.label}</h3>
+                  <p className="text-[10px] md:text-xs text-gray-400 leading-relaxed">{type.description}</p>
                 </div>
               </div>
 
               {/* Channel Toggles */}
-              <div className="ml-11">
-                <div className="p-4 bg-white/3 border border-white/5 rounded-md">
-                  <div className="flex flex-wrap gap-8">
+              <div className="ml-10 md:ml-11">
+                <div className="p-3 md:p-4 bg-white/3 border border-white/5 rounded-lg">
+                  <div className="grid grid-cols-2 md:flex md:flex-wrap gap-4 md:gap-6">
                     {channels.map((channel) => (
-                      <div key={`${type.id}-${channel.id}`} className="flex items-center gap-3 min-w-[110px]">
+                      <div key={`${type.id}-${channel.id}`} className="flex items-center justify-between md:gap-3 min-w-[100px]">
                         <div className="flex items-center gap-2">
-                          <channel.icon className="w-3.5 h-3.5 text-gray-400" />
-                          <span className="text-xs text-gray-300">{channel.label}</span>
+                          <channel.icon className="w-3 h-3 text-gray-400" />
+                          <span className="text-[10px] md:text-xs text-gray-300">{channel.label}</span>
                         </div>
                         <motion.label 
                           className="relative inline-flex items-center cursor-pointer"
@@ -728,12 +736,12 @@ const NotificationsSection: React.FC<NotificationsSectionProps> = ({ notificatio
 
         {/* Global Settings */}
         <div className="pt-6 border-t border-white/5">
-          <div className="p-4 bg-gradient-to-r from-yellow-500/5 to-orange-500/5 border border-yellow-500/10 rounded-md">
-            <div className="flex items-start gap-2.5">
-              <Info className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
+          <div className="p-3 md:p-4 bg-gradient-to-r from-yellow-500/5 to-orange-500/5 border border-yellow-500/10 rounded-lg">
+            <div className="flex items-start gap-2">
+              <Info className="w-3 h-3 md:w-4 md:h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-medium text-yellow-100 mb-1">Notification Preferences</h4>
-                <p className="text-xs text-yellow-200/70 leading-relaxed">
+                <h4 className="text-[10px] md:text-xs font-medium text-yellow-100 mb-1">Notification Preferences</h4>
+                <p className="text-[10px] md:text-xs text-yellow-200/70 leading-relaxed">
                   You can unsubscribe from marketing emails at any time. Security and billing notifications are required for user safety.
                 </p>
               </div>
@@ -766,13 +774,13 @@ const BillingSection = () => (
       <Card animate={false} padding="md">
         <div className="space-y-8">
           {/* Header */}
-          <div className="flex items-center gap-3 pb-6 border-b border-white/5">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#42E695]/15 to-[#3BB2B8]/15 rounded-lg flex items-center justify-center border border-[#42E695]/20">
-              <CreditCard className="w-4 h-4 text-[#42E695]" />
+          <div className="flex items-center gap-3 pb-4 border-b border-white/5">
+            <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-br from-[#42E695]/15 to-[#3BB2B8]/15 rounded-lg flex items-center justify-center border border-[#42E695]/20">
+              <CreditCard className="w-3 h-3 md:w-4 md:h-4 text-[#42E695]" />
             </div>
             <div>
-              <h2 className="text-sm font-medium text-white">Payment Methods</h2>
-              <p className="text-xs text-gray-400">Manage your payment methods and billing preferences</p>
+              <h2 className="text-xs md:text-sm font-medium text-white">Payment Methods</h2>
+              <p className="text-[10px] md:text-xs text-gray-400">Manage your payment methods and billing preferences</p>
             </div>
           </div>
 
@@ -781,17 +789,17 @@ const BillingSection = () => (
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center justify-between p-4 bg-white/3 border border-white/5 rounded-md hover:bg-white/5 hover:border-white/10 transition-all duration-200 group"
+              className="flex items-center justify-between p-3 md:p-4 bg-white/3 border border-white/5 rounded-lg hover:bg-white/5 hover:border-white/10 transition-all duration-200 group"
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-6 bg-gradient-to-r from-[#D417C8] to-[#14BDEA] rounded flex items-center justify-center">
                   <span className="text-xs font-bold text-white">VISA</span>
                 </div>
                 <div>
-                  <p className="text-white font-light text-xs">•••• •••• •••• 4242</p>
-                  <div className="flex items-center gap-3 text-xs text-gray-400">
+                  <p className="text-white font-light text-[10px] md:text-xs">•••• •••• •••• 4242</p>
+                  <div className="flex items-center gap-3 text-[10px] md:text-xs text-gray-400">
                     <span>Expires 12/24</span>
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-500/15 border border-green-400/20 rounded text-green-400 text-xs">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-500/15 border border-green-400/20 rounded text-green-400 text-[10px]">
                       <div className="w-1 h-1 bg-green-400 rounded-full" />
                       Primary
                     </span>
@@ -799,10 +807,10 @@ const BillingSection = () => (
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <button className="text-[#D417C8] hover:text-[#BD2CD0] text-xs font-medium transition-colors duration-200">
+                <button className="text-[#D417C8] hover:text-[#BD2CD0] text-[10px] md:text-xs font-medium transition-colors duration-200">
                   Edit
                 </button>
-                <button className="text-gray-400 hover:text-gray-300 text-xs font-medium transition-colors duration-200">
+                <button className="text-gray-400 hover:text-gray-300 text-[10px] md:text-xs font-medium transition-colors duration-200">
                   Remove
                 </button>
               </div>
@@ -814,9 +822,9 @@ const BillingSection = () => (
               transition={{ delay: 0.1 }}
               className="border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-white/30 transition-colors duration-200"
             >
-              <CreditCard className="w-8 h-8 text-gray-400 mx-auto mb-3" />
-              <h3 className="text-white text-xs font-medium mb-2">Add New Payment Method</h3>
-              <p className="text-gray-400 text-xs mb-4">Add a credit card, debit card, or bank account</p>
+              <CreditCard className="w-6 h-6 md:w-8 md:h-8 text-gray-400 mx-auto mb-3" />
+              <h3 className="text-white text-[10px] md:text-xs font-medium mb-2">Add New Payment Method</h3>
+              <p className="text-gray-400 text-[10px] md:text-xs mb-4">Add a credit card, debit card, or bank account</p>
               <ActionButton
                 label="Add Payment Method"
                 onClick={() => { /* Add payment method clicked */ }}
@@ -832,13 +840,13 @@ const BillingSection = () => (
       <Card animate={false} padding="lg">
         <div className="space-y-6">
           {/* Header */}
-          <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 rounded-lg flex items-center justify-center border border-[#7767DA]/30">
-              <Mail className="w-5 h-5 text-[#7767DA]" />
+          <div className="flex items-center gap-3 pb-4 border-b border-white/5">
+            <div className="w-7 h-7 md:w-8 md:h-8 bg-gradient-to-br from-[#7767DA]/15 to-[#D417C8]/15 rounded-lg flex items-center justify-center border border-[#7767DA]/20">
+              <Mail className="w-3 h-3 md:w-4 md:h-4 text-[#7767DA]" />
             </div>
             <div>
-              <h2 className="text-sm font-medium text-white">Billing Information</h2>
-              <p className="text-xs text-gray-400">Your billing address and invoice preferences</p>
+              <h2 className="text-xs md:text-sm font-medium text-white">Billing Information</h2>
+              <p className="text-[10px] md:text-xs text-gray-400">Your billing address and invoice preferences</p>
             </div>
           </div>
 
@@ -846,10 +854,10 @@ const BillingSection = () => (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <h4 className="text-xs font-medium text-gray-300 mb-2">Billing Address</h4>
-                <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
-                  <div className="space-y-1 text-xs text-gray-300">
-                    <p className="text-white text-xs font-medium">Acme Corporation</p>
+                <h4 className="text-[11px] font-medium text-gray-300 mb-2 uppercase tracking-wider">Billing Address</h4>
+                <div className="p-3 md:p-4 bg-white/5 border border-white/10 rounded-lg">
+                  <div className="space-y-1 text-[10px] md:text-xs text-gray-300">
+                    <p className="text-white text-[10px] md:text-xs font-medium">Acme Corporation</p>
                     <p>123 Business Street</p>
                     <p>Suite 100</p>
                     <p>San Francisco, CA 94105</p>
@@ -861,10 +869,10 @@ const BillingSection = () => (
 
             <div className="space-y-4">
               <div>
-                <h4 className="text-xs font-medium text-gray-300 mb-2">Invoice Preferences</h4>
+                <h4 className="text-[11px] font-medium text-gray-300 mb-2 uppercase tracking-wider">Invoice Preferences</h4>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <label htmlFor="email-invoices" className="text-xs text-gray-300 cursor-pointer">Email invoices</label>
+                    <label htmlFor="email-invoices" className="text-[10px] md:text-xs text-gray-300 cursor-pointer">Email invoices</label>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input id="email-invoices" type="checkbox" className="sr-only peer" defaultChecked />
                       <div className="w-9 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#D417C8]/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#D417C8] peer-checked:to-[#14BDEA]" />
@@ -872,7 +880,7 @@ const BillingSection = () => (
                     </label>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <label htmlFor="payment-reminders" className="text-xs text-gray-300 cursor-pointer">Payment reminders</label>
+                    <label htmlFor="payment-reminders" className="text-[10px] md:text-xs text-gray-300 cursor-pointer">Payment reminders</label>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input id="payment-reminders" type="checkbox" className="sr-only peer" defaultChecked />
                       <div className="w-9 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#D417C8]/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#D417C8] peer-checked:to-[#14BDEA]" />

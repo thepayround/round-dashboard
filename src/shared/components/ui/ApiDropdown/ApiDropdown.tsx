@@ -461,11 +461,16 @@ export const ApiDropdown = <T = unknown>({
 
         {/* Display value or placeholder */}
         <div className="flex-1 text-left truncate flex items-center">
-          {selectedOption ? (
-            <span className="text-white/95 font-medium leading-none">{selectedOption.label}</span>
-          ) : (
-            <span className="text-white/60 font-normal leading-none">{config.placeholder}</span>
-          )}
+          {/* Show loading state if data is loading and we have a value but no selectedOption */}
+          {(() => {
+            if (isLoading && value && !selectedOption) {
+              return <span className="text-white/60 font-normal leading-none">Loading {value}...</span>
+            }
+            if (selectedOption) {
+              return <span className="text-white/95 font-medium leading-none">{selectedOption.label}</span>
+            }
+            return <span className="text-white/60 font-normal leading-none">{config.placeholder}</span>
+          })()}
         </div>
 
         {/* Right side icons */}

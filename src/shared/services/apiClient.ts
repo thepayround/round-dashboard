@@ -568,8 +568,8 @@ class ApiClient {
             companyInfo: {
               companyName: organization.name,
               registrationNumber: organization.registrationNumber || '',
-              currency: organization.currency || 'USD',
-              businessType: organization.type || 'corporation',
+              currency: organization.currency || '',
+              businessType: organization.type || '',
             }
           }),
           createdAt: userData.createdDate

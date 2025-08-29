@@ -3,7 +3,6 @@ import { Settings } from 'lucide-react'
 import type { BusinessSettings } from '../../types/onboarding'
 import { 
   ApiDropdown, 
-  currencyDropdownConfig, 
   timezoneDropdownConfig, 
   fiscalYearDropdownConfig 
 } from '@/shared/components/ui/ApiDropdown'
@@ -54,20 +53,6 @@ export const BusinessSettingsStep = ({
 
       {/* Form */}
       <div className="max-w-[420px] mx-auto space-y-6">
-        {/* Currency */}
-        <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">Currency</span>
-          <ApiDropdown
-            config={currencyDropdownConfig}
-            value={data.currency}
-            onSelect={value => handleSelectChange('currency', value)}
-            onClear={() => handleSelectChange('currency', '')}
-            error={!!errors.currency}
-            allowClear
-          />
-          {errors.currency && <p className="mt-1 text-sm text-red-400">{errors.currency}</p>}
-        </div>
-
         {/* Timezone */}
         <div>
           <span className="block text-sm font-medium text-gray-300 mb-2">Timezone</span>

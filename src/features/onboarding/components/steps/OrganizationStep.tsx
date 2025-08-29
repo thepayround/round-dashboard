@@ -32,9 +32,11 @@ export const OrganizationStep = ({
     description: data.description ?? '',
     revenue: data.revenue ?? '',
     country: data.country,
-    currency: businessSettings?.currency ?? 'USD',
-    timeZone: businessSettings?.timezone ?? 'UTC',
-    fiscalYearStart: businessSettings?.fiscalYearStart ?? 'January'
+    currency: data.currency ?? '',
+    timeZone: businessSettings?.timezone ?? '',
+    fiscalYearStart: businessSettings?.fiscalYearStart ?? '',
+    registrationNumber: data.registrationNumber ?? '',
+    taxId: data.taxId ?? ''
   }), [data, businessSettings])
 
   // Handle form changes and convert back to onboarding format
@@ -47,7 +49,10 @@ export const OrganizationStep = ({
       website: formData.website,
       description: formData.description,
       revenue: formData.revenue,
-      country: formData.country
+      country: formData.country,
+      currency: formData.currency,
+      registrationNumber: formData.registrationNumber,
+      taxId: formData.taxId
     })
   }
 

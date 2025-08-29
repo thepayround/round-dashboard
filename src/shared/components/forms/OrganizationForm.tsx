@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Building, ExternalLink, AlignLeft } from 'lucide-react'
-import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig } from '@/shared/components/ui/ApiDropdown'
-import { useCurrency } from '@/shared/hooks/useCurrency'
+import { Building, ExternalLink, AlignLeft, Hash, CreditCard } from 'lucide-react'
+import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig, currencyDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 
 export interface OrganizationFormData {
   companyName: string
@@ -16,6 +16,8 @@ export interface OrganizationFormData {
   currency: string
   timeZone: string
   fiscalYearStart: string
+  registrationNumber: string
+  taxId: string
 }
 
 interface OrganizationFormProps {
@@ -41,11 +43,8 @@ export const OrganizationForm = ({
   showRegionalSettings = true,
   className = ''
 }: OrganizationFormProps) => {
-  const { getCurrencySymbol, isLoading: currencyLoading } = useCurrency()
-
-  // Get currency symbol
-  const currencySymbol = getCurrencySymbol(data.currency || 'USD')
-
+  const { data: currencies, isLoading: currenciesLoading } = useCurrencies()
+  
   // Handle input changes
   const handleInputChange = useCallback((field: keyof OrganizationFormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     onChange({
@@ -55,11 +54,26 @@ export const OrganizationForm = ({
   }, [data, onChange])
 
   const handleSelectChange = useCallback((field: keyof OrganizationFormData, value: string) => {
-    onChange({
+    const newData = {
       ...data,
       [field]: value,
-    })
+    }
+    onChange(newData)
   }, [data, onChange])
+  
+  // Get current currency symbol from backend - NO fallbacks, backend is source of truth
+  const currentCurrency = currencies?.find(currency => currency.currencyCodeAlpha === data.currency)
+  const currencySymbol = currentCurrency?.currencySymbol
+  
+  // If we have a saved currency but currencies are still loading, show loading state
+  if (data.currency && currenciesLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="w-8 h-8 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+        <span className="ml-3 text-white/60">Loading currency data for {data.currency}...</span>
+      </div>
+    )
+  }
 
   return (
     <motion.div
@@ -251,6 +265,64 @@ export const OrganizationForm = ({
           </div>
         </motion.div>
 
+        {/* Business Compliance Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: showHeader ? 0.45 : 0.25 }}
+          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+        >
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <Hash className="w-4 h-4 text-[#14BDEA]" />
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-white">Business Compliance</h3>
+              <p className="text-xs text-gray-400">Registration and compliance information</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Registration Number */}
+            <div>
+              <label htmlFor="registrationNumber" className="auth-label">
+                Registration Number <span className="text-red-400">*</span>
+              </label>
+              <div className="input-container">
+                <Hash className="input-icon-left auth-icon-primary" />
+                <input
+                  id="registrationNumber"
+                  type="text"
+                  value={data.registrationNumber}
+                  onChange={handleInputChange('registrationNumber')}
+                  placeholder="12345678"
+                  className={`auth-input input-with-icon-left ${errors.registrationNumber ? 'auth-input-error' : ''}`}
+                />
+              </div>
+              {errors.registrationNumber && <p className="mt-1 text-sm text-red-400">{errors.registrationNumber}</p>}
+            </div>
+
+            {/* Tax ID */}
+            <div>
+              <label htmlFor="taxId" className="auth-label">
+                Tax ID <span className="text-gray-500">(optional)</span>
+              </label>
+              <div className="input-container">
+                <CreditCard className="input-icon-left auth-icon-primary" />
+                <input
+                  id="taxId"
+                  type="text"
+                  value={data.taxId}
+                  onChange={handleInputChange('taxId')}
+                  placeholder="XX-XXXXXXX"
+                  className={`auth-input input-with-icon-left ${errors.taxId ? 'auth-input-error' : ''}`}
+                />
+              </div>
+              {errors.taxId && <p className="mt-1 text-sm text-red-400">{errors.taxId}</p>}
+            </div>
+          </div>
+        </motion.div>
+
         {/* Financial Information Section */}
         {showFinancialSettings && (
           <motion.div
@@ -275,42 +347,28 @@ export const OrganizationForm = ({
                 <label htmlFor="currency" className="auth-label">
                   Currency <span className="text-red-400">*</span>
                 </label>
-                <div className="input-container">
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
-                    <span className="text-sm font-semibold text-[#14BDEA]">{currencySymbol}</span>
-                  </div>
-                  <select
-                    id="currency"
-                    value={data.currency}
-                    onChange={e => handleSelectChange('currency', e.target.value)}
-                    className="auth-input input-with-icon-left"
-                    style={{ paddingLeft: '3rem' }}
-                  >
-                    <option value="USD">USD - US Dollar</option>
-                    <option value="EUR">EUR - Euro</option>
-                    <option value="GBP">GBP - British Pound</option>
-                    <option value="CAD">CAD - Canadian Dollar</option>
-                    <option value="AUD">AUD - Australian Dollar</option>
-                    <option value="JPY">JPY - Japanese Yen</option>
-                  </select>
-                </div>
+                <ApiDropdown
+                  config={currencyDropdownConfig}
+                  value={data.currency}
+                  onSelect={value => handleSelectChange('currency', value)}
+                  onClear={() => handleSelectChange('currency', '')}
+                  error={!!errors.currency}
+                  allowClear
+                />
+                {errors.currency && <p className="mt-1 text-sm text-red-400">{errors.currency}</p>}
               </div>
 
               {/* Revenue */}
               <div>
                 <label htmlFor="revenue" className="auth-label">
                   Annual Revenue <span className="text-gray-500">(optional)</span>
-                  <span className="text-gray-500 ml-2">({data.currency})</span>
+                  <span className="text-gray-500 ml-2">({data.currency || 'USD'})</span>
                 </label>
                 <div className="input-container">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
-                    {currencyLoading ? (
-                      <div className="w-3 h-3 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
-                    ) : (
-                      <span className="text-sm font-semibold text-[#14BDEA]">
-                        {currencySymbol}
-                      </span>
-                    )}
+                    <span className="text-sm font-semibold text-[#14BDEA]">
+                      {currencySymbol}
+                    </span>
                   </div>
                   <input
                     id="revenue"
