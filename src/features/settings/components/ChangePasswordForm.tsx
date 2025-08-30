@@ -1,22 +1,27 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Eye, EyeOff, CheckCircle, AlertCircle, ChevronDown, Loader2 } from 'lucide-react'
-import { AuthInput } from '@/shared/components/AuthInput'
+import { motion } from 'framer-motion'
+import { Eye, EyeOff, CheckCircle, AlertCircle, Lock, RotateCcw } from 'lucide-react'
 import { ActionButton } from '@/shared/components'
 import { apiClient } from '@/shared/services/apiClient'
+import {
+  validatePassword,
+  getFieldError,
+  hasFieldError,
+  type ValidationError
+} from '@/shared/utils/validation'
 
 interface ChangePasswordFormProps {
   className?: string
 }
 
 export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ className = '' }) => {
-  const [isExpanded, setIsExpanded] = useState(false)
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [errors, setErrors] = useState<ValidationError[]>([])
   
   const [formData, setFormData] = useState({
     currentPassword: '',
@@ -28,11 +33,61 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
     setFormData(prev => ({ ...prev, [field]: e.target.value }))
     setError(null)
     setIsSuccess(false)
+
+    // Clear field error when user starts typing
+    if (hasFieldError(errors, field)) {
+      setErrors(prev => prev.filter(error => error.field !== field))
+    }
+
+    // If changing new password, also clear confirm password errors
+    if (field === 'newPassword' && hasFieldError(errors, 'confirmPassword')) {
+      setErrors(prev => prev.filter(error => error.field !== 'confirmPassword'))
+    }
   }
 
-  const handleSubmitClick = async () => {
+  const handleInputBlur = (field: keyof typeof formData) => (e: React.FocusEvent<HTMLInputElement>) => {
+    const { value } = e.target
+
+    // Don't validate empty fields on blur
+    if (!value?.trim()) {
+      return
+    }
+
+    // Validate field when user leaves it
+    if (field === 'currentPassword') {
+      const fieldValidation = validatePassword(value)
+      if (!fieldValidation.isValid) {
+        // Map the field name from 'password' to 'currentPassword'
+        const mappedErrors = fieldValidation.errors.map(error => ({
+          ...error,
+          field: 'currentPassword'
+        }))
+        setErrors(prev => [...prev.filter(error => error.field !== field), ...mappedErrors])
+      }
+    } else if (field === 'newPassword') {
+      const fieldValidation = validatePassword(value)
+      if (!fieldValidation.isValid) {
+        // Map the field name from 'password' to 'newPassword'
+        const mappedErrors = fieldValidation.errors.map(error => ({
+          ...error,
+          field: 'newPassword'
+        }))
+        setErrors(prev => [...prev.filter(error => error.field !== field), ...mappedErrors])
+      }
+    } else if (field === 'confirmPassword') {
+      // Validate password confirmation
+      if (value && value !== formData.newPassword) {
+        setErrors(prev => [
+          ...prev.filter(error => error.field !== field),
+          { field: 'confirmPassword', message: 'Passwords do not match', code: 'PASSWORD_MISMATCH' }
+        ])
+      }
+    }
+  }
+
+  const handleSubmitClick = () => {
     const fakeEvent = { preventDefault: () => {} } as React.FormEvent
-    await handleSubmit(fakeEvent)
+    handleSubmit(fakeEvent)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,17 +96,28 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
     setIsLoading(true)
 
     try {
-      // Client-side validation
+      // Client-side validation - use the same validation as registration
       if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
         throw new Error('All fields are required')
       }
 
-      if (formData.newPassword !== formData.confirmPassword) {
-        throw new Error('New passwords do not match')
+      // Validate new password using registration validation
+      const passwordValidation = validatePassword(formData.newPassword)
+      if (!passwordValidation.isValid) {
+        // Map the field name from 'password' to 'newPassword'
+        const mappedErrors = passwordValidation.errors.map(error => ({
+          ...error,
+          field: 'newPassword'
+        }))
+        setErrors(mappedErrors)
+        setIsLoading(false)
+        return
       }
 
-      if (formData.newPassword.length < 8) {
-        throw new Error('New password must be at least 8 characters long')
+      // Validate password confirmation
+      if (formData.newPassword !== formData.confirmPassword) {
+        setErrors([{ field: 'confirmPassword', message: 'Passwords do not match', code: 'PASSWORD_MISMATCH' }])
+        return
       }
 
       const response = await apiClient.changePassword(
@@ -63,12 +129,12 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
       if (response.success) {
         setIsSuccess(true)
         setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })
+        setErrors([])
         
-        // Auto-collapse form after success
+        // Clear success message after 5 seconds
         setTimeout(() => {
-          setIsExpanded(false)
           setIsSuccess(false)
-        }, 3000)
+        }, 5000)
       } else {
         throw new Error(response.message ?? 'Failed to change password')
       }
@@ -81,166 +147,202 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
     }
   }
 
-  const handleCancel = () => {
+  const handleReset = () => {
     setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })
     setError(null)
     setIsSuccess(false)
-    setIsExpanded(false)
+    setErrors([])
   }
 
   return (
     <div className={`${className}`}>
-      {/* Header Button */}
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-3 md:p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 group"
-      >
-        <div className="flex items-center gap-3">
-          <div className="p-1.5 md:p-2 rounded-lg bg-blue-500/20 border border-blue-400/30 group-hover:bg-blue-500/30 transition-colors">
-            <svg className="w-3 h-3 md:w-4 md:h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-          </div>
-          <div className="text-left">
-            <h3 className="text-white font-medium text-xs md:text-sm">Change Password</h3>
-            <p className="text-gray-400 text-[10px] md:text-xs">Update your account password</p>
+      {/* Success State */}
+      {isSuccess && (
+        <div className="mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-3 h-3 text-green-400 flex-shrink-0" />
+            <div>
+              <h4 className="text-green-400 font-medium text-xs">Password Updated Successfully</h4>
+              <p className="text-green-300/80 text-[11px] mt-0.5">
+                Your password has been changed securely.
+              </p>
+            </div>
           </div>
         </div>
-        <motion.div
-          animate={{ rotate: isExpanded ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <ChevronDown className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
-        </motion.div>
-      </button>
+      )}
 
-      {/* Expandable Form */}
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="overflow-hidden"
-          >
-            <div className="mt-4 p-4 md:p-6 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10">
-              {/* Success State */}
-              {isSuccess && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="mb-6 p-3 md:p-4 rounded-lg bg-green-500/20 border border-green-400/30"
+      {/* Error State */}
+      {error && (
+        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-3 h-3 text-red-400 flex-shrink-0" />
+            <div>
+              <h4 className="text-red-400 font-medium text-xs">Password Change Failed</h4>
+              <p className="text-red-300/80 text-[11px] mt-0.5">{error}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Form */}
+      <div className="max-w-md mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Current Password Section */}
+          <div className="p-4 bg-white/[0.02] rounded-lg border border-white/8">
+            <h3 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
+              <Lock className="w-4 h-4 text-gray-400" />
+              Current Password
+            </h3>
+            <div>
+              <label htmlFor="currentPassword" className="auth-label">
+                Enter Current Password
+              </label>
+              <div className="input-container">
+                <Lock className="input-icon-left auth-icon-primary" />
+                <input
+                  id="currentPassword"
+                  type={showCurrentPassword ? 'text' : 'password'}
+                  name="currentPassword"
+                  value={formData.currentPassword}
+                  onChange={handleInputChange('currentPassword')}
+                  onBlur={handleInputBlur('currentPassword')}
+                  placeholder="Enter your current password"
+                  className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(errors, 'currentPassword') ? 'auth-input-error' : ''}`}
+                  required
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
                 >
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-green-400 flex-shrink-0" />
-                    <div>
-                      <h4 className="text-green-400 font-medium text-xs md:text-sm">Password Updated Successfully!</h4>
-                      <p className="text-green-300/80 text-[10px] md:text-xs mt-1">
-                        Your password has been changed. For security, you&apos;ll need to sign in again on other devices.
-                      </p>
-                    </div>
-                  </div>
+                  {showCurrentPassword ? <EyeOff /> : <Eye />}
+                </button>
+              </div>
+              {hasFieldError(errors, 'currentPassword') && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                >
+                  <AlertCircle className="w-4 h-4" />
+                  <span>{getFieldError(errors, 'currentPassword')?.message}</span>
                 </motion.div>
               )}
+            </div>
+          </div>
 
-              {/* Error State */}
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="mb-6 p-3 md:p-4 rounded-lg bg-red-500/20 border border-red-400/30"
-                >
-                  <div className="flex items-center gap-3">
-                    <AlertCircle className="w-4 h-4 md:w-5 md:h-5 text-red-400 flex-shrink-0" />
-                    <div>
-                      <h4 className="text-red-400 font-medium text-xs md:text-sm">Password Change Failed</h4>
-                      <p className="text-red-300/80 text-[10px] md:text-xs mt-1">{error}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-                <div className="space-y-3 md:space-y-4">
-                  {/* Current Password */}
-                  <AuthInput
-                    label="Current Password"
-                    type={showCurrentPassword ? 'text' : 'password'}
-                    value={formData.currentPassword}
-                    onChange={handleInputChange('currentPassword')}
-                    placeholder="Enter your current password"
-                    required
-                    disabled={isLoading}
-                    rightIcon={showCurrentPassword ? EyeOff : Eye}
-                    onRightIconClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  />
-
-                  {/* New Password */}
-                  <AuthInput
-                    label="New Password"
+          {/* New Password Section */}
+          <div className="p-4 bg-white/[0.02] rounded-lg border border-white/8">
+            <h3 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
+              <Lock className="w-4 h-4 text-emerald-400" />
+              New Password
+            </h3>
+            <div className="space-y-4">
+              {/* New Password */}
+              <div>
+                <label htmlFor="newPassword" className="auth-label">
+                  New Password
+                </label>
+                <div className="input-container">
+                  <Lock className="input-icon-left auth-icon-primary" />
+                  <input
+                    id="newPassword"
                     type={showNewPassword ? 'text' : 'password'}
+                    name="newPassword"
                     value={formData.newPassword}
                     onChange={handleInputChange('newPassword')}
-                    placeholder="Enter your new password"
+                    onBlur={handleInputBlur('newPassword')}
+                    placeholder="Enter new password"
+                    className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(errors, 'newPassword') ? 'auth-input-error' : ''}`}
                     required
                     disabled={isLoading}
-                    rightIcon={showNewPassword ? EyeOff : Eye}
-                    onRightIconClick={() => setShowNewPassword(!showNewPassword)}
-                    hint="Must be at least 8 characters long"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
+                  >
+                    {showNewPassword ? <EyeOff /> : <Eye />}
+                  </button>
+                </div>
+                {hasFieldError(errors, 'newPassword') && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{getFieldError(errors, 'newPassword')?.message}</span>
+                  </motion.div>
+                )}
+              </div>
 
-                  {/* Confirm New Password */}
-                  <AuthInput
-                    label="Confirm New Password"
+              {/* Confirm New Password */}
+              <div>
+                <label htmlFor="confirmPassword" className="auth-label">
+                  Confirm New Password
+                </label>
+                <div className="input-container">
+                  <Lock className="input-icon-left auth-icon-primary" />
+                  <input
+                    id="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
+                    name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleInputChange('confirmPassword')}
-                    placeholder="Confirm your new password"
+                    onBlur={handleInputBlur('confirmPassword')}
+                    placeholder="Confirm new password"
+                    className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(errors, 'confirmPassword') ? 'auth-input-error' : ''}`}
                     required
                     disabled={isLoading}
-                    rightIcon={showConfirmPassword ? EyeOff : Eye}
-                    onRightIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
+                  >
+                    {showConfirmPassword ? <EyeOff /> : <Eye />}
+                  </button>
                 </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-3 pt-2">
-                  <ActionButton
-                    label={isLoading ? 'Changing...' : 'Change Password'}
-                    onClick={handleSubmitClick}
-                    disabled={isLoading || !formData.currentPassword || !formData.newPassword || !formData.confirmPassword}
-                    variant="primary"
-                    size="sm"
-                    className="flex-1"
-                    icon={isLoading ? Loader2 : undefined}
-                  />
-                  <ActionButton
-                    label="Cancel"
-                    onClick={handleCancel}
-                    disabled={isLoading}
-                    variant="secondary"
-                    size="sm"
-                    className="px-6"
-                  />
-                </div>
-              </form>
-
-              {/* Security Tips */}
-              <div className="mt-4 md:mt-6 p-3 md:p-4 rounded-lg bg-blue-500/10 border border-blue-400/20">
-                <h4 className="text-blue-400 font-medium mb-2 text-xs md:text-sm">Security Tips</h4>
-                <ul className="text-blue-300/80 text-[10px] md:text-xs space-y-1">
-                  <li>• Use a unique password you don&apos;t use elsewhere</li>
-                  <li>• Include uppercase, lowercase, numbers, and special characters</li>
-                  <li>• Avoid common words or personal information</li>
-                  <li>• Consider using a password manager</li>
-                </ul>
+                {hasFieldError(errors, 'confirmPassword') && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{getFieldError(errors, 'confirmPassword')?.message}</span>
+                  </motion.div>
+                )}
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex justify-center gap-3 pt-2">
+            <ActionButton
+              label="Reset"
+              onClick={handleReset}
+              disabled={isLoading}
+              variant="secondary"
+              size="sm"
+              icon={RotateCcw}
+              actionType="general"
+              className="px-6"
+            />
+            <ActionButton
+              label={isLoading ? 'Changing...' : 'Change Password'}
+              onClick={handleSubmitClick}
+              disabled={isLoading || !formData.currentPassword || !formData.newPassword || !formData.confirmPassword}
+              size="sm"
+              actionType="general"
+              loading={isLoading}
+              className="px-6"
+            />
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

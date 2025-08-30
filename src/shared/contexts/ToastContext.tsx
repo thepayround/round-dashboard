@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { createContext, useContext, useCallback } from 'react'
+import { createContext, useContext } from 'react'
 import type { ToastType } from '../components/Toast';
 import { Toast } from '../components/Toast'
 import { useToast } from '../hooks/useToast'
@@ -55,6 +55,7 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
 }
 
 // Custom hook to use the toast context
+// eslint-disable-next-line react-refresh/only-export-components
 export const useGlobalToast = () => {
   const context = useContext(ToastContext)
   if (context === undefined) {
