@@ -1,5 +1,47 @@
 # Round - AI Context Guide
 
+## DEVELOPMENT RULES
+
+### Backend as Source of Truth
+**CRITICAL RULE**: Never use frontend fallbacks for data that should come from the backend. The backend is always the source of truth.
+
+**Examples of what NOT to do**:
+- Frontend currency symbol fallbacks when backend provides currency data
+- Hardcoded dropdown options when API provides the data
+- Client-side data transformations that duplicate backend logic
+
+**Always**:
+- Use backend data directly without client-side fallbacks
+- Display loading states while waiting for backend data
+- Handle backend errors properly without masking them with fallbacks
+- Trust the backend data structure and content
+
+## Google OAuth Authentication Changes (IMPORTANT)
+
+### Updated Google Registration Flow
+
+**CRITICAL CHANGE**: Google OAuth now creates BUSINESS accounts instead of personal accounts.
+
+**Flow Changes**:
+1. **Google Login** → Creates business account with minimal org data
+2. **Redirect to `/get-started`** → User completes business setup
+3. **Get-Started Flow** → Collects company info, billing address, business settings
+
+**Frontend Changes**:
+- `GoogleLoginButton.tsx`: Always sets `accountType: 'business'` 
+- All Google users redirect to `/get-started` for business onboarding
+- Get-started page handles missing company information gracefully
+
+**Backend Changes**:
+- `GoogleAuthAsync`: Creates business organization with `Category = "business"`
+- Sets `AccountType.Business` instead of `AccountType.Personal`
+- Default organization type is `"Corporation"` instead of `"Individual"`
+
+**Rationale**: 
+- Consistent business-focused platform experience
+- Streamlined onboarding through get-started flow
+- Business information collected where users expect it
+
 ## Project Overview
 Round is a comprehensive AI-powered enterprise billing and customer intelligence platform for B2B SaaS companies. Provides revenue management, customer analytics, and business intelligence to optimize billing operations and maximize revenue growth.
 

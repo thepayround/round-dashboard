@@ -69,7 +69,7 @@ export const BusinessRegisterPage = () => {
     taxId: '',
     currency: undefined, // No preselected currency
     industry: undefined,
-    businessType: 'corporation',
+    businessType: undefined,
     website: '',
     employeeCount: undefined,
     description: '',

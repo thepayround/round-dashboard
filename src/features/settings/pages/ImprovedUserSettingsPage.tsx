@@ -58,9 +58,9 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
     },
     { 
       id: 'security', 
-      label: 'Password', 
+      label: 'Security & Privacy', 
       icon: Shield,
-      description: 'Password management and security'
+      description: 'Password and user security settings'
     },
     { 
       id: 'notifications', 
@@ -83,14 +83,14 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex items-center justify-center py-12"
+          className="flex items-center justify-center py-24"
         >
-          <Card animate={false} padding="lg" className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-[#D417C8] mx-auto mb-4" />
-            <h3 className="text-sm font-medium text-white mb-2">
+          <Card animate={false} padding="xl" className="text-center">
+            <Loader2 className="w-12 h-12 animate-spin text-[#D417C8] mx-auto mb-6" />
+            <h3 className="text-lg font-semibold text-white mb-2">
               {isLoadingOptions ? 'Loading Settings...' : 'Initializing...'}
             </h3>
-            <p className="text-xs text-gray-400">
+            <p className="text-gray-400">
               {isLoadingOptions ? 'Preparing your preferences' : 'Setting up your account'}
             </p>
           </Card>
@@ -169,7 +169,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-4 md:space-y-6">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -177,17 +177,16 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
           transition={{ duration: 0.5 }}
         >
           <SectionHeader
-            title="User Settings"
-            subtitle="Manage your user preferences and security settings"
+            title="Account Settings"
+            subtitle="Manage your account preferences and security settings"
             size="main"
-            className="text-base md:text-lg"
           />
         </motion.div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Navigation Sidebar */}
-          <div className="lg:col-span-1 lg:sticky lg:top-6 lg:self-start">
+          <div className="lg:col-span-1">
             <SettingsNavigation
               sections={settingsSections}
               activeSection={activeSection}
@@ -196,7 +195,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
           </div>
 
           {/* Content Area */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-3">
             {renderSectionContent()}
           </div>
         </div>

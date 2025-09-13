@@ -29,7 +29,7 @@ export interface CompanyInfo {
   taxId?: string
   currency: Currency | undefined
   industry?: Industry
-  businessType: BusinessType
+  businessType?: BusinessType
   website?: string
   employeeCount?: number
   description?: string

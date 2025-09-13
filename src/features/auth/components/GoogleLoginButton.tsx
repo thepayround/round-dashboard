@@ -114,34 +114,28 @@ export const GoogleLoginButton = ({ onSuccess, onError }: GoogleLoginButtonProps
           updatedAt: new Date().toISOString(),
         }
         
-        const fullUser = result.data.user.accountType === 'business' 
-          ? {
-              ...baseUser,
-              accountType: 'business' as const,
-              role: 'admin' as const,
-              companyInfo: {
-                companyName: '',
-                registrationNumber: '',
-                currency: undefined,
-                businessType: 'corporation' as const,
-                industry: 'technology' as const,
-                website: '',
-                taxId: ''
-              }
-            }
-          : {
-              ...baseUser,
-              accountType: 'personal' as const,
-              role: 'admin' as const,
-            }
+        // CHANGE: Google OAuth now always creates business accounts
+        const fullUser = {
+          ...baseUser,
+          accountType: 'business' as const,
+          role: 'admin' as const,
+          companyInfo: {
+            companyName: '',
+            registrationNumber: '',
+            currency: undefined,
+            businessType: undefined,
+            industry: undefined,
+            website: '',
+            taxId: ''
+          }
+        }
         
         // Update auth context
         await login(fullUser, result.data.accessToken)
         
         onSuccess?.()
         
-        // For Google OAuth, new users always go to get-started
-        // Backend creates new users, so this is always a new user flow
+        // Google OAuth users always go to get-started to complete business setup
         navigate('/get-started')
       } else {
         const errorMessage = result.error ?? 'Google authentication failed'

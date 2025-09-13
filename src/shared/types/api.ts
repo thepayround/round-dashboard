@@ -118,6 +118,7 @@ export interface OrganizationResponse {
   category?: string
   type?: string
   registrationNumber?: string
+  taxId?: string
   currency?: string
   timeZone?: string
   country?: string
@@ -138,6 +139,7 @@ export interface CreateOrganizationData {
   category?: string
   type?: string
   registrationNumber?: string
+  taxId?: string
   currency?: string
   timeZone?: string
   country?: string
@@ -154,6 +156,7 @@ export interface UpdateOrganizationData {
   category?: string
   type?: string
   registrationNumber?: string
+  taxId?: string
   currency?: string
   timeZone?: string
   country?: string

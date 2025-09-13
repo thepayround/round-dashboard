@@ -81,11 +81,13 @@ const defaultOnboardingData: OnboardingData = {
     timeZone: '',
     revenue: '',
     country: '',
+    registrationNumber: '',
+    taxId: '',
+    currency: '',
   },
   businessSettings: {
-    currency: 'USD',
-    timezone: 'UTC',
-    fiscalYearStart: 'January',
+    timezone: '',
+    fiscalYearStart: '',
   },
   address: {
     name: '',
@@ -127,6 +129,7 @@ export const GetStartedPage = () => {
   const [isCompleting, setIsCompleting] = useState(false)
   const [apiError, setApiError] = useState('')
   const [cachedOrgData, setCachedOrgData] = useState<OrganizationResponse | null>(null)
+  const [isLoadingData, setIsLoadingData] = useState(true) // Track if we're still loading initial data
   const [errorToast, setErrorToast] = useState<ErrorToast>({
     show: false,
     isVisible: false,
@@ -173,18 +176,16 @@ export const GetStartedPage = () => {
           organization.industry !== '' &&
           organization.companySize !== '' &&
           organization.organizationType !== '' &&
-          organization.country !== ''
+          organization.country !== '' &&
+          organization.registrationNumber?.trim() !== ''
         )
       }
 
       case 'businessSettings': {
         const { businessSettings } = onboardingData
         if (!businessSettings) return false
-        return (
-          businessSettings.currency !== '' &&
-          businessSettings.timezone !== '' &&
-          businessSettings.fiscalYearStart !== ''
-        )
+        // Business settings are optional - users can set them later if needed
+        return true
       }
 
       case 'address': {
@@ -285,6 +286,7 @@ export const GetStartedPage = () => {
     if (loadingRef.current) return
     loadingRef.current = true
     setApiError('')
+    setIsLoadingData(true)
 
     try {
       // Load user data
@@ -325,6 +327,9 @@ export const GetStartedPage = () => {
               timeZone: org.timeZone ?? '',
               revenue: org.revenue?.toString() ?? '',
               country: org.country ?? '',
+              registrationNumber: org.registrationNumber ?? '',
+              taxId: org.taxId ?? '',
+              currency: org.currency ?? '',
             }
             
             updateOrganization(orgData)
@@ -333,7 +338,7 @@ export const GetStartedPage = () => {
             const completedStepsFromData: OnboardingStep[] = []
             
             // Check organization completion
-            if (org.name && org.category && org.size && org.type && org.country) {
+            if (org.name && org.category && org.size && org.type && org.country && org.registrationNumber) {
               completedStepsFromData.push('organization')
             }
 
@@ -360,15 +365,14 @@ export const GetStartedPage = () => {
             }
 
             // Update business settings
-            if (org.currency ?? org.timeZone ?? org.fiscalYearStart) {
+            if (org.timeZone ?? org.fiscalYearStart) {
               updateBusinessSettings({
-                currency: org.currency ?? 'USD',
-                timezone: org.timeZone ?? 'UTC',
-                fiscalYearStart: org.fiscalYearStart ?? 'January',
+                timezone: org.timeZone ?? '',
+                fiscalYearStart: org.fiscalYearStart ?? '',
               })
               
-              // Check business settings completion
-              if (org.currency && org.timeZone && org.fiscalYearStart) {
+              // Check business settings completion - only mark complete if all fields are present
+              if (org.timeZone && org.fiscalYearStart) {
                 completedStepsFromData.push('businessSettings')
               }
             }
@@ -394,6 +398,7 @@ export const GetStartedPage = () => {
       setApiError('Failed to load onboarding data')
     } finally {
       loadingRef.current = false
+      setIsLoadingData(false)
     }
   }, [getCurrentOrganization, user, updateUserInfo, updateOrganization, updateAddress, updateBusinessSettings, showErrorToast])
 
@@ -431,8 +436,8 @@ export const GetStartedPage = () => {
                 : 0,
               category: onboardingData.organization.industry ?? '',
               type: onboardingData.organization.organizationType ?? '',
-              registrationNumber: cachedOrgData?.registrationNumber ?? `REG-${Date.now()}`,
-              currency: onboardingData.businessSettings.currency ?? 'USD',
+              registrationNumber: onboardingData.organization.registrationNumber ?? '',
+              currency: onboardingData.organization.currency ?? 'USD',
               timeZone: onboardingData.businessSettings.timezone ?? 'UTC',
               country: onboardingData.organization.country ?? 'US',
               userId: state.user?.id ?? '',
@@ -596,11 +601,6 @@ export const GetStartedPage = () => {
     return 'Next'
   }
 
-  // Debug: Log current state
-  React.useEffect(() => {
-    // Development logging removed
-  }, [currentStep, completedSteps, isStepValid])
-
   const _getButtonIcon = () => {
     if (isCompleting) {
       return (
@@ -628,6 +628,15 @@ export const GetStartedPage = () => {
           />
         )
       case 'organization':
+        // Show loading state if we're still loading data OR if organization has currency but currencies API isn't ready
+        if (isLoadingData && !onboardingData.organization.companyName) {
+          return (
+            <div className="flex items-center justify-center py-12">
+              <div className="w-8 h-8 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+              <span className="ml-3 text-white/60">Loading organization data...</span>
+            </div>
+          )
+        }
         return (
           <OrganizationStep
             data={onboardingData.organization}
@@ -637,6 +646,7 @@ export const GetStartedPage = () => {
           />
         )
       case 'businessSettings':
+        // Business settings can be rendered even during loading since it's optional
         return (
           <BusinessSettingsStep
             data={onboardingData.businessSettings}
@@ -644,6 +654,15 @@ export const GetStartedPage = () => {
           />
         )
       case 'address':
+        // Show loading state if we're still loading data and don't have address data yet
+        if (isLoadingData && !onboardingData.address.name) {
+          return (
+            <div className="flex items-center justify-center py-12">
+              <div className="w-8 h-8 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+              <span className="ml-3 text-white/60">Loading address data...</span>
+            </div>
+          )
+        }
         return (
           <AddressStep
             data={onboardingData.address}

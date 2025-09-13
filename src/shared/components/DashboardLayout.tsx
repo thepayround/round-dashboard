@@ -281,7 +281,7 @@ const NavigationItem = memo(({
           className={`mt-1 ${
             isCollapsed 
               ? 'flex flex-col items-center space-y-1 py-1' 
-              : 'ml-6 space-y-1 bg-white/[0.03] border-l-2 border-pink-500/20 py-2 rounded-r-lg'
+              : 'ml-6 space-y-1 border-l-2 border-pink-500/20 py-2'
           }`}
         >
           {isCollapsed && (

@@ -49,11 +49,11 @@ export const EmailConfirmationPage = () => {
             size: companyInfo?.employeeCount?.toString() ?? '',
             revenue: 0, // Default value
             category: (companyInfo?.industry as string) ?? 'business', // Default to 'business' 
-            type: (companyInfo?.businessType as string) ?? 'corporation',
+            type: (companyInfo?.businessType as string) ?? '',
             registrationNumber: (companyInfo?.registrationNumber as string) ?? '',
             currency: (companyInfo?.currency as string) ?? '',
             timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            country: (billingAddress?.country as string) ?? 'United States', // From billing address or default
+            country: (billingAddress?.country as string) ?? '', 
             userId,
             fiscalYearStart: 'January', // Default fiscal year start
           })
