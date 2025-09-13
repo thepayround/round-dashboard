@@ -156,7 +156,7 @@ const App = () => {
         />
         <Route path="/" element={<HomePage />} />
       </Routes>
-        </Router>
+      </Router>
       </AuthProvider>
     </ToastProvider>
   )
