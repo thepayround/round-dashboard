@@ -39,7 +39,7 @@ export const RegisterPage = () => {
           <div className="inline-flex items-center space-x-4 px-8 py-4 bg-white/8 backdrop-blur-xl rounded-lg border border-white/15 shadow-2xl">
             <span className="text-white/85 text-base font-medium">Already have an account?</span>
             <Link
-              to="/auth/login"
+              to="/login"
               className="inline-flex items-center px-6 py-2 text-white font-semibold rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 transition-all duration-300 hover:bg-white/15 hover:border-white/30 hover:shadow-lg hover:shadow-[#14BDEA]/10 brand-primary"
               aria-label="Sign in to your existing account"
             >

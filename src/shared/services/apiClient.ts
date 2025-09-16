@@ -103,8 +103,8 @@ class ApiClient {
           // Token expired or invalid
           this.clearStoredToken()
           // Only redirect if not already on login page
-          if (!window.location.pathname.includes('/auth/login')) {
-            window.location.href = '/auth/login'
+          if (!window.location.pathname.includes('/login')) {
+            window.location.href = '/login'
           }
         }
         return Promise.reject(error)

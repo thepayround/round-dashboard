@@ -117,7 +117,7 @@ describe('InvitationAcceptancePage', () => {
       await waitFor(() => {
         const loginButton = screen.getByText('Go to Login')
         fireEvent.click(loginButton)
-        expect(mockNavigate).toHaveBeenCalledWith('/auth/login')
+        expect(mockNavigate).toHaveBeenCalledWith('/login')
       })
     })
   })

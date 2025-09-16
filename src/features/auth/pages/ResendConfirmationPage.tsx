@@ -184,7 +184,7 @@ export const ResendConfirmationPage = () => {
         {/* Back to Login */}
         <div className="text-center mt-8">
           <Link
-            to="/auth/login"
+            to="/login"
             className="auth-link brand-primary inline-flex items-center space-x-2"
           >
             <ArrowLeft className="w-4 h-4" />

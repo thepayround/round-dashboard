@@ -623,7 +623,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
       await apiClient.logout()
     }
     logout()
-    navigate('/auth/login')
+    navigate('/login')
   }
 
 

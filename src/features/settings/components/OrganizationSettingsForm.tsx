@@ -134,6 +134,8 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
         size: organizationData.companySize,
         revenue: organizationData.revenue ? parseFloat(organizationData.revenue) : 0,
         category: organizationData.industry,
+        // Add Industry field as backend expects it (capital I)
+        Industry: organizationData.industry,
         type: organizationData.organizationType,
         registrationNumber: cachedOrgData?.registrationNumber ?? `REG-${Date.now()}`,
         currency: organizationData.currency,
@@ -141,7 +143,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
         country: organizationData.country,
         userId: cachedOrgData?.userId ?? '',
         fiscalYearStart: organizationData.fiscalYearStart
-      }
+      } as OrganizationRequest & { Industry: string }
 
       let result
       if (cachedOrgData?.organizationId) {

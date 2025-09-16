@@ -49,7 +49,7 @@ class BaseHttpClient {
 
           if (!isAuthPage && hasToken) {
             // Only redirect if user was logged in and got 401
-            window.location.href = '/auth/login'
+            window.location.href = '/login'
           }
         }
         return Promise.reject(error)

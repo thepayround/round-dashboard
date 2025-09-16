@@ -282,7 +282,7 @@ export const InvitationAcceptancePage = () => {
             <p className="auth-text-muted mb-6">{tokenError}</p>
             <ActionButton
               label="Go to Login"
-              onClick={() => navigate('/auth/login')}
+              onClick={() => navigate('/login')}
               size="sm"
               actionType="auth"
             />

@@ -172,7 +172,7 @@ export const ResetPasswordPage = () => {
       const fakeEvent = { preventDefault: () => {} } as React.FormEvent
       await handleSubmit(fakeEvent)
     } else {
-      navigate('/auth/login')
+      navigate('/login')
     }
   }
 
@@ -192,7 +192,7 @@ export const ResetPasswordPage = () => {
       } else {
         console.error('Auto-login failed:', response.error)
         // If auto-login fails, just go to login page with a message
-        navigate('/auth/login', { 
+        navigate('/login', { 
           state: { 
             message: 'Password reset successful. Please sign in with your new password.',
             email: formData.email
@@ -202,7 +202,7 @@ export const ResetPasswordPage = () => {
     } catch (error) {
       console.error('Auto-login failed:', error)
       // If auto-login fails, just go to login page with a message
-      navigate('/auth/login', { 
+      navigate('/login', { 
         state: { 
           message: 'Password reset successful. Please sign in with your new password.',
           email: formData.email
@@ -300,10 +300,10 @@ export const ResetPasswordPage = () => {
             >
               {!isSuccess ? (
                 <>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">
                     Reset Password
                   </h1>
-                  <p className="auth-text-muted text-base sm:text-lg font-medium">
+                  <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
                     Enter your new password for <strong className="text-white">{formData.email}</strong>
                   </p>
                 </>
@@ -312,10 +312,10 @@ export const ResetPasswordPage = () => {
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
                     <CheckCircle className="w-8 h-8 text-white" />
                   </div>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">
                     Password Reset Successful
                   </h1>
-                  <p className="auth-text-muted text-base sm:text-lg font-medium">
+                  <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
                     Your password has been successfully reset. You will be logged in automatically...
                   </p>
                 </>

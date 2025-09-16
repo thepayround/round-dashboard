@@ -7,7 +7,7 @@ export const HomePage = () => (
       <p className="text-xl text-gray-300 mb-8">Your billing and customer intelligence platform</p>
       <div className="space-x-4">
         <Link
-          to="/auth/login"
+          to="/login"
           className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300"
         >
           Sign In

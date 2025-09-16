@@ -205,7 +205,7 @@ export const ConfirmationPendingPage = () => {
 
             <div className="flex items-center justify-center">
               <Link
-                to="/auth/login"
+                to="/login"
                 className="auth-link brand-primary flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />

@@ -669,8 +669,8 @@ export const BusinessRegisterPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">Create Business Account</h1>
-            <p className="auth-text-muted text-base sm:text-lg font-medium">Join Round for business</p>
+            <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">Create Business Account</h1>
+            <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">Join Round for business</p>
           </motion.div>
         </div>
 
@@ -789,7 +789,7 @@ export const BusinessRegisterPage = () => {
           <div className="text-center mt-6 sm:mt-8">
             <p className="auth-text-muted text-sm sm:text-base">
               Already have an account?{' '}
-              <Link to="/auth/login" className="auth-link brand-primary">
+              <Link to="/login/business" className="auth-link brand-primary">
                 Sign in
               </Link>
             </p>

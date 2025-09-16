@@ -97,7 +97,7 @@ export const ForgotPasswordPage = () => {
   }
 
   const handleBackToLogin = () => {
-    navigate('/auth/login')
+    navigate('/login')
   }
 
   const handleTryAgain = () => {
@@ -143,10 +143,10 @@ export const ForgotPasswordPage = () => {
             >
               {!isSuccess ? (
                 <>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">
                     Forgot Password?
                   </h1>
-                  <p className="auth-text-muted text-base sm:text-lg font-medium">
+                  <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
                     Enter your email address and we&apos;ll send you a link to reset your password
                   </p>
                 </>
@@ -167,10 +167,10 @@ export const ForgotPasswordPage = () => {
                       />
                     </svg>
                   </div>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold auth-text mb-2 sm:mb-4 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">
                     Check Your Email
                   </h1>
-                  <p className="auth-text-muted text-base sm:text-lg font-medium">
+                  <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
                     We&apos;ve sent a password reset link to <strong className="text-white">{email}</strong>
                   </p>
                 </>
@@ -244,7 +244,7 @@ export const ForgotPasswordPage = () => {
                 {/* Back to Login */}
                 <div className="text-center">
                   <Link
-                    to="/auth/login"
+                    to="/login"
                     className="auth-link text-sm brand-primary inline-flex items-center space-x-2"
                   >
                     <ArrowLeft className="w-4 h-4" />

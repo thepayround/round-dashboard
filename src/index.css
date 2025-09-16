@@ -167,14 +167,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 0 0 3rem 0;
     z-index: 1;
-  }
-
-  @media (min-width: 640px) {
-    .auth-container {
-      padding: 2rem;
-    }
   }
 
   .auth-background {
@@ -369,7 +363,7 @@
   @media (min-width: 1024px) {
     .auth-input.textarea {
       min-height: 6rem; /* 96px - premium spacious feel on desktop */
-      padding: 1.125rem 2.5rem; /* Even more generous padding */
+      padding: 0.650rem 2.5rem; /* Even more generous padding */
     }
   }
 

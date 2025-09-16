@@ -47,22 +47,15 @@ import type {
 // Import Step Components
 import { UserInfoStep } from '../components/steps/UserInfoStep'
 import { OrganizationStep } from '../components/steps/OrganizationStep'
-import { BusinessSettingsStep } from '../components/steps/BusinessSettingsStep'
 import { AddressStep } from '../components/steps/AddressStep'
 import { ProductsStep } from '../components/steps/ProductsStep'
 import { BillingStep } from '../components/steps/BillingStep'
 import { TeamStep } from '../components/steps/TeamStep'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 
-interface ErrorToast {
-  show: boolean
-  message: string
-  isVisible: boolean
-  details?: unknown
-}
 
 // Constants
-const allSteps: OnboardingStep[] = ['organization', 'businessSettings', 'address', 'team', 'products', 'billing']
+const allSteps: OnboardingStep[] = ['organization', 'address', 'team', 'products', 'billing']
 
 const defaultOnboardingData: OnboardingData = {
   userInfo: {
@@ -130,12 +123,7 @@ export const GetStartedPage = () => {
   const [apiError, setApiError] = useState('')
   const [cachedOrgData, setCachedOrgData] = useState<OrganizationResponse | null>(null)
   const [isLoadingData, setIsLoadingData] = useState(true) // Track if we're still loading initial data
-  const [errorToast, setErrorToast] = useState<ErrorToast>({
-    show: false,
-    isVisible: false,
-    message: '',
-    details: undefined
-  })
+  // Removed local error toast state - using global toast system instead
   const [onboardingData, setOnboardingData] = useState<OnboardingData>(defaultOnboardingData)
   
   // Form change detection hooks
@@ -145,31 +133,17 @@ export const GetStartedPage = () => {
   // Refs
   const loadingRef = useRef(false)
 
-  // Error handling
-  const showErrorToast = useCallback((error: unknown) => {
+  // Error handling using global toast system
+  const handleError = useCallback((error: unknown) => {
     const parsedError = parseBackendError(error)
-    setErrorToast({
-      show: true,
-      isVisible: true,
-      message: parsedError.message ?? 'An error occurred',
-      details: parsedError.details
-    })
-  }, [])
-
-  const hideErrorToast = useCallback(() => {
-    setErrorToast({
-      show: false,
-      isVisible: false,
-      message: '',
-      details: undefined
-    })
-  }, [])
+    showError(parsedError.message ?? 'An error occurred')
+  }, [showError])
 
   // Step validation
   const isStepValid = useCallback((step: OnboardingStep): boolean => {
     switch (step) {
       case 'organization': {
-        const { organization } = onboardingData
+        const { organization, businessSettings } = onboardingData
         if (!organization) return false
         return (
           organization.companyName?.trim() !== '' &&
@@ -177,15 +151,11 @@ export const GetStartedPage = () => {
           organization.companySize !== '' &&
           organization.organizationType !== '' &&
           organization.country !== '' &&
-          organization.registrationNumber?.trim() !== ''
+          organization.registrationNumber?.trim() !== '' &&
+          // Include business settings validation (timezone and fiscal year are optional but recommended)
+          businessSettings?.timezone !== '' &&
+          businessSettings?.fiscalYearStart !== ''
         )
-      }
-
-      case 'businessSettings': {
-        const { businessSettings } = onboardingData
-        if (!businessSettings) return false
-        // Business settings are optional - users can set them later if needed
-        return true
       }
 
       case 'address': {
@@ -238,14 +208,16 @@ export const GetStartedPage = () => {
       }
 
       if (!result?.success) {
-        throw new Error('Failed to save organization')
+        console.error('Organization save failed:', result)
+        const errorMessage = result?.error ?? 'Failed to save organization'
+        throw new Error(errorMessage)
       }
     } catch (error) {
-      showErrorToast(error)
+      handleError(error)
     } finally {
       setIsCompleting(false)
     }
-  }, [cachedOrgData, organizationChangeDetection, showErrorToast])
+  }, [cachedOrgData, organizationChangeDetection, handleError])
 
   const { debouncedFn: _debouncedSaveOrganization, flush: flushOrganizationSave } = useDebouncedUpdate(
     saveOrganizationData,
@@ -337,8 +309,8 @@ export const GetStartedPage = () => {
             // Determine which steps are completed based on loaded data
             const completedStepsFromData: OnboardingStep[] = []
             
-            // Check organization completion
-            if (org.name && org.category && org.size && org.type && org.country && org.registrationNumber) {
+            // Check organization completion (now includes business settings)
+            if (org.name && org.category && org.size && org.type && org.country && org.registrationNumber && org.timeZone && org.fiscalYearStart) {
               completedStepsFromData.push('organization')
             }
 
@@ -364,18 +336,11 @@ export const GetStartedPage = () => {
               }
             }
 
-            // Update business settings
-            if (org.timeZone ?? org.fiscalYearStart) {
-              updateBusinessSettings({
-                timezone: org.timeZone ?? '',
-                fiscalYearStart: org.fiscalYearStart ?? '',
-              })
-              
-              // Check business settings completion - only mark complete if all fields are present
-              if (org.timeZone && org.fiscalYearStart) {
-                completedStepsFromData.push('businessSettings')
-              }
-            }
+            // Update business settings (now loaded with organization data)
+            updateBusinessSettings({
+              timezone: org.timeZone ?? '',
+              fiscalYearStart: org.fiscalYearStart ?? '',
+            })
             
             // Set all completed steps at once to avoid race conditions
             if (completedStepsFromData.length > 0) {
@@ -383,7 +348,7 @@ export const GetStartedPage = () => {
             }
           }
         } catch (orgError) {
-          showErrorToast(orgError)
+          handleError(orgError)
           setApiError('Failed to load organization data')
         }
       }
@@ -400,7 +365,7 @@ export const GetStartedPage = () => {
       loadingRef.current = false
       setIsLoadingData(false)
     }
-  }, [getCurrentOrganization, user, updateUserInfo, updateOrganization, updateAddress, updateBusinessSettings, showErrorToast])
+  }, [getCurrentOrganization, user, updateUserInfo, updateOrganization, updateAddress, updateBusinessSettings, handleError])
 
   // Initialize data when user is available
   useEffect(() => {
@@ -415,7 +380,7 @@ export const GetStartedPage = () => {
       const currentStepValid = isStepValid(currentStep)
       
       if (!currentStepValid) {
-        showErrorToast(new Error('Please fill in all required fields'))
+        showError('Please fill in all required fields')
         return
       }
 
@@ -423,8 +388,8 @@ export const GetStartedPage = () => {
       if (isStepValid(currentStep)) {
         setIsCompleting(true)
         try {
-          // Save organization data when leaving organization or businessSettings step
-          if (currentStep === 'organization' || currentStep === 'businessSettings') {
+          // Save organization data when leaving organization step (now includes business settings)
+          if (currentStep === 'organization') {
             const baseOrgData: OrganizationRequest = {
               name: onboardingData.organization.companyName ?? 'Untitled Company',
               description: onboardingData.organization.description ?? 
@@ -435,6 +400,8 @@ export const GetStartedPage = () => {
                 ? parseFloat(onboardingData.organization.revenue) 
                 : 0,
               category: onboardingData.organization.industry ?? '',
+              // Add Industry field as backend expects it (capital I)
+              Industry: onboardingData.organization.industry ?? '',
               type: onboardingData.organization.organizationType ?? '',
               registrationNumber: onboardingData.organization.registrationNumber ?? '',
               currency: onboardingData.organization.currency ?? 'USD',
@@ -442,6 +409,12 @@ export const GetStartedPage = () => {
               country: onboardingData.organization.country ?? 'US',
               userId: state.user?.id ?? '',
               fiscalYearStart: onboardingData.businessSettings.fiscalYearStart ?? 'January'
+            } as OrganizationRequest & { Industry: string }
+
+            
+            // Validate that industry is not empty
+            if (!onboardingData.organization.industry || onboardingData.organization.industry.trim() === '') {
+              throw new Error('Industry is required. Please select an industry.')
             }
 
             // Only save if data has actually changed
@@ -537,7 +510,7 @@ export const GetStartedPage = () => {
           }
 
         } catch (error) {
-          showErrorToast(error instanceof Error ? error.message : 'Failed to save data')
+          showError(error instanceof Error ? error.message : 'Failed to save data')
           return
         } finally {
           setIsCompleting(false)
@@ -565,7 +538,7 @@ export const GetStartedPage = () => {
         navigate('/dashboard')
       }
     } catch (error) {
-      showErrorToast(error instanceof Error ? error.message : 'Navigation error occurred') 
+      showError(error instanceof Error ? error.message : 'Navigation error occurred') 
     }
   }, [
     currentStep,
@@ -574,7 +547,7 @@ export const GetStartedPage = () => {
     state.user,
     getCurrentStepIndex,
     availableSteps,
-    showErrorToast,
+    showError,
     navigate,
     cachedOrgData,
     addressChangeDetection,
@@ -643,14 +616,6 @@ export const GetStartedPage = () => {
             onChange={updateOrganization}
             isPrePopulated={!!onboardingData.organization.companyName}
             businessSettings={onboardingData.businessSettings}
-          />
-        )
-      case 'businessSettings':
-        // Business settings can be rendered even during loading since it's optional
-        return (
-          <BusinessSettingsStep
-            data={onboardingData.businessSettings}
-            onChange={updateBusinessSettings}
           />
         )
       case 'address':
@@ -782,20 +747,6 @@ export const GetStartedPage = () => {
           </motion.div>
         </div>
       </div>
-      
-      
-      {/* Error Toast for page-level errors */}
-      {errorToast.isVisible && (
-        <div className="fixed top-4 right-4 bg-red-500/90 text-white p-4 rounded-lg shadow-lg z-50">
-          <div className="flex items-center space-x-2">
-            <AlertCircle className="w-5 h-5" />
-            <span>{errorToast.message}</span>
-            <button onClick={hideErrorToast} className="ml-2 text-white/70 hover:text-white">
-              ×
-            </button>
-          </div>
-        </div>
-      )}
     </DashboardLayout>
   )
 }

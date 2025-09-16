@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authService } from '@/shared/services/api/auth.service'
 import { useAuth } from '@/shared/hooks/useAuth'
+import type { User, BusinessUser, PersonalUser } from '@/shared/types/auth'
 
 interface GoogleLoginButtonProps {
   onSuccess?: () => void
   onError?: (error: string) => void
+  accountType: 'personal' | 'business'
 }
 
 interface GoogleTokenClient {
@@ -44,7 +46,7 @@ const GoogleIcon = () => (
   </svg>
 )
 
-export const GoogleLoginButton = ({ onSuccess, onError }: GoogleLoginButtonProps) => {
+export const GoogleLoginButton = ({ onSuccess, onError, accountType }: GoogleLoginButtonProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false)
   const navigate = useNavigate()
@@ -114,29 +116,42 @@ export const GoogleLoginButton = ({ onSuccess, onError }: GoogleLoginButtonProps
           updatedAt: new Date().toISOString(),
         }
         
-        // CHANGE: Google OAuth now always creates business accounts
-        const fullUser = {
-          ...baseUser,
-          accountType: 'business' as const,
-          role: 'admin' as const,
-          companyInfo: {
-            companyName: '',
-            registrationNumber: '',
-            currency: undefined,
-            businessType: undefined,
-            industry: undefined,
-            website: '',
-            taxId: ''
-          }
+        // Set account type based on login page and create properly typed user
+        let fullUser: User
+        if (accountType === 'business') {
+          fullUser = {
+            ...baseUser,
+            accountType: 'business',
+            role: 'admin' as const,
+            companyInfo: {
+              companyName: '',
+              registrationNumber: '',
+              currency: undefined,
+              businessType: undefined,
+              industry: undefined,
+              website: '',
+              taxId: ''
+            }
+          } as BusinessUser
+        } else {
+          fullUser = {
+            ...baseUser,
+            accountType: 'personal',
+            role: 'admin' as const,
+          } as PersonalUser
         }
-        
+
         // Update auth context
         await login(fullUser, result.data.accessToken)
         
         onSuccess?.()
         
-        // Google OAuth users always go to get-started to complete business setup
-        navigate('/get-started')
+        // Navigate based on account type
+        if (accountType === 'business') {
+          navigate('/get-started') // Business users complete setup
+        } else {
+          navigate('/dashboard') // Personal users go to dashboard
+        }
       } else {
         const errorMessage = result.error ?? 'Google authentication failed'
         onError?.(errorMessage)

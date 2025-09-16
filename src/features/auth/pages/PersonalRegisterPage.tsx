@@ -434,7 +434,8 @@ export const PersonalRegisterPage = () => {
 
           {/* Social Login Buttons */}
           <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-4">
-            <GoogleLoginButton 
+            <GoogleLoginButton
+              accountType="personal"
               onSuccess={() => {
                 showSuccess('Successfully registered with Google!')
                 // Redirect to dashboard or profile completion
@@ -465,7 +466,7 @@ export const PersonalRegisterPage = () => {
           <div className="text-center mt-6">
             <p className="auth-text-muted">
               Already have an account?{' '}
-              <Link to="/auth/login" className="auth-link brand-primary">
+              <Link to="/login" className="auth-link brand-primary">
                 Sign in
               </Link>
             </p>

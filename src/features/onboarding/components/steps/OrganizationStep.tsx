@@ -68,7 +68,7 @@ export const OrganizationStep = ({
           ? 'Review and complete your company profile'
           : 'Complete your company profile'}
         showFinancialSettings
-        showRegionalSettings={false}
+        showRegionalSettings
       />
     </div>
   )
