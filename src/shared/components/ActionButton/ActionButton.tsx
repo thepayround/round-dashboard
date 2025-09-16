@@ -97,7 +97,7 @@ const ActionButton = ({
 
   const baseClasses = `
     rounded-lg inline-flex items-center justify-center
-    focus:outline-none focus:ring-2 focus:ring-pink-400/50 focus:ring-offset-2 focus:ring-offset-transparent
+    focus:outline-none
     disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
     disabled:hover:bg-gradient-to-r disabled:hover:from-white/8 disabled:hover:to-white/4
     relative isolate overflow-hidden
@@ -112,10 +112,6 @@ const ActionButton = ({
     whileHover: disabled || loading ? {} : { 
       y: -1,
       transition: { type: "spring" as const, stiffness: 300, damping: 20 }
-    },
-    whileTap: disabled || loading ? {} : { 
-      y: 0,
-      transition: { type: "spring" as const, stiffness: 400, damping: 25 }
     },
     initial: { y: 0 },
     transition: { type: "spring" as const, stiffness: 300, damping: 20 }
@@ -143,8 +139,8 @@ const ActionButton = ({
         </>
       ) : (
         <>
-          <DefaultIcon className={`${iconSizes[size]} relative z-10 drop-shadow-[0_0_4px_rgba(255,255,255,0.3)]`} />
           <span className="relative z-10 drop-shadow-[0_0_4px_rgba(255,255,255,0.2)]">{label}</span>
+          <DefaultIcon className={`${iconSizes[size]} relative z-10 drop-shadow-[0_0_4px_rgba(255,255,255,0.3)]`} />
         </>
       )}
     </ButtonComponent>
