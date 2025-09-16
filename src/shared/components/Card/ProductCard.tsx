@@ -204,7 +204,7 @@ const ProductCardComponent = ({
 
         {price && (
           <div className="text-center py-4 bg-black/20 rounded-lg my-4">
-            <div className="text-3xl font-bold text-white mb-1">
+            <div className="text-lg font-bold text-white mb-1">
               {formatCurrency(price.amount, price.currency)}
             </div>
             <div className="text-sm text-gray-400">per {price.period}</div>

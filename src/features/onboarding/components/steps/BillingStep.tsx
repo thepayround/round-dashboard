@@ -36,8 +36,8 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
         </motion.div>
 
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2">Billing</h2>
-          <p className="text-gray-400 text-lg">Connect your payment method</p>
+          <h2 className="text-lg font-bold text-white mb-2">Billing</h2>
+          <p className="text-gray-400 text-sm">Connect your payment method</p>
         </div>
       </div>
 
@@ -58,8 +58,8 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                     </svg>
                   </div>
                   <div className="text-left">
-                    <h3 className="text-xl font-semibold text-white">Connect with Stripe</h3>
-                    <p className="text-gray-400">Secure payment processing for your business</p>
+                    <h3 className="text-sm font-medium text-white">Connect with Stripe</h3>
+                    <p className="text-gray-400 text-xs">Secure payment processing for your business</p>
                   </div>
                 </div>
 
@@ -106,7 +106,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-sm font-medium text-white mb-2">
                     Payment Method Connected
                   </h3>
                   <p className="text-gray-400">

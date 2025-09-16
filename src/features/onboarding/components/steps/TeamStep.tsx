@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion'
 import { Users, UserPlus, Mail, Trash2, Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { TeamSettings } from '../../types/onboarding'
 import { useTeamInvitation, useTeamRoleUtils } from '@/shared/hooks/api/useTeam'
 import { UserRole } from '@/shared/services/api/team.service'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { ActionButton } from '@/shared/components'
+import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
+import { teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
 
 interface TeamStepProps {
   data: TeamSettings
@@ -16,12 +18,41 @@ interface TeamStepProps {
 
 export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepProps) => {
   const [inviteEmail, setInviteEmail] = useState('')
-  const [inviteRole, setInviteRole] = useState(UserRole.TeamMember)
-  const [roleDropdownOpen, setRoleDropdownOpen] = useState(false)
+  const [inviteRole, setInviteRole] = useState('TeamMember') // Use string value that maps to UserRole.TeamMember
   const { state } = useAuth()
   const { inviteUser, isLoading } = useTeamInvitation()
-  const { getCommonRoles, getRoleName } = useTeamRoleUtils()
+  const { getRoleName } = useTeamRoleUtils()
 
+  // Map string role values to UserRole enum values for API calls
+  const mapStringRoleToEnum = (roleString: string): UserRole => {
+    const roleMapping: Record<string, UserRole> = {
+      'SuperAdmin': UserRole.SuperAdmin,
+      'Admin': UserRole.Admin,
+      'TeamOwner': UserRole.TeamOwner,
+      'TeamManager': UserRole.TeamManager,
+      'TeamMember': UserRole.TeamMember,
+      'SalesManager': UserRole.SalesManager,
+      'SalesRepresentative': UserRole.SalesRepresentative,
+      'MarketingManager': UserRole.MarketingManager,
+      'MarketingAnalyst': UserRole.MarketingAnalyst,
+      'SupportAdmin': UserRole.SupportAdmin,
+      'SupportAgent': UserRole.SupportAgent,
+      'ProductManager': UserRole.ProductManager,
+      'Developer': UserRole.Developer,
+      'QAEngineer': UserRole.QAEngineer,
+      'Designer': UserRole.Designer,
+      'FinanceManager': UserRole.FinanceManager,
+      'BillingSpecialist': UserRole.BillingSpecialist,
+      'Viewer': UserRole.Viewer,
+      'Guest': UserRole.Guest,
+      // Handle backend role names (simplified)
+      'Sales': UserRole.SalesRepresentative,
+      'Finance': UserRole.FinanceManager,
+      'Support': UserRole.SupportAgent
+    }
+    
+    return roleMapping[roleString] ?? UserRole.TeamMember
+  }
 
   const handleInviteTeamMember = async () => {
     if (!inviteEmail.trim()) {
@@ -66,7 +97,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
       const result = await inviteUser({
         roundAccountId,
         email: inviteEmail.trim(),
-        role: inviteRole
+        role: mapStringRoleToEnum(inviteRole)
       })
       
 
@@ -77,7 +108,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
         const newInvitation = {
           id: Date.now().toString(),
           email: inviteEmail.trim(),
-          role: getRoleName(inviteRole),
+          role: getRoleName(mapStringRoleToEnum(inviteRole)),
           status: 'pending' as const,
         }
 
@@ -88,7 +119,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
 
         // Reset form
         setInviteEmail('')
-        setInviteRole(UserRole.TeamMember)
+        setInviteRole('TeamMember')
       } else {
         // Backend validation errors will be handled by the API response
         showError(
@@ -127,65 +158,6 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
     return 'bg-[#32A1E4]/20 text-[#32A1E4] border-[#32A1E4]/30'
   }
 
-  const Dropdown = ({
-    value,
-    options,
-    placeholder,
-    onSelect,
-    isOpen,
-    setIsOpen,
-    error,
-  }: {
-    value: number
-    options: Array<{ value: number; label: string }>
-    placeholder: string
-    onSelect: (value: number) => void
-    isOpen: boolean
-    setIsOpen: (open: boolean) => void
-    error?: string
-  }) => (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className={`auth-input flex items-center justify-between ${error ? 'auth-input-error' : ''}`}
-      >
-        <span className={value ? 'text-white' : 'text-gray-400'}>
-          {value ? options.find(opt => opt.value === value)?.label : placeholder}
-        </span>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-          className="w-5 h-5 text-gray-400"
-        >
-          ▼
-        </motion.div>
-      </button>
-
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="absolute top-full left-0 right-0 mt-2 bg-gray-800/95 backdrop-blur-xl border border-white/20 rounded-lg shadow-2xl z-dropdown max-h-60 overflow-y-auto"
-        >
-          {options.map(option => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => {
-                onSelect(option.value)
-                setIsOpen(false)
-              }}
-              className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors duration-200 first:rounded-t-xl last:rounded-b-xl"
-            >
-              {option.label}
-            </button>
-          ))}
-        </motion.div>
-      )}
-    </div>
-  )
 
   return (
     <motion.div
@@ -206,8 +178,8 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
         </motion.div>
 
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2">Team</h2>
-          <p className="text-gray-400 text-lg">Invite your team members</p>
+          <h2 className="text-lg font-bold text-white mb-2">Team</h2>
+          <p className="text-gray-400 text-sm">Invite your team members</p>
         </div>
       </div>
 
@@ -217,7 +189,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <UserPlus className="w-6 h-6 text-[#32A1E4]" />
-              <h3 className="text-lg font-semibold text-white">Invite Team Members</h3>
+              <h3 className="text-sm font-medium text-white">Invite Team Members</h3>
             </div>
 
             {/* Invite Form */}
@@ -247,13 +219,10 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                   >
                     Role
                   </label>
-                  <Dropdown
+                  <ApiDropdown
+                    config={teamRoleDropdownConfig}
                     value={inviteRole}
-                    options={getCommonRoles()}
-                    placeholder="Select role"
                     onSelect={(value) => setInviteRole(value)}
-                    isOpen={roleDropdownOpen}
-                    setIsOpen={setRoleDropdownOpen}
                   />
                 </div>
               </div>

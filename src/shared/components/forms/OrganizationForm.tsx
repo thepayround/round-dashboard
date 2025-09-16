@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Building, ExternalLink, AlignLeft, Hash, CreditCard } from 'lucide-react'
-import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig, currencyDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig, currencyDropdownConfig, fiscalYearDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 
 export interface OrganizationFormData {
@@ -95,8 +95,8 @@ export const OrganizationForm = ({
           </motion.div>
 
           <div>
-            <h2 className="text-3xl font-bold text-white mb-2">{headerTitle}</h2>
-            <p className="text-gray-400 text-lg">{headerSubtitle}</p>
+            <h2 className="text-lg font-bold text-white mb-2">{headerTitle}</h2>
+            <p className="text-gray-400 text-sm">{headerSubtitle}</p>
           </div>
         </div>
       )}
@@ -305,7 +305,7 @@ export const OrganizationForm = ({
             {/* Tax ID */}
             <div>
               <label htmlFor="taxId" className="auth-label">
-                Tax ID <span className="text-gray-500">(optional)</span>
+                Tax ID <span className="text-red-400">*</span>
               </label>
               <div className="input-container">
                 <CreditCard className="input-icon-left auth-icon-primary" />
@@ -432,25 +432,12 @@ export const OrganizationForm = ({
                 <label htmlFor="fiscalYearStart" className="auth-label">
                   Fiscal Year Start
                 </label>
-                <select
-                  id="fiscalYearStart"
+                <ApiDropdown
+                  config={fiscalYearDropdownConfig}
                   value={data.fiscalYearStart}
-                  onChange={e => handleSelectChange('fiscalYearStart', e.target.value)}
-                  className="auth-input"
-                >
-                  <option value="January">January</option>
-                  <option value="February">February</option>
-                  <option value="March">March</option>
-                  <option value="April">April</option>
-                  <option value="May">May</option>
-                  <option value="June">June</option>
-                  <option value="July">July</option>
-                  <option value="August">August</option>
-                  <option value="September">September</option>
-                  <option value="October">October</option>
-                  <option value="November">November</option>
-                  <option value="December">December</option>
-                </select>
+                  onSelect={value => handleSelectChange('fiscalYearStart', value)}
+                  allowClear
+                />
               </div>
             </div>
           </motion.div>

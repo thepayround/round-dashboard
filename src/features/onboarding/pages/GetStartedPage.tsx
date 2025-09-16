@@ -152,6 +152,7 @@ export const GetStartedPage = () => {
           organization.organizationType !== '' &&
           organization.country !== '' &&
           organization.registrationNumber?.trim() !== '' &&
+          organization.taxId?.trim() !== '' && // Tax ID is now required
           // Include business settings validation (timezone and fiscal year are optional but recommended)
           businessSettings?.timezone !== '' &&
           businessSettings?.fiscalYearStart !== ''
@@ -181,6 +182,18 @@ export const GetStartedPage = () => {
         return false
     }
   }, [onboardingData])
+
+  // Find first incomplete step - smart navigation logic
+  const getFirstIncompleteStep = useCallback((): OnboardingStep => {
+    // Check each step in order and return the first incomplete one
+    for (const step of allSteps) {
+      if (!isStepValid(step)) {
+        return step
+      }
+    }
+    // If all steps are valid, return the last step
+    return allSteps[allSteps.length - 1]
+  }, [isStepValid])
 
   // Step navigation
   const getCurrentStepIndex = useCallback(() => availableSteps.indexOf(currentStep), [availableSteps, currentStep])
@@ -374,6 +387,30 @@ export const GetStartedPage = () => {
     }
   }, [user, loadOnboardingData])
 
+  // Smart navigation: Auto-navigate to first incomplete step after data is loaded (only once)
+  useEffect(() => {
+    if (!isLoadingData && onboardingData) {
+      // Update completed steps based on loaded data
+      const newCompletedSteps: OnboardingStep[] = []
+      for (const step of allSteps) {
+        if (isStepValid(step)) {
+          newCompletedSteps.push(step)
+        }
+      }
+      setCompletedSteps(newCompletedSteps)
+
+      // Only trigger smart navigation once when data first loads
+      // Don't interfere with manual navigation afterwards
+      const firstIncompleteStep = getFirstIncompleteStep()
+      // Only auto-navigate if we're on organization step (initial step) and it's completed
+      if (currentStep === 'organization' && isStepValid('organization') && firstIncompleteStep !== 'organization') {
+        setCurrentStep(firstIncompleteStep)
+        console.log(`Smart navigation: Organization step completed, jumping to "${firstIncompleteStep}"`)
+      }
+    }
+  }, [isLoadingData, onboardingData, getFirstIncompleteStep, isStepValid])
+  // Removed currentStep from deps to prevent re-triggering after manual navigation
+
   // Navigation handlers
   const handleNext = useCallback(async () => {
     try {
@@ -404,6 +441,7 @@ export const GetStartedPage = () => {
               Industry: onboardingData.organization.industry ?? '',
               type: onboardingData.organization.organizationType ?? '',
               registrationNumber: onboardingData.organization.registrationNumber ?? '',
+              taxId: onboardingData.organization.taxId ?? '', // Tax ID is now required
               currency: onboardingData.organization.currency ?? 'USD',
               timeZone: onboardingData.businessSettings.timezone ?? 'UTC',
               country: onboardingData.organization.country ?? 'US',
@@ -415,6 +453,11 @@ export const GetStartedPage = () => {
             // Validate that industry is not empty
             if (!onboardingData.organization.industry || onboardingData.organization.industry.trim() === '') {
               throw new Error('Industry is required. Please select an industry.')
+            }
+
+            // Validate that taxId is not empty (now required)
+            if (!onboardingData.organization.taxId || onboardingData.organization.taxId.trim() === '') {
+              throw new Error('Tax ID is required for business compliance.')
             }
 
             // Only save if data has actually changed
@@ -663,13 +706,13 @@ export const GetStartedPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl font-bold text-white mb-4">
+            <h1 className="text-lg font-medium text-white mb-4">
               Welcome to{' '}
               <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
                 Round
               </span>
             </h1>
-            <p className="text-xl text-gray-400 mb-3">
+            <p className="text-sm text-gray-400 mb-3">
               Let&apos;s set up your account in just a few steps
             </p>
           </motion.div>
@@ -721,17 +764,19 @@ export const GetStartedPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center justify-between"
           >
-            <Button
-              onClick={handleBack}
-              disabled={isFirstStep()}
-              variant="ghost"
-              enhanced
-              icon={ArrowLeft}
-              iconPosition="left"
-              size="sm"
-            >
-              Back
-            </Button>
+            {!isFirstStep() && (
+              <Button
+                onClick={handleBack}
+                variant="ghost"
+                enhanced
+                icon={ArrowLeft}
+                iconPosition="left"
+                size="sm"
+              >
+                Back
+              </Button>
+            )}
+            {isFirstStep() && <div />}
 
             <ActionButton
               label={getButtonText()}

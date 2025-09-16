@@ -122,7 +122,7 @@ export const BillingPage = () => (
             </div>
             <div className="space-y-4">
               <div className="text-center">
-                <p className="auth-text text-2xl sm:text-3xl font-bold mb-2">$24,500</p>
+                <p className="auth-text text-2xl sm:text-lg font-bold mb-2">$24,500</p>
                 <p className="auth-text-muted text-sm">This Month</p>
               </div>
               <div className="h-32 bg-gradient-to-t from-[#D417C8]/20 to-[#14BDEA]/20 rounded-lg flex items-end justify-center">
