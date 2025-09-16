@@ -125,10 +125,6 @@ const ActionButton = ({
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...motionProps}
     >
-      {/* Luxury shine effect overlay - constrained to avoid border artifacts */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
-      </div>
       
       {loading ? (
         <>

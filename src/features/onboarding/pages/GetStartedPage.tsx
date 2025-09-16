@@ -405,11 +405,9 @@ export const GetStartedPage = () => {
       // Only auto-navigate if we're on organization step (initial step) and it's completed
       if (currentStep === 'organization' && isStepValid('organization') && firstIncompleteStep !== 'organization') {
         setCurrentStep(firstIncompleteStep)
-        console.log(`Smart navigation: Organization step completed, jumping to "${firstIncompleteStep}"`)
       }
     }
-  }, [isLoadingData, onboardingData, getFirstIncompleteStep, isStepValid])
-  // Removed currentStep from deps to prevent re-triggering after manual navigation
+  }, [isLoadingData, onboardingData, getFirstIncompleteStep, isStepValid, currentStep])
 
   // Navigation handlers
   const handleNext = useCallback(async () => {

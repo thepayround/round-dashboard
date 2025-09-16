@@ -41,9 +41,8 @@ export const TabNavigation = ({
   const isStepCompleted = (stepId: OnboardingStep) => completedSteps.includes(stepId)
   const isStepActive = (stepId: OnboardingStep) => currentStep === stepId
   const getCurrentStepIndex = () => steps.findIndex(step => step.id === currentStep)
-  const getStepIndex = (stepId: OnboardingStep) => steps.findIndex(step => step.id === stepId)
 
-  const canClickStep = (stepId: OnboardingStep) => 
+  const canClickStep = (_stepId: OnboardingStep) =>
     // During onboarding flow, allow navigation to any step
     // This provides flexibility to go back and edit any step
      true

@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion'
 import { Users, UserPlus, Mail, Trash2, Loader2 } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import type { TeamSettings } from '../../types/onboarding'
 import { useTeamInvitation, useTeamRoleUtils } from '@/shared/hooks/api/useTeam'
 import { UserRole } from '@/shared/services/api/team.service'
 import { useAuth } from '@/shared/hooks/useAuth'
-import { ActionButton } from '@/shared/components'
 import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
 import { teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
 
@@ -185,59 +184,45 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
 
       {/* Invite Team Members Section */}
       <div className="space-y-6">
-        <div className="p-6 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl">
+        <div className="p-4 rounded-lg bg-white/4 border border-white/8 backdrop-blur-xl">
           <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <UserPlus className="w-6 h-6 text-[#32A1E4]" />
-              <h3 className="text-sm font-medium text-white">Invite Team Members</h3>
+            <div className="flex items-center space-x-2">
+              <UserPlus className="w-4 h-4 text-[#32A1E4]" />
+              <h3 className="text-xs font-medium text-white uppercase tracking-wider">Invite Team Members</h3>
             </div>
 
             {/* Invite Form */}
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-2">
-                  <label htmlFor="inviteEmail" className="auth-label">
-                    Email Address
-                  </label>
-                  <div className="input-container">
-                    <Mail className="input-icon-left auth-icon-primary" />
-                    <input
-                      id="inviteEmail"
-                      type="email"
-                      value={inviteEmail}
-                      onChange={e => setInviteEmail(e.target.value)}
-                      placeholder="colleague@example.com"
-                      className="auth-input input-with-icon-left"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="inviteRole"
-                    className="auth-label"
-                  >
-                    Role
-                  </label>
-                  <ApiDropdown
-                    config={teamRoleDropdownConfig}
-                    value={inviteRole}
-                    onSelect={(value) => setInviteRole(value)}
+            <div className="flex gap-3 items-end">
+              <div className="flex-1">
+                <label htmlFor="inviteEmail" className="auth-label text-[10px]">Email Address</label>
+                <div className="input-container">
+                  <Mail className="input-icon-left auth-icon-primary w-3 h-3" />
+                  <input
+                    id="inviteEmail"
+                    type="email"
+                    value={inviteEmail}
+                    onChange={e => setInviteEmail(e.target.value)}
+                    placeholder="colleague@example.com"
+                    className="auth-input input-with-icon-left text-xs w-full"
                   />
                 </div>
               </div>
-
-              <ActionButton
-                label={isLoading ? 'Sending...' : 'Send Invitation'}
+              <div className="w-40">
+                <label htmlFor="inviteRole" className="auth-label text-[10px]">Role</label>
+                <ApiDropdown
+                  config={teamRoleDropdownConfig}
+                  value={inviteRole}
+                  onSelect={(value) => setInviteRole(value)}
+                />
+              </div>
+              <button
                 onClick={handleInviteTeamMember}
                 disabled={!inviteEmail.trim() || isLoading}
-                icon={isLoading ? Loader2 : UserPlus}
-                loading={isLoading}
-                size="md"
-                animated={false}
-                actionType="general"
-              />
-
+                className="px-4 py-2 h-9 rounded-lg bg-gradient-to-r from-[#32A1E4] to-[#14BDEA] hover:from-[#2891D4] hover:to-[#12A5D2] disabled:opacity-50 text-white text-xs font-medium flex items-center gap-2 shrink-0"
+              >
+                {isLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <UserPlus className="w-3 h-3" />}
+                {isLoading ? 'Sending...' : 'Invite'}
+              </button>
             </div>
           </div>
         </div>
@@ -247,39 +232,39 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-4"
+            className="space-y-3"
           >
-            <h4 className="text-lg font-medium text-white">Pending Invitations</h4>
-            <div className="space-y-3">
+            <h4 className="text-xs font-medium text-white uppercase tracking-wider">Pending Invitations</h4>
+            <div className="space-y-2">
               {data.invitations.map(invitation => (
                 <motion.div
                   key={invitation.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-4 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl"
+                  className="p-3 rounded-lg bg-white/4 border border-white/8 backdrop-blur-xl"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 flex items-center justify-center">
-                        <Mail className="w-5 h-5 text-[#32A1E4]" />
+                    <div className="flex items-center space-x-3">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 flex items-center justify-center">
+                        <Mail className="w-3 h-3 text-[#32A1E4]" />
                       </div>
                       <div>
-                        <p className="font-medium text-white">{invitation.email}</p>
+                        <p className="text-xs font-medium text-white">{invitation.email}</p>
                         <div className="flex items-center space-x-2">
                           <span
-                            className={`text-xs px-2 py-1 rounded-full border ${getRoleBadgeColor(invitation.role)}`}
+                            className={`text-[10px] px-1.5 py-0.5 rounded border ${getRoleBadgeColor(invitation.role)}`}
                           >
                             {invitation.role}
                           </span>
-                          <span className="text-xs text-gray-400">Status: {invitation.status}</span>
+                          <span className="text-[10px] text-gray-400">{invitation.status}</span>
                         </div>
                       </div>
                     </div>
                     <button
                       onClick={() => handleRemoveInvitation(invitation.id)}
-                      className="p-2 rounded-lg text-red-400 hover:bg-red-400/10 transition-colors duration-200"
+                      className="p-1.5 rounded text-red-400 hover:bg-red-400/10 transition-colors duration-200"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3 h-3" />
                     </button>
                   </div>
                 </motion.div>
@@ -291,7 +276,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
 
         {/* Skip Option */}
         <div className="text-center">
-          <p className="text-sm text-gray-400">
+          <p className="text-xs text-gray-400">
             You can invite team members later from your team management page
           </p>
         </div>
