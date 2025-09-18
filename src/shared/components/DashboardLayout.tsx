@@ -736,11 +736,11 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                 group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
                 ${
                   isActive(item.href)
-                    ? 'bg-white/6 text-white border-l-3 border-l-[#D417C8]'
+                    ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-                ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
+                ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id)
                   ? 'ring-2 ring-white/50' : ''
                 }
               `}
@@ -1043,7 +1043,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
       {/* Main Content - Responsive margins */}
       <motion.main
         initial={false}
-        animate={{ 
+        animate={{
           marginLeft: (() => {
             if (isMobile || isTablet) {
               return 0
@@ -1054,7 +1054,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         transition={{ duration: 0.15, ease: 'easeOut' }}
         className="min-h-screen relative z-10"
       >
-        <div className="px-4 sm:px-8 md:px-16 lg:px-32 py-6">
+        <div className="max-w-6xl lg:max-w-7xl xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6">
           <Breadcrumb />
           {children}
         </div>
