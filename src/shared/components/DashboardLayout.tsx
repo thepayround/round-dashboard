@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronLeft,
-  ChevronRight,
   ChevronDown,
   LayoutDashboard,
   Users,
@@ -1033,11 +1032,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         onClick={toggleSidebar}
         className="fixed top-16 lg:top-20 w-10 h-11 md:h-9 lg:w-8 lg:h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-50 lg:z-base"
       >
-        {isCollapsed ? (
-          <ChevronRight className="w-5 h-5 lg:w-4 lg:h-4 text-white" />
-        ) : (
-          <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4 text-white" />
-        )}
+        <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4 text-white" />
       </motion.button>
 
       {/* Main Content - Responsive margins */}

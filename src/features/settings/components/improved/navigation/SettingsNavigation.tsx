@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Card } from '@/shared/components'
-import { Settings, ChevronRight } from 'lucide-react'
+import { Settings } from 'lucide-react'
 
 interface SettingsSection {
   id: string
@@ -66,11 +66,6 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
                     <p className="text-xs font-medium truncate">{section.label}</p>
                   </div>
                 </div>
-                <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-all duration-200 ${
-                  isActive 
-                    ? 'text-[#D417C8]' 
-                    : 'text-gray-500 group-hover:text-gray-300'
-                }`} />
               </button>
             )
           })}
