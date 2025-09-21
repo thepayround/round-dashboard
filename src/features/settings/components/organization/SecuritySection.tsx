@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Card, SectionHeader } from '@/shared/components'
-import { Shield, Lock, Eye, AlertTriangle, Key, Users } from 'lucide-react'
+import { Lock, Eye, AlertTriangle, Key, Users } from 'lucide-react'
 
 export const SecuritySection: React.FC = () => (
     <motion.div

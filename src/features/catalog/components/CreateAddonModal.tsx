@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Zap, Save, AlertCircle, Plus, Minus, DollarSign } from 'lucide-react'
 import { useState } from 'react'
+import { UiDropdown, type UiDropdownOption } from '@/shared/components/ui/UiDropdown'
 
 import type { CreateAddonRequest, PricePoint, PricingModel } from '../types/catalog.types'
 import { validateCreateAddon } from '../utils/catalog.validation'
@@ -53,6 +54,18 @@ export const CreateAddonModal = ({
     // Clear field-specific errors
     if (errors.some(error => error.field === name)) {
       setErrors(prev => prev.filter(error => error.field !== name))
+    }
+  }
+
+  const handleDropdownChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+
+    // Clear field-specific errors
+    if (errors.some(error => error.field === field)) {
+      setErrors(prev => prev.filter(error => error.field !== field))
     }
   }
 
@@ -270,21 +283,17 @@ export const CreateAddonModal = ({
                         <label htmlFor="productFamilyId" className="auth-label">
                           Product Family *
                         </label>
-                        <select
-                          id="productFamilyId"
-                          name="productFamilyId"
+                        <UiDropdown
+                          options={productFamilies.map((family): UiDropdownOption => ({
+                            value: family.id,
+                            label: family.name
+                          }))}
                           value={formData.productFamilyId}
-                          onChange={handleInputChange}
-                          className={`auth-input ${getFieldError('productFamilyId') ? 'auth-input-error' : ''}`}
-                          required
-                        >
-                          <option value="">Select a product family</option>
-                          {productFamilies.map(family => (
-                            <option key={family.id} value={family.id}>
-                              {family.name}
-                            </option>
-                          ))}
-                        </select>
+                          onSelect={(value) => handleDropdownChange('productFamilyId', value)}
+                          placeholder="Select a product family"
+                          error={!!getFieldError('productFamilyId')}
+                          allowClear
+                        />
                         {getFieldError('productFamilyId') && (
                           <div className="mt-2 flex items-center space-x-2 auth-validation-error text-sm">
                             <AlertCircle className="w-4 h-4" />
@@ -301,18 +310,17 @@ export const CreateAddonModal = ({
                         <label htmlFor="type" className="auth-label">
                           Add-on Type *
                         </label>
-                        <select
-                          id="type"
-                          name="type"
+                        <UiDropdown
+                          options={[
+                            { value: 'recurring', label: 'Recurring - Charged regularly' },
+                            { value: 'one_time', label: 'One-time - Single charge' },
+                            { value: 'usage_based', label: 'Usage-based - Based on consumption' }
+                          ]}
                           value={formData.type}
-                          onChange={handleInputChange}
-                          className="auth-input"
-                          required
-                        >
-                          <option value="recurring">Recurring - Charged regularly</option>
-                          <option value="one_time">One-time - Single charge</option>
-                          <option value="usage_based">Usage-based - Based on consumption</option>
-                        </select>
+                          onSelect={(value) => handleDropdownChange('type', value)}
+                          placeholder="Select add-on type"
+                          allowClear
+                        />
                         <p className="text-xs auth-text-muted mt-1">
                           {formData.type === 'recurring' && 'Charged on a regular billing cycle'}
                           {formData.type === 'one_time' && 'Charged once when added to subscription'}
@@ -324,20 +332,16 @@ export const CreateAddonModal = ({
                         <label htmlFor="chargeModel" className="auth-label">
                           Charge Model *
                         </label>
-                        <select
-                          id="chargeModel"
-                          name="chargeModel"
+                        <UiDropdown
+                          options={getChargeModelOptions().map((option): UiDropdownOption => ({
+                            value: option.value,
+                            label: option.label
+                          }))}
                           value={formData.chargeModel}
-                          onChange={handleInputChange}
-                          className="auth-input"
-                          required
-                        >
-                          {getChargeModelOptions().map(option => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
+                          onSelect={(value) => handleDropdownChange('chargeModel', value)}
+                          placeholder="Select charge model"
+                          allowClear
+                        />
                         <p className="text-xs auth-text-muted mt-1">
                           How the pricing is calculated for this add-on
                         </p>
@@ -370,17 +374,18 @@ export const CreateAddonModal = ({
                           <div className={`grid gap-4 ${showBillingFrequency ? 'grid-cols-3' : 'grid-cols-2'}`}>
                             <div>
                               <label htmlFor={`currency-${index}`} className="auth-label">Currency</label>
-                              <select
-                                id={`currency-${index}`}
+                              <UiDropdown
+                                options={[
+                                  { value: 'USD', label: 'USD' },
+                                  { value: 'EUR', label: 'EUR' },
+                                  { value: 'GBP', label: 'GBP' },
+                                  { value: 'CAD', label: 'CAD' }
+                                ]}
                                 value={pricePoint.currency}
-                                onChange={(e) => handlePricePointChange(index, 'currency', e.target.value)}
-                                className="auth-input"
-                              >
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                                <option value="GBP">GBP</option>
-                                <option value="CAD">CAD</option>
-                              </select>
+                                onSelect={(value) => handlePricePointChange(index, 'currency', value)}
+                                placeholder="Select currency"
+                                allowClear
+                              />
                             </div>
                             
                             <div>
@@ -405,18 +410,19 @@ export const CreateAddonModal = ({
                             {showBillingFrequency && (
                               <div>
                                 <label htmlFor={`billingFrequency-${index}`} className="auth-label">Billing Frequency</label>
-                                <select
-                                  id={`billingFrequency-${index}`}
+                                <UiDropdown
+                                  options={[
+                                    { value: 'weekly', label: 'Weekly' },
+                                    { value: 'monthly', label: 'Monthly' },
+                                    { value: 'quarterly', label: 'Quarterly' },
+                                    { value: 'semi_annual', label: 'Semi-Annual' },
+                                    { value: 'yearly', label: 'Yearly' }
+                                  ]}
                                   value={pricePoint.billingFrequency}
-                                  onChange={(e) => handlePricePointChange(index, 'billingFrequency', e.target.value)}
-                                  className="auth-input"
-                                >
-                                  <option value="weekly">Weekly</option>
-                                  <option value="monthly">Monthly</option>
-                                  <option value="quarterly">Quarterly</option>
-                                  <option value="semi_annual">Semi-Annual</option>
-                                  <option value="yearly">Yearly</option>
-                                </select>
+                                  onSelect={(value) => handlePricePointChange(index, 'billingFrequency', value)}
+                                  placeholder="Select frequency"
+                                  allowClear
+                                />
                               </div>
                             )}
                           </div>

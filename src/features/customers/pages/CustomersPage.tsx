@@ -21,9 +21,46 @@ import type { Customer, CustomerFilters, CustomerMetrics } from '../types/custom
 import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
 
 const CustomersPage: React.FC = () => {
-  const [filters, _setFilters] = useState<CustomerFilters>({})
+  const [filters, setFilters] = useState<CustomerFilters>({})
   const [viewMode, setViewMode] = useState<ViewMode>('table')
   const [showFilters, setShowFilters] = useState(false)
+
+  // Individual filter state for UI
+  const [statusFilter, setStatusFilter] = useState('')
+  const [churnRiskFilter, setChurnRiskFilter] = useState('')
+  const [planFilter, setPlanFilter] = useState('')
+  const [countryFilter, setCountryFilter] = useState('')
+
+  // Filter change handlers
+  const handleStatusChange = useCallback((value: string) => {
+    setStatusFilter(value)
+    if (value === '' || value === 'all') {
+      setFilters(prev => ({ ...prev, status: undefined }))
+    } else {
+      setFilters(prev => ({ ...prev, status: [value] }))
+    }
+  }, [])
+
+  const handleChurnRiskChange = useCallback((value: string) => {
+    setChurnRiskFilter(value)
+    if (value === '' || value === 'all') {
+      setFilters(prev => ({ ...prev, churnRisk: undefined }))
+    } else {
+      setFilters(prev => ({ ...prev, churnRisk: [value] }))
+    }
+  }, [])
+
+  const handlePlanChange = useCallback((value: string) => {
+    setPlanFilter(value)
+    // Plan filtering would need to be implemented in the filter function
+    // For now, just store the value
+  }, [])
+
+  const handleCountryChange = useCallback((value: string) => {
+    setCountryFilter(value)
+    // Country filtering would need to be implemented in the filter function
+    // For now, just store the value
+  }, [])
 
   // Mock data
   const mockCustomers = useMemo((): Customer[] => [
@@ -263,10 +300,8 @@ const CustomersPage: React.FC = () => {
       id: 'status',
       label: 'Status',
       type: 'select',
-      value: '', // You can manage this with state
-      onChange: (_value) => {
-        // Handle status filter change
-      },
+      value: statusFilter,
+      onChange: handleStatusChange,
       options: [
         { id: 'all', name: 'All Statuses' },
         { id: 'active', name: 'Active' },
@@ -279,10 +314,8 @@ const CustomersPage: React.FC = () => {
       id: 'churnRisk',
       label: 'Churn Risk',
       type: 'select',
-      value: '',
-      onChange: (_value) => {
-        // Handle churn risk filter change
-      },
+      value: churnRiskFilter,
+      onChange: handleChurnRiskChange,
       options: [
         { id: 'all', name: 'All Risk Levels' },
         { id: 'low', name: 'Low Risk' },
@@ -294,10 +327,8 @@ const CustomersPage: React.FC = () => {
       id: 'plan',
       label: 'Plan',
       type: 'select',
-      value: '',
-      onChange: (_value) => {
-        // Handle plan filter change
-      },
+      value: planFilter,
+      onChange: handlePlanChange,
       options: [
         { id: 'all', name: 'All Plans' },
         { id: '1', name: 'Starter Plan' },
@@ -309,10 +340,8 @@ const CustomersPage: React.FC = () => {
       id: 'country',
       label: 'Country',
       type: 'select',
-      value: '',
-      onChange: (_value) => {
-        // Handle country filter change
-      },
+      value: countryFilter,
+      onChange: handleCountryChange,
       options: [
         { id: 'all', name: 'All Countries' },
         { id: 'US', name: 'United States' },

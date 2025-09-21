@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { UiDropdown } from '@/shared/components/ui/UiDropdown'
+import type { UiDropdownOption } from '@/shared/components/ui/UiDropdown'
 import { 
   Plus, 
   Trash2, 
@@ -86,6 +88,13 @@ const pricingModelOptions = [
     icon: TrendingUp,
     example: '$0.10 per API call with 1000 included'
   }
+]
+
+const aggregationOptions: UiDropdownOption[] = [
+  { value: 'sum', label: 'Sum', description: 'Add all values together' },
+  { value: 'max', label: 'Maximum', description: 'Use the highest value' },
+  { value: 'last_value', label: 'Last Value', description: 'Use the most recent value' },
+  { value: 'unique_count', label: 'Unique Count', description: 'Count distinct values' }
 ]
 
 export const PricingModelBuilder = ({
@@ -414,23 +423,19 @@ export const PricingModelBuilder = ({
                   </div>
                   
                   <div>
-                    <label htmlFor={`metric-aggregation-${index}`} className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-medium auth-text mb-2">
                       Aggregation
-                    </label>
-                    <select
-                      id={`metric-aggregation-${index}`}
+                    </div>
+                    <UiDropdown
+                      options={aggregationOptions}
                       value={usage.aggregation}
-                      onChange={(e) => updateMeteredUsage(index, { 
-                        ...usage, 
-                        aggregation: e.target.value as 'sum' | 'max' | 'last_value' | 'unique_count'
+                      onSelect={(value) => updateMeteredUsage(index, {
+                        ...usage,
+                        aggregation: value as 'sum' | 'max' | 'last_value' | 'unique_count'
                       })}
-                      className="auth-input w-full"
-                    >
-                      <option value="sum">Sum</option>
-                      <option value="max">Maximum</option>
-                      <option value="last_value">Last Value</option>
-                      <option value="unique_count">Unique Count</option>
-                    </select>
+                      placeholder="Select aggregation method"
+                      className="w-full"
+                    />
                   </div>
                   
                   <div>

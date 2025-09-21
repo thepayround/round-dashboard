@@ -13,8 +13,9 @@ import {
   Plus,
   Trash2
 } from 'lucide-react'
-import type { 
-  DiscountType, 
+import { UiDropdown, type UiDropdownOption } from '@/shared/components/ui/UiDropdown'
+import type {
+  DiscountType,
   DurationType
 } from '../types/catalog.types'
 
@@ -40,7 +41,7 @@ const discountTypes: { value: DiscountType; label: string; description: string; 
   }
 ]
 
-const durationTypes: { value: DurationType; label: string; description: string }[] = [
+const durationTypeOptions: UiDropdownOption[] = [
   { value: 'one_time', label: 'One-time', description: 'Applied only to the first billing cycle' },
   { value: 'forever', label: 'Forever', description: 'Applied to all billing cycles' },
   { value: 'limited_period', label: 'Limited Period', description: 'Applied for a specific number of billing cycles' }
@@ -441,24 +442,19 @@ export const CreateCouponModalEnhanced = ({
                   </div>
 
                   <div>
-                    <label htmlFor="duration-type" className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-medium auth-text mb-2">
                       Duration Type *
-                    </label>
-                    <select
-                      id="duration-type"
+                    </div>
+                    <UiDropdown
+                      options={durationTypeOptions}
                       value={formData.durationType}
-                      onChange={(e) => setFormData({ 
-                        ...formData, 
-                        durationType: e.target.value as DurationType 
+                      onSelect={(value) => setFormData({
+                        ...formData,
+                        durationType: value as DurationType
                       })}
-                      className="auth-input w-full"
-                    >
-                      {durationTypes.map(type => (
-                        <option key={type.value} value={type.value}>
-                          {type.label} - {type.description}
-                        </option>
-                      ))}
-                    </select>
+                      placeholder="Select duration type"
+                      className="w-full"
+                    />
                   </div>
                 </div>
 

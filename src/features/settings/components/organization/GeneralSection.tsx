@@ -1,7 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Card, SectionHeader } from '@/shared/components'
-import { Building2 } from 'lucide-react'
 import { OrganizationSettingsForm } from '../OrganizationSettingsForm'
 
 export const GeneralSection: React.FC = () => (

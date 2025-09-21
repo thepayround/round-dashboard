@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { UiDropdown } from '@/shared/components/ui/UiDropdown'
+import type { UiDropdownOption } from '@/shared/components/ui/UiDropdown'
+import { ApiDropdown, currencyDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 import { 
   X, 
   Package, 
@@ -24,7 +28,7 @@ interface CreatePlanModalEnhancedProps {
   productFamilies?: { id: string; name: string }[]
 }
 
-const billingFrequencies: { value: BillingFrequency; label: string; description: string }[] = [
+const billingFrequencyOptions: UiDropdownOption[] = [
   { value: 'weekly', label: 'Weekly', description: 'Charged every week' },
   { value: 'monthly', label: 'Monthly', description: 'Charged every month' },
   { value: 'quarterly', label: 'Quarterly', description: 'Charged every 3 months' },
@@ -32,16 +36,20 @@ const billingFrequencies: { value: BillingFrequency; label: string; description:
   { value: 'yearly', label: 'Yearly', description: 'Charged every year' }
 ]
 
-const currencies = [
-  { code: 'USD', symbol: '$', name: 'US Dollar' },
-  { code: 'EUR', symbol: '€', name: 'Euro' },
-  { code: 'GBP', symbol: '£', name: 'British Pound' },
-  { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar' },
-  { code: 'AUD', symbol: 'A$', name: 'Australian Dollar' },
-  { code: 'JPY', symbol: '¥', name: 'Japanese Yen' }
+const featureTypeOptions: UiDropdownOption[] = [
+  { value: 'boolean', label: 'Boolean', description: 'On/off toggle feature' },
+  { value: 'quantity', label: 'Quantity', description: 'Numeric limit or count' },
+  { value: 'text', label: 'Text', description: 'Text-based value' }
 ]
 
+const booleanValueOptions: UiDropdownOption[] = [
+  { value: 'true', label: 'Enabled', description: 'Feature is available' },
+  { value: 'false', label: 'Disabled', description: 'Feature is not available' }
+]
+
+
 export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] }: CreatePlanModalEnhancedProps) => {
+  const { data: currencies = [] } = useCurrencies()
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     name: '',
@@ -239,22 +247,20 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                   </div>
 
                   <div>
-                    <label htmlFor="product-family" className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-medium auth-text mb-2">
                       Product Family *
-                    </label>
-                    <select
-                      id="product-family"
+                    </div>
+                    <UiDropdown
+                      options={productFamilies.map(family => ({
+                        value: family.id,
+                        label: family.name
+                      }))}
                       value={formData.productFamilyId}
-                      onChange={(e) => setFormData({ ...formData, productFamilyId: e.target.value })}
-                      className="auth-input w-full"
-                    >
-                      <option value="">Select a product family</option>
-                      {productFamilies.map(family => (
-                        <option key={family.id} value={family.id}>
-                          {family.name}
-                        </option>
-                      ))}
-                    </select>
+                      onSelect={(value) => setFormData({ ...formData, productFamilyId: value })}
+                      placeholder="Select a product family"
+                      icon={<Package className="w-4 h-4" />}
+                      className="w-full"
+                    />
                   </div>
                 </div>
 
@@ -331,45 +337,35 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
-                      <label htmlFor="price-currency" className="block text-sm font-medium auth-text mb-2">
+                      <div className="block text-sm font-medium auth-text mb-2">
                         Currency
-                      </label>
-                      <select
-                        id="price-currency"
+                      </div>
+                      <ApiDropdown
+                        config={currencyDropdownConfig}
                         value={currentPricePoint.currency}
-                        onChange={(e) => setCurrentPricePoint({ 
-                          ...currentPricePoint, 
-                          currency: e.target.value 
+                        onSelect={(value) => setCurrentPricePoint({
+                          ...currentPricePoint,
+                          currency: value
                         })}
-                        className="auth-input w-full"
-                      >
-                        {currencies.map(currency => (
-                          <option key={currency.code} value={currency.code}>
-                            {currency.symbol} {currency.code} - {currency.name}
-                          </option>
-                        ))}
-                      </select>
+                        className="w-full"
+                      />
                     </div>
 
                     <div>
-                      <label htmlFor="billing-frequency" className="block text-sm font-medium auth-text mb-2">
+                      <div className="block text-sm font-medium auth-text mb-2">
                         Billing Frequency
-                      </label>
-                      <select
-                        id="billing-frequency"
+                      </div>
+                      <UiDropdown
+                        options={billingFrequencyOptions}
                         value={currentPricePoint.billingFrequency}
-                        onChange={(e) => setCurrentPricePoint({ 
-                          ...currentPricePoint, 
-                          billingFrequency: e.target.value as BillingFrequency
+                        onSelect={(value) => setCurrentPricePoint({
+                          ...currentPricePoint,
+                          billingFrequency: value as BillingFrequency
                         })}
-                        className="auth-input w-full"
-                      >
-                        {billingFrequencies.map(freq => (
-                          <option key={freq.value} value={freq.value}>
-                            {freq.label} - {freq.description}
-                          </option>
-                        ))}
-                      </select>
+                        placeholder="Select billing frequency"
+                        icon={<DollarSign className="w-4 h-4" />}
+                        className="w-full"
+                      />
                     </div>
                   </div>
 
@@ -422,7 +418,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                           <div>
                             <div className="flex items-center space-x-2">
                               <span className="font-medium auth-text">
-                                {currencies.find(c => c.code === pp.currency)?.symbol}{pp.price} 
+                                {currencies.find(c => c.currencyCodeAlpha === pp.currency)?.currencySymbol}{pp.price} 
                                 {pp.currency} / {pp.billingFrequency}
                               </span>
                               <span className="px-2 py-1 bg-[#D417C8]/20 text-[#D417C8] text-xs rounded-full">
@@ -479,22 +475,20 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         </div>
 
                         <div>
-                          <label htmlFor={`feature-type-${index}`} className="block text-sm font-medium auth-text mb-2">
+                          <div className="block text-sm font-medium auth-text mb-2">
                             Type
-                          </label>
-                          <select
-                            id={`feature-type-${index}`}
+                          </div>
+                          <UiDropdown
+                            options={featureTypeOptions}
                             value={feature.featureType}
-                            onChange={(e) => updateFeature(index, { 
-                              ...feature, 
-                              featureType: e.target.value as 'boolean' | 'quantity' | 'text'
+                            onSelect={(value) => updateFeature(index, {
+                              ...feature,
+                              featureType: value as 'boolean' | 'quantity' | 'text'
                             })}
-                            className="auth-input w-full"
-                          >
-                            <option value="boolean">Yes/No</option>
-                            <option value="quantity">Quantity</option>
-                            <option value="text">Text</option>
-                          </select>
+                            placeholder="Select feature type"
+                            icon={<Zap className="w-4 h-4" />}
+                            className="w-full"
+                          />
                         </div>
 
                         <div>
@@ -505,18 +499,16 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                             {(() => {
                               if (feature.featureType === 'boolean') {
                                 return (
-                                  <select
-                                    id={`feature-value-${index}`}
+                                  <UiDropdown
+                                    options={booleanValueOptions}
                                     value={feature.value.toString()}
-                                    onChange={(e) => updateFeature(index, { 
-                                      ...feature, 
-                                      value: e.target.value === 'true'
+                                    onSelect={(value) => updateFeature(index, {
+                                      ...feature,
+                                      value: value === 'true'
                                     })}
-                                    className="auth-input w-full"
-                                  >
-                                    <option value="true">Yes</option>
-                                    <option value="false">No</option>
-                                  </select>
+                                    placeholder="Select value"
+                                    className="w-full"
+                                  />
                                 );
                               }
                               
@@ -759,7 +751,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                           <div>
                             <span className="font-medium auth-text">
-                              {currencies.find(c => c.code === pp.currency)?.symbol}{pp.price} {pp.currency}
+                              {currencies.find(c => c.currencyCodeAlpha === pp.currency)?.currencySymbol}{pp.price} {pp.currency}
                             </span>
                             <span className="auth-text-muted"> / {pp.billingFrequency}</span>
                             <div className="text-xs auth-text-muted">

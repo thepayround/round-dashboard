@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Building, ExternalLink, AlignLeft, Hash, CreditCard } from 'lucide-react'
-import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig, currencyDropdownConfig, fiscalYearDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig, currencyDropdownConfig, fiscalYearDropdownConfig, timezoneDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 
 export interface OrganizationFormData {
@@ -410,21 +410,16 @@ export const OrganizationForm = ({
                 <label htmlFor="timeZone" className="auth-label">
                   Time Zone
                 </label>
-                <select
-                  id="timeZone"
+                <ApiDropdown
+                  config={timezoneDropdownConfig}
                   value={data.timeZone}
-                  onChange={e => handleSelectChange('timeZone', e.target.value)}
-                  className="auth-input"
-                >
-                  <option value="UTC">UTC - Coordinated Universal Time</option>
-                  <option value="America/New_York">EST - Eastern Standard Time</option>
-                  <option value="America/Chicago">CST - Central Standard Time</option>
-                  <option value="America/Denver">MST - Mountain Standard Time</option>
-                  <option value="America/Los_Angeles">PST - Pacific Standard Time</option>
-                  <option value="Europe/London">GMT - Greenwich Mean Time</option>
-                  <option value="Europe/Paris">CET - Central European Time</option>
-                  <option value="Asia/Tokyo">JST - Japan Standard Time</option>
-                </select>
+                  onSelect={(value) => handleSelectChange('timeZone', value)}
+                  error={!!errors.timeZone}
+                  allowClear
+                />
+                {errors.timeZone && (
+                  <p className="text-red-400 text-xs mt-1">{errors.timeZone}</p>
+                )}
               </div>
 
               {/* Fiscal Year Start */}

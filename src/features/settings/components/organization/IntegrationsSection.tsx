@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Card, SectionHeader } from '@/shared/components'
-import { Globe, Plus, Settings, ExternalLink, Check, Key, Zap } from 'lucide-react'
+import { Plus, Settings, ExternalLink, Check, Key, Zap } from 'lucide-react'
 
 interface Integration {
   id: string

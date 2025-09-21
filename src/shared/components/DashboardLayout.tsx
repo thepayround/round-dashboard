@@ -642,7 +642,12 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div
+      className="min-h-screen relative"
+      style={{
+        '--sidebar-width': isCollapsed ? '80px' : '280px'
+      } as React.CSSProperties}
+    >
       {/* Animated Background - Same as auth pages */}
       <div className="fixed inset-0 z-0">
         <div className="floating-orb" />
