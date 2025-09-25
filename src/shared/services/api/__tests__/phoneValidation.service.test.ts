@@ -33,6 +33,21 @@ describe('PhoneValidationService', () => {
       expect(result).toEqual({ isValid: true })
     })
 
+    it('should handle validation errors (400) by returning the error response', async () => {
+      const mockErrorResponse = { 
+        response: { 
+          status: 400, 
+          data: { isValid: false, error: 'Phone number is too short' } 
+        } 
+      }
+      mockHttpClient.post.mockRejectedValue(mockErrorResponse)
+
+      const request = { phoneNumber: '123', countryCode: 'US' }
+      const result = await phoneValidationService.validatePhoneNumber(request)
+      
+      expect(result).toEqual({ isValid: false, error: 'Phone number is too short' })
+    })
+
     it('should handle API errors gracefully', async () => {
       const mockError = new Error('Network error')
       mockHttpClient.post.mockRejectedValue(mockError)

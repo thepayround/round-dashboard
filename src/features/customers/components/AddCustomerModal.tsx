@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Loader2, Hash, Truck, Languages } from 'lucide-react'
+import { X, User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Loader2, Hash, Truck, Languages, AlertCircle } from 'lucide-react'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CustomerCreateRequest } from '@/shared/services/api/customer.service'
@@ -10,6 +10,8 @@ import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDro
 import { languageDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
 import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
+import { phoneValidator } from '@/shared/utils/phoneValidation'
+import type { ValidationError } from '@/shared/utils/validation'
 
 interface AddCustomerModalProps {
   isOpen: boolean
@@ -24,6 +26,40 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
 }) => {
   const { showSuccess, showError } = useGlobalToast()
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<ValidationError[]>([])
+  
+  // Helper functions for error handling (matching registration pattern)
+  const hasFieldError = (field: string) => errors.some(error => error.field === field)
+
+  const getFieldError = (field: string) => {
+    const error = errors.find(error => error.field === field)
+    return error?.message ?? ''
+  }
+
+  // Form validation helper (matching registration pattern)
+  const isFormValid = () => {
+    // Check if all required fields are filled
+    if (
+      !formData.firstName.trim() ||
+      !formData.lastName.trim() ||
+      !formData.email.trim()
+    ) {
+      return false
+    }
+
+    // Simple phone check - use client-side validation (same as registration)
+    if (formData.phoneNumber?.trim() && !phoneValidator.hasMinimumContent(formData.phoneNumber)) {
+      return false
+    }
+
+    // Check if there are any validation errors from other fields
+    const nonPhoneErrors = errors.filter(error => error.field !== 'phoneNumber')
+    if (nonPhoneErrors.length > 0) {
+      return false
+    }
+
+    return true
+  }
   
   const [formData, setFormData] = useState<CustomerCreateRequest>({
     email: '',
@@ -66,6 +102,11 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
       ...prev,
       [field]: value
     }))
+
+    // Clear field error when user starts typing (matching registration pattern)
+    if (hasFieldError(field)) {
+      setErrors(prev => prev.filter(error => error.field !== field))
+    }
   }
 
   const handleAddressChange = (addressType: 'billingAddress' | 'shippingAddress', field: string, value: string) => {
@@ -112,48 +153,65 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
 
   const handlePhoneChange = (phoneNumber: string) => {
     setFormData(prev => ({ ...prev, phoneNumber }))
+    
+    // Clear phone error when user starts typing (same as registration pattern)
+    if (hasFieldError('phoneNumber')) {
+      setErrors(prev => prev.filter(error => error.field !== 'phoneNumber'))
+    }
   }
 
-  const handlePhoneBlur = async (cleanPhoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
+  const handlePhoneBlur = async (phoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
     // Store the country phone code for backend submission
     if (countryInfo?.phoneCode) {
       setFormData(prev => ({ ...prev, countryPhoneCode: countryInfo.phoneCode }))
     }
 
-    // Validate phone when user leaves the field if needed
-    if (!cleanPhoneNumber?.trim()) {
+    // Validate phone when user leaves the field (same pattern as registration)
+    if (!phoneNumber?.trim()) {
       return // Don't validate empty fields on blur
     }
 
     try {
-      // Use the provided clean phone number and country info
-      const countryCode = countryInfo?.countryCode ?? 'US'
+      // Use the provided phone number and country info
+      const countryCode = countryInfo?.countryCode ?? 'GR'
 
-      // Call backend API for validation using the proper service pattern
+      // Call backend API for validation using proper service (consistent with platform pattern)
       const result = await phoneValidationService.validatePhoneNumber({
-        phoneNumber: cleanPhoneNumber,
+        phoneNumber: phoneNumber.trim(),
         countryCode
       })
       
       if (!result.isValid && result.error) {
-        showError(`Phone validation: ${result.error}`)
+        setErrors(prev => [
+          ...prev.filter(error => error.field !== 'phoneNumber'),
+          { field: 'phoneNumber', message: result.error ?? 'Phone number is invalid', code: 'INVALID_PHONE' }
+        ])
       }
     } catch (error) {
+      console.error('Phone validation failed:', error)
       // Don't show error for network issues, just log them
-      console.error('Phone validation error:', error)
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!formData.email || !formData.firstName || !formData.lastName) {
-      showError('Please fill in all required fields')
+    setLoading(true)
+
+    // Final validation check before submission (matching registration pattern)
+    if (!isFormValid()) {
+      showError('Please fill in all required fields correctly')
+      setLoading(false)
+      return
+    }
+
+    // Check for any existing validation errors
+    if (errors.length > 0) {
+      showError('Please fix the validation errors before submitting')
+      setLoading(false)
       return
     }
 
     try {
-      setLoading(true)
       
       // Clean up the data before sending to API - using camelCase as configured in backend
       const cleanCustomerData: CustomerCreateRequest = {
@@ -399,7 +457,20 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                         placeholder="Phone number"
                         defaultCountry="US"
                         showValidation={false}
+                        error={hasFieldError('phoneNumber') ? getFieldError('phoneNumber') : undefined}
                       />
+                      <AnimatePresence>
+                        {hasFieldError('phoneNumber') && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                          >
+                            <AlertCircle className="w-4 h-4" />
+                            <span>{getFieldError('phoneNumber')}</span>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                     
                     <div>
@@ -608,13 +679,43 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                   </div>
                 </div>
 
-                {/* Shipping Address - only show when not same as billing */}
-                {!sameAsBinding && (
-                  <div className="space-y-4">
+                {/* Shipping Address Section */}
+                <div className="space-y-4">
+                  {/* Header with Toggle */}
+                  <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
                       <Truck className="w-5 h-5 text-[#00BCD4]" />
                       <span>Shipping Address</span>
                     </h3>
+                    
+                    <div className="flex items-center space-x-3">
+                      <span className="text-sm text-white/70">Same as billing</span>
+                      <label className="relative inline-flex items-center cursor-pointer" aria-label="Use Billing as Shipping Address">
+                        <input
+                          type="checkbox"
+                          checked={sameAsBinding}
+                          onChange={(e) => setSameAsBinding(e.target.checked)}
+                          className="sr-only peer"
+                        />
+                        <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#00BCD4]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00BCD4]" />
+                      </label>
+                    </div>
+                  </div>
+                  
+                  {/* Address Fields or Same as Billing Message */}
+                  {sameAsBinding ? (
+                    <div className="p-4 bg-[#00BCD4]/10 border border-[#00BCD4]/30 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 rounded-full bg-[#00BCD4]/20 flex items-center justify-center">
+                          <Truck className="w-4 h-4 text-[#00BCD4]" />
+                        </div>
+                        <div>
+                          <p className="text-white text-sm font-medium">Shipping address will be same as billing address</p>
+                          <p className="text-white/60 text-xs">Turn off the toggle above to enter a different shipping address</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
                     
                     <div className="space-y-4">
                       {/* Address Lines - Symmetric 2-column */}
@@ -670,20 +771,20 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                         </div>
                         
                         <div>
-                          <div className="auth-label">
-                            Country <span className="text-red-400">*</span>
+                          <div className="space-y-2">
+                            <span className="auth-label">Country</span>
+                            <ApiDropdown
+                              config={countryDropdownConfig}
+                              value={formData.shippingAddress?.country ?? ''}
+                              onSelect={(value) => handleAddressChange('shippingAddress', 'country', value)}
+                              allowClear
+                            />
                           </div>
-                          <ApiDropdown
-                            config={countryDropdownConfig}
-                            value={formData.shippingAddress?.country ?? ''}
-                            onSelect={(value) => handleAddressChange('shippingAddress', 'country', value)}
-                            allowClear
-                          />
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
 
                 {/* Customer Settings */}
                 <div className="space-y-6">
@@ -736,29 +837,6 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                           aria-describedby="auto-collection-description"
                         />
                         <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#14BDEA]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#14BDEA]" />
-                      </label>
-                    </div>
-
-                    {/* Same Address Setting */}
-                    <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-lg bg-[#00BCD4]/20 flex items-center justify-center">
-                          <Truck className="w-5 h-5 text-[#00BCD4]" />
-                        </div>
-                        <div>
-                          <h4 className="text-white font-medium">Use Billing as Shipping Address</h4>
-                          <p className="text-white/60 text-sm">Shipping address will be same as billing address</p>
-                        </div>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer" aria-label="Use Billing as Shipping Address">
-                        <input
-                          type="checkbox"
-                          checked={sameAsBinding}
-                          onChange={(e) => setSameAsBinding(e.target.checked)}
-                          className="sr-only peer"
-                          aria-describedby="same-address-description"
-                        />
-                        <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#00BCD4]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00BCD4]" />
                       </label>
                     </div>
                   </div>

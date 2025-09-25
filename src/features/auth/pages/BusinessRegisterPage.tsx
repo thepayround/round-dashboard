@@ -17,6 +17,7 @@ import { ActionButton, AuthLogo, PhoneInput } from '@/shared/components'
 import type { CompanyInfo, BillingAddress } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
 import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
+import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
 import {
   validateRegistrationForm,
   validateField,
@@ -224,7 +225,7 @@ export const BusinessRegisterPage = () => {
     setIsPersonalValid(isPersonalFormValid)
   }
 
-  const handlePersonalPhoneBlur = async (cleanPhoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
+  const handlePersonalPhoneBlur = async (phoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
     // Store the country phone code for backend submission
     if (countryInfo?.phoneCode) {
       setPersonalData(prev => ({ ...prev, countryPhoneCode: countryInfo.phoneCode }))
@@ -233,7 +234,7 @@ export const BusinessRegisterPage = () => {
     // Always validate phone when user leaves the field (same pattern as other fields)
     
     // If field is empty and required, show required error immediately
-    if (!cleanPhoneNumber?.trim()) {
+    if (!phoneNumber?.trim()) {
       setPersonalErrors(prev => [
         ...prev.filter(error => error.field !== 'phone'),
         { field: 'phone', message: 'Phone number is required', code: 'REQUIRED' }
@@ -242,27 +243,19 @@ export const BusinessRegisterPage = () => {
     }
 
     try {
-      // Use the provided clean phone number and country info
-      const countryCode = countryInfo?.countryCode
+      // Use the provided phone number and country info
+      const countryCode = countryInfo?.countryCode ?? 'US'
 
-      // Call backend API for validation
-      const response = await fetch('http://localhost:5000/phone-validation/validate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          phoneNumber: cleanPhoneNumber,
-          countryCode
-        }),
+      // Call backend API for validation using service (follows platform pattern)
+      const result = await phoneValidationService.validatePhoneNumber({
+        phoneNumber: phoneNumber.trim(),
+        countryCode
       })
-
-      const result = await response.json()
       
       if (!result.isValid && result.error) {
         setPersonalErrors(prev => [
           ...prev.filter(error => error.field !== 'phone'),
-          { field: 'phone', message: result.error, code: 'INVALID_PHONE' }
+          { field: 'phone', message: result.error ?? 'Phone number is invalid', code: 'INVALID_PHONE' }
         ])
       }
     } catch (error) {
