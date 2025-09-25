@@ -54,8 +54,8 @@ export const AddressStep = ({
         </motion.div>
 
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2">Address Information</h2>
-          <p className="text-gray-400 text-lg">
+          <h2 className="text-lg font-bold text-white mb-2">Address Information</h2>
+          <p className="text-gray-400 text-sm">
             {isPrePopulated
               ? 'Review and complete your address details'
               : 'Add your business or billing address'}

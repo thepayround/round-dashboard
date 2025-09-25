@@ -26,7 +26,7 @@ export type Industry =
 export interface CompanyInfo {
   companyName: string
   registrationNumber: string
-  taxId?: string
+  taxId: string
   currency: Currency | undefined
   industry?: Industry
   businessType?: BusinessType

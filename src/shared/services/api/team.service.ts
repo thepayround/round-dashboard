@@ -87,6 +87,7 @@ export enum UserRole {
   Guest = 18
 }
 
+
 export class TeamService {
   private readonly baseUrl = '/identities'
 
@@ -273,6 +274,7 @@ export class TeamService {
       { value: UserRole.Viewer, label: this.getRoleName(UserRole.Viewer) }
     ]
   }
+
 }
 
 export const teamService = new TeamService()

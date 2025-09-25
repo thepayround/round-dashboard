@@ -301,7 +301,7 @@ export const EmailConfirmationPage = () => {
               </button>
 
               <Link
-                to="/auth/login"
+                to="/login"
                 className="btn-primary inline-flex items-center justify-center"
               >
                 Back to Login

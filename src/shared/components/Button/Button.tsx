@@ -46,7 +46,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   ...props
 }, ref) => {
   const baseClasses = `
-    rounded-lg transition-all duration-150 flex items-center justify-center gap-1.5
+    rounded-lg transition-all duration-150 flex items-center justify-center gap-1
     focus:outline-none focus:ring-1 focus:ring-[#D417C8]/30 focus:ring-offset-1 focus:ring-offset-transparent
     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
     relative isolate font-medium

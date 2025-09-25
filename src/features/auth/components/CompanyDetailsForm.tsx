@@ -168,7 +168,7 @@ export const CompanyDetailsForm = ({
             <input
               id="taxId"
               type="text"
-              value={companyInfo.taxId ?? ''}
+              value={companyInfo.taxId}
               onChange={e => handleInputChange('taxId', e.target.value)}
               onBlur={e => handleInputBlur('taxId', e.target.value)}
               placeholder="XX-XXXXXXX"

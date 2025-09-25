@@ -100,14 +100,17 @@ export class OrganizationService {
         size: organizationData.size,
         revenue: organizationData.revenue,
         category: organizationData.category,
+        // Add Industry field as backend expects it (capital I)
+        Industry: (organizationData as OrganizationRequest & { Industry?: string }).Industry ?? organizationData.category,
         type: organizationData.type,
         registrationNumber: organizationData.registrationNumber,
+        taxId: organizationData.taxId,
         currency: organizationData.currency,
         timeZone: organizationData.timeZone,
         country: organizationData.country,
         fiscalYearStart: organizationData.fiscalYearStart,
         userId: organizationData.userId,
-      }
+      } as OrganizationRequest & { Industry: string }
 
       const response = await this.client.post<OrganizationResponse>(
         ENDPOINTS.ORGANIZATIONS.BASE,
@@ -137,14 +140,17 @@ export class OrganizationService {
         size: organizationData.size,
         revenue: organizationData.revenue,
         category: organizationData.category,
+        // Add Industry field as backend expects it (capital I)
+        Industry: (organizationData as OrganizationRequest & { Industry?: string }).Industry ?? organizationData.category,
         type: organizationData.type,
         registrationNumber: organizationData.registrationNumber,
+        taxId: organizationData.taxId,
         currency: organizationData.currency,
         timeZone: organizationData.timeZone,
         country: organizationData.country,
         fiscalYearStart: organizationData.fiscalYearStart,
         // Note: Do not include userId for updates to avoid FK constraint issues
-      }
+      } as Omit<OrganizationRequest, 'userId'> & { Industry: string }
 
       await this.client.put(ENDPOINTS.ORGANIZATIONS.BY_ID(id), organizationRequest)
 

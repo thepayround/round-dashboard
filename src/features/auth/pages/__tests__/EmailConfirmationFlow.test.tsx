@@ -260,7 +260,7 @@ describe('Email Confirmation Flow', () => {
 
       const backLink = screen.getByText('Back to Login')
       expect(backLink).toBeInTheDocument()
-      expect(backLink.closest('a')).toHaveAttribute('href', '/auth/login')
+      expect(backLink.closest('a')).toHaveAttribute('href', '/login')
     })
   })
 })

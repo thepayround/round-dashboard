@@ -117,7 +117,7 @@ describe('InvitationAcceptancePage', () => {
       await waitFor(() => {
         const loginButton = screen.getByText('Go to Login')
         fireEvent.click(loginButton)
-        expect(mockNavigate).toHaveBeenCalledWith('/auth/login')
+        expect(mockNavigate).toHaveBeenCalledWith('/login')
       })
     })
   })
@@ -319,7 +319,8 @@ describe('InvitationAcceptancePage', () => {
               currency: 'USD',
               industry: 'technology',
               businessType: 'llc',
-              employeeCount: 25
+              employeeCount: 25,
+              taxId: 'TAX-123456789'
             },
             role: 'admin' as const
           }
@@ -381,7 +382,8 @@ describe('InvitationAcceptancePage', () => {
               currency: 'USD',
               industry: 'technology',
               businessType: 'llc',
-              employeeCount: 25
+              employeeCount: 25,
+              taxId: 'TAX-123456789'
             },
             role: 'admin' as const
           }
@@ -497,7 +499,8 @@ describe('InvitationAcceptancePage', () => {
               currency: 'USD',
               industry: 'technology',
               businessType: 'llc',
-              employeeCount: 25
+              employeeCount: 25,
+              taxId: 'TAX-123456789'
             },
             role: 'admin' as const
           }

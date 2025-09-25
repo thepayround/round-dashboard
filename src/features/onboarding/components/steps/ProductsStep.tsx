@@ -46,8 +46,8 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
         </motion.div>
 
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2">Products</h2>
-          <p className="text-gray-400 text-lg">Set up your product catalog</p>
+          <h2 className="text-lg font-bold text-white mb-2">Products</h2>
+          <p className="text-gray-400 text-sm">Set up your product catalog</p>
         </div>
       </div>
 
@@ -61,7 +61,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold text-white mb-2">Add Your First Product</h3>
+                <h3 className="font-semibold text-white mb-2">Add Your First Product</h3>
                 <p className="text-gray-400">
                   Create your first product to start managing your catalog and pricing.
                 </p>
@@ -109,7 +109,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
 
         {/* Skip Option */}
         <div className="text-center">
-          <p className="text-sm text-gray-400">
+          <p className="text-gray-400">
             You can always add products later in your dashboard
           </p>
         </div>

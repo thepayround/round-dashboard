@@ -74,21 +74,21 @@ export const Toast = ({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -100, scale: 0.9 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed top-4 right-4 z-toast max-w-sm md:max-w-md lg:max-w-sm"
+          className="fixed top-4 right-4 z-toast max-w-md"
         >
-          <div className={`${styles.background} backdrop-blur-xl border ${styles.border} rounded-lg md:rounded-lg lg:rounded-lg p-3 md:p-4 lg:p-3 shadow-2xl`}>
-            <div className="flex items-start space-x-2.5 md:space-x-3 lg:space-x-2.5">
+          <div className={`${styles.background} backdrop-blur-xl border ${styles.border} rounded-lg p-4 shadow-2xl`}>
+            <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
-                <IconComponent className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${styles.iconColor}`} />
+                <IconComponent className={`w-6 h-6 ${styles.iconColor}`} />
               </div>
               
               <div className="flex-1 min-w-0">
-                <p className={`${styles.textColor} font-medium text-xs md:text-sm lg:text-xs`}>{message}</p>
+                <p className={`${styles.textColor} font-medium text-sm`}>{message}</p>
                 
                 {details && Object.keys(details).length > 0 && (
-                  <div className="mt-1.5 md:mt-2 lg:mt-1.5 space-y-0.5 md:space-y-1 lg:space-y-0.5">
+                  <div className="mt-2 space-y-1">
                     {Object.entries(details).map(([field, error]) => (
-                      <p key={field} className={`${styles.iconColor} text-xs md:text-xs lg:text-xs`}>
+                      <p key={field} className={`${styles.iconColor} text-xs`}>
                         <span className="font-medium capitalize">{field}:</span> {error}
                       </p>
                     ))}
@@ -98,9 +98,9 @@ export const Toast = ({
               
               <button
                 onClick={onClose}
-                className={`flex-shrink-0 w-5 h-5 md:w-6 md:h-6 lg:w-5 lg:h-5 rounded-full ${styles.background} hover:opacity-80 transition-opacity duration-200 flex items-center justify-center`}
+                className={`flex-shrink-0 w-6 h-6 rounded-full ${styles.background} hover:opacity-80 transition-opacity duration-200 flex items-center justify-center`}
               >
-                <X className={`w-3 h-3 md:w-4 md:h-4 lg:w-3 lg:h-3 ${styles.iconColor}`} />
+                <X className={`w-4 h-4 ${styles.iconColor}`} />
               </button>
             </div>
           </div>

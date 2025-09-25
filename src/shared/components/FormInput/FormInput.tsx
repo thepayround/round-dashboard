@@ -2,8 +2,9 @@ import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import type { LucideIcon} from 'lucide-react';
 import { AlertCircle } from 'lucide-react'
+import { UiDropdown, type UiDropdownOption } from '../ui/UiDropdown'
 
-interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
+interface FormInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>, 'onSelect'> {
   label?: string
   error?: string
   hint?: string
@@ -14,6 +15,7 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement | HT
   options?: { value: string; label: string }[]
   containerClassName?: string
   iconPosition?: 'left' | 'right'
+  onSelect?: (value: string) => void
 }
 
 export const FormInput = forwardRef<
@@ -31,6 +33,7 @@ export const FormInput = forwardRef<
   containerClassName = '',
   iconPosition = 'left',
   className = '',
+  onSelect,
   ...props
 }, ref) => {
   const baseInputClasses = `
@@ -61,14 +64,29 @@ export const FormInput = forwardRef<
         return <textarea rows={rows} {...baseProps} ref={ref as React.ForwardedRef<HTMLTextAreaElement>} />
       case 'select':
         return (
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          <select {...baseProps} ref={ref as React.ForwardedRef<HTMLSelectElement>}>
-            {options.map((option) => (
-              <option key={option.value} value={option.value} className="bg-gray-800 text-white">
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <UiDropdown
+            options={options.map((option): UiDropdownOption => ({
+              value: option.value,
+              label: option.label
+            }))}
+            value={props.value as string}
+            onSelect={onSelect ?? ((value) => {
+              // Create a proper synthetic event with name and value
+              const event = {
+                target: {
+                  name: props.name,
+                  value,
+                  type: 'select'
+                }
+              } as unknown as React.ChangeEvent<HTMLSelectElement>
+              props.onChange?.(event)
+            })}
+            placeholder={props.placeholder ?? 'Select an option'}
+            disabled={props.disabled}
+            error={!!error}
+            icon={Icon ? <Icon className="w-4 h-4" /> : undefined}
+            allowClear
+          />
         )
       default:
         // eslint-disable-next-line react/jsx-props-no-spreading

@@ -2,6 +2,7 @@ import React from 'react'
 import { Filter } from 'lucide-react'
 import { SearchInput } from '../SearchInput/SearchInput'
 import { ViewModeToggle } from '../ViewModeToggle'
+import { UiDropdown, type UiDropdownOption } from '../ui/UiDropdown'
 import type { ViewMode, ViewModeOption } from '../ViewModeToggle'
 
 export interface FilterField {
@@ -71,17 +72,16 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             <label className="block text-sm font-medium auth-text-muted mb-2">
               {field.label}
             </label>
-            <select
-              value={field.value}
-              onChange={(e) => field.onChange(e.target.value)}
-              className="auth-input w-full"
-            >
-              {field.options?.map((option) => (
-                <option key={option.id} value={option.value ?? option.id}>
-                  {option.name}
-                </option>
-              ))}
-            </select>
+            <UiDropdown
+              options={field.options?.map((option): UiDropdownOption => ({
+                value: option.value ?? option.id,
+                label: option.name
+              })) ?? []}
+              value={String(field.value)}
+              onSelect={(value) => field.onChange(value)}
+              placeholder={field.placeholder ?? `Select ${field.label.toLowerCase()}`}
+              allowClear
+            />
           </div>
         )
       

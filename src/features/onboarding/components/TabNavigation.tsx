@@ -41,13 +41,12 @@ export const TabNavigation = ({
   const isStepCompleted = (stepId: OnboardingStep) => completedSteps.includes(stepId)
   const isStepActive = (stepId: OnboardingStep) => currentStep === stepId
   const getCurrentStepIndex = () => steps.findIndex(step => step.id === currentStep)
-  const getStepIndex = (stepId: OnboardingStep) => steps.findIndex(step => step.id === stepId)
 
-  const canClickStep = (stepId: OnboardingStep) => {
-    const stepIndex = getStepIndex(stepId)
-    const currentIndex = getCurrentStepIndex()
-    return stepIndex <= currentIndex || isStepCompleted(stepId)
-  }
+  const canClickStep = (_stepId: OnboardingStep) =>
+    // During onboarding flow, allow navigation to any step
+    // This provides flexibility to go back and edit any step
+     true
+  
 
   const getProgress = () => {
     const currentIndex = getCurrentStepIndex()
@@ -61,10 +60,8 @@ export const TabNavigation = ({
     if (isStepCompleted(stepId)) {
       return 'bg-gradient-to-r from-[#42E695] to-[#3BB2B8]'
     }
-    if (canClickStep(stepId)) {
-      return 'bg-gray-700 border-gray-500 hover:bg-gray-600 hover:border-gray-400'
-    }
-    return 'bg-gray-800 border-gray-600 cursor-not-allowed'
+    // All other steps are clickable and interactive
+    return 'bg-gray-700 border-gray-500 hover:bg-gray-600 hover:border-gray-400 cursor-pointer'
   }
 
   const getStepTextClasses = (stepId: OnboardingStep): string => {
@@ -74,10 +71,8 @@ export const TabNavigation = ({
     if (isStepCompleted(stepId)) {
       return 'text-[#42E695] font-semibold'
     }
-    if (canClickStep(stepId)) {
-      return 'text-gray-300 hover:text-white'
-    }
-    return 'text-gray-500 cursor-not-allowed'
+    // All other steps are clickable and interactive
+    return 'text-gray-300 hover:text-white cursor-pointer'
   }
 
   return (

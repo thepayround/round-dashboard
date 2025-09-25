@@ -13,9 +13,13 @@ import {
   Target,
   Globe
 } from 'lucide-react'
-import type { 
-  Charge, 
-  ChargeType, 
+import { UiDropdown, type UiDropdownOption } from '@/shared/components/ui/UiDropdown'
+import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
+import { currencyDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
+import { useCurrency } from '@/shared/hooks/useCurrency'
+import type {
+  Charge,
+  ChargeType,
   ChargePeriod,
   ChargeModel
 } from '../types/catalog.types'
@@ -47,7 +51,7 @@ const chargeTypes: { value: ChargeType; label: string; description: string; icon
   }
 ]
 
-const chargePeriods: { value: ChargePeriod; label: string }[] = [
+const chargePeriodOptions: UiDropdownOption[] = [
   { value: 'weekly', label: 'Weekly' },
   { value: 'monthly', label: 'Monthly' },
   { value: 'quarterly', label: 'Quarterly' },
@@ -63,20 +67,13 @@ const chargeModels: { value: ChargeModel; label: string; description: string }[]
   { value: 'percentage', label: 'Percentage', description: 'Percentage of a base amount' }
 ]
 
-const currencies = [
-  { code: 'USD', symbol: '$', name: 'US Dollar' },
-  { code: 'EUR', symbol: '€', name: 'Euro' },
-  { code: 'GBP', symbol: '£', name: 'British Pound' },
-  { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar' },
-  { code: 'AUD', symbol: 'A$', name: 'Australian Dollar' },
-  { code: 'JPY', symbol: '¥', name: 'Japanese Yen' }
-]
 
-export const CreateChargeModalEnhanced = ({ 
-  isOpen, 
-  onClose, 
-  existingCharge 
+export const CreateChargeModalEnhanced = ({
+  isOpen,
+  onClose,
+  existingCharge
 }: CreateChargeModalEnhancedProps) => {
+  const { getCurrencySymbol } = useCurrency()
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     name: existingCharge?.name ?? '',
@@ -307,21 +304,15 @@ export const CreateChargeModalEnhanced = ({
                   </div>
 
                   <div>
-                    <label htmlFor="charge-currency" className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-medium auth-text mb-2">
                       Currency *
-                    </label>
-                    <select
-                      id="charge-currency"
+                    </div>
+                    <ApiDropdown
+                      config={currencyDropdownConfig}
                       value={formData.currency}
-                      onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
-                      className="auth-input w-full"
-                    >
-                      {currencies.map(currency => (
-                        <option key={currency.code} value={currency.code}>
-                          {currency.symbol} {currency.code} - {currency.name}
-                        </option>
-                      ))}
-                    </select>
+                      onSelect={(value) => setFormData({ ...formData, currency: value })}
+                      className="w-full"
+                    />
                   </div>
 
                   <div>
@@ -371,21 +362,16 @@ export const CreateChargeModalEnhanced = ({
                 {/* Period for recurring charges */}
                 {formData.chargeType === 'recurring' && (
                   <div>
-                    <label htmlFor="charge-billing-period" className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-medium auth-text mb-2">
                       Billing Period *
-                    </label>
-                    <select
-                      id="charge-billing-period"
+                    </div>
+                    <UiDropdown
+                      options={chargePeriodOptions}
                       value={formData.period}
-                      onChange={(e) => setFormData({ ...formData, period: e.target.value as ChargePeriod })}
-                      className="auth-input w-full md:w-64"
-                    >
-                      {chargePeriods.map(period => (
-                        <option key={period.value} value={period.value}>
-                          {period.label}
-                        </option>
-                      ))}
-                    </select>
+                      onSelect={(value) => setFormData({ ...formData, period: value as ChargePeriod })}
+                      placeholder="Select billing period"
+                      className="w-full md:w-64"
+                    />
                   </div>
                 )}
 
@@ -449,7 +435,7 @@ export const CreateChargeModalEnhanced = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <label htmlFor="charge-amount" className="block text-sm font-medium auth-text mb-2">
-                          Amount ({currencies.find(c => c.code === formData.currency)?.symbol}) *
+                          Amount ({getCurrencySymbol(formData.currency)}) *
                         </label>
                         <input
                           id="charge-amount"
@@ -486,7 +472,7 @@ export const CreateChargeModalEnhanced = ({
                       </div>
                       <div>
                         <label className="block text-sm font-medium auth-text mb-2">
-                          Price per Unit ({currencies.find(c => c.code === formData.currency)?.symbol}) *
+                          Price per Unit ({getCurrencySymbol(formData.currency)}) *
                         </label>
                         <input
                           type="number"
@@ -563,7 +549,7 @@ export const CreateChargeModalEnhanced = ({
                             </div>
                             <div>
                               <label className="block text-xs auth-text-muted mb-1">
-                                Price per Unit ({currencies.find(c => c.code === formData.currency)?.symbol})
+                                Price per Unit ({getCurrencySymbol(formData.currency)})
                               </label>
                               <input
                                 type="number"
@@ -639,7 +625,7 @@ export const CreateChargeModalEnhanced = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium auth-text mb-2">
-                        Minimum Charge ({currencies.find(c => c.code === formData.currency)?.symbol})
+                        Minimum Charge ({getCurrencySymbol(formData.currency)})
                       </label>
                       <input
                         type="number"
@@ -656,7 +642,7 @@ export const CreateChargeModalEnhanced = ({
                     </div>
                     <div>
                       <label className="block text-sm font-medium auth-text mb-2">
-                        Maximum Charge ({currencies.find(c => c.code === formData.currency)?.symbol})
+                        Maximum Charge ({getCurrencySymbol(formData.currency)})
                       </label>
                       <input
                         type="number"
@@ -961,7 +947,7 @@ export const CreateChargeModalEnhanced = ({
                   {formData.chargeModel === 'flat_fee' && (
                     <p className="auth-text">
                       Fixed amount: <span className="font-medium">
-                        {currencies.find(c => c.code === formData.currency)?.symbol}{formData.amount}
+                        {getCurrencySymbol(formData.currency)}{formData.amount}
                       </span>
                     </p>
                   )}
@@ -972,7 +958,7 @@ export const CreateChargeModalEnhanced = ({
                       </p>
                       <p className="auth-text">
                         Price per unit: <span className="font-medium">
-                          {currencies.find(c => c.code === formData.currency)?.symbol}{formData.unitPrice}
+                          {getCurrencySymbol(formData.currency)}{formData.unitPrice}
                         </span>
                       </p>
                       {formData.freeUnits > 0 && (
@@ -990,7 +976,7 @@ export const CreateChargeModalEnhanced = ({
                       <div className="space-y-1">
                         {formData.tiers.map((tier, index) => (
                           <div key={index} className="text-sm auth-text p-2 bg-white/5 rounded">
-                            {tier.startingUnit}-{tier.endingUnit} units: {currencies.find(c => c.code === formData.currency)?.symbol}{tier.pricePerUnit} each
+                            {tier.startingUnit}-{tier.endingUnit} units: {getCurrencySymbol(formData.currency)}{tier.pricePerUnit} each
                           </div>
                         ))}
                       </div>

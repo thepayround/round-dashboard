@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import type { LucideIcon} from 'lucide-react';
-import { TrendingUp, TrendingDown, ChevronRight } from 'lucide-react'
+import { TrendingUp, TrendingDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { ReactNode} from 'react';
 import { memo } from 'react'
@@ -177,7 +177,6 @@ const CardComponent = ({
                   <Icon className={`w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 ${colorConfig.iconColor}`} />
                 </div>
               )}
-              <ChevronRight className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 text-gray-400 group-hover:text-white transition-colors duration-200" />
             </div>
             <h3 className={`text-xs font-light text-white transition-colors duration-200 ${colorConfig.hoverColor} mb-0.5`}>
               {title}
@@ -204,7 +203,6 @@ const CardComponent = ({
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-200" />
           </div>
         )
       )}

@@ -43,7 +43,7 @@ export const ProtectedRoute = ({ children, requireOnboarding = false }: Protecte
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    return <Navigate to="/auth/login" state={{ from: location }} replace />
+    return <Navigate to="/login" state={{ from: location }} replace />
   }
 
   // Check onboarding requirement

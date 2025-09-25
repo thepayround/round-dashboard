@@ -3,6 +3,7 @@ import { Card } from '@/shared/components/Card'
 import { ActionButton } from '@/shared/components/ActionButton'
 import { SearchFilterToolbar } from '@/shared/components/SearchFilterToolbar'
 import type { FilterField } from '@/shared/components'
+import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { 
   Users, 
   UserPlus, 
@@ -157,16 +158,19 @@ export const TeamManagementPage: React.FC = () => {
     {
       id: 'roleFilter',
       label: 'Role',
-      type: 'select',
+      type: 'custom',
       value: roleFilter,
       onChange: (value: string) => setRoleFilter(value as UserRole | 'all'),
-      options: [
-        { id: 'all', name: 'All Roles' },
-        ...Object.entries(roleLabels).map(([role, config]) => ({
-          id: role,
-          name: config.label
-        }))
-      ]
+      component: (
+        <ApiDropdown
+          config={teamRoleDropdownConfig}
+          value={roleFilter === 'all' ? '' : roleFilter}
+          onSelect={(value) => setRoleFilter(value as UserRole)}
+          allowClear
+          onClear={() => setRoleFilter('all')}
+          className="w-full"
+        />
+      )
     }
   ]
 
@@ -290,7 +294,7 @@ export const TeamManagementPage: React.FC = () => {
         <div>
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-bold text-white mb-2">Team Management</h2>
+              <h2 className="text-sm font-medium auth-text mb-0">Team Management</h2>
               <p className="text-gray-400">Manage team members, roles, and invitations</p>
             </div>
             <ActionButton

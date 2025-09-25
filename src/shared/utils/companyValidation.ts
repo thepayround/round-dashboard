@@ -75,8 +75,14 @@ export const validateRegistrationNumber = (registrationNumber: string): Validati
 export const validateTaxId = (taxId: string): ValidationResult => {
   const errors: ValidationError[] = []
 
-  // Tax ID is optional, so only validate if provided
-  if (taxId.trim()) {
+  // Tax ID is required for business compliance
+  if (!taxId?.trim()) {
+    errors.push({
+      field: 'taxId',
+      message: 'Tax ID is required for business compliance',
+      code: 'REQUIRED',
+    })
+  } else {
     if (taxId.length < 5) {
       errors.push({
         field: 'taxId',
@@ -186,11 +192,9 @@ export const validateCompanyInfo = (companyInfo: CompanyInfo): ValidationResult 
   errors.push(...registrationNumberValidation.errors)
   errors.push(...currencyValidation.errors)
 
-  // Validate optional fields if provided
-  if (companyInfo.taxId) {
-    const taxIdValidation = validateTaxId(companyInfo.taxId)
-    errors.push(...taxIdValidation.errors)
-  }
+  // Validate required Tax ID field
+  const taxIdValidation = validateTaxId(companyInfo.taxId || '')
+  errors.push(...taxIdValidation.errors)
 
   return { isValid: errors.length === 0, errors }
 }

@@ -46,8 +46,8 @@ export const BusinessSettingsStep = ({
         </motion.div>
 
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2">Business Settings</h2>
-          <p className="text-gray-400 text-lg">Configure your business preferences</p>
+          <h2 className="text-lg font-bold text-white mb-2">Business Settings</h2>
+          <p className="text-gray-400 text-sm">Configure your business preferences</p>
         </div>
       </div>
 
