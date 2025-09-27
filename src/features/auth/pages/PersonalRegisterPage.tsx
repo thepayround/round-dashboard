@@ -8,6 +8,7 @@ import { useGlobalToast } from '@/shared/contexts/ToastContext'
 
 import type { ValidationError } from '@/shared/utils/validation'
 import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
+import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
 import {
   validateRegistrationForm,
   getFieldError,
@@ -103,39 +104,31 @@ export const PersonalRegisterPage = () => {
     }
   }
 
-  const handlePhoneBlur = async (cleanPhoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
+  const handlePhoneBlur = async (phoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
     // Store the country phone code for backend submission
     if (countryInfo?.phoneCode) {
       setFormData(prev => ({ ...prev, countryPhoneCode: countryInfo.phoneCode }))
     }
 
     // Validate phone when user leaves the field (same pattern as other fields)
-    if (!cleanPhoneNumber?.trim()) {
+    if (!phoneNumber?.trim()) {
       return // Don't validate empty fields on blur
     }
 
     try {
-      // Use the provided clean phone number and country info
+      // Use the provided phone number and country info
       const countryCode = countryInfo?.countryCode ?? 'GR'
 
-      // Call backend API for validation
-      const response = await fetch('http://localhost:5000/phone-validation/validate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          phoneNumber: cleanPhoneNumber,
-          countryCode
-        }),
+      // Call backend API for validation using service (follows platform pattern)
+      const result = await phoneValidationService.validatePhoneNumber({
+        phoneNumber: phoneNumber.trim(),
+        countryCode
       })
-
-      const result = await response.json()
       
       if (!result.isValid && result.error) {
         setErrors(prev => [
           ...prev.filter(error => error.field !== 'phone'),
-          { field: 'phone', message: result.error, code: 'INVALID_PHONE' }
+          { field: 'phone', message: result.error ?? 'Phone number is invalid', code: 'INVALID_PHONE' }
         ])
       }
     } catch (error) {

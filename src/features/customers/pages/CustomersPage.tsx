@@ -1,309 +1,160 @@
-import React, { useState, useMemo, useCallback } from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { 
-  Users, 
-  Download, 
+  Users,
   Eye,
   Edit,
-  Building2,
-  DollarSign,
-  TrendingUp,
-  Clock,
+  Mail,
+  Phone,
+  Calendar,
+  MapPin,
   MoreHorizontal,
-  Table,
-  Grid3X3
+  Loader2
 } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Card, ActionButton, SearchFilterToolbar, SectionHeader } from '@/shared/components'
-import type { ViewMode, FilterField } from '@/shared/components'
-import type { Customer, CustomerFilters, CustomerMetrics } from '../types/customer.types'
+import { Card } from '@/shared/components/Card'
+import { ActionButton } from '@/shared/components/ActionButton'
+import { SearchFilterToolbar, SectionHeader } from '@/shared/components'
+import type { FilterField } from '@/shared/components'
 import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
+import { customerService } from '@/shared/services/api/customer.service'
+import type { CustomerResponse, CustomerSearchParams } from '@/shared/services/api/customer.service'
+import { AddCustomerModal } from '../components/AddCustomerModal'
+
+// CustomerStatus enum values from backend
+enum CustomerStatus {
+  Active = 1,
+  Inactive = 2,
+  Suspended = 3,
+  Cancelled = 4
+}
+
+const getStatusText = (status: number | string): string => {
+  const statusValue = typeof status === 'string' ? parseInt(status) : status
+  
+  switch (statusValue) {
+    case CustomerStatus.Active:
+      return 'Active'
+    case CustomerStatus.Inactive:
+      return 'Inactive'
+    case CustomerStatus.Suspended:
+      return 'Suspended'
+    case CustomerStatus.Cancelled:
+      return 'Cancelled'
+    default:
+      return 'Unknown'
+  }
+}
+
+const getStatusClass = (status: number | string): string => {
+  const statusValue = typeof status === 'string' ? parseInt(status) : status
+  
+  switch (statusValue) {
+    case CustomerStatus.Active:
+      return 'bg-green-500/20 text-green-400 border border-green-500/30'
+    case CustomerStatus.Inactive:
+      return 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+    case CustomerStatus.Suspended:
+      return 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+    case CustomerStatus.Cancelled:
+      return 'bg-red-500/20 text-red-400 border border-red-500/30'
+    default:
+      return 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+  }
+}
 
 const CustomersPage: React.FC = () => {
-  const [filters, setFilters] = useState<CustomerFilters>({})
-  const [viewMode, setViewMode] = useState<ViewMode>('table')
+  const { showError, showSuccess } = useGlobalToast()
+  
+  const [customers, setCustomers] = useState<CustomerResponse[]>([])
+  const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [currentPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
 
-  // Individual filter state for UI
-  const [statusFilter, setStatusFilter] = useState('')
-  const [churnRiskFilter, setChurnRiskFilter] = useState('')
-  const [planFilter, setPlanFilter] = useState('')
-  const [countryFilter, setCountryFilter] = useState('')
+  const pageSize = 12
 
-  // Filter change handlers
-  const handleStatusChange = useCallback((value: string) => {
-    setStatusFilter(value)
-    if (value === '' || value === 'all') {
-      setFilters(prev => ({ ...prev, status: undefined }))
-    } else {
-      setFilters(prev => ({ ...prev, status: [value] }))
+  const loadCustomers = useCallback(async () => {
+    try {
+      setLoading(true)
+      
+      const searchParams: CustomerSearchParams = {
+        pageNumber: currentPage,
+        pageSize,
+        orderBy: 'CreatedDate',
+        isAscending: false
+      }
+
+      const response = await customerService.getAll(searchParams)
+      setCustomers(response.items)
+      setTotalCount(response.totalCount)
+    } catch (error) {
+      showError('Failed to load customers')
+    } finally {
+      setLoading(false)
     }
-  }, [])
+  }, [currentPage, pageSize, showError])
 
-  const handleChurnRiskChange = useCallback((value: string) => {
-    setChurnRiskFilter(value)
-    if (value === '' || value === 'all') {
-      setFilters(prev => ({ ...prev, churnRisk: undefined }))
-    } else {
-      setFilters(prev => ({ ...prev, churnRisk: [value] }))
-    }
-  }, [])
+  useEffect(() => {
+    loadCustomers()
+  }, [loadCustomers])
 
-  const handlePlanChange = useCallback((value: string) => {
-    setPlanFilter(value)
-    // Plan filtering would need to be implemented in the filter function
-    // For now, just store the value
-  }, [])
-
-  const handleCountryChange = useCallback((value: string) => {
-    setCountryFilter(value)
-    // Country filtering would need to be implemented in the filter function
-    // For now, just store the value
-  }, [])
-
-  // Mock data
-  const mockCustomers = useMemo((): Customer[] => [
-    {
-      id: '1',
-      email: 'john.doe@acmecorp.com',
-      firstName: 'John',
-      lastName: 'Doe',
-      displayName: 'John Doe',
-      company: 'Acme Corporation',
-      phone: '+1-555-0123',
-      status: 'active' as const,
-      billingAddress: {
-        line1: '123 Business St',
-        city: 'San Francisco',
-        state: 'CA',
-        country: 'US',
-        zip: '94105'
-      },
-      subscriptions: [
-        {
-          id: 'sub1',
-          planId: '1',
-          planName: 'Professional Plan',
-          status: 'active' as const,
-          currentTermStart: new Date('2024-01-01'),
-          currentTermEnd: new Date('2024-12-31'),
-          nextBillingDate: new Date('2024-08-01'),
-          mrr: 99,
-          currency: 'USD',
-          billingPeriod: 'monthly' as const,
-          addons: [],
-          coupons: [],
-          createdAt: new Date('2024-01-01')
-        }
-      ],
-      totalMRR: 99,
-      totalLTV: 1188,
-      accountBalance: 0,
-      creditBalance: 0,
-      unbilledCharges: 0,
-      signupDate: new Date('2024-01-01'),
-      lastActivityDate: new Date('2024-07-20'),
-      churnRisk: 'low' as const,
-      emailPreferences: {
-        invoices: true,
-        subscriptionUpdates: true,
-        marketingEmails: false,
-        paymentFailures: true,
-        trialReminders: true
-      },
-      portalAccess: true,
-      autoCollection: true,
-      tags: ['enterprise', 'high-value'],
-      customFields: {},
-      notes: [],
-      currency: 'USD',
-      createdAt: new Date('2024-01-01'),
-      updatedAt: new Date('2024-07-20')
-    },
-    {
-      id: '2',
-      email: 'sarah.smith@techstart.io',
-      firstName: 'Sarah',
-      lastName: 'Smith',
-      displayName: 'Sarah Smith',
-      company: 'TechStart.io',
-      phone: '+1-555-0456',
-      status: 'active' as const,
-      billingAddress: {
-        line1: '456 Startup Ave',
-        city: 'Austin',
-        state: 'TX',
-        country: 'US',
-        zip: '73301'
-      },
-      subscriptions: [
-        {
-          id: 'sub2',
-          planId: '2',
-          planName: 'Starter Plan',
-          status: 'trialing' as const,
-          currentTermStart: new Date('2024-07-15'),
-          currentTermEnd: new Date('2024-08-15'),
-          mrr: 29,
-          currency: 'USD',
-          billingPeriod: 'monthly' as const,
-          addons: [],
-          coupons: [],
-          trialEnd: new Date('2024-08-15'),
-          createdAt: new Date('2024-07-15')
-        }
-      ],
-      totalMRR: 29,
-      totalLTV: 348,
-      accountBalance: 0,
-      creditBalance: 50,
-      unbilledCharges: 0,
-      signupDate: new Date('2024-07-15'),
-      trialEndDate: new Date('2024-08-15'),
-      lastActivityDate: new Date('2024-07-23'),
-      churnRisk: 'medium' as const,
-      emailPreferences: {
-        invoices: true,
-        subscriptionUpdates: true,
-        marketingEmails: true,
-        paymentFailures: true,
-        trialReminders: true
-      },
-      portalAccess: true,
-      autoCollection: true,
-      tags: ['trial', 'startup'],
-      customFields: {},
-      notes: [],
-      currency: 'USD',
-      createdAt: new Date('2024-07-15')
-    },
-    {
-      id: '3',
-      email: 'mike.johnson@globaltech.com',
-      firstName: 'Mike',
-      lastName: 'Johnson',
-      displayName: 'Mike Johnson',
-      company: 'GlobalTech Solutions',
-      phone: '+1-555-0789',
-      status: 'suspended' as const,
-      billingAddress: {
-        line1: '789 Enterprise Blvd',
-        city: 'New York',
-        state: 'NY',
-        country: 'US',
-        zip: '10001'
-      },
-      subscriptions: [
-        {
-          id: 'sub3',
-          planId: '3',
-          planName: 'Enterprise Plan',
-          status: 'paused' as const,
-          currentTermStart: new Date('2024-01-01'),
-          currentTermEnd: new Date('2024-12-31'),
-          mrr: 499,
-          currency: 'USD',
-          billingPeriod: 'monthly' as const,
-          addons: [],
-          coupons: [],
-          pausedAt: new Date('2024-06-15'),
-          createdAt: new Date('2024-01-01')
-        }
-      ],
-      totalMRR: 0,
-      totalLTV: 2495,
-      accountBalance: -150,
-      creditBalance: 0,
-      unbilledCharges: 75,
-      signupDate: new Date('2024-01-01'),
-      lastActivityDate: new Date('2024-06-10'),
-      churnRisk: 'high' as const,
-      emailPreferences: {
-        invoices: true,
-        subscriptionUpdates: true,
-        marketingEmails: false,
-        paymentFailures: true,
-        trialReminders: false
-      },
-      portalAccess: false,
-      autoCollection: false,
-      tags: ['enterprise', 'payment-issues'],
-      customFields: {},
-      notes: [
-        {
-          id: 'note1',
-          content: 'Payment failed multiple times. Reached out via phone.',
-          author: 'Support Team',
-          isInternal: true,
-          createdAt: new Date('2024-06-15')
-        }
-      ],
-      currency: 'USD',
-      createdAt: new Date('2024-01-01'),
-      updatedAt: new Date('2024-06-15')
-    }
-  ], [])
-
-  // Search fields extraction function - Memoized for stability
-  const getCustomerSearchFields = useCallback((customer: Customer): string[] => [
-    customer.displayName ?? '',
+  // Search fields extraction function
+  const getCustomerSearchFields = useCallback((customer: CustomerResponse): string[] => [
     customer.email ?? '',
+    customer.firstName ?? '',
+    customer.lastName ?? '',
+    customer.displayName ?? '',
     customer.company ?? '',
-    customer.id ?? ''
+    customer.phoneNumber ?? '',
+    customer.status ?? '',
+    ...(customer.tags ?? [])
   ], [])
 
-  // Filter function for additional filters - Stable implementation
-  const customerFilterFn = useCallback((customer: Customer, filters: CustomerFilters): boolean => {
-    if (filters.status?.length && !filters.status.includes(customer.status)) {
-      return false
-    }
-
-    if (filters.churnRisk?.length && !filters.churnRisk.includes(customer.churnRisk)) {
-      return false
-    }
-
-    return true
-  }, [])
-
-  // Focus-safe debounced search
+  // Use debounced search
   const {
     searchQuery,
     setSearchQuery,
-    filteredItems: filteredCustomers,
-    isSearching,
-    clearSearch,
-    totalCount,
-    filteredCount
+    filteredItems: filteredCustomers
   } = useDebouncedSearch({
-    items: mockCustomers,
+    items: customers,
     searchFields: getCustomerSearchFields,
-    debounceMs: 300,
-    filters,
-    filterFn: customerFilterFn
+    debounceMs: 300
   })
 
-  const customerMetrics: CustomerMetrics = {
-    totalCustomers: mockCustomers.length,
-    activeCustomers: mockCustomers.filter(c => c.status === 'active').length,
-    trialingCustomers: mockCustomers.filter(c => c.subscriptions.some(s => s.status === 'trialing')).length,
-    churnedCustomers: mockCustomers.filter(c => c.status === 'cancelled').length,
-    avgMRR: mockCustomers.reduce((sum, c) => sum + c.totalMRR, 0) / mockCustomers.length,
-    avgLTV: mockCustomers.reduce((sum, c) => sum + c.totalLTV, 0) / mockCustomers.length,
-    churnRate: 5.2,
-    reactivationRate: 12.8,
-    trialConversionRate: 68.5
+  const formatDate = (dateString: string) => new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(dateString))
+
+  const getInitials = (displayName: string) => displayName
+      .split(' ')
+      .map(name => name[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase()
+
+  const handleCustomerAdded = () => {
+    loadCustomers()
+    setShowAddModal(false)
+    showSuccess('Customer added successfully')
   }
 
+  // Filter fields for the search toolbar
   const filterFields: FilterField[] = [
     {
       id: 'status',
       label: 'Status',
       type: 'select',
-      value: statusFilter,
-      onChange: handleStatusChange,
+      value: '',
+      onChange: (_value: string) => {
+        // TODO: Implement status filter
+      },
       options: [
-        { id: 'all', name: 'All Statuses' },
         { id: 'active', name: 'Active' },
         { id: 'inactive', name: 'Inactive' },
         { id: 'suspended', name: 'Suspended' },
@@ -311,476 +162,244 @@ const CustomersPage: React.FC = () => {
       ]
     },
     {
-      id: 'churnRisk',
-      label: 'Churn Risk',
+      id: 'currency',
+      label: 'Currency',
       type: 'select',
-      value: churnRiskFilter,
-      onChange: handleChurnRiskChange,
+      value: '',
+      onChange: (_value: string) => {
+        // TODO: Implement currency filter
+      },
       options: [
-        { id: 'all', name: 'All Risk Levels' },
-        { id: 'low', name: 'Low Risk' },
-        { id: 'medium', name: 'Medium Risk' },
-        { id: 'high', name: 'High Risk' }
+        { id: 'USD', name: 'USD' },
+        { id: 'EUR', name: 'EUR' },
+        { id: 'GBP', name: 'GBP' },
+        { id: 'CAD', name: 'CAD' }
       ]
     },
     {
-      id: 'plan',
-      label: 'Plan',
+      id: 'portalAccess',
+      label: 'Portal Access',
       type: 'select',
-      value: planFilter,
-      onChange: handlePlanChange,
+      value: '',
+      onChange: (_value: string) => {
+        // TODO: Implement portal access filter
+      },
       options: [
-        { id: 'all', name: 'All Plans' },
-        { id: '1', name: 'Starter Plan' },
-        { id: '2', name: 'Professional Plan' },
-        { id: '3', name: 'Enterprise Plan' }
-      ]
-    },
-    {
-      id: 'country',
-      label: 'Country',
-      type: 'select',
-      value: countryFilter,
-      onChange: handleCountryChange,
-      options: [
-        { id: 'all', name: 'All Countries' },
-        { id: 'US', name: 'United States' },
-        { id: 'CA', name: 'Canada' },
-        { id: 'GB', name: 'United Kingdom' },
-        { id: 'DE', name: 'Germany' }
+        { id: 'true', name: 'Enabled' },
+        { id: 'false', name: 'Disabled' }
       ]
     }
   ]
 
-  const getStatusBadge = (status: Customer['status']) => {
-    const statusConfig = {
-      active: { 
-        class: 'bg-[#42E695]/20 text-[#42E695] border border-[#42E695]/30', 
-        label: 'Active' 
-      },
-      inactive: { 
-        class: 'bg-[#FFC107]/20 text-[#FFC107] border border-[#FFC107]/30', 
-        label: 'Inactive' 
-      },
-      suspended: { 
-        class: 'bg-red-500/20 text-red-300 border border-red-400/30', 
-        label: 'Suspended' 
-      },
-      cancelled: { 
-        class: 'bg-gray-500/20 text-gray-400 border border-gray-500/30', 
-        label: 'Cancelled' 
-      }
-    }
-    
-    const config = statusConfig[status]
+  if (loading && customers.length === 0) {
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium ${config.class}`}>
-        {config.label}
-      </span>
+      <DashboardLayout>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <div className="w-48 h-8 bg-white/10 rounded animate-pulse" />
+              <div className="w-64 h-4 bg-white/10 rounded animate-pulse" />
+            </div>
+            <div className="w-32 h-10 bg-white/10 rounded-lg animate-pulse" />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="p-6 bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl animate-pulse">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-white/10 rounded-xl" />
+                    <div className="space-y-2">
+                      <div className="w-24 h-4 bg-white/10 rounded" />
+                      <div className="w-32 h-3 bg-white/10 rounded" />
+                    </div>
+                  </div>
+                  <div className="w-8 h-8 bg-white/10 rounded-lg" />
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="w-full h-3 bg-white/10 rounded" />
+                  <div className="w-3/4 h-3 bg-white/10 rounded" />
+                  <div className="w-1/2 h-3 bg-white/10 rounded" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </DashboardLayout>
     )
   }
-
-  const getChurnRiskBadge = (risk: Customer['churnRisk']) => {
-    const riskConfig = {
-      low: { 
-        class: 'bg-[#42E695]/20 text-[#42E695] border border-[#42E695]/30', 
-        label: 'Low Risk' 
-      },
-      medium: { 
-        class: 'bg-[#FFC107]/20 text-[#FFC107] border border-[#FFC107]/30', 
-        label: 'Medium Risk' 
-      },
-      high: { 
-        class: 'bg-red-500/20 text-red-300 border border-red-400/30', 
-        label: 'High Risk' 
-      }
-    }
-    
-    const config = riskConfig[risk]
-    return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium ${config.class}`}>
-        {config.label}
-      </span>
-    )
-  }
-
-  const formatCurrency = (amount: number, currency: string = 'USD') => new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency
-    }).format(amount)
-
-  const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    }).format(date)
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        {/* Header */}
+      <div className="space-y-6">
         <SectionHeader
-          title="Customer Management"
-          subtitle="Manage and track your customer relationships"
-          size="main"
+          title="Customers"
+          subtitle={`Manage your ${totalCount} customers and their information`}
           actions={
-            <div className="flex items-center gap-2 sm:gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="btn-secondary flex items-center gap-2"
-              >
-                <Download className="w-4 h-4 sm:mr-2" />
-                <span className="hidden sm:inline">Export</span>
-              </motion.button>
-              <ActionButton
-                label="Add Customer"
-                onClick={() => { /* Add customer clicked */ }}
-                size="md"
-                animated={false}
-              />
-            </div>
+            <ActionButton
+              label="Add Customer"
+              variant="primary"
+              size="md"
+              onClick={() => setShowAddModal(true)}
+            />
           }
         />
 
-        {/* Stats Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 mb-8"
-        >
-          <Card
-            variant="compact"
-            title="Total Customers"
-            value={customerMetrics.totalCustomers}
-            icon={Users}
-            color="success"
-            animate={false}
-          />
-
-          <Card
-            variant="compact"
-            title="Active Customers"
-            value={customerMetrics.activeCustomers}
-            icon={TrendingUp}
-            color="secondary"
-            trend={{
-              value: "+5.2%",
-              direction: "up",
-              label: "vs last month"
-            }}
-            animate={false}
-          />
-
-          <Card
-            variant="compact"
-            title="Avg MRR"
-            value={formatCurrency(customerMetrics.avgMRR)}
-            icon={DollarSign}
-            color="warning"
-            trend={{
-              value: "+12.4%",
-              direction: "up",
-              label: "vs last month"
-            }}
-            animate={false}
-          />
-
-          <Card
-            variant="compact"
-            title="Avg LTV"
-            value={formatCurrency(customerMetrics.avgLTV)}
-            icon={Clock}
-            color="accent"
-            trend={{
-              value: "+8.7%",
-              direction: "up",
-              label: "vs last month"
-            }}
-            animate={false}
-          />
-
-          <Card
-            variant="compact"
-            title="Churn Rate"
-            value={`${customerMetrics.churnRate}%`}
-            icon={TrendingUp}
-            color="danger"
-            trend={{
-              value: "+1.2%",
-              direction: "up",
-              label: "vs last month"
-            }}
-            animate={false}
-          />
-        </motion.div>
-
-        {/* Search and Filters */}
         <SearchFilterToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          searchPlaceholder="Search customers by name, email, or company..."
-          isSearching={isSearching}
-          onClearSearch={clearSearch}
-          searchResults={{
-            total: totalCount,
-            filtered: filteredCount
-          }}
+          searchPlaceholder="Search customers by name, email, company, phone, or tags..."
           showFilters={showFilters}
           onToggleFilters={() => setShowFilters(!showFilters)}
           filterFields={filterFields}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-          viewModeOptions={[
-            { value: 'table', icon: Table, label: 'Table' },
-            { value: 'grid', icon: Grid3X3, label: 'Grid' }
-          ]}
-          className="mb-6"
         />
 
-        {/* Customer Table/Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card animate={false}>
-          {viewMode === 'table' ? (
-            <>
-              {/* Desktop Table View */}
-              <div className="hidden lg:block overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-700/50">
-                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">Customer</th>
-                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">Status</th>
-                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">MRR</th>
-                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">LTV</th>
-                      <th className="text-left py-2 px-6 text-sm font-medium auth-text-muted">Churn Risk</th>
-                      <th className="text-right py-2 px-6 text-sm font-medium auth-text-muted">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredCustomers.map((customer) => (
-                      <tr key={customer.id} className="border-b border-gray-700/30 hover:bg-white/5 transition-colors">
-                        <td className="py-2 px-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-[#14BDEA] to-[#7767DA] rounded-full flex items-center justify-center text-white font-semibold">
-                              {customer.firstName[0]}{customer.lastName[0]}
-                            </div>
-                            <div>
-                              <p className="auth-text font-medium">{customer.displayName}</p>
-                              <p className="auth-text-muted text-sm">{customer.email}</p>
-                              {customer.company && (
-                                <div className="text-xs auth-text-muted flex items-center gap-1 mt-1">
-                                  <Building2 className="w-3 h-3" />
-                                  {customer.company}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-2 px-6">
-                          {getStatusBadge(customer.status as Customer['status'])}
-                        </td>
-                        <td className="py-2 px-6">
-                          <div>
-                            <p className="auth-text font-semibold">{formatCurrency(customer.totalMRR)}</p>
-                            <p className="auth-text-muted text-sm">
-                              {customer.subscriptions.length} subscription{customer.subscriptions.length !== 1 ? 's' : ''}
-                            </p>
-                          </div>
-                        </td>
-                        <td className="py-2 px-6">
-                          <div>
-                            <p className="auth-text font-semibold">{formatCurrency(customer.totalLTV)}</p>
-                            <p className="auth-text-muted text-sm">Since {formatDate(customer.signupDate)}</p>
-                          </div>
-                        </td>
-                        <td className="py-2 px-6">
-                          {getChurnRiskBadge(customer.churnRisk as Customer['churnRisk'])}
-                        </td>
-                        <td className="py-2 px-6 text-right">
-                          <div className="flex items-center justify-end space-x-2">
-                            <Link
-                              to={`/customers/${customer.id}`}
-                              className="p-2 rounded-lg hover:bg-white/10 transition-colors touch-target"
-                            >
-                              <Eye className="w-4 h-4 text-gray-400 hover:text-white" />
-                            </Link>
-                            <button className="p-2 rounded-lg hover:bg-white/10 transition-colors touch-target">
-                              <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
-                            </button>
-                            <button className="p-2 rounded-lg hover:bg-white/10 transition-colors touch-target">
-                              <MoreHorizontal className="w-4 h-4 text-gray-400 hover:text-white" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Mobile/Tablet Card View */}
-              <div className="lg:hidden space-y-4 p-4 sm:p-6">
-                {filteredCustomers.map((customer) => (
-                  <div 
-                    key={customer.id}
-                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4 sm:p-6 hover:bg-white/10 transition-all duration-200"
-                  >
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#14BDEA] to-[#7767DA] rounded-full flex items-center justify-center text-white font-semibold text-sm sm:text-base">
-                          {customer.firstName[0]}{customer.lastName[0]}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <h3 className="auth-text font-semibold truncate">{customer.displayName}</h3>
-                          <p className="auth-text-muted text-sm truncate">{customer.email}</p>
-                          {customer.company && (
-                            <div className="text-xs auth-text-muted flex items-center gap-1 mt-1">
-                              <Building2 className="w-3 h-3 flex-shrink-0" />
-                              <span className="truncate">{customer.company}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="ml-3 flex-shrink-0">
-                        {getStatusBadge(customer.status as Customer['status'])}
-                      </div>
-                    </div>
-
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
-                      <div className="text-center sm:text-left">
-                        <div className="text-xs auth-text-muted mb-1">MRR</div>
-                        <div className="auth-text font-semibold text-sm">{formatCurrency(customer.totalMRR)}</div>
-                        <div className="auth-text-muted text-xs mt-1">
-                          {customer.subscriptions.length} sub{customer.subscriptions.length !== 1 ? 's' : ''}
-                        </div>
-                      </div>
-                      <div className="text-center sm:text-left">
-                        <div className="text-xs auth-text-muted mb-1">LTV</div>
-                        <div className="auth-text font-semibold text-sm">{formatCurrency(customer.totalLTV)}</div>
-                        <div className="auth-text-muted text-xs mt-1">Since {formatDate(customer.signupDate)}</div>
-                      </div>
-                      <div className="col-span-2 sm:col-span-1 text-center sm:text-left">
-                        <div className="text-xs auth-text-muted mb-2">Churn Risk</div>
-                        <div className="flex justify-center sm:justify-start">
-                          {getChurnRiskBadge(customer.churnRisk as Customer['churnRisk'])}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center gap-2 pt-4 border-t border-gray-700/50">
-                      <Link
-                        to={`/customers/${customer.id}`}
-                        className="flex-1 btn-primary text-center flex items-center justify-center gap-2"
-                      >
-                        <Eye className="w-4 h-4" />
-                        View Details
-                      </Link>
-                      <button className="btn-secondary">
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button className="btn-secondary">
-                        <MoreHorizontal className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 sm:p-6">
-              {filteredCustomers.map((customer) => (
-                <Card key={customer.id} animate={false}>
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#14BDEA] to-[#7767DA] rounded-full flex items-center justify-center text-white font-semibold">
-                        {customer.firstName[0]}{customer.lastName[0]}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="auth-text font-semibold truncate">{customer.displayName}</h3>
-                        <p className="auth-text-muted text-sm truncate">{customer.email}</p>
-                      </div>
-                    </div>
-                    <div className="ml-3 flex-shrink-0">
-                      {getStatusBadge(customer.status as Customer['status'])}
-                    </div>
-                  </div>
-
-                  {customer.company && (
-                    <div className="flex items-center gap-2 mb-3 text-sm auth-text-muted">
-                      <Building2 className="w-4 h-4 flex-shrink-0" />
-                      <span className="truncate">{customer.company}</span>
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <div className="text-sm auth-text-muted">MRR</div>
-                      <div className="auth-text font-semibold">{formatCurrency(customer.totalMRR)}</div>
+        {/* Customers Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCustomers.map((customer) => (
+            <motion.div
+              key={customer.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="group relative"
+            >
+              <Card className="h-full p-6 hover:scale-[1.02] transition-all duration-300">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-bold text-sm">
+                      {getInitials(customer.displayName)}
                     </div>
                     <div>
-                      <div className="text-sm auth-text-muted">LTV</div>
-                      <div className="auth-text font-semibold">{formatCurrency(customer.totalLTV)}</div>
+                      <h3 className="font-semibold text-white group-hover:text-[#D417C8] transition-colors">
+                        {customer.displayName}
+                      </h3>
+                      {customer.company && (
+                        <p className="text-sm text-white/60">{customer.company}</p>
+                      )}
                     </div>
                   </div>
-
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="text-sm">
-                      <span className="auth-text-muted">Risk: </span>
-                      {getChurnRiskBadge(customer.churnRisk as Customer['churnRisk'])}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-4 border-t border-gray-700/50">
-                    <Link
-                      to={`/customers/${customer.id}`}
-                      className="flex-1 btn-primary text-center flex items-center justify-center gap-2"
-                    >
-                      <Eye className="w-4 h-4" />
-                      View Details
-                    </Link>
-                    <button className="btn-secondary">
-                      <Edit className="w-4 h-4" />
+                  
+                  <div className="relative">
+                    <button className="p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                      <MoreHorizontal className="w-4 h-4" />
                     </button>
                   </div>
-                </Card>
-              ))}
-            </div>
-          )}
-          </Card>
-        </motion.div>
+                </div>
+
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center space-x-2 text-sm text-white/70">
+                    <Mail className="w-4 h-4 text-[#14BDEA]" />
+                    <span className="truncate">{customer.email}</span>
+                  </div>
+                  
+                  {customer.phoneNumber && (
+                    <div className="flex items-center space-x-2 text-sm text-white/70">
+                      <Phone className="w-4 h-4 text-[#42E695]" />
+                      <span>{customer.phoneNumber}</span>
+                    </div>
+                  )}
+                  
+                  {customer.billingAddress && (
+                    <div className="flex items-center space-x-2 text-sm text-white/70">
+                      <MapPin className="w-4 h-4 text-[#FFC107]" />
+                      <span className="truncate">
+                        {customer.billingAddress.city}, {customer.billingAddress.country}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center space-x-2 text-sm text-white/70">
+                    <Calendar className="w-4 h-4 text-[#7767DA]" />
+                    <span>Joined {formatDate(customer.signupDate)}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(customer.status)}`}>
+                      {getStatusText(customer.status)}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Link
+                      to={`/customers/${customer.id}`}
+                      className="p-2 text-white/50 hover:text-[#14BDEA] hover:bg-[#14BDEA]/10 rounded-lg transition-all duration-200"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </Link>
+                    <Link
+                      to={`/customers/${customer.id}/edit`}
+                      className="p-2 text-white/50 hover:text-[#D417C8] hover:bg-[#D417C8]/10 rounded-lg transition-all duration-200"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Tags */}
+                {customer.tags.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-white/10">
+                    <div className="flex flex-wrap gap-1">
+                      {customer.tags.slice(0, 3).map((tag, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 bg-[#7767DA]/20 text-[#7767DA] border border-[#7767DA]/30 rounded text-xs"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {customer.tags.length > 3 && (
+                        <span className="px-2 py-1 bg-white/10 text-white/60 rounded text-xs">
+                          +{customer.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </Card>
+            </motion.div>
+          ))}
+        </div>
 
         {/* Empty State */}
-        {filteredCustomers.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <Card className="text-center py-12" animate={false}>
-            <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="auth-text text-xl font-semibold mb-2">No customers found</h3>
-            <p className="auth-text-muted mb-6">
-              {searchQuery || Object.keys(filters).length > 0
-                ? "Try adjusting your search or filters"
-                : "Get started by adding your first customer"
-              }
+        {!loading && filteredCustomers.length === 0 && (
+          <div className="text-center py-12">
+            <div className="w-24 h-24 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center">
+              <Users className="w-12 h-12 text-white/50" />
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-2">No customers found</h3>
+            <p className="text-white/60 mb-6">
+              {searchQuery ? 'Try adjusting your search criteria' : 'Get started by adding your first customer'}
             </p>
-            <ActionButton
-              label="Add Customer"
-              onClick={() => { /* Add customer clicked */ }}
-              size="md"
-              animated={false}
-            />
-            </Card>
-          </motion.div>
+            {!searchQuery && (
+              <ActionButton
+                label="Add Customer"
+                variant="primary"
+                size="md"
+                onClick={() => setShowAddModal(true)}
+              />
+            )}
+          </div>
         )}
+
+        {/* Loading State */}
+        {loading && customers.length > 0 && (
+          <div className="flex items-center justify-center py-8">
+            <div className="flex items-center space-x-3 text-white/60">
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span className="text-white">Loading customers...</span>
+            </div>
+          </div>
+        )}
+
+        {/* Add Customer Modal */}
+        <AddCustomerModal
+          isOpen={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          onCustomerAdded={handleCustomerAdded}
+        />
       </div>
     </DashboardLayout>
   )

@@ -45,8 +45,21 @@ export class PhoneValidationService {
    * Validate phone number against country rules
    */
   async validatePhoneNumber(request: PhoneValidationRequest): Promise<PhoneValidationResponse> {
-    const response = await httpClient.getClient().post('/phone-validation/validate', request)
-    return response.data
+    try {
+      const response = await httpClient.getClient().post('/phone-validation/validate', request)
+      return response.data
+    } catch (error: unknown) {
+      // Handle validation errors (400 Bad Request) - these contain the validation result
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { status?: number, data?: PhoneValidationResponse } }
+        if (axiosError.response?.status === 400 && axiosError.response.data) {
+          // Backend returns validation errors as 400 with the validation response in data
+          return axiosError.response.data
+        }
+      }
+      // Re-throw other errors (network issues, etc.)
+      throw error
+    }
   }
 
   /**
