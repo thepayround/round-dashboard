@@ -44,20 +44,23 @@ export const useTeamManagement = (): TeamManagementState & TeamManagementActions
       setError(null)
 
       const result = await teamService.inviteMember({ email, role })
-      
+
       if (result.success) {
         // Refresh invitations to show the new one
         const invitationsResult = await teamService.getInvitations()
         if (invitationsResult.success && invitationsResult.data) {
           setInvitations(invitationsResult.data)
         }
+        setError(null) // Clear any previous errors
         return true
       } else {
-        setError(result.error ?? 'Failed to invite member')
+        // Don't set error state here - let the UI handle it via toast
+        // setError(result.error ?? 'Failed to invite member')
         return false
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred')
+      // Don't set error state here - let the UI handle it via toast
+      // setError(err instanceof Error ? err.message : 'An unexpected error occurred')
       return false
     } finally {
       setIsLoading(false)

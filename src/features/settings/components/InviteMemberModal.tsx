@@ -3,6 +3,7 @@ import { Modal } from '@/shared/components/Modal/Modal'
 import { ActionButton } from '@/shared/components/ActionButton'
 import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { Mail, UserPlus } from 'lucide-react'
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import type { UserRole } from '../types/team.types'
 
 interface InviteMemberModalProps {
@@ -17,6 +18,8 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
   const [email, setEmail] = useState('')
   const [selectedRole, setSelectedRole] = useState<UserRole>('TeamMember')
   const [error, setError] = useState('')
+  const { showError, showSuccess } = useGlobalToast()
+
 
   const handleInviteClick = () => {
     const event = {
@@ -45,18 +48,24 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
 
     try {
       const success = await onInvite(email.trim(), selectedRole)
+
       if (success) {
-        // Reset form and close modal
+        // Reset form and close modal on success
         setEmail('')
         setSelectedRole('TeamMember')
         setError('')
+        showSuccess('Invitation sent successfully!')
         onClose()
       } else {
-        setError('Failed to send invitation. Please try again.')
+        // Show error toast and keep modal open
+        setError('')
+        showError('Failed to send invitation. This email may already have a pending invitation.')
+        // Modal stays open for user to try again
       }
-    } catch (err) {
-      setError('An error occurred while sending the invitation')
-      console.error('Invite member error:', err)
+    } catch (err: unknown) {
+      setError('')
+      showError('An unexpected error occurred. Please try again.')
+      // Modal stays open for user to try again
     }
   }
 
@@ -78,19 +87,20 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Email Input */}
         <div>
-          <div className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="invite-email" className="modal-label">
             Email Address
-          </div>
+          </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Mail className="h-5 w-5 text-gray-400" />
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center pointer-events-none">
+              <Mail className="w-4 h-4 text-white/60" />
             </div>
             <input
+              id="invite-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="colleague@company.com"
-              className="block w-full pl-10 pr-3 py-2.5 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="modal-input pl-10"
               required
             />
           </div>
@@ -98,15 +108,17 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
 
         {/* Role Selection */}
         <div>
-          <div className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="invite-role" className="modal-label">
             Select Role
+          </label>
+          <div id="invite-role">
+            <ApiDropdown
+              config={teamRoleDropdownConfig}
+              value={selectedRole}
+              onSelect={(value) => setSelectedRole(value as UserRole)}
+              className="w-full"
+            />
           </div>
-          <ApiDropdown
-            config={teamRoleDropdownConfig}
-            value={selectedRole}
-            onSelect={(value) => setSelectedRole(value as UserRole)}
-            className="w-full"
-          />
         </div>
 
         {/* Error Message */}
