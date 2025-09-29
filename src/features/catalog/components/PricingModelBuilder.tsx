@@ -198,10 +198,11 @@ export const PricingModelBuilder = ({
           <h4 className="text-lg font-medium auth-text mb-4">Price Configuration</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium auth-text mb-2">
+              <label htmlFor="pricing-base-price" className="block text-sm font-medium auth-text mb-2">
                 {selectedModel === 'percentage' ? 'Percentage (%)' : 'Price ($)'}
               </label>
               <input
+                id="pricing-base-price"
                 type="number"
                 value={price}
                 onChange={(e) => onPriceChange(Number(e.target.value))}
@@ -338,10 +339,11 @@ export const PricingModelBuilder = ({
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor={`tier-price-${index}`} className="block text-sm font-medium auth-text mb-2">
                       {selectedModel === 'stairstep' ? 'Flat Fee ($)' : 'Price per Unit ($)'}
                     </label>
                     <input
+                      id={`tier-price-${index}`}
                       type="number"
                       value={tier.price}
                       onChange={(e) => updateTier(index, { ...tier, price: Number(e.target.value) })}
@@ -471,7 +473,7 @@ export const PricingModelBuilder = ({
                   </div>
                   
                   <div className="flex items-center pt-6">
-                    <label className="flex items-center space-x-2">
+                    <label className="flex items-center space-x-2" aria-label="Allow overage charges beyond included quantity">
                       <input
                         type="checkbox"
                         checked={usage.overage}

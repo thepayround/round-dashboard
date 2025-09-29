@@ -69,7 +69,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       case 'select':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium auth-text-muted mb-2">
+            <label htmlFor={field.id} className="block text-sm font-medium auth-text-muted mb-2">
               {field.label}
             </label>
             <UiDropdown
@@ -84,14 +84,15 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             />
           </div>
         )
-      
+
       case 'input':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium auth-text-muted mb-2">
+            <label htmlFor={field.id} className="block text-sm font-medium auth-text-muted mb-2">
               {field.label}
             </label>
             <input
+              id={field.id}
               type="text"
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
@@ -100,14 +101,15 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             />
           </div>
         )
-      
+
       case 'date':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium auth-text-muted mb-2">
+            <label htmlFor={field.id} className="block text-sm font-medium auth-text-muted mb-2">
               {field.label}
             </label>
             <input
+              id={field.id}
               type="date"
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
@@ -115,11 +117,11 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             />
           </div>
         )
-      
+
       case 'custom':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium auth-text-muted mb-2">
+            <label htmlFor={field.id} className="block text-sm font-medium auth-text-muted mb-2">
               {field.label}
             </label>
             {field.component}

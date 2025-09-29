@@ -34,11 +34,12 @@ export const FormInput = forwardRef<
   iconPosition = 'left',
   className = '',
   onSelect,
+  id,
   ...props
 }, ref) => {
   const baseInputClasses = `
-    w-full px-3 py-1.5 
-    bg-white/5 border border-white/10 rounded-lg 
+    w-full px-3 py-1.5
+    bg-white/5 border border-white/10 rounded-lg
     text-white placeholder-gray-400 text-xs
     focus:outline-none focus:border-[#D417C8]/50 focus:bg-white/10 transition-all duration-200
     disabled:opacity-50 disabled:cursor-not-allowed
@@ -46,7 +47,7 @@ export const FormInput = forwardRef<
   `
 
   const iconInputClasses = `
-    ${Icon && iconPosition === 'left' ? 'pl-10' : 'pl-3'} 
+    ${Icon && iconPosition === 'left' ? 'pl-10' : 'pl-3'}
     ${Icon && iconPosition === 'right' ? 'pr-10' : 'pr-3'}
   `
 
@@ -55,6 +56,7 @@ export const FormInput = forwardRef<
   const renderInput = () => {
     const baseProps = {
       ...props,
+      id,
       className: `${baseInputClasses} ${iconInputClasses} ${errorClasses} ${className}`,
     }
 
@@ -98,7 +100,7 @@ export const FormInput = forwardRef<
     <div className={`space-y-2 ${containerClassName}`}>
       {/* Label */}
       {label && (
-        <label className="block text-sm font-medium text-gray-300">
+        <label htmlFor={id} className="block text-sm font-medium text-gray-300">
           {label}
           {props.required && <span className="text-red-400 ml-1">*</span>}
         </label>

@@ -413,8 +413,8 @@ export const ApiDropdown = <T = unknown>({
       {/* Dropdown trigger */}
       <div
         ref={triggerRef}
-        onClick={handleToggle}
-        onKeyDown={(e) => {
+        onClick={disabled ? undefined : handleToggle}
+        onKeyDown={disabled ? undefined : (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
             handleToggle()
@@ -422,11 +422,11 @@ export const ApiDropdown = <T = unknown>({
         }}
         className={`
           relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
-          bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between
+          bg-white/[0.12] border-white/20 text-white flex items-center justify-between
           font-light text-xs outline-none
           [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]
           ${error ? 'border-[#ef4444] bg-[rgba(239,68,68,0.12)]' : ''}
-          ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/[0.18] hover:border-white/30'}
+          ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer hover:bg-white/[0.18] hover:border-white/30'}
           ${isOpen && !error ? 'bg-white/[0.18] border-[#14BDEA]/50 outline-none ring-0 shadow-[0_0_0_3px_rgba(20,189,234,0.15),0_4px_16px_rgba(20,189,234,0.2)] transform -translate-y-px' : ''}
           ${isOpen && error ? 'shadow-[0_0_0_3px_rgba(239,68,68,0.25)] transform -translate-y-px' : ''}
         `}

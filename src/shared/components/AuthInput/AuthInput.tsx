@@ -29,29 +29,30 @@ export const AuthInput = forwardRef<
   rows = 3,
   containerClassName = '',
   className = '',
+  id,
   ...props
 }, ref) => {
   // Responsive inputs - 42px mobile -> 36px desktop, smaller than buttons
   const baseInputClasses = `
     w-full h-[42px] md:h-9 px-3 py-1.5
-    bg-white/6 backdrop-blur-xl border border-white/10 rounded-lg 
+    bg-white/6 backdrop-blur-xl border border-white/10 rounded-lg
     text-white placeholder-white/50 text-xs font-light
-    focus:outline-none focus:border-[#14BDEA]/30 focus:bg-white/8 
+    focus:outline-none focus:border-[#14BDEA]/30 focus:bg-white/8
     transition-all duration-150 ease-out
     disabled:opacity-50 disabled:cursor-not-allowed
   `
 
   const textareaClasses = `
     w-full min-h-14 px-3 py-2 resize-none
-    bg-white/6 backdrop-blur-xl border border-white/10 rounded-lg 
+    bg-white/6 backdrop-blur-xl border border-white/10 rounded-lg
     text-white placeholder-white/50 text-xs font-normal
-    focus:outline-none focus:border-[#14BDEA]/30 focus:bg-white/8 
+    focus:outline-none focus:border-[#14BDEA]/30 focus:bg-white/8
     transition-all duration-150 ease-out
     disabled:opacity-50 disabled:cursor-not-allowed
   `
 
   const iconInputClasses = `
-    ${LeftIcon ? 'pl-10' : 'pl-3'} 
+    ${LeftIcon ? 'pl-10' : 'pl-3'}
     ${RightIcon ? 'pr-10' : 'pr-3'}
   `
 
@@ -61,25 +62,26 @@ export const AuthInput = forwardRef<
     const inputClasses = inputType === 'textarea' ? textareaClasses : baseInputClasses
     const baseProps = {
       ...props,
+      id,
       className: `${inputClasses} ${iconInputClasses} ${errorClasses} ${className}`,
     }
 
     if (inputType === 'textarea') {
       return (
-        <textarea 
-          rows={rows} 
+        <textarea
+          rows={rows}
           // eslint-disable-next-line react/jsx-props-no-spreading
-          {...baseProps} 
-          ref={ref as React.ForwardedRef<HTMLTextAreaElement>} 
+          {...baseProps}
+          ref={ref as React.ForwardedRef<HTMLTextAreaElement>}
         />
       )
     }
 
     return (
-      <input 
+      <input
         // eslint-disable-next-line react/jsx-props-no-spreading
-        {...baseProps} 
-        ref={ref as React.ForwardedRef<HTMLInputElement>} 
+        {...baseProps}
+        ref={ref as React.ForwardedRef<HTMLInputElement>}
       />
     )
   }
@@ -88,7 +90,7 @@ export const AuthInput = forwardRef<
     <div className={`space-y-2 ${containerClassName}`}>
       {/* Label */}
       {label && (
-        <label className="block text-[0.625rem] font-medium text-white/75 uppercase tracking-widest">
+        <label htmlFor={id} className="block text-[0.625rem] font-medium text-white/75 uppercase tracking-widest">
           {label}
           {props.required && <span className="text-red-400 ml-1">*</span>}
         </label>
