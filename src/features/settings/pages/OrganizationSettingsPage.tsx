@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { SectionHeader } from '@/shared/components'
 import {
   Building2,
   Users,
@@ -9,7 +7,8 @@ import {
   Shield,
   Bell,
   Palette,
-  Globe
+  Globe,
+  MapPin
 } from 'lucide-react'
 import { SettingsNavigation } from '../components/improved/navigation/SettingsNavigation'
 import {
@@ -19,7 +18,8 @@ import {
   SecuritySection,
   NotificationsSection,
   BrandingSection,
-  IntegrationsSection
+  IntegrationsSection,
+  AddressManagementSection
 } from '../components/organization'
 
 interface SettingsSection {
@@ -44,6 +44,12 @@ export const OrganizationSettingsPage: React.FC = () => {
       label: 'Team Management',
       icon: Users,
       description: 'Manage team members, roles, and invitations'
+    },
+    {
+      id: 'addresses',
+      label: 'Address Management',
+      icon: MapPin,
+      description: 'Manage billing, shipping, and office addresses'
     },
     {
       id: 'billing',
@@ -83,6 +89,8 @@ export const OrganizationSettingsPage: React.FC = () => {
         return <GeneralSection />
       case 'team':
         return <TeamSection />
+      case 'addresses':
+        return <AddressManagementSection />
       case 'billing':
         return <BillingSection />
       case 'security':
@@ -101,20 +109,6 @@ export const OrganizationSettingsPage: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-4 md:space-y-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <SectionHeader
-            title="Organization Settings"
-            subtitle="Manage your organization's settings, team, and preferences"
-            size="main"
-            className="text-base md:text-lg"
-          />
-        </motion.div>
-
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 md:gap-6">
           {/* Navigation Sidebar */}

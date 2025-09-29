@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Card, SectionHeader } from '@/shared/components'
+import { Card } from '@/shared/components'
 import { CreditCard, Calendar, DollarSign, FileText, TrendingUp } from 'lucide-react'
 
 export const BillingSection: React.FC = () => (
@@ -10,11 +10,17 @@ export const BillingSection: React.FC = () => (
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <SectionHeader
-        title="Billing & Subscription"
-        subtitle="Manage your subscription, billing information, and usage"
-        size="section"
-      />
+      <div>
+        <h1 className="text-lg font-medium text-white mb-4">
+          Billing{' '}
+          <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+            & Subscription
+          </span>
+        </h1>
+        <p className="text-sm text-gray-400 mb-3">
+          Manage your subscription, billing information, and usage
+        </p>
+      </div>
 
       {/* Current Plan */}
       <Card animate={false} padding="lg">

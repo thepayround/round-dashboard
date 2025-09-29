@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Card, SectionHeader } from '@/shared/components'
+import { Card } from '@/shared/components'
 import { Bell, Mail, MessageSquare, Smartphone, Settings } from 'lucide-react'
 
 interface NotificationPreference {
@@ -69,11 +69,17 @@ export const NotificationsSection: React.FC = () => {
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <SectionHeader
-        title="Notification Settings"
-        subtitle="Configure organization-wide notification preferences"
-        size="section"
-      />
+      <div>
+        <h1 className="text-lg font-medium text-white mb-4">
+          Notification{' '}
+          <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+            Settings
+          </span>
+        </h1>
+        <p className="text-sm text-gray-400 mb-3">
+          Configure organization-wide notification preferences
+        </p>
+      </div>
 
       {/* Global Settings */}
       <Card animate={false} padding="lg">

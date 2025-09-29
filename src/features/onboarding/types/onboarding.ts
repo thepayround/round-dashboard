@@ -54,6 +54,12 @@ export interface AddressInfo {
   isPrimary?: boolean
 }
 
+export interface EnhancedAddressInfo {
+  billingAddress: AddressInfo
+  shippingAddress?: AddressInfo
+  sameAsBilling: boolean
+}
+
 export interface TeamSettings {
   invitations: Array<{
     id: string
@@ -67,7 +73,7 @@ export interface OnboardingData {
   userInfo: UserInfo
   organization: OrganizationInfo
   businessSettings: BusinessSettings
-  address: AddressInfo
+  address: EnhancedAddressInfo
   products: ProductInfo
   billing: BillingSettings
   team: TeamSettings

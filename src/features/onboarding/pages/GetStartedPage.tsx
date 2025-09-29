@@ -26,22 +26,21 @@ const parseBackendError = (error: unknown) => {
 }
 
 // Import proper types
-import type { 
-  OnboardingData, 
-  OnboardingStep, 
-  UserInfo, 
-  OrganizationInfo, 
-  BusinessSettings, 
-  AddressInfo, 
-  ProductInfo, 
-  BillingSettings, 
-  TeamSettings 
+import type {
+  OnboardingData,
+  OnboardingStep,
+  UserInfo,
+  OrganizationInfo,
+  BusinessSettings,
+  EnhancedAddressInfo,
+  ProductInfo,
+  BillingSettings,
+  TeamSettings
 } from '../types/onboarding'
-import type { 
-  OrganizationResponse, 
-  OrganizationRequest, 
-  CreateAddressData, 
-  UpdateAddressData 
+import type {
+  OrganizationResponse,
+  OrganizationRequest,
+  CreateAddressData
 } from '@/shared/types/api'
 
 // Import Step Components
@@ -83,17 +82,33 @@ const defaultOnboardingData: OnboardingData = {
     fiscalYearStart: '',
   },
   address: {
-    name: '',
-    street: '',
-    addressLine1: '',
-    addressLine2: '',
-    number: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
-    addressType: 'billing',
-    isPrimary: true,
+    billingAddress: {
+      name: '',
+      street: '',
+      addressLine1: '',
+      addressLine2: '',
+      number: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: '',
+      addressType: 'billing',
+      isPrimary: true,
+    },
+    shippingAddress: {
+      name: '',
+      street: '',
+      addressLine1: '',
+      addressLine2: '',
+      number: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: '',
+      addressType: 'shipping',
+      isPrimary: false,
+    },
+    sameAsBilling: true,
   },
   products: {
     hasProducts: false,
@@ -128,7 +143,7 @@ export const GetStartedPage = () => {
   
   // Form change detection hooks
   const organizationChangeDetection = useFormChangeDetection<OrganizationRequest>()
-  const addressChangeDetection = useFormChangeDetection<CreateAddressData>()
+  const _addressChangeDetection = useFormChangeDetection<CreateAddressData>()
   
   // Refs
   const loadingRef = useRef(false)
@@ -161,15 +176,16 @@ export const GetStartedPage = () => {
 
       case 'address': {
         const { address } = onboardingData
-        if (!address) return false
+        if (!address?.billingAddress) return false
+        const billing = address.billingAddress
         return (
-          address.name?.trim() !== '' &&
-          address.addressLine1?.trim() !== '' &&
-          address.number?.trim() !== '' &&
-          address.city?.trim() !== '' &&
-          address.state?.trim() !== '' &&
-          address.zipCode?.trim() !== '' &&
-          address.country !== ''
+          billing.name?.trim() !== '' &&
+          billing.addressLine1?.trim() !== '' &&
+          billing.number?.trim() !== '' &&
+          billing.city?.trim() !== '' &&
+          billing.state?.trim() !== '' &&
+          billing.zipCode?.trim() !== '' &&
+          billing.country !== ''
         )
       }
 
@@ -250,7 +266,7 @@ export const GetStartedPage = () => {
     setOnboardingData(prev => ({ ...prev, businessSettings }))
   }, [])
 
-  const updateAddress = useCallback((address: AddressInfo) => {
+  const updateAddress = useCallback((address: EnhancedAddressInfo) => {
     setOnboardingData(prev => ({ ...prev, address }))
   }, [])
 
@@ -327,25 +343,92 @@ export const GetStartedPage = () => {
               completedStepsFromData.push('organization')
             }
 
-            // Update address from organization
-            if (org.address) {
-              updateAddress({
-                name: org.address.name,
-                street: org.address.addressLine1 ?? '',
-                addressLine1: org.address.addressLine1,
-                addressLine2: org.address.addressLine2 ?? '',
-                number: org.address.number ?? '',
-                city: org.address.city,
-                state: org.address.state ?? '',
-                zipCode: org.address.zipCode,
-                country: org.address.country,
-                addressType: 'billing',
-                isPrimary: true
-              })
-              
-              // Check address completion
-              if (org.address.name && org.address.addressLine1 && org.address.city && org.address.country) {
-                completedStepsFromData.push('address')
+            // Load organization addresses
+            try {
+              const addressesResponse = await addressService.getByOrganizationId(org.organizationId)
+              if (addressesResponse.success && addressesResponse.data) {
+                const addresses = addressesResponse.data
+
+                // Find billing address
+                const billingAddress = addresses.find(addr => addr.addressType === 'billing')
+
+                // Create enhanced address data (only billing address for B2B)
+                const enhancedAddressData: EnhancedAddressInfo = {
+                  billingAddress: billingAddress ? {
+                    name: billingAddress.name,
+                    street: billingAddress.addressLine1,
+                    addressLine1: billingAddress.addressLine1,
+                    addressLine2: billingAddress.addressLine2 ?? '',
+                    number: billingAddress.number ?? '',
+                    city: billingAddress.city,
+                    state: billingAddress.state,
+                    zipCode: billingAddress.zipCode,
+                    country: billingAddress.country,
+                    addressType: 'billing',
+                    isPrimary: billingAddress.isPrimary ?? true,
+                  } : defaultOnboardingData.address.billingAddress,
+                  shippingAddress: defaultOnboardingData.address.shippingAddress,
+                  sameAsBilling: true,
+                }
+
+                updateAddress(enhancedAddressData)
+
+                // Check address completion - require billing address
+                if (billingAddress?.name && billingAddress.addressLine1 && billingAddress.city && billingAddress.country) {
+                  completedStepsFromData.push('address')
+                }
+              } else {
+                // Fallback to organization address if addresses API fails
+                if (org.address) {
+                  updateAddress({
+                    billingAddress: {
+                      name: org.address.name,
+                      street: org.address.addressLine1 ?? '',
+                      addressLine1: org.address.addressLine1,
+                      addressLine2: org.address.addressLine2 ?? '',
+                      number: org.address.number ?? '',
+                      city: org.address.city,
+                      state: org.address.state ?? '',
+                      zipCode: org.address.zipCode,
+                      country: org.address.country,
+                      addressType: 'billing',
+                      isPrimary: true,
+                    },
+                    shippingAddress: defaultOnboardingData.address.shippingAddress,
+                    sameAsBilling: true,
+                  })
+
+                  // Check address completion
+                  if (org.address.name && org.address.addressLine1 && org.address.city && org.address.country) {
+                    completedStepsFromData.push('address')
+                  }
+                }
+              }
+            } catch (addressError) {
+              // Fallback to organization address if addresses API fails
+              if (org.address) {
+                updateAddress({
+                  billingAddress: {
+                    name: org.address.name,
+                    street: org.address.addressLine1 ?? '',
+                    addressLine1: org.address.addressLine1,
+                    addressLine2: org.address.addressLine2 ?? '',
+                    number: org.address.number ?? '',
+                    city: org.address.city,
+                    state: org.address.state ?? '',
+                    zipCode: org.address.zipCode,
+                    country: org.address.country,
+                    addressType: 'billing',
+                    isPrimary: true,
+                  },
+                  shippingAddress: defaultOnboardingData.address.shippingAddress,
+                  sameAsBilling: true,
+                })
+
+                // Check address completion
+                if (org.address.name && org.address.addressLine1 && org.address.city && org.address.country) {
+                  completedStepsFromData.push('address')
+                }
               }
             }
 
@@ -468,85 +551,52 @@ export const GetStartedPage = () => {
           // Save address data when leaving address step
           if (currentStep === 'address') {
             const addressData = onboardingData.address
-            if (!addressData.name || !addressData.addressLine1 || !addressData.city || !addressData.country) {
-              throw new Error('Address information is incomplete')
+            const {billingAddress} = addressData
+
+            // Validate billing address (required)
+            if (!billingAddress.name || !billingAddress.addressLine1 || !billingAddress.city || !billingAddress.country) {
+              throw new Error('Billing address information is incomplete')
             }
 
-            // Prepare address data for change detection (using a normalized format)
-            const addressApiData = {
-              name: addressData.name,
-              addressLine1: addressData.addressLine1,
-              addressLine2: addressData.addressLine2,
-              number: addressData.number,
-              city: addressData.city,
-              state: addressData.state ?? '',
-              zipCode: addressData.zipCode,
-              country: addressData.country,
-              addressType: addressData.addressType,
-              isPrimary: addressData.isPrimary
+            // Create only billing address for B2B service
+            const billingApiData: CreateAddressData = {
+              name: billingAddress.name,
+              addressLine1: billingAddress.addressLine1,
+              addressLine2: billingAddress.addressLine2,
+              number: billingAddress.number,
+              city: billingAddress.city,
+              state: billingAddress.state ?? '',
+              zipCode: billingAddress.zipCode,
+              country: billingAddress.country,
+              addressType: 'billing',
+              isPrimary: true
             }
 
-            // Only save if address data has actually changed
-            if (addressChangeDetection.hasChanged(addressApiData)) {
-              let addressResult = null
-              
-              if (cachedOrgData?.address?.addressId) {
-                // Update existing address
-                const updateData: UpdateAddressData = {
-                  name: addressApiData.name,
-                  addressLine1: addressApiData.addressLine1,
-                  addressLine2: addressApiData.addressLine2,
-                  number: addressApiData.number,
-                  city: addressApiData.city,
-                  state: addressApiData.state,
-                  zipCode: addressApiData.zipCode,
-                  country: addressApiData.country,
-                  addressType: addressApiData.addressType,
-                  isPrimary: addressApiData.isPrimary
-                }
-                addressResult = await addressService.update(cachedOrgData.address.addressId, updateData)
-              } else {
-                // Create new address for organization
-                const createData: CreateAddressData = {
-                  name: addressApiData.name,
-                  addressLine1: addressApiData.addressLine1,
-                  addressLine2: addressApiData.addressLine2,
-                  number: addressApiData.number,
-                  city: addressApiData.city,
-                  state: addressApiData.state,
-                  zipCode: addressApiData.zipCode,
-                  country: addressApiData.country,
-                  addressType: addressApiData.addressType,
-                  isPrimary: addressApiData.isPrimary
-                }
-                
-                if (cachedOrgData?.organizationId) {
-                  addressResult = await organizationService.createOrganizationAddress(cachedOrgData.organizationId, createData)
-                } else {
-                  if (process.env.NODE_ENV === 'development') {
-                    console.error('No organization data available:', cachedOrgData)
-                  }
-                  throw new Error('Organization ID not found for address creation')
-                }
-              }
+            // Create billing address
+            if (cachedOrgData?.organizationId) {
+              const addressResult = await organizationService.createOrganizationAddress(
+                cachedOrgData.organizationId,
+                billingApiData
+              )
 
               if (!addressResult?.success) {
-                throw new Error('Failed to save address')
+                throw new Error('Failed to save billing address')
               }
 
-              // If we have an organization and created a new address, link them
-              if (addressResult.success && addressResult.data && cachedOrgData && !cachedOrgData.addressId) {
+              // Link the billing address to organization
+              if (addressResult.success && addressResult.data && !cachedOrgData.addressId) {
                 try {
-                  // Update organization with the new address ID
                   const orgUpdateData = {
                     ...cachedOrgData,
                     addressId: addressResult.data.addressId
                   }
                   await organizationService.update(cachedOrgData.organizationId, orgUpdateData)
                 } catch (linkError) {
-                  // Don't fail the whole process for this - address linking failed
+                  // Don't fail the whole process for this
                 }
               }
+            } else {
+              throw new Error('Organization ID not found for address creation')
             }
           }
 
@@ -591,7 +641,6 @@ export const GetStartedPage = () => {
     showError,
     navigate,
     cachedOrgData,
-    addressChangeDetection,
     flushOrganizationSave,
     organizationChangeDetection
   ])
@@ -661,7 +710,7 @@ export const GetStartedPage = () => {
         )
       case 'address':
         // Show loading state if we're still loading data and don't have address data yet
-        if (isLoadingData && !onboardingData.address.name) {
+        if (isLoadingData && !onboardingData.address.billingAddress.name) {
           return (
             <div className="flex items-center justify-center py-12">
               <div className="w-8 h-8 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />

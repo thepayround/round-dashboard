@@ -1,5 +1,6 @@
 export { GeneralSection } from './GeneralSection'
 export { TeamSection } from './TeamSection'
+export { AddressManagementSection } from './AddressManagementSection'
 export { BillingSection } from './BillingSection'
 export { SecuritySection } from './SecuritySection'
 export { NotificationsSection } from './NotificationsSection'

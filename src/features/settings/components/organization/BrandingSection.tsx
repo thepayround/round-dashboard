@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Card, SectionHeader } from '@/shared/components'
+import { Card } from '@/shared/components'
 import { Palette, Upload, Eye, Download, Trash2, Image } from 'lucide-react'
 
 export const BrandingSection: React.FC = () => {
@@ -29,11 +29,17 @@ export const BrandingSection: React.FC = () => {
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <SectionHeader
-        title="Branding & Appearance"
-        subtitle="Customize your organization's visual identity and theme"
-        size="section"
-      />
+      <div>
+        <h1 className="text-lg font-medium text-white mb-4">
+          Branding{' '}
+          <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+            & Appearance
+          </span>
+        </h1>
+        <p className="text-sm text-gray-400 mb-3">
+          Customize your organization&apos;s visual identity and theme
+        </p>
+      </div>
 
       {/* Logo & Assets */}
       <Card animate={false} padding="lg">

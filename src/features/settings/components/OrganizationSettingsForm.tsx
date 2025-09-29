@@ -186,12 +186,6 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-semibold text-white">Organization Settings</h2>
-          <p className="text-gray-400 text-sm mt-1">
-            Manage your organization&apos;s basic information and settings
-          </p>
-        </div>
         
         <Button
           onClick={handleSave}

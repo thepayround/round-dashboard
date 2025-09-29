@@ -295,8 +295,15 @@ export const TeamManagementPage: React.FC = () => {
         <div>
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-medium auth-text mb-0">Team Management</h2>
-              <p className="text-gray-400">Manage team members, roles, and invitations</p>
+              <h1 className="text-lg font-medium text-white mb-4">
+                Team{' '}
+                <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+                  Management
+                </span>
+              </h1>
+              <p className="text-sm text-gray-400 mb-3">
+                Manage team members, roles, and invitations
+              </p>
             </div>
             <ActionButton
               label="Invite Member"
