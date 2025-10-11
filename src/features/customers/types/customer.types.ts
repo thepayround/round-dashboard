@@ -1,5 +1,13 @@
+export enum CustomerType {
+  Individual = 1,
+  Business = 2
+}
+
 export interface Customer {
   id: string
+  type: CustomerType
+  effectiveDisplayName: string
+  isBusinessCustomer: boolean
   email: string
   firstName: string
   lastName: string

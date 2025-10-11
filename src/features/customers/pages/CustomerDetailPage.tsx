@@ -7,6 +7,7 @@ import {
   Mail,
   Phone,
   Building2,
+  User,
   MapPin,
   Calendar,
   Globe,
@@ -16,14 +17,22 @@ import {
   FileText,
   AlertCircle,
   CheckCircle,
-  MoreHorizontal
+  MoreHorizontal,
+  CreditCard,
+  Truck,
+  Activity,
+  Zap
 } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Card } from '@/shared/components/Card'
 import { ActionButton } from '@/shared/components/ActionButton'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
+import { EmailComposeModal } from '../components/EmailComposeModal'
+import { CustomerNotesModal } from '../components/CustomerNotesModal'
+import { EditCustomerModal } from '../components/EditCustomerModal'
+import { CustomerDetailSkeleton } from '../components/CustomerDetailSkeleton'
+import { DangerousActionsModal } from '../components/DangerousActionsModal'
 
 const CustomerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -31,20 +40,44 @@ const CustomerDetailPage: React.FC = () => {
   
   const [customer, setCustomer] = useState<CustomerResponse | null>(null)
   const [loading, setLoading] = useState(true)
-  const [_isEditing, setIsEditing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false)
+  const [isNotesModalOpen, setIsNotesModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDangerousActionsModalOpen, setIsDangerousActionsModalOpen] = useState(false)
 
   const loadCustomer = useCallback(async (customerId: string) => {
     try {
       setLoading(true)
+      setError(null)
       const data = await customerService.get(customerId)
       setCustomer(data)
-    } catch (error) {
-      showError('Failed to load customer details')
+    } catch (error: unknown) {
+      const errorMessage = (error as Error)?.message ?? 'Failed to load customer details'
+      setError(errorMessage)
+      showError(errorMessage)
       console.error('Error loading customer:', error)
     } finally {
       setLoading(false)
     }
   }, [showError])
+
+  const handleRetry = () => {
+    if (id) {
+      loadCustomer(id)
+    }
+  }
+
+  const handleStatusChanged = (newStatus: string) => {
+    if (customer) {
+      setCustomer({ ...customer, status: newStatus as CustomerResponse['status'] })
+    }
+  }
+
+  const handleCustomerDeleted = () => {
+    // Navigate back to customers list after deletion
+    window.location.href = '/customers'
+  }
 
   useEffect(() => {
     if (id) {
@@ -73,17 +106,39 @@ const CustomerDetailPage: React.FC = () => {
       day: 'numeric'
     }).format(new Date(dateString))
 
-  const getStatusBadge = (status: string) => {
-    const variants = {
-      active: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-      inactive: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
-      suspended: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      cancelled: 'bg-red-500/20 text-red-400 border-red-500/30'
+  const getStatusBadge = (status: string | number) => {
+    // Convert status to number if it's a string
+    const statusValue = typeof status === 'string' ? parseInt(status) : status
+    
+    const statusConfig = {
+      1: { // Active
+        variant: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+        icon: '●',
+        label: 'Active'
+      },
+      2: { // Inactive
+        variant: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+        icon: '○',
+        label: 'Inactive'
+      },
+      3: { // Suspended
+        variant: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+        icon: '⏸',
+        label: 'Suspended'
+      },
+      4: { // Cancelled
+        variant: 'bg-red-500/20 text-red-400 border-red-500/30',
+        icon: '✕',
+        label: 'Cancelled'
+      }
     }
     
+    const config = statusConfig[statusValue as keyof typeof statusConfig] ?? statusConfig[2]
+    
     return (
-      <span className={`px-2 py-1 text-xs font-medium rounded-md border ${variants[status as keyof typeof variants]}`}>
-        {status}
+      <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border ${config.variant}`}>
+        <span className="text-xs">{config.icon}</span>
+        {config.label}
       </span>
     )
   }
@@ -91,46 +146,56 @@ const CustomerDetailPage: React.FC = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="space-y-6">
-          <div className="flex items-center gap-4">
-            <div className="w-8 h-8 bg-white/10 rounded-lg animate-pulse" />
-            <div className="space-y-2">
-              <div className="w-48 h-6 bg-white/10 rounded animate-pulse" />
-              <div className="w-32 h-4 bg-white/10 rounded animate-pulse" />
+        <div className="max-w-7xl mx-auto p-6">
+          {/* Header */}
+          <div className="flex items-center gap-4 mb-6">
+            <Link 
+              to="/customers" 
+              className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <div>
+              <div className="h-7 bg-gray-700/50 rounded w-48 mb-2 animate-pulse" />
+              <div className="h-4 bg-gray-700/50 rounded w-32 animate-pulse" />
             </div>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="w-full h-64 bg-white/5 rounded-lg animate-pulse" />
-              <div className="w-full h-48 bg-white/5 rounded-lg animate-pulse" />
-            </div>
-            <div className="space-y-6">
-              <div className="w-full h-48 bg-white/5 rounded-lg animate-pulse" />
-              <div className="w-full h-32 bg-white/5 rounded-lg animate-pulse" />
-            </div>
-          </div>
+          <CustomerDetailSkeleton />
         </div>
       </DashboardLayout>
     )
   }
 
-  if (!customer) {
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  if (error || !customer) {
     return (
       <DashboardLayout>
         <div className="flex flex-col items-center justify-center py-24">
-          <AlertCircle className="w-16 h-16 text-gray-400 mb-4" />
-          <h3 className="text-lg font-semibold text-white mb-2">Customer Not Found</h3>
+          <AlertCircle className="w-16 h-16 text-red-400 mb-4" />
+          <h3 className="text-lg font-semibold text-white mb-2">
+            {error ? 'Error Loading Customer' : 'Customer Not Found'}
+          </h3>
           <p className="text-gray-400 text-center mb-6">
-            The customer you&apos;re looking for doesn&apos;t exist or you don&apos;t have permission to view it.
+            {error ?? "The customer you're looking for doesn't exist or you don't have permission to view it."}
           </p>
-          <Link
-            to="/customers"
-            className="flex items-center gap-2 px-4 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white rounded-lg font-medium transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Customers
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              to="/customers"
+              className="flex items-center gap-2 px-4 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white rounded-lg font-medium transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Customers
+            </Link>
+            {error && (
+              <ActionButton
+                label="Try Again"
+                onClick={handleRetry}
+                variant="secondary"
+                size="sm"
+              />
+            )}
+          </div>
         </div>
       </DashboardLayout>
     )
@@ -143,33 +208,71 @@ const CustomerDetailPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between"
+          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6"
         >
-          <div className="flex items-center gap-4">
-            <Link
-              to="/customers"
-              className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-            <div>
-              <h1 className="text-base font-medium text-white mb-1">{customer.displayName}</h1>
-              <p className="text-xs text-gray-400">{customer.email}</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <Link
+                to="/customers"
+                className="p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 border border-white/10"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Link>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center">
+                  {customer.isBusinessCustomer ? (
+                    <Building2 className="w-6 h-6 text-white" />
+                  ) : (
+                    <User className="w-6 h-6 text-white" />
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h1 className="text-lg font-medium text-white">{customer.effectiveDisplayName ?? customer.displayName}</h1>
+                    {customer.isBusinessCustomer && (
+                      <span className="px-3 py-1 bg-[#14BDEA]/20 text-[#14BDEA] border border-[#14BDEA]/30 rounded-lg text-sm font-medium">
+                        Business
+                      </span>
+                    )}
+                    {getStatusBadge(customer.status)}
+                  </div>
+                  <div className="flex items-center gap-4 text-white/70">
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4" />
+                      <span className="text-sm">{customer.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4" />
+                      <span className="text-sm">Member since {formatDate(customer.signupDate)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            {getStatusBadge(customer.status)}
-            <ActionButton
-              label="Edit"
-              icon={Edit}
-              onClick={() => setIsEditing(true)}
-              variant="secondary"
-              size="sm"
-            />
-            <button className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
+            
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsEmailModalOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-[#14BDEA]/20 border border-[#14BDEA]/30 text-[#14BDEA] rounded-lg hover:bg-[#14BDEA]/30 hover:text-white transition-all duration-200"
+              >
+                <Mail className="w-4 h-4" />
+                <span className="text-sm font-medium">Send Email</span>
+              </button>
+              <button
+                onClick={() => setIsEditModalOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-lg hover:shadow-lg hover:shadow-[#D417C8]/25 transition-all duration-200"
+              >
+                <Edit className="w-4 h-4" />
+                <span className="text-sm font-medium">Edit Details</span>
+              </button>
+              <button 
+                onClick={() => setIsDangerousActionsModalOpen(true)}
+                className="p-3 text-white/70 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200 border border-white/10"
+                title="Dangerous Actions"
+              >
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </motion.div>
 
@@ -183,61 +286,99 @@ const CustomerDetailPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              <Card padding="md" className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-gradient-to-br from-[#D417C8]/15 to-[#14BDEA]/15 rounded-lg border border-[#D417C8]/20">
-                    <Building2 className="w-3.5 h-3.5 text-[#D417C8]" />
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="p-3 bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 rounded-xl border border-[#D417C8]/30">
+                    {customer.isBusinessCustomer ? (
+                      <Building2 className="w-5 h-5 text-[#D417C8]" />
+                    ) : (
+                      <User className="w-5 h-5 text-[#D417C8]" />
+                    )}
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-sm font-medium text-white mb-1">Customer Information</h2>
-                    <p className="text-xs text-gray-400 mb-4">
-                      Core customer details and contact information
+                    <h2 className="text-lg font-medium text-white mb-2">
+                      {customer.isBusinessCustomer ? 'Business Information' : 'Customer Information'}
+                    </h2>
+                    <p className="text-sm text-gray-400">
+                      Core {customer.isBusinessCustomer ? 'business' : 'customer'} details and contact information
                     </p>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                          <Mail className="w-3 h-3 text-gray-400" />
-                          <span className="text-xs text-gray-300">{customer.email}</span>
-                        </div>
-                        {customer.phoneNumber && (
-                          <div className="flex items-center gap-2">
-                            <Phone className="w-3 h-3 text-gray-400" />
-                            <span className="text-xs text-gray-300">{customer.phoneNumber}</span>
-                          </div>
-                        )}
-                        {customer.company && (
-                          <div className="flex items-center gap-2">
-                            <Building2 className="w-3 h-3 text-gray-400" />
-                            <span className="text-xs text-gray-300">{customer.company}</span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-3 h-3 text-gray-400" />
-                          <span className="text-xs text-gray-300">
-                            Member since {formatDate(customer.signupDate)}
-                          </span>
-                        </div>
-                        {customer.timezone && (
-                          <div className="flex items-center gap-2">
-                            <Clock className="w-3 h-3 text-gray-400" />
-                            <span className="text-xs text-gray-300">{customer.timezone}</span>
-                          </div>
-                        )}
-                        {customer.locale && (
-                          <div className="flex items-center gap-2">
-                            <Globe className="w-3 h-3 text-gray-400" />
-                            <span className="text-xs text-gray-300">{customer.locale}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
                   </div>
                 </div>
-              </Card>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <Mail className="w-4 h-4 text-[#14BDEA]" />
+                      <div>
+                        <div className="text-sm font-medium text-white">{customer.email}</div>
+                        <div className="text-xs text-white/60">Primary email address</div>
+                      </div>
+                    </div>
+                    {customer.phoneNumber && (
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <Phone className="w-4 h-4 text-[#42E695]" />
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-white">{customer.phoneNumber}</div>
+                          <div className="text-xs text-white/60">Phone number</div>
+                        </div>
+                        {customer.phoneNumberConfirmed && (
+                          <div title="Phone number confirmed">
+                            <CheckCircle className="w-4 h-4 text-emerald-400" />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {customer.company && (
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <Building2 className="w-4 h-4 text-[#7767DA]" />
+                        <div>
+                          <div className="text-sm font-medium text-white">{customer.company}</div>
+                          <div className="text-xs text-white/60">Company name</div>
+                        </div>
+                      </div>
+                    )}
+                    {customer.taxNumber && (
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <FileText className="w-4 h-4 text-amber-400" />
+                        <div>
+                          <div className="text-sm font-medium text-white">{customer.taxNumber}</div>
+                          <div className="text-xs text-white/60">Tax number</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {customer.timezone && (
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <Clock className="w-4 h-4 text-[#FF6B6B]" />
+                        <div>
+                          <div className="text-sm font-medium text-white">{customer.timezone}</div>
+                          <div className="text-xs text-white/60">Timezone</div>
+                        </div>
+                      </div>
+                    )}
+                    {customer.locale && (
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <Globe className="w-4 h-4 text-[#14BDEA]" />
+                        <div>
+                          <div className="text-sm font-medium text-white">{customer.locale}</div>
+                          <div className="text-xs text-white/60">Language & locale</div>
+                        </div>
+                      </div>
+                    )}
+                    {customer.currency && (
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <span className="w-4 h-4 flex items-center justify-center text-[#42E695] font-bold text-xs">$</span>
+                        <div>
+                          <div className="text-sm font-medium text-white">{customer.currency}</div>
+                          <div className="text-xs text-white/60">Preferred currency</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </motion.div>
 
             {/* Addresses */}
@@ -246,53 +387,69 @@ const CustomerDetailPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Card padding="md" className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-gradient-to-br from-[#14BDEA]/15 to-[#7767DA]/15 rounded-lg border border-[#14BDEA]/20">
-                    <MapPin className="w-3.5 h-3.5 text-[#14BDEA]" />
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="p-3 bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 rounded-xl border border-[#14BDEA]/30">
+                    <MapPin className="w-5 h-5 text-[#14BDEA]" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-sm font-medium text-white mb-1">Addresses</h2>
-                    <p className="text-xs text-gray-400 mb-4">
-                      Billing and shipping addresses
+                    <h2 className="text-lg font-medium text-white mb-2">Addresses</h2>
+                    <p className="text-sm text-gray-400">
+                      Customer billing and shipping addresses
                     </p>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {customer.billingAddress && (
-                        <div className="space-y-2">
-                          <h3 className="text-xs font-medium text-gray-300 uppercase tracking-wider">
-                            Billing Address
-                          </h3>
-                          <div className="text-xs text-gray-400 space-y-1">
-                            <div>{customer.billingAddress.line1}</div>
-                            {customer.billingAddress.line2 && <div>{customer.billingAddress.line2}</div>}
-                            <div>
-                              {customer.billingAddress.city}, {customer.billingAddress.state} {customer.billingAddress.zipCode}
-                            </div>
-                            <div>{customer.billingAddress.country}</div>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {customer.shippingAddress && (
-                        <div className="space-y-2">
-                          <h3 className="text-xs font-medium text-gray-300 uppercase tracking-wider">
-                            Shipping Address
-                          </h3>
-                          <div className="text-xs text-gray-400 space-y-1">
-                            <div>{customer.shippingAddress.line1}</div>
-                            {customer.shippingAddress.line2 && <div>{customer.shippingAddress.line2}</div>}
-                            <div>
-                              {customer.shippingAddress.city}, {customer.shippingAddress.state} {customer.shippingAddress.zipCode}
-                            </div>
-                            <div>{customer.shippingAddress.country}</div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </div>
-              </Card>
+                
+                {(customer.billingAddress ?? customer.shippingAddress) ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {customer.billingAddress && (
+                      <div className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-200">
+                        <div className="flex items-center gap-3 mb-3">
+                          <CreditCard className="w-5 h-5 text-[#42E695]" />
+                          <h3 className="text-sm font-medium text-white">
+                            Billing Address
+                          </h3>
+                        </div>
+                        <div className="text-sm text-white/80 leading-relaxed space-y-1">
+                          <div>{customer.billingAddress.line1}</div>
+                          {customer.billingAddress.line2 && <div>{customer.billingAddress.line2}</div>}
+                          <div>
+                            {customer.billingAddress.city}, {customer.billingAddress.state} {customer.billingAddress.zipCode}
+                          </div>
+                          <div className="text-white/60">{customer.billingAddress.country}</div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {customer.shippingAddress && (
+                      <div className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-200">
+                        <div className="flex items-center gap-3 mb-3">
+                          <Truck className="w-5 h-5 text-[#7767DA]" />
+                          <h3 className="text-sm font-medium text-white">
+                            Shipping Address
+                          </h3>
+                        </div>
+                        <div className="text-sm text-white/80 leading-relaxed space-y-1">
+                          <div>{customer.shippingAddress.line1}</div>
+                          {customer.shippingAddress.line2 && <div>{customer.shippingAddress.line2}</div>}
+                          <div>
+                            {customer.shippingAddress.city}, {customer.shippingAddress.state} {customer.shippingAddress.zipCode}
+                          </div>
+                          <div className="text-white/60">{customer.shippingAddress.country}</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 border-2 border-dashed border-white/20 rounded-xl">
+                    <MapPin className="w-12 h-12 text-white/40 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-white/70 mb-2">No addresses on file</h3>
+                    <p className="text-sm text-white/50">
+                      Customer addresses will appear here once added
+                    </p>
+                  </div>
+                )}
+              </div>
             </motion.div>
 
             {/* Tags and Custom Fields */}
@@ -302,55 +459,55 @@ const CustomerDetailPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <Card padding="md" className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 bg-gradient-to-br from-[#7767DA]/15 to-[#D417C8]/15 rounded-lg border border-[#7767DA]/20">
-                      <Tag className="w-3.5 h-3.5 text-[#7767DA]" />
+                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 rounded-xl border border-[#7767DA]/30">
+                      <Tag className="w-5 h-5 text-[#7767DA]" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-sm font-medium text-white mb-1">Metadata</h2>
-                      <p className="text-xs text-gray-400 mb-4">
+                      <h2 className="text-lg font-medium text-white mb-2">Metadata</h2>
+                      <p className="text-sm text-gray-400">
                         Tags and custom fields
                       </p>
-                      
-                      <div className="space-y-4">
-                        {customer.tags.length > 0 && (
-                          <div>
-                            <h3 className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
-                              Tags
-                            </h3>
-                            <div className="flex flex-wrap gap-2">
-                              {customer.tags.map((tag, index) => (
-                                <span
-                                  key={index}
-                                  className="px-2 py-1 bg-gray-700/50 text-gray-300 text-xs rounded-md border border-gray-600/30"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {Object.keys(customer.customFields).length > 0 && (
-                          <div>
-                            <h3 className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
-                              Custom Fields
-                            </h3>
-                            <div className="space-y-2">
-                              {Object.entries(customer.customFields).map(([key, value]) => (
-                                <div key={key} className="flex justify-between text-xs">
-                                  <span className="text-gray-400">{key}</span>
-                                  <span className="text-gray-300">{value}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
                     </div>
                   </div>
-                </Card>
+                  
+                  <div className="space-y-4">
+                    {customer.tags.length > 0 && (
+                      <div>
+                        <h3 className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
+                          Tags
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {customer.tags.map((tag, index) => (
+                            <span
+                              key={index}
+                              className="px-2 py-1 bg-gray-700/50 text-gray-300 text-xs rounded-md border border-gray-600/30"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {Object.keys(customer.customFields).length > 0 && (
+                      <div>
+                        <h3 className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
+                          Custom Fields
+                        </h3>
+                        <div className="space-y-2">
+                          {Object.entries(customer.customFields).map(([key, value]) => (
+                            <div key={key} className="flex justify-between text-xs">
+                              <span className="text-gray-400">{key}</span>
+                              <span className="text-gray-300">{value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </motion.div>
             )}
           </div>
@@ -363,46 +520,43 @@ const CustomerDetailPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <Card padding="md">
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="p-2 bg-gradient-to-br from-emerald-500/15 to-emerald-400/15 rounded-lg border border-emerald-500/20">
-                    <Shield className="w-3.5 h-3.5 text-emerald-400" />
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-emerald-400/20 rounded-xl border border-emerald-500/30">
+                    <Zap className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div>
-                    <h2 className="text-sm font-medium text-white mb-1">Quick Actions</h2>
-                    <p className="text-xs text-gray-400">
+                    <h2 className="text-lg font-medium text-white mb-2">Quick Actions</h2>
+                    <p className="text-sm text-gray-400">
                       Manage customer account
                     </p>
                   </div>
                 </div>
                 
                 <div className="space-y-3">
-                  <ActionButton
-                    label="Send Email"
-                    icon={Mail}
-                    onClick={() => {/* TODO: Implement email */}}
-                    variant="secondary"
-                    size="sm"
-                    className="w-full"
-                  />
-                  <ActionButton
-                    label="View Notes"
-                    icon={FileText}
-                    onClick={() => {/* TODO: Implement notes */}}
-                    variant="secondary"
-                    size="sm"
-                    className="w-full"
-                  />
-                  <ActionButton
-                    label="Edit Details"
-                    icon={Edit}
-                    onClick={() => setIsEditing(true)}
-                    variant="primary"
-                    size="sm"
-                    className="w-full"
-                  />
+                  <button
+                    onClick={() => setIsEmailModalOpen(true)}
+                    className="w-full flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-[#14BDEA]/30 text-left transition-all duration-200 group"
+                  >
+                    <Mail className="w-4 h-4 text-[#14BDEA] group-hover:text-white" />
+                    <span className="text-sm font-medium text-white">Send Email</span>
+                  </button>
+                  <button
+                    onClick={() => setIsNotesModalOpen(true)}
+                    className="w-full flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-[#42E695]/30 text-left transition-all duration-200 group"
+                  >
+                    <FileText className="w-4 h-4 text-[#42E695] group-hover:text-white" />
+                    <span className="text-sm font-medium text-white">View Notes</span>
+                  </button>
+                  <button
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="w-full flex items-center gap-3 p-3 bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 border border-[#D417C8]/30 rounded-xl hover:from-[#D417C8]/30 hover:to-[#14BDEA]/30 text-left transition-all duration-200 group"
+                  >
+                    <Edit className="w-4 h-4 text-[#D417C8] group-hover:text-white" />
+                    <span className="text-sm font-medium text-white">Edit Details</span>
+                  </button>
                 </div>
-              </Card>
+              </div>
             </motion.div>
 
             {/* Status Information */}
@@ -411,54 +565,101 @@ const CustomerDetailPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <Card padding="md">
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="p-2 bg-gradient-to-br from-amber-500/15 to-amber-400/15 rounded-lg border border-amber-500/20">
-                    <CheckCircle className="w-3.5 h-3.5 text-amber-400" />
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="p-3 bg-gradient-to-br from-amber-500/20 to-amber-400/20 rounded-xl border border-amber-500/30">
+                    <Activity className="w-5 h-5 text-amber-400" />
                   </div>
                   <div>
-                    <h2 className="text-sm font-medium text-white mb-1">Account Status</h2>
-                    <p className="text-xs text-gray-400">
+                    <h2 className="text-lg font-medium text-white mb-2">Account Status</h2>
+                    <p className="text-sm text-gray-400">
                       Customer account settings
                     </p>
                   </div>
                 </div>
                 
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-400">Portal Access</span>
-                    <span className={`text-xs px-2 py-1 rounded-md ${
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-xl">
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-white/70" />
+                      <span className="text-sm text-white">Portal Access</span>
+                    </div>
+                    <span className={`text-sm px-3 py-1 rounded-lg font-medium ${
                       customer.portalAccess 
-                        ? 'bg-emerald-500/20 text-emerald-400' 
-                        : 'bg-red-500/20 text-red-400'
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
+                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
                     }`}>
                       {customer.portalAccess ? 'Enabled' : 'Disabled'}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-400">Auto Collection</span>
-                    <span className={`text-xs px-2 py-1 rounded-md ${
+                  <div className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-xl">
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="w-4 h-4 text-white/70" />
+                      <span className="text-sm text-white">Auto Collection</span>
+                    </div>
+                    <span className={`text-sm px-3 py-1 rounded-lg font-medium ${
                       customer.autoCollection 
-                        ? 'bg-emerald-500/20 text-emerald-400' 
-                        : 'bg-red-500/20 text-red-400'
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
+                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
                     }`}>
                       {customer.autoCollection ? 'Enabled' : 'Disabled'}
                     </span>
                   </div>
                   {customer.lastActivityDate && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-400">Last Activity</span>
-                      <span className="text-xs text-gray-300">
+                    <div className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-xl">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-white/70" />
+                        <span className="text-sm text-white">Last Activity</span>
+                      </div>
+                      <span className="text-sm text-white/80 font-medium">
                         {formatDate(customer.lastActivityDate)}
                       </span>
                     </div>
                   )}
                 </div>
-              </Card>
+              </div>
             </motion.div>
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      {customer && (
+        <>
+          <EmailComposeModal
+            isOpen={isEmailModalOpen}
+            onClose={() => setIsEmailModalOpen(false)}
+            customerEmail={customer.email}
+            customerName={customer.effectiveDisplayName}
+            customerId={customer.id}
+          />
+          
+          <CustomerNotesModal
+            isOpen={isNotesModalOpen}
+            onClose={() => setIsNotesModalOpen(false)}
+            customerId={customer.id}
+            customerName={customer.effectiveDisplayName}
+            initialNotes={customer.notes}
+          />
+          
+          <EditCustomerModal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            customer={customer}
+            onCustomerUpdated={(updatedCustomer) => setCustomer(updatedCustomer)}
+          />
+          
+          <DangerousActionsModal
+            isOpen={isDangerousActionsModalOpen}
+            onClose={() => setIsDangerousActionsModalOpen(false)}
+            customerId={customer.id}
+            customerName={customer.effectiveDisplayName}
+            currentStatus={customer.status}
+            onStatusChanged={handleStatusChanged}
+            onCustomerDeleted={handleCustomerDeleted}
+          />
+        </>
+      )}
     </DashboardLayout>
   )
 }

@@ -1,6 +1,12 @@
 import { httpClient } from './base/client'
 import type { PagedResult } from '@/shared/types/api/common'
 
+// Customer Types
+export enum CustomerType {
+  Individual = 1,
+  Business = 2
+}
+
 // Add customers endpoint to config first
 const CUSTOMER_ENDPOINTS = {
   BASE: '/customers',
@@ -8,11 +14,17 @@ const CUSTOMER_ENDPOINTS = {
   SEARCH: '/customers/search',
   TAGS: (id: string) => `/customers/${id}/tags`,
   STATUS: (id: string) => `/customers/${id}/status`,
+  NOTES: (id: string) => `/customers/${id}/notes`,
+  NOTE_BY_ID: (id: string, noteId: string) => `/customers/${id}/notes/${noteId}`,
+  SEND_EMAIL: (id: string) => `/customers/${id}/send-email`,
 } as const
 
 // Customer Types
 export interface CustomerResponse {
   id: string
+  type: CustomerType
+  effectiveDisplayName: string
+  isBusinessCustomer: boolean
   email: string
   firstName: string
   lastName: string
@@ -61,6 +73,7 @@ export interface CustomerNoteResponse {
 }
 
 export interface CustomerCreateRequest {
+  type?: CustomerType
   email: string
   firstName: string
   lastName: string
@@ -80,6 +93,7 @@ export interface CustomerCreateRequest {
 }
 
 export interface CustomerUpdateRequest {
+  type: CustomerType
   email: string
   firstName: string
   lastName: string
@@ -94,6 +108,8 @@ export interface CustomerUpdateRequest {
   autoCollection: boolean
   tags: string[]
   customFields: Record<string, string>
+  billingAddress?: CustomerAddressCreateRequest | null
+  shippingAddress?: CustomerAddressCreateRequest | null
 }
 
 export interface CustomerAddressCreateRequest {
@@ -128,6 +144,18 @@ export interface CustomerSearchRequest {
   email?: string
   phone?: string
   limit?: number
+}
+
+export interface CustomerNoteCreateRequest {
+  content: string
+  isInternal: boolean
+  createdBy: string
+}
+
+export interface CustomerEmailRequest {
+  subject: string
+  message: string
+  isHtml: boolean
 }
 
 // Customer Service Class
@@ -194,6 +222,36 @@ export class CustomerService {
 
   async updateStatus(id: string, request: CustomerStatusUpdateRequest): Promise<void> {
     await this.client.put(CUSTOMER_ENDPOINTS.STATUS(id), request)
+  }
+
+  // Customer Notes methods
+  async getNotes(id: string): Promise<CustomerNoteResponse[]> {
+    const response = await this.client.get<CustomerNoteResponse[]>(CUSTOMER_ENDPOINTS.NOTES(id))
+    return response.data
+  }
+
+  async getNote(id: string, noteId: string): Promise<CustomerNoteResponse> {
+    const response = await this.client.get<CustomerNoteResponse>(CUSTOMER_ENDPOINTS.NOTE_BY_ID(id, noteId))
+    return response.data
+  }
+
+  async createNote(id: string, request: CustomerNoteCreateRequest): Promise<CustomerNoteResponse> {
+    const response = await this.client.post<CustomerNoteResponse>(CUSTOMER_ENDPOINTS.NOTES(id), request)
+    return response.data
+  }
+
+  async updateNote(id: string, noteId: string, request: CustomerNoteCreateRequest): Promise<CustomerNoteResponse> {
+    const response = await this.client.put<CustomerNoteResponse>(CUSTOMER_ENDPOINTS.NOTE_BY_ID(id, noteId), request)
+    return response.data
+  }
+
+  async deleteNote(id: string, noteId: string): Promise<void> {
+    await this.client.delete(CUSTOMER_ENDPOINTS.NOTE_BY_ID(id, noteId))
+  }
+
+  // Email method
+  async sendEmail(id: string, request: CustomerEmailRequest): Promise<void> {
+    await this.client.post(CUSTOMER_ENDPOINTS.SEND_EMAIL(id), request)
   }
 }
 

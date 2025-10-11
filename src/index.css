@@ -227,9 +227,9 @@
   }
 
   .auth-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px; /* Consistent 8px radius everywhere */
     padding: 1.25rem 1rem; /* 20px top/bottom, 16px left/right - ultra compact */
     box-shadow:

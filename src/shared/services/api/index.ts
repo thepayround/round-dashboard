@@ -15,6 +15,7 @@ export { teamService } from './team.service'
 export { roundAccountService } from './roundAccount.service'
 export { organizationTypeService } from './organizationType.service'
 export { userSettingsService } from './userSettings.service'
+export { customerService } from './customer.service'
 
 // Re-export service classes for testing/mocking
 export { AuthService } from './auth.service'
@@ -22,6 +23,7 @@ export { OrganizationService } from './organization.service'
 export { AddressService } from './address.service'
 export { CountryCurrencyService } from './countryCurrency.service'
 export { TeamService } from './team.service'
+export { CustomerService } from './customer.service'
 
 // Re-export types
 export type { 

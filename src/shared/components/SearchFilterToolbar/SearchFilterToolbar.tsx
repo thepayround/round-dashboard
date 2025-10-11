@@ -1,5 +1,5 @@
 import React from 'react'
-import { Filter } from 'lucide-react'
+import { Filter, X } from 'lucide-react'
 import { SearchInput } from '../SearchInput/SearchInput'
 import { ViewModeToggle } from '../ViewModeToggle'
 import { UiDropdown, type UiDropdownOption } from '../ui/UiDropdown'
@@ -11,6 +11,7 @@ export interface FilterField {
   type: 'select' | 'input' | 'date' | 'custom'
   value: string | number
   onChange: (value: string) => void
+  onClear?: () => void
   options?: Array<{ id: string; name: string; value?: string }>
   placeholder?: string
   component?: React.ReactNode
@@ -35,6 +36,7 @@ export interface SearchFilterToolbarProps {
   showFilters: boolean
   onToggleFilters: () => void
   filterFields?: FilterField[]
+  onClearFilters?: () => void
   
   // View mode functionality (optional)
   viewMode?: ViewMode
@@ -58,6 +60,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
   showFilters,
   onToggleFilters,
   filterFields = [],
+  onClearFilters,
   viewMode,
   onViewModeChange,
   viewModeOptions,
@@ -68,8 +71,8 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
     switch (field.type) {
       case 'select':
         return (
-          <div key={field.id}>
-            <label className="block text-sm font-medium auth-text-muted mb-2">
+          <div key={field.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
+            <label className="block text-sm font-medium text-white/80 mb-3">
               {field.label}
             </label>
             <UiDropdown
@@ -79,6 +82,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               })) ?? []}
               value={String(field.value)}
               onSelect={(value) => field.onChange(value)}
+              onClear={field.onClear}
               placeholder={field.placeholder ?? `Select ${field.label.toLowerCase()}`}
               allowClear
             />
@@ -87,8 +91,8 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       
       case 'input':
         return (
-          <div key={field.id}>
-            <label className="block text-sm font-medium auth-text-muted mb-2">
+          <div key={field.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
+            <label className="block text-sm font-medium text-white/80 mb-3">
               {field.label}
             </label>
             <input
@@ -96,30 +100,30 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
               placeholder={field.placeholder}
-              className="auth-input w-full"
+              className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/50 focus:border-[#D417C8]/50"
             />
           </div>
         )
       
       case 'date':
         return (
-          <div key={field.id}>
-            <label className="block text-sm font-medium auth-text-muted mb-2">
+          <div key={field.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
+            <label className="block text-sm font-medium text-white/80 mb-3">
               {field.label}
             </label>
             <input
               type="date"
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
-              className="auth-input w-full"
+              className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#D417C8]/50 focus:border-[#D417C8]/50"
             />
           </div>
         )
       
       case 'custom':
         return (
-          <div key={field.id}>
-            <label className="block text-sm font-medium auth-text-muted mb-2">
+          <div key={field.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
+            <label className="block text-sm font-medium text-white/80 mb-3">
               {field.label}
             </label>
             {field.component}
@@ -133,8 +137,8 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
 
   return (
     <div className={className}>
-      {/* Focus-stable toolbar using plain div instead of animated Card component */}
-      <div className="auth-card relative overflow-hidden p-3 md:p-4 lg:p-3.5">
+      {/* Enhanced search toolbar with consistent styling */}
+      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
         <div className="flex flex-col gap-2.5 md:gap-3 lg:gap-2.5">
           {/* Main toolbar - aligned row */}
           <div className="flex flex-col xs:flex-row gap-2.5 md:gap-3 lg:gap-2.5 xs:items-center">
@@ -186,12 +190,12 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             </div>
           </div>
 
-          {/* Search Results Info - separate row to avoid layout shift */}
+          {/* Search Results Info - Enhanced styling */}
           {searchResults && (searchQuery || searchResults.filtered < searchResults.total) && (
-            <div className="flex items-center gap-2 text-xs md:text-xs lg:text-xs -mt-0.5 px-1">
-              <div className="flex items-center gap-1.5">
-                <div className="w-1 h-1 rounded-full bg-[#14BDEA]" />
-                <span className="text-gray-400">
+            <div className="flex items-center gap-3 text-sm -mt-2 px-2">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#14BDEA]" />
+                <span className="text-white/70">
                   {searchResults.filtered === searchResults.total 
                     ? `${searchResults.total} result${searchResults.total !== 1 ? 's' : ''}`
                     : `${searchResults.filtered} of ${searchResults.total} result${searchResults.total !== 1 ? 's' : ''}`
@@ -199,10 +203,10 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
                 </span>
               </div>
               {searchQuery && (
-                <div className="flex items-center gap-1.5">
-                  <span className="text-gray-500">•</span>
-                  <span className="text-gray-500">for</span>
-                  <span className="text-[#14BDEA] font-medium bg-[#14BDEA]/10 px-2 py-0.5 rounded-md border border-[#14BDEA]/20">
+                <div className="flex items-center gap-2">
+                  <span className="text-white/50">•</span>
+                  <span className="text-white/50">for</span>
+                  <span className="text-[#14BDEA] font-medium bg-[#14BDEA]/20 px-3 py-1 rounded-lg border border-[#14BDEA]/30">
                     &quot;{searchQuery}&quot;
                   </span>
                 </div>
@@ -211,12 +215,25 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
           )}
         </div>
 
-        {/* Advanced Filters - Mobile optimized */}
+        {/* Advanced Filters - Enhanced styling */}
         {showFilters && filterFields.length > 0 && (
-          <div className="mt-3 md:mt-4 lg:mt-3.5 pt-3 md:pt-4 lg:pt-3.5 border-t border-gray-700/50">
-            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-3 lg:gap-2.5">
+          <div className="mt-6 pt-6 border-t border-white/10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filterFields.map(renderFilterField)}
             </div>
+            
+            {/* Clear all filters button */}
+            {onClearFilters && filterFields.some(field => field.value !== '' && field.value !== null && field.value !== undefined) && (
+              <div className="mt-6 flex justify-center">
+                <button
+                  onClick={onClearFilters}
+                  className="px-6 py-3 text-sm bg-gradient-to-r from-red-500/20 to-red-600/20 hover:from-red-500/30 hover:to-red-600/30 border border-red-500/30 hover:border-red-400/40 rounded-lg text-red-300 hover:text-red-200 transition-all duration-200 flex items-center space-x-2"
+                >
+                  <X className="w-4 h-4" />
+                  <span>Clear All Filters</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

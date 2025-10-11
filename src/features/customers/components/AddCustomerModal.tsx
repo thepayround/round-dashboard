@@ -47,6 +47,11 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
       return false
     }
 
+    // Business customers must have a company name
+    if (formData.type === 2 && !formData.company?.trim()) {
+      return false
+    }
+
     // Simple phone check - use client-side validation (same as registration)
     if (formData.phoneNumber?.trim() && !phoneValidator.hasMinimumContent(formData.phoneNumber)) {
       return false
@@ -62,6 +67,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
   }
   
   const [formData, setFormData] = useState<CustomerCreateRequest>({
+    type: 1, // Default to Individual
     email: '',
     firstName: '',
     lastName: '',
@@ -215,6 +221,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
       
       // Clean up the data before sending to API - using camelCase as configured in backend
       const cleanCustomerData: CustomerCreateRequest = {
+        type: formData.type,
         email: formData.email.trim(),
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
@@ -288,6 +295,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
       
       // Reset form
       setFormData({
+        type: 1, // Reset to Individual
         email: '',
         firstName: '',
         lastName: '',
@@ -357,7 +365,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden"
           >
-            <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl">
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <div className="flex items-center space-x-3">
@@ -385,6 +393,43 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                     <User className="w-5 h-5 text-[#D417C8]" />
                     <span>Basic Information</span>
                   </h3>
+                  
+                  {/* Customer Type Selection */}
+                  <div className="space-y-3">
+                    <label className="auth-label" htmlFor="customer-type-selection">Customer Type</label>
+                    <div className="grid grid-cols-2 gap-3" id="customer-type-selection">
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, type: 1 }))}
+                        className={`p-4 rounded-xl border-2 transition-all duration-200 flex items-center space-x-3 ${
+                          formData.type === 1
+                            ? 'border-[#D417C8] bg-[#D417C8]/10 text-white'
+                            : 'border-white/20 hover:border-white/40 text-white/70 hover:text-white'
+                        }`}
+                      >
+                        <User className="w-5 h-5" />
+                        <div className="text-left">
+                          <div className="font-medium">Individual</div>
+                          <div className="text-sm opacity-75">Personal customer</div>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, type: 2 }))}
+                        className={`p-4 rounded-xl border-2 transition-all duration-200 flex items-center space-x-3 ${
+                          formData.type === 2
+                            ? 'border-[#14BDEA] bg-[#14BDEA]/10 text-white'
+                            : 'border-white/20 hover:border-white/40 text-white/70 hover:text-white'
+                        }`}
+                      >
+                        <Building2 className="w-5 h-5" />
+                        <div className="text-left">
+                          <div className="font-medium">Business</div>
+                          <div className="text-sm opacity-75">Company customer</div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
                   
                   {/* Name and Email Row - Symmetric 3-column */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -473,39 +518,46 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                       </AnimatePresence>
                     </div>
                     
-                    <div>
-                      <label htmlFor="company" className="auth-label">
-                        Company
-                      </label>
-                      <div className="input-container">
-                        <Building2 className="input-icon-left auth-icon-primary" />
-                        <input
-                          id="company"
-                          type="text"
-                          value={formData.company}
-                          onChange={(e) => handleInputChange('company', e.target.value)}
-                          placeholder="Acme Corporation"
-                          className="auth-input input-with-icon-left"
-                        />
+                    {/* Company field - only for business customers */}
+                    {formData.type === 2 && (
+                      <div>
+                        <label htmlFor="company" className="auth-label">
+                          Company <span className="text-red-400">*</span>
+                        </label>
+                        <div className="input-container">
+                          <Building2 className="input-icon-left auth-icon-primary" />
+                          <input
+                            id="company"
+                            type="text"
+                            value={formData.company}
+                            onChange={(e) => handleInputChange('company', e.target.value)}
+                            placeholder="Acme Corporation"
+                            className="auth-input input-with-icon-left"
+                            required={formData.type === 2}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                     
-                    <div>
-                      <label htmlFor="taxNumber" className="auth-label">
-                        Tax Number
-                      </label>
-                      <div className="input-container">
-                        <Hash className="input-icon-left auth-icon-primary" />
-                        <input
-                          id="taxNumber"
-                          type="text"
-                          value={formData.taxNumber}
-                          onChange={(e) => handleInputChange('taxNumber', e.target.value)}
-                          placeholder="Enter tax number"
-                          className="auth-input input-with-icon-left"
-                        />
+                    {/* Tax Number field - only for business customers */}
+                    {formData.type === 2 && (
+                      <div>
+                        <label htmlFor="taxNumber" className="auth-label">
+                          Tax Number
+                        </label>
+                        <div className="input-container">
+                          <Hash className="input-icon-left auth-icon-primary" />
+                          <input
+                            id="taxNumber"
+                            type="text"
+                            value={formData.taxNumber}
+                            onChange={(e) => handleInputChange('taxNumber', e.target.value)}
+                            placeholder="Enter tax number"
+                            className="auth-input input-with-icon-left"
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 

@@ -34,11 +34,11 @@ export const SectionHeader = ({
     <div className={className}>
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h2 className={`${size === 'main' ? 'text-base' : 'text-sm'} font-medium ${size === 'main' ? 'bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent' : 'auth-text'} ${size === 'main' ? 'mb-1.5' : 'mb-0'}`}>
+          <h2 className={`${size === 'main' ? 'text-lg' : 'text-lg'} font-medium text-white ${size === 'main' ? 'mb-1.5' : 'mb-0'}`}>
             {title}
           </h2>
           {subtitle && (
-            <p className={`${size === 'main' ? 'auth-text-muted text-xs' : 'text-gray-400 text-xs'} mt-1.5 font-light`}>
+            <p className={`${size === 'main' ? 'text-sm' : 'text-sm'} text-gray-400 mt-1.5`}>
               {subtitle}
             </p>
           )}

@@ -567,8 +567,9 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
               handleToggle()
             }
           }}
+          style={{ display: 'flex', alignItems: 'center' }}
           className={cn(
-            'relative flex items-center gap-2 h-full min-w-[120px] border-r cursor-pointer transition-all duration-150',
+            'relative gap-2 h-full min-w-[120px] border-r cursor-pointer transition-all duration-150',
             // Match auth-input responsive padding exactly  
             'px-3 md:px-4',
             // Match auth-input text styling exactly
@@ -607,25 +608,43 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             if (selectedCountry) {
               return (
                 <>
-                  <span className="text-base flex-shrink-0" role="img" aria-label={selectedCountry.countryName}>
+                  <span 
+                    className="text-sm flex-shrink-0 flex items-center" 
+                    style={{ lineHeight: '1' }}
+                    role="img" 
+                    aria-label={selectedCountry.countryName}
+                  >
                     {selectedCountry.flag}
                   </span>
-                  <span className="text-xs md:text-xs text-white/95 truncate">+{selectedCountry.phoneCode}</span>
+                  <span 
+                    className="text-xs md:text-xs text-white/95 truncate flex items-center"
+                    style={{ lineHeight: '1' }}
+                  >
+                    +{selectedCountry.phoneCode}
+                  </span>
                 </>
               )
             }
-            return <span className="text-xs md:text-xs text-white/60">Select</span>
+            return (
+              <span 
+                className="text-xs md:text-xs text-white/60 flex items-center"
+                style={{ lineHeight: '1' }}
+              >
+                Select
+              </span>
+            )
           })()}
           <ChevronDown 
             className={cn(
-              'w-3 h-3 text-gray-400 transition-transform duration-200 flex-shrink-0',
+              'w-3 h-3 text-gray-400 transition-transform duration-200 flex-shrink-0 flex items-center',
               isDropdownOpen && 'rotate-180'
-            )} 
+            )}
+            style={{ lineHeight: '1' }}
           />
         </div>
 
         {/* Phone Number Input */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative flex items-center h-full">
           <input
             ref={phoneInputRef}
             type="tel"
@@ -641,7 +660,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             placeholder={getPlaceholder()}
             disabled={disabled}
             className={cn(
-              'w-full h-full bg-transparent focus:outline-none',
+              'w-full bg-transparent focus:outline-none',
               // Match auth-input responsive padding exactly
               'pl-3 pr-3 md:pl-4 md:pr-4',
               // Match auth-input text color and size exactly
