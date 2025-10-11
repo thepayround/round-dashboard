@@ -144,7 +144,10 @@ const CustomersPage: React.FC = () => {
 
   const loadCustomers = useCallback(async () => {
     try {
-      setLoading(true)
+      // Only show loading overlay for initial load or when no data exists
+      if (initialLoad || customers.length === 0) {
+        setLoading(true)
+      }
       
       // Build search params with proper backend pagination
       const searchParams: CustomerSearchParams = {
@@ -194,7 +197,9 @@ const CustomersPage: React.FC = () => {
       showError('Failed to load customers')
       console.error('Error loading customers:', error)
     } finally {
-      setLoading(false)
+      if (initialLoad || customers.length === 0) {
+        setLoading(false)
+      }
       setInitialLoad(false)
     }
   }, [currentPage, itemsPerPage, sortConfig, selectedCustomerType, selectedStatus, selectedCurrency, selectedPortalAccess, showError])
@@ -469,18 +474,9 @@ const CustomersPage: React.FC = () => {
           />
         </div>
 
-        {/* Loading State for Filter Changes */}
-        {loading && !initialLoad && (
-          <div className="flex items-center justify-center py-8">
-            <div className="flex items-center space-x-3 text-white/60">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              <span className="text-white">Updating results...</span>
-            </div>
-          </div>
-        )}
-
         {/* Content Area */}
-        {!loading && (
+        <div className="relative">
+          {/* Show content immediately, let table handle loading states */}
           <AnimatePresence mode="wait">
             {viewMode === 'grid' ? (
               <motion.div
@@ -656,7 +652,7 @@ const CustomersPage: React.FC = () => {
               </motion.div>
             )}
           </AnimatePresence>
-        )}
+        </div>
 
         {/* Pagination */}
         {!loading && totalCount > 0 && (
@@ -694,16 +690,6 @@ const CustomersPage: React.FC = () => {
                 onClick={() => setShowAddModal(true)}
               />
             )}
-          </div>
-        )}
-
-        {/* Loading State */}
-        {loading && customers.length > 0 && (
-          <div className="flex items-center justify-center py-8">
-            <div className="flex items-center space-x-3 text-white/60">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              <span className="text-white">Loading customers...</span>
-            </div>
           </div>
         )}
 
