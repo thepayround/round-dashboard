@@ -471,10 +471,11 @@ export const CreateChargeModalEnhanced = ({
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium auth-text mb-2">
+                        <label htmlFor="unitPrice" className="block text-sm font-medium auth-text mb-2">
                           Price per Unit ({getCurrencySymbol(formData.currency)}) *
                         </label>
                         <input
+                          id="unitPrice"
                           type="number"
                           value={formData.unitPrice}
                           onChange={(e) => setFormData({ ...formData, unitPrice: Number(e.target.value) })}
@@ -548,10 +549,11 @@ export const CreateChargeModalEnhanced = ({
                               />
                             </div>
                             <div>
-                              <label className="block text-xs auth-text-muted mb-1">
+                              <label htmlFor={`tier-${index}-pricePerUnit`} className="block text-xs auth-text-muted mb-1">
                                 Price per Unit ({getCurrencySymbol(formData.currency)})
                               </label>
                               <input
+                                id={`tier-${index}-pricePerUnit`}
                                 type="number"
                                 value={tier.pricePerUnit}
                                 onChange={(e) => updateTier(index, 'pricePerUnit', Number(e.target.value))}
@@ -624,15 +626,16 @@ export const CreateChargeModalEnhanced = ({
                   <h4 className="text-lg font-medium auth-text mb-4">Charge Limits</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="minimumCharge" className="block text-sm font-medium auth-text mb-2">
                         Minimum Charge ({getCurrencySymbol(formData.currency)})
                       </label>
                       <input
+                        id="minimumCharge"
                         type="number"
                         value={formData.minimumCharge ?? ''}
-                        onChange={(e) => setFormData({ 
-                          ...formData, 
-                          minimumCharge: e.target.value ? Number(e.target.value) : undefined 
+                        onChange={(e) => setFormData({
+                          ...formData,
+                          minimumCharge: e.target.value ? Number(e.target.value) : undefined
                         })}
                         className="auth-input w-full"
                         min="0"
@@ -641,15 +644,16 @@ export const CreateChargeModalEnhanced = ({
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="maximumCharge" className="block text-sm font-medium auth-text mb-2">
                         Maximum Charge ({getCurrencySymbol(formData.currency)})
                       </label>
                       <input
+                        id="maximumCharge"
                         type="number"
                         value={formData.maximumCharge ?? ''}
-                        onChange={(e) => setFormData({ 
-                          ...formData, 
-                          maximumCharge: e.target.value ? Number(e.target.value) : undefined 
+                        onChange={(e) => setFormData({
+                          ...formData,
+                          maximumCharge: e.target.value ? Number(e.target.value) : undefined
                         })}
                         className="auth-input w-full"
                         min="0"
@@ -671,7 +675,7 @@ export const CreateChargeModalEnhanced = ({
                   <h4 className="text-lg font-medium auth-text mb-4">Tax Configuration</h4>
                   
                   <div className="space-y-4">
-                    <label className="flex items-center space-x-3">
+                    <label className="flex items-center space-x-3" aria-label="This charge is taxable">
                       <input
                         type="checkbox"
                         checked={formData.taxable}
@@ -683,7 +687,7 @@ export const CreateChargeModalEnhanced = ({
 
                     {formData.taxable && (
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-                        <label className="flex items-center space-x-3">
+                        <label className="flex items-center space-x-3" aria-label="Tax inclusive">
                           <input
                             type="checkbox"
                             checked={formData.taxConfiguration.taxInclusive}

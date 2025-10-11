@@ -88,7 +88,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             />
           </div>
         )
-      
+
       case 'input':
         return (
           <div key={field.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
@@ -96,6 +96,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               {field.label}
             </label>
             <input
+              id={field.id}
               type="text"
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
@@ -104,7 +105,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             />
           </div>
         )
-      
+
       case 'date':
         return (
           <div key={field.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
@@ -112,6 +113,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               {field.label}
             </label>
             <input
+              id={field.id}
               type="date"
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
@@ -119,7 +121,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             />
           </div>
         )
-      
+
       case 'custom':
         return (
           <div key={field.id} className="bg-white/5 border border-white/10 rounded-lg p-4">

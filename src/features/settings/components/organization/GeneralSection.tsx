@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Card, SectionHeader } from '@/shared/components'
+import { Card } from '@/shared/components'
 import { OrganizationSettingsForm } from '../OrganizationSettingsForm'
 
 export const GeneralSection: React.FC = () => (
@@ -10,11 +10,17 @@ export const GeneralSection: React.FC = () => (
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <SectionHeader
-        title="General Settings"
-        subtitle="Manage your organization's basic information and preferences"
-        size="section"
-      />
+      <div>
+        <h1 className="text-lg font-medium text-white mb-4">
+          General{' '}
+          <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+            Settings
+          </span>
+        </h1>
+        <p className="text-sm text-gray-400 mb-3">
+          Manage your organization&apos;s basic information and preferences
+        </p>
+      </div>
 
       <Card animate={false} padding="lg">
         <OrganizationSettingsForm />

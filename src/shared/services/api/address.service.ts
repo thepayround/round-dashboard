@@ -60,6 +60,22 @@ export class AddressService {
   }
 
   /**
+   * Get addresses by organization ID
+   */
+  async getByOrganizationId(organizationId: string): Promise<ApiResponse<AddressResponse[]>> {
+    try {
+      const response = await this.client.get(ENDPOINTS.ADDRESSES.BY_ORGANIZATION(organizationId))
+
+      return {
+        success: true,
+        data: response.data,
+      }
+    } catch (error) {
+      return this.handleApiError(error, 'Failed to fetch organization addresses')
+    }
+  }
+
+  /**
    * Create new address
    * @deprecated Use organizationService.createOrganizationAddress() instead
    * Direct address creation is not supported by the API

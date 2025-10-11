@@ -797,6 +797,146 @@
       radial-gradient(circle at 80% 80%, rgba(20, 189, 234, 0.03) 0%, transparent 60%);
   }
 
+  /* Modal input styling - matches auth inputs */
+  .modal-input {
+    width: 100%;
+    height: 2.625rem; /* 42px - mobile inputs */
+    padding: 0 0.75rem;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px; /* Consistent 8px radius */
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 300; /* Light weight for premium feel */
+    font-size: 0.75rem; /* 12px - matches auth inputs */
+    line-height: 1.2;
+    transition: all 0.3s ease;
+    outline: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .modal-input {
+      height: 2.25rem; /* 36px - desktop inputs */
+      padding: 0 0.875rem;
+      font-size: 0.75rem; /* 12px - consistent */
+      font-weight: 375;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .modal-input {
+      height: 2.25rem; /* 36px - desktop inputs */
+      padding: 0 1rem;
+      font-size: 0.75rem; /* 12px - consistent */
+      font-weight: 400;
+    }
+  }
+
+  .modal-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+  }
+
+  .modal-input:hover:not(:focus) {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .modal-input:focus {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(20, 189, 234, 0.5) !important;
+    box-shadow:
+      0 0 0 3px rgba(20, 189, 234, 0.15),
+      0 4px 16px rgba(20, 189, 234, 0.2);
+    transform: translateY(-1px);
+    color: rgba(255, 255, 255, 1) !important;
+  }
+
+  /* Fix autocomplete styling - prevent white background */
+  .modal-input:-webkit-autofill,
+  .modal-input:-webkit-autofill:hover,
+  .modal-input:-webkit-autofill:focus,
+  .modal-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.12) inset !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(16px) !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+  }
+
+  .modal-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.18) inset !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 1) !important;
+    background: rgba(255, 255, 255, 0.18) !important;
+  }
+
+  /* Modal textarea styling */
+  .modal-input.textarea {
+    height: auto;
+    min-height: 5rem; /* 80px - spacious text areas */
+    padding: 1rem;
+    line-height: 1.6;
+    resize: vertical;
+  }
+
+  @media (min-width: 640px) {
+    .modal-input.textarea {
+      min-height: 5.5rem; /* 88px - enhanced spaciousness */
+      padding: 1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .modal-input.textarea {
+      min-height: 6rem; /* 96px - premium feel */
+      padding: 1rem;
+    }
+  }
+
+  /* Modal select styling */
+  .modal-input[type="select"],
+  select.modal-input {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.6)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem 1rem;
+    padding-right: 2.5rem;
+  }
+
+  select.modal-input:hover {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.8)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  }
+
+  /* Modal label styling */
+  .modal-label {
+    display: block;
+    font-size: 0.625rem; /* 10px - compact labels */
+    font-weight: 450;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.25rem;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+  }
+
+  @media (min-width: 768px) {
+    .modal-label {
+      font-size: 0.625rem; /* 10px - consistent */
+      font-weight: 475;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .modal-label {
+      font-size: 0.6875rem; /* 11px - desktop */
+      font-weight: 500;
+    }
+  }
+
   /* Enhanced visual hierarchy for forms - more spacious */
   .auth-card form > div:not(:last-child) {
     margin-bottom: 0rem; /* Increased from 1.5rem to 2rem */

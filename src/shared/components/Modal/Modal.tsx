@@ -1,18 +1,16 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
-import { useEffect } from 'react'
 import { useResponsive } from '@/shared/hooks/useResponsive'
 
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
-  title: string
+  title?: string
   subtitle?: string
-  size?: 'sm' | 'md' | 'lg' | 'xl'
   children: React.ReactNode
-  showCloseButton?: boolean
-  closeOnOverlayClick?: boolean
-  closeOnEscape?: boolean
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  showHeader?: boolean
+  className?: string
 }
 
 const sizeClasses = {
@@ -27,116 +25,136 @@ export const Modal = ({
   onClose,
   title,
   subtitle,
-  size = 'lg',
   children,
-  showCloseButton = true,
-  closeOnOverlayClick = true,
-  closeOnEscape = true
+  size = 'md',
+  showHeader = true,
+  className = ''
 }: ModalProps) => {
   const { isMobile, isTablet } = useResponsive()
 
-  // Handle escape key
-  useEffect(() => {
-    if (!closeOnEscape || !isOpen) return
+  // Track sidebar state reactively
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => localStorage.getItem('sidebar-collapsed') === 'true')
 
+  // Listen for sidebar state changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setSidebarCollapsed(localStorage.getItem('sidebar-collapsed') === 'true')
+    }
+
+    // Listen for localStorage changes (cross-tab)
+    window.addEventListener('storage', handleStorageChange)
+
+    // Listen for custom sidebar toggle events (same tab)
+    window.addEventListener('sidebar-toggle', handleStorageChange)
+
+    // Poll for changes as fallback (in case events don't fire)
+    const interval = setInterval(handleStorageChange, 100)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('sidebar-toggle', handleStorageChange)
+      clearInterval(interval)
+    }
+  }, [])
+
+  // Calculate modal positioning to center between sidebar and right edge
+  const getModalPositioning = () => {
+    if (isMobile || isTablet) {
+      return { left: 0, width: '100vw' }
+    }
+
+    const sidebarWidth = sidebarCollapsed ? 80 : 280
+    const availableWidth = `calc(100vw - ${sidebarWidth}px)`
+
+    return {
+      left: sidebarWidth,
+      width: availableWidth
+    }
+  }
+
+  // Handle escape key and body scroll lock
+  useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' && isOpen) {
         onClose()
       }
     }
 
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [isOpen, onClose, closeOnEscape])
-
-  // Prevent body scroll when modal is open
-  useEffect(() => {
     if (isOpen) {
+      document.addEventListener('keydown', handleEscape)
       document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
     }
 
     return () => {
+      document.removeEventListener('keydown', handleEscape)
       document.body.style.overflow = 'unset'
     }
-  }, [isOpen])
+  }, [isOpen, onClose])
 
-  // Calculate positioning based on sidebar state
-  const getModalPositioning = () => {
-    if (isMobile || isTablet) {
-      return 'fixed inset-0'
-    }
-    // On desktop, account for sidebar (80px collapsed, 280px expanded)
-    // We'll use CSS custom properties that the layout can set
-    return 'fixed inset-0 lg:left-[var(--sidebar-width,280px)]'
-  }
+  if (!isOpen) return null
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop - covers entire viewport */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeOnOverlayClick ? onClose : undefined}
-            className="fixed inset-0 bg-black/70 backdrop-blur-md z-50"
-          />
-
-          {/* Modal Container - positioned relative to main content */}
-          <div className={`${getModalPositioning()} z-50 flex items-center justify-center p-4`}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', duration: 0.4, bounce: 0.1 }}
-              className={`relative w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Glassmorphism Modal */}
-              <div className="relative bg-white/[0.08] backdrop-blur-2xl border border-white/20 rounded-lg shadow-2xl">
-                {/* Subtle gradient overlay for depth */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.12] via-transparent to-white/[0.04] rounded-lg pointer-events-none" />
-
-                {/* Content container */}
-                <div className="relative">
-                {/* Header */}
-                <div className="px-6 py-4 border-b border-white/20 bg-white/[0.03]">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1 min-w-0">
-                      <h2 className="text-lg font-medium text-white truncate">
+    <div
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      style={{
+        left: getModalPositioning().left,
+        width: getModalPositioning().width
+      }}
+      role="dialog"
+      aria-modal="true"
+    >
+      <button
+        className="fixed inset-0 w-full h-full bg-transparent border-none cursor-default"
+        onClick={onClose}
+        aria-label="Close modal"
+        tabIndex={-1}
+      />
+          <div
+            role="document"
+            className={`
+              relative w-full ${sizeClasses[size]} max-h-[90vh] mx-auto
+              bg-white/8 backdrop-blur-xl border border-white/15
+              rounded-lg shadow-xl overflow-hidden
+              ${className}
+            `}
+          >
+              {/* Header */}
+              {showHeader && (
+                <div className="flex items-start justify-between p-4 border-b border-white/10">
+                  <div className="flex-1 min-w-0">
+                    {title && (
+                      <h2 className="text-lg font-medium text-white/90 truncate">
                         {title}
                       </h2>
-                      {subtitle && (
-                        <p className="text-sm text-gray-400 mt-1 line-clamp-2">
-                          {subtitle}
-                        </p>
-                      )}
-                    </div>
-
-                    {showCloseButton && (
-                      <button
-                        onClick={onClose}
-                        className="ml-4 p-2 rounded-lg bg-white/[0.08] border border-white/20 text-gray-300 hover:text-white hover:bg-white/[0.15] hover:border-white/30 transition-all duration-200 backdrop-blur-sm"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
+                    )}
+                    {subtitle && (
+                      <p className="text-sm text-white/60 mt-1 truncate">
+                        {subtitle}
+                      </p>
                     )}
                   </div>
+                  <button
+                    onClick={onClose}
+                    className="
+                      ml-3 p-1.5 rounded-md flex-shrink-0
+                      bg-white/5 hover:bg-white/10
+                      border border-white/10 hover:border-white/20
+                      text-white/60 hover:text-white/90
+                    "
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
+              )}
 
-                {/* Body */}
-                <div className="p-6 max-h-[calc(90vh-120px)] overflow-y-auto">
-                  {children}
-                </div>
-                </div>
+              {/* Content */}
+              <div className={`
+                overflow-y-auto max-h-[calc(90vh-${showHeader ? '80px' : '0px'})]
+                ${showHeader ? 'p-6' : 'p-6'}
+              `}>
+                {children}
               </div>
-            </motion.div>
-          </div>
-        </>
-      )}
-    </AnimatePresence>
+            </div>
+    </div>
   )
 }

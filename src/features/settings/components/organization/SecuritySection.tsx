@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Card, SectionHeader } from '@/shared/components'
+import { Card } from '@/shared/components'
 import { Lock, Eye, AlertTriangle, Key, Users } from 'lucide-react'
 
 export const SecuritySection: React.FC = () => (
@@ -10,11 +10,17 @@ export const SecuritySection: React.FC = () => (
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <SectionHeader
-        title="Security Settings"
-        subtitle="Manage security policies, authentication, and audit logs"
-        size="section"
-      />
+      <div>
+        <h1 className="text-lg font-medium text-white mb-4">
+          Security{' '}
+          <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+            Settings
+          </span>
+        </h1>
+        <p className="text-sm text-gray-400 mb-3">
+          Manage security policies, authentication, and audit logs
+        </p>
+      </div>
 
       {/* Security Policies */}
       <Card animate={false} padding="lg">

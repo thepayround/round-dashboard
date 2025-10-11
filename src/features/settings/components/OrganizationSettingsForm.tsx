@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
-import { Save } from 'lucide-react'
-import { Button } from '@/shared/components/Button'
+import { motion, AnimatePresence } from 'framer-motion'
+import { CheckCircle, AlertCircle, Edit, X } from 'lucide-react'
+import { ActionButton } from '@/shared/components'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
 import { organizationService } from '@/shared/services/api/organization.service'
@@ -19,6 +20,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
   // State
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
   const [organizationData, setOrganizationData] = useState<OrganizationFormData>({
     companyName: '',
     industry: '',
@@ -34,6 +36,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
     registrationNumber: '',
     taxId: ''
   })
+  const [originalFormData, setOriginalFormData] = useState<OrganizationFormData | null>(null)
   const [cachedOrgData, setCachedOrgData] = useState<OrganizationResponse | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -42,12 +45,12 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
     try {
       setIsLoading(true)
       const response = await getCurrentOrganization()
-      
+
       if (response.success && response.data) {
         const org = response.data
         setCachedOrgData(org)
-        
-        setOrganizationData({
+
+        const formData: OrganizationFormData = {
           companyName: org.name ?? '',
           industry: org.category ?? '',
           companySize: org.size ?? '',
@@ -61,7 +64,10 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
           fiscalYearStart: org.fiscalYearStart ?? '',
           registrationNumber: org.registrationNumber ?? '',
           taxId: org.taxId ?? ''
-        })
+        }
+
+        setOrganizationData(formData)
+        setOriginalFormData(formData) // Store original for cancel
       }
     } catch (error) {
       console.error('Failed to load organization data:', error)
@@ -75,6 +81,21 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
   useEffect(() => {
     loadOrganizationData()
   }, [loadOrganizationData])
+
+  // Edit mode handlers
+  const handleStartEdit = () => {
+    setIsEditing(true)
+    setErrors({})
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+    setErrors({})
+    // Restore original data
+    if (originalFormData) {
+      setOrganizationData(originalFormData)
+    }
+  }
 
   // Form validation
   const validateForm = useCallback((): boolean => {
@@ -156,11 +177,15 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
 
       if (result?.success) {
         showSuccess('Organization settings saved successfully')
-        
+
         // Update cached data
         if (result.data) {
           setCachedOrgData(result.data)
         }
+
+        // Reload data and exit edit mode
+        await loadOrganizationData()
+        setIsEditing(false)
       } else {
         throw new Error(result?.error ?? 'Failed to save organization')
       }
@@ -170,13 +195,47 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
     } finally {
       setIsSaving(false)
     }
-  }, [validateForm, organizationData, cachedOrgData, showError, showSuccess])
+  }, [validateForm, organizationData, cachedOrgData, showError, showSuccess, loadOrganizationData])
+
+  const getButtonText = (): string => {
+    if (isSaving) return 'Saving...'
+    return 'Save Changes'
+  }
+
+  // Read-only form component with edit header
+  const ReadOnlyForm = () => (
+      <div className="space-y-6">
+        {/* Edit Button */}
+        <div className="flex justify-end">
+          <ActionButton
+            label="Edit Settings"
+            onClick={handleStartEdit}
+            icon={Edit}
+            variant="secondary"
+            actionType="general"
+            size="sm"
+          />
+        </div>
+
+        {/* Read-only Organization Form */}
+        <OrganizationForm
+          data={organizationData}
+          onChange={setOrganizationData}
+          errors={errors}
+          showHeader={false}
+          showFinancialSettings
+          showRegionalSettings
+          readOnly
+        />
+      </div>
+    )
 
   if (isLoading) {
     return (
       <div className={`space-y-6 ${className}`}>
         <div className="flex items-center justify-center py-12">
-          <div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+          <span className="ml-3 text-white/60">Loading organization data...</span>
         </div>
       </div>
     )
@@ -184,38 +243,73 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
 
   return (
     <div className={`space-y-6 ${className}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-semibold text-white">Organization Settings</h2>
-          <p className="text-gray-400 text-sm mt-1">
-            Manage your organization&apos;s basic information and settings
-          </p>
-        </div>
-        
-        <Button
-          onClick={handleSave}
-          disabled={isSaving}
-          loading={isSaving}
-          icon={Save}
-          iconPosition="left"
-          variant="primary"
-          size="sm"
+      {/* Error Message */}
+      {Object.keys(errors).length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
         >
-          {isSaving ? 'Saving...' : 'Save Changes'}
-        </Button>
-      </div>
+          <div className="flex items-center space-x-2 text-red-400">
+            <AlertCircle className="w-5 h-5" />
+            <span className="text-sm font-medium">Please fix the errors in the form</span>
+          </div>
+        </motion.div>
+      )}
 
-      {/* Organization Form */}
-      <OrganizationForm
-        data={organizationData}
-        onChange={setOrganizationData}
-        errors={errors}
-        showHeader={false}
-        showFinancialSettings
-        showRegionalSettings
-      />
+      {/* Content */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          {isEditing ? (
+            <OrganizationForm
+              data={organizationData}
+              onChange={setOrganizationData}
+              errors={errors}
+              showHeader={false}
+              showFinancialSettings
+              showRegionalSettings
+            />
+          ) : (
+            <ReadOnlyForm />
+          )}
+        </motion.div>
+      </AnimatePresence>
 
+      {/* Navigation Buttons - Show only in edit mode */}
+      {isEditing && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between pt-4"
+        >
+          {/* Cancel Button */}
+          <ActionButton
+            label="Cancel"
+            onClick={handleCancelEdit}
+            icon={X}
+            variant="ghost"
+            actionType="general"
+            size="sm"
+          />
+
+          {/* Save Button */}
+          <ActionButton
+            label={getButtonText()}
+            onClick={handleSave}
+            disabled={isSaving}
+            variant="primary"
+            icon={CheckCircle}
+            loading={isSaving}
+            actionType="navigation"
+            size="sm"
+          />
+        </motion.div>
+      )}
     </div>
   )
 }

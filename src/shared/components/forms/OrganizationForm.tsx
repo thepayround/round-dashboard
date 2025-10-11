@@ -30,6 +30,7 @@ interface OrganizationFormProps {
   showFinancialSettings?: boolean
   showRegionalSettings?: boolean
   className?: string
+  readOnly?: boolean
 }
 
 export const OrganizationForm = ({
@@ -41,7 +42,8 @@ export const OrganizationForm = ({
   headerSubtitle = 'Complete your company profile',
   showFinancialSettings = true,
   showRegionalSettings = true,
-  className = ''
+  className = '',
+  readOnly = false
 }: OrganizationFormProps) => {
   const { data: currencies, isLoading: currenciesLoading } = useCurrencies()
   
@@ -136,6 +138,8 @@ export const OrganizationForm = ({
                   onChange={handleInputChange('companyName')}
                   placeholder="Acme Corporation"
                   className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
+                  readOnly={readOnly}
+                  disabled={readOnly}
                 />
               </div>
               {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
@@ -155,6 +159,8 @@ export const OrganizationForm = ({
                   onChange={handleInputChange('website')}
                   placeholder="https://www.example.com"
                   className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
+                  readOnly={readOnly}
+                  disabled={readOnly}
                 />
               </div>
               {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
@@ -174,6 +180,8 @@ export const OrganizationForm = ({
                   placeholder="Brief description of your company..."
                   rows={3}
                   className={`auth-input textarea input-with-icon-left resize-none ${errors.description ? 'auth-input-error' : ''}`}
+                  readOnly={readOnly}
+                  disabled={readOnly}
                 />
               </div>
               {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
@@ -211,6 +219,7 @@ export const OrganizationForm = ({
                 onClear={() => handleSelectChange('country', '')}
                 error={!!errors.country}
                 allowClear
+                disabled={readOnly}
               />
               {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
             </div>
@@ -227,6 +236,7 @@ export const OrganizationForm = ({
                 onClear={() => handleSelectChange('industry', '')}
                 error={!!errors.industry}
                 allowClear
+                disabled={readOnly}
               />
               {errors.industry && <p className="mt-1 text-sm text-red-400">{errors.industry}</p>}
             </div>
@@ -243,6 +253,7 @@ export const OrganizationForm = ({
                 onClear={() => handleSelectChange('companySize', '')}
                 error={!!errors.companySize}
                 allowClear
+                disabled={readOnly}
               />
               {errors.companySize && <p className="mt-1 text-sm text-red-400">{errors.companySize}</p>}
             </div>
@@ -259,6 +270,7 @@ export const OrganizationForm = ({
                 onClear={() => handleSelectChange('organizationType', '')}
                 error={!!errors.organizationType}
                 allowClear
+                disabled={readOnly}
               />
               {errors.organizationType && <p className="mt-1 text-sm text-red-400">{errors.organizationType}</p>}
             </div>
@@ -297,6 +309,8 @@ export const OrganizationForm = ({
                   onChange={handleInputChange('registrationNumber')}
                   placeholder="12345678"
                   className={`auth-input input-with-icon-left ${errors.registrationNumber ? 'auth-input-error' : ''}`}
+                  readOnly={readOnly}
+                  disabled={readOnly}
                 />
               </div>
               {errors.registrationNumber && <p className="mt-1 text-sm text-red-400">{errors.registrationNumber}</p>}
@@ -316,6 +330,8 @@ export const OrganizationForm = ({
                   onChange={handleInputChange('taxId')}
                   placeholder="XX-XXXXXXX"
                   className={`auth-input input-with-icon-left ${errors.taxId ? 'auth-input-error' : ''}`}
+                  readOnly={readOnly}
+                  disabled={readOnly}
                 />
               </div>
               {errors.taxId && <p className="mt-1 text-sm text-red-400">{errors.taxId}</p>}
@@ -354,6 +370,7 @@ export const OrganizationForm = ({
                   onClear={() => handleSelectChange('currency', '')}
                   error={!!errors.currency}
                   allowClear
+                  disabled={readOnly}
                 />
                 {errors.currency && <p className="mt-1 text-sm text-red-400">{errors.currency}</p>}
               </div>
@@ -378,6 +395,8 @@ export const OrganizationForm = ({
                     placeholder="1000000"
                     className={`auth-input input-with-icon-left ${errors.revenue ? 'auth-input-error' : ''}`}
                     style={{ paddingLeft: '3rem' }}
+                    readOnly={readOnly}
+                    disabled={readOnly}
                   />
                 </div>
                 {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}
@@ -416,6 +435,7 @@ export const OrganizationForm = ({
                   onSelect={(value) => handleSelectChange('timeZone', value)}
                   error={!!errors.timeZone}
                   allowClear
+                  disabled={readOnly}
                 />
                 {errors.timeZone && (
                   <p className="text-red-400 text-xs mt-1">{errors.timeZone}</p>
@@ -432,6 +452,7 @@ export const OrganizationForm = ({
                   value={data.fiscalYearStart}
                   onSelect={value => handleSelectChange('fiscalYearStart', value)}
                   allowClear
+                  disabled={readOnly}
                 />
               </div>
             </div>
