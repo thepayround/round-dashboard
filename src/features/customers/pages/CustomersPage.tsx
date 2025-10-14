@@ -15,7 +15,9 @@ import {
   List,
   Download,
   Building2,
-  User
+  User,
+  CheckSquare,
+  Square
 } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { ActionButton } from '@/shared/components/ActionButton'
@@ -94,6 +96,7 @@ const CustomersPage: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false)
   const [showAddModal, setShowAddModal] = useState(false)
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([])
+  const [selectionMode, setSelectionMode] = useState(false)
   
   // View and pagination state
   const [viewMode, setViewModeState] = useState<ViewMode>(preferences.viewMode)
@@ -417,34 +420,62 @@ const CustomersPage: React.FC = () => {
       <div className="space-y-6">
         <SectionHeader
           title="Customers"
-          subtitle={`Manage your ${totalCount} customers and their information`}
+          subtitle={
+            selectionMode && selectedCustomers.length > 0
+              ? `${selectedCustomers.length} customer${selectedCustomers.length !== 1 ? 's' : ''} selected`
+              : `Manage your ${totalCount} customers and their information`
+          }
           actions={
             <div className="flex items-center space-x-3">
-              {selectedCustomers.length > 0 && (
+              {selectionMode ? (
+                <>
+                  {selectedCustomers.length > 0 && (
+                    <>
+                      <ActionButton
+                        label={`Export (${selectedCustomers.length})`}
+                        variant="ghost"
+                        size="sm"
+                        icon={Download}
+                        onClick={handleExportSelected}
+                      />
+                      <ActionButton
+                        label={`Bulk Edit (${selectedCustomers.length})`}
+                        variant="ghost"
+                        size="sm"
+                        icon={Edit}
+                        onClick={handleBulkEdit}
+                      />
+                    </>
+                  )}
+                  <ActionButton
+                    label="Cancel Selection"
+                    variant="ghost"
+                    size="sm"
+                    icon={Square}
+                    onClick={() => {
+                      setSelectedCustomers([])
+                      setSelectionMode(false)
+                    }}
+                  />
+                </>
+              ) : (
                 <>
                   <ActionButton
-                    label={`Export (${selectedCustomers.length})`}
+                    label="Select"
+                    variant="ghost"
+                    size="sm"
+                    icon={CheckSquare}
+                    onClick={() => setSelectionMode(true)}
+                  />
+                  <ActionButton
+                    label="Export All"
                     variant="ghost"
                     size="sm"
                     icon={Download}
-                    onClick={handleExportSelected}
-                  />
-                  <ActionButton
-                    label={`Bulk Edit (${selectedCustomers.length})`}
-                    variant="ghost"
-                    size="sm"
-                    icon={Edit}
-                    onClick={handleBulkEdit}
+                    onClick={() => showSuccess('Export functionality coming soon')}
                   />
                 </>
               )}
-              <ActionButton
-                label="Export All"
-                variant="ghost"
-                size="sm"
-                icon={Download}
-                onClick={() => showSuccess('Export functionality coming soon')}
-              />
               <ActionButton
                 label="Add Customer"
                 variant="primary"
@@ -496,25 +527,31 @@ const CustomersPage: React.FC = () => {
                 className="group relative h-full"
               >
               <Card padding="lg" className="h-full hover:shadow-lg hover:shadow-[#D417C8]/10 transition-all duration-300">
-                {/* Card selection checkbox */}
-                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <label htmlFor={`customer-card-${customer.id}`} className="flex items-center cursor-pointer">
-                    <span className="sr-only">Select customer {customer.displayName}</span>
-                    <input
-                      id={`customer-card-${customer.id}`}
-                      type="checkbox"
-                      checked={selectedCustomers.includes(customer.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedCustomers([...selectedCustomers, customer.id])
-                        } else {
-                          setSelectedCustomers(selectedCustomers.filter(id => id !== customer.id))
-                        }
-                      }}
-                      className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/30 rounded focus:ring-[#D417C8] focus:ring-2"
-                    />
-                  </label>
-                </div>
+                {/* Card selection checkbox - only show in selection mode */}
+                {selectionMode && (
+                  <div className={`absolute top-4 right-4 transition-all duration-200 ${
+                    selectedCustomers.includes(customer.id) ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100'
+                  }`}>
+                    <label htmlFor={`customer-card-${customer.id}`} className="flex items-center cursor-pointer">
+                      <span className="sr-only">Select customer {customer.displayName}</span>
+                      <div className={`relative ${selectedCustomers.includes(customer.id) ? 'bg-[#D417C8]/20 p-1 rounded-lg border border-[#D417C8]/50' : ''}`}>
+                        <input
+                          id={`customer-card-${customer.id}`}
+                          type="checkbox"
+                          checked={selectedCustomers.includes(customer.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedCustomers([...selectedCustomers, customer.id])
+                            } else {
+                              setSelectedCustomers(selectedCustomers.filter(id => id !== customer.id))
+                            }
+                          }}
+                          className="w-5 h-5 text-[#D417C8] bg-white/10 border-white/30 rounded focus:ring-[#D417C8] focus:ring-2 cursor-pointer"
+                        />
+                      </div>
+                    </label>
+                  </div>
+                )}
 
                 {/* Header Section */}
                 <div className="flex items-start gap-4 mb-6">
@@ -654,7 +691,7 @@ const CustomersPage: React.FC = () => {
                   sortConfig={sortConfig}
                   onSort={handleSortChange}
                   loading={loading}
-                  selectable
+                  selectable={selectionMode}
                   selectedIds={selectedCustomers}
                   onSelectionChange={setSelectedCustomers}
                 />

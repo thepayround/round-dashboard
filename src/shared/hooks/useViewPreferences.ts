@@ -9,7 +9,7 @@ interface ViewPreferences {
 }
 
 const DEFAULT_PREFERENCES: ViewPreferences = {
-  viewMode: 'grid',
+  viewMode: 'table',
   itemsPerPage: 12,
   sortField: 'displayName',
   sortDirection: 'asc'

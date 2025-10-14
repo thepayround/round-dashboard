@@ -130,18 +130,43 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               {selectable && (
                 <TableHeader className="w-12">
                   <div className="flex items-center">
-                    <label htmlFor="select-all" className="flex items-center cursor-pointer">
+                    <label htmlFor="select-all" className="flex items-center cursor-pointer group">
                       <span className="sr-only">Select all customers</span>
-                      <input
-                        id="select-all"
-                        type="checkbox"
-                        checked={isAllSelected}
-                        ref={(el) => {
-                          if (el) el.indeterminate = isIndeterminate
-                        }}
-                        onChange={(e) => handleSelectAll(e.target.checked)}
-                        className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/30 rounded focus:ring-[#D417C8] focus:ring-2"
-                      />
+                      <div 
+                        className={`
+                          flex items-center justify-center
+                          w-9 h-9 rounded-lg
+                          transition-all duration-200
+                          ${isAllSelected || isIndeterminate
+                            ? 'bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border-2 border-[#D417C8]/50 shadow-lg shadow-[#D417C8]/20' 
+                            : 'bg-white/5 backdrop-blur-xl border border-white/10 group-hover:bg-white/10 group-hover:border-white/20'
+                          }
+                        `}
+                      >
+                        <div className={`flex items-center justify-center w-4 h-4 rounded border-2 transition-all ${
+                          isAllSelected || isIndeterminate
+                            ? 'bg-[#D417C8] border-[#D417C8]'
+                            : 'bg-transparent border-white/40'
+                        }`}>
+                          {isAllSelected && (
+                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                          {isIndeterminate && !isAllSelected && (
+                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 12h14" />
+                            </svg>
+                          )}
+                        </div>
+                        <input
+                          id="select-all"
+                          type="checkbox"
+                          checked={isAllSelected}
+                          onChange={(e) => handleSelectAll(e.target.checked)}
+                          className="sr-only"
+                        />
+                      </div>
                     </label>
                   </div>
                 </TableHeader>
@@ -171,15 +196,38 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               >
                 {selectable && (
                   <td className="px-6 py-4">
-                    <label htmlFor={`select-${customer.id}`} className="flex items-center cursor-pointer">
+                    <label htmlFor={`select-${customer.id}`} className="flex items-center cursor-pointer group">
                       <span className="sr-only">Select customer {customer.displayName}</span>
-                      <input
-                        id={`select-${customer.id}`}
-                        type="checkbox"
-                        checked={selectedIds.includes(customer.id)}
-                        onChange={(e) => handleSelectRow(customer.id, e.target.checked)}
-                        className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/30 rounded focus:ring-[#D417C8] focus:ring-2"
-                      />
+                      <div 
+                        className={`
+                          flex items-center justify-center
+                          w-9 h-9 rounded-lg
+                          transition-all duration-200
+                          ${selectedIds.includes(customer.id) 
+                            ? 'bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border-2 border-[#D417C8]/50 shadow-lg shadow-[#D417C8]/20' 
+                            : 'bg-white/5 backdrop-blur-xl border border-white/10 group-hover:bg-white/10 group-hover:border-white/20'
+                          }
+                        `}
+                      >
+                        <div className={`flex items-center justify-center w-4 h-4 rounded border-2 transition-all ${
+                          selectedIds.includes(customer.id)
+                            ? 'bg-[#D417C8] border-[#D417C8]'
+                            : 'bg-transparent border-white/40'
+                        }`}>
+                          {selectedIds.includes(customer.id) && (
+                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </div>
+                        <input
+                          id={`select-${customer.id}`}
+                          type="checkbox"
+                          checked={selectedIds.includes(customer.id)}
+                          onChange={(e) => handleSelectRow(customer.id, e.target.checked)}
+                          className="sr-only"
+                        />
+                      </div>
                     </label>
                   </td>
                 )}
