@@ -90,7 +90,7 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
         <div className="bg-white/[0.06] backdrop-blur-sm border border-white/15 rounded-lg p-4">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-gradient-to-br from-[#D417C8] to-[#14BDEA] rounded-lg flex items-center justify-center">
-              <span className="text-white font-semibold text-lg">
+              <span className="text-white font-medium text-lg">
                 {member.firstName[0]}{member.lastName[0]}
               </span>
             </div>
@@ -118,7 +118,7 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
             Select New Role
           </div>
           <div className="mb-3">
-            <span className="text-xs text-gray-400 bg-white/[0.08] px-2 py-1 rounded-md border border-white/15 backdrop-blur-sm">
+            <span className="text-xs text-gray-400 bg-white/[0.08] px-2 py-1 rounded-lg border border-white/15 backdrop-blur-sm">
               Current: <span className="text-gray-300 font-medium">{member.roleName}</span>
             </span>
           </div>

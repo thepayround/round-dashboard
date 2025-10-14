@@ -141,9 +141,9 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
     <div className={className}>
       {/* Enhanced search toolbar with consistent styling */}
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
-        <div className="flex flex-col gap-2.5 md:gap-3 lg:gap-2.5">
+        <div className="flex flex-col gap-3">
           {/* Main toolbar - aligned row */}
-          <div className="flex flex-col xs:flex-row gap-2.5 md:gap-3 lg:gap-2.5 xs:items-center">
+          <div className="flex flex-col xs:flex-row gap-3 xs:items-center">
             {/* Search Input - fixed height container */}
             <div className="flex-1 min-w-0">
               <SearchInput
@@ -157,7 +157,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             </div>
             
             {/* Actions Section - Mobile stacked, desktop inline */}
-            <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 md:gap-2.5 lg:gap-2 flex-shrink-0">
+            <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 flex-shrink-0">
               {/* Additional Actions */}
               {additionalActions && (
                 <div className="flex items-center justify-center xs:justify-start">
@@ -166,14 +166,14 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               )}
               
               {/* Bottom row on mobile, inline on desktop */}
-              <div className="flex items-center gap-2 md:gap-2.5 lg:gap-2">
+              <div className="flex items-center gap-2">
                 {/* Filters Button */}
                 {filterFields.length > 0 && (
                   <button
                     onClick={onToggleFilters}
                     className="btn-secondary flex items-center justify-center gap-2 flex-1 xs:flex-none"
                   >
-                    <Filter className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5" />
+                    <Filter className="w-4 h-4" />
                     <span className="xs:inline">Filters</span>
                   </button>
                 )}

@@ -318,7 +318,7 @@ export const TeamManagementPage: React.FC = () => {
 
       {/* Tabs */}
       <div>
-        <Card className="p-6">
+        <Card padding="lg">
           <nav className="flex space-x-2">
             {tabs.map((tab) => {
               const IconComponent = tab.icon
@@ -365,11 +365,11 @@ export const TeamManagementPage: React.FC = () => {
         />
 
         {/* Content */}
-        <Card className="p-6">
+        <Card padding="lg">
           {activeTab === 'members' ? (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-white">Team Members ({filteredMembers.length})</h2>
+                <h2 className="text-lg font-medium text-white">Team Members ({filteredMembers.length})</h2>
               </div>
 
               {filteredMembers.length === 0 ? (
@@ -409,7 +409,7 @@ export const TeamManagementPage: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
                             <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full flex items-center justify-center">
-                              <span className="text-white font-semibold">
+                              <span className="text-white font-medium">
                                 {member.firstName[0]}{member.lastName[0]}
                               </span>
                             </div>
@@ -477,7 +477,7 @@ export const TeamManagementPage: React.FC = () => {
           ) : (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-white">Invitations ({filteredInvitations.length})</h2>
+                <h2 className="text-lg font-medium text-white">Invitations ({filteredInvitations.length})</h2>
               </div>
 
               {filteredInvitations.length === 0 ? (

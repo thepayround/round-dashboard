@@ -40,32 +40,32 @@ export const BillingSection: React.FC = () => (
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 bg-white/4 rounded-lg border border-white/8">
+          <Card variant="nested" padding="lg">
             <div className="flex items-center gap-2 mb-2">
               <DollarSign className="w-4 h-4 text-green-400" />
               <span className="text-xs font-medium text-gray-300">Monthly Cost</span>
             </div>
-            <p className="text-lg font-semibold text-white">$49.99</p>
+            <p className="text-lg font-medium text-white">$49.99</p>
             <p className="text-xs text-gray-400">Professional Plan</p>
-          </div>
+          </Card>
 
-          <div className="p-4 bg-white/4 rounded-lg border border-white/8">
+          <Card variant="nested" padding="lg">
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="w-4 h-4 text-blue-400" />
               <span className="text-xs font-medium text-gray-300">Next Billing</span>
             </div>
-            <p className="text-lg font-semibold text-white">Dec 15, 2024</p>
+            <p className="text-lg font-medium text-white">Dec 15, 2024</p>
             <p className="text-xs text-gray-400">Auto-renewal enabled</p>
-          </div>
+          </Card>
 
-          <div className="p-4 bg-white/4 rounded-lg border border-white/8">
+          <Card variant="nested" padding="lg">
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-4 h-4 text-purple-400" />
               <span className="text-xs font-medium text-gray-300">Usage</span>
             </div>
-            <p className="text-lg font-semibold text-white">2,847</p>
+            <p className="text-lg font-medium text-white">2,847</p>
             <p className="text-xs text-gray-400">API calls this month</p>
-          </div>
+          </Card>
         </div>
       </Card>
 
@@ -83,7 +83,7 @@ export const BillingSection: React.FC = () => (
 
         <div className="text-center py-12">
           <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-white mb-2">Billing Management</h3>
+          <h3 className="text-lg font-medium text-white mb-2">Billing Management</h3>
           <p className="text-gray-400 mb-4">View and manage your subscription, billing details, and usage.</p>
           <p className="text-sm text-gray-500">This section is coming soon...</p>
         </div>

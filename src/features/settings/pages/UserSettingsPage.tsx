@@ -110,7 +110,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-full w-fit mx-auto mb-6">
               <AlertCircle className="w-8 h-8 text-red-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Settings Unavailable</h3>
+            <h3 className="text-lg font-medium text-white mb-2">Settings Unavailable</h3>
             <p className="text-gray-400 mb-6">{error}</p>
             <button
               onClick={clearError}

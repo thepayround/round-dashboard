@@ -7,13 +7,17 @@ import {
   Clock,
   DollarSign,
   ArrowUpRight,
+  Mail,
+  MapPin,
+  Calendar,
+  Building2
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { useCurrency } from '@/shared/hooks/useCurrency'
 import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
-import { Card, SectionHeader, ActionButton } from '@/shared/components'
+import { SectionHeader, ActionButton, Card } from '@/shared/components'
 import { useAuth } from '@/shared/hooks/useAuth'
 
 export const DashboardPage = () => {
@@ -51,7 +55,6 @@ export const DashboardPage = () => {
       </DashboardLayout>
     )
   }
-
 
   return (
     <DashboardLayout>
@@ -96,251 +99,360 @@ export const DashboardPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
-            <Card
-              variant="compact"
-              title="Account Type"
-              value={roundAccount.accountType}
-              icon={Building}
-              color="primary"
-              animate={false}
-            />
+            {/* Account Type */}
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="text-white/60 text-xs font-medium mb-1">Account Type</div>
+                  <div className="text-white text-sm font-medium capitalize">{roundAccount.accountType}</div>
+                </div>
+                <div className="p-3 bg-gradient-to-br from-[#D417C8]/20 to-[#BD2CD0]/20 rounded-lg border border-[#D417C8]/30">
+                  <Building className="w-4 h-4 text-[#D417C8]" />
+                </div>
+              </div>
+            </div>
 
-            <Card
-              variant="compact"
-              title="Account Status"
-              value={roundAccount.status}
-              icon={CheckCircle}
-              color="success"
-              animate={false}
-            />
+            {/* Account Status */}
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="text-white/60 text-xs font-medium mb-1">Account Status</div>
+                  <div className="text-white text-sm font-medium">{roundAccount.status}</div>
+                </div>
+                <div className="p-3 bg-gradient-to-br from-[#42E695]/20 to-[#3BB2B8]/20 rounded-lg border border-[#42E695]/30">
+                  <CheckCircle className="w-4 h-4 text-[#42E695]" />
+                </div>
+              </div>
+            </div>
 
-            <Card
-              variant="compact"
-              title="Created Date"
-              value={new Date(roundAccount.createdDate).toLocaleDateString()}
-              icon={Clock}
-              color="secondary"
-              animate={false}
-            />
+            {/* Created Date */}
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="text-white/60 text-xs font-medium mb-1">Created Date</div>
+                  <div className="text-white text-sm font-medium">
+                    {new Date(roundAccount.createdDate).toLocaleDateString()}
+                  </div>
+                </div>
+                <div className="p-3 bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 rounded-lg border border-[#14BDEA]/30">
+                  <Clock className="w-4 h-4 text-[#14BDEA]" />
+                </div>
+              </div>
+            </div>
 
+            {/* Currency */}
             {roundAccount.organization?.currency && (
-              <Card
-                variant="compact"
-                title="Currency"
-                value={roundAccount.organization.currency}
-                icon={DollarSign}
-                color="accent"
-                animate={false}
-              />
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="text-white/60 text-xs font-medium mb-1">Currency</div>
+                    <div className="text-white text-sm font-medium">{roundAccount.organization.currency}</div>
+                  </div>
+                  <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 rounded-lg border border-[#7767DA]/30">
+                    <DollarSign className="w-4 h-4 text-[#7767DA]" />
+                  </div>
+                </div>
+              </div>
             )}
           </motion.div>
         )}
 
-        {/* Round Account Main Content Grid */}
+        {/* Main Content Grid */}
         {roundAccount && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Round Account Details Card */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Account Details */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Card animate={false}>
-                <div className="flex items-center space-x-3 mb-6">
-                  <Building className="w-6 h-6 text-[#32A1E4]" />
-                  <h2 className="text-xl font-bold auth-text">Account Details</h2>
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="p-3 bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 rounded-xl border border-[#32A1E4]/30">
+                    <Building className="w-5 h-5 text-[#32A1E4]" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-lg font-medium text-white mb-2">Account Details</h2>
+                    <p className="text-sm text-gray-400">Core account information and settings</p>
+                  </div>
                 </div>
 
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-sm font-medium auth-text-muted">Account Name</span>
-                    <p className="auth-text font-medium">{roundAccount.accountName}</p>
-                  </div>
-
-                  <div>
-                    <span className="text-sm font-medium auth-text-muted">Account ID</span>
-                    <p className="auth-text font-medium font-mono text-sm">{roundAccount.roundAccountId}</p>
-                  </div>
-
-                  <div>
-                    <span className="text-sm font-medium auth-text-muted">Account Type</span>
-                    <p className="auth-text font-medium capitalize">{roundAccount.accountType}</p>
-                  </div>
-
-                  <div>
-                    <span className="text-sm font-medium auth-text-muted">Status</span>
-                    <div className="flex items-center space-x-2">
-                      <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
-                        roundAccount.status.toLowerCase() === 'active' 
-                          ? 'bg-[#42E695]/20 text-[#42E695] border border-[#42E695]/30'
-                          : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-                      }`}>
-                        {roundAccount.status}
-                      </span>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                    <Building2 className="w-4 h-4 text-[#14BDEA]" />
+                    <div>
+                      <div className="text-sm font-medium text-white">{roundAccount.accountName}</div>
+                      <div className="text-xs text-white/60">Account name</div>
                     </div>
                   </div>
 
-                  <div>
-                    <span className="text-sm font-medium auth-text-muted">Created Date</span>
-                    <p className="auth-text font-medium">
-                      {new Date(roundAccount.createdDate).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </p>
+                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                    <Building className="w-4 h-4 text-[#D417C8]" />
+                    <div>
+                      <div className="text-sm font-medium text-white font-mono">{roundAccount.roundAccountId}</div>
+                      <div className="text-xs text-white/60">Account ID</div>
+                    </div>
                   </div>
 
-                  <div>
-                    <span className="text-sm font-medium auth-text-muted">Last Modified</span>
-                    <p className="auth-text font-medium">
-                      {new Date(roundAccount.modifiedDate).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </p>
+                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                    <Building className="w-4 h-4 text-[#14BDEA]" />
+                    <div>
+                      <div className="text-sm font-medium text-white capitalize">{roundAccount.accountType}</div>
+                      <div className="text-xs text-white/60">Account type</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                    <CheckCircle className={`w-4 h-4 ${
+                      roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
+                    }`} />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-1 text-xs rounded-lg font-medium border ${
+                          roundAccount.status.toLowerCase() === 'active' 
+                            ? 'bg-[#42E695]/20 text-[#42E695] border-[#42E695]/30'
+                            : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+                        }`}>
+                          {roundAccount.status}
+                        </span>
+                      </div>
+                      <div className="text-xs text-white/60 mt-1">Status</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                    <Calendar className="w-4 h-4 text-[#7767DA]" />
+                    <div>
+                      <div className="text-sm font-medium text-white">
+                        {new Date(roundAccount.createdDate).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </div>
+                      <div className="text-xs text-white/60">Created date</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                    <Clock className="w-4 h-4 text-[#32A1E4]" />
+                    <div>
+                      <div className="text-sm font-medium text-white">
+                        {new Date(roundAccount.modifiedDate).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </div>
+                      <div className="text-xs text-white/60">Last modified</div>
+                    </div>
                   </div>
                 </div>
-              </Card>
+              </div>
             </motion.div>
 
-            {/* Organization Details Card */}
+            {/* Organization Details */}
             {roundAccount.organization && (
               <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <Card animate={false}>
-                  <div className="flex items-center space-x-3 mb-6">
-                    <Building className="w-6 h-6 text-[#7767DA]" />
-                    <h2 className="text-xl font-bold auth-text">Organization Details</h2>
+                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 rounded-xl border border-[#7767DA]/30">
+                      <Building className="w-5 h-5 text-[#7767DA]" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-lg font-medium text-white mb-2">Organization Details</h2>
+                      <p className="text-sm text-gray-400">Company information and settings</p>
+                    </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <div>
-                      <span className="text-sm font-medium auth-text-muted">Organization Name</span>
-                      <p className="auth-text font-medium">{roundAccount.organization.name}</p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <Building2 className="w-4 h-4 text-[#D417C8]" />
+                      <div>
+                        <div className="text-sm font-medium text-white">{roundAccount.organization.name}</div>
+                        <div className="text-xs text-white/60">Organization name</div>
+                      </div>
                     </div>
 
-                    <div>
-                      <span className="text-sm font-medium auth-text-muted">Organization ID</span>
-                      <p className="auth-text font-medium font-mono text-sm">{roundAccount.organization.organizationId}</p>
+                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <DollarSign className="w-4 h-4 text-[#42E695]" />
+                      <div>
+                        <div className="text-sm font-medium text-white font-mono">{roundAccount.organization.organizationId}</div>
+                        <div className="text-xs text-white/60">Organization ID</div>
+                      </div>
                     </div>
 
-                    <div>
-                      <span className="text-sm font-medium auth-text-muted">Organization Type</span>
-                      <p className="auth-text font-medium capitalize">{roundAccount.organization.type}</p>
+                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <Building className="w-4 h-4 text-[#14BDEA]" />
+                      <div>
+                        <div className="text-sm font-medium text-white capitalize">{roundAccount.organization.type}</div>
+                        <div className="text-xs text-white/60">Organization type</div>
+                      </div>
                     </div>
 
-                    <div>
-                      <span className="text-sm font-medium auth-text-muted">Industry Category</span>
-                      <p className="auth-text font-medium capitalize">{roundAccount.organization.category}</p>
+                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <Building2 className="w-4 h-4 text-[#7767DA]" />
+                      <div>
+                        <div className="text-sm font-medium text-white capitalize">{roundAccount.organization.category}</div>
+                        <div className="text-xs text-white/60">Industry category</div>
+                      </div>
                     </div>
 
-                    <div>
-                      <span className="text-sm font-medium auth-text-muted">Currency</span>
-                      <p className="auth-text font-medium">{roundAccount.organization.currency}</p>
+                    {roundAccount.organization.industry && (
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <Building2 className="w-4 h-4 text-[#32A1E4]" />
+                        <div>
+                          <div className="text-sm font-medium text-white capitalize">{roundAccount.organization.industry}</div>
+                          <div className="text-xs text-white/60">Industry</div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <DollarSign className="w-4 h-4 text-[#42E695]" />
+                      <div>
+                        <div className="text-sm font-medium text-white">{roundAccount.organization.currency}</div>
+                        <div className="text-xs text-white/60">Currency</div>
+                      </div>
                     </div>
 
-                    <div>
-                      <span className="text-sm font-medium auth-text-muted">Timezone</span>
-                      <p className="auth-text font-medium">{roundAccount.organization.timeZone}</p>
+                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <Clock className="w-4 h-4 text-[#7767DA]" />
+                      <div>
+                        <div className="text-sm font-medium text-white">{roundAccount.organization.timeZone}</div>
+                        <div className="text-xs text-white/60">Timezone</div>
+                      </div>
                     </div>
 
-                    <div>
-                      <span className="text-sm font-medium auth-text-muted">Country</span>
-                      <p className="auth-text font-medium">{roundAccount.organization.country}</p>
+                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <MapPin className="w-4 h-4 text-[#32A1E4]" />
+                      <div>
+                        <div className="text-sm font-medium text-white">{roundAccount.organization.country}</div>
+                        <div className="text-xs text-white/60">Country</div>
+                      </div>
                     </div>
 
                     {roundAccount.organization.size && (
-                      <div>
-                        <span className="text-sm font-medium auth-text-muted">Organization Size</span>
-                        <p className="auth-text font-medium">{roundAccount.organization.size}</p>
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <Users className="w-4 h-4 text-[#14BDEA]" />
+                        <div>
+                          <div className="text-sm font-medium text-white">{roundAccount.organization.size}</div>
+                          <div className="text-xs text-white/60">Organization size</div>
+                        </div>
                       </div>
                     )}
 
                     {roundAccount.organization.website && (
-                      <div>
-                        <span className="text-sm font-medium auth-text-muted">Website</span>
-                        <a
-                          href={roundAccount.organization.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="auth-link brand-primary flex items-center space-x-1"
-                        >
-                          <span>{roundAccount.organization.website}</span>
-                          <ArrowUpRight className="w-4 h-4" />
-                        </a>
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <ArrowUpRight className="w-4 h-4 text-[#32A1E4]" />
+                        <div>
+                          <a
+                            href={roundAccount.organization.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm font-medium text-[#14BDEA] hover:text-[#32A1E4] transition-colors"
+                          >
+                            {roundAccount.organization.website}
+                          </a>
+                          <div className="text-xs text-white/60">Website</div>
+                        </div>
                       </div>
                     )}
 
                     {roundAccount.organization.registrationNumber && (
-                      <div>
-                        <span className="text-sm font-medium auth-text-muted">Registration Number</span>
-                        <p className="auth-text font-medium">{roundAccount.organization.registrationNumber}</p>
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <Building2 className="w-4 h-4 text-amber-400" />
+                        <div>
+                          <div className="text-sm font-medium text-white">{roundAccount.organization.registrationNumber}</div>
+                          <div className="text-xs text-white/60">Registration number</div>
+                        </div>
                       </div>
                     )}
 
-                    {roundAccount.organization.revenue && (
-                      <div>
-                        <span className="text-sm font-medium auth-text-muted">Annual Revenue</span>
-                        <p className="auth-text font-medium">
-                          {formatCurrency(roundAccount.organization.revenue, roundAccount.organization.currency)}
-                        </p>
+                    {(roundAccount.organization.taxId && roundAccount.organization.taxId.trim() !== '') && (
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <DollarSign className="w-4 h-4 text-amber-500" />
+                        <div>
+                          <div className="text-sm font-medium text-white">{roundAccount.organization.taxId}</div>
+                          <div className="text-xs text-white/60">Tax ID</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {(typeof roundAccount.organization.revenue === 'number' && roundAccount.organization.revenue > 0) && (
+                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <DollarSign className="w-4 h-4 text-[#42E695]" />
+                        <div>
+                          <div className="text-sm font-medium text-white">
+                            {formatCurrency(roundAccount.organization.revenue, roundAccount.organization.currency)}
+                          </div>
+                          <div className="text-xs text-white/60">Annual revenue</div>
+                        </div>
                       </div>
                     )}
 
                     {roundAccount.organization.description && (
-                      <div>
-                        <span className="text-sm font-medium auth-text-muted">Description</span>
-                        <p className="auth-text font-medium">{roundAccount.organization.description}</p>
+                      <div className="flex items-start gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <Building className="w-4 h-4 text-[#7767DA] mt-0.5" />
+                        <div>
+                          <div className="text-sm font-medium text-white">{roundAccount.organization.description}</div>
+                          <div className="text-xs text-white/60">Description</div>
+                        </div>
                       </div>
                     )}
                   </div>
-                </Card>
+                </div>
               </motion.div>
             )}
           </div>
         )}
 
-        {/* Round Account Addresses */}
+        {/* Addresses Section */}
         {roundAccount?.roundAccountAddresses && roundAccount.roundAccountAddresses.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="mt-8"
           >
-            <Card animate={false}>
-              <div className="flex items-center space-x-3 mb-6">
-                <Building className="w-6 h-6 text-[#7767DA]" />
-                <h2 className="text-xl font-bold auth-text">Account Addresses</h2>
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 rounded-xl border border-[#7767DA]/30">
+                  <MapPin className="w-5 h-5 text-[#7767DA]" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-lg font-medium text-white mb-2">Account Addresses</h2>
+                  <p className="text-sm text-gray-400">Billing and shipping addresses</p>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {roundAccount.roundAccountAddresses.map((address) => (
                   <div
                     key={address.addressId}
-                    className="p-4 rounded-lg bg-white/5 border border-white/10"
+                    className="p-4 bg-white/5 border border-white/10 rounded-lg"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-medium auth-text">{address.name}</h3>
-                        <span className="text-xs px-2 py-1 rounded-full bg-[#7767DA]/20 text-[#7767DA] border border-[#7767DA]/30">
-                          {address.addressType}
-                        </span>
-                        {address.isPrimary && (
-                          <span className="ml-2 text-xs px-2 py-1 rounded-full bg-[#42E695]/20 text-[#42E695] border border-[#42E695]/30">
-                            Primary
+                        <h3 className="font-medium text-white text-sm mb-2">{address.name}</h3>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs px-2 py-1 rounded-lg bg-[#7767DA]/20 text-[#7767DA] border border-[#7767DA]/30 font-medium">
+                            {address.addressType}
                           </span>
-                        )}
+                          {address.isPrimary && (
+                            <span className="text-xs px-2 py-1 rounded-lg bg-[#42E695]/20 text-[#42E695] border border-[#42E695]/30 font-medium">
+                              Primary
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="text-sm auth-text-muted space-y-1">
+                    <div className="text-sm text-gray-400 space-y-1">
                       <p>{address.number} {address.addressLine1}</p>
                       {address.addressLine2 && <p>{address.addressLine2}</p>}
                       <p>{address.city}, {address.state} {address.zipCode}</p>
@@ -349,39 +461,43 @@ export const DashboardPage = () => {
                   </div>
                 ))}
               </div>
-            </Card>
+            </div>
           </motion.div>
         )}
 
-        {/* Round Account Users Section */}
+        {/* Users Section */}
         {roundAccount?.roundAccountUsers && roundAccount.roundAccountUsers.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="mt-8"
           >
-            <Card animate={false}>
-              <div className="flex items-center space-x-3 mb-6">
-                <Users className="w-6 h-6 text-[#32A1E4]" />
-                <h2 className="text-xl font-bold auth-text">Account Users</h2>
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="p-3 bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 rounded-xl border border-[#32A1E4]/30">
+                  <Users className="w-5 h-5 text-[#32A1E4]" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-lg font-medium text-white mb-2">Account Users</h2>
+                  <p className="text-sm text-gray-400">Team members with access to this account</p>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {roundAccount.roundAccountUsers.map((accountUser) => (
                   <div
                     key={`${accountUser.roundAccountId}-${accountUser.userId}`}
-                    className="p-4 rounded-lg bg-white/5 border border-white/10"
+                    className="p-4 bg-white/5 border border-white/10 rounded-lg"
                   >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white text-sm font-medium mb-2">
-                          <User className="w-4 h-4" />
-                        </div>
-                        <p className="font-medium auth-text text-sm">User ID</p>
-                        <p className="text-xs auth-text-muted font-mono break-all">{accountUser.userId}</p>
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center flex-shrink-0">
+                        <User className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-white text-sm mb-1">User ID</p>
+                        <p className="text-xs text-gray-400 font-mono break-all">{accountUser.userId}</p>
                         {accountUser.role && (
-                          <span className="inline-block mt-2 text-xs px-2 py-1 rounded-full bg-[#32A1E4]/20 text-[#32A1E4] border border-[#32A1E4]/30">
+                          <span className="inline-block mt-2 text-xs px-2 py-1 rounded-lg bg-[#32A1E4]/20 text-[#32A1E4] border border-[#32A1E4]/30 font-medium">
                             {accountUser.role}
                           </span>
                         )}
@@ -390,7 +506,7 @@ export const DashboardPage = () => {
                   </div>
                 ))}
               </div>
-            </Card>
+            </div>
           </motion.div>
         )}
 
@@ -400,28 +516,31 @@ export const DashboardPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-center py-12"
           >
-            <Building className="w-16 h-16 auth-text-muted mx-auto mb-4" />
-            <h3 className="text-xl font-semibold auth-text mb-2">No Round Account Found</h3>
-            <p className="auth-text-muted mb-6">
-              It looks like you don&apos;t have a Round account set up yet, or there was an issue loading your account data.
-            </p>
-            <div className="space-x-4">
-              <ActionButton
-                label="Contact Support"
-                onClick={() => navigate('/help')}
-                size="md"
-                variant="secondary"
-                animated={false}
-              />
-              <ActionButton
-                label="Refresh Page"
-                onClick={() => window.location.reload()}
-                size="md"
-                variant="primary"
-                animated={false}
-              />
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-12">
+              <div className="text-center">
+                <Building className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">No Round Account Found</h3>
+                <p className="text-gray-400 mb-6">
+                  It looks like you don&apos;t have a Round account set up yet, or there was an issue loading your account data.
+                </p>
+                <div className="flex items-center justify-center gap-4">
+                  <ActionButton
+                    label="Contact Support"
+                    onClick={() => navigate('/help')}
+                    size="md"
+                    variant="secondary"
+                    animated={false}
+                  />
+                  <ActionButton
+                    label="Refresh Page"
+                    onClick={() => window.location.reload()}
+                    size="md"
+                    variant="primary"
+                    animated={false}
+                  />
+                </div>
+              </div>
             </div>
           </motion.div>
         )}

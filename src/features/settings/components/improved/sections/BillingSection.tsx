@@ -21,7 +21,7 @@ export const BillingSection: React.FC = () => (
       <Card animate={false} padding="md">
         <div className="flex items-start gap-3 mb-4">
           <div className="p-2 bg-gradient-to-br from-green-500/15 to-emerald-500/15 rounded-lg border border-green-500/20">
-            <CreditCard className="w-3 h-3 text-green-400" />
+            <CreditCard className="w-4 h-4 text-green-400" />
           </div>
           <div className="flex-1">
             <h2 className="text-xs font-medium text-white mb-1">Billing & Payments</h2>
@@ -39,7 +39,7 @@ export const BillingSection: React.FC = () => (
               <p className="text-[10px] text-gray-400">Billed monthly • Next billing: March 15, 2024</p>
             </div>
             <div className="text-right">
-              <div className="text-sm font-bold text-white">$49</div>
+              <div className="text-sm font-medium text-white">$49</div>
               <div className="text-[10px] text-gray-400">per month</div>
             </div>
           </div>
@@ -73,7 +73,7 @@ export const BillingSection: React.FC = () => (
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-1.5 bg-blue-500/20 rounded-lg">
-                  <CreditCard className="w-3 h-3 text-blue-400" />
+                  <CreditCard className="w-4 h-4 text-blue-400" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">
@@ -109,7 +109,7 @@ export const BillingSection: React.FC = () => (
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-purple-500/20 rounded-lg">
-                <Building className="w-3 h-3 text-purple-400" />
+                <Building className="w-4 h-4 text-purple-400" />
               </div>
               <div>
                 <h3 className="text-xs font-medium text-white">Billing Address</h3>
@@ -140,7 +140,7 @@ export const BillingSection: React.FC = () => (
         <Card animate={false} padding="md">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-orange-500/20 rounded-lg">
-              <Download className="w-3 h-3 text-orange-400" />
+              <Download className="w-4 h-4 text-orange-400" />
             </div>
             <div>
               <h3 className="text-xs font-medium text-white">Invoice Preferences</h3>
@@ -152,7 +152,7 @@ export const BillingSection: React.FC = () => (
             <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-lg">
               <div className="flex items-center gap-3">
                 <div className="p-1.5 bg-blue-500/20 rounded-lg">
-                  <Download className="w-3 h-3 text-blue-400" />
+                  <Download className="w-4 h-4 text-blue-400" />
                 </div>
                 <div>
                   <p className="text-xs font-medium text-white">Email invoices</p>

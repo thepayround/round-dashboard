@@ -25,6 +25,7 @@ import {
 } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { ActionButton } from '@/shared/components/ActionButton'
+import { Card } from '@/shared/components/Card'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
@@ -208,9 +209,9 @@ const CustomerDetailPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6"
         >
-          <div className="flex items-center justify-between">
+          <Card padding="lg">
+            <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <Link
                 to="/customers"
@@ -274,6 +275,7 @@ const CustomerDetailPage: React.FC = () => {
               </button>
             </div>
           </div>
+          </Card>
         </motion.div>
 
         {/* Main Content Grid */}
@@ -286,7 +288,7 @@ const CustomerDetailPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="p-3 bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 rounded-xl border border-[#D417C8]/30">
                     {customer.isBusinessCustomer ? (
@@ -307,15 +309,18 @@ const CustomerDetailPage: React.FC = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <Mail className="w-4 h-4 text-[#14BDEA]" />
-                      <div>
-                        <div className="text-sm font-medium text-white">{customer.email}</div>
-                        <div className="text-xs text-white/60">Primary email address</div>
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <Mail className="w-4 h-4 text-[#14BDEA]" />
+                        <div>
+                          <div className="text-sm font-medium text-white">{customer.email}</div>
+                          <div className="text-xs text-white/60">Primary email address</div>
+                        </div>
                       </div>
-                    </div>
+                    </Card>
                     {customer.phoneNumber && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
                         <Phone className="w-4 h-4 text-[#42E695]" />
                         <div className="flex-1">
                           <div className="text-sm font-medium text-white">{customer.phoneNumber}</div>
@@ -326,59 +331,70 @@ const CustomerDetailPage: React.FC = () => {
                             <CheckCircle className="w-4 h-4 text-emerald-400" />
                           </div>
                         )}
-                      </div>
+                        </div>
+                      </Card>
                     )}
                     {customer.company && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
                         <Building2 className="w-4 h-4 text-[#7767DA]" />
                         <div>
                           <div className="text-sm font-medium text-white">{customer.company}</div>
                           <div className="text-xs text-white/60">Company name</div>
                         </div>
-                      </div>
+                        </div>
+                      </Card>
                     )}
                     {customer.taxNumber && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <FileText className="w-4 h-4 text-amber-400" />
-                        <div>
-                          <div className="text-sm font-medium text-white">{customer.taxNumber}</div>
-                          <div className="text-xs text-white/60">Tax number</div>
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <FileText className="w-4 h-4 text-amber-400" />
+                          <div>
+                            <div className="text-sm font-medium text-white">{customer.taxNumber}</div>
+                            <div className="text-xs text-white/60">Tax number</div>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     )}
                   </div>
                   
                   <div className="space-y-4">
                     {customer.timezone && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <Clock className="w-4 h-4 text-[#FF6B6B]" />
-                        <div>
-                          <div className="text-sm font-medium text-white">{customer.timezone}</div>
-                          <div className="text-xs text-white/60">Timezone</div>
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <Clock className="w-4 h-4 text-[#FF6B6B]" />
+                          <div>
+                            <div className="text-sm font-medium text-white">{customer.timezone}</div>
+                            <div className="text-xs text-white/60">Timezone</div>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     )}
                     {customer.locale && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <Globe className="w-4 h-4 text-[#14BDEA]" />
-                        <div>
-                          <div className="text-sm font-medium text-white">{customer.locale}</div>
-                          <div className="text-xs text-white/60">Language & locale</div>
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <Globe className="w-4 h-4 text-[#14BDEA]" />
+                          <div>
+                            <div className="text-sm font-medium text-white">{customer.locale}</div>
+                            <div className="text-xs text-white/60">Language & locale</div>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     )}
                     {customer.currency && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <span className="w-4 h-4 flex items-center justify-center text-[#42E695] font-bold text-xs">$</span>
-                        <div>
-                          <div className="text-sm font-medium text-white">{customer.currency}</div>
-                          <div className="text-xs text-white/60">Preferred currency</div>
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <span className="w-4 h-4 flex items-center justify-center text-[#42E695] font-bold text-xs">$</span>
+                          <div>
+                            <div className="text-sm font-medium text-white">{customer.currency}</div>
+                            <div className="text-xs text-white/60">Preferred currency</div>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     )}
                   </div>
                 </div>
-              </div>
+              </Card>
             </motion.div>
 
             {/* Addresses */}
@@ -387,7 +403,7 @@ const CustomerDetailPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="p-3 bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 rounded-xl border border-[#14BDEA]/30">
                     <MapPin className="w-5 h-5 text-[#14BDEA]" />
@@ -403,7 +419,7 @@ const CustomerDetailPage: React.FC = () => {
                 {(customer.billingAddress ?? customer.shippingAddress) ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {customer.billingAddress && (
-                      <div className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-200">
+                      <Card variant="nested" padding="lg" className="hover:bg-white/10">
                         <div className="flex items-center gap-3 mb-3">
                           <CreditCard className="w-5 h-5 text-[#42E695]" />
                           <h3 className="text-sm font-medium text-white">
@@ -418,11 +434,11 @@ const CustomerDetailPage: React.FC = () => {
                           </div>
                           <div className="text-white/60">{customer.billingAddress.country}</div>
                         </div>
-                      </div>
+                      </Card>
                     )}
                     
                     {customer.shippingAddress && (
-                      <div className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-200">
+                      <Card variant="nested" padding="lg" className="hover:bg-white/10">
                         <div className="flex items-center gap-3 mb-3">
                           <Truck className="w-5 h-5 text-[#7767DA]" />
                           <h3 className="text-sm font-medium text-white">
@@ -437,7 +453,7 @@ const CustomerDetailPage: React.FC = () => {
                           </div>
                           <div className="text-white/60">{customer.shippingAddress.country}</div>
                         </div>
-                      </div>
+                      </Card>
                     )}
                   </div>
                 ) : (
@@ -449,7 +465,7 @@ const CustomerDetailPage: React.FC = () => {
                     </p>
                   </div>
                 )}
-              </div>
+              </Card>
             </motion.div>
 
             {/* Tags and Custom Fields */}
@@ -459,7 +475,7 @@ const CustomerDetailPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                <Card padding="lg">
                   <div className="flex items-start gap-4 mb-6">
                     <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 rounded-xl border border-[#7767DA]/30">
                       <Tag className="w-5 h-5 text-[#7767DA]" />
@@ -507,7 +523,7 @@ const CustomerDetailPage: React.FC = () => {
                       </div>
                     )}
                   </div>
-                </div>
+                </Card>
               </motion.div>
             )}
           </div>
@@ -520,7 +536,7 @@ const CustomerDetailPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-emerald-400/20 rounded-xl border border-emerald-500/30">
                     <Zap className="w-5 h-5 text-emerald-400" />
@@ -556,7 +572,7 @@ const CustomerDetailPage: React.FC = () => {
                     <span className="text-sm font-medium text-white">Edit Details</span>
                   </button>
                 </div>
-              </div>
+              </Card>
             </motion.div>
 
             {/* Status Information */}
@@ -565,7 +581,7 @@ const CustomerDetailPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="p-3 bg-gradient-to-br from-amber-500/20 to-amber-400/20 rounded-xl border border-amber-500/30">
                     <Activity className="w-5 h-5 text-amber-400" />
@@ -617,7 +633,7 @@ const CustomerDetailPage: React.FC = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </Card>
             </motion.div>
           </div>
         </div>

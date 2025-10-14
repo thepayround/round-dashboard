@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, AlertCircle, Edit, X, MapPin } from 'lucide-react'
-import { ActionButton } from '@/shared/components'
+import { ActionButton, Card } from '@/shared/components'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { AddressStep } from '@/features/onboarding/components/steps/AddressStep'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
@@ -226,7 +226,7 @@ export const AddressManagementSection: React.FC = () => {
     if (!billing.name && !billing.addressLine1) {
       return (
         <div className="text-center py-12">
-          <MapPin className="w-12 h-12 text-white/40 mx-auto mb-4" />
+          <MapPin className="w-16 h-16 text-white/40 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-white/80 mb-2">No billing address found</h3>
           <p className="text-white/60 mb-6">Add your billing address for invoicing and tax purposes</p>
           <ActionButton
@@ -298,7 +298,7 @@ export const AddressManagementSection: React.FC = () => {
 
       {/* Step Content - Same as get-started */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-12">
-        <div className="bg-white/5 backdrop-blur-xl rounded-lg border border-white/10 p-8">
+        <Card padding="lg">
           <AnimatePresence mode="wait">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -324,7 +324,7 @@ export const AddressManagementSection: React.FC = () => {
               )}
             </motion.div>
           </AnimatePresence>
-        </div>
+        </Card>
       </motion.div>
 
       {/* Navigation Buttons - Show only in edit mode */}

@@ -24,7 +24,9 @@ export interface RoundAccountInfo {
     revenue?: number
     category: string
     type: string
+    industry?: string
     registrationNumber?: string
+    taxId?: string
     currency: string
     timeZone: string
     country: string

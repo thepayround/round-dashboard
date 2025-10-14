@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { ActionButton } from '@/shared/components/ActionButton'
+import { Card } from '@/shared/components/Card'
 import { SearchFilterToolbar, SectionHeader } from '@/shared/components'
 import Pagination from '@/shared/components/Pagination'
 import type { FilterField } from '@/shared/components'
@@ -492,9 +493,9 @@ const CustomersPage: React.FC = () => {
                 key={customer.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="group relative"
+                className="group relative h-full"
               >
-              <div className="h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6 hover:shadow-lg hover:shadow-[#D417C8]/10 transition-all duration-300">
+              <Card padding="lg" className="h-full hover:shadow-lg hover:shadow-[#D417C8]/10 transition-all duration-300">
                 {/* Card selection checkbox */}
                 <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                   <label htmlFor={`customer-card-${customer.id}`} className="flex items-center cursor-pointer">
@@ -546,43 +547,51 @@ const CustomersPage: React.FC = () => {
 
                 {/* Information Cards */}
                 <div className="space-y-3 mb-4">
-                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <Mail className="w-4 h-4 text-[#14BDEA]" />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-white truncate">{customer.email}</div>
-                      <div className="text-xs text-white/60">Primary email</div>
-                    </div>
-                  </div>
-                  
-                  {customer.phoneNumber && (
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <Phone className="w-4 h-4 text-[#42E695]" />
-                      <div className="flex-1">
-                        <div className="text-sm font-medium text-white">{customer.phoneNumber}</div>
-                        <div className="text-xs text-white/60">Phone number</div>
+                  <Card variant="nested" padding="md">
+                    <div className="flex items-center gap-3">
+                      <Mail className="w-4 h-4 text-[#14BDEA]" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-white truncate">{customer.email}</div>
+                        <div className="text-xs text-white/60">Primary email</div>
                       </div>
                     </div>
+                  </Card>
+                  
+                  {customer.phoneNumber && (
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <Phone className="w-4 h-4 text-[#42E695]" />
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-white">{customer.phoneNumber}</div>
+                          <div className="text-xs text-white/60">Phone number</div>
+                        </div>
+                      </div>
+                    </Card>
                   )}
                   
                   {customer.billingAddress && (
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <MapPin className="w-4 h-4 text-amber-400" />
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-white truncate">
-                          {customer.billingAddress.city}, {customer.billingAddress.country}
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <MapPin className="w-4 h-4 text-amber-400" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-white truncate">
+                            {customer.billingAddress.city}, {customer.billingAddress.country}
+                          </div>
+                          <div className="text-xs text-white/60">Location</div>
                         </div>
-                        <div className="text-xs text-white/60">Location</div>
                       </div>
-                    </div>
+                    </Card>
                   )}
                   
-                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <Calendar className="w-4 h-4 text-[#7767DA]" />
-                    <div>
-                      <div className="text-sm font-medium text-white">{formatDate(customer.signupDate)}</div>
-                      <div className="text-xs text-white/60">Customer since</div>
+                  <Card variant="nested" padding="md">
+                    <div className="flex items-center gap-3">
+                      <Calendar className="w-4 h-4 text-[#7767DA]" />
+                      <div>
+                        <div className="text-sm font-medium text-white">{formatDate(customer.signupDate)}</div>
+                        <div className="text-xs text-white/60">Customer since</div>
+                      </div>
                     </div>
-                  </div>
+                  </Card>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -628,7 +637,7 @@ const CustomersPage: React.FC = () => {
                     </div>
                   </div>
                 )}
-              </div>
+              </Card>
             </motion.div>
           ))}
               </motion.div>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import type { LucideIcon} from 'lucide-react';
-import { TrendingUp, TrendingDown } from 'lucide-react'
+import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { ReactNode} from 'react';
 import { memo } from 'react'
@@ -12,7 +12,7 @@ export interface CardProps {
   children?: ReactNode
   className?: string
   padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
-  variant?: 'default' | 'compact' | 'stats' | 'navigation' | 'feature'
+  variant?: 'default' | 'compact' | 'stats' | 'navigation' | 'feature' | 'nested'
   color?: 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger' | 'neutral'
   hover?: boolean
   clickable?: boolean
@@ -32,12 +32,15 @@ export interface CardProps {
   description?: string
   href?: string
   external?: boolean
-  navigationVariant?: 'default' | 'compact'  // Add navigation layout variants
-  enhancedHover?: boolean  // For NavigationCard-style enhanced hover effects
+  navigationVariant?: 'default' | 'compact'
+  enhancedHover?: boolean
   
   // Animation props
   animate?: boolean
   delay?: number
+  
+  // Nested variant - for inner cards
+  nested?: boolean
 }
 
 const paddingVariants = {
@@ -103,7 +106,7 @@ const colorVariants = {
 const CardComponent = ({
   children,
   className = '',
-  padding = 'lg',
+  padding = 'md',
   variant = 'default',
   color = 'neutral',
   clickable = false,
@@ -117,7 +120,8 @@ const CardComponent = ({
   external = false,
   navigationVariant = 'default',
   animate = true,
-  delay = 0
+  delay = 0,
+  nested = false
 }: CardProps) => {
   const colorConfig = colorVariants[color]
   const paddingClass = paddingVariants[padding]
@@ -130,78 +134,85 @@ const CardComponent = ({
     }
   }
 
-  const _TrendIcon = trend?.direction === 'up' ? TrendingUp : TrendingDown
+  const TrendIcon = trend?.direction === 'up' ? ArrowUpRight : ArrowDownRight
 
-  const baseClasses = `
-    auth-card relative overflow-hidden group
-    ${paddingClass}
-    ${clickable || onClick ? 'cursor-pointer' : ''}
-    ${className}
-  `.trim()
+  // Glassmorphism base classes (new default design)
+  const baseClasses = (nested || variant === 'nested')
+    ? `
+      bg-white/5 border border-white/10 rounded-lg
+      transition-all duration-200
+      ${paddingClass}
+      ${clickable || onClick ? 'cursor-pointer hover:bg-white/10' : ''}
+      ${className}
+    `.trim()
+    : `
+      bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg
+      relative overflow-hidden group
+      transition-all duration-200
+      ${paddingClass}
+      ${clickable || onClick ? 'cursor-pointer hover:bg-white/10' : ''}
+      ${className}
+    `.trim()
 
   const CardContent = () => (
     <div className="relative">
       {/* Content based on variant */}
       {variant === 'stats' && title && (
-        <div className="flex items-center justify-between">
-          <div className="min-w-0 flex-1 pr-3">
-            <p className="auth-text-muted text-xs font-medium truncate uppercase tracking-wide">
-              {title}
-            </p>
-            <p className="auth-text text-sm font-medium">
-              {typeof value === 'number' ? value.toLocaleString() : value}
-            </p>
-            
+        <>
+          <div className="flex items-center justify-between mb-4">
+            {Icon && (
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center`}>
+                <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
+              </div>
+            )}
             {trend && (
-              <p className={`text-xs font-medium ${getTrendColor(trend.direction)} truncate`}>
-                {trend.value}{trend.label && ` ${trend.label}`}
-              </p>
+              <div className={`flex items-center gap-1 ${getTrendColor(trend.direction)} text-sm font-medium`}>
+                <TrendIcon className="w-4 h-4" />
+                {trend.value}
+              </div>
             )}
           </div>
-
-          {Icon && (
-            <div className={`w-6 h-6 md:w-7 md:h-7 lg:w-6 lg:h-6 rounded-lg bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
-              <Icon className={`w-3 h-3 md:w-3.5 md:h-3.5 lg:w-3 lg:h-3 ${colorConfig.iconColor}`} />
-            </div>
+          <h3 className="text-2xl font-bold text-white mb-1">
+            {typeof value === 'number' ? value.toLocaleString() : value}
+          </h3>
+          <p className="text-sm text-white/60">{title}</p>
+          {trend?.label && (
+            <p className="text-xs text-white/40 mt-2">{trend.label}</p>
           )}
-        </div>
+        </>
       )}
 
       {variant === 'navigation' && title && description && (
         navigationVariant === 'default' ? (
-          // Default Layout - Vertical Stack (like NavigationCard default)
           <>
             <div className="flex items-center justify-between mb-4">
               {Icon && (
-                <div className={`p-1.5 md:p-2 lg:p-1.5 bg-gradient-to-br ${colorConfig.iconBg} rounded-lg border ${colorConfig.border} backdrop-blur-sm`}>
-                  <Icon className={`w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 ${colorConfig.iconColor}`} />
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center`}>
+                  <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
                 </div>
               )}
             </div>
-            <h3 className={`text-xs font-light text-white transition-colors duration-200 ${colorConfig.hoverColor} mb-0.5`}>
+            <h3 className={`text-base font-semibold text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-2`}>
               {title}
             </h3>
-            <p className="text-gray-400 text-[0.6875rem] leading-tight">
+            <p className="text-white/60 text-sm leading-relaxed">
               {description}
             </p>
           </>
         ) : (
-          // Compact Layout - Horizontal (existing)
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              {Icon && (
-                <div className={`p-1.5 md:p-2 lg:p-1.5 bg-gradient-to-br ${colorConfig.iconBg} rounded-lg border ${colorConfig.border} backdrop-blur-sm`}>
-                  <Icon className={`w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 ${colorConfig.iconColor}`} />
-                </div>
-              )}
-              <div>
-                <h3 className={`text-xs font-light text-white transition-colors duration-200 ${colorConfig.hoverColor}`}>
-                  {title}
-                </h3>
-                <p className="text-gray-400 text-xs mt-1">
-                  {description}
-                </p>
+          <div className="flex items-center gap-4">
+            {Icon && (
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
+                <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
               </div>
+            )}
+            <div className="flex-1">
+              <h3 className={`text-base font-semibold text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-1`}>
+                {title}
+              </h3>
+              <p className="text-white/60 text-sm">
+                {description}
+              </p>
             </div>
           </div>
         )
@@ -209,38 +220,40 @@ const CardComponent = ({
 
       {variant === 'compact' && title && (
         <div className="flex items-center justify-between">
-          <div className="min-w-0 flex-1 pr-3">
-            <p className="text-gray-400 text-xs font-light truncate">{title}</p>
+          {Icon && (
+            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0 mr-3`}>
+              <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
+            </div>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="text-white/60 text-xs mb-1">{title}</p>
             {value && (
-              <p className="text-sm font-medium text-white">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+              <p className="text-lg font-semibold text-white">{typeof value === 'number' ? value.toLocaleString() : value}</p>
             )}
             {trend && (
-              <p className={`text-xs font-medium ${getTrendColor(trend.direction)} truncate`}>
+              <p className={`text-xs font-medium ${getTrendColor(trend.direction)} mt-1`}>
                 {trend.value}{trend.label && ` ${trend.label}`}
               </p>
             )}
           </div>
-          {Icon && (
-            <div className={`w-6 h-6 md:w-7 md:h-7 lg:w-6 lg:h-6 rounded-lg bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
-              <Icon className={`w-3 h-3 md:w-3.5 md:h-3.5 lg:w-3 lg:h-3 ${colorConfig.iconColor}`} />
-            </div>
-          )}
         </div>
       )}
 
       {variant === 'feature' && title && (
         <div className="text-center">
           {Icon && (
-            <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${colorConfig.iconBg} rounded-lg border ${colorConfig.border} flex items-center justify-center backdrop-blur-sm`}>
+            <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${colorConfig.iconBg} rounded-xl flex items-center justify-center`}>
               <Icon className={`w-8 h-8 ${colorConfig.iconColor}`} />
             </div>
           )}
-          <h3 className="text-sm font-medium text-white mb-2">{title}</h3>
+          <h3 className="text-base font-semibold text-white mb-2">{title}</h3>
           {description && (
-            <p className="text-gray-400 text-xs">{description}</p>
+            <p className="text-white/60 text-sm">{description}</p>
           )}
         </div>
       )}
+      
+      {variant === 'nested' && children}
 
       {variant === 'default' && children}
     </div>

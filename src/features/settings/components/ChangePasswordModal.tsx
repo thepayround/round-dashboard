@@ -192,7 +192,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
             <Shield className="w-8 h-8 text-white" />
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Password Updated!</h3>
+          <h3 className="text-lg font-medium text-white mb-2">Password Updated!</h3>
           <p className="text-gray-400 mb-4">
             Your password has been changed successfully. For security, you&apos;ll need to sign in again on other devices.
           </p>
