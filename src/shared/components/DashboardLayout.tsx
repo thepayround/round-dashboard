@@ -114,10 +114,10 @@ const CatalogSubItem = memo(({
   const getActiveStateClasses = () => {
     if (isActive) {
       return isCollapsed
-        ? 'bg-gradient-to-br from-pink-500/25 via-purple-500/20 to-cyan-500/25 text-white shadow-[0_0_12px_rgba(212,23,200,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] border border-pink-400/50'
-        : 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
+        ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
+        : 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
     }
-    return 'text-gray-400 hover:text-white hover:bg-white/5'
+    return 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
   }
 
   return (
@@ -130,29 +130,24 @@ const CatalogSubItem = memo(({
         ${getActiveStateClasses()}
         ${
           isCollapsed 
-            ? 'justify-center w-8 h-8 px-0 backdrop-blur-sm' 
+            ? 'justify-center w-8 h-8 px-0' 
             : 'h-8 px-4 mx-2'
         }
       `}
     >
       <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${
         isCollapsed 
-          ? 'w-3.5 h-3.5 drop-shadow-sm group-hover:scale-105' 
+          ? 'w-3.5 h-3.5' 
           : 'w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2'
       }`} />
       
       {!isCollapsed && (
-        <span className="font-normal text-xs text-gray-300 whitespace-nowrap">{subItem.label}</span>
-      )}
-
-      {/* Subtle inner glow for active state in collapsed mode */}
-      {isCollapsed && isActive && (
-        <div className="absolute inset-0.5 rounded-md bg-gradient-to-br from-pink-500/10 to-cyan-500/10 -z-10" />
+        <span className="font-normal text-xs text-[#a3a3a3] whitespace-nowrap">{subItem.label}</span>
       )}
 
       {/* Connection indicator for collapsed mode */}
       {isCollapsed && !isLastItem && (
-        <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/15" />
+        <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-[#333333]" />
       )}
     </Link>
   )
@@ -202,12 +197,12 @@ const NavigationItem = memo(({
           group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9 w-full
           ${
             isParentActive(item)
-              ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
+              ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
+              : 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
           }
           ${isCollapsed ? 'justify-center px-0' : 'px-6'}
           ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
-            ? 'ring-2 ring-white/50' : ''
+            ? 'ring-2 ring-[#D417C8]' : ''
           }
         `}
         aria-expanded={expandedItems.includes(item.id)}
@@ -243,12 +238,12 @@ const NavigationItem = memo(({
           group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
           ${
             isParentActive(item)
-              ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
+              ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
+              : 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
           }
           ${isCollapsed ? 'justify-center px-0' : 'px-6'}
           ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
-            ? 'ring-2 ring-white/50' : ''
+            ? 'ring-2 ring-[#D417C8]' : ''
           }
         `}
         aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
@@ -643,7 +638,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
 
   return (
     <div
-      className="min-h-screen relative"
+      className="min-h-screen relative bg-[#000000]"
       style={{
         '--sidebar-width': isCollapsed ? '80px' : '280px'
       } as React.CSSProperties}
@@ -677,28 +672,28 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           x: (isMobile || isTablet) && isCollapsed ? -80 : 0
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="fixed left-0 top-0 h-full z-50 lg:z-base bg-white/5 backdrop-blur-xl border-r border-white/10"
+        className="fixed left-0 top-0 h-full z-50 lg:z-base bg-[#000000]"
       >
         {/* Logo Section - Clickable */}
         <Link
           to="/dashboard"
-          className="flex items-center justify-center border-b border-white/10 flex-shrink-0 hover:bg-white/5 transition-colors duration-200 cursor-pointer"
+          className="flex items-center justify-center flex-shrink-0 hover:bg-[#0a0a0a] transition-colors duration-200 cursor-pointer"
           style={{ height: '97px' }}
         >
           {!isCollapsed ? (
             <div className="flex items-center space-x-4">
-              <img src={ColorLogo} alt="Round Logo" className="w-10 h-11 md:h-9 animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_20px_rgba(212,23,200,0.6)]" />
-              <div className="flex items-center space-x-0.5 animate-[pulse_3s_ease-in-out_infinite]">
-                <span className="text-[#D417C8] font-extralight text-3xl tracking-wider drop-shadow-[0_0_15px_rgba(212,23,200,0.7)] transition-all duration-300">R</span>
-                <span className="text-[#BD2CD0] font-extralight text-3xl tracking-wider drop-shadow-[0_0_15px_rgba(189,44,208,0.7)] transition-all duration-300">O</span>
-                <span className="text-[#7767DA] font-extralight text-3xl tracking-wider drop-shadow-[0_0_15px_rgba(119,103,218,0.7)] transition-all duration-300">U</span>
-                <span className="text-[#32A1E4] font-extralight text-3xl tracking-wider drop-shadow-[0_0_15px_rgba(50,161,228,0.7)] transition-all duration-300">N</span>
-                <span className="text-[#14BDEA] font-extralight text-3xl tracking-wider drop-shadow-[0_0_15px_rgba(20,189,234,0.7)] transition-all duration-300">D</span>
+              <img src={ColorLogo} alt="Round Logo" className="w-10 h-11 md:h-9" />
+              <div className="flex items-center space-x-0.5">
+                <span className="text-[#D417C8] font-light text-3xl tracking-wider transition-all duration-300">R</span>
+                <span className="text-[#BD2CD0] font-light text-3xl tracking-wider transition-all duration-300">O</span>
+                <span className="text-[#7767DA] font-light text-3xl tracking-wider transition-all duration-300">U</span>
+                <span className="text-[#32A1E4] font-light text-3xl tracking-wider transition-all duration-300">N</span>
+                <span className="text-[#14BDEA] font-light text-3xl tracking-wider transition-all duration-300">D</span>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-center">
-              <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_16px_rgba(212,23,200,0.6)]" />
+              <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
             </div>
           )}
         </Link>
@@ -740,12 +735,12 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                 group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
                 ${
                   isActive(item.href)
-                    ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
+                    : 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                 ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id)
-                  ? 'ring-2 ring-white/50' : ''
+                  ? 'ring-2 ring-[#D417C8]' : ''
                 }
               `}
               aria-label={item.label}
@@ -773,7 +768,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className={`overflow-hidden border-t border-white/10 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
+                className={`overflow-hidden border-t border-[#262626] mx-2 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
               >
                 <Link
                   to="/user-settings"
@@ -784,8 +779,8 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                     group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
                     ${
                       isActive('/user-settings')
-                        ? 'bg-gradient-to-r from-pink-500/15 to-cyan-500/15 text-white border border-pink-400/40 shadow-[0_0_20px_rgba(212,23,200,0.3),0_0_12px_rgba(20,189,234,0.2)]'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
+                        : 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                   `}
@@ -829,7 +824,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           </AnimatePresence>
 
           {/* Divider */}
-          <div className="border-t border-white/10" />
+          <div className="border-t border-white/10 mx-2" />
           
           {/* User Profile */}
           <div className={`py-2 ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}>
@@ -843,9 +838,9 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               onMouseLeave={handleTooltipLeave}
               className={`
                 group relative flex items-center rounded-lg transition-all duration-200 w-full
-                text-gray-400 hover:text-white hover:bg-white/5
+                text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]
                 ${isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
-                ${showProfileDropdown ? 'bg-white/10 text-white' : ''}
+                ${showProfileDropdown ? 'bg-[#1a1a1a] text-white' : ''}
               `}
               aria-label="User profile menu"
               aria-expanded={showProfileDropdown}
@@ -910,7 +905,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.15 }}
-            className={`fixed bg-black/90 backdrop-blur-md border border-white/30 text-white rounded-lg pointer-events-none z-tooltip shadow-xl ${
+            className={`fixed bg-[#141414] border border-[#333333] text-white rounded-lg pointer-events-none z-tooltip shadow-xl ${
               hoveredTooltip.isUser ? 'px-4 py-3 text-xs max-w-[250px]' : 'px-3 py-2 text-sm whitespace-nowrap'
             }`}
             style={{
@@ -954,7 +949,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg p-6 max-w-md mx-4"
+              className="bg-[#141414] border border-[#333333] rounded-lg p-6 max-w-md mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
@@ -971,36 +966,36 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               <div className="space-y-4 text-sm">
                 <div>
                   <h4 className="text-white font-medium mb-2">Navigation</h4>
-                  <div className="space-y-1 text-gray-300">
+                  <div className="space-y-1 text-[#a3a3a3]">
                     <div className="flex justify-between">
                       <span>Dashboard</span>
-                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+1</kbd>
+                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+1</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Customers</span>
-                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+2</kbd>
+                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+2</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Billing</span>
-                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+3</kbd>
+                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+3</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Invoices</span>
-                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+4</kbd>
+                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+4</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Catalog</span>
-                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Alt+5</kbd>
+                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+5</kbd>
                     </div>
                   </div>
                 </div>
                 
                 <div>
                   <h4 className="text-white font-medium mb-2">Sidebar</h4>
-                  <div className="space-y-1 text-gray-300">
+                  <div className="space-y-1 text-[#a3a3a3]">
                     <div className="flex justify-between">
                       <span>Toggle Sidebar</span>
-                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Ctrl+Shift+B</kbd>
+                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Ctrl+Shift+B</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Arrow Navigation</span>
@@ -1035,7 +1030,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
         onClick={toggleSidebar}
-        className="fixed top-16 lg:top-20 w-10 h-11 md:h-9 lg:w-8 lg:h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-200 z-50 lg:z-base"
+        className="fixed top-16 lg:top-20 w-10 h-11 md:h-9 lg:w-8 lg:h-8 rounded-full bg-[#1a1a1a] border border-[#333333] flex items-center justify-center hover:bg-[#262626] hover:border-[#404040] transition-all duration-200 z-50 lg:z-base"
       >
         <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4 text-white" />
       </motion.button>
@@ -1052,11 +1047,13 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           })()
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="min-h-screen relative z-10"
+        className="relative z-10 p-2 pl-3"
       >
-        <div className="max-w-6xl lg:max-w-7xl xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6">
-          <Breadcrumb />
-          {children}
+        <div className="h-[calc(100vh-1rem)] bg-[#0f0f0f] rounded-xl border border-[#1a1a1a] overflow-y-auto scrollbar-thin">
+          <div className="max-w-6xl lg:max-w-7xl xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6">
+            <Breadcrumb />
+            {children}
+          </div>
         </div>
       </motion.main>
 

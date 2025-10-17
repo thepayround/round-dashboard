@@ -37,7 +37,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 
   return (
     <div className={`relative ${className}`}>
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#737373]" />
       
       <input
         type="text"
@@ -47,10 +47,10 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         disabled={disabled}
         className={`
           w-full h-[42px] md:h-9 pl-10 pr-16 md:pr-20 px-3 py-1.5
-          bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg
-          text-white placeholder-white/60 text-xs font-light
-          focus:outline-none focus:border-[#14BDEA]/50 focus:bg-white/10
-          transition-all duration-300 ease-out
+          bg-[#0a0a0a] border border-[#333333] rounded-lg
+          text-white placeholder-[#737373] text-xs font-light
+          focus:outline-none focus:border-[#14BDEA] focus:bg-[#000000]
+          transition-all duration-200
           ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
         `}
         autoComplete="off"
@@ -71,13 +71,12 @@ export const SearchInput: React.FC<SearchInputProps> = ({
             onClick={handleClear}
             className="
               flex items-center justify-center w-7 h-7 md:w-6 md:h-6 rounded-lg
-              bg-white/6 backdrop-blur-md border border-white/10
-              text-white/60 hover:text-white hover:bg-white/10
-              hover:border-white/20 hover:shadow-md hover:shadow-black/10
-              active:bg-white/5 active:scale-95
-              transition-all duration-200 ease-out
-              focus:outline-none focus:ring-2 focus:ring-[#14BDEA]/50 focus:ring-offset-2 focus:ring-offset-transparent
-              hover:-translate-y-0.5
+              bg-[#1a1a1a] border border-[#333333]
+              text-[#a3a3a3] hover:text-white hover:bg-[#262626]
+              hover:border-[#404040]
+              active:bg-[#1a1a1a] active:scale-95
+              transition-all duration-200
+              focus:outline-none focus:ring-2 focus:ring-[#14BDEA]
             "
             type="button"
             disabled={disabled}

@@ -30,6 +30,7 @@
     width: 0;
     height: 0;
   }
+
   .z-modal { z-index: var(--z-modal); }
   .z-toast { z-index: var(--z-toast); }
 
@@ -37,14 +38,42 @@
     @apply border-border;
   }
 
+  /* Polar-inspired Design System Colors */
+  :root {
+    /* Pure black foundation */
+    --color-bg-primary: #000000;
+    --color-bg-secondary: #0a0a0a;
+    --color-bg-tertiary: #141414;
+    --color-bg-elevated: #1a1a1a;
+    
+    /* Clean border scale */
+    --color-border-subtle: #262626;
+    --color-border-default: #333333;
+    --color-border-strong: #404040;
+    
+    /* Text hierarchy */
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #a3a3a3;
+    --color-text-tertiary: #737373;
+    --color-text-disabled: #525252;
+    
+    /* Brand colors (unchanged) */
+    --color-brand-pink: #D417C8;
+    --color-brand-pink-light: #BD2CD0;
+    --color-brand-purple: #7767DA;
+    --color-brand-cyan-light: #32A1E4;
+    --color-brand-cyan: #14BDEA;
+    --color-brand-green: #42E695;
+  }
+
   html {
-    background-color: #0a0a0a;
+    background-color: #000000;
     min-height: 100vh;
   }
 
   #root {
     min-height: 100vh;
-    background-color: #0a0a0a;
+    background-color: #000000;
   }
 
   body {
@@ -55,109 +84,41 @@
       sans-serif;
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 32;
-    background-color: #0a0a0a;
+    background-color: #000000;
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    /* Ultra-premium liner typography */
-    font-size: 11px;
-    line-height: 1.35;
-    font-weight: 350; /* Lighter weight for premium feel */
+    /* Clean, readable typography */
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--color-text-primary);
   }
 
   @media (min-width: 640px) {
     body {
-      font-size: 12px;
-      line-height: 1.4;
-      font-weight: 375;
+      font-size: 14px;
+      line-height: 1.5;
     }
   }
 
   @media (min-width: 1024px) {
     body {
-      font-size: 13px;
-      line-height: 1.45;
-      font-weight: 400;
+      font-size: 14px;
+      line-height: 1.5;
     }
   }
 
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-      linear-gradient(45deg, transparent 40%, rgba(20, 189, 234, 0.015) 50%, transparent 60%),
-      linear-gradient(-45deg, transparent 40%, rgba(119, 103, 218, 0.015) 50%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-    animation: subtleShift 25s ease-in-out infinite alternate;
+  /* Removed animated background for clean aesthetic */
+
+  /* Removed animated background for clean aesthetic */
+
+  /* Clean transition standards */
+  * {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  @keyframes subtleShift {
-    0% {
-      opacity: 0.2;
-      transform: translateX(0px) rotate(0deg);
-    }
-    50% {
-      opacity: 0.4;
-      transform: translateX(5px) rotate(0.5deg);
-    }
-    100% {
-      opacity: 0.3;
-      transform: translateX(10px) rotate(1deg);
-    }
-  }
-
-  @keyframes gradientShift {
-    0% {
-      background-position:
-        0% 50%,
-        0% 50%;
-    }
-    25% {
-      background-position:
-        0% 50%,
-        100% 50%;
-    }
-    50% {
-      background-position:
-        0% 50%,
-        100% 0%;
-    }
-    75% {
-      background-position:
-        0% 50%,
-        0% 100%;
-    }
-    100% {
-      background-position:
-        0% 50%,
-        0% 50%;
-    }
-  }
-
-  @keyframes simpleFloat {
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-
-  @keyframes glow {
-    0%,
-    100% {
-      box-shadow: 0 0 20px rgba(212, 23, 200, 0.3);
-    }
-    50% {
-      box-shadow: 0 0 40px rgba(20, 189, 234, 0.5);
-    }
-  }
+  /* Remove unnecessary keyframes */
 }
 
 @layer components {
@@ -291,85 +252,56 @@
     pointer-events: none;
   }
 
+  /* Polar-inspired Input System - Clean and Solid */
   .auth-input {
     width: 100%;
-    height: 2.625rem; /* 42px - mobile inputs */
-    padding: 0 0.75rem;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px; /* Consistent 8px radius */
-    color: rgba(255, 255, 255, 0.95) !important;
-    font-weight: 300; /* Light weight for premium feel */
-    font-size: 0.75rem; /* 12px - matches ApiDropdown */
-    line-height: 1.2;
-    transition: all 0.3s ease;
+    height: 2.5rem;
+    padding: 0 1rem;
+    background: #0a0a0a;
+    border: 1px solid #333333;
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    transition: all 0.2s ease;
     outline: none;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    position: relative;
-  }
-
-  @media (min-width: 768px) {
-    .auth-input {
-      height: 2.25rem; /* 36px - desktop inputs */
-      padding: 0 0.875rem;
-      font-size: 0.75rem; /* 12px - slightly larger on tablets */
-      font-weight: 375;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .auth-input {
-      height: 2.25rem; /* 36px - desktop inputs */
-      padding: 0 1rem;
-      font-size: 0.75rem; /* 12px - consistent */
-      font-weight: 400;
-    }
   }
 
   .auth-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: #737373;
     font-weight: 400;
+  }
+
+  .auth-input:hover:not(:focus) {
+    border-color: #404040;
+  }
+
+  .auth-input:focus {
+    border-color: #D417C8;
+    box-shadow: 0 0 0 1px #D417C8;
   }
 
   /* Input padding adjustments for icons */
   .auth-input.input-with-icon-left {
-    padding-left: 2.5rem; /* 40px - space for icon + spacing */
+    padding-left: 2.5rem;
   }
 
   .auth-input.input-with-icon-right {
-    padding-right: 2.5rem; /* 40px - space for icon + spacing */
+    padding-right: 2.5rem;
   }
 
   .auth-input.input-with-icon-left.input-with-icon-right {
-    padding-left: 2.5rem; /* 40px - space for left icon */
-    padding-right: 2.5rem; /* 40px - space for right icon */
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 
   .auth-input.textarea {
     height: auto;
-    min-height: 5rem; /* 80px - more spacious for text areas */
-    padding: 1rem 2.5rem; /* Consistent enhanced padding */
-    line-height: 1.6; /* Better line spacing for multi-line text */
-  }
-
-  @media (min-width: 640px) {
-    .auth-input.textarea {
-      min-height: 5.5rem; /* 88px - enhanced spaciousness on tablet+ */
-      padding: 1rem 2.5rem; /* Consistent enhanced padding */
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .auth-input.textarea {
-      min-height: 6rem; /* 96px - premium spacious feel on desktop */
-      padding: 0.650rem 2.5rem; /* Even more generous padding */
-    }
-  }
-
-  .auth-input:hover:not(:focus) {
-    background: rgba(255, 255, 255, 0.18) !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
+    min-height: 5rem;
+    padding: 0.75rem 1rem;
+    line-height: 1.5;
+    resize: vertical;
   }
 
   /* Enhanced select styling to match ApiDropdown */
@@ -492,111 +424,98 @@
     border-radius: 8px;
   }
 
+  /* Polar-inspired Button System - Clean and Solid */
   .btn-primary {
-    background: linear-gradient(135deg, #d417c8 0%, #7767da 50%, #14bdea 100%) !important;
+    background: #D417C8 !important;
     color: white !important;
-    font-weight: 400; /* Light weight for premium feel */
-    height: 2.75rem; /* 44px - mobile buttons */
-    padding: 0 1rem;
-    border-radius: 8px; /* Consistent 8px radius */
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-weight: 500;
+    height: 2.5rem;
+    padding: 0 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
     outline: none;
     cursor: pointer;
     transition:
-      transform 0.12s ease,
-      box-shadow 0.12s ease;
-    position: relative;
-    overflow: hidden;
-    box-shadow:
-      0 2px 8px rgba(212, 23, 200, 0.12),
-      0 1px 4px rgba(20, 189, 234, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+      background-color 0.2s ease,
+      transform 0.2s ease;
     text-decoration: none !important;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.6875rem; /* 11px - smaller button text */
-  }
-
-  @media (min-width: 768px) {
-    .btn-primary {
-      height: 2.25rem; /* 36px - desktop buttons */
-      padding: 0 1.25rem;
-      font-size: 0.75rem; /* 12px - consistent smaller text */
-      font-weight: 425;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .btn-primary {
-      height: 2.25rem; /* 36px - desktop buttons */
-      padding: 0 1.5rem;
-      font-size: 0.75rem; /* 12px - consistent smaller text */
-      font-weight: 450;
-    }
+    font-size: 0.875rem;
+    white-space: nowrap;
   }
 
   .btn-primary:hover {
+    background: #BD2CD0 !important;
     transform: translateY(-1px);
-    box-shadow:
-      0 12px 32px rgba(212, 23, 200, 0.3),
-      0 8px 16px rgba(20, 189, 234, 0.2);
   }
 
   .btn-primary:active {
     transform: translateY(0);
   }
 
+  .btn-primary:disabled {
+    background: #525252 !important;
+    cursor: not-allowed;
+    transform: none;
+  }
+
   .btn-secondary {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(24px);
+    background: transparent;
     color: white;
-    font-weight: 350; /* Light weight for premium feel */
-    height: 2.75rem; /* 44px - mobile buttons */
-    padding: 0 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px; /* Consistent 8px radius */
+    font-weight: 500;
+    height: 2.5rem;
+    padding: 0 1.5rem;
+    border: 2px solid #333333;
+    border-radius: 0.5rem;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
     outline: none;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.6875rem; /* 11px - smaller text */
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  }
-
-  @media (min-width: 768px) {
-    .btn-secondary {
-      height: 2.25rem; /* 36px - desktop buttons */
-      padding: 0 1.25rem;
-      font-size: 0.75rem; /* 12px - consistent smaller text */
-      font-weight: 375;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .btn-secondary {
-      height: 2.25rem; /* 36px - desktop buttons */
-      padding: 0 1.5rem;
-      font-size: 0.75rem; /* 12px - consistent smaller text */
-      font-weight: 400;
-    }
+    font-size: 0.875rem;
+    white-space: nowrap;
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 
-      0 0 20px rgba(107, 114, 128, 0.4),
-      0 0 15px rgba(148, 163, 184, 0.3),
-      0 8px 25px rgba(0, 0, 0, 0.2);
-    transform: none !important;
-    scale: none !important;
+    border-color: #D417C8;
+    background: rgba(212, 23, 200, 0.1);
+  }
+
+  .btn-secondary:disabled {
+    border-color: #262626;
+    color: #525252;
+    cursor: not-allowed;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: #a3a3a3;
+    font-weight: 500;
+    height: 2.5rem;
+    padding: 0 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .btn-ghost:hover {
+    color: white;
+    background: #1a1a1a;
+  }
+
+  .btn-ghost:disabled {
+    color: #525252;
+    cursor: not-allowed;
   }
 
   .auth-divider {

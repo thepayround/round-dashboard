@@ -95,7 +95,7 @@ export const Modal = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
       style={{
         left: getModalPositioning().left,
         width: getModalPositioning().width
@@ -113,22 +113,22 @@ export const Modal = ({
             role="document"
             className={`
               relative w-full ${sizeClasses[size]} max-h-[90vh] mx-auto
-              bg-white/8 backdrop-blur-xl border border-white/15
+              bg-[#141414] border border-[#333333]
               rounded-lg shadow-xl overflow-hidden
               ${className}
             `}
           >
               {/* Header */}
               {showHeader && (
-                <div className="flex items-start justify-between p-4 border-b border-white/10">
+                <div className="flex items-start justify-between p-4 border-b border-[#262626]">
                   <div className="flex-1 min-w-0">
                     {title && (
-                      <h2 className="text-lg font-medium text-white/90 truncate">
+                      <h2 className="text-lg font-medium text-white truncate">
                         {title}
                       </h2>
                     )}
                     {subtitle && (
-                      <p className="text-sm text-white/60 mt-1 truncate">
+                      <p className="text-sm text-[#a3a3a3] mt-1 truncate">
                         {subtitle}
                       </p>
                     )}
@@ -137,9 +137,9 @@ export const Modal = ({
                     onClick={onClose}
                     className="
                       ml-3 p-1.5 rounded-md flex-shrink-0
-                      bg-white/5 hover:bg-white/10
-                      border border-white/10 hover:border-white/20
-                      text-white/60 hover:text-white/90
+                      bg-[#1a1a1a] hover:bg-[#262626]
+                      border border-[#333333] hover:border-[#404040]
+                      text-[#a3a3a3] hover:text-white
                     "
                   >
                     <X className="w-4 h-4" />

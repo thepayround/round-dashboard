@@ -60,51 +60,50 @@ export default {
         secondary: '#14BDEA', // Cyan - Secondary brand color
         accent: '#7767DA', // Purple - Accent color
 
-        // Glass morphism border colors
-        border: 'rgba(255, 255, 255, 0.15)', // Default border
-        'border-light': 'rgba(255, 255, 255, 0.1)', // Light border
-        DEFAULT: 'rgba(255, 255, 255, 0.15)', // Default fallback
+        // Neutral scale
+        'bg-primary': '#000000',
+        'bg-secondary': '#0a0a0a',
+        'bg-tertiary': '#141414',
+        'bg-elevated': '#1a1a1a',
+        
+        'border-subtle': '#262626',
+        'border-default': '#333333',
+        'border-strong': '#404040',
+        
+        'text-primary': '#ffffff',
+        'text-secondary': '#a3a3a3',
+        'text-tertiary': '#737373',
+        'text-disabled': '#525252',
 
-        // Status colors with gradient support
+        // Legacy glass morphism support (deprecated - migrate to solid colors)
+        border: '#333333',
+        'border-light': '#262626',
+        DEFAULT: '#333333',
+
+        // Status colors - solid approach
         success: {
-          from: '#42E695', // Green gradient start
-          to: '#3BB2B8', // Green gradient end
-          glass: 'rgba(66, 230, 149, 0.1)', // Glass effect background
-          text: '#38D39F', // Text color
+          DEFAULT: '#42E695',
+          light: '#3BB2B8',
+          bg: 'rgba(66, 230, 149, 0.1)',
+          text: '#38D39F',
         },
         warning: {
-          from: '#FFC107', // Yellow gradient start
-          to: '#FF8A00', // Orange gradient end
-          glass: 'rgba(255, 193, 7, 0.1)', // Glass effect background
-          text: '#FF9F0A', // Text color
+          DEFAULT: '#FFC107',
+          light: '#FF8A00',
+          bg: 'rgba(255, 193, 7, 0.1)',
+          text: '#FF9F0A',
         },
         error: {
-          from: '#FF4E50', // Red gradient start
-          to: '#F44336', // Red gradient end
-          glass: 'rgba(244, 67, 54, 0.1)', // Glass effect background
-          text: '#FF3B30', // Text color
+          DEFAULT: '#FF4E50',
+          light: '#F44336',
+          bg: 'rgba(244, 67, 54, 0.1)',
+          text: '#FF3B30',
         },
         info: {
-          from: '#14BDEA', // Blue gradient start
-          to: '#7767DA', // Purple gradient end
-          glass: 'rgba(20, 189, 234, 0.1)', // Glass effect background
-          text: '#32A1E4', // Text color
-        },
-
-        // Premium glass morphism effect colors
-        glass: {
-          bg: 'rgba(255, 255, 255, 0.04)', // Subtle premium background
-          'bg-light': 'rgba(255, 255, 255, 0.06)', // Slightly more visible
-          'bg-medium': 'rgba(255, 255, 255, 0.08)', // Medium visibility
-          border: 'rgba(255, 255, 255, 0.1)', // Subtle border
-          'border-light': 'rgba(255, 255, 255, 0.12)', // Light border
-          'border-medium': 'rgba(255, 255, 255, 0.15)', // Medium border
-          hover: 'rgba(255, 255, 255, 0.08)', // Hover state
-          'hover-border': 'rgba(255, 255, 255, 0.18)', // Hover border
-          focus: 'rgba(255, 255, 255, 0.12)', // Focus state
-          'focus-border': 'rgba(20, 189, 234, 0.3)', // Focus border with brand color
-          disabled: 'rgba(150, 150, 150, 0.08)', // Disabled state
-          'disabled-text': 'rgba(150, 150, 150, 0.4)', // Disabled text
+          DEFAULT: '#14BDEA',
+          light: '#7767DA',
+          bg: 'rgba(20, 189, 234, 0.1)',
+          text: '#32A1E4',
         },
       },
       // Custom background gradients

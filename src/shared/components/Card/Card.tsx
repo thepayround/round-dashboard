@@ -53,53 +53,46 @@ const paddingVariants = {
 
 const colorVariants = {
   primary: {
-    gradient: 'from-[#D417C8]/20 via-transparent to-transparent',
-    iconBg: 'from-[#BD2CD0]/20 to-[#D417C8]/20',
+    iconBg: 'bg-[#D417C8]/10',
     border: 'border-[#D417C8]/20',
-    iconColor: 'text-[#BD2CD0]',
+    iconColor: 'text-[#D417C8]',
     hoverColor: 'group-hover:text-[#D417C8]'
   },
   secondary: {
-    gradient: 'from-[#14BDEA]/20 via-transparent to-transparent',
-    iconBg: 'from-[#32A1E4]/20 to-[#7767DA]/20',
+    iconBg: 'bg-[#14BDEA]/10',
     border: 'border-[#14BDEA]/20',
-    iconColor: 'text-[#32A1E4]',
+    iconColor: 'text-[#14BDEA]',
     hoverColor: 'group-hover:text-[#14BDEA]'
   },
   accent: {
-    gradient: 'from-[#7767DA]/20 via-transparent to-transparent',
-    iconBg: 'from-[#7767DA]/20 to-[#BD2CD0]/20',
+    iconBg: 'bg-[#7767DA]/10',
     border: 'border-[#7767DA]/20',
     iconColor: 'text-[#7767DA]',
     hoverColor: 'group-hover:text-[#7767DA]'
   },
   success: {
-    gradient: 'from-[#42E695]/20 via-transparent to-transparent',
-    iconBg: 'from-[#42E695]/20 to-[#3BB2B8]/20',
+    iconBg: 'bg-[#42E695]/10',
     border: 'border-[#42E695]/20',
     iconColor: 'text-[#42E695]',
     hoverColor: 'group-hover:text-[#42E695]'
   },
   warning: {
-    gradient: 'from-[#FFC107]/20 via-transparent to-transparent',
-    iconBg: 'from-[#FFC107]/20 to-[#FF8A00]/20',
+    iconBg: 'bg-[#FFC107]/10',
     border: 'border-[#FFC107]/20',
     iconColor: 'text-[#FFC107]',
     hoverColor: 'group-hover:text-[#FFC107]'
   },
   danger: {
-    gradient: 'from-red-500/20 via-transparent to-transparent',
-    iconBg: 'from-red-500/30 to-red-500/10',
+    iconBg: 'bg-red-500/10',
     border: 'border-red-500/20',
     iconColor: 'text-red-500',
     hoverColor: 'group-hover:text-red-400'
   },
   neutral: {
-    gradient: 'from-gray-500/10 via-transparent to-transparent',
-    iconBg: 'from-gray-500/20 to-gray-500/10',
-    border: 'border-gray-500/20',
-    iconColor: 'text-gray-400',
-    hoverColor: 'group-hover:text-gray-300'
+    iconBg: 'bg-[#404040]',
+    border: 'border-[#333333]',
+    iconColor: 'text-[#a3a3a3]',
+    hoverColor: 'group-hover:text-white'
   }
 }
 
@@ -136,21 +129,21 @@ const CardComponent = ({
 
   const TrendIcon = trend?.direction === 'up' ? ArrowUpRight : ArrowDownRight
 
-  // Glassmorphism base classes (new default design)
+  // Polar-inspired clean design
   const baseClasses = (nested || variant === 'nested')
     ? `
-      bg-white/5 border border-white/10 rounded-lg
+      bg-[#1a1a1a] border border-[#333333] rounded-lg
       transition-all duration-200
       ${paddingClass}
-      ${clickable || onClick ? 'cursor-pointer hover:bg-white/10' : ''}
+      ${clickable || onClick ? 'cursor-pointer hover:bg-[#222222] hover:border-[#404040]' : ''}
       ${className}
     `.trim()
     : `
-      bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg
+      bg-[#141414] border border-[#262626] rounded-lg
       relative overflow-hidden group
       transition-all duration-200
       ${paddingClass}
-      ${clickable || onClick ? 'cursor-pointer hover:bg-white/10' : ''}
+      ${clickable || onClick ? 'cursor-pointer hover:bg-[#1a1a1a] hover:border-[#333333]' : ''}
       ${className}
     `.trim()
 
@@ -161,7 +154,7 @@ const CardComponent = ({
         <>
           <div className="flex items-center justify-between mb-4">
             {Icon && (
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center`}>
+              <div className={`w-12 h-12 rounded-xl ${colorConfig.iconBg} flex items-center justify-center`}>
                 <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
               </div>
             )}
@@ -175,9 +168,9 @@ const CardComponent = ({
           <h3 className="text-2xl font-bold text-white mb-1">
             {typeof value === 'number' ? value.toLocaleString() : value}
           </h3>
-          <p className="text-sm text-white/60">{title}</p>
+          <p className="text-sm text-[#a3a3a3]">{title}</p>
           {trend?.label && (
-            <p className="text-xs text-white/40 mt-2">{trend.label}</p>
+            <p className="text-xs text-[#737373] mt-2">{trend.label}</p>
           )}
         </>
       )}
@@ -187,7 +180,7 @@ const CardComponent = ({
           <>
             <div className="flex items-center justify-between mb-4">
               {Icon && (
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center`}>
+                <div className={`w-10 h-10 rounded-xl ${colorConfig.iconBg} flex items-center justify-center`}>
                   <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
                 </div>
               )}
@@ -195,14 +188,14 @@ const CardComponent = ({
             <h3 className={`text-base font-semibold text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-2`}>
               {title}
             </h3>
-            <p className="text-white/60 text-sm leading-relaxed">
+            <p className="text-[#a3a3a3] text-sm leading-relaxed">
               {description}
             </p>
           </>
         ) : (
           <div className="flex items-center gap-4">
             {Icon && (
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
+              <div className={`w-10 h-10 rounded-xl ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
                 <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
               </div>
             )}
@@ -210,7 +203,7 @@ const CardComponent = ({
               <h3 className={`text-base font-semibold text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-1`}>
                 {title}
               </h3>
-              <p className="text-white/60 text-sm">
+              <p className="text-[#a3a3a3] text-sm">
                 {description}
               </p>
             </div>
@@ -221,12 +214,12 @@ const CardComponent = ({
       {variant === 'compact' && title && (
         <div className="flex items-center justify-between">
           {Icon && (
-            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0 mr-3`}>
+            <div className={`w-10 h-10 rounded-xl ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0 mr-3`}>
               <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <p className="text-white/60 text-xs mb-1">{title}</p>
+            <p className="text-[#a3a3a3] text-xs mb-1">{title}</p>
             {value && (
               <p className="text-lg font-semibold text-white">{typeof value === 'number' ? value.toLocaleString() : value}</p>
             )}
@@ -242,13 +235,13 @@ const CardComponent = ({
       {variant === 'feature' && title && (
         <div className="text-center">
           {Icon && (
-            <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${colorConfig.iconBg} rounded-xl flex items-center justify-center`}>
+            <div className={`w-16 h-16 mx-auto mb-4 ${colorConfig.iconBg} rounded-xl flex items-center justify-center`}>
               <Icon className={`w-8 h-8 ${colorConfig.iconColor}`} />
             </div>
           )}
           <h3 className="text-base font-semibold text-white mb-2">{title}</h3>
           {description && (
-            <p className="text-white/60 text-sm">{description}</p>
+            <p className="text-[#a3a3a3] text-sm">{description}</p>
           )}
         </div>
       )}

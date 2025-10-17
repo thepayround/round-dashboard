@@ -17,12 +17,12 @@ interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
 }
 
 const variants = {
-  primary: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium shadow-btn-premium hover:shadow-btn-hover transition-all duration-150',
-  secondary: 'bg-glass-bg-light border border-glass-border-light text-white font-medium hover:bg-glass-hover hover:border-glass-hover-border backdrop-blur-xl shadow-glass-sm',
-  ghost: 'bg-transparent border border-transparent text-gray-300 hover:text-white hover:bg-glass-bg backdrop-blur-xl hover:border-glass-border',
-  danger: 'bg-gradient-to-r from-red-500 to-pink-500 text-white font-medium hover:from-red-600 hover:to-pink-600 shadow-glass-sm hover:shadow-glass-md transition-all duration-150',
-  success: 'bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium hover:from-green-600 hover:to-emerald-600 shadow-glass-sm hover:shadow-glass-md transition-all duration-150',
-  create: 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium shadow-btn-premium hover:shadow-btn-hover transition-all duration-150 relative overflow-hidden'
+  primary: 'bg-[#D417C8] text-white font-medium hover:bg-[#BD2CD0] transition-all duration-150',
+  secondary: 'bg-transparent border border-[#333333] text-white font-medium hover:bg-[#1a1a1a] hover:border-[#404040] transition-all duration-150',
+  ghost: 'bg-transparent border border-transparent text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a] transition-all duration-150',
+  danger: 'bg-red-600 text-white font-medium hover:bg-red-700 transition-all duration-150',
+  success: 'bg-[#42E695] text-black font-medium hover:bg-[#3BD88B] transition-all duration-150',
+  create: 'bg-[#D417C8] text-white font-medium hover:bg-[#BD2CD0] transition-all duration-150'
 }
 
 const sizes = {
@@ -47,7 +47,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 }, ref) => {
   const baseClasses = `
     rounded-lg transition-all duration-150 flex items-center justify-center gap-1
-    focus:outline-none focus:ring-1 focus:ring-[#D417C8]/30 focus:ring-offset-1 focus:ring-offset-transparent
+    focus:outline-none focus:ring-2 focus:ring-[#D417C8] focus:ring-offset-2 focus:ring-offset-[#000000]
     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
     relative isolate font-medium
   `
@@ -86,7 +86,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
         <>
           {Icon && iconPosition === 'left' && (
             enhanced ? (
-              <div className={`flex items-center justify-center rounded-lg ${variant === 'primary' || variant === 'create' ? 'bg-white/10' : 'bg-current/10'} p-1`}>
+              <div className={`flex items-center justify-center rounded-lg ${variant === 'primary' || variant === 'create' ? 'bg-white/15' : 'bg-white/5'} p-1`}>
                 <Icon className="w-5 h-5" />
               </div>
             ) : (
@@ -96,7 +96,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
           <span className={enhanced ? 'font-semibold' : ''}>{children}</span>
           {Icon && iconPosition === 'right' && (
             enhanced ? (
-              <div className={`flex items-center justify-center rounded-lg ${variant === 'primary' || variant === 'create' ? 'bg-white/10' : 'bg-current/10'} p-1`}>
+              <div className={`flex items-center justify-center rounded-lg ${variant === 'primary' || variant === 'create' ? 'bg-white/15' : 'bg-white/5'} p-1`}>
                 <Icon className="w-5 h-5" />
               </div>
             ) : (
@@ -104,13 +104,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
             )
           )}
         </>
-      )}
-      
-      {/* Enhanced shine effects for create and primary variants */}
-      {enhanced && (variant === 'primary' || variant === 'create') && (
-        <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/4 to-transparent transform -skew-x-12 animate-pulse" />
-        </div>
       )}
     </motion.button>
   )

@@ -39,9 +39,9 @@ export const FormInput = forwardRef<
 }, ref) => {
   const baseInputClasses = `
     w-full px-3 py-1.5
-    bg-white/5 border border-white/10 rounded-lg
-    text-white placeholder-gray-400 text-xs
-    focus:outline-none focus:border-[#D417C8]/50 focus:bg-white/10 transition-all duration-200
+    bg-[#0a0a0a] border border-[#333333] rounded-lg
+    text-white placeholder-[#737373] text-xs
+    focus:outline-none focus:border-[#D417C8] focus:bg-[#000000] transition-all duration-200
     disabled:opacity-50 disabled:cursor-not-allowed
     h-[42px] md:h-9
   `
@@ -51,7 +51,7 @@ export const FormInput = forwardRef<
     ${Icon && iconPosition === 'right' ? 'pr-10' : 'pr-3'}
   `
 
-  const errorClasses = error ? 'border-red-500/50 focus:border-red-500/70' : ''
+  const errorClasses = error ? 'border-red-500 focus:border-red-500' : ''
 
   const renderInput = () => {
     const baseProps = {
@@ -100,7 +100,7 @@ export const FormInput = forwardRef<
     <div className={`space-y-2 ${containerClassName}`}>
       {/* Label */}
       {label && (
-        <label htmlFor={id} className="block text-sm font-medium text-gray-300">
+        <label htmlFor={id} className="block text-sm font-medium text-[#a3a3a3]">
           {label}
           {props.required && <span className="text-red-400 ml-1">*</span>}
         </label>
@@ -111,7 +111,7 @@ export const FormInput = forwardRef<
         {/* Left Icon */}
         {Icon && iconPosition === 'left' && (
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10">
-            <Icon className="w-4 h-4 text-gray-400" />
+            <Icon className="w-4 h-4 text-[#737373]" />
           </div>
         )}
 
@@ -121,7 +121,7 @@ export const FormInput = forwardRef<
         {/* Right Icon */}
         {Icon && iconPosition === 'right' && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10">
-            <Icon className="w-4 h-4 text-gray-400" />
+            <Icon className="w-4 h-4 text-[#737373]" />
           </div>
         )}
 
@@ -147,7 +147,7 @@ export const FormInput = forwardRef<
 
       {/* Hint Text */}
       {hint && !error && (
-        <p className="text-sm text-gray-500">{hint}</p>
+        <p className="text-sm text-[#737373]">{hint}</p>
       )}
     </div>
   )

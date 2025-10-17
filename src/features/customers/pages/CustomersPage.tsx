@@ -382,30 +382,30 @@ const CustomersPage: React.FC = () => {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-2">
-              <div className="w-48 h-8 bg-white/10 rounded animate-pulse" />
-              <div className="w-64 h-4 bg-white/10 rounded animate-pulse" />
+              <div className="w-48 h-8 bg-[#262626] rounded animate-pulse" />
+              <div className="w-64 h-4 bg-[#262626] rounded animate-pulse" />
             </div>
-            <div className="w-32 h-10 bg-white/10 rounded-lg animate-pulse" />
+            <div className="w-32 h-10 bg-[#262626] rounded-lg animate-pulse" />
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, index) => (
-              <div key={index} className="p-6 bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl animate-pulse">
+              <div key={index} className="p-6 bg-[#141414] border border-[#262626] rounded-2xl animate-pulse">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-white/10 rounded-xl" />
+                    <div className="w-12 h-12 bg-[#262626] rounded-xl" />
                     <div className="space-y-2">
-                      <div className="w-24 h-4 bg-white/10 rounded" />
-                      <div className="w-32 h-3 bg-white/10 rounded" />
+                      <div className="w-24 h-4 bg-[#262626] rounded" />
+                      <div className="w-32 h-3 bg-[#262626] rounded" />
                     </div>
                   </div>
-                  <div className="w-8 h-8 bg-white/10 rounded-lg" />
+                  <div className="w-8 h-8 bg-[#262626] rounded-lg" />
                 </div>
                 
                 <div className="space-y-3">
-                  <div className="w-full h-3 bg-white/10 rounded" />
-                  <div className="w-3/4 h-3 bg-white/10 rounded" />
-                  <div className="w-1/2 h-3 bg-white/10 rounded" />
+                  <div className="w-full h-3 bg-[#262626] rounded" />
+                  <div className="w-3/4 h-3 bg-[#262626] rounded" />
+                  <div className="w-1/2 h-3 bg-[#262626] rounded" />
                 </div>
               </div>
             ))}
@@ -546,7 +546,7 @@ const CustomersPage: React.FC = () => {
                               setSelectedCustomers(selectedCustomers.filter(id => id !== customer.id))
                             }
                           }}
-                          className="w-5 h-5 text-[#D417C8] bg-white/10 border-white/30 rounded focus:ring-[#D417C8] focus:ring-2 cursor-pointer"
+                          className="w-5 h-5 text-[#D417C8] bg-[#1a1a1a] border-[#333333] rounded focus:ring-[#D417C8] focus:ring-2 cursor-pointer"
                         />
                       </div>
                     </label>
@@ -555,7 +555,7 @@ const CustomersPage: React.FC = () => {
 
                 {/* Header Section */}
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 rounded-xl border border-[#D417C8]/30">
+                  <div className="p-3 bg-[#D417C8]/10 rounded-xl border border-[#D417C8]/20">
                     {customer.isBusinessCustomer ? (
                       <Building2 className="w-5 h-5 text-[#D417C8]" />
                     ) : (
@@ -568,16 +568,16 @@ const CustomersPage: React.FC = () => {
                         {customer.effectiveDisplayName || customer.displayName}
                       </h3>
                       {customer.isBusinessCustomer && (
-                        <span className="px-2 py-1 bg-[#14BDEA]/20 text-[#14BDEA] border border-[#14BDEA]/30 rounded text-xs font-medium">
+                        <span className="px-2 py-1 bg-[#14BDEA]/10 text-[#14BDEA] border border-[#14BDEA]/20 rounded text-xs font-medium">
                           Business
                         </span>
                       )}
                     </div>
                     {customer.company && (
-                      <p className="text-sm text-white/70">{customer.company}</p>
+                      <p className="text-sm text-[#a3a3a3]">{customer.company}</p>
                     )}
                   </div>
-                  <button className="p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                  <button className="p-2 text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-all duration-200">
                     <MoreHorizontal className="w-4 h-4" />
                   </button>
                 </div>
@@ -667,7 +667,7 @@ const CustomersPage: React.FC = () => {
                         </span>
                       ))}
                       {customer.tags.length > 3 && (
-                        <span className="px-2 py-1 bg-white/10 text-white/60 rounded text-xs">
+                        <span className="px-2 py-1 bg-[#262626] text-[#a3a3a3] rounded text-xs">
                           +{customer.tags.length - 3}
                         </span>
                       )}
@@ -719,11 +719,11 @@ const CustomersPage: React.FC = () => {
         {/* Empty State */}
         {!loading && displayedCustomers.length === 0 && (
           <div className="text-center py-12">
-            <div className="w-24 h-24 mx-auto mb-4 rounded-lg bg-white/5 flex items-center justify-center">
-              <Users className="w-12 h-12 text-white/50" />
+            <div className="w-24 h-24 mx-auto mb-4 rounded-lg bg-[#141414] border border-[#262626] flex items-center justify-center">
+              <Users className="w-12 h-12 text-[#737373]" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">No customers found</h3>
-            <p className="text-white/60 mb-6">
+            <p className="text-[#a3a3a3] mb-6">
               {searchQuery || selectedCustomerType || selectedStatus || selectedCurrency
                 ? 'No customers match your current filters. Try adjusting your search criteria or clearing some filters.' 
                 : 'Get started by adding your first customer'}
