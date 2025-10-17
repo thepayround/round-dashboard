@@ -89,8 +89,8 @@ const colorVariants = {
     hoverColor: 'group-hover:text-red-400'
   },
   neutral: {
-    iconBg: 'bg-[#404040]',
-    border: 'border-[#333333]',
+    iconBg: 'bg-[#1d1d20]',
+    border: 'border-[#25262a]',
     iconColor: 'text-[#a3a3a3]',
     hoverColor: 'group-hover:text-white'
   }
@@ -132,18 +132,18 @@ const CardComponent = ({
   // Polar-inspired clean design
   const baseClasses = (nested || variant === 'nested')
     ? `
-      bg-[#1a1a1a] border border-[#333333] rounded-lg
+      bg-[#1d1d20] border border-[#25262a] rounded-lg
       transition-all duration-200
       ${paddingClass}
-      ${clickable || onClick ? 'cursor-pointer hover:bg-[#222222] hover:border-[#404040]' : ''}
+      ${clickable || onClick ? 'cursor-pointer hover:bg-[#212124] hover:border-[#2c2d31]' : ''}
       ${className}
     `.trim()
     : `
-      bg-[#141414] border border-[#262626] rounded-lg
+      bg-[#171719] border border-[#1e1f22] rounded-lg
       relative overflow-hidden group
       transition-all duration-200
       ${paddingClass}
-      ${clickable || onClick ? 'cursor-pointer hover:bg-[#1a1a1a] hover:border-[#333333]' : ''}
+      ${clickable || onClick ? 'cursor-pointer hover:bg-[#1d1d20] hover:border-[#25262a]' : ''}
       ${className}
     `.trim()
 

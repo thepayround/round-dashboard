@@ -39,9 +39,9 @@ export const FormInput = forwardRef<
 }, ref) => {
   const baseInputClasses = `
     w-full px-3 py-1.5
-    bg-[#0a0a0a] border border-[#333333] rounded-lg
+    bg-[#0a0a0a] border border-[#1e1f22] rounded-lg
     text-white placeholder-[#737373] text-xs
-    focus:outline-none focus:border-[#D417C8] focus:bg-[#000000] transition-all duration-200
+    focus:outline-none focus:border-[#D417C8] focus:bg-[#070708] transition-all duration-200
     disabled:opacity-50 disabled:cursor-not-allowed
     h-[42px] md:h-9
   `

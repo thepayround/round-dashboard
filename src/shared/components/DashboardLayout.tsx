@@ -117,7 +117,7 @@ const CatalogSubItem = memo(({
         ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
         : 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
     }
-    return 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
+    return 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
   }
 
   return (
@@ -147,7 +147,7 @@ const CatalogSubItem = memo(({
 
       {/* Connection indicator for collapsed mode */}
       {isCollapsed && !isLastItem && (
-        <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-[#333333]" />
+        <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-[#25262a]" />
       )}
     </Link>
   )
@@ -198,7 +198,7 @@ const NavigationItem = memo(({
           ${
             isParentActive(item)
               ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
-              : 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
+              : 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
           }
           ${isCollapsed ? 'justify-center px-0' : 'px-6'}
           ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
@@ -239,7 +239,7 @@ const NavigationItem = memo(({
           ${
             isParentActive(item)
               ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
-              : 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
+              : 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
           }
           ${isCollapsed ? 'justify-center px-0' : 'px-6'}
           ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
@@ -672,12 +672,12 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           x: (isMobile || isTablet) && isCollapsed ? -80 : 0
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="fixed left-0 top-0 h-full z-50 lg:z-base bg-[#000000]"
+        className="fixed left-0 top-0 h-full z-50 lg:z-base bg-[#070708]"
       >
         {/* Logo Section - Clickable */}
         <Link
           to="/dashboard"
-          className="flex items-center justify-center flex-shrink-0 hover:bg-[#0a0a0a] transition-colors duration-200 cursor-pointer"
+          className="flex items-center justify-center flex-shrink-0 hover:bg-[#101011] transition-colors duration-200 cursor-pointer"
           style={{ height: '97px' }}
         >
           {!isCollapsed ? (
@@ -736,7 +736,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                 ${
                   isActive(item.href)
                     ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
-                    : 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
+                    : 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                 ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id)
@@ -780,7 +780,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                     ${
                       isActive('/user-settings')
                         ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
-                        : 'text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]'
+                        : 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                   `}
@@ -838,9 +838,9 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               onMouseLeave={handleTooltipLeave}
               className={`
                 group relative flex items-center rounded-lg transition-all duration-200 w-full
-                text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a]
+                text-[#a3a3a3] hover:text-white hover:bg-[#171719]
                 ${isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
-                ${showProfileDropdown ? 'bg-[#1a1a1a] text-white' : ''}
+                ${showProfileDropdown ? 'bg-[#171719] text-white' : ''}
               `}
               aria-label="User profile menu"
               aria-expanded={showProfileDropdown}
@@ -905,7 +905,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.15 }}
-            className={`fixed bg-[#141414] border border-[#333333] text-white rounded-lg pointer-events-none z-tooltip shadow-xl ${
+            className={`fixed bg-[#171719] border border-[#25262a] text-white rounded-lg pointer-events-none z-tooltip shadow-xl ${
               hoveredTooltip.isUser ? 'px-4 py-3 text-xs max-w-[250px]' : 'px-3 py-2 text-sm whitespace-nowrap'
             }`}
             style={{
@@ -949,7 +949,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="bg-[#141414] border border-[#333333] rounded-lg p-6 max-w-md mx-4"
+              className="bg-[#171719] border border-[#25262a] rounded-lg p-6 max-w-md mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
@@ -969,23 +969,23 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                   <div className="space-y-1 text-[#a3a3a3]">
                     <div className="flex justify-between">
                       <span>Dashboard</span>
-                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+1</kbd>
+                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+1</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Customers</span>
-                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+2</kbd>
+                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+2</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Billing</span>
-                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+3</kbd>
+                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+3</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Invoices</span>
-                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+4</kbd>
+                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+4</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Catalog</span>
-                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Alt+5</kbd>
+                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+5</kbd>
                     </div>
                   </div>
                 </div>
@@ -995,7 +995,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                   <div className="space-y-1 text-[#a3a3a3]">
                     <div className="flex justify-between">
                       <span>Toggle Sidebar</span>
-                      <kbd className="px-2 py-1 bg-[#262626] rounded text-xs">Ctrl+Shift+B</kbd>
+                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Ctrl+Shift+B</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Arrow Navigation</span>
@@ -1030,7 +1030,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
         onClick={toggleSidebar}
-        className="fixed top-16 lg:top-20 w-10 h-11 md:h-9 lg:w-8 lg:h-8 rounded-full bg-[#1a1a1a] border border-[#333333] flex items-center justify-center hover:bg-[#262626] hover:border-[#404040] transition-all duration-200 z-50 lg:z-base"
+        className="fixed top-16 lg:top-20 w-10 h-11 md:h-9 lg:w-8 lg:h-8 rounded-full bg-[#171719] border border-[#25262a] flex items-center justify-center hover:bg-[#1d1d20] hover:border-[#2c2d31] transition-all duration-200 z-50 lg:z-base"
       >
         <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4 text-white" />
       </motion.button>
@@ -1047,9 +1047,9 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           })()
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="relative z-10 p-2 pl-3"
+        className="relative z-10 p-2"
       >
-        <div className="h-[calc(100vh-1rem)] bg-[#0f0f0f] rounded-xl border border-[#1a1a1a] overflow-y-auto scrollbar-thin">
+        <div className="h-[calc(100vh-1rem)] bg-[#101011] rounded-xl border border-[#1e1f22] overflow-y-auto scrollbar-thin">
           <div className="max-w-6xl lg:max-w-7xl xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6">
             <Breadcrumb />
             {children}

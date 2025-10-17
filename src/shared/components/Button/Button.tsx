@@ -18,8 +18,8 @@ interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
 
 const variants = {
   primary: 'bg-[#D417C8] text-white font-medium hover:bg-[#BD2CD0] transition-all duration-150',
-  secondary: 'bg-transparent border border-[#333333] text-white font-medium hover:bg-[#1a1a1a] hover:border-[#404040] transition-all duration-150',
-  ghost: 'bg-transparent border border-transparent text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a] transition-all duration-150',
+  secondary: 'bg-transparent border border-[#25262a] text-white font-medium hover:bg-[#1d1d20] hover:border-[#2c2d31] transition-all duration-150',
+  ghost: 'bg-transparent border border-transparent text-[#a3a3a3] hover:text-white hover:bg-[#1d1d20] transition-all duration-150',
   danger: 'bg-red-600 text-white font-medium hover:bg-red-700 transition-all duration-150',
   success: 'bg-[#42E695] text-black font-medium hover:bg-[#3BD88B] transition-all duration-150',
   create: 'bg-[#D417C8] text-white font-medium hover:bg-[#BD2CD0] transition-all duration-150'

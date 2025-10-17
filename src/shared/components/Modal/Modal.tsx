@@ -113,14 +113,14 @@ export const Modal = ({
             role="document"
             className={`
               relative w-full ${sizeClasses[size]} max-h-[90vh] mx-auto
-              bg-[#141414] border border-[#333333]
+              bg-[#171719] border border-[#1e1f22]
               rounded-lg shadow-xl overflow-hidden
               ${className}
             `}
           >
               {/* Header */}
               {showHeader && (
-                <div className="flex items-start justify-between p-4 border-b border-[#262626]">
+                <div className="flex items-start justify-between p-4 border-b border-[#25262a]">
                   <div className="flex-1 min-w-0">
                     {title && (
                       <h2 className="text-lg font-medium text-white truncate">
@@ -137,9 +137,10 @@ export const Modal = ({
                     onClick={onClose}
                     className="
                       ml-3 p-1.5 rounded-md flex-shrink-0
-                      bg-[#1a1a1a] hover:bg-[#262626]
-                      border border-[#333333] hover:border-[#404040]
+                      bg-[#1d1d20] hover:bg-[#212124]
+                      border border-[#25262a] hover:border-[#2c2d31]
                       text-[#a3a3a3] hover:text-white
+                      transition-all duration-200
                     "
                   >
                     <X className="w-4 h-4" />

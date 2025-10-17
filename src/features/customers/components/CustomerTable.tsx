@@ -122,10 +122,10 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   )
 
   return (
-    <div className="bg-[#141414] border border-[#262626] rounded-lg overflow-hidden">
+    <div className="bg-[#171719] border border-[#1e1f22] rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-[#0a0a0a] border-b border-[#262626]">
+          <thead className="bg-[#101011] border-b border-[#1e1f22]">
             <tr>
               {selectable && (
                 <TableHeader className="w-12">
@@ -139,14 +139,14 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                           transition-all duration-200
                           ${isAllSelected || isIndeterminate
                             ? 'bg-[#D417C8]/10 border-2 border-[#D417C8]' 
-                            : 'bg-[#1a1a1a] border border-[#333333] group-hover:bg-[#262626] group-hover:border-[#404040]'
+                            : 'bg-[#1d1d20] border border-[#25262a] group-hover:bg-[#212124] group-hover:border-[#2c2d31]'
                           }
                         `}
                       >
                         <div className={`flex items-center justify-center w-4 h-4 rounded border-2 transition-all ${
                           isAllSelected || isIndeterminate
                             ? 'bg-[#D417C8] border-[#D417C8]'
-                            : 'bg-transparent border-[#404040]'
+                            : 'bg-transparent border-[#2c2d31]'
                         }`}>
                           {isAllSelected && (
                             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,16 +180,16 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               <TableHeader className="text-right">Actions</TableHeader>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/10">
+          <tbody className="divide-y divide-[#16171a]">
             {customers.map((customer) => (
               <motion.tr
                 key={customer.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={`transition-all duration-200 border-b border-[#1a1a1a] ${(() => {
-                  if (hoveredRow === customer.id) return 'bg-[#1a1a1a]'
-                  if (selectedIds.includes(customer.id)) return 'bg-[#D417C8]/10'
-                  return 'hover:bg-[#0a0a0a]'
+                className={`transition-all duration-200 border-b border-[#16171a] ${(() => {
+                  if (hoveredRow === customer.id) return 'bg-[#121315]'
+                  if (selectedIds.includes(customer.id)) return 'bg-[#D417C8]/5'
+                  return 'hover:bg-[#0f1012]'
                 })()}`}
                 onMouseEnter={() => setHoveredRow(customer.id)}
                 onMouseLeave={() => setHoveredRow(null)}
@@ -205,14 +205,14 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                           transition-all duration-200
                           ${selectedIds.includes(customer.id) 
                             ? 'bg-[#D417C8]/10 border-2 border-[#D417C8]' 
-                            : 'bg-[#1a1a1a] border border-[#333333] group-hover:bg-[#262626] group-hover:border-[#404040]'
+                            : 'bg-[#1d1d20] border border-[#25262a] group-hover:bg-[#212124] group-hover:border-[#2c2d31]'
                           }
                         `}
                       >
                         <div className={`flex items-center justify-center w-4 h-4 rounded border-2 transition-all ${
                           selectedIds.includes(customer.id)
                             ? 'bg-[#D417C8] border-[#D417C8]'
-                            : 'bg-transparent border-[#404040]'
+                            : 'bg-transparent border-[#2c2d31]'
                         }`}>
                           {selectedIds.includes(customer.id) && (
                             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -299,7 +299,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                       <Edit className="w-4 h-4" />
                     </Link>
                     <button 
-                      className="p-2 text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-all duration-200"
+                      className="p-2 text-[#a3a3a3] hover:text-white hover:bg-[#1d1d20] rounded-lg transition-all duration-200"
                       title="More actions"
                     >
                       <MoreHorizontal className="w-4 h-4" />
@@ -314,7 +314,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
 
       {/* Selection Info Bar */}
       {selectable && selectedIds.length > 0 && (
-        <div className="border-t border-[#262626] px-6 py-3 bg-[#0a0a0a]">
+        <div className="border-t border-[#1e1f22] px-6 py-3 bg-[#101011]">
           <div className="flex items-center justify-between">
             <div className="text-sm text-[#a3a3a3]">
               {selectedIds.length} customer{selectedIds.length === 1 ? '' : 's'} selected

@@ -47,9 +47,9 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         disabled={disabled}
         className={`
           w-full h-[42px] md:h-9 pl-10 pr-16 md:pr-20 px-3 py-1.5
-          bg-[#0a0a0a] border border-[#333333] rounded-lg
+          bg-[#0a0a0a] border border-[#1e1f22] rounded-lg
           text-white placeholder-[#737373] text-xs font-light
-          focus:outline-none focus:border-[#14BDEA] focus:bg-[#000000]
+          focus:outline-none focus:border-[#14BDEA] focus:bg-[#070708]
           transition-all duration-200
           ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
         `}
@@ -71,10 +71,10 @@ export const SearchInput: React.FC<SearchInputProps> = ({
             onClick={handleClear}
             className="
               flex items-center justify-center w-7 h-7 md:w-6 md:h-6 rounded-lg
-              bg-[#1a1a1a] border border-[#333333]
-              text-[#a3a3a3] hover:text-white hover:bg-[#262626]
-              hover:border-[#404040]
-              active:bg-[#1a1a1a] active:scale-95
+              bg-[#1d1d20] border border-[#25262a]
+              text-[#a3a3a3] hover:text-white hover:bg-[#212124]
+              hover:border-[#2c2d31]
+              active:bg-[#1d1d20] active:scale-95
               transition-all duration-200
               focus:outline-none focus:ring-2 focus:ring-[#14BDEA]
             "
