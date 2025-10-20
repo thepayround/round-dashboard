@@ -17,12 +17,12 @@ interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
 }
 
 const variants = {
-  primary: 'bg-[#D417C8] text-white font-medium hover:bg-[#BD2CD0] transition-all duration-150',
-  secondary: 'bg-transparent border border-[#25262a] text-white font-medium hover:bg-[#1d1d20] hover:border-[#2c2d31] transition-all duration-150',
+  primary: 'bg-[#D417C8] text-white font-normal tracking-tight hover:bg-[#BD2CD0] transition-all duration-150',
+  secondary: 'bg-transparent border border-[#25262a] text-white font-normal tracking-tight hover:bg-[#1d1d20] hover:border-[#2c2d31] transition-all duration-150',
   ghost: 'bg-transparent border border-transparent text-[#a3a3a3] hover:text-white hover:bg-[#1d1d20] transition-all duration-150',
-  danger: 'bg-red-600 text-white font-medium hover:bg-red-700 transition-all duration-150',
-  success: 'bg-[#42E695] text-black font-medium hover:bg-[#3BD88B] transition-all duration-150',
-  create: 'bg-[#D417C8] text-white font-medium hover:bg-[#BD2CD0] transition-all duration-150'
+  danger: 'bg-red-600 text-white font-normal tracking-tight hover:bg-red-700 transition-all duration-150',
+  success: 'bg-[#42E695] text-black font-normal tracking-tight hover:bg-[#3BD88B] transition-all duration-150',
+  create: 'bg-[#D417C8] text-white font-normal tracking-tight hover:bg-[#BD2CD0] transition-all duration-150'
 }
 
 const sizes = {
@@ -49,7 +49,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     rounded-lg transition-all duration-150 flex items-center justify-center gap-1
     focus:outline-none focus:ring-2 focus:ring-[#D417C8] focus:ring-offset-2 focus:ring-offset-[#000000]
     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-    relative isolate font-medium
+    relative isolate font-normal tracking-tight
   `
 
   const variantClasses = variants[variant]
@@ -93,7 +93,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
               <Icon className="w-5 h-5" />
             )
           )}
-          <span className={enhanced ? 'font-semibold' : ''}>{children}</span>
+          <span className={enhanced ? 'font-medium tracking-tight' : 'tracking-tight'}>{children}</span>
           {Icon && iconPosition === 'right' && (
             enhanced ? (
               <div className={`flex items-center justify-center rounded-lg ${variant === 'primary' || variant === 'create' ? 'bg-white/15' : 'bg-white/5'} p-1`}>

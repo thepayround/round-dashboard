@@ -58,7 +58,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
     children: React.ReactNode; 
     className?: string 
   }) => (
-    <th className={`px-6 py-4 text-left text-sm font-semibold text-white/80 ${className}`}>
+    <th className={`px-6 py-4 text-left text-sm font-normal tracking-tight tracking-tight text-white/80 ${className}`}>
       {field ? (
         <button
           onClick={() => onSort(field)}
@@ -82,10 +82,10 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
   )
 
   return (
-    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg overflow-hidden">
+    <div className="bg-[#171719] border border-[#1e1f22] rounded-lg overflow-hidden">
       {/* Loading Overlay */}
       {loading && (
-        <div className="absolute inset-0 bg-[#0A0118]/80 backdrop-blur-sm z-10 flex items-center justify-center">
+        <div className="absolute inset-0 bg-[#101011]/90 z-10 flex items-center justify-center">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 border-2 border-[#D417C8] border-t-transparent rounded-full animate-spin" />
             <p className="text-white/70">Loading invoices...</p>
@@ -95,7 +95,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
 
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-white/5 border-b border-white/10">
+          <thead className="bg-[#171719] border-b border-[#1e1f22]">
             <tr>
               <TableHeader field="id">Invoice ID</TableHeader>
               <TableHeader field="customer">Customer</TableHeader>
@@ -106,14 +106,14 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
               <TableHeader className="text-right">Actions</TableHeader>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/10">
+          <tbody className="divide-y divide-[#1e1f22]">
             {invoices.map((invoice) => (
               <motion.tr
                 key={invoice.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={`transition-all duration-200 ${
-                  hoveredRow === invoice.id ? 'bg-white/10' : 'hover:bg-white/5'
+                className={`transition-all duration-200 bg-[#101011] ${
+                  hoveredRow === invoice.id ? 'bg-[#171719]' : 'hover:bg-[#171719]'
                 }`}
                 onMouseEnter={() => setHoveredRow(invoice.id)}
                 onMouseLeave={() => setHoveredRow(null)}
@@ -123,7 +123,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-bold text-xs">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-medium text-xs tracking-tight">
                       {getInitials(invoice.customer)}
                     </div>
                     <div className="font-medium text-white">{invoice.customer}</div>
@@ -133,7 +133,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
                   <div className="font-medium text-white">${invoice.amount.toFixed(2)}</div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}>
+                  <span className={`px-3 py-1 rounded-full text-xs font-normal tracking-tight ${getStatusColor(invoice.status)}`}>
                     {invoice.status}
                   </span>
                 </td>

@@ -137,7 +137,7 @@ const CustomerDetailPage: React.FC = () => {
     const config = statusConfig[statusValue as keyof typeof statusConfig] ?? statusConfig[2]
     
     return (
-      <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border ${config.variant}`}>
+      <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal tracking-tight rounded-lg border ${config.variant}`}>
         <span className="text-xs">{config.icon}</span>
         {config.label}
       </span>
@@ -174,7 +174,7 @@ const CustomerDetailPage: React.FC = () => {
       <DashboardLayout>
         <div className="flex flex-col items-center justify-center py-24">
           <AlertCircle className="w-16 h-16 text-red-400 mb-4" />
-          <h3 className="text-lg font-semibold text-white mb-2">
+          <h3 className="text-lg font-medium tracking-tight text-white mb-2">
             {error ? 'Error Loading Customer' : 'Customer Not Found'}
           </h3>
           <p className="text-gray-400 text-center mb-6">
@@ -313,7 +313,7 @@ const CustomerDetailPage: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <Mail className="w-4 h-4 text-[#14BDEA]" />
                         <div>
-                          <div className="text-sm font-medium text-white">{customer.email}</div>
+                          <div className="text-sm font-normal tracking-tight text-white">{customer.email}</div>
                           <div className="text-xs text-white/60">Primary email address</div>
                         </div>
                       </div>
@@ -323,7 +323,7 @@ const CustomerDetailPage: React.FC = () => {
                         <div className="flex items-center gap-3">
                         <Phone className="w-4 h-4 text-[#42E695]" />
                         <div className="flex-1">
-                          <div className="text-sm font-medium text-white">{customer.phoneNumber}</div>
+                          <div className="text-sm font-normal tracking-tight text-white">{customer.phoneNumber}</div>
                           <div className="text-xs text-white/60">Phone number</div>
                         </div>
                         {customer.phoneNumberConfirmed && (
@@ -339,7 +339,7 @@ const CustomerDetailPage: React.FC = () => {
                         <div className="flex items-center gap-3">
                         <Building2 className="w-4 h-4 text-[#7767DA]" />
                         <div>
-                          <div className="text-sm font-medium text-white">{customer.company}</div>
+                          <div className="text-sm font-normal tracking-tight text-white">{customer.company}</div>
                           <div className="text-xs text-white/60">Company name</div>
                         </div>
                         </div>
@@ -350,7 +350,7 @@ const CustomerDetailPage: React.FC = () => {
                         <div className="flex items-center gap-3">
                           <FileText className="w-4 h-4 text-amber-400" />
                           <div>
-                            <div className="text-sm font-medium text-white">{customer.taxNumber}</div>
+                            <div className="text-sm font-normal tracking-tight text-white">{customer.taxNumber}</div>
                             <div className="text-xs text-white/60">Tax number</div>
                           </div>
                         </div>
@@ -364,7 +364,7 @@ const CustomerDetailPage: React.FC = () => {
                         <div className="flex items-center gap-3">
                           <Clock className="w-4 h-4 text-[#FF6B6B]" />
                           <div>
-                            <div className="text-sm font-medium text-white">{customer.timezone}</div>
+                            <div className="text-sm font-normal tracking-tight text-white">{customer.timezone}</div>
                             <div className="text-xs text-white/60">Timezone</div>
                           </div>
                         </div>
@@ -375,7 +375,7 @@ const CustomerDetailPage: React.FC = () => {
                         <div className="flex items-center gap-3">
                           <Globe className="w-4 h-4 text-[#14BDEA]" />
                           <div>
-                            <div className="text-sm font-medium text-white">{customer.locale}</div>
+                            <div className="text-sm font-normal tracking-tight text-white">{customer.locale}</div>
                             <div className="text-xs text-white/60">Language & locale</div>
                           </div>
                         </div>
@@ -384,9 +384,9 @@ const CustomerDetailPage: React.FC = () => {
                     {customer.currency && (
                       <Card variant="nested" padding="md">
                         <div className="flex items-center gap-3">
-                          <span className="w-4 h-4 flex items-center justify-center text-[#42E695] font-bold text-xs">$</span>
+                          <span className="w-4 h-4 flex items-center justify-center text-[#42E695] font-medium text-xs tracking-tight">$</span>
                           <div>
-                            <div className="text-sm font-medium text-white">{customer.currency}</div>
+                            <div className="text-sm font-normal tracking-tight text-white">{customer.currency}</div>
                             <div className="text-xs text-white/60">Preferred currency</div>
                           </div>
                         </div>
@@ -422,7 +422,7 @@ const CustomerDetailPage: React.FC = () => {
                       <Card variant="nested" padding="lg" className="hover:bg-white/10">
                         <div className="flex items-center gap-3 mb-3">
                           <CreditCard className="w-5 h-5 text-[#42E695]" />
-                          <h3 className="text-sm font-medium text-white">
+                          <h3 className="text-sm font-normal tracking-tight text-white">
                             Billing Address
                           </h3>
                         </div>
@@ -441,7 +441,7 @@ const CustomerDetailPage: React.FC = () => {
                       <Card variant="nested" padding="lg" className="hover:bg-white/10">
                         <div className="flex items-center gap-3 mb-3">
                           <Truck className="w-5 h-5 text-[#7767DA]" />
-                          <h3 className="text-sm font-medium text-white">
+                          <h3 className="text-sm font-normal tracking-tight text-white">
                             Shipping Address
                           </h3>
                         </div>
@@ -491,7 +491,7 @@ const CustomerDetailPage: React.FC = () => {
                   <div className="space-y-4">
                     {customer.tags.length > 0 && (
                       <div>
-                        <h3 className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
+                        <h3 className="text-xs font-normal tracking-tight text-gray-300 uppercase tracking-wider mb-2">
                           Tags
                         </h3>
                         <div className="flex flex-wrap gap-2">
@@ -509,7 +509,7 @@ const CustomerDetailPage: React.FC = () => {
                     
                     {Object.keys(customer.customFields).length > 0 && (
                       <div>
-                        <h3 className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
+                        <h3 className="text-xs font-normal tracking-tight text-gray-300 uppercase tracking-wider mb-2">
                           Custom Fields
                         </h3>
                         <div className="space-y-2">
@@ -552,24 +552,24 @@ const CustomerDetailPage: React.FC = () => {
                 <div className="space-y-3">
                   <button
                     onClick={() => setIsEmailModalOpen(true)}
-                    className="w-full flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-[#14BDEA]/30 text-left transition-all duration-200 group"
+                    className="w-full flex items-center gap-3 p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl hover:bg-[#212124] hover:border-[#14BDEA]/30 text-left transition-all duration-200 group"
                   >
                     <Mail className="w-4 h-4 text-[#14BDEA] group-hover:text-white" />
-                    <span className="text-sm font-medium text-white">Send Email</span>
+                    <span className="text-sm font-normal tracking-tight text-white">Send Email</span>
                   </button>
                   <button
                     onClick={() => setIsNotesModalOpen(true)}
-                    className="w-full flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-[#42E695]/30 text-left transition-all duration-200 group"
+                    className="w-full flex items-center gap-3 p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl hover:bg-[#212124] hover:border-[#42E695]/30 text-left transition-all duration-200 group"
                   >
                     <FileText className="w-4 h-4 text-[#42E695] group-hover:text-white" />
-                    <span className="text-sm font-medium text-white">View Notes</span>
+                    <span className="text-sm font-normal tracking-tight text-white">View Notes</span>
                   </button>
                   <button
                     onClick={() => setIsEditModalOpen(true)}
                     className="w-full flex items-center gap-3 p-3 bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 border border-[#D417C8]/30 rounded-xl hover:from-[#D417C8]/30 hover:to-[#14BDEA]/30 text-left transition-all duration-200 group"
                   >
                     <Edit className="w-4 h-4 text-[#D417C8] group-hover:text-white" />
-                    <span className="text-sm font-medium text-white">Edit Details</span>
+                    <span className="text-sm font-normal tracking-tight text-white">Edit Details</span>
                   </button>
                 </div>
               </Card>
@@ -595,12 +595,12 @@ const CustomerDetailPage: React.FC = () => {
                 </div>
                 
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-xl">
+                  <div className="flex justify-between items-center p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl">
                     <div className="flex items-center gap-2">
                       <Shield className="w-4 h-4 text-white/70" />
                       <span className="text-sm text-white">Portal Access</span>
                     </div>
-                    <span className={`text-sm px-3 py-1 rounded-lg font-medium ${
+                    <span className={`text-sm px-3 py-1 rounded-lg font-normal tracking-tight ${
                       customer.portalAccess 
                         ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
                         : 'bg-red-500/20 text-red-400 border border-red-500/30'
@@ -608,12 +608,12 @@ const CustomerDetailPage: React.FC = () => {
                       {customer.portalAccess ? 'Enabled' : 'Disabled'}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-xl">
+                  <div className="flex justify-between items-center p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl">
                     <div className="flex items-center gap-2">
                       <CreditCard className="w-4 h-4 text-white/70" />
                       <span className="text-sm text-white">Auto Collection</span>
                     </div>
-                    <span className={`text-sm px-3 py-1 rounded-lg font-medium ${
+                    <span className={`text-sm px-3 py-1 rounded-lg font-normal tracking-tight ${
                       customer.autoCollection 
                         ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
                         : 'bg-red-500/20 text-red-400 border border-red-500/30'
@@ -622,7 +622,7 @@ const CustomerDetailPage: React.FC = () => {
                     </span>
                   </div>
                   {customer.lastActivityDate && (
-                    <div className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-xl">
+                    <div className="flex justify-between items-center p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl">
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-white/70" />
                         <span className="text-sm text-white">Last Activity</span>

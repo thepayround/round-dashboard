@@ -478,9 +478,9 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                 placeholder="Search countries..."
                 className="
                   w-full pl-9 md:pl-10 lg:pl-9 pr-8 md:pr-10 lg:pr-8 py-1.5 md:py-2 lg:py-1.5 
-                  bg-white/10 border border-white/20 rounded-lg
-                  text-white/95 placeholder-white/60 text-xs md:text-sm lg:text-xs
-                  focus:bg-white/15 focus:border-[#14BDEA]/50 focus:outline-none
+                  bg-[#171719] border border-[#333333] rounded-lg
+                  text-white/95 placeholder-[#737373] text-xs md:text-sm lg:text-xs
+                  focus:border-[#14bdea] focus:outline-none
                   transition-all duration-200
                 "
               />

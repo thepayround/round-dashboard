@@ -114,7 +114,7 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
 
         {/* Role Selection */}
         <div>
-          <div className="block text-sm font-medium text-gray-300 mb-2">
+          <div className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
             Select New Role
           </div>
           <div className="mb-3">

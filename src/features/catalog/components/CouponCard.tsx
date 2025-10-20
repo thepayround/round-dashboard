@@ -146,7 +146,7 @@ export const CouponCard = ({
                 <div className="flex items-center space-x-3 mb-1">
                   <Link 
                     to={`/catalog/coupons/${coupon.id}`}
-                    className="text-xl font-bold auth-text hover:text-[#14BDEA] transition-colors"
+                    className="text-xl font-medium tracking-tight auth-text hover:text-[#14BDEA] transition-colors"
                   >
                     {coupon.name}
                   </Link>
@@ -186,7 +186,7 @@ export const CouponCard = ({
             {/* Discount Display */}
             <div className="flex items-center space-x-4">
               <div className="text-right">
-                <div className="text-2xl font-bold text-[#14BDEA]">
+                <div className="text-2xl font-medium tracking-tight text-[#14BDEA]">
                   {formatDiscount()}
                 </div>
                 <div className="text-sm auth-text-muted">
@@ -387,7 +387,7 @@ export const CouponCard = ({
 
         {/* Content */}
         <Link to={`/catalog/coupons/${coupon.id}`} className="block mb-4">
-          <h3 className="text-xl font-bold auth-text mb-2 group-hover:text-[#14BDEA] transition-colors">
+          <h3 className="text-xl font-medium tracking-tight auth-text mb-2 group-hover:text-[#14BDEA] transition-colors">
             {coupon.name}
           </h3>
           <p className="auth-text-muted text-sm line-clamp-2">
@@ -406,7 +406,7 @@ export const CouponCard = ({
               <Copy className="w-4 h-4" />
             </button>
             <div className="text-right">
-              <div className="text-2xl font-bold text-[#14BDEA] flex items-center space-x-1">
+              <div className="text-2xl font-medium tracking-tight text-[#14BDEA] flex items-center space-x-1">
                 {coupon.discountType === 'percentage' ? (
                   <Percent className="w-5 h-5" />
                 ) : (
@@ -443,15 +443,15 @@ export const CouponCard = ({
         {/* Footer */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[coupon.status]}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-normal tracking-tight ${statusColors[coupon.status]}`}>
               <StatusIcon className="w-3 h-3 inline mr-1" />
               {coupon.status}
             </span>
-            <span className={`px-3 py-1 rounded-full text-xs font-medium border ${discountTypeColors[coupon.discountType]}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-normal tracking-tight border ${discountTypeColors[coupon.discountType]}`}>
               {coupon.discountType === 'percentage' ? 'Percentage' : 'Fixed Amount'}
             </span>
             {isExpiringSoon() && (
-              <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#FFC107]/10 border border-[#FFC107]/20 text-[#FFC107]">
+              <span className="px-3 py-1 rounded-full text-xs font-normal tracking-tight bg-[#FFC107]/10 border border-[#FFC107]/20 text-[#FFC107]">
                 Expiring Soon
               </span>
             )}

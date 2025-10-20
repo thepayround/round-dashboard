@@ -7,7 +7,6 @@ import {
   Clock,
   DollarSign,
   ArrowUpRight,
-  Mail,
   MapPin,
   Calendar,
   Building2
@@ -83,7 +82,7 @@ export const DashboardPage = () => {
                 <CheckCircle className={`w-5 h-5 ${
                   roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
                 }`} />
-                <span className={`font-medium ${
+                <span className={`font-normal tracking-tight ${
                   roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
                 }`}>
                   {roundAccount.status}
@@ -102,36 +101,36 @@ export const DashboardPage = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {/* Account Type */}
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+            <Card padding="lg">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <div className="text-white/60 text-xs font-medium mb-1">Account Type</div>
-                  <div className="text-white text-sm font-medium capitalize">{roundAccount.accountType}</div>
+                  <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account Type</div>
+                  <div className="text-white text-sm font-normal tracking-tight capitalize">{roundAccount.accountType}</div>
                 </div>
                 <div className="p-3 bg-gradient-to-br from-[#D417C8]/20 to-[#BD2CD0]/20 rounded-lg border border-[#D417C8]/30">
                   <Building className="w-4 h-4 text-[#D417C8]" />
                 </div>
               </div>
-            </div>
+            </Card>
 
             {/* Account Status */}
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+            <Card padding="lg">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <div className="text-white/60 text-xs font-medium mb-1">Account Status</div>
+                  <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account Status</div>
                   <div className="text-white text-sm font-medium">{roundAccount.status}</div>
                 </div>
                 <div className="p-3 bg-gradient-to-br from-[#42E695]/20 to-[#3BB2B8]/20 rounded-lg border border-[#42E695]/30">
                   <CheckCircle className="w-4 h-4 text-[#42E695]" />
                 </div>
               </div>
-            </div>
+            </Card>
 
             {/* Created Date */}
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+            <Card padding="lg">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <div className="text-white/60 text-xs font-medium mb-1">Created Date</div>
+                  <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Created Date</div>
                   <div className="text-white text-sm font-medium">
                     {new Date(roundAccount.createdDate).toLocaleDateString()}
                   </div>
@@ -140,21 +139,21 @@ export const DashboardPage = () => {
                   <Clock className="w-4 h-4 text-[#14BDEA]" />
                 </div>
               </div>
-            </div>
+            </Card>
 
             {/* Currency */}
             {roundAccount.organization?.currency && (
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <Card padding="lg">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <div className="text-white/60 text-xs font-medium mb-1">Currency</div>
+                    <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Currency</div>
                     <div className="text-white text-sm font-medium">{roundAccount.organization.currency}</div>
                   </div>
                   <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 rounded-lg border border-[#7767DA]/30">
                     <DollarSign className="w-4 h-4 text-[#7767DA]" />
                   </div>
                 </div>
-              </div>
+              </Card>
             )}
           </motion.div>
         )}
@@ -168,7 +167,7 @@ export const DashboardPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+              <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="p-3 bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 rounded-xl border border-[#32A1E4]/30">
                     <Building className="w-5 h-5 text-[#32A1E4]" />
@@ -180,77 +179,89 @@ export const DashboardPage = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <Building2 className="w-4 h-4 text-[#14BDEA]" />
-                    <div>
-                      <div className="text-sm font-medium text-white">{roundAccount.accountName}</div>
-                      <div className="text-xs text-white/60">Account name</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <Building className="w-4 h-4 text-[#D417C8]" />
-                    <div>
-                      <div className="text-sm font-medium text-white font-mono">{roundAccount.roundAccountId}</div>
-                      <div className="text-xs text-white/60">Account ID</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <Building className="w-4 h-4 text-[#14BDEA]" />
-                    <div>
-                      <div className="text-sm font-medium text-white capitalize">{roundAccount.accountType}</div>
-                      <div className="text-xs text-white/60">Account type</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <CheckCircle className={`w-4 h-4 ${
-                      roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
-                    }`} />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className={`px-2 py-1 text-xs rounded-lg font-medium border ${
-                          roundAccount.status.toLowerCase() === 'active' 
-                            ? 'bg-[#42E695]/20 text-[#42E695] border-[#42E695]/30'
-                            : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
-                        }`}>
-                          {roundAccount.status}
-                        </span>
+                  <Card variant="nested" padding="md">
+                    <div className="flex items-center gap-3">
+                      <Building2 className="w-4 h-4 text-[#14BDEA]" />
+                      <div>
+                        <div className="text-sm font-normal tracking-tight text-white">{roundAccount.accountName}</div>
+                        <div className="text-xs text-white/60">Account name</div>
                       </div>
-                      <div className="text-xs text-white/60 mt-1">Status</div>
                     </div>
-                  </div>
+                  </Card>
 
-                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <Calendar className="w-4 h-4 text-[#7767DA]" />
-                    <div>
-                      <div className="text-sm font-medium text-white">
-                        {new Date(roundAccount.createdDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
+                  <Card variant="nested" padding="md">
+                    <div className="flex items-center gap-3">
+                      <Building className="w-4 h-4 text-[#D417C8]" />
+                      <div>
+                        <div className="text-sm font-normal tracking-tight text-white font-mono">{roundAccount.roundAccountId}</div>
+                        <div className="text-xs text-white/60">Account ID</div>
                       </div>
-                      <div className="text-xs text-white/60">Created date</div>
                     </div>
-                  </div>
+                  </Card>
 
-                  <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                    <Clock className="w-4 h-4 text-[#32A1E4]" />
-                    <div>
-                      <div className="text-sm font-medium text-white">
-                        {new Date(roundAccount.modifiedDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
+                  <Card variant="nested" padding="md">
+                    <div className="flex items-center gap-3">
+                      <Building className="w-4 h-4 text-[#14BDEA]" />
+                      <div>
+                        <div className="text-sm font-normal tracking-tight text-white capitalize">{roundAccount.accountType}</div>
+                        <div className="text-xs text-white/60">Account type</div>
                       </div>
-                      <div className="text-xs text-white/60">Last modified</div>
                     </div>
-                  </div>
+                  </Card>
+
+                  <Card variant="nested" padding="md">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className={`w-4 h-4 ${
+                        roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
+                      }`} />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2 py-1 text-xs rounded-lg font-normal tracking-tight border ${
+                            roundAccount.status.toLowerCase() === 'active' 
+                              ? 'bg-[#42E695]/20 text-[#42E695] border-[#42E695]/30'
+                              : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+                          }`}>
+                            {roundAccount.status}
+                          </span>
+                        </div>
+                        <div className="text-xs text-white/60 mt-1">Status</div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card variant="nested" padding="md">
+                    <div className="flex items-center gap-3">
+                      <Calendar className="w-4 h-4 text-[#7767DA]" />
+                      <div>
+                        <div className="text-sm font-normal tracking-tight text-white">
+                          {new Date(roundAccount.createdDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </div>
+                        <div className="text-xs text-white/60">Created date</div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card variant="nested" padding="md">
+                    <div className="flex items-center gap-3">
+                      <Clock className="w-4 h-4 text-[#32A1E4]" />
+                      <div>
+                        <div className="text-sm font-normal tracking-tight text-white">
+                          {new Date(roundAccount.modifiedDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </div>
+                        <div className="text-xs text-white/60">Last modified</div>
+                      </div>
+                    </div>
+                  </Card>
                 </div>
-              </div>
+              </Card>
             </motion.div>
 
             {/* Organization Details */}
@@ -260,7 +271,7 @@ export const DashboardPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                <Card padding="lg">
                   <div className="flex items-start gap-4 mb-6">
                     <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 rounded-xl border border-[#7767DA]/30">
                       <Building className="w-5 h-5 text-[#7767DA]" />
@@ -272,142 +283,170 @@ export const DashboardPage = () => {
                   </div>
 
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <Building2 className="w-4 h-4 text-[#D417C8]" />
-                      <div>
-                        <div className="text-sm font-medium text-white">{roundAccount.organization.name}</div>
-                        <div className="text-xs text-white/60">Organization name</div>
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <Building2 className="w-4 h-4 text-[#D417C8]" />
+                        <div>
+                          <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.name}</div>
+                          <div className="text-xs text-white/60">Organization name</div>
+                        </div>
                       </div>
-                    </div>
+                    </Card>
 
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <DollarSign className="w-4 h-4 text-[#42E695]" />
-                      <div>
-                        <div className="text-sm font-medium text-white font-mono">{roundAccount.organization.organizationId}</div>
-                        <div className="text-xs text-white/60">Organization ID</div>
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <DollarSign className="w-4 h-4 text-[#42E695]" />
+                        <div>
+                          <div className="text-sm font-normal tracking-tight text-white font-mono">{roundAccount.organization.organizationId}</div>
+                          <div className="text-xs text-white/60">Organization ID</div>
+                        </div>
                       </div>
-                    </div>
+                    </Card>
 
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <Building className="w-4 h-4 text-[#14BDEA]" />
-                      <div>
-                        <div className="text-sm font-medium text-white capitalize">{roundAccount.organization.type}</div>
-                        <div className="text-xs text-white/60">Organization type</div>
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <Building className="w-4 h-4 text-[#14BDEA]" />
+                        <div>
+                          <div className="text-sm font-normal tracking-tight text-white capitalize">{roundAccount.organization.type}</div>
+                          <div className="text-xs text-white/60">Organization type</div>
+                        </div>
                       </div>
-                    </div>
+                    </Card>
 
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <Building2 className="w-4 h-4 text-[#7767DA]" />
-                      <div>
-                        <div className="text-sm font-medium text-white capitalize">{roundAccount.organization.category}</div>
-                        <div className="text-xs text-white/60">Industry category</div>
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <Building2 className="w-4 h-4 text-[#7767DA]" />
+                        <div>
+                          <div className="text-sm font-normal tracking-tight text-white capitalize">{roundAccount.organization.category}</div>
+                          <div className="text-xs text-white/60">Industry category</div>
+                        </div>
                       </div>
-                    </div>
+                    </Card>
 
                     {roundAccount.organization.industry && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <Building2 className="w-4 h-4 text-[#32A1E4]" />
-                        <div>
-                          <div className="text-sm font-medium text-white capitalize">{roundAccount.organization.industry}</div>
-                          <div className="text-xs text-white/60">Industry</div>
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <Building2 className="w-4 h-4 text-[#32A1E4]" />
+                          <div>
+                            <div className="text-sm font-normal tracking-tight text-white capitalize">{roundAccount.organization.industry}</div>
+                            <div className="text-xs text-white/60">Industry</div>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     )}
 
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <DollarSign className="w-4 h-4 text-[#42E695]" />
-                      <div>
-                        <div className="text-sm font-medium text-white">{roundAccount.organization.currency}</div>
-                        <div className="text-xs text-white/60">Currency</div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <Clock className="w-4 h-4 text-[#7767DA]" />
-                      <div>
-                        <div className="text-sm font-medium text-white">{roundAccount.organization.timeZone}</div>
-                        <div className="text-xs text-white/60">Timezone</div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                      <MapPin className="w-4 h-4 text-[#32A1E4]" />
-                      <div>
-                        <div className="text-sm font-medium text-white">{roundAccount.organization.country}</div>
-                        <div className="text-xs text-white/60">Country</div>
-                      </div>
-                    </div>
-
-                    {roundAccount.organization.size && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <Users className="w-4 h-4 text-[#14BDEA]" />
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <DollarSign className="w-4 h-4 text-[#42E695]" />
                         <div>
-                          <div className="text-sm font-medium text-white">{roundAccount.organization.size}</div>
-                          <div className="text-xs text-white/60">Organization size</div>
+                          <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.currency}</div>
+                          <div className="text-xs text-white/60">Currency</div>
                         </div>
                       </div>
+                    </Card>
+
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-4 h-4 text-[#7767DA]" />
+                        <div>
+                          <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.timeZone}</div>
+                          <div className="text-xs text-white/60">Timezone</div>
+                        </div>
+                      </div>
+                    </Card>
+
+                    <Card variant="nested" padding="md">
+                      <div className="flex items-center gap-3">
+                        <MapPin className="w-4 h-4 text-[#32A1E4]" />
+                        <div>
+                          <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.country}</div>
+                          <div className="text-xs text-white/60">Country</div>
+                        </div>
+                      </div>
+                    </Card>
+
+                    {roundAccount.organization.size && (
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <Users className="w-4 h-4 text-[#14BDEA]" />
+                          <div>
+                            <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.size}</div>
+                            <div className="text-xs text-white/60">Organization size</div>
+                          </div>
+                        </div>
+                      </Card>
                     )}
 
                     {roundAccount.organization.website && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <ArrowUpRight className="w-4 h-4 text-[#32A1E4]" />
-                        <div>
-                          <a
-                            href={roundAccount.organization.website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm font-medium text-[#14BDEA] hover:text-[#32A1E4] transition-colors"
-                          >
-                            {roundAccount.organization.website}
-                          </a>
-                          <div className="text-xs text-white/60">Website</div>
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <ArrowUpRight className="w-4 h-4 text-[#32A1E4]" />
+                          <div>
+                            <a
+                              href={roundAccount.organization.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm font-normal tracking-tight text-[#14BDEA] hover:text-[#32A1E4] transition-colors"
+                            >
+                              {roundAccount.organization.website}
+                            </a>
+                            <div className="text-xs text-white/60">Website</div>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     )}
 
                     {roundAccount.organization.registrationNumber && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <Building2 className="w-4 h-4 text-amber-400" />
-                        <div>
-                          <div className="text-sm font-medium text-white">{roundAccount.organization.registrationNumber}</div>
-                          <div className="text-xs text-white/60">Registration number</div>
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <Building2 className="w-4 h-4 text-amber-400" />
+                          <div>
+                            <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.registrationNumber}</div>
+                            <div className="text-xs text-white/60">Registration number</div>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     )}
 
                     {(roundAccount.organization.taxId && roundAccount.organization.taxId.trim() !== '') && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <DollarSign className="w-4 h-4 text-amber-500" />
-                        <div>
-                          <div className="text-sm font-medium text-white">{roundAccount.organization.taxId}</div>
-                          <div className="text-xs text-white/60">Tax ID</div>
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <DollarSign className="w-4 h-4 text-amber-500" />
+                          <div>
+                            <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.taxId}</div>
+                            <div className="text-xs text-white/60">Tax ID</div>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     )}
 
                     {(typeof roundAccount.organization.revenue === 'number' && roundAccount.organization.revenue > 0) && (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <DollarSign className="w-4 h-4 text-[#42E695]" />
-                        <div>
-                          <div className="text-sm font-medium text-white">
-                            {formatCurrency(roundAccount.organization.revenue, roundAccount.organization.currency)}
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-center gap-3">
+                          <DollarSign className="w-4 h-4 text-[#42E695]" />
+                          <div>
+                            <div className="text-sm font-normal tracking-tight text-white">
+                              {formatCurrency(roundAccount.organization.revenue, roundAccount.organization.currency)}
+                            </div>
+                            <div className="text-xs text-white/60">Annual revenue</div>
                           </div>
-                          <div className="text-xs text-white/60">Annual revenue</div>
                         </div>
-                      </div>
+                      </Card>
                     )}
 
                     {roundAccount.organization.description && (
-                      <div className="flex items-start gap-3 p-3 bg-white/5 border border-white/10 rounded-lg">
-                        <Building className="w-4 h-4 text-[#7767DA] mt-0.5" />
-                        <div>
-                          <div className="text-sm font-medium text-white">{roundAccount.organization.description}</div>
-                          <div className="text-xs text-white/60">Description</div>
+                      <Card variant="nested" padding="md">
+                        <div className="flex items-start gap-3">
+                          <Building className="w-4 h-4 text-[#7767DA] mt-0.5" />
+                          <div>
+                            <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.description}</div>
+                            <div className="text-xs text-white/60">Description</div>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     )}
                   </div>
-                </div>
+                </Card>
               </motion.div>
             )}
           </div>
@@ -420,7 +459,7 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+            <Card padding="lg">
               <div className="flex items-start gap-4 mb-6">
                 <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 rounded-xl border border-[#7767DA]/30">
                   <MapPin className="w-5 h-5 text-[#7767DA]" />
@@ -433,9 +472,10 @@ export const DashboardPage = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {roundAccount.roundAccountAddresses.map((address) => (
-                  <div
+                  <Card
                     key={address.addressId}
-                    className="p-4 bg-white/5 border border-white/10 rounded-lg"
+                    variant="nested"
+                    padding="lg"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -458,10 +498,10 @@ export const DashboardPage = () => {
                       <p>{address.city}, {address.state} {address.zipCode}</p>
                       <p>{address.country}</p>
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
-            </div>
+            </Card>
           </motion.div>
         )}
 
@@ -472,7 +512,7 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+            <Card padding="lg">
               <div className="flex items-start gap-4 mb-6">
                 <div className="p-3 bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 rounded-xl border border-[#32A1E4]/30">
                   <Users className="w-5 h-5 text-[#32A1E4]" />
@@ -485,9 +525,10 @@ export const DashboardPage = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {roundAccount.roundAccountUsers.map((accountUser) => (
-                  <div
+                  <Card
                     key={`${accountUser.roundAccountId}-${accountUser.userId}`}
-                    className="p-4 bg-white/5 border border-white/10 rounded-lg"
+                    variant="nested"
+                    padding="lg"
                   >
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center flex-shrink-0">
@@ -503,10 +544,10 @@ export const DashboardPage = () => {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
-            </div>
+            </Card>
           </motion.div>
         )}
 
@@ -517,10 +558,10 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-12">
+            <Card padding="xl">
               <div className="text-center">
                 <Building className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">No Round Account Found</h3>
+                <h3 className="text-xl font-medium tracking-tight text-white mb-2">No Round Account Found</h3>
                 <p className="text-gray-400 mb-6">
                   It looks like you don&apos;t have a Round account set up yet, or there was an issue loading your account data.
                 </p>
@@ -541,7 +582,7 @@ export const DashboardPage = () => {
                   />
                 </div>
               </div>
-            </div>
+            </Card>
           </motion.div>
         )}
       </div>

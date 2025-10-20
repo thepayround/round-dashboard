@@ -91,7 +91,7 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60"
             onClick={onClose}
           />
           
@@ -102,15 +102,15 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden"
           >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl">
+            <div className="bg-[#171719] border border-[#25262a] rounded-lg shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-white/10">
+            <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center">
                   <Send className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">Compose Email</h2>
+                  <h2 className="text-xl font-medium tracking-tight text-white">Compose Email</h2>
                   <p className="text-sm text-white/70">Send email to {customerName}</p>
                 </div>
               </div>

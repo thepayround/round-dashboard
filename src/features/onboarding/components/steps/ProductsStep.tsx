@@ -46,7 +46,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
         </motion.div>
 
         <div>
-          <h2 className="text-lg font-bold text-white mb-2">Products</h2>
+          <h2 className="text-lg font-medium tracking-tight text-white mb-2">Products</h2>
           <p className="text-gray-400 text-sm">Set up your product catalog</p>
         </div>
       </div>
@@ -54,14 +54,14 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
       {/* Add Product Section */}
       <div className="space-y-6">
         <div className="text-center space-y-6">
-          <div className="p-8 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl">
+          <div className="p-8 rounded-lg bg-[#1d1d20] border border-[#25262a]">
             <div className="space-y-4">
               <div className="w-12 h-12 mx-auto rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                 <Package className="w-6 h-6 text-[#14BDEA]" />
               </div>
 
               <div>
-                <h3 className="font-semibold text-white mb-2">Add Your First Product</h3>
+                <h3 className="font-medium text-white mb-2 tracking-tight">Add Your First Product</h3>
                 <p className="text-gray-400">
                   Create your first product to start managing your catalog and pricing.
                 </p>
@@ -90,7 +90,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
               {data.products.map(product => (
                 <div
                   key={product.id}
-                  className="p-4 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl"
+                  className="p-4 rounded-lg bg-[#212124] border border-[#2c2d31]"
                 >
                   <div className="flex items-center justify-between">
                     <div>

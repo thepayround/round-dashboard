@@ -10,7 +10,6 @@ import {
   Calendar,
   MapPin,
   MoreHorizontal,
-  Loader2,
   Grid3X3,
   List,
   Download,
@@ -206,7 +205,7 @@ const CustomersPage: React.FC = () => {
       }
       setInitialLoad(false)
     }
-  }, [currentPage, itemsPerPage, sortConfig, selectedCustomerType, selectedStatus, selectedCurrency, selectedPortalAccess, showError])
+  }, [currentPage, itemsPerPage, sortConfig, selectedCustomerType, selectedStatus, selectedCurrency, selectedPortalAccess, showError, customers.length, initialLoad])
 
   useEffect(() => {
     loadCustomers()
@@ -564,7 +563,7 @@ const CustomersPage: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-white group-hover:text-[#D417C8] transition-colors">
+                      <h3 className="font-medium text-white group-hover:text-[#D417C8] transition-colors tracking-tight">
                         {customer.effectiveDisplayName || customer.displayName}
                       </h3>
                       {customer.isBusinessCustomer && (
@@ -588,7 +587,7 @@ const CustomersPage: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <Mail className="w-4 h-4 text-[#14BDEA]" />
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-white truncate">{customer.email}</div>
+                        <div className="text-sm font-normal tracking-tight text-white truncate">{customer.email}</div>
                         <div className="text-xs text-white/60">Primary email</div>
                       </div>
                     </div>
@@ -599,7 +598,7 @@ const CustomersPage: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <Phone className="w-4 h-4 text-[#42E695]" />
                         <div className="flex-1">
-                          <div className="text-sm font-medium text-white">{customer.phoneNumber}</div>
+                          <div className="text-sm font-normal tracking-tight text-white">{customer.phoneNumber}</div>
                           <div className="text-xs text-white/60">Phone number</div>
                         </div>
                       </div>
@@ -611,7 +610,7 @@ const CustomersPage: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <MapPin className="w-4 h-4 text-amber-400" />
                         <div className="flex-1 min-w-0">
-                          <div className="text-sm font-medium text-white truncate">
+                          <div className="text-sm font-normal tracking-tight text-white truncate">
                             {customer.billingAddress.city}, {customer.billingAddress.country}
                           </div>
                           <div className="text-xs text-white/60">Location</div>
@@ -624,7 +623,7 @@ const CustomersPage: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <Calendar className="w-4 h-4 text-[#7767DA]" />
                       <div>
-                        <div className="text-sm font-medium text-white">{formatDate(customer.signupDate)}</div>
+                        <div className="text-sm font-normal tracking-tight text-white">{formatDate(customer.signupDate)}</div>
                         <div className="text-xs text-white/60">Customer since</div>
                       </div>
                     </div>
@@ -633,7 +632,7 @@ const CustomersPage: React.FC = () => {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(customer.status)}`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight ${getStatusClass(customer.status)}`}>
                       {getStatusText(customer.status)}
                     </span>
                   </div>
@@ -722,7 +721,7 @@ const CustomersPage: React.FC = () => {
             <div className="w-24 h-24 mx-auto mb-4 rounded-lg bg-[#141414] border border-[#262626] flex items-center justify-center">
               <Users className="w-12 h-12 text-[#737373]" />
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">No customers found</h3>
+            <h3 className="text-xl font-medium tracking-tight text-white mb-2">No customers found</h3>
             <p className="text-[#a3a3a3] mb-6">
               {searchQuery || selectedCustomerType || selectedStatus || selectedCurrency
                 ? 'No customers match your current filters. Try adjusting your search criteria or clearing some filters.' 

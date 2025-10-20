@@ -36,7 +36,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
         </motion.div>
 
         <div>
-          <h2 className="text-lg font-bold text-white mb-2">Billing</h2>
+          <h2 className="text-lg font-medium tracking-tight text-white mb-2">Billing</h2>
           <p className="text-gray-400 text-sm">Connect your payment method</p>
         </div>
       </div>
@@ -45,7 +45,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
       <div className="space-y-6">
         {!data.isConnected ? (
           <div className="text-center space-y-6">
-            <div className="p-8 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl">
+            <div className="p-8 rounded-lg bg-[#1d1d20] border border-[#25262a]">
               <div className="space-y-6">
                 {/* Stripe Logo & Info */}
                 <div className="flex items-center justify-center space-x-4">
@@ -58,7 +58,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                     </svg>
                   </div>
                   <div className="text-left">
-                    <h3 className="text-sm font-medium text-white">Connect with Stripe</h3>
+                    <h3 className="text-sm font-normal tracking-tight text-white">Connect with Stripe</h3>
                     <p className="text-gray-400 text-xs">Secure payment processing for your business</p>
                   </div>
                 </div>
@@ -106,7 +106,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-white mb-2">
+                  <h3 className="text-sm font-normal tracking-tight text-white mb-2">
                     Payment Method Connected
                   </h3>
                   <p className="text-gray-400">

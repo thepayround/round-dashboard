@@ -204,7 +204,7 @@ export const CreateAddonModal = ({
                     <Zap className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold auth-text">Create Add-on</h2>
+                    <h2 className="text-xl font-medium tracking-tight auth-text">Create Add-on</h2>
                     <p className="text-sm auth-text-muted">Add additional services and features</p>
                   </div>
                 </div>
@@ -233,7 +233,7 @@ export const CreateAddonModal = ({
                   {/* Basic Information */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold auth-text">Basic Information</h3>
+                      <h3 className="text-lg font-medium tracking-tight auth-text">Basic Information</h3>
                       
                       <div>
                         <label htmlFor="name" className="auth-label">
@@ -304,7 +304,7 @@ export const CreateAddonModal = ({
                     </div>
 
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold auth-text">Add-on Configuration</h3>
+                      <h3 className="text-lg font-medium tracking-tight auth-text">Add-on Configuration</h3>
                       
                       <div>
                         <label htmlFor="type" className="auth-label">
@@ -352,7 +352,7 @@ export const CreateAddonModal = ({
                   {/* Pricing */}
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold auth-text">Pricing</h3>
+                      <h3 className="text-lg font-medium tracking-tight auth-text">Pricing</h3>
                       <button className="btn-secondary">
                         <Plus className="w-4 h-4" />
                         <span>Add Price Point</span>

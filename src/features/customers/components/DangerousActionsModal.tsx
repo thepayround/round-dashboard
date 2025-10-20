@@ -88,7 +88,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60"
             onClick={handleClose}
           />
           
@@ -99,15 +99,15 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
             exit={{ opacity: 0, scale: 0.95 }}
             className="relative w-full max-w-lg overflow-hidden"
           >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl">
+            <div className="bg-[#171719] border border-[#25262a] rounded-lg shadow-2xl">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10">
+          <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Dangerous Actions</h2>
+                <h2 className="text-xl font-medium tracking-tight text-white">Dangerous Actions</h2>
                 <p className="text-sm text-white/70">Irreversible customer actions</p>
               </div>
             </div>
@@ -123,8 +123,8 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
           <div className="p-6">
             {!actionType ? (
               <div className="space-y-6">
-                <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 backdrop-blur-sm">
-                  <h3 className="text-sm font-semibold text-red-400 mb-2 flex items-center gap-2">
+                <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+                  <h3 className="text-sm font-normal tracking-tight tracking-tight text-red-400 mb-2 flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4" />
                     Warning
                   </h3>
@@ -142,7 +142,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                           <UserX className="w-5 h-5 text-orange-400" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-white mb-2">Deactivate Customer</h3>
+                          <h3 className="text-lg font-medium tracking-tight text-white mb-2">Deactivate Customer</h3>
                           <p className="text-sm text-white/70">
                             Suspend the customer&apos;s account. They won&apos;t be able to access services but data is preserved.
                           </p>
@@ -165,7 +165,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                         <Trash2 className="w-5 h-5 text-red-400" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-white mb-2">Delete Customer</h3>
+                        <h3 className="text-lg font-medium tracking-tight text-white mb-2">Delete Customer</h3>
                         <p className="text-sm text-white/70">
                           Permanently remove the customer and all associated data. This cannot be undone.
                         </p>
@@ -186,14 +186,14 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                 {actionType === 'deactivate' && (
                   <div className="space-y-6">
                     <div className="text-center">
-                      <h3 className="text-2xl font-bold text-white mb-2">Confirm Deactivation</h3>
+                      <h3 className="text-2xl font-medium tracking-tight text-white mb-2">Confirm Deactivation</h3>
                       <p className="text-white/70">This action will suspend the customer&apos;s account</p>
                     </div>
                     
                     <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-5 backdrop-blur-sm">
                       <div className="flex items-center gap-3 mb-3">
                         <UserX className="w-5 h-5 text-orange-400" />
-                        <h4 className="font-semibold text-orange-400">Account Suspension</h4>
+                        <h4 className="font-medium text-orange-400 tracking-tight">Account Suspension</h4>
                       </div>
                       <p className="text-sm text-white/80 leading-relaxed">
                         You are about to deactivate <strong className="text-white">{customerName}</strong>. 
@@ -233,14 +233,14 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                 {actionType === 'delete' && (
                   <div className="space-y-6">
                     <div className="text-center">
-                      <h3 className="text-2xl font-bold text-white mb-2">Confirm Deletion</h3>
+                      <h3 className="text-2xl font-medium tracking-tight text-white mb-2">Confirm Deletion</h3>
                       <p className="text-white/70">This action cannot be undone</p>
                     </div>
                     
                     <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-5 backdrop-blur-sm">
                       <div className="flex items-center gap-3 mb-3">
                         <Trash2 className="w-5 h-5 text-red-400" />
-                        <h4 className="font-semibold text-red-400">Permanent Deletion</h4>
+                        <h4 className="font-medium text-red-400 tracking-tight">Permanent Deletion</h4>
                       </div>
                       <p className="text-sm text-white/80 leading-relaxed mb-4">
                         You are about to <strong className="text-red-400">permanently delete</strong> {customerName} 

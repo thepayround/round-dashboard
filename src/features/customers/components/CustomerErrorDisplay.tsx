@@ -23,7 +23,7 @@ export const CustomerErrorDisplay: React.FC<CustomerErrorBoundaryProps> = ({
         {onRetry && (
           <button
             onClick={onRetry}
-            className="text-red-400 hover:text-red-300 text-sm font-medium mt-2 underline"
+            className="text-red-400 hover:text-red-300 text-sm font-normal tracking-tight mt-2 underline"
           >
             Try Again
           </button>

@@ -51,7 +51,7 @@ export const AccountTypeSelector = ({
     {/* Header with animated gradient text */}
     <div className="text-center mb-16">
       <div className="relative">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent mb-6 leading-tight">
+        <h1 className="text-5xl font-medium tracking-tight bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent mb-6 leading-tight">
           Choose Your Journey
         </h1>
       </div>
@@ -102,7 +102,7 @@ export const AccountTypeSelector = ({
 
             {/* Content */}
             <div className="text-center">
-              <h3 className="text-2xl font-bold text-white">{accountType.title}</h3>
+              <h3 className="text-2xl font-medium tracking-tight text-white">{accountType.title}</h3>
             </div>
 
             {/* Bottom gradient line */}

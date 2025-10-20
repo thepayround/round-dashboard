@@ -60,6 +60,20 @@ export default {
         secondary: '#14BDEA', // Cyan - Secondary brand color
         accent: '#7767DA', // Purple - Accent color
 
+        white: '#fafafa', // Softer white instead of pure #ffffff
+        gray: {
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a1a1aa', // secondary text
+          500: '#71717a', // tertiary text
+          600: '#52525b',
+          700: '#3f3f46',
+          800: '#27272a',
+          900: '#18181b',
+        },
+
         // Neutral scale
         'bg-primary': '#000000',
         'bg-secondary': '#0a0a0a',
@@ -70,10 +84,10 @@ export default {
         'border-default': '#333333',
         'border-strong': '#404040',
         
-        'text-primary': '#ffffff',
-        'text-secondary': '#a3a3a3',
-        'text-tertiary': '#737373',
-        'text-disabled': '#525252',
+        'text-primary': '#fafafa',
+        'text-secondary': '#a1a1aa',
+        'text-tertiary': '#71717a',
+        'text-disabled': '#52525b',
 
         // Legacy glass morphism support (deprecated - migrate to solid colors)
         border: '#333333',
@@ -129,6 +143,24 @@ export default {
         // Add custom fonts:
         // mono: ['Fira Code', 'monospace'],
         // serif: ['Georgia', 'serif'],
+      },
+      // Polar.sh inspired font weights
+      fontWeight: {
+        thin: '200',
+        extralight: '200',
+        light: '300',
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+      },
+      letterSpacing: {
+        tighter: '-0.02em',
+        tight: '-0.01em',
+        normal: '0',
+        wide: '0.01em',
+        wider: '0.02em',
+        widest: '0.03em',
       },
       // Custom backdrop blur values for glass effects
       backdropBlur: {

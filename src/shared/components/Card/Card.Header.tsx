@@ -59,11 +59,11 @@ export const CardHeader = ({
         
         <div className="flex items-center space-x-2 flex-wrap">
           {title && (
-            <h3 className="text-lg font-semibold text-white">{title}</h3>
+            <h3 className="text-lg font-medium tracking-tight text-white">{title}</h3>
           )}
           
           {status && (
-            <span className={`px-2 py-1 rounded-full text-xs font-medium border ${statusVariants[status.variant]}`}>
+            <span className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight border ${statusVariants[status.variant]}`}>
               {status.label}
             </span>
           )}
@@ -71,7 +71,7 @@ export const CardHeader = ({
           {badges.map((badge, index) => (
             <span
               key={index}
-              className={`px-2 py-1 rounded-full text-xs font-medium border ${badgeVariants[badge.variant]}`}
+              className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight border ${badgeVariants[badge.variant]}`}
             >
               {badge.label}
             </span>

@@ -29,7 +29,7 @@ export const SecuritySection: React.FC = () => (
             <Lock className="w-5 h-5 text-[#D417C8]" />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-white">Security Policies</h3>
+            <h3 className="text-sm font-normal tracking-tight text-white">Security Policies</h3>
             <p className="text-xs text-gray-400">Configure organization-wide security settings</p>
           </div>
         </div>
@@ -39,7 +39,7 @@ export const SecuritySection: React.FC = () => (
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Key className="w-4 h-4 text-blue-400" />
-                <span className="text-xs font-medium text-white">Two-Factor Authentication</span>
+                <span className="text-xs font-normal tracking-tight text-white">Two-Factor Authentication</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-red-400 rounded-full" />
@@ -47,7 +47,7 @@ export const SecuritySection: React.FC = () => (
               </div>
             </div>
             <p className="text-xs text-gray-400 mb-3">Require 2FA for all organization members</p>
-            <button className="w-full px-3 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-medium rounded-lg transition-colors duration-200">
+            <button className="w-full px-3 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
               Enable 2FA
             </button>
           </Card>
@@ -56,7 +56,7 @@ export const SecuritySection: React.FC = () => (
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-green-400" />
-                <span className="text-xs font-medium text-white">SSO Integration</span>
+                <span className="text-xs font-normal tracking-tight text-white">SSO Integration</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-400 rounded-full" />
@@ -64,7 +64,7 @@ export const SecuritySection: React.FC = () => (
               </div>
             </div>
             <p className="text-xs text-gray-400 mb-3">Single Sign-On with Google Workspace</p>
-            <button className="w-full px-3 py-2 bg-white/10 hover:bg-white/15 text-white text-xs font-medium rounded-lg transition-colors duration-200">
+            <button className="w-full px-3 py-2 bg-white/10 hover:bg-white/15 text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
               Configure SSO
             </button>
           </Card>
@@ -78,7 +78,7 @@ export const SecuritySection: React.FC = () => (
             <Eye className="w-5 h-5 text-[#32A1E4]" />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-white">Audit Logs</h3>
+            <h3 className="text-sm font-normal tracking-tight text-white">Audit Logs</h3>
             <p className="text-xs text-gray-400">Recent security events and user activities</p>
           </div>
         </div>

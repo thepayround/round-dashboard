@@ -98,7 +98,7 @@ export const ResendConfirmationPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-4xl font-bold auth-text mb-4 relative">Resend Confirmation</h1>
+            <h1 className="text-4xl font-medium tracking-tight auth-text mb-4 relative">Resend Confirmation</h1>
             <p className="auth-text-muted text-lg font-medium">
               Enter your email to receive a new confirmation link
             </p>

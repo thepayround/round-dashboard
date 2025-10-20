@@ -87,7 +87,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
         >
           <Card animate={false} padding="lg" className="text-center">
             <Loader2 className="w-8 h-8 animate-spin text-[#D417C8] mx-auto mb-4" />
-            <h3 className="text-sm font-medium text-white mb-2">
+            <h3 className="text-sm font-normal tracking-tight text-white mb-2">
               {isLoadingOptions ? 'Loading Settings...' : 'Initializing...'}
             </h3>
             <p className="text-xs text-gray-400">

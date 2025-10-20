@@ -131,7 +131,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             <UserIcon className="w-3.5 h-3.5 text-[#D417C8]" />
           </div>
           <div className="flex-1">
-            <h2 className="text-sm font-medium text-white mb-1">User Information</h2>
+            <h2 className="text-sm font-normal tracking-tight text-white mb-1">User Information</h2>
             <p className="text-xs text-gray-400 mb-3">
               Your user details and contact information
             </p>
@@ -220,7 +220,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             <Globe className="w-3.5 h-3.5 text-[#7767DA]" />
           </div>
           <div className="flex-1">
-            <h2 className="text-sm font-medium text-white mb-1">Display & Localization</h2>
+            <h2 className="text-sm font-normal tracking-tight text-white mb-1">Display & Localization</h2>
             <p className="text-xs text-gray-400">
               Customize how dates, times, and content are displayed
             </p>

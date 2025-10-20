@@ -164,7 +164,7 @@ export const PricingModelBuilder = ({
     <div className="space-y-6">
       {/* Pricing Model Selection */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold auth-text">Pricing Model</h3>
+        <h3 className="text-lg font-medium tracking-tight auth-text">Pricing Model</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {pricingModelOptions.map(option => (
             <motion.button
@@ -198,7 +198,7 @@ export const PricingModelBuilder = ({
           <h4 className="text-lg font-medium auth-text mb-4">Price Configuration</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="pricing-base-price" className="block text-sm font-medium auth-text mb-2">
+              <label htmlFor="pricing-base-price" className="block text-sm font-normal tracking-tight auth-text mb-2">
                 {selectedModel === 'percentage' ? 'Percentage (%)' : 'Price ($)'}
               </label>
               <input
@@ -215,7 +215,7 @@ export const PricingModelBuilder = ({
             
             {selectedModel === 'per_unit' && (
               <div>
-                <label htmlFor="pricing-free-quantity" className="block text-sm font-medium auth-text mb-2">
+                <label htmlFor="pricing-free-quantity" className="block text-sm font-normal tracking-tight auth-text mb-2">
                   Free Quantity
                 </label>
                 <input
@@ -242,7 +242,7 @@ export const PricingModelBuilder = ({
           <h4 className="text-lg font-medium auth-text mb-4">Package Configuration</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="package-price" className="block text-sm font-medium auth-text mb-2">
+              <label htmlFor="package-price" className="block text-sm font-normal tracking-tight auth-text mb-2">
                 Price per Package ($)
               </label>
               <input
@@ -257,7 +257,7 @@ export const PricingModelBuilder = ({
               />
             </div>
             <div>
-              <label htmlFor="package-size" className="block text-sm font-medium auth-text mb-2">
+              <label htmlFor="package-size" className="block text-sm font-normal tracking-tight auth-text mb-2">
                 Package Size
               </label>
               <input
@@ -297,7 +297,7 @@ export const PricingModelBuilder = ({
                 className="p-4 bg-white/5 rounded-lg border border-white/10"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium auth-text">Tier {index + 1}</span>
+                  <span className="text-sm font-normal tracking-tight auth-text">Tier {index + 1}</span>
                   <button
                     onClick={() => removeTier(index)}
                     className="btn-secondary text-red-400 hover:text-red-300"
@@ -308,7 +308,7 @@ export const PricingModelBuilder = ({
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label htmlFor={`starting-unit-${index}`} className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor={`starting-unit-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Starting Unit
                     </label>
                     <input
@@ -322,7 +322,7 @@ export const PricingModelBuilder = ({
                   </div>
                   
                   <div>
-                    <label htmlFor={`ending-unit-${index}`} className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor={`ending-unit-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Ending Unit
                     </label>
                     <input
@@ -339,7 +339,7 @@ export const PricingModelBuilder = ({
                   </div>
                   
                   <div>
-                    <label htmlFor={`tier-price-${index}`} className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor={`tier-price-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                       {selectedModel === 'stairstep' ? 'Flat Fee ($)' : 'Price per Unit ($)'}
                     </label>
                     <input
@@ -386,7 +386,7 @@ export const PricingModelBuilder = ({
                 className="p-4 bg-white/5 rounded-lg border border-white/10"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium auth-text">Metric {index + 1}</span>
+                  <span className="text-sm font-normal tracking-tight auth-text">Metric {index + 1}</span>
                   <button
                     onClick={() => removeMeteredUsage(index)}
                     className="btn-secondary text-red-400 hover:text-red-300"
@@ -397,7 +397,7 @@ export const PricingModelBuilder = ({
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
-                    <label htmlFor={`metric-name-${index}`} className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor={`metric-name-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Metric Name
                     </label>
                     <input
@@ -411,7 +411,7 @@ export const PricingModelBuilder = ({
                   </div>
                   
                   <div>
-                    <label htmlFor={`metric-unit-${index}`} className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor={`metric-unit-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Unit
                     </label>
                     <input
@@ -425,7 +425,7 @@ export const PricingModelBuilder = ({
                   </div>
                   
                   <div>
-                    <div className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Aggregation
                     </div>
                     <UiDropdown
@@ -441,7 +441,7 @@ export const PricingModelBuilder = ({
                   </div>
                   
                   <div>
-                    <label htmlFor={`metric-price-${index}`} className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor={`metric-price-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Price per Unit ($)
                     </label>
                     <input
@@ -456,7 +456,7 @@ export const PricingModelBuilder = ({
                   </div>
                   
                   <div>
-                    <label htmlFor={`metric-included-${index}`} className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor={`metric-included-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Included Quantity
                     </label>
                     <input

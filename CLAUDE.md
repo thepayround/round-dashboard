@@ -101,164 +101,218 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 
 ## Design System
 
-### Responsive Design System (UPDATED)
+### Responsive Design System
 - **Mobile-first approach** with xs (475px), sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px) breakpoints
-- **Touch-friendly interface** with minimum 44px tap targets (48px on mobile)
+- **Touch-friendly interface** with minimum 44px tap targets on mobile
 - **Adaptive layouts** that gracefully scale from mobile to desktop
-- **Safe area support** for modern mobile devices with notches and rounded corners
-- **Font scaling** - 14px base on mobile, 16px on desktop for optimal readability
-- **Mobile-first CSS utilities** - responsive grids, touch targets, form optimizations
-- **Accessible focus states** - enhanced for mobile with 3px outline offset
+- **Safe area support** for modern mobile devices
+- **No iOS zoom** - 16px minimum font size on form inputs
+- **Accessible focus states** - 1px cyan border, no ring/shadow
 
 ### Mobile-Specific Enhancements
 - **Sidebar behavior** - Overlay on mobile/tablet, persistent on desktop
-- **Form inputs** - 16px font size to prevent iOS zoom, improved touch targets  
+- **Form inputs** - 16px font size minimum to prevent iOS zoom, improved touch targets  
 - **Button sizing** - Enhanced touch targets with minimum heights
 - **Responsive spacing** - Adaptive padding and margins based on screen size
 - **Safe area handling** - Support for device notches and rounded corners
 
-### Brand Colors
+### Polar.sh-Inspired Design System (MANDATORY)
+
+**CRITICAL**: ALL UI components MUST follow the new clean, instant-interaction design system inspired by Polar.sh's minimalist aesthetic.
+
+#### Core Design Principles
+
+1. **Zero Animations for Interactive Components**: Dropdowns, buttons, and inputs respond instantly without transitions
+2. **Solid Backgrounds**: No glassmorphism - clean solid colors with crisp borders
+3. **Lighter Typography**: Inter font family with baseline weight 300, promoting a clean, modern look
+4. **Instant Feedback**: No delays, no transitions - immediate visual response
+
+#### Color Palette
+
+```css
+/* Backgrounds */
+- **Primary Background**: `#171719` (main surfaces, cards, dropdowns)
+- **Page Background**: `#0a0a0a` (darker base)
+
+/* Borders */
+- **Default Border**: `#333333` (neutral state)
+- **Hover Border**: `#404040` (subtle hover enhancement)
+- **Focus Border**: `#14bdea` (cyan accent, 1px solid)
+- **Error Border**: `#ef4444` (validation errors)
+
+/* Brand Colors */
 - **Primary**: `#D417C8` (Accent Pink)
 - **Secondary**: `#14BDEA` (Accent Cyan)
 - **Accent**: `#7767DA` (Purple)
 
-### Status Gradients
-- **Success**: `#42E695` → `#3BB2B8` | Glass: `rgba(66, 230, 149, 0.1)` | Text: `#38D39F`
-- **Warning**: `#FFC107` → `#FF8A00` | Glass: `rgba(255, 193, 7, 0.1)` | Text: `#FF9F0A`
-- **Error**: `#FF4E50` → `#F44336` | Glass: `rgba(244, 67, 54, 0.1)` | Text: `#FF3B30`
-- **Info**: `#14BDEA` → `#7767DA` | Glass: `rgba(20, 189, 234, 0.1)` | Text: `#32A1E4`
+/* Focus States */
+- **Focus Ring**: NONE - use 1px border only
+- **Focus Border**: `border-[#14bdea]` (cyan accent)
+```
 
-### Glass Morphism System
-- **Background**: `rgba(255, 255, 255, 0.04)` | Border: `rgba(255, 255, 255, 0.12)`
-- **Hover**: `rgba(255, 255, 255, 0.08)` | Border: `rgba(255, 255, 255, 0.15)`
-- **Focus**: `rgba(255, 255, 255, 0.12)` | Border: `rgba(255, 255, 255, 0.35)`
-- **Disabled**: `rgba(150, 150, 150, 0.1)` | Text: `rgba(150, 150, 150, 0.5)`
-- **Enhanced Effects**: Multi-layer gradients, subtle grid patterns, advanced blur effects (24px)
-- **Sophisticated Shadows**: Multi-layer shadows with brand color accents
+#### Status Colors (No Gradients)
+- **Success**: Text `#38D39F`, Border `#38D39F`
+- **Warning**: Text `#FF9F0A`, Border `#FF9F0A`
+- **Error**: Text `#FF3B30`, Border `#FF3B30`
+- **Info**: Text `#32A1E4`, Border `#32A1E4`
 
-### Typography & Spacing
-- **Font**: Inter with fallbacks
-- **Typography Scale**: 8 size variants (xs to 4xl)
-- **Spacing System**: 25+ spacing utilities
-- **Shadow System**: 15+ shadow variants including glass effects
+#### Typography System (Polar.sh-Inspired)
 
-### Ultra-Premium Business Design System (MANDATORY - FINAL)
+A **lighter, cleaner typography system** with Inter font family:
 
-**CRITICAL**: ALL UI components MUST follow the new ultra-premium business design standards optimized for maximum elegance, information density, and refined visual hierarchy.
+```css
+/* Font Configuration */
+- **Font Family**: Inter, system-ui, -apple-system
+- **Letter Spacing**: -0.01em (slightly tighter for cleaner look)
+- **Baseline Weight**: 300 (light) for most text
 
-#### Ultra-Premium Typography Scale (LINER BUSINESS)
-- **Liner Elegance**: Ultra-compact, sophisticated fonts with lighter weights
-  - Main Page Title: `text-base font-medium` (16px/400) - Refined sophistication
-  - Section Headers: `text-sm font-medium` (14px/425) - Clean hierarchy
-  - Card Titles: `text-xs font-medium` (12px/400) - Ultra compact elegance  
-  - Form Labels: `text-[11px] font-medium uppercase tracking-wider` - Business precision
-  - Body Text: `text-xs font-normal` (12px/375) - Dense, readable content
-  - Table Text: `text-xs font-light` (12px/350) - Ultra compact data
-  - Captions/Meta: `text-[10px] font-light` (10px/325) - Minimal annotations
+/* Typography Hierarchy */
+- Main Page Title: `text-base font-normal` (16px/400)
+- Section Titles: `text-sm font-normal` (14px/400)
+- Card Titles: `text-sm font-normal` (14px/400)
+- Body Text: `text-sm font-light` (14px/300)
+- Labels: `text-xs font-normal` (12px/400)
+- Placeholders: `text-sm font-light` (14px/300)
+- Small Text: `text-[11px] font-light` (11px/300)
+```
 
-#### Premium Responsive Component Sizing (PROPER HIERARCHY)
+**Weight Guidelines:**
+- **NEVER use** `font-medium` for body text (too heavy)
+- **Replace** `font-semibold` and `font-bold` with `font-medium` (500)
+- **Default to** `font-normal` (400) or `font-light` (300)
+- **Use** `font-medium` (500) sparingly for emphasis only
+
+**Key Principles:**
+- **Lighter weights** create a more refined, less aggressive appearance
+- **Tighter letter spacing** (`-0.01em`) improves density and readability
+- **Minimal weight variation** keeps the UI calm and professional
+- **No heavy fonts** - max weight is `font-medium` (500)
+
+#### NO Animations Policy
+
+**CRITICAL RULE**: Interactive components (dropdowns, buttons, inputs) must have ZERO animations:
+
+- **NO Framer Motion** on dropdowns, buttons, or form inputs
+- **NO CSS transitions** (`transition-all`, `transition-colors`, etc.) on interactive elements
+- **NO will-change-transform** (causes compositor issues)
+- **NO staggered animations** (causes cascading glitches)
+- **Instant interactions** - immediate visual feedback only
+
+**Why No Animations:**
+- Prevents glitching and cascading effects
+- Provides instant, professional feel
+- Reduces complexity and performance issues
+- Matches Polar.sh's clean, instant interaction model
+
+**When animations ARE acceptable:**
+- Page transitions (route changes)
+- Toast notifications entering/exiting
+- Modal overlays appearing/disappearing
+- NOT on interactive elements within those components
+
+### Dropdown Component Guidelines
+
+The dashboard includes two dropdown components with distinct purposes:
+
+#### UiDropdown Component (`/shared/components/Dropdown/UiDropdown.tsx`)
+
+**Purpose**: Generic reusable dropdown for non-API data (static options, client-side data)
+
+**Key Features:**
+- Zero animations - instant open/close
+- Searchable with built-in search input
+- Multi-select support with checkmarks
+- Automatic positioning (calculates available space)
+- Keyboard navigation (Arrow keys, Enter, Escape)
+- Click-outside detection to close
+- Custom render support for complex options
+
+**Usage Example:**
+```tsx
+<UiDropdown
+  options={['Option 1', 'Option 2', 'Option 3']}
+  value={selectedValue}
+  onChange={setSelectedValue}
+  placeholder="Select option..."
+  searchable={true}
+/>
+```
+
+**Design Specifications:**
+- Background: `#171719` (solid, no transparency)
+- Border: `#333333` default, `#14bdea` focus, `#404040` hover
+- Height: `h-10` mobile, `h-9` desktop
+- No transitions or animations
+- Instant feedback on all interactions
+
+#### ApiDropdown Component (`/shared/components/Dropdown/ApiDropdown.tsx`)
+
+**Purpose**: Dropdown for API-driven data (countries, industries, currencies, etc.)
+
+**Key Features:**
+- Same instant-interaction design as UiDropdown
+- Loads data from API endpoints
+- Caches responses for performance
+- Loading states and error handling
+- Same search and keyboard navigation
+- Automatic retry logic
+
+**Usage Example:**
+```tsx
+<ApiDropdown
+  apiEndpoint="/api/countries"
+  value={selectedCountry}
+  onChange={setSelectedCountry}
+  placeholder="Select country..."
+  labelKey="name"
+  valueKey="id"
+/>
+```
+
+**When to Use Which:**
+- **UiDropdown**: Static lists, client-side filtering, custom data structures
+- **ApiDropdown**: Dynamic data from backend, countries, industries, currencies
+
+**Critical Rules:**
+- NEVER add Framer Motion to either component
+- NEVER add CSS transitions to interactive states
+- Keep instant open/close behavior
+- Maintain consistent styling between both components
+
+#### Responsive Component Sizing
+
 - **Mobile (≤767px)**: Compact sizing for space efficiency
-  - Input Fields: `h-7` (28px) - Compact data entry
-  - Buttons: `h-10` (40px) - Larger interaction targets
-  - Social Buttons: `h-10` (40px) - Consistent with action buttons
-  - Dropdowns: `h-7` (28px) - Match inputs for form consistency
+  - Input Fields: `h-10` (40px) - Touch-friendly
+  - Buttons: `h-10` (40px) - Consistent interaction targets
+  - Dropdowns: `h-10` (40px) - Match inputs for form consistency
 
-- **Tablet+ (≥768px)**: Optimal sizing for better usability
-  - Input Fields: `h-9` (36px) - Better usability, not too small
+- **Desktop (≥768px)**: Optimal sizing for usability
+  - Input Fields: `h-9` (36px) - Balanced usability
   - Buttons: `h-11` (44px) - Optimal interaction targets
-  - Social Buttons: `h-11` (44px) - Consistent with action buttons  
   - Dropdowns: `h-9` (36px) - Match inputs for form consistency
 
-- **Text Areas**: `min-h-14` (56px) - Functional across all screens
+- **Text Areas**: `min-h-20` (80px) - Functional across all screens
 
-#### Premium Sizing & Spacing Standards  
-- **Border Radius**: `rounded-lg` (8px) EVERYWHERE - Perfect consistency
-- **Card Padding**: Ultra-compact hierarchy for information density
-  - Tight: `p-2` (8px) - Table cells, inline elements
-  - Compact: `p-3` (12px) - List items, small cards  
+#### Sizing & Spacing Standards
+
+- **Border Radius**: `rounded-lg` (8px) - Consistent across all components
+- **Card Padding**: Clean hierarchy for readability
+  - Compact: `p-3` (12px) - Small cards, list items
   - Standard: `p-4` (16px) - Main cards, forms
-  - Spacious: `p-5` (20px) - Feature sections only
-- **Icons**: Smaller, refined sizes for elegance
-  - Table/Form Icons: `w-3 h-3` (12px) - Ultra compact
-  - Card Icons: `w-3.5 h-3.5` (14px) - Refined elegance
-  - Button Icons: Match button size for perfect alignment
-
-#### Premium Business Spacing System
-- **Compact Layout Philosophy**: Reduced spacing for information density
-- **Card Padding**: Business-optimized hierarchy
-  - Compact: `p-2` (8px) - Table cells, inline elements  
-  - Small: `p-3` (12px) - List items, compact cards
-  - Medium: `p-4` (16px) - Standard cards, forms
-  - Large: `p-5` (20px) - Feature sections only
+  - Spacious: `p-6` (24px) - Feature sections
+- **Icons**: Consistent sizing for clarity
+  - Small Icons: `w-4 h-4` (16px) - Inline, table icons
+  - Standard Icons: `w-5 h-5` (20px) - Buttons, cards
+  - Large Icons: `w-6 h-6` (24px) - Feature highlights
 - **Grid Gaps**: `gap-4` to `gap-6` based on content density
-- **Form Spacing**: `space-y-4` to `space-y-6` for optimal form flow
 
-#### Enhanced Premium Glassmorphism
-- **Ultra-Subtle Backgrounds**: `rgba(255, 255, 255, 0.04)` for refined transparency
-- **Minimal Borders**: `border-white/8` to `border-white/12` for clean separation
-- **Sophisticated Shadows**: Multi-layered business-grade shadows
-  - `shadow-glass-sm`: Subtle card elevation
-  - `shadow-glass-md`: Standard component depth
-  - `shadow-btn-premium`: Refined button shadows
-- **Premium Blur Effects**: `backdrop-blur-xl` (24px+) for professional depth
-- **Micro-Interactions**: Subtle hover states with minimal transform effects
 
-#### Premium Responsive Business Utility Classes
-```jsx
-// ✅ PREMIUM RESPONSIVE: Proper hierarchy with responsive sizing
-<div className="premium-card"> {/* Ultra-subtle glass card */}
-<input className="premium-input" /> {/* 28px→36px responsive inputs */}
-<button className="premium-button"> {/* 40px→44px responsive buttons */}
-<select className="premium-dropdown"> {/* 28px→36px responsive dropdowns */}
-<tr className="premium-table-row"> {/* Ultra-compact table rows */}
-<th className="premium-table-header"> {/* Minimal table headers */}
+#### Component Standards
 
-// ✅ CORRECT: Responsive Tailwind classes (8px radius, proper hierarchy)
-<input className="h-7 md:h-9 px-3 md:px-4 bg-white/6 border border-white/10 rounded-lg text-xs md:text-sm" />
-<button className="h-10 md:h-11 px-4 md:px-5 text-sm md:text-base font-medium rounded-lg" />
-<select className="h-7 md:h-9 px-3 md:px-4 bg-white/6 border border-white/10 rounded-lg text-xs md:text-sm" />
-
-// ❌ INCORRECT: Fixed sizing without responsive hierarchy
-<input className="h-8 px-3 py-1.5 bg-white/6 border border-white/10 rounded-lg text-xs" />
-<button className="h-8 px-3 py-1.5 text-xs font-medium rounded-lg" />
-```
-
-#### Ultra-Premium Typography Classes
-```jsx
-// ✅ LINER TYPOGRAPHY: Ultra-compact elegant hierarchy
-<h1 className="premium-text-2xl"> {/* 16px/500 - Main titles */}
-<h2 className="premium-text-xl"> {/* 14px/450 - Section headers */}
-<h3 className="premium-text-lg"> {/* 13px/425 - Subsection headers */}
-<p className="premium-text-base"> {/* 12px/400 - Body text */}
-<label className="premium-text-sm uppercase tracking-wider"> {/* 11px/375 - Form labels */}
-<span className="premium-text-xs"> {/* 10px/350 - Captions */}
-```
-
-#### Ultra-Premium Icon Standards (8px RADIUS)
-- **Input Icons**: `w-3.5 h-3.5` (14px) positioned with `absolute left-3 top-1/2 transform -translate-y-1/2`
-- **Button Icons**: `w-3 h-3` (12px) for `h-8` buttons - perfectly proportioned
-- **Card Icons**: `w-3 h-3` (12px) to `w-3.5 h-3.5` (14px) for ultra-compact layouts
-- **Table Icons**: `w-2.5 h-2.5` (10px) to `w-3 h-3` (12px) for dense data display
-- **Icon Containers**: All use `rounded-lg` (8px) for perfect consistency
-- **Icon Spacing**: `pl-9` for left icons, `pr-9` for right icons in compact inputs
-
-#### Ultra-Premium Responsive Design Rules
-- **Mobile-first**: Start with mobile classes, add responsive variants with `sm:`, `md:`, `lg:` prefixes
-- **Universal Height**: Same `h-8` (32px) for ALL interactive elements across breakpoints
-- **Consistent Padding**: Use `px-3` for all form elements and buttons
-- **8px Radius**: `rounded-lg` everywhere - inputs, buttons, cards, dropdowns
-
-#### Premium Responsive Business Enforcement Rules (FINAL)
-1. **Proper Visual Hierarchy**: Inputs MUST be smaller than buttons on all screen sizes
-   - Mobile: Inputs `h-7` (28px), Buttons `h-10` (40px) 
-   - Tablet+: Inputs `h-9` (36px), Buttons `h-11` (44px)
-2. **8px Radius**: `rounded-lg` everywhere - no exceptions, perfect visual consistency  
-3. **Responsive Typography**: Scale text sizes appropriately across breakpoints
-4. **Social Button Consistency**: Google/Facebook buttons MUST match primary action buttons
-5. **Component Consistency**: Always use updated `AuthInput`, `Button`, and `Card` components
-6. **Minimum Usability**: Inputs ≥36px on tablet+ for proper touch targets
-
-**VIOLATION CONSEQUENCES**: Any deviation from these standards will cause visual inconsistencies and responsive issues across the application.
+- **Consistent Components**: Always use updated shared components (Button, Card, Input, etc.)
+- **Responsive Sizing**: Use appropriate mobile/desktop breakpoints for touch targets
+- **Accessibility**: Minimum 44px touch targets on mobile, proper ARIA labels
+- **Form Consistency**: Match input and dropdown heights within forms
 
 ## Tech Stack
 
@@ -267,7 +321,7 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 - **Vite 5.4.19** (build tool)
 - **React Router DOM 7.5.2** (routing)
 - **Tailwind CSS 3.4.3** (styling)
-- **Framer Motion 12.12.1** (animations)
+- **Framer Motion 12.12.1** (animations - **NOT used in interactive components**)
 - **Headless UI 2.2.2** (accessible components)
 
 ### Data & State
@@ -290,16 +344,17 @@ Round is a comprehensive AI-powered enterprise billing and customer intelligence
 ## Current Implementation Status
 
 ### Implemented Features
-- **Authentication** - LoginPage, RegisterPage, AuthLayout, B2C + B2B dual flows with dark glassmorphism design
-- **B2B Registration** - BusinessRegisterPage, CompanyDetailsForm, BillingAddressForm with sophisticated multi-step interface
-- **Account Type Selection** - Enhanced AccountTypeSelector with brand-consistent colors, minimalist design, and glass morphism effects
-- **Multi-Step Forms** - useMultiStepForm hook for progressive registration with smooth Framer Motion animations
+- **Authentication** - LoginPage, RegisterPage, AuthLayout, B2C + B2B dual flows with design
+- **B2B Registration** - BusinessRegisterPage, CompanyDetailsForm, BillingAddressForm with multi-step interface
+- **Account Type Selection** - Enhanced AccountTypeSelector with brand-consistent colors and minimalist design
+- **Multi-Step Forms** - useMultiStepForm hook for progressive registration
 - **Company Validation** - Business data validation utilities with real-time feedback
-- **Navigation Components** - Glassmorphism breadcrumb system with auto-route generation and smooth animations
-- **UI Components** - Button, WhiteLogo, Breadcrumb, form components with dark glassmorphism styling and accessibility compliance
+- **Navigation Components** - Breadcrumb system with auto-route generation
+- **UI Components** - Button, WhiteLogo, Breadcrumb, form components with clean, solid styling
+- **Dropdown Components** - UiDropdown and ApiDropdown with instant interactions (zero animations)
 - **Utilities** - cn function, type definitions, validation utilities
 - **Development Tools** - ESLint, Prettier, Husky hooks
-- **Dark Glassmorphism UI** - Y Combinator pitch-ready design inspired by Channel Analytics and Spotify dashboards
+- **Clean Minimal UI** - Y Combinator pitch-ready design with solid backgrounds and instant interactions Polar.sh and Spotify inspired
 
 ### Project Structure
 round-dashboard/
@@ -310,10 +365,11 @@ round-dashboard/
 │   ├── features/dashboard/ # Dashboard pages
 │   ├── shared/components/ # UI components
 │   │   ├── Breadcrumb/ # Navigation breadcrumb system
-│   │   ├── Button/ # Enhanced button with variants and animations
+│   │   ├── Button/ # Enhanced button with variants
 │   │   ├── DashboardLayout/ # Main layout wrapper
-│   │   ├── FormInput/ # Glassmorphism form input with validation
-│   │   ├── Modal/ # Reusable modal with glassmorphism design
+│   │   ├── Dropdown/ # UiDropdown and ApiDropdown (zero animations)
+│   │   ├── FormInput/ # Form input with validation
+│   │   ├── Modal/ # Reusable modal component
 │   │   ├── Card/ # Universal card component for all card-like elements
 │   │   ├── NavigationCard/ # Card component for navigation items
 │   │   ├── SectionHeader/ # Consistent section headers with accents
@@ -489,10 +545,10 @@ Avoid `useEffect` for things React can do declaratively.
 10. **API Response Mapping** - Ensure backend property names match frontend type expectations (camelCase vs PascalCase)
 
 ### UI/UX Guidelines
-1. **Glass Morphism & Aurora UI** - Semi-transparent surfaces with blur effects and gradients
-2. **Dark/Light Mode** - Full theme support with accessibility compliance
-3. **Micro-interactions** - Smooth animations using Framer Motion
-4. **Accessibility** - WCAG compliance, ARIA standards, keyboard navigation
+1. **Solid Design** - Clean solid backgrounds (#171719), crisp borders, zero animations on interactive components
+2. **Instant Interactions** - No transitions or animations on dropdowns, buttons, or form inputs
+3. **Lighter Typography** - Inter font with baseline weight 300, lighter weights throughout
+4. **Accessibility** - WCAG compliance, ARIA standards, keyboard navigation, 44px minimum touch targets
 5. **Component-Driven** - Modular, reusable components with Tailwind CSS
 
 ### Standard Component Patterns

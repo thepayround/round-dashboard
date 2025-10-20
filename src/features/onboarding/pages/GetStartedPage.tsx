@@ -790,7 +790,7 @@ export const GetStartedPage = () => {
 
           {/* Step Content */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-12">
-            <div className="bg-white/5 backdrop-blur-xl rounded-lg border border-white/10 p-8">
+            <div className="bg-[#171719] rounded-lg border border-[#1e1f22] p-8">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentStep}

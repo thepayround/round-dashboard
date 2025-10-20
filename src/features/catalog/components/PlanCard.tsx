@@ -134,7 +134,7 @@ export const PlanCard = ({
                 <div className="flex items-center space-x-3 mb-1">
                   <Link 
                     to={`/catalog/plans/${plan.id}`}
-                    className="text-xl font-bold auth-text hover:text-[#7767DA] transition-colors"
+                    className="text-xl font-medium tracking-tight auth-text hover:text-[#7767DA] transition-colors"
                   >
                     {plan.name}
                   </Link>
@@ -172,14 +172,14 @@ export const PlanCard = ({
               <div className="text-right">
                 {lowestPrice ? (
                   <>
-                    <div className="text-2xl font-bold text-[#42E695]">
+                    <div className="text-2xl font-medium tracking-tight text-[#42E695]">
                       {formatPrice(lowestPrice.price, lowestPrice.currency, lowestPrice.billingFrequency)}
                     </div>
                     <div className="text-sm auth-text-muted">Starting Price</div>
                   </>
                 ) : (
                   <>
-                    <div className="text-2xl font-bold auth-text">
+                    <div className="text-2xl font-medium tracking-tight auth-text">
                       Custom
                     </div>
                     <div className="text-sm auth-text-muted">Contact Sales</div>
@@ -362,7 +362,7 @@ export const PlanCard = ({
 
         {/* Content */}
         <Link to={`/catalog/plans/${plan.id}`} className="block mb-4">
-          <h3 className="text-xl font-bold auth-text mb-2 group-hover:text-[#7767DA] transition-colors">
+          <h3 className="text-xl font-medium tracking-tight auth-text mb-2 group-hover:text-[#7767DA] transition-colors">
             {plan.name}
           </h3>
           <p className="auth-text-muted text-sm line-clamp-2">
@@ -374,14 +374,14 @@ export const PlanCard = ({
         <div className="mb-4">
           {lowestPrice ? (
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#42E695] mb-1">
+              <div className="text-2xl font-medium tracking-tight text-[#42E695] mb-1">
                 {formatPrice(lowestPrice.price, lowestPrice.currency, lowestPrice.billingFrequency)}
               </div>
               <div className="text-xs auth-text-muted">Starting from</div>
             </div>
           ) : (
             <div className="text-center">
-              <div className="text-2xl font-bold auth-text mb-1">Custom</div>
+              <div className="text-2xl font-medium tracking-tight auth-text mb-1">Custom</div>
               <div className="text-xs auth-text-muted">Contact for pricing</div>
             </div>
           )}
@@ -394,7 +394,7 @@ export const PlanCard = ({
               <Users className="w-4 h-4 text-[#32A1E4]" />
               <span className="text-xs auth-text-muted">Features</span>
             </div>
-            <div className="text-lg font-bold auth-text">{plan.features?.length || 0}</div>
+            <div className="text-lg font-medium tracking-tight auth-text">{plan.features?.length || 0}</div>
           </div>
           
           <div className="p-3 bg-black/20 rounded-lg text-center">
@@ -402,7 +402,7 @@ export const PlanCard = ({
               <Calendar className="w-4 h-4 text-[#7767DA]" />
               <span className="text-xs auth-text-muted">Billing</span>
             </div>
-            <div className="text-sm font-bold text-[#7767DA] capitalize">{plan.billingPeriod}</div>
+            <div className="text-sm font-normal tracking-tight tracking-tight text-[#7767DA] capitalize">{plan.billingPeriod}</div>
           </div>
 
           {plan.trialPeriod && (
@@ -411,20 +411,20 @@ export const PlanCard = ({
                 <Clock className="w-4 h-4 text-[#FFC107]" />
                 <span className="text-xs auth-text-muted">Trial</span>
               </div>
-              <div className="text-sm font-bold text-[#FFC107]">{plan.trialPeriod} days</div>
+              <div className="text-sm font-normal tracking-tight tracking-tight text-[#FFC107]">{plan.trialPeriod} days</div>
             </div>
           )}
         </div>
 
         {/* Footer */}
         <div className="flex items-center justify-between">
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[plan.status]}`}>
+          <span className={`px-3 py-1 rounded-full text-xs font-normal tracking-tight ${statusColors[plan.status]}`}>
             <StatusIcon className="w-3 h-3 inline mr-1" />
             {plan.status}
           </span>
           
           {plan.isMetered && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#32A1E4]/10 border border-[#32A1E4]/20 text-[#32A1E4]">
+            <span className="px-3 py-1 rounded-full text-xs font-normal tracking-tight bg-[#32A1E4]/10 border border-[#32A1E4]/20 text-[#32A1E4]">
               <Zap className="w-3 h-3 inline mr-1" />
               Metered
             </span>

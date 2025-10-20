@@ -192,7 +192,7 @@ export const EmailConfirmationPage = () => {
                 className="w-16 h-16 border-4 border-[#D417C8] border-t-transparent rounded-full"
               />
             </div>
-            <h2 className="text-2xl font-bold auth-text mb-4">Confirming Your Email</h2>
+            <h2 className="text-2xl font-medium tracking-tight auth-text mb-4">Confirming Your Email</h2>
             <p className="auth-text-muted">Please wait while we confirm your email address...</p>
           </motion.div>
         )
@@ -213,7 +213,7 @@ export const EmailConfirmationPage = () => {
             >
               <CheckCircle className="w-16 h-16 text-green-500" />
             </motion.div>
-            <h2 className="text-2xl font-bold auth-text mb-4">Email Confirmed!</h2>
+            <h2 className="text-2xl font-medium tracking-tight auth-text mb-4">Email Confirmed!</h2>
             <p className="auth-text-muted mb-6">{message}</p>
 
             <motion.div
@@ -256,7 +256,7 @@ export const EmailConfirmationPage = () => {
             >
               <XCircle className="w-16 h-16 text-red-500" />
             </motion.div>
-            <h2 className="text-2xl font-bold auth-text mb-4">Confirmation Failed</h2>
+            <h2 className="text-2xl font-medium tracking-tight auth-text mb-4">Confirmation Failed</h2>
             <p className="auth-text-muted mb-6">{message}</p>
 
             <motion.div
@@ -343,7 +343,7 @@ export const EmailConfirmationPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-4xl font-bold auth-text mb-4 relative">Email Confirmation</h1>
+            <h1 className="text-4xl font-medium tracking-tight auth-text mb-4 relative">Email Confirmation</h1>
             <p className="auth-text-muted text-lg font-medium">Verifying your email address</p>
           </motion.div>
         </div>

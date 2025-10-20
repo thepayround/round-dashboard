@@ -88,7 +88,7 @@ export const NotificationsSection: React.FC = () => {
             <Settings className="w-5 h-5 text-[#D417C8]" />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-white">Global Settings</h3>
+            <h3 className="text-sm font-normal tracking-tight text-white">Global Settings</h3>
             <p className="text-xs text-gray-400">Organization-wide notification preferences</p>
           </div>
         </div>
@@ -97,7 +97,7 @@ export const NotificationsSection: React.FC = () => {
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
             <div className="flex items-center gap-2 mb-3">
               <Mail className="w-4 h-4 text-blue-400" />
-              <span className="text-xs font-medium text-white">Email Notifications</span>
+              <span className="text-xs font-normal tracking-tight text-white">Email Notifications</span>
             </div>
             <label className="flex items-center gap-2">
               <input
@@ -112,7 +112,7 @@ export const NotificationsSection: React.FC = () => {
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
             <div className="flex items-center gap-2 mb-3">
               <MessageSquare className="w-4 h-4 text-green-400" />
-              <span className="text-xs font-medium text-white">Push Notifications</span>
+              <span className="text-xs font-normal tracking-tight text-white">Push Notifications</span>
             </div>
             <label className="flex items-center gap-2">
               <input
@@ -127,7 +127,7 @@ export const NotificationsSection: React.FC = () => {
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
             <div className="flex items-center gap-2 mb-3">
               <Smartphone className="w-4 h-4 text-purple-400" />
-              <span className="text-xs font-medium text-white">SMS Notifications</span>
+              <span className="text-xs font-normal tracking-tight text-white">SMS Notifications</span>
             </div>
             <label className="flex items-center gap-2">
               <input
@@ -147,23 +147,23 @@ export const NotificationsSection: React.FC = () => {
             <Bell className="w-5 h-5 text-[#32A1E4]" />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-white">Notification Types</h3>
+            <h3 className="text-sm font-normal tracking-tight text-white">Notification Types</h3>
             <p className="text-xs text-gray-400">Configure specific notification preferences</p>
           </div>
         </div>
 
         <div className="space-y-4">
           <div className="grid grid-cols-4 gap-4 pb-3 border-b border-white/10">
-            <div className="text-xs font-medium text-gray-300">Notification Type</div>
-            <div className="text-xs font-medium text-gray-300 text-center">Email</div>
-            <div className="text-xs font-medium text-gray-300 text-center">Push</div>
-            <div className="text-xs font-medium text-gray-300 text-center">SMS</div>
+            <div className="text-xs font-normal tracking-tight text-gray-300">Notification Type</div>
+            <div className="text-xs font-normal tracking-tight text-gray-300 text-center">Email</div>
+            <div className="text-xs font-normal tracking-tight text-gray-300 text-center">Push</div>
+            <div className="text-xs font-normal tracking-tight text-gray-300 text-center">SMS</div>
           </div>
 
           {preferences.map((pref) => (
             <div key={pref.id} className="grid grid-cols-4 gap-4 py-3 items-center">
               <div>
-                <h4 className="text-xs font-medium text-white">{pref.title}</h4>
+                <h4 className="text-xs font-normal tracking-tight text-white">{pref.title}</h4>
                 <p className="text-xs text-gray-400 mt-1">{pref.description}</p>
               </div>
               <div className="text-center">
@@ -195,7 +195,7 @@ export const NotificationsSection: React.FC = () => {
         </div>
 
         <div className="mt-6 pt-6 border-t border-white/10">
-          <button className="px-6 py-3 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-sm font-medium rounded-lg transition-colors duration-200">
+          <button className="px-6 py-3 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-sm font-normal tracking-tight rounded-lg transition-colors duration-200">
             Save Notification Settings
           </button>
         </div>

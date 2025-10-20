@@ -301,14 +301,14 @@ export const ChargesPage = () => {
           className="space-y-6"
         >
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold auth-text">Your Charges</h2>
+            <h2 className="text-2xl font-medium tracking-tight auth-text">Your Charges</h2>
             <span className="auth-text-muted">{filteredCharges.length} charges</span>
           </div>
 
           {filteredCharges.length === 0 ? (
             <div className="auth-card p-12 text-center">
               <Zap className="w-16 h-16 auth-icon mx-auto mb-4" />
-              <h3 className="text-xl font-semibold auth-text mb-2">No charges found</h3>
+              <h3 className="text-xl font-medium tracking-tight auth-text mb-2">No charges found</h3>
               <p className="auth-text-muted mb-6">
                 {searchQuery || selectedFamily !== 'all' || selectedType !== 'all'
                   ? 'Try adjusting your search or filters'

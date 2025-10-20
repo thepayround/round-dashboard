@@ -66,10 +66,10 @@ export const TabNavigation = ({
 
   const getStepTextClasses = (stepId: OnboardingStep): string => {
     if (isStepActive(stepId)) {
-      return 'text-white font-bold'
+      return 'text-white font-medium tracking-tight'
     }
     if (isStepCompleted(stepId)) {
-      return 'text-[#42E695] font-semibold'
+      return 'text-[#42E695] font-normal tracking-tight'
     }
     // All other steps are clickable and interactive
     return 'text-gray-300 hover:text-white cursor-pointer'
@@ -122,7 +122,7 @@ export const TabNavigation = ({
                 {isStepCompleted(step.id) ? (
                   <Check className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 text-white" />
                 ) : (
-                  <span className={`text-xs md:text-sm lg:text-xs font-bold ${
+                  <span className={`text-xs md:text-sm lg:text-xs font-normal tracking-tight tracking-tight ${
                     isStepActive(step.id) || canClickStep(step.id) ? 'text-white' : 'text-gray-500'
                   }`}>
                     {step.number}
@@ -158,7 +158,7 @@ export const TabNavigation = ({
             >
               <div className={`
                 text-xs md:text-sm lg:text-xs
-                font-medium leading-tight text-center
+                font-normal tracking-tight leading-tight text-center
                 transition-colors duration-300 
                 px-1 md:px-1.5 lg:px-1
                 ${getStepTextClasses(step.id)}

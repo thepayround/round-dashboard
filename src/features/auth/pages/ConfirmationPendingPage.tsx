@@ -70,7 +70,7 @@ export const ConfirmationPendingPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-4xl font-bold auth-text mb-4 relative">Check Your Email</h1>
+            <h1 className="text-4xl font-medium tracking-tight auth-text mb-4 relative">Check Your Email</h1>
             <p className="auth-text-muted text-lg font-medium">
               We&apos;ve sent you a confirmation link
             </p>
@@ -103,7 +103,7 @@ export const ConfirmationPendingPage = () => {
             transition={{ delay: 1, duration: 0.6 }}
             className="mb-8"
           >
-            <h2 className="text-2xl font-bold auth-text mb-4">Registration Successful!</h2>
+            <h2 className="text-2xl font-medium tracking-tight auth-text mb-4">Registration Successful!</h2>
             <p className="auth-text-muted mb-4">We&apos;ve sent a confirmation email to:</p>
             <p className="text-lg font-medium text-[#D417C8] mb-6">
               {email || 'your email address'}
@@ -130,11 +130,11 @@ export const ConfirmationPendingPage = () => {
             transition={{ delay: 1.2, duration: 0.6 }}
             className="p-6 rounded-lg bg-gradient-to-r from-[#D417C8]/10 to-[#14BDEA]/10 border border-white/10 mb-8"
           >
-            <h3 className="text-lg font-semibold auth-text mb-4">What to do next:</h3>
+            <h3 className="text-lg font-medium tracking-tight auth-text mb-4">What to do next:</h3>
             <div className="space-y-3 text-left">
               <div className="flex items-start space-x-3">
                 <div className="w-6 h-6 bg-[#D417C8] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm font-bold">1</span>
+                  <span className="text-white text-sm font-medium tracking-tight">1</span>
                 </div>
                 <p className="auth-text-muted text-sm">
                   Check your email inbox (and spam folder if needed)
@@ -142,7 +142,7 @@ export const ConfirmationPendingPage = () => {
               </div>
               <div className="flex items-start space-x-3">
                 <div className="w-6 h-6 bg-[#14BDEA] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm font-bold">2</span>
+                  <span className="text-white text-sm font-medium tracking-tight">2</span>
                 </div>
                 <p className="auth-text-muted text-sm">
                   Click the &quot;Confirm Email&quot; button in the email
@@ -150,7 +150,7 @@ export const ConfirmationPendingPage = () => {
               </div>
               <div className="flex items-start space-x-3">
                 <div className="w-6 h-6 bg-[#7767DA] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm font-bold">3</span>
+                  <span className="text-white text-sm font-medium tracking-tight">3</span>
                 </div>
                 <p className="auth-text-muted text-sm">
                   {hasBusinessData

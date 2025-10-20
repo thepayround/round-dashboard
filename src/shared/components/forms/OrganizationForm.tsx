@@ -91,13 +91,13 @@ export const OrganizationForm = ({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 border border-[#25262a] flex items-center justify-center"
           >
             <Building className="w-8 h-8 text-[#32A1E4]" />
           </motion.div>
 
           <div>
-            <h2 className="text-lg font-bold text-white mb-2">{headerTitle}</h2>
+            <h2 className="text-lg font-medium tracking-tight text-white mb-2">{headerTitle}</h2>
             <p className="text-gray-400 text-sm">{headerSubtitle}</p>
           </div>
         </div>
@@ -111,14 +111,14 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.3 : 0.1 }}
-          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+          className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 border border-[#25262a] flex items-center justify-center">
               <Building className="w-4 h-4 text-[#32A1E4]" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-white">Company Identity</h3>
+              <h3 className="text-sm font-normal tracking-tight text-white">Company Identity</h3>
               <p className="text-xs text-gray-400">Basic company information</p>
             </div>
           </div>
@@ -194,14 +194,14 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.4 : 0.2 }}
-          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+          className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-[#25262a] flex items-center justify-center">
               <Building className="w-4 h-4 text-[#14BDEA]" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-white">Business Details</h3>
+              <h3 className="text-sm font-normal tracking-tight text-white">Business Details</h3>
               <p className="text-xs text-gray-400">Industry and company classification</p>
             </div>
           </div>
@@ -209,7 +209,7 @@ export const OrganizationForm = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Country */}
             <div>
-              <span className="block text-sm font-medium text-gray-300 mb-2">
+              <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
                 Country <span className="text-red-400">*</span>
               </span>
               <ApiDropdown
@@ -226,7 +226,7 @@ export const OrganizationForm = ({
 
             {/* Industry */}
             <div>
-              <span className="block text-sm font-medium text-gray-300 mb-2">
+              <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
                 Industry <span className="text-red-400">*</span>
               </span>
               <ApiDropdown
@@ -243,7 +243,7 @@ export const OrganizationForm = ({
 
             {/* Company Size */}
             <div>
-              <span className="block text-sm font-medium text-gray-300 mb-2">
+              <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
                 Company Size <span className="text-red-400">*</span>
               </span>
               <ApiDropdown
@@ -260,7 +260,7 @@ export const OrganizationForm = ({
 
             {/* Organization Type */}
             <div>
-              <span className="block text-sm font-medium text-gray-300 mb-2">
+              <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
                 Organization Type <span className="text-red-400">*</span>
               </span>
               <ApiDropdown
@@ -282,14 +282,14 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.45 : 0.25 }}
-          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+          className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 border border-[#25262a] flex items-center justify-center">
               <Hash className="w-4 h-4 text-[#14BDEA]" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-white">Business Compliance</h3>
+              <h3 className="text-sm font-normal tracking-tight text-white">Business Compliance</h3>
               <p className="text-xs text-gray-400">Registration and compliance information</p>
             </div>
           </div>
@@ -345,14 +345,14 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.5 : 0.3 }}
-            className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+            className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
           >
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                <span className="text-sm font-semibold text-[#7767DA]">{currencySymbol}</span>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 border border-[#25262a] flex items-center justify-center">
+                <span className="text-sm font-normal tracking-tight tracking-tight text-[#7767DA]">{currencySymbol}</span>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-white">Financial Information</h3>
+                <h3 className="text-sm font-normal tracking-tight text-white">Financial Information</h3>
                 <p className="text-xs text-gray-400">Revenue and currency settings</p>
               </div>
             </div>
@@ -383,7 +383,7 @@ export const OrganizationForm = ({
                 </label>
                 <div className="input-container">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
-                    <span className="text-sm font-semibold text-[#14BDEA]">
+                    <span className="text-sm font-normal tracking-tight tracking-tight text-[#14BDEA]">
                       {currencySymbol}
                     </span>
                   </div>
@@ -411,14 +411,14 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.6 : 0.4 }}
-            className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+            className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
           >
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                <span className="text-sm font-semibold text-[#D417C8]">🌍</span>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#32A1E4]/20 border border-[#25262a] flex items-center justify-center">
+                <span className="text-sm font-normal tracking-tight tracking-tight text-[#D417C8]">🌍</span>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-white">Regional Settings</h3>
+                <h3 className="text-sm font-normal tracking-tight text-white">Regional Settings</h3>
                 <p className="text-xs text-gray-400">Time zone and fiscal year settings</p>
               </div>
             </div>

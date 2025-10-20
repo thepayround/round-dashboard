@@ -34,7 +34,7 @@ export const SectionHeader = ({
     <div className={className}>
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h2 className={`${size === 'main' ? 'text-lg' : 'text-lg'} font-medium text-white ${size === 'main' ? 'mb-1.5' : 'mb-0'}`}>
+          <h2 className={`${size === 'main' ? 'text-lg' : 'text-lg'} font-normal tracking-tight text-white ${size === 'main' ? 'mb-1.5' : 'mb-0'}`}>
             {title}
           </h2>
           {subtitle && (

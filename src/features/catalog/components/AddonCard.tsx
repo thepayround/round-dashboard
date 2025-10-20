@@ -175,7 +175,7 @@ export const AddonCard = ({
                 <div className="flex items-center space-x-3 mb-1">
                   <Link 
                     to={`/catalog/addons/${addon.id}`}
-                    className="text-xl font-bold auth-text hover:text-[#D417C8] transition-colors"
+                    className="text-xl font-medium tracking-tight auth-text hover:text-[#D417C8] transition-colors"
                   >
                     {addon.name}
                   </Link>
@@ -208,14 +208,14 @@ export const AddonCard = ({
               <div className="text-right">
                 {lowestPrice ? (
                   <>
-                    <div className="text-2xl font-bold text-[#42E695]">
+                    <div className="text-2xl font-medium tracking-tight text-[#42E695]">
                       {formatPrice(lowestPrice.price, lowestPrice.currency, addon.type, lowestPrice.billingFrequency)}
                     </div>
                     <div className="text-sm auth-text-muted">Starting Price</div>
                   </>
                 ) : (
                   <>
-                    <div className="text-2xl font-bold auth-text">
+                    <div className="text-2xl font-medium tracking-tight auth-text">
                       Custom
                     </div>
                     <div className="text-sm auth-text-muted">Contact Sales</div>
@@ -418,7 +418,7 @@ export const AddonCard = ({
 
         {/* Content */}
         <Link to={`/catalog/addons/${addon.id}`} className="block mb-4">
-          <h3 className="text-xl font-bold auth-text mb-2 group-hover:text-[#D417C8] transition-colors">
+          <h3 className="text-xl font-medium tracking-tight auth-text mb-2 group-hover:text-[#D417C8] transition-colors">
             {addon.name}
           </h3>
           <p className="auth-text-muted text-sm line-clamp-2">
@@ -430,7 +430,7 @@ export const AddonCard = ({
         <div className="mb-4">
           {lowestPrice ? (
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#42E695] mb-1">
+              <div className="text-2xl font-medium tracking-tight text-[#42E695] mb-1">
                 {formatPrice(lowestPrice.price, lowestPrice.currency, addon.type, lowestPrice.billingFrequency)}
               </div>
               <div className="text-xs auth-text-muted">
@@ -439,7 +439,7 @@ export const AddonCard = ({
             </div>
           ) : (
             <div className="text-center">
-              <div className="text-2xl font-bold auth-text mb-1">Custom</div>
+              <div className="text-2xl font-medium tracking-tight auth-text mb-1">Custom</div>
               <div className="text-xs auth-text-muted">Contact for pricing</div>
             </div>
           )}
@@ -452,7 +452,7 @@ export const AddonCard = ({
               <Package className="w-4 h-4 text-[#32A1E4]" />
               <span className="text-xs auth-text-muted">Model</span>
             </div>
-            <div className="text-sm font-bold auth-text">{getChargeModelLabel(addon.chargeModel)}</div>
+            <div className="text-sm font-normal tracking-tight tracking-tight auth-text">{getChargeModelLabel(addon.chargeModel)}</div>
           </div>
           
           <div className="p-3 bg-black/20 rounded-lg text-center">
@@ -460,18 +460,18 @@ export const AddonCard = ({
               <DollarSign className="w-4 h-4 text-[#42E695]" />
               <span className="text-xs auth-text-muted">Prices</span>
             </div>
-            <div className="text-lg font-bold text-[#42E695]">{addon.pricePoints?.length || 0}</div>
+            <div className="text-lg font-medium tracking-tight text-[#42E695]">{addon.pricePoints?.length || 0}</div>
           </div>
         </div>
 
         {/* Footer */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[addon.status]}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-normal tracking-tight ${statusColors[addon.status]}`}>
               <StatusIcon className="w-3 h-3 inline mr-1" />
               {addon.status}
             </span>
-            <span className={`px-3 py-1 rounded-full text-xs font-medium border ${typeColors[addon.type]}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-normal tracking-tight border ${typeColors[addon.type]}`}>
               {getTypeLabel(addon.type)}
             </span>
           </div>

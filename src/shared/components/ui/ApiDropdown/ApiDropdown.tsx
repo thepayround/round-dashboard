@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Search, X, Check } from 'lucide-react'
 
 export interface ApiDropdownOption {
@@ -263,32 +262,19 @@ export const ApiDropdown = <T = unknown>({
 
   // Create portal element
   const dropdownPortal = isOpen ? createPortal(
-    <AnimatePresence>
-      {/* Dropdown content */}
-      <motion.div
-        key="dropdown"
-        ref={dropdownRef}
-        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-        transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="fixed z-[9999] will-change-transform"
-        style={{
-          top: `${dropdownPosition.top}px`,
-          left: `${dropdownPosition.left}px`,
-          width: `${dropdownPosition.width}px`,
-          zIndex: 9999,
-          minWidth: '280px',
-        }}
-      >
-        <div className="
-          bg-[#1a1d23] border border-white/20
-          rounded-lg shadow-2xl overflow-hidden
-          max-h-80 flex flex-col
-          ring-1 ring-white/10
-        ">
-          {/* Search input */}
-          <div className="p-2.5 border-b border-white/10">
+    <div
+      ref={dropdownRef}
+      className="fixed z-[9999]"
+      style={{
+        top: `${dropdownPosition.top}px`,
+        left: `${dropdownPosition.left}px`,
+        width: `${dropdownPosition.width}px`,
+        minWidth: '280px',
+      }}
+    >
+      <div className="bg-[#1a1d23] border border-white/20 rounded-lg shadow-2xl overflow-hidden max-h-80 flex flex-col ring-1 ring-white/10">
+        {/* Search input */}
+        <div className="p-2.5 border-b border-white/10">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
               <input
@@ -297,18 +283,12 @@ export const ApiDropdown = <T = unknown>({
                 value={searchTerm}
                 onChange={handleSearchChange}
                 placeholder={config.searchPlaceholder}
-                className="
-                  w-full pl-9 pr-8 py-1.5 
-                  bg-white/10 border border-white/20 rounded-lg
-                  text-white/95 placeholder-white/60 text-xs
-                  focus:bg-white/15 focus:border-[#14BDEA]/50 focus:outline-none
-                  transition-all duration-200
-                "
+                className="w-full pl-9 pr-8 py-1.5 bg-[#171719] border border-[#333333] rounded-lg text-white/95 placeholder-[#737373] text-xs focus:border-[#14bdea] focus:outline-none"
               />
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
+                  className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-white/10 rounded-lg"
                   type="button"
                   aria-label="Clear search"
                 >
@@ -326,13 +306,7 @@ export const ApiDropdown = <T = unknown>({
                   setSearchTerm('')
                   setHighlightedIndex(-1)
                 }}
-                className="
-                  mt-1.5 w-full px-2.5 py-1.5 text-xs
-                  bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg
-                  text-white/70 hover:text-white/90
-                  transition-all duration-200
-                  flex items-center justify-center space-x-1.5
-                "
+                className="mt-1.5 w-full px-2.5 py-1.5 text-xs bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg text-white/70 hover:text-white/90 flex items-center justify-center space-x-1.5"
                 type="button"
               >
                 <X className="w-4 h-4" />
@@ -350,31 +324,35 @@ export const ApiDropdown = <T = unknown>({
             ) : (
               <div className="p-1.5 space-y-0.5">
                 {filteredOptions.map((option, index) => (
-                  <motion.div
-                    key={option.value ? `${option.value}-${index}` : `empty-option-${index}`}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.02 }}
+                  <div
+                    key={option.value || `option-${index}`}
+                    role="option"
+                    aria-selected={value === option.value}
+                    tabIndex={0}
                     onClick={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
                       handleSelect(option.value)
                     }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        handleSelect(option.value)
+                      }
+                    }}
                     className={`
                       px-2.5 py-2 rounded-lg cursor-pointer
                       flex items-center justify-between
-                      transition-all duration-200
                       ${index === highlightedIndex 
                         ? 'bg-[#14BDEA]/20 border border-[#14BDEA]/30' 
                         : 'hover:bg-white/10 border border-transparent'
                       }
                       ${option.value === value 
-                        ? 'bg-[#D417C8]/20 border-[#D417C8]/30' 
+                        ? 'bg-[#14bdea]/20 border-[#14bdea]/30' 
                         : ''
                       }
                     `}
-                    role="option"
-                    aria-selected={option.value === value}
                   >
                     <div className="flex items-center space-x-2.5 flex-1 min-w-0">
                       {option.icon && (
@@ -395,16 +373,15 @@ export const ApiDropdown = <T = unknown>({
                     </div>
                     
                     {option.value === value && (
-                      <Check className="w-4 h-4 text-[#D417C8] flex-shrink-0" />
+                      <Check className="w-4 h-4 text-[#14bdea] flex-shrink-0" />
                     )}
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             )}
           </div>
         </div>
-      </motion.div>
-    </AnimatePresence>,
+      </div>,
     document.body
   ) : null
 
@@ -422,12 +399,12 @@ export const ApiDropdown = <T = unknown>({
         }}
         className={`
           relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
-          bg-white/[0.12] border-white/20 text-white flex items-center justify-between
+          bg-[#171719] border-[#333333] text-white flex items-center justify-between
           font-light text-xs outline-none
           [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]
-          ${error ? 'border-[#ef4444] bg-[rgba(239,68,68,0.12)]' : ''}
-          ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer hover:bg-white/[0.18] hover:border-white/30'}
-          ${isOpen && !error ? 'bg-white/[0.18] border-[#14BDEA]/50 outline-none ring-0 shadow-[0_0_0_3px_rgba(20,189,234,0.15),0_4px_16px_rgba(20,189,234,0.2)] transform -translate-y-px' : ''}
+          ${error ? 'border-[#ef4444]' : ''}
+          ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}
+          ${isOpen && !error ? 'border-[#14bdea] outline-none ring-0 shadow-[0_0_0_3px_rgba(20,189,234,0.15)] transform -translate-y-px' : ''}
           ${isOpen && error ? 'shadow-[0_0_0_3px_rgba(239,68,68,0.25)] transform -translate-y-px' : ''}
         `}
         role="combobox"

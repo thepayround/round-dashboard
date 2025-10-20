@@ -35,18 +35,18 @@ export const AuthInput = forwardRef<
   // Responsive inputs - 42px mobile -> 36px desktop, smaller than buttons
   const baseInputClasses = `
     w-full h-[42px] md:h-9 px-3 py-1.5
-    bg-white/6 backdrop-blur-xl border border-white/10 rounded-lg
-    text-white placeholder-white/50 text-xs font-light
-    focus:outline-none focus:border-[#14BDEA]/30 focus:bg-white/8
+    bg-[#171719] border border-[#333333] rounded-lg
+    text-white placeholder-[#737373] text-xs font-light
+    focus:outline-none focus:border-[#14bdea]
     transition-all duration-150 ease-out
     disabled:opacity-50 disabled:cursor-not-allowed
   `
 
   const textareaClasses = `
     w-full min-h-14 px-3 py-2 resize-none
-    bg-white/6 backdrop-blur-xl border border-white/10 rounded-lg
-    text-white placeholder-white/50 text-xs font-normal
-    focus:outline-none focus:border-[#14BDEA]/30 focus:bg-white/8
+    bg-[#171719] border border-[#333333] rounded-lg
+    text-white placeholder-[#737373] text-xs font-normal
+    focus:outline-none focus:border-[#14bdea]
     transition-all duration-150 ease-out
     disabled:opacity-50 disabled:cursor-not-allowed
   `

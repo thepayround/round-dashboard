@@ -124,7 +124,7 @@ export const BillingPage = () => (
             <div className="space-y-4">
               <Card variant="nested" padding="md">
                 <div className="text-center">
-                  <p className="text-white text-2xl sm:text-3xl font-bold mb-1">$24,500</p>
+                  <p className="text-white text-2xl sm:text-3xl font-medium mb-1 tracking-tight">$24,500</p>
                   <p className="text-white/60 text-sm">This Month</p>
                 </div>
               </Card>

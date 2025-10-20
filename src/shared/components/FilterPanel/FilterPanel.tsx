@@ -88,7 +88,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       const focusableElements = panelRef.current!.querySelectorAll<HTMLElement>(
         'input, select, textarea, button, [tabindex]:not([tabindex="-1"])'
       )
-      const firstElement = focusableElements[0]
+      const [firstElement] = focusableElements
       const lastElement = focusableElements[focusableElements.length - 1]
 
       // If Shift+Tab on first element, go to last
@@ -156,7 +156,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-white/10 sticky top-0 bg-white/5 backdrop-blur-xl z-10">
               <h2 
                 id="filter-panel-title" 
-                className="text-xl font-semibold text-white"
+                className="text-xl font-medium tracking-tight text-white"
               >
                 {title}
               </h2>

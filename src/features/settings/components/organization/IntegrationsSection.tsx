@@ -145,11 +145,11 @@ export const IntegrationsSection: React.FC = () => {
               <Key className="w-5 h-5 text-[#D417C8]" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-white">API Keys</h3>
+              <h3 className="text-sm font-normal tracking-tight text-white">API Keys</h3>
               <p className="text-xs text-gray-400">Manage your API keys and access tokens</p>
             </div>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-medium rounded-lg transition-colors duration-200">
+          <button className="flex items-center gap-2 px-4 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
             <Plus className="w-3 h-3" />
             Generate New Key
           </button>
@@ -159,7 +159,7 @@ export const IntegrationsSection: React.FC = () => {
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-medium text-white">Production API Key</h4>
+                <h4 className="text-xs font-normal tracking-tight text-white">Production API Key</h4>
                 <p className="text-xs text-gray-400 font-mono">rnd_prod_••••••••••••••••</p>
               </div>
               <div className="flex items-center gap-2">
@@ -174,7 +174,7 @@ export const IntegrationsSection: React.FC = () => {
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-medium text-white">Development API Key</h4>
+                <h4 className="text-xs font-normal tracking-tight text-white">Development API Key</h4>
                 <p className="text-xs text-gray-400 font-mono">rnd_dev_••••••••••••••••</p>
               </div>
               <div className="flex items-center gap-2">
@@ -195,7 +195,7 @@ export const IntegrationsSection: React.FC = () => {
             <Zap className="w-5 h-5 text-[#32A1E4]" />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-white">Available Integrations</h3>
+            <h3 className="text-sm font-normal tracking-tight text-white">Available Integrations</h3>
             <p className="text-xs text-gray-400">Connect with your favorite tools and services</p>
           </div>
         </div>
@@ -206,7 +206,7 @@ export const IntegrationsSection: React.FC = () => {
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${
+              className={`px-3 py-1.5 text-xs font-normal tracking-tight rounded-lg transition-all duration-200 ${
                 activeCategory === category.id
                   ? 'bg-[#D417C8] text-white'
                   : 'text-gray-400 hover:text-white hover:bg-white/10'
@@ -228,7 +228,7 @@ export const IntegrationsSection: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="text-2xl">{integration.icon}</div>
                   <div>
-                    <h4 className="text-sm font-medium text-white">{integration.name}</h4>
+                    <h4 className="text-sm font-normal tracking-tight text-white">{integration.name}</h4>
                     <p className="text-xs text-gray-400">{integration.description}</p>
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export const IntegrationsSection: React.FC = () => {
               </div>
 
               {integration.status === 'available' && (
-                <button className="w-full mt-3 px-3 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-medium rounded-lg transition-colors duration-200">
+                <button className="w-full mt-3 px-3 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
                   Connect Integration
                 </button>
               )}

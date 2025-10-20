@@ -83,7 +83,7 @@ export const Toast = ({
               </div>
               
               <div className="flex-1 min-w-0">
-                <p className={`${styles.textColor} font-medium text-sm`}>{message}</p>
+                <p className={`${styles.textColor} font-normal tracking-tight text-sm`}>{message}</p>
                 
                 {details && Object.keys(details).length > 0 && (
                   <div className="mt-2 space-y-1">

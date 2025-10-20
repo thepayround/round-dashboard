@@ -113,7 +113,7 @@ const ActionCardComponent = ({
                   <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
                 </div>
               </div>
-              <h3 className={`text-lg font-semibold text-white ${colorConfig.hoverColor} transition-colors mb-2`}>
+              <h3 className={`text-lg font-normal tracking-tight tracking-tight text-white ${colorConfig.hoverColor} transition-colors mb-2`}>
                 {title}
               </h3>
               <p className="text-gray-400 text-sm">
@@ -128,7 +128,7 @@ const ActionCardComponent = ({
                   <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
                 </div>
                 <div>
-                  <h3 className={`text-lg font-semibold text-white ${colorConfig.hoverColor} transition-colors`}>
+                  <h3 className={`text-lg font-normal tracking-tight tracking-tight text-white ${colorConfig.hoverColor} transition-colors`}>
                     {title}
                   </h3>
                   <p className="text-gray-400 text-sm">

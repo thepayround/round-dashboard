@@ -30,11 +30,11 @@ export const BillingSection: React.FC = () => (
               <TrendingUp className="w-5 h-5 text-[#D417C8]" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-white">Current Plan</h3>
+              <h3 className="text-sm font-normal tracking-tight text-white">Current Plan</h3>
               <p className="text-xs text-gray-400">Your active subscription</p>
             </div>
           </div>
-          <button className="px-4 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-medium rounded-lg transition-colors duration-200">
+          <button className="px-4 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
             Upgrade Plan
           </button>
         </div>
@@ -43,7 +43,7 @@ export const BillingSection: React.FC = () => (
           <Card variant="nested" padding="lg">
             <div className="flex items-center gap-2 mb-2">
               <DollarSign className="w-4 h-4 text-green-400" />
-              <span className="text-xs font-medium text-gray-300">Monthly Cost</span>
+              <span className="text-xs font-normal tracking-tight text-gray-300">Monthly Cost</span>
             </div>
             <p className="text-lg font-medium text-white">$49.99</p>
             <p className="text-xs text-gray-400">Professional Plan</p>
@@ -52,7 +52,7 @@ export const BillingSection: React.FC = () => (
           <Card variant="nested" padding="lg">
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="w-4 h-4 text-blue-400" />
-              <span className="text-xs font-medium text-gray-300">Next Billing</span>
+              <span className="text-xs font-normal tracking-tight text-gray-300">Next Billing</span>
             </div>
             <p className="text-lg font-medium text-white">Dec 15, 2024</p>
             <p className="text-xs text-gray-400">Auto-renewal enabled</p>
@@ -61,7 +61,7 @@ export const BillingSection: React.FC = () => (
           <Card variant="nested" padding="lg">
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-4 h-4 text-purple-400" />
-              <span className="text-xs font-medium text-gray-300">Usage</span>
+              <span className="text-xs font-normal tracking-tight text-gray-300">Usage</span>
             </div>
             <p className="text-lg font-medium text-white">2,847</p>
             <p className="text-xs text-gray-400">API calls this month</p>
@@ -76,7 +76,7 @@ export const BillingSection: React.FC = () => (
             <FileText className="w-5 h-5 text-[#32A1E4]" />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-white">Billing History</h3>
+            <h3 className="text-sm font-normal tracking-tight text-white">Billing History</h3>
             <p className="text-xs text-gray-400">Recent invoices and payments</p>
           </div>
         </div>

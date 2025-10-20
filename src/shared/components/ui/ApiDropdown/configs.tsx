@@ -81,7 +81,7 @@ export const countryDropdownConfig: ApiDropdownConfig<Record<string, string>> = 
         description: `${country.countryCodeAlpha2} • ${country.currencyCodeAlpha}`,
         icon: (
           <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
-            <span className="text-xs font-semibold text-white/80">
+            <span className="text-xs font-normal tracking-tight text-white/80">
               {country.countryCodeAlpha2}
             </span>
           </div>
@@ -115,7 +115,7 @@ export const currencyDropdownConfig: ApiDropdownConfig<CurrencyResponse> = {
           }`,
           icon: (
             <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center">
-              <span className="text-xs font-semibold text-white/80">
+              <span className="text-xs font-normal tracking-tight text-white/80">
                 {symbol}
               </span>
             </div>

@@ -175,7 +175,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                 <Package className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold auth-text">Create New Plan</h2>
+                <h2 className="text-2xl font-medium tracking-tight auth-text">Create New Plan</h2>
                 <p className="auth-text-muted">Step {step} of {steps.length}: {steps[step - 1].title}</p>
               </div>
             </div>
@@ -210,7 +210,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         <stepItem.icon className="w-4 h-4" />
                       )}
                     </div>
-                    <span className="text-sm font-medium hidden sm:inline">
+                    <span className="text-sm font-normal tracking-tight hidden sm:inline">
                       {stepItem.title}
                     </span>
                   </div>
@@ -229,11 +229,11 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
           <div className="p-6">
             {step === 1 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Basic Plan Information</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Basic Plan Information</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="plan-name" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="plan-name" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Plan Name *
                     </label>
                     <input
@@ -247,7 +247,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                   </div>
 
                   <div>
-                    <div className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Product Family *
                     </div>
                     <UiDropdown
@@ -265,7 +265,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                 </div>
 
                 <div>
-                  <label htmlFor="plan-description" className="block text-sm font-medium auth-text mb-2">
+                  <label htmlFor="plan-description" className="block text-sm font-normal tracking-tight auth-text mb-2">
                     Description
                   </label>
                   <textarea
@@ -287,7 +287,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                       aria-label="Metered Plan - Enable usage-based billing with real-time tracking"
                     />
                     <div>
-                      <span className="text-sm font-medium auth-text">Metered Plan</span>
+                      <span className="text-sm font-normal tracking-tight auth-text">Metered Plan</span>
                       <p className="text-xs auth-text-muted">
                         Enable usage-based billing with real-time tracking
                       </p>
@@ -295,7 +295,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                   </label>
 
                   <div>
-                    <label htmlFor="billing-cycles" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="billing-cycles" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Billing Cycles
                     </label>
                     <input
@@ -321,7 +321,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
             {step === 2 && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-semibold auth-text">Pricing Configuration</h3>
+                  <h3 className="text-xl font-medium tracking-tight auth-text">Pricing Configuration</h3>
                   {pricePoints.length > 0 && (
                     <button className="btn-primary">
                       Add Price Point
@@ -337,7 +337,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
-                      <div className="block text-sm font-medium auth-text mb-2">
+                      <div className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Currency
                       </div>
                       <ApiDropdown
@@ -352,7 +352,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                     </div>
 
                     <div>
-                      <div className="block text-sm font-medium auth-text mb-2">
+                      <div className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Billing Frequency
                       </div>
                       <UiDropdown
@@ -450,7 +450,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
             {step === 3 && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-semibold auth-text">Plan Features</h3>
+                  <h3 className="text-xl font-medium tracking-tight auth-text">Plan Features</h3>
                   <button className="btn-primary">
                     Add Feature
                   </button>
@@ -461,7 +461,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                     <div key={feature.id} className="glass-card p-4">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                          <label htmlFor={`feature-name-${index}`} className="block text-sm font-medium auth-text mb-2">
+                          <label htmlFor={`feature-name-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                             Feature Name
                           </label>
                           <input
@@ -475,7 +475,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         </div>
 
                         <div>
-                          <div className="block text-sm font-medium auth-text mb-2">
+                          <div className="block text-sm font-normal tracking-tight auth-text mb-2">
                             Type
                           </div>
                           <UiDropdown
@@ -492,7 +492,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         </div>
 
                         <div>
-                          <label htmlFor={`feature-value-${index}`} className="block text-sm font-medium auth-text mb-2">
+                          <label htmlFor={`feature-value-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                             Value
                           </label>
                           <div className="flex items-center space-x-2">
@@ -552,7 +552,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                       </div>
 
                       <div className="mt-4">
-                        <label htmlFor={`feature-description-${index}`} className="block text-sm font-medium auth-text mb-2">
+                        <label htmlFor={`feature-description-${index}`} className="block text-sm font-normal tracking-tight auth-text mb-2">
                           Description
                         </label>
                         <input
@@ -583,7 +583,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
 
             {step === 4 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Customer Portal Settings</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Customer Portal Settings</h3>
                 
                 <div className="glass-card p-6">
                   <h4 className="text-lg font-medium auth-text mb-4">Visibility Settings</h4>
@@ -603,7 +603,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         aria-label="Show in Checkout - Allow customers to subscribe to this plan during checkout"
                       />
                       <div>
-                        <span className="text-sm font-medium auth-text">Show in Checkout</span>
+                        <span className="text-sm font-normal tracking-tight auth-text">Show in Checkout</span>
                         <p className="text-xs auth-text-muted">
                           Allow customers to subscribe to this plan during checkout
                         </p>
@@ -625,7 +625,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         aria-label="Show in Customer Portal - Display this plan in the self-service customer portal"
                       />
                       <div>
-                        <span className="text-sm font-medium auth-text">Show in Customer Portal</span>
+                        <span className="text-sm font-normal tracking-tight auth-text">Show in Customer Portal</span>
                         <p className="text-xs auth-text-muted">
                           Display this plan in the self-service customer portal
                         </p>
@@ -652,7 +652,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         aria-label="Allow Upgrades - Customers can upgrade to this plan from lower-tier plans"
                       />
                       <div>
-                        <span className="text-sm font-medium auth-text">Allow Upgrades</span>
+                        <span className="text-sm font-normal tracking-tight auth-text">Allow Upgrades</span>
                         <p className="text-xs auth-text-muted">
                           Customers can upgrade to this plan from lower-tier plans
                         </p>
@@ -674,7 +674,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         aria-label="Allow Downgrades - Customers can downgrade from this plan to lower-tier plans"
                       />
                       <div>
-                        <span className="text-sm font-medium auth-text">Allow Downgrades</span>
+                        <span className="text-sm font-normal tracking-tight auth-text">Allow Downgrades</span>
                         <p className="text-xs auth-text-muted">
                           Customers can downgrade from this plan to lower-tier plans
                         </p>
@@ -696,7 +696,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                         aria-label="Allow Self-Cancellation - Customers can cancel their subscription to this plan"
                       />
                       <div>
-                        <span className="text-sm font-medium auth-text">Allow Self-Cancellation</span>
+                        <span className="text-sm font-normal tracking-tight auth-text">Allow Self-Cancellation</span>
                         <p className="text-xs auth-text-muted">
                           Customers can cancel their subscription to this plan
                         </p>
@@ -709,7 +709,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
 
             {step === 5 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Review Plan Details</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Review Plan Details</h3>
                 
                 {/* Plan Summary */}
                 <div className="glass-card p-6">

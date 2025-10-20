@@ -47,9 +47,9 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         disabled={disabled}
         className={`
           w-full h-[42px] md:h-9 pl-10 pr-16 md:pr-20 px-3 py-1.5
-          bg-[#0a0a0a] border border-[#1e1f22] rounded-lg
+          bg-[#171719] border border-[#333333] rounded-lg
           text-white placeholder-[#737373] text-xs font-light
-          focus:outline-none focus:border-[#14BDEA] focus:bg-[#070708]
+          focus:outline-none focus:border-[#14bdea]
           transition-all duration-200
           ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
         `}

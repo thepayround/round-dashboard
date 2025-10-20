@@ -167,7 +167,7 @@ export const LoginPage = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="relative"
             >
-              <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">Welcome Back</h1>
+              <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">Welcome Back</h1>
               <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">Sign in to your Round account</p>
             </motion.div>
           </div>

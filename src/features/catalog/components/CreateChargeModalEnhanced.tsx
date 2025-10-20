@@ -217,7 +217,7 @@ export const CreateChargeModalEnhanced = ({
                 <Zap className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold auth-text">
+                <h2 className="text-2xl font-medium tracking-tight auth-text">
                   {existingCharge ? 'Edit Charge' : 'Create New Charge'}
                 </h2>
                 <p className="auth-text-muted">Step {step} of {steps.length}: {steps[step - 1].title}</p>
@@ -254,7 +254,7 @@ export const CreateChargeModalEnhanced = ({
                         <stepItem.icon className="w-4 h-4" />
                       )}
                     </div>
-                    <span className="text-sm font-medium hidden sm:inline">
+                    <span className="text-sm font-normal tracking-tight hidden sm:inline">
                       {stepItem.title}
                     </span>
                   </div>
@@ -273,11 +273,11 @@ export const CreateChargeModalEnhanced = ({
           <div className="p-6">
             {step === 1 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Basic Charge Information</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Basic Charge Information</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="md:col-span-2">
-                    <label htmlFor="charge-name" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="charge-name" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Charge Name *
                     </label>
                     <input
@@ -291,7 +291,7 @@ export const CreateChargeModalEnhanced = ({
                   </div>
 
                   <div className="md:col-span-2">
-                    <label htmlFor="charge-description" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="charge-description" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Description
                     </label>
                     <textarea
@@ -304,7 +304,7 @@ export const CreateChargeModalEnhanced = ({
                   </div>
 
                   <div>
-                    <div className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Currency *
                     </div>
                     <ApiDropdown
@@ -316,7 +316,7 @@ export const CreateChargeModalEnhanced = ({
                   </div>
 
                   <div>
-                    <label htmlFor="charge-invoice-display-name" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="charge-invoice-display-name" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Invoice Display Name
                     </label>
                     <input
@@ -332,7 +332,7 @@ export const CreateChargeModalEnhanced = ({
 
                 {/* Charge Type Selection */}
                 <div className="space-y-4">
-                  <label htmlFor="charge-type" className="block text-sm font-medium auth-text mb-2">
+                  <label htmlFor="charge-type" className="block text-sm font-normal tracking-tight auth-text mb-2">
                     Charge Type *
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -362,7 +362,7 @@ export const CreateChargeModalEnhanced = ({
                 {/* Period for recurring charges */}
                 {formData.chargeType === 'recurring' && (
                   <div>
-                    <div className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Billing Period *
                     </div>
                     <UiDropdown
@@ -387,7 +387,7 @@ export const CreateChargeModalEnhanced = ({
                         aria-label="Enable proration - Charge proportionally based on usage period"
                       />
                       <div>
-                        <span className="text-sm font-medium auth-text">Enable proration</span>
+                        <span className="text-sm font-normal tracking-tight auth-text">Enable proration</span>
                         <p className="text-xs auth-text-muted">
                           Charge proportionally based on usage period
                         </p>
@@ -400,11 +400,11 @@ export const CreateChargeModalEnhanced = ({
 
             {step === 2 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Pricing Model Configuration</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Pricing Model Configuration</h3>
                 
                 {/* Charge Model Selection */}
                 <div className="space-y-4">
-                  <label htmlFor="charge-pricing-model" className="block text-sm font-medium auth-text mb-2">
+                  <label htmlFor="charge-pricing-model" className="block text-sm font-normal tracking-tight auth-text mb-2">
                     Pricing Model *
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -434,7 +434,7 @@ export const CreateChargeModalEnhanced = ({
                     <h4 className="text-lg font-medium auth-text mb-4">Flat Fee Configuration</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label htmlFor="charge-amount" className="block text-sm font-medium auth-text mb-2">
+                        <label htmlFor="charge-amount" className="block text-sm font-normal tracking-tight auth-text mb-2">
                           Amount ({getCurrencySymbol(formData.currency)}) *
                         </label>
                         <input
@@ -458,7 +458,7 @@ export const CreateChargeModalEnhanced = ({
                     <h4 className="text-lg font-medium auth-text mb-4">Per Unit Configuration</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
-                        <label htmlFor="unitName" className="block text-sm font-medium auth-text mb-2">
+                        <label htmlFor="unitName" className="block text-sm font-normal tracking-tight auth-text mb-2">
                           Unit Name *
                         </label>
                         <input
@@ -471,7 +471,7 @@ export const CreateChargeModalEnhanced = ({
                         />
                       </div>
                       <div>
-                        <label htmlFor="unitPrice" className="block text-sm font-medium auth-text mb-2">
+                        <label htmlFor="unitPrice" className="block text-sm font-normal tracking-tight auth-text mb-2">
                           Price per Unit ({getCurrencySymbol(formData.currency)}) *
                         </label>
                         <input
@@ -486,7 +486,7 @@ export const CreateChargeModalEnhanced = ({
                         />
                       </div>
                       <div>
-                        <label htmlFor="freeUnits" className="block text-sm font-medium auth-text mb-2">
+                        <label htmlFor="freeUnits" className="block text-sm font-normal tracking-tight auth-text mb-2">
                           Free Units
                         </label>
                         <input
@@ -509,7 +509,7 @@ export const CreateChargeModalEnhanced = ({
                     <h4 className="text-lg font-medium auth-text mb-4">Tiered Pricing Configuration</h4>
                     
                     <div className="mb-4">
-                      <label htmlFor="tieredUnitName" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="tieredUnitName" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Unit Name *
                       </label>
                       <input
@@ -589,7 +589,7 @@ export const CreateChargeModalEnhanced = ({
                     <h4 className="text-lg font-medium auth-text mb-4">Percentage Configuration</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label htmlFor="percentageOf" className="block text-sm font-medium auth-text mb-2">
+                        <label htmlFor="percentageOf" className="block text-sm font-normal tracking-tight auth-text mb-2">
                           Percentage of *
                         </label>
                         <input
@@ -602,7 +602,7 @@ export const CreateChargeModalEnhanced = ({
                         />
                       </div>
                       <div>
-                        <label htmlFor="percentageValue" className="block text-sm font-medium auth-text mb-2">
+                        <label htmlFor="percentageValue" className="block text-sm font-normal tracking-tight auth-text mb-2">
                           Percentage Value (%) *
                         </label>
                         <input
@@ -626,7 +626,7 @@ export const CreateChargeModalEnhanced = ({
                   <h4 className="text-lg font-medium auth-text mb-4">Charge Limits</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="minimumCharge" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="minimumCharge" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Minimum Charge ({getCurrencySymbol(formData.currency)})
                       </label>
                       <input
@@ -644,7 +644,7 @@ export const CreateChargeModalEnhanced = ({
                       />
                     </div>
                     <div>
-                      <label htmlFor="maximumCharge" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="maximumCharge" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Maximum Charge ({getCurrencySymbol(formData.currency)})
                       </label>
                       <input
@@ -668,7 +668,7 @@ export const CreateChargeModalEnhanced = ({
 
             {step === 3 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Advanced Configuration</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Advanced Configuration</h3>
                 
                 {/* Tax Configuration */}
                 <div className="glass-card p-6">
@@ -682,7 +682,7 @@ export const CreateChargeModalEnhanced = ({
                         onChange={(e) => setFormData({ ...formData, taxable: e.target.checked })}
                         className="auth-checkbox"
                       />
-                      <span className="text-sm font-medium auth-text">This charge is taxable</span>
+                      <span className="text-sm font-normal tracking-tight auth-text">This charge is taxable</span>
                     </label>
 
                     {formData.taxable && (
@@ -704,7 +704,7 @@ export const CreateChargeModalEnhanced = ({
                         </label>
 
                         <div>
-                          <label htmlFor="taxCode" className="block text-sm font-medium auth-text mb-2">
+                          <label htmlFor="taxCode" className="block text-sm font-normal tracking-tight auth-text mb-2">
                             Tax Code
                           </label>
                           <input
@@ -724,7 +724,7 @@ export const CreateChargeModalEnhanced = ({
                         </div>
 
                         <div>
-                          <label htmlFor="exemptionCode" className="block text-sm font-medium auth-text mb-2">
+                          <label htmlFor="exemptionCode" className="block text-sm font-normal tracking-tight auth-text mb-2">
                             Exemption Code
                           </label>
                           <input
@@ -754,7 +754,7 @@ export const CreateChargeModalEnhanced = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Applicable Countries */}
                     <div>
-                      <label htmlFor="applicable-countries" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="applicable-countries" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Applicable Countries
                       </label>
                       <div className="flex space-x-2 mb-3">
@@ -801,7 +801,7 @@ export const CreateChargeModalEnhanced = ({
 
                     {/* Excluded Countries */}
                     <div>
-                      <label htmlFor="excluded-countries" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="excluded-countries" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Excluded Countries
                       </label>
                       <div className="flex space-x-2 mb-3">
@@ -853,7 +853,7 @@ export const CreateChargeModalEnhanced = ({
                   <h4 className="text-lg font-medium auth-text mb-4">Accounting Integration</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                      <label htmlFor="revenue-account" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="revenue-account" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Revenue Account
                       </label>
                       <input
@@ -872,7 +872,7 @@ export const CreateChargeModalEnhanced = ({
                       />
                     </div>
                     <div>
-                      <label htmlFor="deferred-revenue-account" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="deferred-revenue-account" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Deferred Revenue Account
                       </label>
                       <input
@@ -891,7 +891,7 @@ export const CreateChargeModalEnhanced = ({
                       />
                     </div>
                     <div>
-                      <label htmlFor="cost-center" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="cost-center" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Cost Center
                       </label>
                       <input
@@ -916,7 +916,7 @@ export const CreateChargeModalEnhanced = ({
 
             {step === 4 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Review Charge Configuration</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Review Charge Configuration</h3>
                 
                 {/* Basic Info Summary */}
                 <div className="glass-card p-6">

@@ -110,7 +110,7 @@ export const ProductFamilyCard = ({
                 <div className="flex items-center space-x-3 mb-1">
                   <Link 
                     to={`/catalog/families/${family.id}`}
-                    className="text-xl font-bold auth-text hover:text-[#D417C8] transition-colors"
+                    className="text-xl font-medium tracking-tight auth-text hover:text-[#D417C8] transition-colors"
                   >
                     {family.name}
                   </Link>
@@ -134,7 +134,7 @@ export const ProductFamilyCard = ({
             {/* Revenue Display */}
             <div className="flex items-center space-x-4">
               <div className="text-right">
-                <div className="text-2xl font-bold text-[#42E695]">
+                <div className="text-2xl font-medium tracking-tight text-[#42E695]">
                   {formatRevenue(family.revenue)}
                 </div>
                 <div className="text-sm auth-text-muted">Monthly Revenue</div>
@@ -323,7 +323,7 @@ export const ProductFamilyCard = ({
 
         {/* Content */}
         <Link to={`/catalog/families/${family.id}`} className="block mb-4">
-          <h3 className="text-xl font-bold auth-text mb-2 group-hover:text-[#D417C8] transition-colors">
+          <h3 className="text-xl font-medium tracking-tight auth-text mb-2 group-hover:text-[#D417C8] transition-colors">
             {family.name}
           </h3>
           <p className="auth-text-muted text-sm line-clamp-2">
@@ -338,7 +338,7 @@ export const ProductFamilyCard = ({
               <Package className="w-4 h-4 text-[#32A1E4]" />
               <span className="text-xs auth-text-muted">Products</span>
             </div>
-            <div className="text-lg font-bold auth-text">{family.productCount}</div>
+            <div className="text-lg font-medium tracking-tight auth-text">{family.productCount}</div>
           </div>
           
           <div className="p-3 bg-black/20 rounded-lg text-center">
@@ -346,13 +346,13 @@ export const ProductFamilyCard = ({
               <DollarSign className="w-4 h-4 text-[#42E695]" />
               <span className="text-xs auth-text-muted">Revenue</span>
             </div>
-            <div className="text-sm font-bold text-[#42E695]">{formatRevenue(family.revenue)}</div>
+            <div className="text-sm font-normal tracking-tight tracking-tight text-[#42E695]">{formatRevenue(family.revenue)}</div>
           </div>
         </div>
 
           {/* Footer */}
           <div className="flex items-center justify-center">
-            <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[family.status]}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-normal tracking-tight ${statusColors[family.status]}`}>
               <StatusIcon className="w-3 h-3 inline mr-1" />
               {family.status}
             </span>

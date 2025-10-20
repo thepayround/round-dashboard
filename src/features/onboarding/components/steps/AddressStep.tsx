@@ -69,7 +69,7 @@ export const AddressStep = ({
         </motion.div>
 
         <div>
-          <h2 className="text-lg font-bold text-white mb-2">Address Information</h2>
+          <h2 className="text-lg font-medium tracking-tight text-white mb-2">Address Information</h2>
           <p className="text-gray-400 text-sm">
             {isPrePopulated
               ? 'Review and complete your billing address details'
@@ -79,7 +79,7 @@ export const AddressStep = ({
       </div>
 
       {/* Form */}
-      <div className="max-w-[520px] mx-auto bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6 space-y-6">
+      <div className="max-w-[520px] mx-auto bg-[#1d1d20] border border-[#25262a] rounded-lg p-6 space-y-6">
         {/* Address Name */}
         <FormInput
           label="Address Name"

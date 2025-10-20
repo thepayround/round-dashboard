@@ -247,7 +247,7 @@ export const ResetPasswordPage = () => {
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
                 <AlertCircle className="w-8 h-8 text-white" />
               </div>
-              <h1 className="text-2xl font-bold auth-text mb-4">Invalid Reset Link</h1>
+              <h1 className="text-2xl font-medium tracking-tight auth-text mb-4">Invalid Reset Link</h1>
               <p className="auth-text-muted mb-6">
                 This password reset link is invalid or has expired. Please request a new one.
               </p>
@@ -300,7 +300,7 @@ export const ResetPasswordPage = () => {
             >
               {!isSuccess ? (
                 <>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
                     Reset Password
                   </h1>
                   <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
@@ -312,7 +312,7 @@ export const ResetPasswordPage = () => {
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
                     <CheckCircle className="w-8 h-8 text-white" />
                   </div>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
                     Password Reset Successful
                   </h1>
                   <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
@@ -374,7 +374,7 @@ export const ResetPasswordPage = () => {
                     <div className="mt-2">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-xs auth-text-muted">Password strength</span>
-                        <span className={`text-xs font-medium ${getPasswordTextColor(passwordStrength.score)}`}>
+                        <span className={`text-xs font-normal tracking-tight ${getPasswordTextColor(passwordStrength.score)}`}>
                           {passwordStrength.label}
                         </span>
                       </div>

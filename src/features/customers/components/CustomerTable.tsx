@@ -98,7 +98,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
     children: React.ReactNode; 
     className?: string 
   }) => (
-    <th className={`px-6 py-4 text-left text-sm font-semibold text-white/80 ${className}`}>
+    <th className={`px-6 py-4 text-left text-sm font-normal text-white/80 tracking-tight ${className}`}>
       {field ? (
         <button
           onClick={() => onSort(field)}
@@ -125,7 +125,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
     <div className="bg-[#171719] border border-[#1e1f22] rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-[#101011] border-b border-[#1e1f22]">
+          <thead className="bg-[#171719] border-b border-[#1e1f22]">
             <tr>
               {selectable && (
                 <TableHeader className="w-12">
@@ -186,10 +186,10 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                 key={customer.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={`transition-all duration-200 border-b border-[#16171a] ${(() => {
-                  if (hoveredRow === customer.id) return 'bg-[#121315]'
+                className={`transition-all duration-200 border-b border-[#16171a] bg-[#101011] ${(() => {
+                  if (hoveredRow === customer.id) return 'hover:bg-[#171719]'
                   if (selectedIds.includes(customer.id)) return 'bg-[#D417C8]/5'
-                  return 'hover:bg-[#0f1012]'
+                  return 'hover:bg-[#171719]'
                 })()}`}
                 onMouseEnter={() => setHoveredRow(customer.id)}
                 onMouseLeave={() => setHoveredRow(null)}
@@ -233,16 +233,16 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                 )}
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-bold text-xs">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-medium text-xs tracking-tight">
                       {getInitials(customer.displayName)}
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center space-x-2">
-                        <div className="font-medium text-white truncate">
+                        <div className="font-normal text-white tracking-tight truncate">
                           {customer.effectiveDisplayName ?? customer.displayName}
                         </div>
                         {customer.isBusinessCustomer && (
-                          <span className="px-2 py-1 bg-[#14BDEA]/20 text-[#14BDEA] border border-[#14BDEA]/30 rounded text-xs font-medium flex-shrink-0">
+                          <span className="px-2 py-1 bg-[#14BDEA]/20 text-[#14BDEA] border border-[#14BDEA]/30 rounded text-xs font-normal tracking-tight flex-shrink-0">
                             Business
                           </span>
                         )}
@@ -268,7 +268,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(customer.status)}`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight ${getStatusClass(customer.status)}`}>
                       {getStatusText(customer.status)}
                     </span>
                     {customer.portalAccess && (
@@ -314,7 +314,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
 
       {/* Selection Info Bar */}
       {selectable && selectedIds.length > 0 && (
-        <div className="border-t border-[#1e1f22] px-6 py-3 bg-[#101011]">
+        <div className="border-t border-[#1e1f22] px-6 py-3 bg-[#171719]">
           <div className="flex items-center justify-between">
             <div className="text-sm text-[#a3a3a3]">
               {selectedIds.length} customer{selectedIds.length === 1 ? '' : 's'} selected

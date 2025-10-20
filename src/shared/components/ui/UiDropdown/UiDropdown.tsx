@@ -276,9 +276,9 @@ export const UiDropdown = ({
                   placeholder={searchPlaceholder}
                   className="
                     w-full pl-9 pr-8 py-1.5
-                    bg-white/10 border border-white/20 rounded-lg
-                    text-white/95 placeholder-white/60 text-xs
-                    focus:bg-white/15 focus:border-[#14BDEA]/50 focus:outline-none
+                    bg-[#171719] border border-[#333333] rounded-lg
+                    text-white/95 placeholder-[#737373] text-xs
+                    focus:border-[#14bdea] focus:outline-none
                     transition-all duration-200
                   "
                 />
@@ -347,7 +347,7 @@ export const UiDropdown = ({
                         : 'hover:bg-white/10 border border-transparent'
                       }
                       ${option.value === value
-                        ? 'bg-[#D417C8]/20 border-[#D417C8]/30'
+                        ? 'bg-[#14bdea]/20 border-[#14bdea]/30'
                         : ''
                       }
                     `}
@@ -373,7 +373,7 @@ export const UiDropdown = ({
                     </div>
 
                     {option.value === value && (
-                      <Check className="w-4 h-4 text-[#D417C8] flex-shrink-0" />
+                      <Check className="w-4 h-4 text-[#14bdea] flex-shrink-0" />
                     )}
                   </motion.div>
                 ))}
@@ -404,12 +404,12 @@ export const UiDropdown = ({
         }}
         className={`
           relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
-          bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between
+          bg-[#171719] border-[#333333] text-white cursor-pointer flex items-center justify-between
           font-light text-xs outline-none
           [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]
-          ${error ? 'border-[#ef4444] bg-[rgba(239,68,68,0.12)]' : ''}
-          ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/[0.18] hover:border-white/30'}
-          ${isOpen && !error ? 'bg-white/[0.18] border-[#14BDEA]/50 outline-none ring-0 shadow-[0_0_0_3px_rgba(20,189,234,0.15),0_4px_16px_rgba(20,189,234,0.2)] transform -translate-y-px' : ''}
+          ${error ? 'border-[#ef4444]' : ''}
+          ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+          ${isOpen && !error ? 'border-[#14bdea] outline-none ring-0 shadow-[0_0_0_3px_rgba(20,189,234,0.15)] transform -translate-y-px' : ''}
           ${isOpen && error ? 'shadow-[0_0_0_3px_rgba(239,68,68,0.25)] transform -translate-y-px' : ''}
         `}
         role="combobox"

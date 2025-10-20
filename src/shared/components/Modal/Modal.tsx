@@ -123,7 +123,7 @@ export const Modal = ({
                 <div className="flex items-start justify-between p-4 border-b border-[#25262a]">
                   <div className="flex-1 min-w-0">
                     {title && (
-                      <h2 className="text-lg font-medium text-white truncate">
+                      <h2 className="text-lg font-medium text-white truncate tracking-tight">
                         {title}
                       </h2>
                     )}

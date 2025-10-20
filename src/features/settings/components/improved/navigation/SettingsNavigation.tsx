@@ -63,7 +63,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
                     }`} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium truncate">{section.label}</p>
+                    <p className="text-xs font-normal tracking-tight truncate">{section.label}</p>
                   </div>
                 </div>
               </button>

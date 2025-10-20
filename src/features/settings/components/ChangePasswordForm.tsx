@@ -189,7 +189,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Current Password Section */}
           <div className="p-4 bg-white/[0.02] rounded-lg border border-white/8">
-            <h3 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
+            <h3 className="text-sm font-normal tracking-tight text-white mb-3 flex items-center gap-2">
               <Lock className="w-4 h-4 text-gray-400" />
               Current Password
             </h3>
@@ -234,7 +234,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
 
           {/* New Password Section */}
           <div className="p-4 bg-white/[0.02] rounded-lg border border-white/8">
-            <h3 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
+            <h3 className="text-sm font-normal tracking-tight text-white mb-3 flex items-center gap-2">
               <Lock className="w-4 h-4 text-emerald-400" />
               New Password
             </h3>

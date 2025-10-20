@@ -131,7 +131,7 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
                       <type.icon className={`w-3.5 h-3.5 ${type.iconColor}`} />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-sm font-medium text-white mb-1">{type.label}</h3>
+                      <h3 className="text-sm font-normal tracking-tight text-white mb-1">{type.label}</h3>
                       <p className="text-xs text-gray-400 leading-relaxed">{type.description}</p>
                     </div>
                   </div>
@@ -143,7 +143,7 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-1.5">
                             <channel.icon className="w-3 h-3 text-gray-300" />
-                            <span className="text-xs font-medium text-white">{channel.label}</span>
+                            <span className="text-xs font-normal tracking-tight text-white">{channel.label}</span>
                           </div>
                           <motion.label 
                             className="relative inline-flex items-center cursor-pointer"

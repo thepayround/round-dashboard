@@ -46,7 +46,7 @@ export const BusinessSettingsStep = ({
         </motion.div>
 
         <div>
-          <h2 className="text-lg font-bold text-white mb-2">Business Settings</h2>
+          <h2 className="text-lg font-medium tracking-tight text-white mb-2">Business Settings</h2>
           <p className="text-gray-400 text-sm">Configure your business preferences</p>
         </div>
       </div>
@@ -55,7 +55,7 @@ export const BusinessSettingsStep = ({
       <div className="max-w-[420px] mx-auto space-y-6">
         {/* Timezone */}
         <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">Timezone</span>
+          <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">Timezone</span>
           <ApiDropdown
             config={timezoneDropdownConfig}
             value={data.timezone}
@@ -68,7 +68,7 @@ export const BusinessSettingsStep = ({
 
         {/* Fiscal Year Start */}
         <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">Fiscal Year Start</span>
+          <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">Fiscal Year Start</span>
           <ApiDropdown
             config={fiscalYearDropdownConfig}
             value={data.fiscalYearStart}

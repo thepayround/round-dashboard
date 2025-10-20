@@ -140,7 +140,7 @@ const ProductCardComponent = ({
               {href && (
                 <Link 
                   to={href}
-                  className="text-xl font-semibold text-white hover:text-blue-300 transition-colors"
+                  className="text-xl font-medium tracking-tight text-white hover:text-blue-300 transition-colors"
                 >
                   {name}
                 </Link>
@@ -149,7 +149,7 @@ const ProductCardComponent = ({
             
             {price && (
               <div className="text-right ml-6">
-                <div className="text-2xl font-bold text-white">
+                <div className="text-2xl font-medium tracking-tight text-white">
                   {formatCurrency(price.amount, price.currency)}
                 </div>
                 <div className="text-xs text-gray-400">
@@ -204,7 +204,7 @@ const ProductCardComponent = ({
 
         {price && (
           <div className="text-center py-4 bg-black/20 rounded-lg my-4">
-            <div className="text-lg font-bold text-white mb-1">
+            <div className="text-lg font-medium tracking-tight text-white mb-1">
               {formatCurrency(price.amount, price.currency)}
             </div>
             <div className="text-sm text-gray-400">per {price.period}</div>
@@ -213,7 +213,7 @@ const ProductCardComponent = ({
 
         {features.length > 0 && (
           <div className="space-y-2 mb-4">
-            <h4 className="text-sm font-medium text-gray-400">Key Features:</h4>
+            <h4 className="text-sm font-normal tracking-tight text-gray-400">Key Features:</h4>
             <div className="space-y-1">
               {features.slice(0, 3).map((feature) => (
                 <div key={feature.id} className="flex items-center space-x-2 text-sm">

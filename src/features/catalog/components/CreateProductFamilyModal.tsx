@@ -121,7 +121,7 @@ export const CreateProductFamilyModal = ({
 
           {/* Basic Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white mb-4">Basic Information</h3>
+            <h3 className="text-lg font-medium tracking-tight text-white mb-4">Basic Information</h3>
             
             <FormInput
               label="Product Family Name"
@@ -167,7 +167,7 @@ export const CreateProductFamilyModal = ({
 
           {/* Settings */}
           <div className="space-y-4 pt-6 border-t border-white/10">
-            <h3 className="text-lg font-semibold text-white mb-4">Settings</h3>
+            <h3 className="text-lg font-medium tracking-tight text-white mb-4">Settings</h3>
             
             <FormInput
               label="Default Currency"

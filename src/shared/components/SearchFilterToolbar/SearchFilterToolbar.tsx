@@ -74,7 +74,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       case 'select':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-white/80 mb-2">
+            <label className="block text-sm font-normal text-white/80 tracking-tight mb-2">
               {field.label}
             </label>
             <UiDropdown
@@ -94,7 +94,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       case 'input':
         return (
           <div key={field.id}>
-            <label htmlFor={field.id} className="block text-sm font-medium text-white/80 mb-2">
+            <label htmlFor={field.id} className="block text-sm font-normal text-white/80 tracking-tight mb-2">
               {field.label}
             </label>
             <input
@@ -103,7 +103,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
               placeholder={field.placeholder}
-              className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/50 focus:border-[#D417C8]/50 transition-all"
+              className="w-full bg-[#171719] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#737373] focus:outline-none focus:border-[#14bdea] transition-all"
             />
           </div>
         )
@@ -111,7 +111,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       case 'date':
         return (
           <div key={field.id}>
-            <label htmlFor={field.id} className="block text-sm font-medium text-white/80 mb-2">
+            <label htmlFor={field.id} className="block text-sm font-normal text-white/80 tracking-tight mb-2">
               {field.label}
             </label>
             <input
@@ -119,7 +119,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               type="date"
               value={field.value}
               onChange={(e) => field.onChange(e.target.value)}
-              className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#D417C8]/50 focus:border-[#D417C8]/50 transition-all"
+              className="w-full bg-[#171719] border border-[#333333] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#14bdea] transition-all"
             />
           </div>
         )
@@ -127,7 +127,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       case 'custom':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-white/80 mb-2">
+            <label className="block text-sm font-normal text-white/80 tracking-tight mb-2">
               {field.label}
             </label>
             {field.component}
@@ -172,14 +172,11 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
         }
       }), [filterFields])
 
-  // Count active filters for badge
-  const activeFilterCount = activeFilters.length
-
   return (
     <>
       <div className={className}>
         {/* Enhanced search toolbar with consistent styling */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+        <div className="bg-[#171719] border border-[#1e1f22] rounded-lg p-6">
           <div className="flex flex-col gap-3">
             {/* Main toolbar - aligned row */}
             <div className="flex flex-col xs:flex-row gap-3 xs:items-center">
@@ -278,7 +275,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
         
         {/* Clear All Button inside panel */}
         {onClearFilters && activeFilters.length > 0 && (
-          <div className="mt-6 pt-6 border-t border-white/10">
+          <div className="mt-6 pt-6 border-t border-[#1e1f22]">
             <button
               onClick={onClearFilters}
               className="w-full px-6 py-3 text-sm 

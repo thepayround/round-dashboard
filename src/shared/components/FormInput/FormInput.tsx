@@ -39,9 +39,9 @@ export const FormInput = forwardRef<
 }, ref) => {
   const baseInputClasses = `
     w-full px-3 py-1.5
-    bg-[#0a0a0a] border border-[#1e1f22] rounded-lg
+    bg-[#171719] border border-[#333333] rounded-lg
     text-white placeholder-[#737373] text-xs
-    focus:outline-none focus:border-[#D417C8] focus:bg-[#070708] transition-all duration-200
+    focus:outline-none focus:border-[#14bdea] transition-all duration-200
     disabled:opacity-50 disabled:cursor-not-allowed
     h-[42px] md:h-9
   `
@@ -100,7 +100,7 @@ export const FormInput = forwardRef<
     <div className={`space-y-2 ${containerClassName}`}>
       {/* Label */}
       {label && (
-        <label htmlFor={id} className="block text-sm font-medium text-[#a3a3a3]">
+        <label htmlFor={id} className="block text-sm font-normal text-[#a3a3a3] tracking-tight">
           {label}
           {props.required && <span className="text-red-400 ml-1">*</span>}
         </label>

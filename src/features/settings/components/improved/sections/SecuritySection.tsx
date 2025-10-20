@@ -24,7 +24,7 @@ export const SecuritySection: React.FC<SecuritySectionProps> = () => (
             <Lock className="w-3.5 h-3.5 text-purple-400" />
           </div>
           <div className="flex-1">
-            <h2 className="text-sm font-medium text-white mb-1">Password Management</h2>
+            <h2 className="text-sm font-normal tracking-tight text-white mb-1">Password Management</h2>
             <p className="text-xs text-gray-400">
               Update your password to keep your account secure
             </p>

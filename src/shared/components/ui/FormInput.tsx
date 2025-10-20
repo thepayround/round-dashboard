@@ -94,10 +94,9 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       ]
 
       return cn(
-        'w-full rounded-lg sm:rounded-lg backdrop-blur-xl border transition-all duration-200',
-        'bg-white/5 border-white/10 text-white placeholder-gray-400',
-        'hover:bg-white/8 hover:border-white/15',
-        'focus:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#D417C8]/30',
+        'w-full rounded-lg sm:rounded-lg border transition-all duration-200',
+        'bg-[#171719] border-[#333333] text-white placeholder-[#737373]',
+        'focus:border-[#14bdea] focus:outline-none',
         // Mobile-specific improvements
         'text-base sm:text-sm md:text-base', // Prevent iOS zoom on focus
         'leading-normal sm:leading-relaxed',
@@ -105,7 +104,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         sizeClasses[size],
         LeftIcon && 'pl-10',
         RightIcon && 'pr-10',
-        error && 'border-red-400 focus:border-red-400 focus:ring-red-400/30',
+        error && 'border-red-400 focus:border-red-400',
         className
       )
     }

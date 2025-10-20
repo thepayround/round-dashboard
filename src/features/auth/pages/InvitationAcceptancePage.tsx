@@ -278,7 +278,7 @@ export const InvitationAcceptancePage = () => {
             <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertCircle className="w-8 h-8 text-red-400" />
             </div>
-            <h1 className="text-2xl font-bold auth-text mb-2">Invalid Invitation</h1>
+            <h1 className="text-2xl font-medium tracking-tight auth-text mb-2">Invalid Invitation</h1>
             <p className="auth-text-muted mb-6">{tokenError}</p>
             <ActionButton
               label="Go to Login"
@@ -330,7 +330,7 @@ export const InvitationAcceptancePage = () => {
               className="relative"
             >
 
-              <h1 className="text-4xl font-bold auth-text mb-4 relative">You&apos;re Invited!</h1>
+              <h1 className="text-4xl font-medium tracking-tight auth-text mb-4 relative">You&apos;re Invited!</h1>
               
               {/* Invitation Details Card */}
               <div className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6 mb-6">
@@ -340,10 +340,10 @@ export const InvitationAcceptancePage = () => {
                   </div>
                 </div>
                 
-                <h2 className="text-xl font-semibold auth-text mb-2">{invitation.organizationName}</h2>
+                <h2 className="text-xl font-medium tracking-tight auth-text mb-2">{invitation.organizationName}</h2>
                 <p className="auth-text-muted text-sm mb-4">
                   {invitation.inviterName} has invited you to join as a{' '}
-                  <span className="font-semibold text-[#14BDEA]">{invitation.roleName}</span>
+                  <span className="font-medium text-[#14BDEA] tracking-tight">{invitation.roleName}</span>
                 </p>
                 
                 <div className="flex items-center justify-center space-x-4 text-xs auth-text-muted">

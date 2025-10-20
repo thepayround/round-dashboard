@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import type { LucideIcon} from 'lucide-react';
-import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from 'lucide-react'
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { ReactNode} from 'react';
 import { memo } from 'react'
@@ -159,13 +159,13 @@ const CardComponent = ({
               </div>
             )}
             {trend && (
-              <div className={`flex items-center gap-1 ${getTrendColor(trend.direction)} text-sm font-medium`}>
+              <div className={`flex items-center gap-1 ${getTrendColor(trend.direction)} text-sm font-normal tracking-tight`}>
                 <TrendIcon className="w-4 h-4" />
                 {trend.value}
               </div>
             )}
           </div>
-          <h3 className="text-2xl font-bold text-white mb-1">
+          <h3 className="text-2xl font-medium text-white mb-1 tracking-tight">
             {typeof value === 'number' ? value.toLocaleString() : value}
           </h3>
           <p className="text-sm text-[#a3a3a3]">{title}</p>
@@ -185,7 +185,7 @@ const CardComponent = ({
                 </div>
               )}
             </div>
-            <h3 className={`text-base font-semibold text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-2`}>
+            <h3 className={`text-base font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-2 tracking-tight`}>
               {title}
             </h3>
             <p className="text-[#a3a3a3] text-sm leading-relaxed">
@@ -200,7 +200,7 @@ const CardComponent = ({
               </div>
             )}
             <div className="flex-1">
-              <h3 className={`text-base font-semibold text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-1`}>
+              <h3 className={`text-base font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-1 tracking-tight`}>
                 {title}
               </h3>
               <p className="text-[#a3a3a3] text-sm">
@@ -221,10 +221,10 @@ const CardComponent = ({
           <div className="min-w-0 flex-1">
             <p className="text-[#a3a3a3] text-xs mb-1">{title}</p>
             {value && (
-              <p className="text-lg font-semibold text-white">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+              <p className="text-lg font-medium text-white tracking-tight">{typeof value === 'number' ? value.toLocaleString() : value}</p>
             )}
             {trend && (
-              <p className={`text-xs font-medium ${getTrendColor(trend.direction)} mt-1`}>
+              <p className={`text-xs font-normal ${getTrendColor(trend.direction)} mt-1 tracking-tight`}>
                 {trend.value}{trend.label && ` ${trend.label}`}
               </p>
             )}
@@ -239,7 +239,7 @@ const CardComponent = ({
               <Icon className={`w-8 h-8 ${colorConfig.iconColor}`} />
             </div>
           )}
-          <h3 className="text-base font-semibold text-white mb-2">{title}</h3>
+          <h3 className="text-base font-normal tracking-tight text-white mb-2 tracking-tight">{title}</h3>
           {description && (
             <p className="text-[#a3a3a3] text-sm">{description}</p>
           )}

@@ -224,7 +224,7 @@ const NavigationItem = memo(({
         )}
         
         {!isCollapsed && item.badge && (
-          <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
+          <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
             {item.badge}
           </span>
         )}
@@ -255,7 +255,7 @@ const NavigationItem = memo(({
           <div className="flex items-center justify-between flex-1 overflow-hidden">
             <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
             {item.badge && (
-              <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
+              <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
                 {item.badge}
               </span>
             )}
@@ -848,7 +848,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               {/* User Avatar */}
               <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
                 {state.user ? (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white text-sm font-medium">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white text-sm font-normal tracking-tight">
                     {getInitials(state.user.firstName, state.user.lastName)}
                   </div>
                 ) : (
@@ -861,7 +861,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               {/* User Info - Only show when expanded */}
               {!isCollapsed && state.user && (
                 <div className="flex-1 text-left overflow-hidden">
-                  <div className="font-medium text-sm text-white truncate">
+                  <div className="font-normal text-sm text-white truncate tracking-tight">
                     {state.user.firstName?.trim() && state.user.lastName?.trim()
                       ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
                       : state.user.firstName?.trim() || state.user.email || 'User'}
@@ -915,7 +915,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           >
             {hoveredTooltip.isUser ? (
               <div>
-                <div className="font-semibold mb-2 text-white">
+                <div className="font-medium mb-2 text-white tracking-tight">
                   {hoveredTooltip.label}
                 </div>
                 <div className="text-gray-300 text-[11px] leading-relaxed space-y-1">
@@ -953,7 +953,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">Keyboard Shortcuts</h3>
+                <h3 className="text-lg font-medium text-white tracking-tight">Keyboard Shortcuts</h3>
                 <button
                   onClick={() => setShowShortcuts(false)}
                   className="text-gray-400 hover:text-white transition-colors"
@@ -965,7 +965,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               
               <div className="space-y-4 text-sm">
                 <div>
-                  <h4 className="text-white font-medium mb-2">Navigation</h4>
+                  <h4 className="text-white font-normal mb-2 tracking-tight">Navigation</h4>
                   <div className="space-y-1 text-[#a3a3a3]">
                     <div className="flex justify-between">
                       <span>Dashboard</span>

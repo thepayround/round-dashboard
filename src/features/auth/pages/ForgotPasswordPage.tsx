@@ -143,7 +143,7 @@ export const ForgotPasswordPage = () => {
             >
               {!isSuccess ? (
                 <>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
                     Forgot Password?
                   </h1>
                   <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
@@ -167,7 +167,7 @@ export const ForgotPasswordPage = () => {
                       />
                     </svg>
                   </div>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
                     Check Your Email
                   </h1>
                   <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">

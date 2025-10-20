@@ -42,7 +42,7 @@ export const UserInfoStep = ({
         </motion.div>
 
         <div>
-          <h2 className="text-lg font-bold text-white mb-2">User Information</h2>
+          <h2 className="text-lg font-medium tracking-tight text-white mb-2">User Information</h2>
           <p className="text-gray-400 text-sm">
             {isPrePopulated
               ? 'Your information has been automatically filled'

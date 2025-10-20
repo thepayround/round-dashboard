@@ -216,7 +216,7 @@ export const CreateCouponModalEnhanced = ({
                 <Tag className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold auth-text">Create New Coupon</h2>
+                <h2 className="text-2xl font-medium tracking-tight auth-text">Create New Coupon</h2>
                 <p className="auth-text-muted">Step {step} of {steps.length}: {steps[step - 1].title}</p>
               </div>
             </div>
@@ -251,7 +251,7 @@ export const CreateCouponModalEnhanced = ({
                         <stepItem.icon className="w-4 h-4" />
                       )}
                     </div>
-                    <span className="text-sm font-medium hidden sm:inline">
+                    <span className="text-sm font-normal tracking-tight hidden sm:inline">
                       {stepItem.title}
                     </span>
                   </div>
@@ -270,11 +270,11 @@ export const CreateCouponModalEnhanced = ({
           <div className="p-6">
             {step === 1 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Basic Coupon Information</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Basic Coupon Information</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="coupon-name" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="coupon-name" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Coupon Name *
                     </label>
                     <input
@@ -288,7 +288,7 @@ export const CreateCouponModalEnhanced = ({
                   </div>
 
                   <div>
-                    <label htmlFor="coupon-code" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="coupon-code" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Coupon Code *
                     </label>
                     <div className="flex space-x-2">
@@ -309,7 +309,7 @@ export const CreateCouponModalEnhanced = ({
                 </div>
 
                 <div>
-                  <label htmlFor="coupon-description" className="block text-sm font-medium auth-text mb-2">
+                  <label htmlFor="coupon-description" className="block text-sm font-normal tracking-tight auth-text mb-2">
                     Description
                   </label>
                   <textarea
@@ -323,7 +323,7 @@ export const CreateCouponModalEnhanced = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="coupon-valid-from" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="coupon-valid-from" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Valid From *
                     </label>
                     <input
@@ -336,7 +336,7 @@ export const CreateCouponModalEnhanced = ({
                   </div>
 
                   <div>
-                    <label htmlFor="coupon-valid-until" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="coupon-valid-until" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Valid Until
                     </label>
                     <input
@@ -363,7 +363,7 @@ export const CreateCouponModalEnhanced = ({
                       aria-label="Stackable with other coupons - Allow this coupon to be combined with other active coupons"
                     />
                     <div>
-                      <span className="text-sm font-medium auth-text">Stackable with other coupons</span>
+                      <span className="text-sm font-normal tracking-tight auth-text">Stackable with other coupons</span>
                       <p className="text-xs auth-text-muted">
                         Allow this coupon to be combined with other active coupons
                       </p>
@@ -379,7 +379,7 @@ export const CreateCouponModalEnhanced = ({
                       aria-label="Auto-apply for eligible customers - Automatically apply this coupon for customers who meet the criteria"
                     />
                     <div>
-                      <span className="text-sm font-medium auth-text">Auto-apply for eligible customers</span>
+                      <span className="text-sm font-normal tracking-tight auth-text">Auto-apply for eligible customers</span>
                       <p className="text-xs auth-text-muted">
                         Automatically apply this coupon for customers who meet the criteria
                       </p>
@@ -391,11 +391,11 @@ export const CreateCouponModalEnhanced = ({
 
             {step === 2 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Discount Configuration</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Discount Configuration</h3>
                 
                 {/* Discount Type Selection */}
                 <div className="space-y-4">
-                  <div className="block text-sm font-medium auth-text mb-2">
+                  <div className="block text-sm font-normal tracking-tight auth-text mb-2">
                     Discount Type *
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -425,7 +425,7 @@ export const CreateCouponModalEnhanced = ({
                 {/* Discount Value */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="discount-value" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="discount-value" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       {formData.discountType === 'percentage' ? 'Discount Percentage (%)' : 'Discount Amount ($)'} *
                     </label>
                     <input
@@ -442,7 +442,7 @@ export const CreateCouponModalEnhanced = ({
                   </div>
 
                   <div>
-                    <div className="block text-sm font-medium auth-text mb-2">
+                    <div className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Duration Type *
                     </div>
                     <UiDropdown
@@ -461,7 +461,7 @@ export const CreateCouponModalEnhanced = ({
                 {/* Duration Period (if limited) */}
                 {formData.durationType === 'limited_period' && (
                   <div>
-                    <label htmlFor="duration-cycles" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="duration-cycles" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Number of Billing Cycles *
                     </label>
                     <input
@@ -485,7 +485,7 @@ export const CreateCouponModalEnhanced = ({
                 {/* Redemption Limits */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="max-redemptions" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="max-redemptions" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Maximum Total Redemptions
                     </label>
                     <input
@@ -503,7 +503,7 @@ export const CreateCouponModalEnhanced = ({
                   </div>
 
                   <div>
-                    <label htmlFor="max-redemptions-per-customer" className="block text-sm font-medium auth-text mb-2">
+                    <label htmlFor="max-redemptions-per-customer" className="block text-sm font-normal tracking-tight auth-text mb-2">
                       Maximum Redemptions per Customer
                     </label>
                     <input
@@ -525,14 +525,14 @@ export const CreateCouponModalEnhanced = ({
 
             {step === 3 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Coupon Restrictions</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Coupon Restrictions</h3>
                 
                 {/* Order Value Restrictions */}
                 <div className="glass-card p-6">
                   <h4 className="text-lg font-medium auth-text mb-4">Order Value Restrictions</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="min-order-value" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="min-order-value" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Minimum Order Value ($)
                       </label>
                       <input
@@ -554,7 +554,7 @@ export const CreateCouponModalEnhanced = ({
                     </div>
 
                     <div>
-                      <label htmlFor="max-discount-amount" className="block text-sm font-medium auth-text mb-2">
+                      <label htmlFor="max-discount-amount" className="block text-sm font-normal tracking-tight auth-text mb-2">
                         Maximum Discount Amount ($)
                       </label>
                       <input
@@ -592,7 +592,7 @@ export const CreateCouponModalEnhanced = ({
                         aria-label="First-time customers only - Restrict this coupon to customers making their first purchase"
                       />
                       <div>
-                        <span className="text-sm font-medium auth-text">First-time customers only</span>
+                        <span className="text-sm font-normal tracking-tight auth-text">First-time customers only</span>
                         <p className="text-xs auth-text-muted">
                           Restrict this coupon to customers making their first purchase
                         </p>
@@ -637,7 +637,7 @@ export const CreateCouponModalEnhanced = ({
 
             {step === 4 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Customer Eligibility</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Customer Eligibility</h3>
                 
                 <div className="glass-card p-6">
                   <h4 className="text-lg font-medium auth-text mb-4">Eligibility Settings</h4>
@@ -659,7 +659,7 @@ export const CreateCouponModalEnhanced = ({
                         aria-label="All customers - Make this coupon available to all customers"
                       />
                       <div>
-                        <span className="text-sm font-medium auth-text">All customers</span>
+                        <span className="text-sm font-normal tracking-tight auth-text">All customers</span>
                         <p className="text-xs auth-text-muted">
                           Make this coupon available to all customers
                         </p>
@@ -682,7 +682,7 @@ export const CreateCouponModalEnhanced = ({
                         aria-label="Specific customers - Limit this coupon to specific customer segments or individual customers"
                       />
                       <div>
-                        <span className="text-sm font-medium auth-text">Specific customers or segments</span>
+                        <span className="text-sm font-normal tracking-tight auth-text">Specific customers or segments</span>
                         <p className="text-xs auth-text-muted">
                           Restrict to specific customer IDs or segments
                         </p>
@@ -783,7 +783,7 @@ export const CreateCouponModalEnhanced = ({
 
             {step === 5 && (
               <div className="space-y-6">
-                <h3 className="text-xl font-semibold auth-text mb-4">Review Coupon Details</h3>
+                <h3 className="text-xl font-medium tracking-tight auth-text mb-4">Review Coupon Details</h3>
                 
                 {/* Coupon Summary */}
                 <div className="glass-card p-6">

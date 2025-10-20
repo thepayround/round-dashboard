@@ -24,7 +24,7 @@ export const BillingSection: React.FC = () => (
             <CreditCard className="w-4 h-4 text-green-400" />
           </div>
           <div className="flex-1">
-            <h2 className="text-xs font-medium text-white mb-1">Billing & Payments</h2>
+            <h2 className="text-xs font-normal tracking-tight text-white mb-1">Billing & Payments</h2>
             <p className="text-[11px] text-gray-400">
               Manage your payment methods and billing information
             </p>
@@ -35,11 +35,11 @@ export const BillingSection: React.FC = () => (
         <div className="p-3 bg-gradient-to-r from-blue-500/5 to-purple-500/5 border border-blue-500/20 rounded-lg mb-4">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <h3 className="text-xs font-medium text-white mb-0.5">Professional Plan</h3>
+              <h3 className="text-xs font-normal tracking-tight text-white mb-0.5">Professional Plan</h3>
               <p className="text-[10px] text-gray-400">Billed monthly • Next billing: March 15, 2024</p>
             </div>
             <div className="text-right">
-              <div className="text-sm font-medium text-white">$49</div>
+              <div className="text-sm font-normal tracking-tight text-white">$49</div>
               <div className="text-[10px] text-gray-400">per month</div>
             </div>
           </div>
@@ -54,7 +54,7 @@ export const BillingSection: React.FC = () => (
       <Card animate={false} padding="md">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-xs font-medium text-white mb-1">Payment Methods</h3>
+            <h3 className="text-xs font-normal tracking-tight text-white mb-1">Payment Methods</h3>
             <p className="text-[11px] text-gray-400">Manage your saved payment methods</p>
           </div>
           <ActionButton
@@ -112,7 +112,7 @@ export const BillingSection: React.FC = () => (
                 <Building className="w-4 h-4 text-purple-400" />
               </div>
               <div>
-                <h3 className="text-xs font-medium text-white">Billing Address</h3>
+                <h3 className="text-xs font-normal tracking-tight text-white">Billing Address</h3>
                 <p className="text-[11px] text-gray-400">Your billing information</p>
               </div>
             </div>
@@ -143,7 +143,7 @@ export const BillingSection: React.FC = () => (
               <Download className="w-4 h-4 text-orange-400" />
             </div>
             <div>
-              <h3 className="text-xs font-medium text-white">Invoice Preferences</h3>
+              <h3 className="text-xs font-normal tracking-tight text-white">Invoice Preferences</h3>
               <p className="text-[11px] text-gray-400">How you receive invoices</p>
             </div>
           </div>
@@ -155,7 +155,7 @@ export const BillingSection: React.FC = () => (
                   <Download className="w-4 h-4 text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-white">Email invoices</p>
+                  <p className="text-xs font-normal tracking-tight text-white">Email invoices</p>
                   <p className="text-[11px] text-gray-400">Receive invoices via email</p>
                 </div>
               </div>

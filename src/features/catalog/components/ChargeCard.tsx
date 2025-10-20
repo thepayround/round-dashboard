@@ -163,7 +163,7 @@ export const ChargeCard = ({
                 <div className="flex items-center space-x-3 mb-1">
                   <Link 
                     to={`/catalog/charges/${charge.id}`}
-                    className="text-xl font-bold auth-text hover:text-[#FFC107] transition-colors"
+                    className="text-xl font-medium tracking-tight auth-text hover:text-[#FFC107] transition-colors"
                   >
                     {charge.name}
                   </Link>
@@ -194,7 +194,7 @@ export const ChargeCard = ({
             {/* Price Display */}
             <div className="flex items-center space-x-4">
               <div className="text-right">
-                <div className="text-2xl font-bold text-[#42E695]">
+                <div className="text-2xl font-medium tracking-tight text-[#42E695]">
                   {formatPrice(charge.pricePoints[0])}
                 </div>
                 <div className="text-sm auth-text-muted">
@@ -377,7 +377,7 @@ export const ChargeCard = ({
 
         {/* Content */}
         <Link to={`/catalog/charges/${charge.id}`} className="block mb-4">
-          <h3 className="text-xl font-bold auth-text mb-2 group-hover:text-[#FFC107] transition-colors">
+          <h3 className="text-xl font-medium tracking-tight auth-text mb-2 group-hover:text-[#FFC107] transition-colors">
             {charge.name}
           </h3>
           <p className="auth-text-muted text-sm line-clamp-2">
@@ -388,7 +388,7 @@ export const ChargeCard = ({
         {/* Price Display */}
         <div className="mb-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-[#42E695] mb-1">
+            <div className="text-2xl font-medium tracking-tight text-[#42E695] mb-1">
               {formatPrice(charge.pricePoints[0])}
             </div>
             <div className="text-xs auth-text-muted">
@@ -407,7 +407,7 @@ export const ChargeCard = ({
               <Package className="w-4 h-4 text-[#32A1E4]" />
               <span className="text-xs auth-text-muted">Model</span>
             </div>
-            <div className="text-sm font-bold auth-text">{getChargeModelLabel(charge.chargeModel)}</div>
+            <div className="text-sm font-normal tracking-tight tracking-tight auth-text">{getChargeModelLabel(charge.chargeModel)}</div>
           </div>
           
           <div className="p-3 bg-black/20 rounded-lg text-center">
@@ -415,18 +415,18 @@ export const ChargeCard = ({
               <DollarSign className="w-4 h-4 text-[#42E695]" />
               <span className="text-xs auth-text-muted">Prices</span>
             </div>
-            <div className="text-lg font-bold text-[#42E695]">{charge.pricePoints?.length || 0}</div>
+            <div className="text-lg font-medium tracking-tight text-[#42E695]">{charge.pricePoints?.length || 0}</div>
           </div>
         </div>
 
         {/* Footer */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[charge.status]}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-normal tracking-tight ${statusColors[charge.status]}`}>
               <StatusIcon className="w-3 h-3 inline mr-1" />
               {charge.status}
             </span>
-            <span className={`px-3 py-1 rounded-full text-xs font-medium border ${typeColors[charge.chargeType]}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-normal tracking-tight border ${typeColors[charge.chargeType]}`}>
               {getTypeLabel(charge.chargeType)}
             </span>
           </div>

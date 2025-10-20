@@ -143,7 +143,7 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60"
             onClick={onClose}
           />
           
@@ -154,15 +154,15 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative w-full max-w-3xl max-h-[90vh] overflow-hidden"
           >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl">
+            <div className="bg-[#171719] border border-[#25262a] rounded-lg shadow-2xl">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-white/10">
+              <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center">
                     <MessageSquare className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-white">Customer Notes</h2>
+                    <h2 className="text-xl font-medium tracking-tight text-white">Customer Notes</h2>
                     <p className="text-sm text-white/70">{customerName} - {notes.length} notes</p>
                   </div>
                 </div>
@@ -181,7 +181,7 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
               <div className="space-y-4">
                 <div className="flex items-center gap-3 mb-3">
                   <Plus className="w-4 h-4 text-[#14BDEA]" />
-                  <span className="text-sm font-medium text-white">Add New Note</span>
+                  <span className="text-sm font-normal tracking-tight text-white">Add New Note</span>
                 </div>
                 
                 <textarea
@@ -250,7 +250,7 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                             <User className="w-3 h-3 text-white/70" />
                           </div>
                           <div>
-                            <span className="text-sm font-medium text-white">{note.author}</span>
+                            <span className="text-sm font-normal tracking-tight text-white">{note.author}</span>
                             <div className="flex items-center gap-2 mt-1">
                               <Calendar className="w-3 h-3 text-white/50" />
                               <span className="text-xs text-white/50">{formatDate(note.createdDate)}</span>

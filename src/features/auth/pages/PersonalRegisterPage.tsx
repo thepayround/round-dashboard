@@ -228,7 +228,7 @@ export const PersonalRegisterPage = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="relative"
             >
-              <h1 className="text-xl md:text-2xl lg:text-xl font-bold auth-text mb-2 md:mb-3 lg:mb-2 relative">Create Personal Account</h1>
+              <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">Create Personal Account</h1>
               <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">Join the Round community</p>
             </motion.div>
           </div>
@@ -441,7 +441,7 @@ export const PersonalRegisterPage = () => {
               type="button"
               className="w-full h-11 md:h-9 px-4 py-2 
                          bg-white/8 backdrop-blur-sm border border-white/15 rounded-lg
-                         text-white font-semibold text-sm
+                         text-white font-normal tracking-tight text-sm
                          hover:bg-white/12 hover:border-white/20
                          transition-all duration-200 ease-out
                          flex items-center justify-center gap-2.5

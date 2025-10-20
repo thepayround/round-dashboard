@@ -8,7 +8,7 @@ import { cn } from '@/shared/utils/cn'
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', isLoading, children, ...props }, ref) => {
     const baseClasses =
-      'inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed'
+      'inline-flex items-center justify-center font-normal tracking-tight transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed'
 
     const variants = {
       primary: 'bg-gradient-primary text-white hover:shadow-lg transform hover:scale-105',
