@@ -154,7 +154,7 @@ export const AddressForm = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6 space-y-8"
+      className="bg-white/4 border border-white/12 rounded-lg p-6 space-y-8"
     >
       {/* Billing Address Section */}
       <div className="space-y-6">

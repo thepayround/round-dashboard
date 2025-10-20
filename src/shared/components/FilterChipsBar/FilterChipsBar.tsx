@@ -36,7 +36,7 @@ export const FilterChipsBar: React.FC<FilterChipsBarProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       className={`flex flex-wrap items-center gap-2 p-4
-                 bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg
+                 bg-white/5 border border-white/10 rounded-lg
                  ${className}`}
     >
       <span className="text-sm text-white/60 mr-1">Active filters:</span>

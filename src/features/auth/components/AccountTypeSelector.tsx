@@ -85,14 +85,14 @@ export const AccountTypeSelector = ({
           />
 
           {/* Card */}
-          <div className="relative backdrop-blur-xl rounded-lg p-8 border transition-all duration-500 bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20">
+          <div className="relative rounded-lg p-8 border transition-all duration-500 bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20">
             {/* Icon with gradient background */}
             <div className="flex justify-center mb-6">
               <div
                 className={`
                   w-20 h-20 rounded-lg flex items-center justify-center relative overflow-hidden
                   ${accountType.iconBg}
-                  backdrop-blur-sm border border-white/20
+                  border border-white/20
                 `}
               >
                 <accountType.icon className="w-10 h-10 text-white drop-shadow-lg" />

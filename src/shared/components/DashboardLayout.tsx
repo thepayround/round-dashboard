@@ -117,7 +117,7 @@ const CatalogSubItem = memo(({
         ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
         : 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
     }
-    return 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
+    return 'text-[#a3a3a3] hover:text-white'
   }
 
   return (
@@ -198,7 +198,7 @@ const NavigationItem = memo(({
           ${
             isParentActive(item)
               ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
-              : 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
+              : 'text-[#a3a3a3] hover:text-white'
           }
           ${isCollapsed ? 'justify-center px-0' : 'px-6'}
           ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
@@ -224,7 +224,7 @@ const NavigationItem = memo(({
         )}
         
         {!isCollapsed && item.badge && (
-          <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
+          <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-[#D417C8] text-white rounded-full">
             {item.badge}
           </span>
         )}
@@ -239,7 +239,7 @@ const NavigationItem = memo(({
           ${
             isParentActive(item)
               ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
-              : 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
+              : 'text-[#a3a3a3] hover:text-white'
           }
           ${isCollapsed ? 'justify-center px-0' : 'px-6'}
           ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
@@ -255,7 +255,7 @@ const NavigationItem = memo(({
           <div className="flex items-center justify-between flex-1 overflow-hidden">
             <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
             {item.badge && (
-              <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-full">
+              <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-[#D417C8] text-white rounded-full">
                 {item.badge}
               </span>
             )}
@@ -672,12 +672,12 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           x: (isMobile || isTablet) && isCollapsed ? -80 : 0
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="fixed left-0 top-0 h-full z-50 lg:z-base bg-[#070708]"
+        className="fixed left-0 top-0 h-full z-50 lg:z-bas"
       >
         {/* Logo Section - Clickable */}
         <Link
           to="/dashboard"
-          className="flex items-center justify-center flex-shrink-0 hover:bg-[#101011] transition-colors duration-200 cursor-pointer"
+          className="flex items-center justify-center flex-shrink-0 transition-colors duration-200 cursor-pointer"
           style={{ height: '97px' }}
         >
           {!isCollapsed ? (
@@ -736,7 +736,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                 ${
                   isActive(item.href)
                     ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
-                    : 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
+                    : 'text-[#a3a3a3] hover:text-white'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                 ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id)
@@ -780,7 +780,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                     ${
                       isActive('/user-settings')
                         ? 'bg-[#D417C8]/10 text-white border border-[#D417C8]/20'
-                        : 'text-[#a3a3a3] hover:text-white hover:bg-[#171719]'
+                        : 'text-[#a3a3a3] hover:text-white'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                   `}
@@ -805,7 +805,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                   onMouseLeave={handleTooltipLeave}
                   className={`
                     group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9 w-full
-                    text-gray-400 hover:text-red-400 hover:bg-red-400/10
+                    text-gray-400 hover:text-red-400
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                   `}
                   aria-label="Logout"
@@ -838,9 +838,9 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               onMouseLeave={handleTooltipLeave}
               className={`
                 group relative flex items-center rounded-lg transition-all duration-200 w-full
-                text-[#a3a3a3] hover:text-white hover:bg-[#171719]
+                text-[#a3a3a3] hover:text-white
                 ${isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
-                ${showProfileDropdown ? 'bg-[#171719] text-white' : ''}
+                ${showProfileDropdown ? 'text-white' : ''}
               `}
               aria-label="User profile menu"
               aria-expanded={showProfileDropdown}
@@ -848,7 +848,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               {/* User Avatar */}
               <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
                 {state.user ? (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white text-sm font-normal tracking-tight">
+                  <div className="w-8 h-8 rounded-full bg-[#D417C8] flex items-center justify-center text-white text-sm font-normal tracking-tight">
                     {getInitials(state.user.firstName, state.user.lastName)}
                   </div>
                 ) : (

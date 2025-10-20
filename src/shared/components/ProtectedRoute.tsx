@@ -77,7 +77,7 @@ export const LoadingScreen = () => (
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-        className="w-20 h-20 mx-auto rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+        className="w-20 h-20 mx-auto rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center"
       >
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D417C8] to-[#14BDEA]" />
       </motion.div>

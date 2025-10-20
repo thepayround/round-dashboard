@@ -87,7 +87,7 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
     >
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Member Info */}
-        <div className="bg-white/[0.06] backdrop-blur-sm border border-white/15 rounded-lg p-4">
+        <div className="bg-white/[0.06] border border-white/15 rounded-lg p-4">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-gradient-to-br from-[#D417C8] to-[#14BDEA] rounded-lg flex items-center justify-center">
               <span className="text-white font-medium text-lg">
@@ -118,7 +118,7 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
             Select New Role
           </div>
           <div className="mb-3">
-            <span className="text-xs text-gray-400 bg-white/[0.08] px-2 py-1 rounded-lg border border-white/15 backdrop-blur-sm">
+            <span className="text-xs text-gray-400 bg-white/[0.08] px-2 py-1 rounded-lg border border-white/15">
               Current: <span className="text-gray-300 font-medium">{member.roleName}</span>
             </span>
           </div>
@@ -134,7 +134,7 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
         {/* Warning Message for Self-Edit */}
         {isEditingSelf && (
           <div className="relative">
-            <div className="p-3 bg-amber-500/15 border border-amber-500/25 rounded-lg text-amber-400 text-sm backdrop-blur-sm">
+            <div className="p-3 bg-amber-500/15 border border-amber-500/25 rounded-lg text-amber-400 text-sm">
               <div className="flex items-center space-x-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
                 <span>You cannot change your own role. Ask another administrator to update your role.</span>
@@ -146,7 +146,7 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
         {/* Error Message */}
         {error && (
           <div className="relative">
-            <div className="p-3 bg-red-500/15 border border-red-500/25 rounded-lg text-red-400 text-sm backdrop-blur-sm">
+            <div className="p-3 bg-red-500/15 border border-red-500/25 rounded-lg text-red-400 text-sm">
               {error}
             </div>
           </div>

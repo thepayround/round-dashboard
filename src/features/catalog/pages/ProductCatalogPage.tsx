@@ -320,7 +320,7 @@ export const ProductCatalogPage = () => {
             title="Product Families"
             accent="accent"
             actions={
-              <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg backdrop-blur-sm">
+              <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg">
                 <span className="text-gray-300 font-medium">{filteredCount} of {totalCount} families</span>
               </div>
             }

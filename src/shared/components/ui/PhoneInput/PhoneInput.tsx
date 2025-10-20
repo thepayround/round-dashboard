@@ -432,7 +432,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9998] bg-black/5 backdrop-blur-[1px]"
+        className="fixed inset-0 z-[9998] bg-black/5"
         onMouseDown={(e) => {
           if (e.target === e.currentTarget) {
             setIsDropdownOpen(false)
@@ -460,7 +460,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         }}
       >
         <div className="
-          bg-white/[0.04] backdrop-blur-[32px] border border-white/10 
+          bg-white/[0.04] border border-white/10 
           rounded-lg shadow-2xl overflow-hidden
           max-h-80 flex flex-col
           bg-gradient-to-br from-white/[0.08] to-white/[0.02]
@@ -538,7 +538,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         // Match auth-input responsive height exactly
         "h-[42px] md:h-9",
         // Use consistent auth-input styling
-        "bg-white/[0.06] backdrop-blur-[24px] border",
+        "bg-white/[0.06] border",
         (() => {
           // Exactly match auth-input CSS cascade: .auth-input:focus then .auth-input-error:focus
           if ((isFocused || isDropdownOpen) && hasError) {

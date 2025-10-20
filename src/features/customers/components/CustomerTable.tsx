@@ -340,7 +340,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
 
       {/* Loading overlay */}
       {loading && (
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
           <div className="text-white/60">Loading...</div>
         </div>
       )}

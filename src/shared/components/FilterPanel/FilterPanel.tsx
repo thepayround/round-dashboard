@@ -131,7 +131,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             exit={{ opacity: 0 }}
             transition={backdropTransition}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none z-[60]"
+            className="fixed inset-0 bg-black/60 md:bg-transparent z-[60]"
             aria-hidden="true"
           />
 
@@ -143,7 +143,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             exit={{ x: '100%' }}
             transition={panelTransition}
             className="fixed inset-y-0 right-0 w-full md:w-[400px] lg:w-[450px]
-                     bg-white/8 backdrop-blur-xl 
+                     bg-white/8
                      border-l border-white/15
                      shadow-2xl shadow-black/50
                      z-[70]
@@ -153,7 +153,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             aria-labelledby="filter-panel-title"
           >
             {/* Header */}
-            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-white/10 sticky top-0 bg-white/5 backdrop-blur-xl z-10">
+            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-white/10 sticky top-0 bg-white/5 z-10">
               <h2 
                 id="filter-panel-title" 
                 className="text-xl font-medium tracking-tight text-white"

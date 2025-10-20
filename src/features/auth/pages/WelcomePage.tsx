@@ -54,7 +54,7 @@ export const WelcomePage = () => {
               type="button"
               onClick={() => navigate('/login')}
               className="w-full p-6 rounded-lg border transition-all duration-200
-                         bg-white/4 backdrop-blur-xl hover:bg-white/8
+                         bg-white/4 hover:bg-white/8
                          border-white/10 hover:border-white/20
                          group relative overflow-hidden"
               whileHover={{ scale: 1.02 }}
@@ -79,7 +79,7 @@ export const WelcomePage = () => {
               type="button"
               onClick={() => navigate('/login/business')}
               className="w-full p-6 rounded-lg border transition-all duration-200
-                         bg-white/4 backdrop-blur-xl hover:bg-white/8
+                         bg-white/4 hover:bg-white/8
                          border-white/10 hover:border-white/20
                          group relative overflow-hidden"
               whileHover={{ scale: 1.02 }}

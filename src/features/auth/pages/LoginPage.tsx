@@ -280,7 +280,7 @@ export const LoginPage = () => {
             <button
               type="button"
               className="w-full h-11 md:h-9 px-4 py-1.5 
-                         bg-white/6 backdrop-blur-xl border border-white/10 rounded-lg
+                         bg-white/6 border border-white/10 rounded-lg
                          text-white font-light text-xs
                          hover:bg-white/8 hover:border-white/15
                          transition-all duration-150 ease-out

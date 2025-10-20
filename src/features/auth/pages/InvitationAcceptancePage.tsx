@@ -333,7 +333,7 @@ export const InvitationAcceptancePage = () => {
               <h1 className="text-4xl font-medium tracking-tight auth-text mb-4 relative">You&apos;re Invited!</h1>
               
               {/* Invitation Details Card */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 p-6 mb-6">
+              <div className="bg-white/5 rounded-lg border border-white/10 p-6 mb-6">
                 <div className="flex items-center justify-center mb-4">
                   <div className="w-12 h-12 bg-[#14BDEA]/20 rounded-full flex items-center justify-center">
                     <Building className="w-6 h-6 text-[#14BDEA]" />

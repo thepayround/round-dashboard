@@ -38,7 +38,7 @@ export const ErrorToast = ({
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="fixed top-4 right-4 z-toast max-w-md"
         >
-          <div className="bg-red-500/10 backdrop-blur-xl border border-red-500/20 rounded-lg p-4 shadow-2xl">
+          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 shadow-2xl">
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
                 <AlertTriangle className="w-6 h-6 text-red-400" />

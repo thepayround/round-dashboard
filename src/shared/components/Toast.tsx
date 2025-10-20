@@ -76,7 +76,7 @@ export const Toast = ({
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="fixed top-4 right-4 z-toast max-w-md"
         >
-          <div className={`${styles.background} backdrop-blur-xl border ${styles.border} rounded-lg p-4 shadow-2xl`}>
+          <div className={`${styles.background} border ${styles.border} rounded-lg p-4 shadow-2xl`}>
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
                 <IconComponent className={`w-6 h-6 ${styles.iconColor}`} />

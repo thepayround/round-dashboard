@@ -30,7 +30,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#BD2CD0]/20 to-[#D417C8]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#BD2CD0]/20 to-[#D417C8]/20 border border-white/20 flex items-center justify-center"
         >
           <CreditCard className="w-8 h-8 text-[#BD2CD0]" />
         </motion.div>

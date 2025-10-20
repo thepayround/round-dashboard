@@ -166,7 +166,7 @@ export const ActionMenu = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.15 }}
-            className={`absolute top-full mt-1 z-50 bg-black/90 backdrop-blur-xl border border-white/10 rounded-lg py-1 min-w-[160px] shadow-xl ${positionClasses[position]}`}
+            className={`absolute top-full mt-1 z-50 bg-black/90 border border-white/10 rounded-lg py-1 min-w-[160px] shadow-xl ${positionClasses[position]}`}
             role="menu"
             aria-orientation="vertical"
           >

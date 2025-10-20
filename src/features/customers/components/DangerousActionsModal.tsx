@@ -190,7 +190,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                       <p className="text-white/70">This action will suspend the customer&apos;s account</p>
                     </div>
                     
-                    <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-5 backdrop-blur-sm">
+                    <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-5">
                       <div className="flex items-center gap-3 mb-3">
                         <UserX className="w-5 h-5 text-orange-400" />
                         <h4 className="font-medium text-orange-400 tracking-tight">Account Suspension</h4>
@@ -237,7 +237,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                       <p className="text-white/70">This action cannot be undone</p>
                     </div>
                     
-                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-5 backdrop-blur-sm">
+                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-5">
                       <div className="flex items-center gap-3 mb-3">
                         <Trash2 className="w-5 h-5 text-red-400" />
                         <h4 className="font-medium text-red-400 tracking-tight">Permanent Deletion</h4>

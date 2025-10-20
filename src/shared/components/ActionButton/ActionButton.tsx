@@ -63,15 +63,15 @@ const ActionButton = ({
 
   const variants = {
     primary: `
-      bg-gradient-to-r from-[#D417C8]/60 to-[#14BDEA]/60 backdrop-blur-md
+      bg-[#D417C8]/60
       text-white
       shadow-md shadow-black/10
       hover:shadow-[0_0_12px_rgba(212,23,200,0.25)]
-      hover:from-[#D417C8]/70 hover:to-[#14BDEA]/70
+      hover:bg-[#D417C8]/70
       transition-all duration-200 ease-out
     `,
     secondary: `
-      bg-white/4 backdrop-blur-md
+      bg-white/4
       text-gray-200 hover:text-white
       shadow-md shadow-black/10
       border border-white/8 hover:border-white/15
