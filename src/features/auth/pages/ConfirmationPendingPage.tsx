@@ -91,7 +91,7 @@ export const ConfirmationPendingPage = () => {
             transition={{ delay: 0.8, duration: 0.5, type: 'spring' }}
             className="flex justify-center mb-6"
           >
-            <div className="w-16 h-16 bg-gradient-to-r from-[#D417C8] to-[#14BDEA] rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
               <Mail className="w-8 h-8 text-white" />
             </div>
           </motion.div>
@@ -114,7 +114,7 @@ export const ConfirmationPendingPage = () => {
               Round.
             </p>
             {hasBusinessData && (
-              <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-[#32A1E4]/10 to-[#7767DA]/10 border border-[#32A1E4]/20">
+              <div className="mt-4 p-4 rounded-lg bg-primary/10 border border-accent/20">
                 <p className="text-sm text-[#32A1E4] font-medium">
                   🏢 Your business information has been saved and will be set up automatically after
                   email confirmation.
@@ -128,7 +128,7 @@ export const ConfirmationPendingPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.6 }}
-            className="p-6 rounded-lg bg-gradient-to-r from-[#D417C8]/10 to-[#14BDEA]/10 border border-white/10 mb-8"
+            className="p-6 rounded-lg bg-primary/10 border border-white/10 mb-8"
           >
             <h3 className="text-lg font-medium tracking-tight auth-text mb-4">What to do next:</h3>
             <div className="space-y-3 text-left">

@@ -220,7 +220,7 @@ const CustomerDetailPage: React.FC = () => {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
                   {customer.isBusinessCustomer ? (
                     <Building2 className="w-6 h-6 text-white" />
                   ) : (
@@ -261,7 +261,7 @@ const CustomerDetailPage: React.FC = () => {
               </button>
               <button
                 onClick={() => setIsEditModalOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-lg hover:shadow-lg hover:shadow-[#D417C8]/25 transition-all duration-200"
+                className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:shadow-lg hover:shadow-[#D417C8]/25 transition-all duration-200"
               >
                 <Edit className="w-4 h-4" />
                 <span className="text-sm font-medium">Edit Details</span>
@@ -290,7 +290,7 @@ const CustomerDetailPage: React.FC = () => {
             >
               <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 rounded-xl border border-[#D417C8]/30">
+                  <div className="p-3 bg-primary/20 rounded-xl border border-[#D417C8]/30">
                     {customer.isBusinessCustomer ? (
                       <Building2 className="w-5 h-5 text-[#D417C8]" />
                     ) : (
@@ -405,7 +405,7 @@ const CustomerDetailPage: React.FC = () => {
             >
               <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 rounded-xl border border-[#14BDEA]/30">
+                  <div className="p-3 bg-primary/20 rounded-xl border border-[#14BDEA]/30">
                     <MapPin className="w-5 h-5 text-[#14BDEA]" />
                   </div>
                   <div className="flex-1">
@@ -477,7 +477,7 @@ const CustomerDetailPage: React.FC = () => {
               >
                 <Card padding="lg">
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 rounded-xl border border-[#7767DA]/30">
+                    <div className="p-3 bg-primary/20 rounded-xl border border-[#7767DA]/30">
                       <Tag className="w-5 h-5 text-[#7767DA]" />
                     </div>
                     <div className="flex-1">
@@ -538,7 +538,7 @@ const CustomerDetailPage: React.FC = () => {
             >
               <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-emerald-400/20 rounded-xl border border-emerald-500/30">
+                  <div className="p-3 bg-primary/20 rounded-xl border border-emerald-500/30">
                     <Zap className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div>
@@ -566,7 +566,7 @@ const CustomerDetailPage: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setIsEditModalOpen(true)}
-                    className="w-full flex items-center gap-3 p-3 bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 border border-[#D417C8]/30 rounded-xl hover:from-[#D417C8]/30 hover:to-[#14BDEA]/30 text-left transition-all duration-200 group"
+                    className="w-full flex items-center gap-3 p-3 bg-primary/20 border border-primary/30 rounded-xl hover:bg-primary/30 text-left transition-all duration-200 group"
                   >
                     <Edit className="w-4 h-4 text-[#D417C8] group-hover:text-white" />
                     <span className="text-sm font-normal tracking-tight text-white">Edit Details</span>
@@ -583,7 +583,7 @@ const CustomerDetailPage: React.FC = () => {
             >
               <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-gradient-to-br from-amber-500/20 to-amber-400/20 rounded-xl border border-amber-500/30">
+                  <div className="p-3 bg-warning/20 rounded-xl border border-amber-500/30">
                     <Activity className="w-5 h-5 text-amber-400" />
                   </div>
                   <div>

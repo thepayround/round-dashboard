@@ -66,7 +66,7 @@ const ActionButton = ({
       bg-[#D417C8]/60
       text-white
       shadow-md shadow-black/10
-      hover:shadow-[0_0_12px_rgba(212,23,200,0.25)]
+      hover:shadow-hover
       hover:bg-[#D417C8]/70
       transition-all duration-200 ease-out
     `,
@@ -86,11 +86,11 @@ const ActionButton = ({
       transition-all duration-200 ease-out
     `,
     success: `
-      bg-gradient-to-r from-emerald-600/80 to-green-600/80
+      bg-primary/80
       text-white
       shadow-md shadow-emerald-500/10
       hover:shadow-[0_0_12px_rgba(34,197,94,0.25)]
-      hover:from-emerald-600/90 hover:to-green-600/90
+      hover:brightness-105
       transition-all duration-200 ease-out
     `
   }
@@ -99,7 +99,7 @@ const ActionButton = ({
     rounded-lg inline-flex items-center justify-center
     focus:outline-none
     disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
-    disabled:hover:bg-gradient-to-r disabled:hover:from-white/8 disabled:hover:to-white/4
+    disabled:hover:bg-white/6
     relative isolate overflow-hidden
     group
     ${variants[variant]}

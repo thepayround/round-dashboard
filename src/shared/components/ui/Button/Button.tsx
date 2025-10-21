@@ -11,8 +11,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       'inline-flex items-center justify-center font-normal tracking-tight transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed'
 
     const variants = {
-      primary: 'bg-gradient-primary text-white hover:shadow-lg transform hover:scale-105',
-      secondary: 'bg-gradient-secondary text-white hover:shadow-lg transform hover:scale-105',
+      primary: 'bg-primary text-white hover:shadow-hover hover:brightness-105 active:translate-y-[1px]',
+      secondary: 'bg-secondary text-white hover:shadow-hover hover:brightness-105 active:translate-y-[1px]',
       glass: 'glass-card glass-card-hover text-white',
       outline: 'border-2 border-glass-border bg-transparent text-white hover:bg-glass-hover',
     }

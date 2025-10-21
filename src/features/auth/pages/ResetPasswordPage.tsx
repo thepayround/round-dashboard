@@ -244,7 +244,7 @@ export const ResetPasswordPage = () => {
         >
           <div className="auth-card">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-destructive flex items-center justify-center">
                 <AlertCircle className="w-8 h-8 text-white" />
               </div>
               <h1 className="text-2xl font-medium tracking-tight auth-text mb-4">Invalid Reset Link</h1>
@@ -309,7 +309,7 @@ export const ResetPasswordPage = () => {
                 </>
               ) : (
                 <>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary flex items-center justify-center">
                     <CheckCircle className="w-8 h-8 text-white" />
                   </div>
                   <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">

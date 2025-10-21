@@ -55,88 +55,49 @@ export default {
     // Extend default theme (keeps defaults + adds custom)
     extend: {
       colors: {
-        // Round Brand Colors
-        primary: '#D417C8', // Pink - Primary brand color
-        secondary: '#14BDEA', // Cyan - Secondary brand color
-        accent: '#7767DA', // Purple - Accent color
-
-        white: '#fafafa', // Softer white instead of pure #ffffff
-        gray: {
-          50: '#fafafa',
-          100: '#f5f5f5',
-          200: '#e5e5e5',
-          300: '#d4d4d4',
-          400: '#a1a1aa', // secondary text
-          500: '#71717a', // tertiary text
-          600: '#52525b',
-          700: '#3f3f46',
-          800: '#27272a',
-          900: '#18181b',
+        // Round Brand Design System - Pure Black with Pink/Cyan/Purple
+        bg: {
+          DEFAULT: 'hsl(var(--bg))',        // Pure black #000000
+          subtle: 'hsl(var(--bg-subtle))',  // #0a0a0a
+          raised: 'hsl(var(--bg-raised))',  // #141414
         },
-
-        // Neutral scale
-        'bg-primary': '#000000',
-        'bg-secondary': '#0a0a0a',
-        'bg-tertiary': '#141414',
-        'bg-elevated': '#1a1a1a',
+        fg: {
+          DEFAULT: 'hsl(var(--fg))',        // Almost white
+          muted: 'hsl(var(--fg-muted))',    // Gray
+        },
         
-        'border-subtle': '#262626',
-        'border-default': '#333333',
-        'border-strong': '#404040',
+        // Your Brand Colors
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',        // #D417C8 pink
+          contrast: 'hsl(var(--accent-contrast))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',      // #14BDEA cyan
+          contrast: 'hsl(var(--accent-contrast))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',         // #7767DA purple
+          contrast: 'hsl(var(--accent-contrast))',
+        },
         
-        'text-primary': '#fafafa',
-        'text-secondary': '#a1a1aa',
-        'text-tertiary': '#71717a',
-        'text-disabled': '#52525b',
-
-        // Legacy glass morphism support (deprecated - migrate to solid colors)
-        border: '#333333',
-        'border-light': '#262626',
-        DEFAULT: '#333333',
-
-        // Status colors - solid approach
-        success: {
-          DEFAULT: '#42E695',
-          light: '#3BB2B8',
-          bg: 'rgba(66, 230, 149, 0.1)',
-          text: '#38D39F',
-        },
-        warning: {
-          DEFAULT: '#FFC107',
-          light: '#FF8A00',
-          bg: 'rgba(255, 193, 7, 0.1)',
-          text: '#FF9F0A',
-        },
-        error: {
-          DEFAULT: '#FF4E50',
-          light: '#F44336',
-          bg: 'rgba(244, 67, 54, 0.1)',
-          text: '#FF3B30',
-        },
-        info: {
-          DEFAULT: '#14BDEA',
-          light: '#7767DA',
-          bg: 'rgba(20, 189, 234, 0.1)',
-          text: '#32A1E4',
+        // Semantic colors
+        destructive: 'hsl(var(--destructive))',
+        warning: 'hsl(var(--warning))',
+        success: 'hsl(var(--success))',
+        
+        // UI elements
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        card: 'hsl(var(--card))',
+        
+        // Elevation system
+        elev: {
+          1: 'hsl(var(--elev-1))',
+          2: 'hsl(var(--elev-2))',
         },
       },
-      // Custom background gradients
-      backgroundImage: {
-        // Brand gradients
-        'gradient-primary': 'linear-gradient(135deg, #D417C8 0%, #14BDEA 100%)',
-        'gradient-secondary': 'linear-gradient(135deg, #14BDEA 0%, #7767DA 100%)',
-        'gradient-accent': 'linear-gradient(135deg, #7767DA 0%, #D417C8 100%)',
-
-        // Status gradients
-        'gradient-success': 'linear-gradient(135deg, #42E695 0%, #3BB2B8 100%)',
-        'gradient-warning': 'linear-gradient(135deg, #FFC107 0%, #FF8A00 100%)',
-        'gradient-error': 'linear-gradient(135deg, #FF4E50 0%, #F44336 100%)',
-        'gradient-info': 'linear-gradient(135deg, #14BDEA 0%, #7767DA 100%)',
-
-        // Glass morphism backgrounds
-        'glass-bg':
-          'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
-      },
+      // Minimal - removed gradients per design system
       // Custom font family
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'], // Primary font stack
@@ -162,32 +123,27 @@ export default {
         wider: '0.02em',
         widest: '0.03em',
       },
-      // Custom backdrop blur values for glass effects
-      backdropBlur: {
-        xs: '2px', // Extra small blur
-        sm: '4px', // Small blur
-        md: '8px', // Medium blur
-        lg: '12px', // Large blur
-        xl: '16px', // Extra large blur
-        '2xl': '24px', // 2x large blur
-        '3xl': '40px', // 3x large blur
-      },
-      // Premium box shadows for glass morphism
+      // Dev-SaaS Minimal elevation system (no glass morphism)
       boxShadow: {
-        // Refined glass shadows - more subtle and premium
-        glass: '0 4px 20px 0 rgba(0, 0, 0, 0.15)', // Default premium glass shadow
-        'glass-sm': '0 2px 8px 0 rgba(0, 0, 0, 0.08)', // Small premium shadow
-        'glass-md': '0 4px 12px 0 rgba(0, 0, 0, 0.12)', // Medium premium shadow
-        'glass-lg': '0 8px 24px 0 rgba(0, 0, 0, 0.18)', // Large premium shadow
-        'glass-xl': '0 12px 32px 0 rgba(0, 0, 0, 0.22)', // Extra large premium shadow
-        'inner-glass': 'inset 0 1px 2px 0 rgba(255, 255, 255, 0.06)', // Subtle inner glow
-        'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.1)', // Top inner glow
-        // Business card shadows
-        'card-premium': '0 2px 12px 0 rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04)',
-        'card-hover': '0 4px 20px 0 rgba(0, 0, 0, 0.12), 0 2px 6px 0 rgba(0, 0, 0, 0.06)',
-        // Button shadows
-        'btn-premium': '0 2px 6px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
-        'btn-hover': '0 4px 12px 0 rgba(0, 0, 0, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.12)',
+        card: '0 6px 18px rgba(0,0,0,.12)',
+        hover: '0 8px 24px rgba(0,0,0,.18)',
+        focus: '0 0 0 3px hsla(var(--ring) / .35)',
+      },
+      borderRadius: {
+        lg: '0.75rem',
+        xl: '1rem',
+        '2xl': '1.25rem',
+      },
+      spacing: {
+        13: '3.25rem',
+        15: '3.75rem',
+      },
+      transitionDuration: {
+        fast: '150ms',
+        base: '200ms',
+      },
+      transitionTimingFunction: {
+        out: 'cubic-bezier(.2,.8,.2,1)',
       },
       // Custom animations
       animation: {

@@ -20,29 +20,29 @@ interface ActionCardProps {
 
 const colorVariants = {
   primary: {
-    gradient: 'from-[#D417C8]/20 via-transparent to-transparent',
-    iconBg: 'from-[#D417C8]/30 to-[#D417C8]/10',
-    iconColor: 'text-[#D417C8]',
-    border: 'border-[#D417C8]/20',
-    hoverColor: 'group-hover:text-[#D417C8]'
+    gradient: '',
+    iconBg: 'bg-primary/20',
+    iconColor: 'text-primary',
+    border: 'border-primary/20',
+    hoverColor: 'group-hover:text-primary'
   },
   secondary: {
-    gradient: 'from-[#14BDEA]/20 via-transparent to-transparent',
-    iconBg: 'from-[#14BDEA]/30 to-[#14BDEA]/10',
-    iconColor: 'text-[#14BDEA]',
-    border: 'border-[#14BDEA]/20',
-    hoverColor: 'group-hover:text-[#14BDEA]'
+    gradient: '',
+    iconBg: 'bg-primary/20',
+    iconColor: 'text-primary',
+    border: 'border-primary/20',
+    hoverColor: 'group-hover:text-primary'
   },
   accent: {
-    gradient: 'from-[#7767DA]/20 via-transparent to-transparent',
-    iconBg: 'from-[#7767DA]/30 to-[#7767DA]/10',
-    iconColor: 'text-[#7767DA]',
-    border: 'border-[#7767DA]/20',
-    hoverColor: 'group-hover:text-[#7767DA]'
+    gradient: '',
+    iconBg: 'bg-primary/20',
+    iconColor: 'text-primary',
+    border: 'border-primary/20',
+    hoverColor: 'group-hover:text-primary'
   },
   success: {
-    gradient: 'from-green-500/20 via-transparent to-transparent',
-    iconBg: 'from-green-500/30 to-green-500/10',
+    gradient: '',
+    iconBg: 'bg-accent/20',
     iconColor: 'text-green-500',
     border: 'border-green-500/20',
     hoverColor: 'group-hover:text-green-400'
@@ -101,7 +101,7 @@ const ActionCardComponent = ({
         disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
       } ${className}`}>
         {/* Hover Gradient Effect */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${colorConfig.gradient} opacity-0 group-hover:opacity-50 transition-opacity duration-200`} />
+        <div className={`absolute inset-0 bg- ${colorConfig.gradient} opacity-0 group-hover:opacity-50 transition-opacity duration-200`} />
         
         {/* Content */}
         <div className="relative">
@@ -109,7 +109,7 @@ const ActionCardComponent = ({
             // Default Layout - Vertical Stack (matching original NavigationCard)
             <>
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-lg bg-gradient-to-br ${colorConfig.iconBg} border ${colorConfig.border}`}>
+                <div className={`p-3 rounded-lg bg- ${colorConfig.iconBg} border ${colorConfig.border}`}>
                   <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
                 </div>
               </div>
@@ -124,7 +124,7 @@ const ActionCardComponent = ({
             // Horizontal Layout - Compact
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className={`p-3 rounded-lg bg-gradient-to-br ${colorConfig.iconBg} border ${colorConfig.border}`}>
+                <div className={`p-3 rounded-lg bg- ${colorConfig.iconBg} border ${colorConfig.border}`}>
                   <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
                 </div>
                 <div>

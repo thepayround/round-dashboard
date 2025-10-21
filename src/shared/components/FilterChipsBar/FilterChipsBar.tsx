@@ -58,8 +58,8 @@ export const FilterChipsBar: React.FC<FilterChipsBarProps> = ({
           animate={{ opacity: 1, scale: 1 }}
           onClick={onClearAll}
           className="ml-2 px-3 py-1.5 text-sm
-                   bg-gradient-to-r from-red-500/20 to-red-600/20 
-                   hover:from-red-500/30 hover:to-red-600/30 
+                   bg-destructive/20 
+                   hover:bg-destructive/30 
                    border border-red-500/30 hover:border-red-400/40 
                    rounded-lg text-red-300 hover:text-red-200 
                    transition-all duration-200"

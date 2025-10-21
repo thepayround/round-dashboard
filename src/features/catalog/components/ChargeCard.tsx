@@ -229,7 +229,7 @@ export const ChargeCard = ({
                         <Link to={`/catalog/charges/${charge.id}`}>
                           <motion.button 
                             whileHover={{ x: 2 }}
-                            className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#32A1E4]/10 hover:to-[#14BDEA]/5 rounded-lg transition-all duration-200"
+                            className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-primary/10 rounded-lg transition-all duration-200"
                           >
                             <Eye className="w-4 h-4 text-[#32A1E4]" />
                             <span className="font-medium">View Details</span>
@@ -239,7 +239,7 @@ export const ChargeCard = ({
                         <motion.button 
                           whileHover={{ x: 2 }}
                           onClick={() => onEdit?.(charge)}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#FFC107]/10 hover:to-[#FF8A00]/5 rounded-lg transition-all duration-200"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-warning/10 rounded-lg transition-all duration-200"
                         >
                           <Edit3 className="w-4 h-4 text-[#FFC107]" />
                           <span className="font-medium">Edit Charge</span>
@@ -248,7 +248,7 @@ export const ChargeCard = ({
                         <motion.button 
                           whileHover={{ x: 2 }}
                           onClick={() => onDuplicate?.(charge)}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#7767DA]/10 hover:to-[#D417C8]/5 rounded-lg transition-all duration-200"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-primary/10 rounded-lg transition-all duration-200"
                         >
                           <Copy className="w-4 h-4 text-[#7767DA]" />
                           <span className="font-medium">Duplicate</span>
@@ -259,7 +259,7 @@ export const ChargeCard = ({
                         <motion.button 
                           whileHover={{ x: 2 }}
                           onClick={() => onDelete?.(charge)}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-gradient-to-r hover:from-[#FF4E50]/10 hover:to-[#F44336]/5 rounded-lg transition-all duration-200"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-destructive/10 rounded-lg transition-all duration-200"
                         >
                           <Trash2 className="w-4 h-4 text-[#FF4E50]" />
                           <span className="font-medium text-[#FF4E50]">Delete Charge</span>
@@ -293,7 +293,7 @@ export const ChargeCard = ({
           {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="relative">
-            <div className="p-3 rounded-lg bg-gradient-to-br from-[#FFC107]/20 to-[#FF8A00]/20 border border-white/10">
+            <div className="p-3 rounded-lg bg-warning/20 border border-white/10">
               <ChargeIcon className="w-7 h-7 text-[#FFC107]" />
             </div>
             <div className="absolute -top-1 -right-1">
@@ -333,7 +333,7 @@ export const ChargeCard = ({
                     <Link to={`/catalog/charges/${charge.id}`}>
                       <motion.button 
                         whileHover={{ x: 2 }}
-                        className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#32A1E4]/10 hover:to-[#14BDEA]/5 rounded-lg transition-all duration-200"
+                        className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-primary/10 rounded-lg transition-all duration-200"
                       >
                         <Eye className="w-4 h-4 text-[#32A1E4]" />
                         <span className="font-medium">View Details</span>
@@ -343,7 +343,7 @@ export const ChargeCard = ({
                     <motion.button 
                       whileHover={{ x: 2 }}
                       onClick={() => onEdit?.(charge)}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#FFC107]/10 hover:to-[#FF8A00]/5 rounded-lg transition-all duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-warning/10 rounded-lg transition-all duration-200"
                     >
                       <Edit3 className="w-4 h-4 text-[#FFC107]" />
                       <span className="font-medium">Edit Charge</span>
@@ -352,7 +352,7 @@ export const ChargeCard = ({
                     <motion.button 
                       whileHover={{ x: 2 }}
                       onClick={() => onDuplicate?.(charge)}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#7767DA]/10 hover:to-[#D417C8]/5 rounded-lg transition-all duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-primary/10 rounded-lg transition-all duration-200"
                     >
                       <Copy className="w-4 h-4 text-[#7767DA]" />
                       <span className="font-medium">Duplicate</span>
@@ -363,7 +363,7 @@ export const ChargeCard = ({
                     <motion.button 
                       whileHover={{ x: 2 }}
                       onClick={() => onDelete?.(charge)}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-gradient-to-r hover:from-[#FF4E50]/10 hover:to-[#F44336]/5 rounded-lg transition-all duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-destructive/10 rounded-lg transition-all duration-200"
                     >
                       <Trash2 className="w-4 h-4 text-[#FF4E50]" />
                       <span className="font-medium text-[#FF4E50]">Delete Charge</span>

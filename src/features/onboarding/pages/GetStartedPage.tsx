@@ -755,7 +755,7 @@ export const GetStartedPage = () => {
           >
             <h1 className="text-lg font-medium text-white mb-4">
               Welcome to{' '}
-              <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+              <span className="text-primary">
                 Round
               </span>
             </h1>

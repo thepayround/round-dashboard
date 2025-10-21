@@ -127,7 +127,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
       {/* Personal Information Section */}
       <Card animate={false} padding="md" className="space-y-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-gradient-to-br from-[#D417C8]/15 to-[#14BDEA]/15 rounded-lg border border-[#D417C8]/20">
+          <div className="p-2 bg-primary/15 rounded-lg border border-[#D417C8]/20">
             <UserIcon className="w-3.5 h-3.5 text-[#D417C8]" />
           </div>
           <div className="flex-1">
@@ -137,7 +137,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             </p>
             
             {/* Info Notice */}
-            <div className="p-3 bg-gradient-to-r from-blue-500/5 to-cyan-500/5 border border-blue-500/10 rounded-lg mb-4">
+            <div className="p-3 bg-primary/5 border border-blue-500/10 rounded-lg mb-4">
               <div className="flex items-start gap-2">
                 <Info className="w-3 h-3 text-blue-400 flex-shrink-0 mt-0.5" />
                 <div>
@@ -216,7 +216,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
       {/* Display Preferences Section */}
       <Card animate={false} padding="md">
         <div className="flex items-start gap-3 mb-4">
-          <div className="p-2 bg-gradient-to-br from-[#7767DA]/15 to-[#D417C8]/15 rounded-lg border border-[#7767DA]/20">
+          <div className="p-2 bg-primary/15 rounded-lg border border-[#7767DA]/20">
             <Globe className="w-3.5 h-3.5 text-[#7767DA]" />
           </div>
           <div className="flex-1">

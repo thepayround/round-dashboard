@@ -11,12 +11,12 @@ interface SectionHeaderProps {
 }
 
 const accentColors = {
-  primary: 'from-[#D417C8] to-[#7767DA]',
-  secondary: 'from-[#14BDEA] to-[#7767DA]',
-  accent: 'from-[#7767DA] to-[#D417C8]',
-  success: 'from-green-500 to-emerald-500',
-  warning: 'from-yellow-500 to-orange-500',
-  danger: 'from-red-500 to-pink-500'
+  primary: 'accent',
+  secondary: 'accent',
+  accent: 'accent',
+  success: 'accent',
+  warning: 'warning',
+  danger: 'destructive'
 }
 
 export const SectionHeader = ({

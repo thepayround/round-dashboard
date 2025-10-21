@@ -80,7 +80,7 @@ export const countryDropdownConfig: ApiDropdownConfig<Record<string, string>> = 
         searchText: `${country.countryName} ${country.countryCodeAlpha2} ${country.currencyCodeAlpha}`,
         description: `${country.countryCodeAlpha2} • ${country.currencyCodeAlpha}`,
         icon: (
-          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+          <div className="w-5 h-5 rounded-full bg-accent/[#14BDEA]/20 border border-white/20 flex items-center justify-center">
             <span className="text-xs font-normal tracking-tight text-white/80">
               {country.countryCodeAlpha2}
             </span>
@@ -114,7 +114,7 @@ export const currencyDropdownConfig: ApiDropdownConfig<CurrencyResponse> = {
             currency.countries.length === 1 ? 'country' : 'countries'
           }`,
           icon: (
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center">
+            <div className="w-5 h-5 rounded-full bg-accent/[#D417C8]/20 border border-white/20 flex items-center justify-center">
               <span className="text-xs font-normal tracking-tight text-white/80">
                 {symbol}
               </span>
@@ -142,7 +142,7 @@ export const organizationTypeDropdownConfig: ApiDropdownConfig<OrganizationTypeR
         searchText: `${orgType.name} ${orgType.description}`,
         description: orgType.description,
         icon: (
-          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+          <div className="w-5 h-5 rounded-full bg-accent/[#32A1E4]/20 border border-white/20 flex items-center justify-center">
             <Building size={12} className="text-white/80" />
           </div>
         ),
@@ -189,7 +189,7 @@ export const timezoneDropdownConfig: ApiDropdownConfig<TimezoneOption> = {
       searchText: `${timezone.label} ${timezone.standardName}`,
       description: timezone.standardName,
       icon: (
-        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#7767DA]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center">
+        <div className="w-5 h-5 rounded-full bg-accent/[#7767DA]/20 border border-white/20 flex items-center justify-center">
           <Clock className="w-3 h-3 text-white/80" />
         </div>
       ),
@@ -210,7 +210,7 @@ export const fiscalYearDropdownConfig: ApiDropdownConfig<Month> = {
       label: month.label,
       searchText: month.label,
       icon: (
-        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+        <div className="w-5 h-5 rounded-full bg-accent/[#D417C8]/20 border border-white/20 flex items-center justify-center">
           <Calendar className="w-3 h-3 text-white/80" />
         </div>
       ),
@@ -284,7 +284,7 @@ export const industryDropdownConfig: ApiDropdownConfig<IndustryResponse> = {
       searchText: `${industry.name} ${industry.code} ${industry.description}`,
       description: industry.description,
       icon: (
-        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 border border-white/20 flex items-center justify-center">
+        <div className="w-5 h-5 rounded-full bg-accent/[#7767DA]/20 border border-white/20 flex items-center justify-center">
           <Building className="w-3 h-3 text-white/80" />
         </div>
       ),
@@ -317,7 +317,7 @@ export const companySizeDropdownConfig: ApiDropdownConfig<CompanySizeResponse> =
         searchText: `${size.name} ${size.code} ${size.description} ${getEmployeeCount()}`,
         description: size.description,
         icon: (
-          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+          <div className="w-5 h-5 rounded-full bg-accent/[#14BDEA]/20 border border-white/20 flex items-center justify-center">
             <User className="w-3 h-3 text-white/80" />
           </div>
         ),
@@ -342,7 +342,7 @@ export const addressTypeDropdownConfig: ApiDropdownConfig<AddressTypeResponse> =
         searchText: `${type.name} ${type.code} ${type.description}`,
         description: type.description,
         icon: (
-          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+          <div className="w-5 h-5 rounded-full bg-accent/[#32A1E4]/20 border border-white/20 flex items-center justify-center">
             <MapPin className="w-3 h-3 text-white/80" />
           </div>
         ),
@@ -366,7 +366,7 @@ export const languageDropdownConfig: ApiDropdownConfig<LanguageOption> = {
         searchText: `${language.label} ${language.nativeName}`,
         description: language.nativeName,
         icon: (
-          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#D417C8]/20 border border-white/20 flex items-center justify-center">
+          <div className="w-5 h-5 rounded-full bg-accent/[#14BDEA]/20 border border-white/20 flex items-center justify-center">
             <Languages className="w-3 h-3 text-white/80" />
           </div>
         ),
@@ -389,7 +389,7 @@ export const dateFormatDropdownConfig: ApiDropdownConfig<DateFormatOption> = {
       searchText: `${format.label} ${format.description}`,
       description: format.description,
       icon: (
-        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#7767DA]/20 to-[#32A1E4]/20 border border-white/20 flex items-center justify-center">
+        <div className="w-5 h-5 rounded-full bg-accent/[#7767DA]/20 border border-white/20 flex items-center justify-center">
           <Calendar className="w-3 h-3 text-white/80" />
         </div>
       ),
@@ -411,7 +411,7 @@ export const timeFormatDropdownConfig: ApiDropdownConfig<TimeFormatOption> = {
       searchText: `${format.label} ${format.description}`,
       description: format.description,
       icon: (
-        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center">
+        <div className="w-5 h-5 rounded-full bg-accent/[#14BDEA]/20 border border-white/20 flex items-center justify-center">
           <Clock className="w-3 h-3 text-white/80" />
         </div>
       ),

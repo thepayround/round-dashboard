@@ -60,7 +60,7 @@ export const WelcomePage = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 transform -skew-x-12" />
+              <div className="absolute inset-0 bg-white/3 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               
               <div className="flex items-center space-x-4 relative z-10">
                 <div className="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center">
@@ -85,7 +85,7 @@ export const WelcomePage = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 transform -skew-x-12" />
+              <div className="absolute inset-0 bg-white/3 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               
               <div className="flex items-center space-x-4 relative z-10">
                 <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center">

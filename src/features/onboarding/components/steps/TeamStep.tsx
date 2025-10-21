@@ -171,7 +171,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-secondary/20 border border-white/20 flex items-center justify-center"
         >
           <Users className="w-8 h-8 text-[#32A1E4]" />
         </motion.div>
@@ -218,7 +218,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
               <button
                 onClick={handleInviteTeamMember}
                 disabled={!inviteEmail.trim() || isLoading}
-                className="px-4 py-2 h-9 rounded-lg bg-gradient-to-r from-[#32A1E4] to-[#14BDEA] hover:from-[#2891D4] hover:to-[#12A5D2] disabled:opacity-50 text-white text-xs font-normal tracking-tight flex items-center gap-2 shrink-0"
+                className="px-4 py-2 h-9 rounded-lg bg-secondary hover:brightness-105 disabled:opacity-50 text-white text-xs font-normal tracking-tight flex items-center gap-2 shrink-0"
               >
                 {isLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <UserPlus className="w-3 h-3" />}
                 {isLoading ? 'Sending...' : 'Invite'}
@@ -245,7 +245,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center">
                         <Mail className="w-3 h-3 text-[#32A1E4]" />
                       </div>
                       <div>

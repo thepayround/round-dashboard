@@ -103,7 +103,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-destructive flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-white" />
               </div>
               <div>

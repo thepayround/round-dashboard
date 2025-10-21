@@ -89,7 +89,7 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
         {/* Member Info */}
         <div className="bg-white/[0.06] border border-white/15 rounded-lg p-4">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-[#D417C8] to-[#14BDEA] rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-white font-medium text-lg">
                 {member.firstName[0]}{member.lastName[0]}
               </span>

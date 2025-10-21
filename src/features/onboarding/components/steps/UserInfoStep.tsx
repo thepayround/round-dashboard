@@ -36,7 +36,7 @@ export const UserInfoStep = ({
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-primary/20 border border-white/20 flex items-center justify-center"
         >
           <User className="w-8 h-8 text-[#D417C8]" />
         </motion.div>
@@ -53,7 +53,7 @@ export const UserInfoStep = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-[#42E695]/20 to-[#3BB2B8]/20 border border-[#42E695]/30"
+              className="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-primary/20 border border-accent/30"
             >
               <span className="text-[#42E695] text-sm font-medium">
                 ✓ Auto-completed from your account

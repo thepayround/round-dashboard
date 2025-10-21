@@ -13,7 +13,7 @@ export const GeneralSection: React.FC = () => (
       <div>
         <h1 className="text-lg font-medium text-white mb-4">
           General{' '}
-          <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+          <span className="text-primary">
             Settings
           </span>
         </h1>

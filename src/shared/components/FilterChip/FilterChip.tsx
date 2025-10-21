@@ -23,10 +23,10 @@ export const FilterChip: React.FC<FilterChipProps> = ({
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.15 }}
       className="inline-flex items-center gap-2 px-3 py-1.5
-               bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20
-               border border-[#D417C8]/30
+               bg-primary/20
+               border border-primary/30
                rounded-lg text-sm text-white/90
-               hover:border-[#D417C8]/50 transition-all group"
+               hover:border-primary/50 transition-all group"
     >
       <span className="font-medium text-white/70">{label}:</span>
       <span className="text-white">{value}</span>

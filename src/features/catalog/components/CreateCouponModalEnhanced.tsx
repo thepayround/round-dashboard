@@ -212,7 +212,7 @@ export const CreateCouponModalEnhanced = ({
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-white/10">
             <div className="flex items-center space-x-4">
-              <div className="p-3 bg-gradient-to-br from-[#D417C8] to-[#14BDEA] rounded-lg">
+              <div className="p-3 bg-secondary rounded-lg">
                 <Tag className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -234,7 +234,7 @@ export const CreateCouponModalEnhanced = ({
                 if (step > stepItem.number) {
                   stepCircleStyle = 'bg-green-500 text-white';
                 } else if (step === stepItem.number) {
-                  stepCircleStyle = 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white';
+                  stepCircleStyle = 'bg-secondary text-white';
                 } else {
                   stepCircleStyle = 'bg-white/10 text-white/50';
                 }

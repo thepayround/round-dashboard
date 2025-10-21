@@ -200,7 +200,7 @@ export const CreateAddonModal = ({
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20">
+                  <div className="p-2 rounded-lg bg-accent/20">
                     <Zap className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>

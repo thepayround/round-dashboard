@@ -8,7 +8,7 @@ interface AccountTypeOption {
   title: string
   description: string
   features: string[]
-  gradient: string
+  colorClass: string
   glowColor: string
   iconBg: string
 }
@@ -26,9 +26,9 @@ const ACCOUNT_TYPES: AccountTypeOption[] = [
     title: 'Personal',
     description: '',
     features: [],
-    gradient: 'from-[#D417C8] via-[#7767DA] to-[#14BDEA]',
+    colorClass: 'accent',
     glowColor: 'rgba(212, 23, 200, 0.3)',
-    iconBg: 'bg-gradient-to-br from-[#D417C8]/20 to-[#7767DA]/20',
+    iconBg: 'bg-primary/20',
   },
   {
     type: 'business',
@@ -36,9 +36,9 @@ const ACCOUNT_TYPES: AccountTypeOption[] = [
     title: 'Business',
     description: '',
     features: [],
-    gradient: 'from-[#14BDEA] via-[#7767DA] to-[#D417C8]',
+    colorClass: 'accent',
     glowColor: 'rgba(20, 189, 234, 0.3)',
-    iconBg: 'bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20',
+    iconBg: 'bg-primary/20',
   },
 ]
 
@@ -51,7 +51,7 @@ export const AccountTypeSelector = ({
     {/* Header with animated gradient text */}
     <div className="text-center mb-16">
       <div className="relative">
-        <h1 className="text-5xl font-medium tracking-tight bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent mb-6 leading-tight">
+        <h1 className="text-5xl font-medium tracking-tight text-primary mb-6 leading-tight">
           Choose Your Journey
         </h1>
       </div>
@@ -80,7 +80,7 @@ export const AccountTypeSelector = ({
           <div
             className="absolute inset-0 rounded-lg blur-xl transition-all duration-500 opacity-20 group-hover:opacity-40"
             style={{
-              background: `linear-gradient(135deg, ${accountType.gradient.replace('from-[', '').replace('] via-[', ', ').replace('] to-[', ', ').replace(']', '')})`,
+              display: 'none',
             }}
           />
 
@@ -96,7 +96,7 @@ export const AccountTypeSelector = ({
                 `}
               >
                 <accountType.icon className="w-10 h-10 text-white drop-shadow-lg" />
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+                <div className="absolute inset-0 bg-white/10" />
               </div>
             </div>
 
@@ -109,7 +109,7 @@ export const AccountTypeSelector = ({
             <div
               className={`
                 h-1 rounded-full mt-6 transition-all duration-500
-                bg-gradient-to-r ${accountType.gradient}
+                bg-primary
                 opacity-40 group-hover:opacity-70
               `}
             />

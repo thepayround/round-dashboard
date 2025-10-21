@@ -233,7 +233,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                 )}
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center text-white font-medium text-xs tracking-tight">
+                    <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-medium text-xs tracking-tight">
                       {getInitials(customer.displayName)}
                     </div>
                     <div className="min-w-0 flex-1">

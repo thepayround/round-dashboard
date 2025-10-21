@@ -20,7 +20,7 @@ export const BillingSection: React.FC = () => (
       {/* Billing Overview */}
       <Card animate={false} padding="md">
         <div className="flex items-start gap-3 mb-4">
-          <div className="p-2 bg-gradient-to-br from-green-500/15 to-emerald-500/15 rounded-lg border border-green-500/20">
+          <div className="p-2 bg-primary/15 rounded-lg border border-green-500/20">
             <CreditCard className="w-4 h-4 text-green-400" />
           </div>
           <div className="flex-1">
@@ -32,7 +32,7 @@ export const BillingSection: React.FC = () => (
         </div>
 
         {/* Current Plan */}
-        <div className="p-3 bg-gradient-to-r from-blue-500/5 to-purple-500/5 border border-blue-500/20 rounded-lg mb-4">
+        <div className="p-3 bg-primary/5 border border-blue-500/20 rounded-lg mb-4">
           <div className="flex items-center justify-between mb-2">
             <div>
               <h3 className="text-xs font-normal tracking-tight text-white mb-0.5">Professional Plan</h3>
@@ -162,7 +162,7 @@ export const BillingSection: React.FC = () => (
               <label htmlFor="email-invoices-toggle" className="relative inline-flex items-center cursor-pointer">
                 <span className="sr-only">Enable email invoices</span>
                 <input id="email-invoices-toggle" type="checkbox" className="sr-only peer" defaultChecked />
-                <div className="w-8 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#D417C8]/20 rounded-full peer peer-checked:after:translate-x-3 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#D417C8] peer-checked:to-[#14BDEA]" />
+                <div className="w-8 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#D417C8]/20 rounded-full peer peer-checked:after:translate-x-3 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary" />
               </label>
             </div>
 

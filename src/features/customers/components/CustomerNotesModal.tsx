@@ -158,7 +158,7 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
                     <MessageSquare className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -209,7 +209,7 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                   <button
                     onClick={handleAddNote}
                     disabled={isAdding || !newNote.content.trim()}
-                    className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-lg hover:shadow-lg hover:shadow-[#D417C8]/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:shadow-lg hover:shadow-[#D417C8]/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isAdding ? (
                       <>

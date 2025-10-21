@@ -369,7 +369,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8] to-[#14BDEA] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
                     <User className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -907,7 +907,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="px-6 py-3 bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>

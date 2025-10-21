@@ -38,42 +38,69 @@
     @apply border-border;
   }
 
-  /* Polar-inspired Design System Colors */
+  /* Round Brand Design System - Pure Black with Pink/Cyan/Purple */
   :root {
-    /* Pure black foundation */
-    --color-bg-primary: #000000;
-    --color-bg-secondary: #0a0a0a;
-    --color-bg-tertiary: #141414;
-    --color-bg-elevated: #1a1a1a;
+    /* Background tokens - Pure Black */
+    --bg: 0 0% 0%;                 /* Pure black #000000 */
+    --bg-subtle: 0 0% 4%;          /* Very dark #0a0a0a */
+    --bg-raised: 0 0% 8%;          /* Dark raised #141414 */
     
-    /* Clean border scale */
-    --color-border-subtle: #262626;
-    --color-border-default: #333333;
-    --color-border-strong: #404040;
+    /* Foreground tokens */
+    --fg: 0 0% 98%;                /* Almost white */
+    --fg-muted: 0 0% 63%;          /* Muted gray #a1a1a1 */
     
-    /* Text hierarchy - Polar.sh inspired softer grays */
-    --color-text-primary: #fafafa;
-    --color-text-secondary: #a1a1aa;
-    --color-text-tertiary: #71717a;
-    --color-text-disabled: #52525b;
+    /* Brand Colors - Your Purple/Pink/Cyan Palette */
+    --primary: 311 88% 44%;        /* #D417C8 pink - Primary actions */
+    --secondary: 192 88% 50%;      /* #14BDEA cyan - Secondary actions */
+    --accent: 249 61% 64%;         /* #7767DA purple - Accent elements */
+    --accent-contrast: 0 0% 100%;  /* White text on colored backgrounds */
     
-    /* Brand colors (unchanged) */
-    --color-brand-pink: #D417C8;
-    --color-brand-pink-light: #BD2CD0;
-    --color-brand-purple: #7767DA;
-    --color-brand-cyan-light: #32A1E4;
-    --color-brand-cyan: #14BDEA;
-    --color-brand-green: #42E695;
+    /* Semantic colors */
+    --destructive: 0 72% 60%;      /* Error red */
+    --warning: 38 92% 56%;         /* Warning amber */
+    --success: 152 69% 58%;        /* Success green */
+    
+    /* UI elements */
+    --border: 0 0% 15%;            /* Dark border #262626 */
+    --input: 0 0% 9%;              /* Input background #171719 */
+    --ring: 311 88% 44%;           /* Focus ring (pink) */
+    --card: 0 0% 4%;               /* Card background #0a0a0a */
+    
+    /* Elevation system */
+    --elev-1: 0 0% 6%;             /* #0f0f0f */
+    --elev-2: 0 0% 10%;            /* #1a1a1a */
+  }
+
+  /* Light theme variant */
+  :root.light {
+    --bg: 0 0% 100%;
+    --bg-subtle: 0 0% 98%;
+    --bg-raised: 0 0% 100%;
+    --fg: 222 47% 11%;
+    --fg-muted: 215 16% 35%;
+    --primary: 311 88% 44%;
+    --secondary: 192 88% 50%;
+    --accent: 249 61% 64%;
+    --accent-contrast: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --warning: 38 92% 50%;
+    --success: 152 69% 58%;
+    --border: 214 14% 90%;
+    --input: 214 14% 92%;
+    --ring: 311 88% 44%;
+    --card: 0 0% 100%;
+    --elev-1: 0 0% 100%;
+    --elev-2: 0 0% 100%;
   }
 
   html {
-    background-color: #000000;
+    background-color: hsl(var(--bg));
     min-height: 100vh;
   }
 
   #root {
     min-height: 100vh;
-    background-color: #000000;
+    background-color: hsl(var(--bg));
   }
 
   body {
@@ -84,16 +111,16 @@
       sans-serif;
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 32;
-    background-color: #000000;
+    background-color: hsl(var(--bg));
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    /* Polar.sh inspired typography - light, clean, readable */
-    font-size: 13px;
+    /* Dev-SaaS Minimal typography - base 14px for density */
+    font-size: 14px;
     line-height: 1.6;
-    font-weight: 300;
+    font-weight: 500;
     letter-spacing: -0.01em;
-    color: #a1a1aa;
+    color: hsl(var(--fg));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -533,14 +560,6 @@
     display: flex;
     align-items: center;
     margin: 1.5rem 0;
-  }
-
-  .auth-divider::before,
-  .auth-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.3);
   }
 
   .auth-divider span {

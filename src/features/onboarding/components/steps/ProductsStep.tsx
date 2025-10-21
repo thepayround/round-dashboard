@@ -40,7 +40,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-secondary/20 border border-white/20 flex items-center justify-center"
         >
           <Package className="w-8 h-8 text-[#14BDEA]" />
         </motion.div>
@@ -56,7 +56,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
         <div className="text-center space-y-6">
           <div className="p-8 rounded-lg bg-[#1d1d20] border border-[#25262a]">
             <div className="space-y-4">
-              <div className="w-12 h-12 mx-auto rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 border border-white/20 flex items-center justify-center">
+              <div className="w-12 h-12 mx-auto rounded-lg bg-secondary/20 border border-white/20 flex items-center justify-center">
                 <Package className="w-6 h-6 text-[#14BDEA]" />
               </div>
 

@@ -91,7 +91,7 @@ export const OrganizationForm = ({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 border border-[#25262a] flex items-center justify-center"
+            className="w-16 h-16 mx-auto rounded-lg bg-accent/[#32A1E4]/20 border border-[#25262a] flex items-center justify-center"
           >
             <Building className="w-8 h-8 text-[#32A1E4]" />
           </motion.div>
@@ -114,7 +114,7 @@ export const OrganizationForm = ({
           className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 border border-[#25262a] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-accent/[#32A1E4]/20 border border-[#25262a] flex items-center justify-center">
               <Building className="w-4 h-4 text-[#32A1E4]" />
             </div>
             <div>
@@ -197,7 +197,7 @@ export const OrganizationForm = ({
           className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-[#25262a] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-accent/[#14BDEA]/20 border border-[#25262a] flex items-center justify-center">
               <Building className="w-4 h-4 text-[#14BDEA]" />
             </div>
             <div>
@@ -285,7 +285,7 @@ export const OrganizationForm = ({
           className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 border border-[#25262a] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-accent/[#14BDEA]/20 border border-[#25262a] flex items-center justify-center">
               <Hash className="w-4 h-4 text-[#14BDEA]" />
             </div>
             <div>
@@ -348,7 +348,7 @@ export const OrganizationForm = ({
             className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
           >
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 border border-[#25262a] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-accent/[#7767DA]/20 border border-[#25262a] flex items-center justify-center">
                 <span className="text-sm font-normal tracking-tight tracking-tight text-[#7767DA]">{currencySymbol}</span>
               </div>
               <div>
@@ -414,7 +414,7 @@ export const OrganizationForm = ({
             className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
           >
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#32A1E4]/20 border border-[#25262a] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-accent/[#D417C8]/20 border border-[#25262a] flex items-center justify-center">
                 <span className="text-sm font-normal tracking-tight tracking-tight text-[#D417C8]">🌍</span>
               </div>
               <div>

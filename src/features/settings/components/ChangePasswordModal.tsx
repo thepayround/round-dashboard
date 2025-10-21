@@ -189,7 +189,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
           animate={{ opacity: 1, scale: 1 }}
           className="text-center py-8"
         >
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary flex items-center justify-center">
             <Shield className="w-8 h-8 text-white" />
           </div>
           <h3 className="text-lg font-medium text-white mb-2">Password Updated!</h3>

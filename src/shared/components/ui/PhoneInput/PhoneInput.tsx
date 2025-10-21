@@ -463,7 +463,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           bg-white/[0.04] border border-white/10 
           rounded-lg shadow-2xl overflow-hidden
           max-h-80 flex flex-col
-          bg-gradient-to-br from-white/[0.08] to-white/[0.02]
+          bg-white/[0.05]
           ring-1 ring-white/5
         ">
           {/* Search input */}
@@ -757,7 +757,7 @@ const CountryOption: React.FC<CountryOptionProps> = ({
     aria-selected={isSelected}
   >
     <div className="flex items-center space-x-2.5 md:space-x-3 lg:space-x-2.5 flex-1 min-w-0">
-      <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 border border-white/20 flex items-center justify-center flex-shrink-0">
+      <div className="w-5 h-5 rounded-full bg-primary/20 border border-white/20 flex items-center justify-center flex-shrink-0">
         <span className="text-sm" role="img" aria-label={country.countryName}>
           {country.flag}
         </span>

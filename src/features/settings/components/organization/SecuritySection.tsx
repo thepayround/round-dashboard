@@ -13,7 +13,7 @@ export const SecuritySection: React.FC = () => (
       <div>
         <h1 className="text-lg font-medium text-white mb-4">
           Security{' '}
-          <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+          <span className="text-primary">
             Settings
           </span>
         </h1>
@@ -25,7 +25,7 @@ export const SecuritySection: React.FC = () => (
       {/* Security Policies */}
       <Card animate={false} padding="lg">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 rounded-lg">
+          <div className="p-2 bg-primary/20 rounded-lg">
             <Lock className="w-5 h-5 text-[#D417C8]" />
           </div>
           <div>
@@ -74,7 +74,7 @@ export const SecuritySection: React.FC = () => (
       {/* Audit Logs */}
       <Card animate={false} padding="lg">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-gradient-to-r from-[#32A1E4]/20 to-[#14BDEA]/20 rounded-lg">
+          <div className="p-2 bg-primary/20 rounded-lg">
             <Eye className="w-5 h-5 text-[#32A1E4]" />
           </div>
           <div>

@@ -75,8 +75,8 @@ export const DashboardPage = () => {
                 transition={{ delay: 0.3 }}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-full border ${
                   roundAccount.status.toLowerCase() === 'active'
-                    ? 'bg-gradient-to-r from-[#42E695]/20 to-[#3BB2B8]/20 border-[#42E695]/30'
-                    : 'bg-gradient-to-r from-gray-500/20 to-gray-400/20 border-gray-500/30'
+                    ? 'bg-primary/20 border-primary/30'
+                    : 'bg-gray-500/20 border-gray-500/30'
                 }`}
               >
                 <CheckCircle className={`w-5 h-5 ${
@@ -107,7 +107,7 @@ export const DashboardPage = () => {
                   <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account Type</div>
                   <div className="text-white text-sm font-normal tracking-tight capitalize">{roundAccount.accountType}</div>
                 </div>
-                <div className="p-3 bg-gradient-to-br from-[#D417C8]/20 to-[#BD2CD0]/20 rounded-lg border border-[#D417C8]/30">
+                <div className="p-3 bg-primary/20 rounded-lg border border-[#D417C8]/30">
                   <Building className="w-4 h-4 text-[#D417C8]" />
                 </div>
               </div>
@@ -120,7 +120,7 @@ export const DashboardPage = () => {
                   <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account Status</div>
                   <div className="text-white text-sm font-medium">{roundAccount.status}</div>
                 </div>
-                <div className="p-3 bg-gradient-to-br from-[#42E695]/20 to-[#3BB2B8]/20 rounded-lg border border-[#42E695]/30">
+                <div className="p-3 bg-primary/20 rounded-lg border border-[#42E695]/30">
                   <CheckCircle className="w-4 h-4 text-[#42E695]" />
                 </div>
               </div>
@@ -135,7 +135,7 @@ export const DashboardPage = () => {
                     {new Date(roundAccount.createdDate).toLocaleDateString()}
                   </div>
                 </div>
-                <div className="p-3 bg-gradient-to-br from-[#14BDEA]/20 to-[#32A1E4]/20 rounded-lg border border-[#14BDEA]/30">
+                <div className="p-3 bg-primary/20 rounded-lg border border-[#14BDEA]/30">
                   <Clock className="w-4 h-4 text-[#14BDEA]" />
                 </div>
               </div>
@@ -149,7 +149,7 @@ export const DashboardPage = () => {
                     <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Currency</div>
                     <div className="text-white text-sm font-medium">{roundAccount.organization.currency}</div>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 rounded-lg border border-[#7767DA]/30">
+                  <div className="p-3 bg-primary/20 rounded-lg border border-[#7767DA]/30">
                     <DollarSign className="w-4 h-4 text-[#7767DA]" />
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export const DashboardPage = () => {
             >
               <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 rounded-xl border border-[#32A1E4]/30">
+                  <div className="p-3 bg-primary/20 rounded-xl border border-[#32A1E4]/30">
                     <Building className="w-5 h-5 text-[#32A1E4]" />
                   </div>
                   <div className="flex-1">
@@ -273,7 +273,7 @@ export const DashboardPage = () => {
               >
                 <Card padding="lg">
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 rounded-xl border border-[#7767DA]/30">
+                    <div className="p-3 bg-primary/20 rounded-xl border border-[#7767DA]/30">
                       <Building className="w-5 h-5 text-[#7767DA]" />
                     </div>
                     <div className="flex-1">
@@ -461,7 +461,7 @@ export const DashboardPage = () => {
           >
             <Card padding="lg">
               <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 bg-gradient-to-br from-[#7767DA]/20 to-[#BD2CD0]/20 rounded-xl border border-[#7767DA]/30">
+                <div className="p-3 bg-primary/20 rounded-xl border border-[#7767DA]/30">
                   <MapPin className="w-5 h-5 text-[#7767DA]" />
                 </div>
                 <div className="flex-1">
@@ -514,7 +514,7 @@ export const DashboardPage = () => {
           >
             <Card padding="lg">
               <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 rounded-xl border border-[#32A1E4]/30">
+                <div className="p-3 bg-primary/20 rounded-xl border border-[#32A1E4]/30">
                   <Users className="w-5 h-5 text-[#32A1E4]" />
                 </div>
                 <div className="flex-1">
@@ -531,7 +531,7 @@ export const DashboardPage = () => {
                     padding="lg"
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[#D417C8] to-[#14BDEA] flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">

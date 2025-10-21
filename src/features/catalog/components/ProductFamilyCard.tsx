@@ -169,7 +169,7 @@ export const ProductFamilyCard = ({
                         <Link to={`/catalog/families/${family.id}`}>
                           <motion.button 
                             whileHover={{ x: 2 }}
-                            className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#32A1E4]/10 hover:to-[#14BDEA]/5 rounded-lg transition-all duration-200"
+                            className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-accent/10 rounded-lg transition-all duration-200"
                           >
                             <Eye className="w-4 h-4 text-[#32A1E4]" />
                             <span className="font-medium">View Details</span>
@@ -179,7 +179,7 @@ export const ProductFamilyCard = ({
                         <motion.button 
                           whileHover={{ x: 2 }}
                           onClick={() => onEdit?.(family)}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#7767DA]/10 hover:to-[#D417C8]/5 rounded-lg transition-all duration-200"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-accent/10 rounded-lg transition-all duration-200"
                         >
                           <Edit3 className="w-4 h-4 text-[#7767DA]" />
                           <span className="font-medium">Edit Family</span>
@@ -188,7 +188,7 @@ export const ProductFamilyCard = ({
                         <Link to={`/catalog/families/${family.id}/settings`}>
                           <motion.button 
                             whileHover={{ x: 2 }}
-                            className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#FFC107]/10 hover:to-[#FF8A00]/5 rounded-lg transition-all duration-200"
+                            className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-warning/10 rounded-lg transition-all duration-200"
                           >
                             <Settings className="w-4 h-4 text-[#FFC107]" />
                             <span className="font-medium">Settings</span>
@@ -201,7 +201,7 @@ export const ProductFamilyCard = ({
                         <motion.button 
                           whileHover={{ x: 2 }}
                           onClick={() => onDelete?.(family)}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-gradient-to-r hover:from-[#FF4E50]/10 hover:to-[#F44336]/5 rounded-lg transition-all duration-200"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-destructive/10 rounded-lg transition-all duration-200"
                         >
                           <Trash2 className="w-4 h-4 text-[#FF4E50]" />
                           <span className="font-medium text-[#FF4E50]">Delete Family</span>
@@ -235,7 +235,7 @@ export const ProductFamilyCard = ({
           {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="relative">
-            <div className="p-3 rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border border-white/10">
+            <div className="p-3 rounded-lg bg-primary/20 border border-white/10">
               <Layers className="w-7 h-7 text-[#D417C8]" />
             </div>
             <div className="absolute -top-1 -right-1">
@@ -249,7 +249,7 @@ export const ProductFamilyCard = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-9 h-9 rounded-lg bg-gradient-to-br from-white/10 to-white/5 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:from-white/15 hover:to-white/10 hover:border-white/30 shadow-lg"
+              className="w-9 h-9 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white/15 hover:border-white/30 shadow-lg"
               onClick={(e) => {
                 e.preventDefault()
                 setShowActions(!showActions)
@@ -269,7 +269,7 @@ export const ProductFamilyCard = ({
                 {/* Enhanced dropdown with better styling */}
                 <div className="bg-black/90 border border-white/20 rounded-lg overflow-hidden">
                   {/* Gradient header */}
-                  <div className="bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 px-4 py-3 border-b border-white/10">
+                  <div className="bg-primary/20 px-4 py-3 border-b border-white/10">
                     <p className="font-medium auth-text text-sm">Product Family Actions</p>
                   </div>
                   
@@ -277,7 +277,7 @@ export const ProductFamilyCard = ({
                     <Link to={`/catalog/families/${family.id}`}>
                       <motion.button 
                         whileHover={{ x: 2 }}
-                        className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#32A1E4]/10 hover:to-[#14BDEA]/5 rounded-lg transition-all duration-200"
+                        className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-accent/10 rounded-lg transition-all duration-200"
                       >
                         <Eye className="w-4 h-4 text-[#32A1E4]" />
                         <span className="font-medium">View Details</span>
@@ -287,7 +287,7 @@ export const ProductFamilyCard = ({
                     <motion.button 
                       whileHover={{ x: 2 }}
                       onClick={() => onEdit?.(family)}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#7767DA]/10 hover:to-[#D417C8]/5 rounded-lg transition-all duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-accent/10 rounded-lg transition-all duration-200"
                     >
                       <Edit3 className="w-4 h-4 text-[#7767DA]" />
                       <span className="font-medium">Edit Family</span>
@@ -296,7 +296,7 @@ export const ProductFamilyCard = ({
                     <Link to={`/catalog/families/${family.id}/settings`}>
                       <motion.button 
                         whileHover={{ x: 2 }}
-                        className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#FFC107]/10 hover:to-[#FF8A00]/5 rounded-lg transition-all duration-200"
+                        className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-warning/10 rounded-lg transition-all duration-200"
                       >
                         <Settings className="w-4 h-4 text-[#FFC107]" />
                         <span className="font-medium">Settings</span>
@@ -309,7 +309,7 @@ export const ProductFamilyCard = ({
                     <motion.button 
                       whileHover={{ x: 2 }}
                       onClick={() => onDelete?.(family)}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-gradient-to-r hover:from-[#FF4E50]/10 hover:to-[#F44336]/5 rounded-lg transition-all duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-destructive/10 rounded-lg transition-all duration-200"
                     >
                       <Trash2 className="w-4 h-4 text-[#FF4E50]" />
                       <span className="font-medium text-[#FF4E50]">Delete Family</span>

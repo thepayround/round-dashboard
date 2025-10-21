@@ -30,7 +30,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#BD2CD0]/20 to-[#D417C8]/20 border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-primary/20 border border-white/20 flex items-center justify-center"
         >
           <CreditCard className="w-8 h-8 text-[#BD2CD0]" />
         </motion.div>
@@ -85,7 +85,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
 
                 <button
                   onClick={handleConnectStripe}
-                  className="inline-flex items-center space-x-2 px-6 py-3 rounded-lg bg-gradient-to-r from-[#D417C8] to-[#14BDEA] text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105"
+                  className="inline-flex items-center space-x-2 px-6 py-3 rounded-lg bg-primary text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105"
                 >
                   <span>Connect Stripe</span>
                   <ExternalLink className="w-5 h-5" />
@@ -99,7 +99,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center space-y-6"
           >
-            <div className="p-8 rounded-lg bg-gradient-to-r from-[#42E695]/10 to-[#3BB2B8]/10 border border-[#42E695]/20">
+            <div className="p-8 rounded-lg bg-primary/10 border border-accent/20">
               <div className="space-y-4">
                 <div className="w-12 h-12 mx-auto rounded-lg bg-[#42E695]/20 flex items-center justify-center">
                   <CheckCircle className="w-6 h-6 text-[#42E695]" />

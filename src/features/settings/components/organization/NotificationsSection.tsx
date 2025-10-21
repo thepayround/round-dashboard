@@ -72,7 +72,7 @@ export const NotificationsSection: React.FC = () => {
       <div>
         <h1 className="text-lg font-medium text-white mb-4">
           Notification{' '}
-          <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+          <span className="text-primary">
             Settings
           </span>
         </h1>
@@ -84,7 +84,7 @@ export const NotificationsSection: React.FC = () => {
       {/* Global Settings */}
       <Card animate={false} padding="lg">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 rounded-lg">
+          <div className="p-2 bg-primary/20 rounded-lg">
             <Settings className="w-5 h-5 text-[#D417C8]" />
           </div>
           <div>
@@ -143,7 +143,7 @@ export const NotificationsSection: React.FC = () => {
       {/* Notification Preferences */}
       <Card animate={false} padding="lg">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-gradient-to-r from-[#32A1E4]/20 to-[#14BDEA]/20 rounded-lg">
+          <div className="p-2 bg-primary/20 rounded-lg">
             <Bell className="w-5 h-5 text-[#32A1E4]" />
           </div>
           <div>

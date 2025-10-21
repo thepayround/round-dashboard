@@ -214,7 +214,7 @@ export const PlanCard = ({
                         <Link to={`/catalog/plans/${plan.id}`}>
                           <motion.button 
                             whileHover={{ x: 2 }}
-                            className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#32A1E4]/10 hover:to-[#14BDEA]/5 rounded-lg transition-all duration-200"
+                            className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-accent/10 rounded-lg transition-all duration-200"
                           >
                             <Eye className="w-4 h-4 text-[#32A1E4]" />
                             <span className="font-medium">View Details</span>
@@ -224,7 +224,7 @@ export const PlanCard = ({
                         <motion.button 
                           whileHover={{ x: 2 }}
                           onClick={() => onEdit?.(plan)}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#7767DA]/10 hover:to-[#D417C8]/5 rounded-lg transition-all duration-200"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-accent/10 rounded-lg transition-all duration-200"
                         >
                           <Edit3 className="w-4 h-4 text-[#7767DA]" />
                           <span className="font-medium">Edit Plan</span>
@@ -233,7 +233,7 @@ export const PlanCard = ({
                         <motion.button 
                           whileHover={{ x: 2 }}
                           onClick={() => onDuplicate?.(plan)}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#FFC107]/10 hover:to-[#FF8A00]/5 rounded-lg transition-all duration-200"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-warning/10 rounded-lg transition-all duration-200"
                         >
                           <Copy className="w-4 h-4 text-[#FFC107]" />
                           <span className="font-medium">Duplicate</span>
@@ -244,7 +244,7 @@ export const PlanCard = ({
                         <motion.button 
                           whileHover={{ x: 2 }}
                           onClick={() => onDelete?.(plan)}
-                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-gradient-to-r hover:from-[#FF4E50]/10 hover:to-[#F44336]/5 rounded-lg transition-all duration-200"
+                          className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-destructive/10 rounded-lg transition-all duration-200"
                         >
                           <Trash2 className="w-4 h-4 text-[#FF4E50]" />
                           <span className="font-medium text-[#FF4E50]">Delete Plan</span>
@@ -278,7 +278,7 @@ export const PlanCard = ({
           {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="relative">
-            <div className="p-3 rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 border border-white/10">
+            <div className="p-3 rounded-lg bg-accent/20 border border-white/10">
               <CreditCard className="w-7 h-7 text-[#7767DA]" />
             </div>
             <div className="absolute -top-1 -right-1">
@@ -318,7 +318,7 @@ export const PlanCard = ({
                     <Link to={`/catalog/plans/${plan.id}`}>
                       <motion.button 
                         whileHover={{ x: 2 }}
-                        className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#32A1E4]/10 hover:to-[#14BDEA]/5 rounded-lg transition-all duration-200"
+                        className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-accent/10 rounded-lg transition-all duration-200"
                       >
                         <Eye className="w-4 h-4 text-[#32A1E4]" />
                         <span className="font-medium">View Details</span>
@@ -328,7 +328,7 @@ export const PlanCard = ({
                     <motion.button 
                       whileHover={{ x: 2 }}
                       onClick={() => onEdit?.(plan)}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#7767DA]/10 hover:to-[#D417C8]/5 rounded-lg transition-all duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-accent/10 rounded-lg transition-all duration-200"
                     >
                       <Edit3 className="w-4 h-4 text-[#7767DA]" />
                       <span className="font-medium">Edit Plan</span>
@@ -337,7 +337,7 @@ export const PlanCard = ({
                     <motion.button 
                       whileHover={{ x: 2 }}
                       onClick={() => onDuplicate?.(plan)}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-gradient-to-r hover:from-[#FFC107]/10 hover:to-[#FF8A00]/5 rounded-lg transition-all duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm auth-text hover:bg-warning/10 rounded-lg transition-all duration-200"
                     >
                       <Copy className="w-4 h-4 text-[#FFC107]" />
                       <span className="font-medium">Duplicate</span>
@@ -348,7 +348,7 @@ export const PlanCard = ({
                     <motion.button 
                       whileHover={{ x: 2 }}
                       onClick={() => onDelete?.(plan)}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-gradient-to-r hover:from-[#FF4E50]/10 hover:to-[#F44336]/5 rounded-lg transition-all duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm hover:bg-destructive/10 rounded-lg transition-all duration-200"
                     >
                       <Trash2 className="w-4 h-4 text-[#FF4E50]" />
                       <span className="font-medium text-[#FF4E50]">Delete Plan</span>

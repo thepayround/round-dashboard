@@ -88,7 +88,7 @@ export const BillingPage = () => (
                 <Card key={invoice} variant="nested" padding="md" clickable>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
                         <CreditCard className="w-5 h-5 text-[#D417C8]" />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -116,7 +116,7 @@ export const BillingPage = () => (
         >
           <Card padding="lg">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#32A1E4]/20 to-[#14BDEA]/20 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
                 <TrendingUp className="w-5 h-5 text-[#32A1E4]" />
               </div>
               <h2 className="text-lg font-medium text-white">Revenue Trend</h2>
@@ -129,7 +129,7 @@ export const BillingPage = () => (
                 </div>
               </Card>
               <Card variant="nested" padding="lg">
-                <div className="h-32 bg-gradient-to-t from-[#D417C8]/20 to-[#14BDEA]/20 rounded-lg flex items-end justify-center">
+                <div className="h-32 bg-primary/20 rounded-lg flex items-end justify-center">
                   <p className="text-white/60 text-sm mb-2">Revenue chart would go here</p>
                 </div>
               </Card>

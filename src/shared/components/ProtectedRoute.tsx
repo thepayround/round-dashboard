@@ -16,7 +16,7 @@ export const ProtectedRoute = ({ children, requireOnboarding = false }: Protecte
   // Show loading spinner while checking authentication
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#000000] flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -66,7 +66,7 @@ export const ProtectedRoute = ({ children, requireOnboarding = false }: Protecte
 
 // Loading component for reuse
 export const LoadingScreen = () => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+  <div className="min-h-screen bg-[#000000] flex items-center justify-center">
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -77,9 +77,9 @@ export const LoadingScreen = () => (
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-        className="w-20 h-20 mx-auto rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#14BDEA]/20 border border-white/20 flex items-center justify-center"
+        className="w-20 h-20 mx-auto rounded-lg bg-primary/20 border border-white/20 flex items-center justify-center"
       >
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D417C8] to-[#14BDEA]" />
+        <div className="w-10 h-10 rounded-full bg-primary" />
       </motion.div>
 
       {/* Loading Spinner */}

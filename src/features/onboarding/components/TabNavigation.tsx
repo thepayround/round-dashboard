@@ -55,10 +55,10 @@ export const TabNavigation = ({
 
   const getStepCircleClasses = (stepId: OnboardingStep): string => {
     if (isStepActive(stepId)) {
-      return 'bg-gradient-to-r from-[#D417C8] to-[#14BDEA] shadow-lg shadow-[#D417C8]/30'
+      return 'bg-primary shadow-lg shadow-[#D417C8]/30'
     }
     if (isStepCompleted(stepId)) {
-      return 'bg-gradient-to-r from-[#42E695] to-[#3BB2B8]'
+      return 'bg-primary'
     }
     // All other steps are clickable and interactive
     return 'bg-gray-700 border-gray-500 hover:bg-gray-600 hover:border-gray-400 cursor-pointer'
@@ -92,7 +92,7 @@ export const TabNavigation = ({
             initial={{ width: 0 }}
             animate={{ width: `${getProgress()}%` }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="h-full bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] rounded-full shadow-sm"
+            className="h-full bg-primary rounded-full shadow-sm"
           />
         </div>
 

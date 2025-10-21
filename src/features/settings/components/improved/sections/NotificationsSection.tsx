@@ -127,7 +127,7 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
                 <div className="space-y-4">
                   {/* Type Header */}
                   <div className="flex items-start gap-3">
-                    <div className={`p-2 bg-gradient-to-br ${type.bgColor} rounded-lg border ${type.borderColor}`}>
+                    <div className={`p-2 bg- ${type.bgColor} rounded-lg border ${type.borderColor}`}>
                       <type.icon className={`w-3.5 h-3.5 ${type.iconColor}`} />
                     </div>
                     <div className="flex-1">
@@ -155,7 +155,7 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
                               checked={getNotificationSetting(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms')}
                               onChange={(e) => handleToggleChange(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms', e.target.checked)}
                             />
-                            <div className="w-8 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#D417C8]/20 rounded-full peer peer-checked:after:translate-x-3 peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#D417C8] peer-checked:to-[#14BDEA]" />
+                            <div className="w-8 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#D417C8]/20 rounded-full peer peer-checked:after:translate-x-3 peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary" />
                           </motion.label>
                         </div>
                         <p className="text-xs text-gray-400">{channel.description}</p>

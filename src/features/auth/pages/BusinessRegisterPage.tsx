@@ -687,7 +687,7 @@ export const BusinessRegisterPage = () => {
                 initial={{ width: 0 }}
                 animate={{ width: `${calculateDetailedProgress()}%` }}
                 transition={{ duration: 0.3 }}
-                className="bg-gradient-to-r from-[#14BDEA] via-[#7767DA] to-[#D417C8] h-2 rounded-full"
+                className="bg-primary h-2 rounded-full"
               />
             </div>
           </motion.div>

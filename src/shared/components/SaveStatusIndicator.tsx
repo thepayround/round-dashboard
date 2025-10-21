@@ -88,7 +88,7 @@ export const SaveButton: React.FC<SaveButtonProps> = ({
         'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500',
         isDisabled
           ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-          : 'bg-gradient-to-r from-pink-500 to-cyan-500 text-white hover:from-pink-600 hover:to-cyan-600',
+          : 'bg-primary text-white hover:brightness-105',
         className
       )}
     >

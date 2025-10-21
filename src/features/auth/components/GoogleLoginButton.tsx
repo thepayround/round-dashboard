@@ -180,7 +180,7 @@ export const GoogleLoginButton = ({ onSuccess, onError, accountType }: GoogleLog
                  relative overflow-hidden group
                  disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 transform -skew-x-12" />
+      <div className="absolute inset-0 bg-white/3 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
       {isLoading ? (
         <>
           <svg className="w-4 h-4 z-10 animate-spin" fill="none" viewBox="0 0 24 24">

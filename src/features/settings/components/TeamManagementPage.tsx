@@ -297,7 +297,7 @@ export const TeamManagementPage: React.FC = () => {
             <div>
               <h1 className="text-lg font-medium text-white mb-4">
                 Team{' '}
-                <span className="bg-gradient-to-r from-[#D417C8] via-[#7767DA] to-[#14BDEA] bg-clip-text text-transparent">
+                <span className="text-primary">
                   Management
                 </span>
               </h1>
@@ -329,7 +329,7 @@ export const TeamManagementPage: React.FC = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#D417C8]/20 to-[#14BDEA]/20 text-white border border-white/20'
+                      ? 'bg-primary/20 text-white border border-white/20'
                       : 'text-gray-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
@@ -408,7 +408,7 @@ export const TeamManagementPage: React.FC = () => {
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full flex items-center justify-center">
+                            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
                               <span className="text-white font-medium">
                                 {member.firstName[0]}{member.lastName[0]}
                               </span>
