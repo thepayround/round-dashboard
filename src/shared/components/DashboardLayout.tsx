@@ -638,7 +638,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
 
   return (
     <div
-      className="min-h-screen relative bg-[#000000]"
+      className="min-h-screen relative bg-[#070708]"
       style={{
         '--sidebar-width': isCollapsed ? '80px' : '280px'
       } as React.CSSProperties}
