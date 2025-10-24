@@ -165,7 +165,7 @@ const CardComponent = ({
               </div>
             )}
           </div>
-          <h3 className="text-2xl font-medium text-white mb-1 tracking-tight">
+          <h3 className="text-2xl font-normal text-white mb-1 tracking-tight">
             {typeof value === 'number' ? value.toLocaleString() : value}
           </h3>
           <p className="text-sm text-[#a3a3a3]">{title}</p>
@@ -221,7 +221,7 @@ const CardComponent = ({
           <div className="min-w-0 flex-1">
             <p className="text-[#a3a3a3] text-xs mb-1">{title}</p>
             {value && (
-              <p className="text-lg font-medium text-white tracking-tight">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+              <p className="text-lg font-normal text-white tracking-tight">{typeof value === 'number' ? value.toLocaleString() : value}</p>
             )}
             {trend && (
               <p className={`text-xs font-normal ${getTrendColor(trend.direction)} mt-1 tracking-tight`}>

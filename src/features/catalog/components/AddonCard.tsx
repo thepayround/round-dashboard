@@ -154,7 +154,7 @@ export const AddonCard = ({
           position: 'relative'
         }}
       >
-        <div className="auth-card group cursor-pointer" style={{ overflow: 'visible', boxShadow: 'none !important' }}>
+        <div className="bg-[#171719] border border-[#1e1f22] rounded-lg group cursor-pointer hover:bg-[#1d1d20] hover:border-[#25262a] transition-all duration-200" style={{ overflow: 'visible' }}>
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
             {/* Main Info */}
@@ -194,10 +194,10 @@ export const AddonCard = ({
                   </span>
                   <span className={`flex items-center space-x-2 text-sm px-3 py-1 rounded-full border ${statusColors[addon.status]}`}>
                     <StatusIcon className="w-3.5 h-3.5" />
-                    <span className="font-medium capitalize">{addon.status}</span>
+                    <span className="font-normal">{addon.status}</span>
                   </span>
                   <span className={`flex items-center space-x-2 text-sm px-3 py-1 rounded-full border ${typeColors[addon.type]}`}>
-                    <span className="font-medium">{getTypeLabel(addon.type)}</span>
+                    <span className="font-normal">{getTypeLabel(addon.type)}</span>
                   </span>
                 </div>
               </div>
@@ -227,7 +227,7 @@ export const AddonCard = ({
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-9 h-9 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white/15 hover:border-white/30"
+                  className="w-9 h-9 rounded-lg bg-[#1d1d20] border border-[#25262a] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-[#212124] hover:border-[#2c2d31]"
                   onClick={() => setShowActions(!showActions)}
                 >
                   <MoreHorizontal className="w-5 h-5 auth-text" />
@@ -241,8 +241,8 @@ export const AddonCard = ({
                     className="absolute right-0 top-full mt-3 min-w-[200px]"
                     style={{ zIndex: 99999 }}
                   >
-                    <div className="bg-black/90 border border-white/20 rounded-lg overflow-hidden">
-                      <div className="bg-[#D417C8]/20 px-4 py-3 border-b border-white/10">
+                    <div className="bg-[#0a0a0a] border border-[#25262a] rounded-lg overflow-hidden shadow-xl">
+                      <div className="bg-[#D417C8]/10 px-4 py-3 border-b border-[#25262a]">
                         <p className="font-medium auth-text text-sm">Add-on Actions</p>
                       </div>
                       
@@ -319,12 +319,12 @@ export const AddonCard = ({
         position: 'relative'
       }}
     >
-      <div className="auth-card group cursor-pointer" style={{ overflow: 'visible', boxShadow: 'none !important' }}>
+      <div className="bg-[#171719] border border-[#1e1f22] rounded-lg group cursor-pointer hover:bg-[#1d1d20] hover:border-[#25262a] transition-all duration-200" style={{ overflow: 'visible' }}>
         <div className="p-6">
           {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="relative">
-            <div className="p-3 rounded-lg bg-primary/20 border border-white/10">
+            <div className="p-3 rounded-lg bg-[#D417C8]/10 border border-[#25262a]">
               <Zap className="w-7 h-7 text-[#D417C8]" />
             </div>
             <div className="absolute -top-1 -right-1">
@@ -338,7 +338,7 @@ export const AddonCard = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-9 h-9 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white/15 hover:border-white/30"
+              className="w-9 h-9 rounded-lg bg-[#1d1d20] border border-[#25262a] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-[#212124] hover:border-[#2c2d31]"
               onClick={(e) => {
                 e.preventDefault()
                 setShowActions(!showActions)
@@ -355,8 +355,8 @@ export const AddonCard = ({
                 className="absolute right-0 top-full mt-3 min-w-[200px]"
                 style={{ zIndex: 99999 }}
               >
-                <div className="bg-black/90 border border-white/20 rounded-lg overflow-hidden">
-                  <div className="bg-[#D417C8]/20 px-4 py-3 border-b border-white/10">
+                <div className="bg-[#0a0a0a] border border-[#25262a] rounded-lg overflow-hidden shadow-xl">
+                  <div className="bg-[#D417C8]/10 px-4 py-3 border-b border-[#25262a]">
                     <p className="font-medium auth-text text-sm">Add-on Actions</p>
                   </div>
                   

@@ -1,10 +1,17 @@
 import { httpClient } from './base/client'
 import type { PagedResult } from '@/shared/types/api/common'
 
-// Customer Types
+// Customer Types - Use string enums to match backend validation
 export enum CustomerType {
-  Individual = 1,
-  Business = 2
+  Individual = 'Individual',
+  Business = 'Business'
+}
+
+export enum CustomerStatus {
+  Active = 'Active',
+  Inactive = 'Inactive',
+  Suspended = 'Suspended',
+  Cancelled = 'Cancelled'
 }
 
 // Add customers endpoint to config first
@@ -36,7 +43,7 @@ export interface CustomerResponse {
   locale?: string
   timezone?: string
   currency: string
-  status: 'active' | 'inactive' | 'suspended' | 'cancelled'
+  status: CustomerStatus
   signupDate: string
   lastActivityDate?: string
   portalAccess: boolean
@@ -126,17 +133,22 @@ export interface CustomerAddressCreateRequest {
 }
 
 export interface CustomerStatusUpdateRequest {
-  status: 'active' | 'inactive' | 'suspended' | 'cancelled'
+  status: CustomerStatus
   reason?: string
 }
 
 export interface CustomerSearchParams {
   pageNumber?: number
   pageSize?: number
-  filterBy?: string
-  filterValue?: string
+  searchQuery?: string  // Global search across name, email, company
   orderBy?: string
   isAscending?: boolean
+  // Multiple filters - sent as query params: ?Status=Active&Currency=USD&Type=Business
+  Status?: string
+  Type?: string
+  Currency?: string
+  PortalAccess?: string
+  AutoCollection?: string
 }
 
 export interface CustomerSearchRequest {
@@ -168,10 +180,16 @@ export class CustomerService {
     
     if (params.pageNumber) searchParams.set('pageNumber', params.pageNumber.toString())
     if (params.pageSize) searchParams.set('pageSize', params.pageSize.toString())
-    if (params.filterBy) searchParams.set('filterBy', params.filterBy)
-    if (params.filterValue) searchParams.set('filterValue', params.filterValue)
+    if (params.searchQuery) searchParams.set('searchQuery', params.searchQuery)
     if (params.orderBy) searchParams.set('orderBy', params.orderBy)
     if (params.isAscending !== undefined) searchParams.set('isAscending', params.isAscending.toString())
+    
+    // Multiple filters - sent as separate query params
+    if (params.Status) searchParams.set('Status', params.Status)
+    if (params.Type) searchParams.set('Type', params.Type)
+    if (params.Currency) searchParams.set('Currency', params.Currency)
+    if (params.PortalAccess) searchParams.set('PortalAccess', params.PortalAccess)
+    if (params.AutoCollection) searchParams.set('AutoCollection', params.AutoCollection)
 
     const response = await this.client.get<PagedResult<CustomerResponse>>(
       `${this.baseUrl}?${searchParams.toString()}`

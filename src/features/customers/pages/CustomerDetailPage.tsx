@@ -28,7 +28,7 @@ import { ActionButton } from '@/shared/components/ActionButton'
 import { Card } from '@/shared/components/Card'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
-import type { CustomerResponse } from '@/shared/services/api/customer.service'
+import type { CustomerResponse , CustomerStatus } from '@/shared/services/api/customer.service'
 import { EmailComposeModal } from '../components/EmailComposeModal'
 import { CustomerNotesModal } from '../components/CustomerNotesModal'
 import { EditCustomerModal } from '../components/EditCustomerModal'
@@ -86,7 +86,7 @@ const CustomerDetailPage: React.FC = () => {
     }
   }, [id, loadCustomer])
 
-  const _handleStatusUpdate = async (status: 'active' | 'inactive' | 'suspended' | 'cancelled', reason?: string) => {
+  const _handleStatusUpdate = async (status: CustomerStatus, reason?: string) => {
     if (!customer) return
     
     try {
@@ -491,7 +491,7 @@ const CustomerDetailPage: React.FC = () => {
                   <div className="space-y-4">
                     {customer.tags.length > 0 && (
                       <div>
-                        <h3 className="text-xs font-normal tracking-tight text-gray-300 uppercase tracking-wider mb-2">
+                        <h3 className="text-xs font-normal tracking-tight text-gray-300 mb-2">
                           Tags
                         </h3>
                         <div className="flex flex-wrap gap-2">
@@ -509,8 +509,8 @@ const CustomerDetailPage: React.FC = () => {
                     
                     {Object.keys(customer.customFields).length > 0 && (
                       <div>
-                        <h3 className="text-xs font-normal tracking-tight text-gray-300 uppercase tracking-wider mb-2">
-                          Custom Fields
+                        <h3 className="text-xs font-normal tracking-tight text-gray-300 mb-2">
+                          Custom fields
                         </h3>
                         <div className="space-y-2">
                           {Object.entries(customer.customFields).map(([key, value]) => (

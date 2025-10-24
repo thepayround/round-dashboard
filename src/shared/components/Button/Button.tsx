@@ -93,7 +93,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
               <Icon className="w-5 h-5" />
             )
           )}
-          <span className={enhanced ? 'font-medium tracking-tight' : 'tracking-tight'}>{children}</span>
+          <span className="font-normal tracking-tight">{children}</span>
           {Icon && iconPosition === 'right' && (
             enhanced ? (
               <div className={`flex items-center justify-center rounded-lg ${variant === 'primary' || variant === 'create' ? 'bg-white/15' : 'bg-white/5'} p-1`}>

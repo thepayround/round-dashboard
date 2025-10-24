@@ -175,7 +175,7 @@ export const PricingModelBuilder = ({
               className={`p-4 rounded-lg border text-left transition-all ${
                 selectedModel === option.id
                   ? 'border-[#D417C8] bg-[#D417C8]/10 text-white'
-                  : 'border-white/20 bg-white/5 text-white/70 hover:text-white hover:border-white/40'
+                  : 'border-[#25262a] bg-[#171719] text-white/70 hover:text-white hover:border-[#2c2d31]'
               }`}
             >
               <div className="flex items-center space-x-3 mb-2">
@@ -294,7 +294,7 @@ export const PricingModelBuilder = ({
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 bg-white/5 rounded-lg border border-white/10"
+                className="p-4 bg-[#171719] rounded-lg border border-[#25262a]"
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-normal tracking-tight auth-text">Tier {index + 1}</span>
@@ -383,7 +383,7 @@ export const PricingModelBuilder = ({
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 bg-white/5 rounded-lg border border-white/10"
+                className="p-4 bg-[#171719] rounded-lg border border-[#25262a]"
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-normal tracking-tight auth-text">Metric {index + 1}</span>

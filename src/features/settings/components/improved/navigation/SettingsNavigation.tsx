@@ -31,7 +31,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
         <div className="p-3 border-b border-white/8">
           <div className="flex items-center gap-2">
             <Settings className="w-3 h-3 text-gray-400" />
-            <span className="text-[11px] font-medium text-gray-300 uppercase tracking-wider">Settings</span>
+            <span className="text-sm font-normal text-gray-300 tracking-tight">Settings</span>
           </div>
         </div>
         

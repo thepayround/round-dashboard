@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { FileText, Download } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { ActionButton, SearchFilterToolbar, SectionHeader } from '@/shared/components'
+import { ActionButton, SearchFilterToolbar } from '@/shared/components'
 import type { FilterField } from '@/shared/components'
 import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
 import { InvoiceTable } from '../components/InvoiceTable'
@@ -111,24 +111,17 @@ export const InvoicesPage = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
+        {/* Action Bar */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="flex items-center justify-end"
         >
-          <SectionHeader
-            title="Invoices"
-            subtitle="Manage and track all your invoices in one place"
-            size="main"
-            actions={
-              <ActionButton
-                label="Create Invoice"
-                onClick={() => { /* Create invoice clicked */ }}
-                size="md"
-                animated={false}
-              />
-            }
+          <ActionButton
+            label="Create Invoice"
+            onClick={() => { /* Create invoice clicked */ }}
+            size="md"
+            animated={false}
           />
         </motion.div>
 
@@ -165,7 +158,7 @@ export const InvoicesPage = () => {
             <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
               <FileText className="w-5 h-5 text-[#D417C8]" />
             </div>
-            <h2 className="text-lg font-medium text-white">All Invoices</h2>
+            <h2 className="text-xl font-normal tracking-tight text-white">Invoices</h2>
           </div>
           
           <InvoiceTable

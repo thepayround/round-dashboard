@@ -75,7 +75,7 @@ const BreadcrumbItem: React.FC<{ item: BreadcrumbItem; index: number }> = ({ ite
           : 'text-gray-400 hover:text-gray-200'
       )}
     >
-      <span className="text-sm">{label}</span>
+      <span className="text-base">{label}</span>
     </motion.span>
   )
 

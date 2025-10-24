@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
@@ -21,11 +21,10 @@ import {
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { ActionButton } from '@/shared/components/ActionButton'
 import { Card } from '@/shared/components/Card'
-import { SearchFilterToolbar, SectionHeader } from '@/shared/components'
+import { SearchFilterToolbar } from '@/shared/components'
 import Pagination from '@/shared/components/Pagination'
 import type { FilterField } from '@/shared/components'
 import type { ViewMode, ViewModeOption } from '@/shared/components/ViewModeToggle'
-import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
 import { useViewPreferences } from '@/shared/hooks/useViewPreferences'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
@@ -89,9 +88,12 @@ const CustomersPage: React.FC = () => {
   const { showError, showSuccess } = useGlobalToast()
   const { preferences, setViewMode, setItemsPerPage, setSortConfig } = useViewPreferences()
   
+  // Data state
   const [customers, setCustomers] = useState<CustomerResponse[]>([])
   const [loading, setLoading] = useState(true)
-  const [initialLoad, setInitialLoad] = useState(true)
+  const [totalCount, setTotalCount] = useState(0)
+  
+  // UI state
   const [showFilters, setShowFilters] = useState(false)
   const [showAddModal, setShowAddModal] = useState(false)
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([])
@@ -101,7 +103,6 @@ const CustomersPage: React.FC = () => {
   const [viewMode, setViewModeState] = useState<ViewMode>(preferences.viewMode)
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPageState] = useState(preferences.itemsPerPage)
-  const [totalCount, setTotalCount] = useState(0)
   
   // Sort state
   const [sortConfig, setSortConfigState] = useState<SortConfig>({
@@ -114,6 +115,12 @@ const CustomersPage: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>('')
   const [selectedCurrency, setSelectedCurrency] = useState<string>('')
   const [selectedPortalAccess, setSelectedPortalAccess] = useState<string>('')
+  
+  // Search state - will be sent to backend
+  const [searchQuery, setSearchQuery] = useState<string>('')
+  
+  // Track if this is the first load to show full loading overlay
+  const isFirstLoadRef = useRef(true)
 
   // Fetch currencies for dynamic currency filter
   const { data: currenciesData } = useCurrencies()
@@ -147,101 +154,82 @@ const CustomersPage: React.FC = () => {
 
   const loadCustomers = useCallback(async () => {
     try {
-      // Only show loading overlay for initial load or when no data exists
-      if (initialLoad || customers.length === 0) {
+      // Show loading overlay only on first load
+      if (isFirstLoadRef.current) {
         setLoading(true)
       }
       
-      // Build search params with proper backend pagination
+      // Build search params - ALL filtering and search done by BACKEND
       const searchParams: CustomerSearchParams = {
         pageNumber: currentPage,
         pageSize: itemsPerPage,
+        searchQuery: searchQuery.trim() || undefined,
         orderBy: (() => {
           if (sortConfig.field === 'displayName') return 'FirstName'
           if (sortConfig.field === 'signupDate') return 'CreatedDate'
           return sortConfig.field.charAt(0).toUpperCase() + sortConfig.field.slice(1)
         })(),
-        isAscending: sortConfig.direction === 'asc'
-      }
-
-      // Apply currency filter via backend (this works properly)
-      if (selectedCurrency) {
-        searchParams.filterBy = 'Currency'
-        searchParams.filterValue = selectedCurrency
+        isAscending: sortConfig.direction === 'asc',
+        // Multiple filters - all sent simultaneously
+        Status: selectedStatus || undefined,
+        Type: selectedCustomerType || undefined,
+        Currency: selectedCurrency || undefined,
+        PortalAccess: selectedPortalAccess || undefined
       }
 
       const response = await customerService.getAll(searchParams)
       
-      // For now, we'll use backend pagination but apply client-side filters for enum/boolean properties
-      // This is a hybrid approach until backend filtering is extended for all field types
-      let filteredCustomers = response.items
-      
-      // Apply client-side filters for enum and boolean properties
-      if (selectedCustomerType) {
-        filteredCustomers = filteredCustomers.filter(c => c.type === parseInt(selectedCustomerType))
-      }
-      
-      if (selectedStatus) {
-        filteredCustomers = filteredCustomers.filter(c => {
-          const customerStatus = typeof c.status === 'string' ? parseInt(c.status) : c.status
-          return customerStatus === parseInt(selectedStatus)
-        })
-      }
-      
-      if (selectedPortalAccess) {
-        const portalAccessBool = selectedPortalAccess === 'true'
-        filteredCustomers = filteredCustomers.filter(c => c.portalAccess === portalAccessBool)
-      }
-      
-      setCustomers(filteredCustomers)
-      // Note: totalCount from backend may not reflect client-side filtering, but it's better than loading all data
+      // Use backend data directly - NO client-side filtering or searching
+      setCustomers(response.items)
       setTotalCount(response.totalCount)
-    } catch (error) {
-      showError('Failed to load customers')
+    } catch (error: unknown) {
+      // Enhanced error handling with specific messages
+      let errorMessage = 'Failed to load customers'
+      
+      // Type guard to check if error has response property
+      const hasResponse = (err: unknown): err is { response: { status: number; data?: { errors?: Record<string, string[]> } } } => typeof err === 'object' && err !== null && 'response' in err
+
+      // Type guard for network errors
+      const hasNetworkProps = (err: unknown): err is { code?: string; message?: string } => typeof err === 'object' && err !== null
+      
+      if (hasResponse(error) && error.response?.status === 400) {
+        // Validation error - show specific field errors
+        const validationErrors = error.response.data?.errors
+        if (validationErrors) {
+          const errorMessages = Object.entries(validationErrors)
+            .map(([field, errors]) => `${field}: ${(errors as string[]).join(', ')}`)
+            .join('\n')
+          errorMessage = `Invalid filters:\n${errorMessages}`
+        } else {
+          errorMessage = 'Invalid filter parameters. Please check your selections.'
+        }
+      } else if (hasResponse(error) && (error.response?.status === 401 || error.response?.status === 403)) {
+        errorMessage = 'You are not authorized to view customers'
+      } else if (hasResponse(error) && error.response?.status >= 500) {
+        errorMessage = 'Server error. Please try again later.'
+      } else if (hasNetworkProps(error) && (error.code === 'ECONNABORTED' || error.message === 'Network Error')) {
+        errorMessage = 'Network error. Please check your connection.'
+      }
+      
+      showError(errorMessage)
       console.error('Error loading customers:', error)
     } finally {
-      if (initialLoad || customers.length === 0) {
+      if (isFirstLoadRef.current) {
         setLoading(false)
+        isFirstLoadRef.current = false
       }
-      setInitialLoad(false)
     }
-  }, [currentPage, itemsPerPage, sortConfig, selectedCustomerType, selectedStatus, selectedCurrency, selectedPortalAccess, showError, customers.length, initialLoad])
+  }, [currentPage, itemsPerPage, sortConfig, searchQuery, selectedCustomerType, selectedStatus, selectedCurrency, selectedPortalAccess, showError])
 
   useEffect(() => {
     loadCustomers()
   }, [loadCustomers])
 
-  // Search fields extraction function
-  const getCustomerSearchFields = useCallback((customer: CustomerResponse): string[] => [
-    customer.email ?? '',
-    customer.firstName ?? '',
-    customer.lastName ?? '',
-    customer.displayName ?? '',
-    customer.company ?? '',
-    customer.phoneNumber ?? '',
-    customer.status ?? '',
-    ...(customer.tags ?? [])
-  ], [])
+  // Client-side search - now handled by backend
+  // Search queries are sent to backend via searchParams.searchQuery
 
-  // Use debounced search
-  const {
-    searchQuery,
-    setSearchQuery,
-    filteredItems: searchFilteredCustomers
-  } = useDebouncedSearch({
-    items: customers,
-    searchFields: getCustomerSearchFields,
-    debounceMs: 300
-  })
-
-  // Apply search filtering to customers (client-side search within current page)
-  const displayedCustomers = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return customers
-    }
-    
-    return searchFilteredCustomers
-  }, [customers, searchFilteredCustomers, searchQuery])
+  // Display customers directly from backend (already filtered/searched)
+  const displayedCustomers = customers
 
   // Calculate pagination info
   const totalPages = Math.ceil(totalCount / itemsPerPage)
@@ -314,8 +302,8 @@ const CustomersPage: React.FC = () => {
       },
       options: [
         { id: '', name: 'All Types' },
-        { id: '1', name: 'Individual' },
-        { id: '2', name: 'Business' }
+        { id: 'Individual', name: 'Individual' },
+        { id: 'Business', name: 'Business' }
       ]
     },
     {
@@ -333,10 +321,10 @@ const CustomersPage: React.FC = () => {
       },
       options: [
         { id: '', name: 'All Status' },
-        { id: '1', name: 'Active' },
-        { id: '2', name: 'Inactive' },
-        { id: '3', name: 'Suspended' },
-        { id: '4', name: 'Cancelled' }
+        { id: 'Active', name: 'Active' },
+        { id: 'Inactive', name: 'Inactive' },
+        { id: 'Suspended', name: 'Suspended' },
+        { id: 'Cancelled', name: 'Cancelled' }
       ]
     },
     {
@@ -375,7 +363,8 @@ const CustomersPage: React.FC = () => {
     }
   ]
 
-  if (initialLoad && loading) {
+  // Show skeleton loading only on first load
+  if (isFirstLoadRef.current && loading) {
     return (
       <DashboardLayout>
         <div className="space-y-6">
@@ -417,73 +406,66 @@ const CustomersPage: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <SectionHeader
-          title="Customers"
-          subtitle={
-            selectionMode && selectedCustomers.length > 0
-              ? `${selectedCustomers.length} customer${selectedCustomers.length !== 1 ? 's' : ''} selected`
-              : `Manage your ${totalCount} customers and their information`
-          }
-          actions={
-            <div className="flex items-center space-x-3">
-              {selectionMode ? (
-                <>
-                  {selectedCustomers.length > 0 && (
-                    <>
-                      <ActionButton
-                        label={`Export (${selectedCustomers.length})`}
-                        variant="ghost"
-                        size="sm"
-                        icon={Download}
-                        onClick={handleExportSelected}
-                      />
-                      <ActionButton
-                        label={`Bulk Edit (${selectedCustomers.length})`}
-                        variant="ghost"
-                        size="sm"
-                        icon={Edit}
-                        onClick={handleBulkEdit}
-                      />
-                    </>
-                  )}
-                  <ActionButton
-                    label="Cancel Selection"
-                    variant="ghost"
-                    size="sm"
-                    icon={Square}
-                    onClick={() => {
-                      setSelectedCustomers([])
-                      setSelectionMode(false)
-                    }}
-                  />
-                </>
-              ) : (
-                <>
-                  <ActionButton
-                    label="Select"
-                    variant="ghost"
-                    size="sm"
-                    icon={CheckSquare}
-                    onClick={() => setSelectionMode(true)}
-                  />
-                  <ActionButton
-                    label="Export All"
-                    variant="ghost"
-                    size="sm"
-                    icon={Download}
-                    onClick={() => showSuccess('Export functionality coming soon')}
-                  />
-                </>
-              )}
-              <ActionButton
-                label="Add Customer"
-                variant="primary"
-                size="md"
-                onClick={() => setShowAddModal(true)}
-              />
-            </div>
-          }
-        />
+        {/* Action Bar */}
+        <div className="flex items-center justify-end">
+          <div className="flex items-center space-x-3">
+            {selectionMode ? (
+              <>
+                {selectedCustomers.length > 0 && (
+                  <>
+                    <ActionButton
+                      label={`Export (${selectedCustomers.length})`}
+                      variant="ghost"
+                      size="sm"
+                      icon={Download}
+                      onClick={handleExportSelected}
+                    />
+                    <ActionButton
+                      label={`Bulk Edit (${selectedCustomers.length})`}
+                      variant="ghost"
+                      size="sm"
+                      icon={Edit}
+                      onClick={handleBulkEdit}
+                    />
+                  </>
+                )}
+                <ActionButton
+                  label="Cancel Selection"
+                  variant="ghost"
+                  size="sm"
+                  icon={Square}
+                  onClick={() => {
+                    setSelectedCustomers([])
+                    setSelectionMode(false)
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                <ActionButton
+                  label="Select"
+                  variant="ghost"
+                  size="sm"
+                  icon={CheckSquare}
+                  onClick={() => setSelectionMode(true)}
+                />
+                <ActionButton
+                  label="Export All"
+                  variant="ghost"
+                  size="sm"
+                  icon={Download}
+                  onClick={() => showSuccess('Export functionality coming soon')}
+                />
+              </>
+            )}
+            <ActionButton
+              label="Add Customer"
+              variant="primary"
+              size="md"
+              onClick={() => setShowAddModal(true)}
+            />
+          </div>
+        </div>
 
         {/* Enhanced Search and View Controls */}
         <div className="space-y-4">

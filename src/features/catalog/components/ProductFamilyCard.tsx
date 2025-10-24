@@ -89,7 +89,7 @@ export const ProductFamilyCard = ({
           position: 'relative'
         }}
       >
-        <div className="auth-card group cursor-pointer" style={{ overflow: 'visible', boxShadow: 'none !important' }}>
+        <div className="bg-[#171719] border border-[#1e1f22] rounded-lg group cursor-pointer hover:bg-[#1d1d20] hover:border-[#25262a] transition-all duration-200" style={{ overflow: 'visible' }}>
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
             {/* Main Info */}
@@ -144,7 +144,7 @@ export const ProductFamilyCard = ({
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-9 h-9 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white/15 hover:border-white/30"
+                  className="w-9 h-9 rounded-lg bg-[#1d1d20] border border-[#25262a] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-[#212124] hover:border-[#2c2d31]"
                   onClick={() => setShowActions(!showActions)}
                 >
                   <MoreHorizontal className="w-5 h-5 auth-text" />
@@ -159,9 +159,9 @@ export const ProductFamilyCard = ({
                     style={{ zIndex: 99999 }}
                   >
                     {/* Enhanced dropdown with better styling */}
-                    <div className="bg-black/90 border border-white/20 rounded-lg overflow-hidden">
+                    <div className="bg-[#0a0a0a] border border-[#25262a] shadow-xl rounded-lg overflow-hidden">
                       {/* Gradient header */}
-                      <div className="bg-[#D417C8]/20 px-4 py-3 border-b border-white/10">
+                      <div className="bg-[#D417C8]/20 px-4 py-3 border-b border-[#25262a]">
                         <p className="font-medium auth-text text-sm">Product Family Actions</p>
                       </div>
                       
@@ -230,12 +230,12 @@ export const ProductFamilyCard = ({
         position: 'relative'
       }}
     >
-      <div className="auth-card group cursor-pointer hover:shadow-none hover:transform-none" style={{ overflow: 'visible' }}>
+      <div className="bg-[#171719] border border-[#1e1f22] rounded-lg group cursor-pointer hover:bg-[#1d1d20] hover:border-[#25262a] transition-all duration-200" style={{ overflow: 'visible' }}>
         <div className="p-6">
           {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="relative">
-            <div className="p-3 rounded-lg bg-primary/20 border border-white/10">
+            <div className="p-3 rounded-lg bg-[#D417C8]/10 border border-[#25262a]">
               <Layers className="w-7 h-7 text-[#D417C8]" />
             </div>
             <div className="absolute -top-1 -right-1">
@@ -249,7 +249,7 @@ export const ProductFamilyCard = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-9 h-9 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white/15 hover:border-white/30 shadow-lg"
+              className="w-9 h-9 rounded-lg bg-[#1d1d20] border border-[#25262a] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-[#212124] hover:border-[#2c2d31] shadow-lg"
               onClick={(e) => {
                 e.preventDefault()
                 setShowActions(!showActions)
@@ -267,9 +267,9 @@ export const ProductFamilyCard = ({
                 style={{ zIndex: 99999 }}
               >
                 {/* Enhanced dropdown with better styling */}
-                <div className="bg-black/90 border border-white/20 rounded-lg overflow-hidden">
+                <div className="bg-[#0a0a0a] border border-[#25262a] shadow-xl rounded-lg overflow-hidden">
                   {/* Gradient header */}
-                  <div className="bg-primary/20 px-4 py-3 border-b border-white/10">
+                  <div className="bg-primary/20 px-4 py-3 border-b border-[#25262a]">
                     <p className="font-medium auth-text text-sm">Product Family Actions</p>
                   </div>
                   

@@ -60,7 +60,7 @@ export const ViewModeToggle = ({
           >
             <IconComponent className={iconSizeClasses[size]} />
             {showLabels && (
-              <span className="text-sm font-medium">{option.label}</span>
+              <span className="text-sm font-normal">{option.label}</span>
             )}
           </button>
         )

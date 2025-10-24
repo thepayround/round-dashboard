@@ -162,8 +162,8 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
           <div className="flex items-center gap-2">
             <CheckCircle className="w-3 h-3 text-green-400 flex-shrink-0" />
             <div>
-              <h4 className="text-green-400 font-medium text-xs">Password Updated Successfully</h4>
-              <p className="text-green-300/80 text-[11px] mt-0.5">
+              <h4 className="text-green-400 font-normal text-xs">Password updated successfully</h4>
+              <p className="text-green-300/80 text-sm mt-0.5">
                 Your password has been changed securely.
               </p>
             </div>
@@ -177,8 +177,8 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
           <div className="flex items-center gap-2">
             <AlertCircle className="w-3 h-3 text-red-400 flex-shrink-0" />
             <div>
-              <h4 className="text-red-400 font-medium text-xs">Password Change Failed</h4>
-              <p className="text-red-300/80 text-[11px] mt-0.5">{error}</p>
+              <h4 className="text-red-400 font-normal text-xs">Password change failed</h4>
+              <p className="text-red-300/80 text-sm mt-0.5">{error}</p>
             </div>
           </div>
         </div>

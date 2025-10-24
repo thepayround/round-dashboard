@@ -166,7 +166,7 @@ export const CreateProductFamilyModal = ({
           </div>
 
           {/* Settings */}
-          <div className="space-y-4 pt-6 border-t border-white/10">
+          <div className="space-y-4 pt-6 border-t border-[#25262a]">
             <h3 className="text-lg font-medium tracking-tight text-white mb-4">Settings</h3>
             
             <FormInput
@@ -192,7 +192,7 @@ export const CreateProductFamilyModal = ({
                   name="settings.allowCustomPricing"
                   checked={formData.settings?.allowCustomPricing ?? false}
                   onChange={handleInputChange}
-                  className="mt-1 h-4 w-4 text-[#D417C8] bg-white/5 border-white/20 rounded 
+                  className="mt-1 h-4 w-4 text-[#D417C8] bg-[#171719] border-white/20 rounded 
                            focus:ring-[#D417C8] focus:ring-2"
                 />
                 <div>
@@ -212,7 +212,7 @@ export const CreateProductFamilyModal = ({
                   name="settings.requireApproval"
                   checked={formData.settings?.requireApproval ?? false}
                   onChange={handleInputChange}
-                  className="mt-1 h-4 w-4 text-[#D417C8] bg-white/5 border-white/20 rounded 
+                  className="mt-1 h-4 w-4 text-[#D417C8] bg-[#171719] border-white/20 rounded 
                            focus:ring-[#D417C8] focus:ring-2"
                 />
                 <div>
@@ -228,7 +228,7 @@ export const CreateProductFamilyModal = ({
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end space-x-3 pt-6 border-t border-white/10">
+          <div className="flex items-center justify-end space-x-3 pt-6 border-t border-[#25262a]">
             <Button
               variant="secondary"
               onClick={onClose}

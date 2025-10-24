@@ -730,8 +730,8 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                 group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
                 ${
                   isActive(item.href)
-                    ? 'bg-accent/10 text-fg'
-                    : 'text-fg-muted hover:text-fg'
+                    ? 'bg-primary/10 text-white border border-primary/20'
+                    : 'text-[#a3a3a3] hover:text-white'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                 ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id)
@@ -774,8 +774,8 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                     group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
                     ${
                       isActive('/user-settings')
-                        ? 'bg-accent/10 text-fg'
-                        : 'text-fg-muted hover:text-fg'
+                        ? 'bg-primary/10 text-white border border-primary/20'
+                        : 'text-[#a3a3a3] hover:text-white'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                   `}
@@ -913,9 +913,9 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                 <div className="font-medium mb-2 text-white tracking-tight">
                   {hoveredTooltip.label}
                 </div>
-                <div className="text-gray-300 text-[11px] leading-relaxed space-y-1">
+                <div className="text-white/90 text-sm leading-relaxed space-y-1">
                   <div>{hoveredTooltip.userInfo?.role as React.ReactNode} at {hoveredTooltip.userInfo?.company as React.ReactNode}</div>
-                  <div className="text-gray-400">{hoveredTooltip.userInfo?.email as React.ReactNode}</div>
+                  <div className="text-white/90">{hoveredTooltip.userInfo?.email as React.ReactNode}</div>
                 </div>
               </div>
             ) : (

@@ -14,7 +14,7 @@ export type { PhoneDisplayProps, CountryInfo } from './ui/PhoneDisplay'
 
 // UI Components
 export { Modal } from './Modal'
-export { Card, ProductCard, ActionCard } from './Card'
+export { Card, ActionCard } from './Card'
 export { SectionHeader } from './SectionHeader'
 export { ViewModeToggle } from './ViewModeToggle/ViewModeToggle'
 export type { ViewMode, ViewModeOption } from './ViewModeToggle/ViewModeToggle'

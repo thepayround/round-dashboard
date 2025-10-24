@@ -12,7 +12,7 @@ import {
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
-import { DashboardLayout, SectionHeader, Button, Card, SearchFilterToolbar, ActionCard, ActionButton } from '@/shared/components'
+import { DashboardLayout, Button, Card, SearchFilterToolbar, ActionCard, ActionButton } from '@/shared/components'
 import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
 import type { ViewMode, FilterField } from '@/shared/components'
 import { ProductFamilyCard, CreateProductFamilyModal } from '../components'
@@ -94,31 +94,23 @@ export const ProductCatalogPage = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Enhanced Header */}
-        <SectionHeader
-          title="Product Catalog"
-          subtitle="Manage your product families, plans, addons, and pricing strategies"
-          accent="primary"
-          size="main"
-          actions={
-            <>
-              <Link to="/catalog/settings">
-                <Button
-                  variant="secondary"
-                  icon={Settings}
-                >
-                  Catalog Settings
-                </Button>
-              </Link>
-              <ActionButton
-                label="Create Product Family"
-                onClick={() => setShowCreateModal(true)}
-                size="md"
-                animated={false}
-              />
-            </>
-          }
-        />
+        {/* Action Bar */}
+        <div className="flex items-center justify-end space-x-3">
+          <Link to="/catalog/settings">
+            <Button
+              variant="secondary"
+              icon={Settings}
+            >
+              Catalog Settings
+            </Button>
+          </Link>
+          <ActionButton
+            label="Create Product Family"
+            onClick={() => setShowCreateModal(true)}
+            size="md"
+            animated={false}
+          />
+        </div>
 
         {/* Enhanced Stats Cards */}
         <motion.div 
@@ -203,18 +195,13 @@ export const ProductCatalogPage = () => {
           className="mb-6"
         />
 
-        {/* Enhanced Catalog Management Navigation */}
+        {/* Catalog Management */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-          className="space-y-6"
+          transition={{ delay: 0.3 }}
+          className="space-y-4"
         >
-          <SectionHeader
-            title="Catalog Management"
-            accent="primary"
-          />
-          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <ActionCard
               title="Manage Plans"
@@ -258,14 +245,9 @@ export const ProductCatalogPage = () => {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="space-y-6"
+          transition={{ delay: 0.4 }}
+          className="space-y-4"
         >
-          <SectionHeader
-            title="Quick Actions"
-            accent="secondary"
-          />
-          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <ActionCard
               title="Create Plan"
@@ -309,24 +291,14 @@ export const ProductCatalogPage = () => {
           </div>
         </motion.div>
 
-        {/* Enhanced Product Families */}
+        {/* Product Families Grid */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="space-y-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="space-y-4"
         >
-          <SectionHeader
-            title="Product Families"
-            accent="accent"
-            actions={
-              <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg">
-                <span className="text-gray-300 font-medium">{filteredCount} of {totalCount} families</span>
-              </div>
-            }
-          />
-
-          <div className={viewMode === 'grid' 
+          <div className={viewMode === 'grid'
             ? 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6' 
             : 'space-y-4'
           }>

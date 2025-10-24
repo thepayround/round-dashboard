@@ -90,7 +90,7 @@ export const AuthInput = forwardRef<
     <div className={`space-y-2 ${containerClassName}`}>
       {/* Label */}
       {label && (
-        <label htmlFor={id} className="block text-[0.625rem] font-medium text-white/75 uppercase tracking-widest">
+        <label htmlFor={id} className="block text-sm font-normal text-white/90 tracking-tight">
           {label}
           {props.required && <span className="text-red-400 ml-1">*</span>}
         </label>

@@ -141,8 +141,8 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
               <div className="flex items-start gap-2">
                 <Info className="w-3 h-3 text-blue-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-[11px] font-medium text-blue-100 mb-0.5">Protected Information</h4>
-                  <p className="text-[11px] text-blue-200/70 leading-relaxed">
+                  <h4 className="text-sm font-normal text-blue-100 mb-0.5">Protected Information</h4>
+                  <p className="text-sm text-blue-200/70 leading-relaxed">
                     User information fields are protected for security. Contact support to update your name, email, or phone number.
                   </p>
                 </div>
@@ -230,7 +230,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <label htmlFor="timezone-dropdown" className="flex items-center gap-1.5 text-[11px] font-medium text-gray-300">
+              <label htmlFor="timezone-dropdown" className="flex items-center gap-1.5 text-sm font-normal text-white/90 tracking-tight">
                 <Globe className="w-3 h-3" />
                 Timezone
               </label>
@@ -243,7 +243,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             </div>
             
             <div className="space-y-2">
-              <label htmlFor="language-dropdown" className="flex items-center gap-1.5 text-[11px] font-medium text-gray-300">
+              <label htmlFor="language-dropdown" className="flex items-center gap-1.5 text-sm font-normal text-white/90 tracking-tight">
                 <Languages className="w-3 h-3" />
                 Language
               </label>
@@ -256,7 +256,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             </div>
             
             <div className="space-y-2">
-              <label htmlFor="date-format-dropdown" className="flex items-center gap-1.5 text-[11px] font-medium text-gray-300">
+              <label htmlFor="date-format-dropdown" className="flex items-center gap-1.5 text-sm font-normal text-white/90 tracking-tight">
                 <Calendar className="w-3 h-3" />
                 Date Format
               </label>
@@ -269,7 +269,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             </div>
             
             <div className="space-y-2">
-              <label htmlFor="time-format-dropdown" className="flex items-center gap-1.5 text-[11px] font-medium text-gray-300">
+              <label htmlFor="time-format-dropdown" className="flex items-center gap-1.5 text-sm font-normal text-white/90 tracking-tight">
                 <Clock className="w-3 h-3" />
                 Time Format
               </label>

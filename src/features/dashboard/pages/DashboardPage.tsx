@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { useCurrency } from '@/shared/hooks/useCurrency'
 import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
-import { SectionHeader, ActionButton, Card } from '@/shared/components'
+import { ActionButton, Card } from '@/shared/components'
 import { useAuth } from '@/shared/hooks/useAuth'
 
 export const DashboardPage = () => {
@@ -58,39 +58,40 @@ export const DashboardPage = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <SectionHeader
-          title={`Welcome back, ${
-            user.firstName?.trim() && user.lastName?.trim()
-              ? `${user.firstName.trim()} ${user.lastName.trim()}`
-              : user.firstName?.trim() || user.email || 'User'
-          }!`}
-          subtitle="Here's an overview of your Round account"
-          size="main"
-          actions={
-            roundAccount && (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.3 }}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-full border ${
-                  roundAccount.status.toLowerCase() === 'active'
-                    ? 'bg-primary/20 border-primary/30'
-                    : 'bg-gray-500/20 border-gray-500/30'
-                }`}
-              >
-                <CheckCircle className={`w-5 h-5 ${
-                  roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
-                }`} />
-                <span className={`font-normal tracking-tight ${
-                  roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
-                }`}>
-                  {roundAccount.status}
-                </span>
-              </motion.div>
-            )
-          }
-        />
+        {/* Welcome Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-normal tracking-tight text-white mb-1">
+              Welcome back, {
+                user.firstName?.trim() && user.lastName?.trim()
+                  ? `${user.firstName.trim()} ${user.lastName.trim()}`
+                  : user.firstName?.trim() || user.email || 'User'
+              }!
+            </h1>
+            <p className="text-sm text-gray-400">Here&apos;s an overview of your Round account</p>
+          </div>
+          {roundAccount && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.1 }}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-full border ${
+                roundAccount.status.toLowerCase() === 'active'
+                  ? 'bg-primary/20 border-primary/30'
+                  : 'bg-gray-500/20 border-gray-500/30'
+              }`}
+            >
+              <CheckCircle className={`w-5 h-5 ${
+                roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
+              }`} />
+              <span className={`font-normal tracking-tight text-sm ${
+                roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
+              }`}>
+                {roundAccount.status}
+              </span>
+            </motion.div>
+          )}
+        </div>
 
         {/* Round Account Quick Stats */}
         {roundAccount && (
@@ -104,8 +105,8 @@ export const DashboardPage = () => {
             <Card padding="lg">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account Type</div>
-                  <div className="text-white text-sm font-normal tracking-tight capitalize">{roundAccount.accountType}</div>
+                  <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account type</div>
+                  <div className="text-white text-sm font-normal tracking-tight">{roundAccount.accountType}</div>
                 </div>
                 <div className="p-3 bg-primary/20 rounded-lg border border-[#D417C8]/30">
                   <Building className="w-4 h-4 text-[#D417C8]" />
@@ -117,8 +118,8 @@ export const DashboardPage = () => {
             <Card padding="lg">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account Status</div>
-                  <div className="text-white text-sm font-medium">{roundAccount.status}</div>
+                  <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account status</div>
+                  <div className="text-white text-sm font-normal tracking-tight">{roundAccount.status}</div>
                 </div>
                 <div className="p-3 bg-primary/20 rounded-lg border border-[#42E695]/30">
                   <CheckCircle className="w-4 h-4 text-[#42E695]" />
@@ -130,8 +131,8 @@ export const DashboardPage = () => {
             <Card padding="lg">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Created Date</div>
-                  <div className="text-white text-sm font-medium">
+                  <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Created date</div>
+                  <div className="text-white text-sm font-normal tracking-tight">
                     {new Date(roundAccount.createdDate).toLocaleDateString()}
                   </div>
                 </div>
@@ -147,7 +148,7 @@ export const DashboardPage = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Currency</div>
-                    <div className="text-white text-sm font-medium">{roundAccount.organization.currency}</div>
+                    <div className="text-white text-sm font-normal tracking-tight">{roundAccount.organization.currency}</div>
                   </div>
                   <div className="p-3 bg-primary/20 rounded-lg border border-[#7767DA]/30">
                     <DollarSign className="w-4 h-4 text-[#7767DA]" />
@@ -173,7 +174,7 @@ export const DashboardPage = () => {
                     <Building className="w-5 h-5 text-[#32A1E4]" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-lg font-medium text-white mb-2">Account Details</h2>
+                    <h2 className="text-xl font-normal tracking-tight text-white mb-2">Account details</h2>
                     <p className="text-sm text-gray-400">Core account information and settings</p>
                   </div>
                 </div>
@@ -203,7 +204,7 @@ export const DashboardPage = () => {
                     <div className="flex items-center gap-3">
                       <Building className="w-4 h-4 text-[#14BDEA]" />
                       <div>
-                        <div className="text-sm font-normal tracking-tight text-white capitalize">{roundAccount.accountType}</div>
+                        <div className="text-sm font-normal tracking-tight text-white">{roundAccount.accountType}</div>
                         <div className="text-xs text-white/60">Account type</div>
                       </div>
                     </div>
@@ -277,7 +278,7 @@ export const DashboardPage = () => {
                       <Building className="w-5 h-5 text-[#7767DA]" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-lg font-medium text-white mb-2">Organization Details</h2>
+                      <h2 className="text-xl font-normal tracking-tight text-white mb-2">Organization details</h2>
                       <p className="text-sm text-gray-400">Company information and settings</p>
                     </div>
                   </div>
@@ -307,7 +308,7 @@ export const DashboardPage = () => {
                       <div className="flex items-center gap-3">
                         <Building className="w-4 h-4 text-[#14BDEA]" />
                         <div>
-                          <div className="text-sm font-normal tracking-tight text-white capitalize">{roundAccount.organization.type}</div>
+                          <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.type}</div>
                           <div className="text-xs text-white/60">Organization type</div>
                         </div>
                       </div>
@@ -317,7 +318,7 @@ export const DashboardPage = () => {
                       <div className="flex items-center gap-3">
                         <Building2 className="w-4 h-4 text-[#7767DA]" />
                         <div>
-                          <div className="text-sm font-normal tracking-tight text-white capitalize">{roundAccount.organization.category}</div>
+                          <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.category}</div>
                           <div className="text-xs text-white/60">Industry category</div>
                         </div>
                       </div>
@@ -328,7 +329,7 @@ export const DashboardPage = () => {
                         <div className="flex items-center gap-3">
                           <Building2 className="w-4 h-4 text-[#32A1E4]" />
                           <div>
-                            <div className="text-sm font-normal tracking-tight text-white capitalize">{roundAccount.organization.industry}</div>
+                            <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.industry}</div>
                             <div className="text-xs text-white/60">Industry</div>
                           </div>
                         </div>

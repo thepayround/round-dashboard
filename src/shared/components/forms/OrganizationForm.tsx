@@ -97,7 +97,7 @@ export const OrganizationForm = ({
           </motion.div>
 
           <div>
-            <h2 className="text-lg font-medium tracking-tight text-white mb-2">{headerTitle}</h2>
+            <h2 className="text-xl font-normal tracking-tight text-white mb-2">{headerTitle}</h2>
             <p className="text-gray-400 text-sm">{headerSubtitle}</p>
           </div>
         </div>
@@ -209,7 +209,7 @@ export const OrganizationForm = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Country */}
             <div>
-              <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
+              <span className="block text-sm font-normal tracking-tight text-white/90 mb-2">
                 Country <span className="text-red-400">*</span>
               </span>
               <ApiDropdown
@@ -226,7 +226,7 @@ export const OrganizationForm = ({
 
             {/* Industry */}
             <div>
-              <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
+              <span className="block text-sm font-normal tracking-tight text-white/90 mb-2">
                 Industry <span className="text-red-400">*</span>
               </span>
               <ApiDropdown
@@ -243,7 +243,7 @@ export const OrganizationForm = ({
 
             {/* Company Size */}
             <div>
-              <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
+              <span className="block text-sm font-normal tracking-tight text-white/90 mb-2">
                 Company Size <span className="text-red-400">*</span>
               </span>
               <ApiDropdown
@@ -260,7 +260,7 @@ export const OrganizationForm = ({
 
             {/* Organization Type */}
             <div>
-              <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
+              <span className="block text-sm font-normal tracking-tight text-white/90 mb-2">
                 Organization Type <span className="text-red-400">*</span>
               </span>
               <ApiDropdown

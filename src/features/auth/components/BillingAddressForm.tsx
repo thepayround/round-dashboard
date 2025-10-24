@@ -163,7 +163,7 @@ export const AddressForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-2xl font-medium tracking-tight auth-text mb-2"
+            className="text-2xl font-normal tracking-tight auth-text mb-2"
           >
             Billing Address
           </motion.h2>
@@ -361,7 +361,7 @@ export const AddressForm = ({
         <div className="space-y-6">
           {/* Header with Toggle */}
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-medium tracking-tight auth-text flex items-center space-x-2">
+            <h3 className="text-xl font-normal tracking-tight auth-text flex items-center space-x-2">
               <Truck className="w-5 h-5 text-[#00BCD4]" />
               <span>Shipping Address</span>
             </h3>
@@ -388,7 +388,7 @@ export const AddressForm = ({
                   <Truck className="w-4 h-4 text-[#00BCD4]" />
                 </div>
                 <div>
-                  <p className="auth-text text-sm font-medium">Shipping address will be same as billing address</p>
+                  <p className="auth-text text-sm font-normal">Shipping address will be same as billing address</p>
                   <p className="auth-text-muted text-xs">Turn off the toggle above to enter a different shipping address</p>
                 </div>
               </div>

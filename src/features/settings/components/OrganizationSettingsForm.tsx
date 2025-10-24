@@ -252,7 +252,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
         >
           <div className="flex items-center space-x-2 text-red-400">
             <AlertCircle className="w-5 h-5" />
-            <span className="text-sm font-medium">Please fix the errors in the form</span>
+            <span className="text-sm font-normal">Please fix the errors in the form</span>
           </div>
         </motion.div>
       )}

@@ -1,6 +1,14 @@
+// Use string enums to match backend validation
 export enum CustomerType {
-  Individual = 1,
-  Business = 2
+  Individual = 'Individual',
+  Business = 'Business'
+}
+
+export enum CustomerStatus {
+  Active = 'Active',
+  Inactive = 'Inactive',
+  Suspended = 'Suspended',
+  Cancelled = 'Cancelled'
 }
 
 export interface Customer {
@@ -17,7 +25,7 @@ export interface Customer {
   taxNumber?: string
   locale?: string
   timezone?: string
-  status: 'active' | 'inactive' | 'suspended' | 'cancelled'
+  status: CustomerStatus
   
   // Billing Information
   billingAddress: Address

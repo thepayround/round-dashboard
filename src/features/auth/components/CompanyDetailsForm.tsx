@@ -78,7 +78,7 @@ export const CompanyDetailsForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-2xl font-medium tracking-tight auth-text mb-2"
+          className="text-2xl font-normal tracking-tight auth-text mb-2"
         >
           Company Information
         </motion.h2>

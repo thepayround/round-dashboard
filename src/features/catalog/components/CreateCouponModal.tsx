@@ -19,7 +19,7 @@ import type {
   DurationType
 } from '../types/catalog.types'
 
-interface CreateCouponModalEnhancedProps {
+interface CreateCouponModalProps {
   isOpen: boolean
   onClose: () => void
   plans?: { id: string; name: string }[]
@@ -47,12 +47,12 @@ const durationTypeOptions: UiDropdownOption[] = [
   { value: 'limited_period', label: 'Limited Period', description: 'Applied for a specific number of billing cycles' }
 ]
 
-export const CreateCouponModalEnhanced = ({ 
+export const CreateCouponModal = ({ 
   isOpen, 
   onClose, 
   plans = [], 
   addons: _addons = [] 
-}: CreateCouponModalEnhancedProps) => {
+}: CreateCouponModalProps) => {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     name: '',
@@ -210,7 +210,7 @@ export const CreateCouponModalEnhanced = ({
           className="glass-card w-full max-w-4xl max-h-[90vh] overflow-y-auto"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10">
+          <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
             <div className="flex items-center space-x-4">
               <div className="p-3 bg-secondary rounded-lg">
                 <Tag className="w-6 h-6 text-white" />
@@ -226,7 +226,7 @@ export const CreateCouponModalEnhanced = ({
           </div>
 
           {/* Progress Steps */}
-          <div className="px-6 py-4 border-b border-white/10">
+          <div className="px-6 py-4 border-b border-[#25262a]">
             <div className="flex items-center justify-between">
               {steps.map((stepItem, index) => {
                 // Determine step styling
@@ -236,7 +236,7 @@ export const CreateCouponModalEnhanced = ({
                 } else if (step === stepItem.number) {
                   stepCircleStyle = 'bg-secondary text-white';
                 } else {
-                  stepCircleStyle = 'bg-white/10 text-white/50';
+                  stepCircleStyle = 'bg-[#1d1d20] text-white/50';
                 }
 
                 return (
@@ -257,7 +257,7 @@ export const CreateCouponModalEnhanced = ({
                   </div>
                   {index < steps.length - 1 && (
                     <div className={`w-8 h-0.5 mx-4 ${
-                      step > stepItem.number ? 'bg-green-500' : 'bg-white/20'
+                      step > stepItem.number ? 'bg-green-500' : 'bg-[#25262a]'
                     }`} />
                   )}
                 </div>
@@ -409,7 +409,7 @@ export const CreateCouponModalEnhanced = ({
                         className={`p-4 rounded-lg border text-left transition-all ${
                           formData.discountType === type.value
                             ? 'border-[#D417C8] bg-[#D417C8]/10 text-white'
-                            : 'border-white/20 bg-white/5 text-white/70 hover:text-white hover:border-white/40'
+                            : 'border-[#25262a] bg-[#171719] text-white/70 hover:text-white hover:border-[#2c2d31]'
                         }`}
                       >
                         <div className="flex items-center space-x-3 mb-2">
@@ -607,7 +607,7 @@ export const CreateCouponModalEnhanced = ({
                   {plans.length > 0 ? (
                     <div className="space-y-3">
                       {plans.map(plan => (
-                        <div key={plan.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                        <div key={plan.id} className="flex items-center justify-between p-3 bg-[#171719] rounded-lg">
                           <span className="auth-text">{plan.name}</span>
                           <div className="flex items-center space-x-2">
                             <button
@@ -718,7 +718,7 @@ export const CreateCouponModalEnhanced = ({
 
                       <div className="space-y-2">
                         {formData.customerEligibility.customerIds.map((customerId, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded">
+                          <div key={index} className="flex items-center justify-between p-2 bg-[#171719] rounded">
                             <span className="auth-text text-sm">{customerId}</span>
                             <button
                               type="button"
@@ -760,7 +760,7 @@ export const CreateCouponModalEnhanced = ({
 
                       <div className="space-y-2">
                         {formData.customerEligibility.customerSegments.map((segment, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded">
+                          <div key={index} className="flex items-center justify-between p-2 bg-[#171719] rounded">
                             <span className="auth-text text-sm">{segment}</span>
                             <button
                               type="button"
@@ -820,13 +820,13 @@ export const CreateCouponModalEnhanced = ({
                   <h4 className="text-lg font-medium auth-text mb-4">Restrictions</h4>
                   <div className="space-y-3">
                     {formData.restrictions.minimumOrderValue && (
-                      <div className="flex items-center justify-between p-2 bg-white/5 rounded">
+                      <div className="flex items-center justify-between p-2 bg-[#171719] rounded">
                         <span className="text-sm auth-text">Minimum Order Value</span>
                         <span className="text-sm auth-text-muted">${formData.restrictions.minimumOrderValue}</span>
                       </div>
                     )}
                     {formData.restrictions.maximumDiscountAmount && (
-                      <div className="flex items-center justify-between p-2 bg-white/5 rounded">
+                      <div className="flex items-center justify-between p-2 bg-[#171719] rounded">
                         <span className="text-sm auth-text">Maximum Discount</span>
                         <span className="text-sm auth-text-muted">${formData.restrictions.maximumDiscountAmount}</span>
                       </div>
@@ -879,7 +879,7 @@ export const CreateCouponModalEnhanced = ({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between p-6 border-t border-white/10">
+          <div className="flex items-center justify-between p-6 border-t border-[#25262a]">
             <div>
               {step > 1 && (
                 <button className="btn-secondary">

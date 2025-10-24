@@ -1,32 +1,46 @@
-// Customer type enums
+// Customer type enums - Use string values to match backend validation
 export enum CustomerType {
-  Individual = 1,
-  Business = 2
+  Individual = 'Individual',
+  Business = 'Business'
 }
 
-// Fix status type mapping between backend and frontend
+// Customer status enum - Use string values to match backend validation
 export enum CustomerStatus {
-  Active = 1,
-  Inactive = 2,
-  Suspended = 3,
-  Cancelled = 4
+  Active = 'Active',
+  Inactive = 'Inactive',
+  Suspended = 'Suspended',
+  Cancelled = 'Cancelled'
 }
 
-export const statusToString = (status: CustomerStatus): string => {
-  switch (status) {
-    case CustomerStatus.Active:
-      return 'active'
-    case CustomerStatus.Inactive:
-      return 'inactive'
-    case CustomerStatus.Suspended:
-      return 'suspended'
-    case CustomerStatus.Cancelled:
-      return 'cancelled'
-    default:
-      return 'unknown'
-  }
-}
+// Mapping utilities for backward compatibility with numeric values
+export const CustomerTypeNumericMap = {
+  1: CustomerType.Individual,
+  2: CustomerType.Business
+} as const;
 
+export const CustomerTypeToNumeric = {
+  [CustomerType.Individual]: 1,
+  [CustomerType.Business]: 2
+} as const;
+
+export const CustomerStatusNumericMap = {
+  1: CustomerStatus.Active,
+  2: CustomerStatus.Inactive,
+  3: CustomerStatus.Suspended,
+  4: CustomerStatus.Cancelled
+} as const;
+
+export const CustomerStatusToNumeric = {
+  [CustomerStatus.Active]: 1,
+  [CustomerStatus.Inactive]: 2,
+  [CustomerStatus.Suspended]: 3,
+  [CustomerStatus.Cancelled]: 4
+} as const;
+
+// Deprecated: Use CustomerStatus enum instead
+export const statusToString = (status: CustomerStatus): string => status.toLowerCase()
+
+// Deprecated: Use CustomerStatus enum values directly
 export const stringToStatus = (status: string): CustomerStatus => {
   switch (status.toLowerCase()) {
     case 'active':
