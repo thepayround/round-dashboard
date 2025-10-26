@@ -217,12 +217,21 @@ export class CustomerService {
   }
 
   async create(request: CustomerCreateRequest): Promise<CustomerResponse> {
-    const response = await this.client.post<CustomerResponse>(this.baseUrl, request)
+    // Convert type from string enum to numeric value for backend
+    const requestWithNumericType = {
+      ...request,
+      type: request.type === CustomerType.Individual ? 1 : 2
+    }
+    const response = await this.client.post<CustomerResponse>(this.baseUrl, requestWithNumericType)
     return response.data
   }
 
   async update(id: string, request: CustomerUpdateRequest): Promise<CustomerResponse> {
-    const response = await this.client.put<CustomerResponse>(CUSTOMER_ENDPOINTS.BY_ID(id), request)
+    // Convert type from string enum to numeric value for backend if present
+    const requestWithNumericType = request.type !== undefined 
+      ? { ...request, type: request.type === CustomerType.Individual ? 1 : 2 }
+      : request
+    const response = await this.client.put<CustomerResponse>(CUSTOMER_ENDPOINTS.BY_ID(id), requestWithNumericType)
     return response.data
   }
 
