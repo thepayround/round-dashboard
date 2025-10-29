@@ -59,7 +59,7 @@ export const CardHeader = ({
         
         <div className="flex items-center space-x-2 flex-wrap">
           {title && (
-            <h3 className="text-lg font-medium tracking-tight text-white">{title}</h3>
+            <h3 className="text-xl font-normal tracking-tight text-white">{title}</h3>
           )}
           
           {status && (

@@ -414,13 +414,29 @@
 
   .auth-label {
     display: block;
-    font-size: 0.875rem; /* 14px - text-sm */
-    font-weight: 500; /* font-medium */
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 0.5rem; /* 8px - better spacing for larger text */
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
-    text-transform: none; /* Title Case - Polar.sh inspired */
-    letter-spacing: -0.01em; /* Tight tracking for better readability */
+    font-size: 0.875rem; /* 14px - Polar.sh style (larger) */
+    font-weight: 400; /* Normal weight */
+    color: rgba(255, 255, 255, 0.9); /* More white, less gray */
+    margin-bottom: 0.5rem; /* 8px - more breathing room */
+    text-shadow: none;
+    text-transform: none;
+    letter-spacing: -0.01em; /* Polar.sh tighter spacing */
+  }
+
+  @media (min-width: 768px) {
+    .auth-label {
+      font-size: 0.875rem; /* 14px - consistent */
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .auth-label {
+      font-size: 0.875rem; /* 14px - consistent across all sizes */
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
   }
 
   .auth-text {

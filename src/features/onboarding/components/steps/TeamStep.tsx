@@ -188,13 +188,13 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <UserPlus className="w-4 h-4 text-[#32A1E4]" />
-              <h3 className="text-xs font-normal tracking-tight text-white uppercase tracking-wider">Invite Team Members</h3>
+              <h3 className="text-sm font-normal tracking-tight text-white">Invite team members</h3>
             </div>
 
             {/* Invite Form */}
             <div className="flex gap-3 items-end">
               <div className="flex-1">
-                <label htmlFor="inviteEmail" className="auth-label text-[10px]">Email Address</label>
+                <label htmlFor="inviteEmail" className="auth-label">Email Address</label>
                 <div className="input-container">
                   <Mail className="input-icon-left auth-icon-primary w-3 h-3" />
                   <input
@@ -208,7 +208,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                 </div>
               </div>
               <div className="w-40">
-                <label htmlFor="inviteRole" className="auth-label text-[10px]">Role</label>
+                <label htmlFor="inviteRole" className="auth-label">Role</label>
                 <ApiDropdown
                   config={teamRoleDropdownConfig}
                   value={inviteRole}
@@ -234,7 +234,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
             animate={{ opacity: 1, y: 0 }}
             className="space-y-3"
           >
-            <h4 className="text-xs font-normal tracking-tight text-white uppercase tracking-wider">Pending Invitations</h4>
+            <h4 className="text-xs font-normal tracking-tight text-white">Pending invitations</h4>
             <div className="space-y-2">
               {data.invitations.map(invitation => (
                 <motion.div
@@ -252,11 +252,11 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                         <p className="text-xs font-normal tracking-tight text-white">{invitation.email}</p>
                         <div className="flex items-center space-x-2">
                           <span
-                            className={`text-[10px] px-1.5 py-0.5 rounded border ${getRoleBadgeColor(invitation.role)}`}
+                            className={`text-xs px-1.5 py-0.5 rounded border ${getRoleBadgeColor(invitation.role)}`}
                           >
                             {invitation.role}
                           </span>
-                          <span className="text-[10px] text-gray-400">{invitation.status}</span>
+                          <span className="text-xs text-white/90">{invitation.status}</span>
                         </div>
                       </div>
                     </div>

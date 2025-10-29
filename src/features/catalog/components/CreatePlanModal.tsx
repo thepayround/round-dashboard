@@ -22,7 +22,7 @@ import type {
   Entitlement
 } from '../types/catalog.types'
 
-interface CreatePlanModalEnhancedProps {
+interface CreatePlanModalProps {
   isOpen: boolean
   onClose: () => void
   productFamilies?: { id: string; name: string }[]
@@ -48,7 +48,7 @@ const booleanValueOptions: UiDropdownOption[] = [
 ]
 
 
-export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] }: CreatePlanModalEnhancedProps) => {
+export const CreatePlanModal = ({ isOpen, onClose, productFamilies = [] }: CreatePlanModalProps) => {
   const { data: currencies = [] } = useCurrencies()
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
@@ -169,7 +169,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
           className="glass-card w-full max-w-4xl max-h-[90vh] overflow-y-auto"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10">
+          <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
             <div className="flex items-center space-x-4">
               <div className="p-3 bg-primary rounded-lg">
                 <Package className="w-6 h-6 text-white" />
@@ -185,7 +185,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
           </div>
 
           {/* Progress Steps */}
-          <div className="px-6 py-4 border-b border-white/10">
+          <div className="px-6 py-4 border-b border-[#25262a]">
             <div className="flex items-center justify-between">
               {steps.map((stepItem, index) => {
                 // Determine step styling
@@ -195,7 +195,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                 } else if (step === stepItem.number) {
                   stepCircleStyle = 'bg-primary text-white';
                 } else {
-                  stepCircleStyle = 'bg-white/10 text-white/50';
+                  stepCircleStyle = 'bg-[#1d1d20] text-white/50';
                 }
 
                 return (
@@ -216,7 +216,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                   </div>
                   {index < steps.length - 1 && (
                     <div className={`w-8 h-0.5 mx-4 ${
-                      step > stepItem.number ? 'bg-green-500' : 'bg-white/20'
+                      step > stepItem.number ? 'bg-green-500' : 'bg-[#25262a]'
                     }`} />
                   )}
                 </div>
@@ -748,7 +748,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                   {pricePoints.length > 0 ? (
                     <div className="space-y-3">
                       {pricePoints.map((pp, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                        <div key={index} className="flex items-center justify-between p-3 bg-[#171719] rounded-lg">
                           <div>
                             <span className="font-medium auth-text">
                               {currencies.find(c => c.currencyCodeAlpha === pp.currency)?.currencySymbol}{pp.price} {pp.currency}
@@ -789,7 +789,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
                   {features.length > 0 ? (
                     <div className="space-y-2">
                       {features.map((feature, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded">
+                        <div key={index} className="flex items-center justify-between p-2 bg-[#171719] rounded">
                           <span className="font-medium auth-text">{feature.name}</span>
                           <span className="auth-text-muted">{feature.value.toString()}</span>
                         </div>
@@ -804,7 +804,7 @@ export const CreatePlanModalEnhanced = ({ isOpen, onClose, productFamilies = [] 
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between p-6 border-t border-white/10">
+          <div className="flex items-center justify-between p-6 border-t border-[#25262a]">
             <div>
               {step > 1 && (
                 <button className="btn-secondary">

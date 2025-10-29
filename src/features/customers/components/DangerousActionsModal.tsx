@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, AlertTriangle, Trash2, UserX } from 'lucide-react'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { customerService } from '@/shared/services/api/customer.service'
+import { customerService, CustomerStatus } from '@/shared/services/api/customer.service'
 
 interface DangerousActionsModalProps {
   isOpen: boolean
@@ -33,10 +33,10 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
     setIsDeactivating(true)
     try {
       await customerService.updateStatus(customerId, {
-        status: 'inactive',
+        status: CustomerStatus.Inactive,
         reason: 'Account deactivated by administrator'
       })
-      onStatusChanged('inactive')
+      onStatusChanged('Inactive')
       showSuccess(`${customerName} has been deactivated`)
       onClose()
       resetForm()

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Card, SectionHeader } from '@/shared/components'
+import { Card } from '@/shared/components'
 import { 
   User as UserIcon, 
   Shield, 
@@ -170,20 +170,6 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
   return (
     <DashboardLayout>
       <div className="space-y-4 md:space-y-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <SectionHeader
-            title="User Settings"
-            subtitle="Manage your user preferences and security settings"
-            size="main"
-            className="text-base md:text-lg"
-          />
-        </motion.div>
-
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 md:gap-6">
           {/* Navigation Sidebar */}

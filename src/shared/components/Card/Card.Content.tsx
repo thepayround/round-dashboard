@@ -44,13 +44,13 @@ export const CardContent = ({
     return (
       <div className={`text-center ${className}`}>
         {title && (
-          <h3 className="text-xl font-medium tracking-tight text-white mb-2">{title}</h3>
+          <h3 className="text-xl font-normal tracking-tight text-white mb-2">{title}</h3>
         )}
         {description && (
           <p className="text-gray-400 text-sm">{description}</p>
         )}
         {value && (
-          <div className="text-2xl font-medium tracking-tight text-white mt-2">
+          <div className="text-2xl font-normal tracking-tight text-white mt-2">
             {typeof value === 'number' ? value.toLocaleString() : value}
           </div>
         )}

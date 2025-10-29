@@ -1,8 +1,11 @@
 import type { ButtonHTMLAttributes } from 'react'
 
+export type ButtonVariant = 'primary' | 'secondary' | 'glass' | 'outline'
+export type ButtonSize = 'sm' | 'md' | 'lg'
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'glass' | 'outline'
-  size?: 'sm' | 'md' | 'lg'
+  variant?: ButtonVariant
+  size?: ButtonSize
   isLoading?: boolean
-  children: React.ReactNode
+  className?: string
 }

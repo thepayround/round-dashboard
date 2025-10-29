@@ -97,7 +97,7 @@ export const OrganizationForm = ({
           </motion.div>
 
           <div>
-            <h2 className="text-lg font-medium tracking-tight text-white mb-2">{headerTitle}</h2>
+            <h2 className="text-xl font-normal tracking-tight text-white mb-2">{headerTitle}</h2>
             <p className="text-gray-400 text-sm">{headerSubtitle}</p>
           </div>
         </div>

@@ -12,8 +12,8 @@ import { useDebouncedSearch } from '../../../shared/hooks/useDebouncedSearch'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
-import { CouponCard, CreateCouponModalEnhanced } from '../components'
-import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
+import { CouponCard, CreateCouponModal } from '../components'
+import { ActionButton, Card, SearchFilterToolbar } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Coupon, CatalogViewMode } from '../types/catalog.types'
 
@@ -196,27 +196,20 @@ export const CouponsPage = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <SectionHeader
-          title="Coupons"
-          subtitle="Create and manage discount coupons for your customers"
-          size="main"
-          actions={
-            <div className="flex items-center space-x-4">
-              <Link to="/catalog">
-                <button className="btn-secondary">
-                  Back to Catalog
-                </button>
-              </Link>
-              <ActionButton
-                label="Create Coupon"
-                onClick={() => setShowCreateModal(true)}
-                size="md"
-                animated={false}
-              />
-            </div>
-          }
-        />
+        {/* Action Bar */}
+        <div className="flex items-center justify-between">
+          <Link to="/catalog">
+            <button className="btn-secondary">
+              Back to Catalog
+            </button>
+          </Link>
+          <ActionButton
+            label="Create Coupon"
+            onClick={() => setShowCreateModal(true)}
+            size="md"
+            animated={false}
+          />
+        </div>
 
         {/* Quick Stats */}
         <motion.div 
@@ -299,7 +292,7 @@ export const CouponsPage = () => {
           </div>
 
           {filteredCoupons.length === 0 ? (
-            <div className="auth-card p-12 text-center">
+            <div className="bg-[#171719] border border-[#1e1f22] rounded-lg p-12 text-center">
               <Ticket className="w-16 h-16 auth-icon mx-auto mb-4" />
               <h3 className="text-xl font-medium tracking-tight auth-text mb-2">No coupons found</h3>
               <p className="auth-text-muted mb-6">
@@ -341,7 +334,7 @@ export const CouponsPage = () => {
       </div>
 
       {/* Create Coupon Modal */}
-      <CreateCouponModalEnhanced 
+      <CreateCouponModal 
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
       />

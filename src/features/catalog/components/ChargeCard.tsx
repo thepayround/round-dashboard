@@ -142,7 +142,7 @@ export const ChargeCard = ({
           position: 'relative'
         }}
       >
-        <div className="auth-card group cursor-pointer" style={{ overflow: 'visible', boxShadow: 'none !important' }}>
+        <div className="bg-[#171719] border border-[#1e1f22] rounded-lg group cursor-pointer hover:bg-[#1d1d20] hover:border-[#25262a] transition-all duration-200" style={{ overflow: 'visible' }}>
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
             {/* Main Info */}
@@ -206,7 +206,7 @@ export const ChargeCard = ({
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-9 h-9 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white/15 hover:border-white/30"
+                  className="w-9 h-9 rounded-lg bg-[#1d1d20] border border-[#25262a] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-[#212124] hover:border-[#2c2d31]"
                   onClick={() => setShowActions(!showActions)}
                 >
                   <MoreHorizontal className="w-5 h-5 auth-text" />
@@ -220,8 +220,8 @@ export const ChargeCard = ({
                     className="absolute right-0 top-full mt-3 min-w-[200px]"
                     style={{ zIndex: 99999 }}
                   >
-                    <div className="bg-black/90 border border-white/20 rounded-lg overflow-hidden">
-                      <div className="bg-[#FFC107]/20 px-4 py-3 border-b border-white/10">
+                    <div className="bg-[#0a0a0a] border border-[#25262a] shadow-xl rounded-lg overflow-hidden">
+                      <div className="bg-[#FFC107]/20 px-4 py-3 border-b border-[#25262a]">
                         <p className="font-medium auth-text text-sm">Charge Actions</p>
                       </div>
                       
@@ -288,12 +288,12 @@ export const ChargeCard = ({
         position: 'relative'
       }}
     >
-      <div className="auth-card group cursor-pointer" style={{ overflow: 'visible', boxShadow: 'none !important' }}>
+      <div className="bg-[#171719] border border-[#1e1f22] rounded-lg group cursor-pointer hover:bg-[#1d1d20] hover:border-[#25262a] transition-all duration-200" style={{ overflow: 'visible' }}>
         <div className="p-6">
           {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="relative">
-            <div className="p-3 rounded-lg bg-warning/20 border border-white/10">
+            <div className="p-3 rounded-lg bg-[#FFC107]/10 border border-[#25262a]">
               <ChargeIcon className="w-7 h-7 text-[#FFC107]" />
             </div>
             <div className="absolute -top-1 -right-1">
@@ -307,7 +307,7 @@ export const ChargeCard = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-9 h-9 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white/15 hover:border-white/30"
+              className="w-9 h-9 rounded-lg bg-[#1d1d20] border border-[#25262a] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-[#212124] hover:border-[#2c2d31]"
               onClick={(e) => {
                 e.preventDefault()
                 setShowActions(!showActions)
@@ -324,8 +324,8 @@ export const ChargeCard = ({
                 className="absolute right-0 top-full mt-3 min-w-[200px]"
                 style={{ zIndex: 99999 }}
               >
-                <div className="bg-black/90 border border-white/20 rounded-lg overflow-hidden">
-                  <div className="bg-[#FFC107]/20 px-4 py-3 border-b border-white/10">
+                <div className="bg-[#0a0a0a] border border-[#25262a] shadow-xl rounded-lg overflow-hidden">
+                  <div className="bg-[#FFC107]/20 px-4 py-3 border-b border-[#25262a]">
                     <p className="font-medium auth-text text-sm">Charge Actions</p>
                   </div>
                   

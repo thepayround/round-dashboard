@@ -25,7 +25,7 @@ export const BillingSection: React.FC = () => (
           </div>
           <div className="flex-1">
             <h2 className="text-xs font-normal tracking-tight text-white mb-1">Billing & Payments</h2>
-            <p className="text-[11px] text-gray-400">
+            <p className="text-sm text-white/90">
               Manage your payment methods and billing information
             </p>
           </div>
@@ -36,16 +36,16 @@ export const BillingSection: React.FC = () => (
           <div className="flex items-center justify-between mb-2">
             <div>
               <h3 className="text-xs font-normal tracking-tight text-white mb-0.5">Professional Plan</h3>
-              <p className="text-[10px] text-gray-400">Billed monthly • Next billing: March 15, 2024</p>
+              <p className="text-xs text-white/90">Billed monthly • Next billing: March 15, 2024</p>
             </div>
             <div className="text-right">
               <div className="text-sm font-normal tracking-tight text-white">$49</div>
-              <div className="text-[10px] text-gray-400">per month</div>
+              <div className="text-xs text-white/90">per month</div>
             </div>
           </div>
           <div className="flex items-center gap-1 text-green-400">
             <CheckCircle className="w-2.5 h-2.5" />
-            <span className="text-[11px] font-medium">Active subscription</span>
+            <span className="text-sm font-normal">Active subscription</span>
           </div>
         </div>
       </Card>
@@ -55,7 +55,7 @@ export const BillingSection: React.FC = () => (
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-xs font-normal tracking-tight text-white mb-1">Payment Methods</h3>
-            <p className="text-[11px] text-gray-400">Manage your saved payment methods</p>
+            <p className="text-sm text-white/90">Manage your saved payment methods</p>
           </div>
           <ActionButton
             label="Add Payment Method"
@@ -63,7 +63,7 @@ export const BillingSection: React.FC = () => (
             variant="secondary"
             size="sm"
             onClick={() => {}}
-            className="h-7 px-3 text-[11px]"
+            className="h-7 px-3 text-sm"
           />
         </div>
 
@@ -78,22 +78,22 @@ export const BillingSection: React.FC = () => (
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">
                     <span className="text-white font-medium text-xs">•••• •••• •••• 4242</span>
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-green-500/15 border border-green-400/20 rounded-full text-green-400 text-[10px]">
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-green-500/15 border border-green-400/20 rounded-full text-green-400 text-xs">
                       <div className="w-1 h-1 bg-green-400 rounded-full" />
                       Primary
                     </span>
                   </div>
-                  <div className="flex items-center gap-4 text-[11px] text-gray-400">
+                  <div className="flex items-center gap-4 text-sm text-white/90">
                     <span>Expires 12/24</span>
                     <span>Visa</span>
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <button className="text-[#D417C8] hover:text-[#BD2CD0] text-[11px] font-medium transition-colors duration-200">
+                <button className="text-[#D417C8] hover:text-[#BD2CD0] text-sm font-normal transition-colors duration-200">
                   Edit
                 </button>
-                <button className="text-gray-400 hover:text-gray-300 text-[11px] font-medium transition-colors duration-200">
+                <button className="text-white/90 hover:text-white text-sm font-normal transition-colors duration-200">
                   Remove
                 </button>
               </div>
@@ -113,7 +113,7 @@ export const BillingSection: React.FC = () => (
               </div>
               <div>
                 <h3 className="text-xs font-normal tracking-tight text-white">Billing Address</h3>
-                <p className="text-[11px] text-gray-400">Your billing information</p>
+                <p className="text-sm text-white/90">Your billing information</p>
               </div>
             </div>
             <ActionButton
@@ -126,7 +126,7 @@ export const BillingSection: React.FC = () => (
           </div>
 
           <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
-            <div className="space-y-1 text-[11px] text-gray-300">
+            <div className="space-y-1 text-sm text-white/90">
               <p className="text-white font-medium text-xs">Acme Corporation</p>
               <p>123 Business Street</p>
               <p>Suite 100</p>
@@ -144,7 +144,7 @@ export const BillingSection: React.FC = () => (
             </div>
             <div>
               <h3 className="text-xs font-normal tracking-tight text-white">Invoice Preferences</h3>
-              <p className="text-[11px] text-gray-400">How you receive invoices</p>
+              <p className="text-sm text-white/90">How you receive invoices</p>
             </div>
           </div>
 
@@ -156,7 +156,7 @@ export const BillingSection: React.FC = () => (
                 </div>
                 <div>
                   <p className="text-xs font-normal tracking-tight text-white">Email invoices</p>
-                  <p className="text-[11px] text-gray-400">Receive invoices via email</p>
+                  <p className="text-sm text-white/90">Receive invoices via email</p>
                 </div>
               </div>
               <label htmlFor="email-invoices-toggle" className="relative inline-flex items-center cursor-pointer">
@@ -173,7 +173,7 @@ export const BillingSection: React.FC = () => (
                 variant="secondary"
                 size="sm"
                 onClick={() => {}}
-                className="text-[11px]"
+                className="text-sm"
               />
             </div>
           </div>

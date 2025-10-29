@@ -11,8 +11,8 @@ import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
-import { ChargeCard, CreateChargeModalEnhanced } from '../components'
-import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
+import { ChargeCard, CreateChargeModal } from '../components'
+import { ActionButton, Card, SearchFilterToolbar } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Charge, CatalogViewMode } from '../types/catalog.types'
 import { useDebouncedSearch } from '../../../shared/hooks/useDebouncedSearch'
@@ -203,27 +203,20 @@ export const ChargesPage = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <SectionHeader
-          title="Charges"
-          subtitle="Manage additional fees, penalties, and one-time charges"
-          size="main"
-          actions={
-            <div className="flex items-center space-x-4">
-              <Link to="/catalog">
-                <button className="btn-secondary">
-                  Back to Catalog
-                </button>
-              </Link>
-              <ActionButton
-                label="Create Charge"
-                onClick={() => setShowCreateModal(true)}
-                size="md"
-                animated={false}
-              />
-            </div>
-          }
-        />
+        {/* Action Bar */}
+        <div className="flex items-center justify-between">
+          <Link to="/catalog">
+            <button className="btn-secondary">
+              Back to Catalog
+            </button>
+          </Link>
+          <ActionButton
+            label="Create Charge"
+            onClick={() => setShowCreateModal(true)}
+            size="md"
+            animated={false}
+          />
+        </div>
 
         {/* Quick Stats */}
         <motion.div 
@@ -306,7 +299,7 @@ export const ChargesPage = () => {
           </div>
 
           {filteredCharges.length === 0 ? (
-            <div className="auth-card p-12 text-center">
+            <div className="bg-[#171719] border border-[#1e1f22] rounded-lg p-12 text-center">
               <Zap className="w-16 h-16 auth-icon mx-auto mb-4" />
               <h3 className="text-xl font-medium tracking-tight auth-text mb-2">No charges found</h3>
               <p className="auth-text-muted mb-6">
@@ -348,7 +341,7 @@ export const ChargesPage = () => {
       </div>
 
       {/* Create Charge Modal */}
-      <CreateChargeModalEnhanced 
+      <CreateChargeModal 
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
       />

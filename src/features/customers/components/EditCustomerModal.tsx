@@ -8,6 +8,7 @@ import { languageDropdownConfig } from '@/shared/components/ui/ApiDropdown/confi
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CustomerResponse, CustomerUpdateRequest, CustomerAddressCreateRequest } from '@/shared/services/api/customer.service'
+import { CustomerType } from '@/shared/types/customer.types'
 
 interface EditCustomerModalProps {
   isOpen: boolean
@@ -193,7 +194,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
 
                   
                   {/* Customer Information - Type Specific */}
-                  {formData.type === 1 ? (
+                  {formData.type === CustomerType.Individual ? (
                     // Individual Customer - Only Individual Fields
                     <div className="space-y-6">
                       <div className="flex items-center space-x-2 text-sm text-white/70 pb-2 border-b border-white/10">

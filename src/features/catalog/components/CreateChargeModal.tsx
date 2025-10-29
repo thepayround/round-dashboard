@@ -24,7 +24,7 @@ import type {
   ChargeModel
 } from '../types/catalog.types'
 
-interface CreateChargeModalEnhancedProps {
+interface CreateChargeModalProps {
   isOpen: boolean
   onClose: () => void
   existingCharge?: Charge
@@ -68,11 +68,11 @@ const chargeModels: { value: ChargeModel; label: string; description: string }[]
 ]
 
 
-export const CreateChargeModalEnhanced = ({
+export const CreateChargeModal = ({
   isOpen,
   onClose,
   existingCharge
-}: CreateChargeModalEnhancedProps) => {
+}: CreateChargeModalProps) => {
   const { getCurrencySymbol } = useCurrency()
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
@@ -211,7 +211,7 @@ export const CreateChargeModalEnhanced = ({
           className="glass-card w-full max-w-4xl max-h-[90vh] overflow-y-auto"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10">
+          <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
             <div className="flex items-center space-x-4">
               <div className="p-3 bg-warning rounded-lg">
                 <Zap className="w-6 h-6 text-white" />
@@ -229,7 +229,7 @@ export const CreateChargeModalEnhanced = ({
           </div>
 
           {/* Progress Steps */}
-          <div className="px-6 py-4 border-b border-white/10">
+          <div className="px-6 py-4 border-b border-[#25262a]">
             <div className="flex items-center justify-between">
               {steps.map((stepItem, index) => {
                 // Determine step styling
@@ -239,7 +239,7 @@ export const CreateChargeModalEnhanced = ({
                 } else if (step === stepItem.number) {
                   stepCircleStyle = 'bg-warning text-white';
                 } else {
-                  stepCircleStyle = 'bg-white/10 text-white/50';
+                  stepCircleStyle = 'bg-[#1d1d20] text-white/50';
                 }
 
                 return (
@@ -260,7 +260,7 @@ export const CreateChargeModalEnhanced = ({
                   </div>
                   {index < steps.length - 1 && (
                     <div className={`w-8 h-0.5 mx-4 ${
-                      step > stepItem.number ? 'bg-green-500' : 'bg-white/20'
+                      step > stepItem.number ? 'bg-green-500' : 'bg-[#25262a]'
                     }`} />
                   )}
                 </div>
@@ -346,7 +346,7 @@ export const CreateChargeModalEnhanced = ({
                         className={`p-4 rounded-lg border text-left transition-all ${
                           formData.chargeType === type.value
                             ? 'border-[#D417C8] bg-[#D417C8]/10 text-white'
-                            : 'border-white/20 bg-white/5 text-white/70 hover:text-white hover:border-white/40'
+                            : 'border-[#25262a] bg-[#171719] text-white/70 hover:text-white hover:border-[#2c2d31]'
                         }`}
                       >
                         <div className="flex items-center space-x-3 mb-2">
@@ -418,7 +418,7 @@ export const CreateChargeModalEnhanced = ({
                         className={`p-4 rounded-lg border text-left transition-all ${
                           formData.chargeModel === model.value
                             ? 'border-[#D417C8] bg-[#D417C8]/10 text-white'
-                            : 'border-white/20 bg-white/5 text-white/70 hover:text-white hover:border-white/40'
+                            : 'border-[#25262a] bg-[#171719] text-white/70 hover:text-white hover:border-[#2c2d31]'
                         }`}
                       >
                         <div className="font-medium mb-1">{model.label}</div>
@@ -524,7 +524,7 @@ export const CreateChargeModalEnhanced = ({
 
                     <div className="space-y-4">
                       {formData.tiers.map((tier, index) => (
-                        <div key={index} className="flex items-center space-x-4 p-4 bg-white/5 rounded-lg">
+                        <div key={index} className="flex items-center space-x-4 p-4 bg-[#171719] rounded-lg">
                           <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                               <label htmlFor={`startingUnit-${index}`} className="block text-xs auth-text-muted mb-1">Starting Unit</label>
@@ -782,7 +782,7 @@ export const CreateChargeModalEnhanced = ({
                       </div>
                       <div className="space-y-2 max-h-32 overflow-y-auto">
                         {formData.applicableCountries.map((country, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded text-sm">
+                          <div key={index} className="flex items-center justify-between p-2 bg-[#171719] rounded text-sm">
                             <span className="auth-text">{country}</span>
                             <button
                               type="button"
@@ -979,7 +979,7 @@ export const CreateChargeModalEnhanced = ({
                       </p>
                       <div className="space-y-1">
                         {formData.tiers.map((tier, index) => (
-                          <div key={index} className="text-sm auth-text p-2 bg-white/5 rounded">
+                          <div key={index} className="text-sm auth-text p-2 bg-[#171719] rounded">
                             {tier.startingUnit}-{tier.endingUnit} units: {getCurrencySymbol(formData.currency)}{tier.pricePerUnit} each
                           </div>
                         ))}
@@ -1037,7 +1037,7 @@ export const CreateChargeModalEnhanced = ({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between p-6 border-t border-white/10">
+          <div className="flex items-center justify-between p-6 border-t border-[#25262a]">
             <div>
               {step > 1 && (
                 <button className="btn-secondary">

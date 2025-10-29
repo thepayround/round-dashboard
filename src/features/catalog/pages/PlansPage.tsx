@@ -12,8 +12,8 @@ import { useDebouncedSearch } from '../../../shared/hooks/useDebouncedSearch'
 import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
-import { PlanCard, CreatePlanModalEnhanced } from '../components'
-import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
+import { PlanCard, CreatePlanModal } from '../components'
+import { ActionButton, Card, SearchFilterToolbar } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Plan, CatalogViewMode } from '../types/catalog.types'
 
@@ -220,27 +220,20 @@ export const PlansPage = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <SectionHeader
-          title="Plans"
-          subtitle="Manage your pricing plans and billing frequencies"
-          size="main"
-          actions={
-            <div className="flex items-center space-x-4">
-              <Link to="/catalog">
-                <button className="btn-secondary">
-                  Back to Catalog
-                </button>
-              </Link>
-              <ActionButton
-                label="Create Plan"
-                onClick={() => setShowCreateModal(true)}
-                size="md"
-                animated={false}
-              />
-            </div>
-          }
-        />
+        {/* Action Bar */}
+        <div className="flex items-center justify-between">
+          <Link to="/catalog">
+            <button className="btn-secondary">
+              Back to Catalog
+            </button>
+          </Link>
+          <ActionButton
+            label="Create Plan"
+            onClick={() => setShowCreateModal(true)}
+            size="md"
+            animated={false}
+          />
+        </div>
 
         {/* Quick Stats */}
         <motion.div 
@@ -365,7 +358,7 @@ export const PlansPage = () => {
       </div>
 
       {/* Create Plan Modal */}
-      <CreatePlanModalEnhanced 
+      <CreatePlanModal 
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         productFamilies={productFamilies}

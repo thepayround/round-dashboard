@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 
 import { DashboardLayout } from '../../../shared/components/DashboardLayout'
 import { AddonCard, CreateAddonModal } from '../components'
-import { ActionButton, Card, SearchFilterToolbar, SectionHeader } from '../../../shared/components'
+import { ActionButton, Card, SearchFilterToolbar } from '../../../shared/components'
 import type { ViewMode, FilterField } from '../../../shared/components'
 import type { Addon, CatalogViewMode } from '../types/catalog.types'
 
@@ -230,27 +230,20 @@ export const AddonsPage = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
-        <SectionHeader
-          title="Add-ons"
-          subtitle="Manage additional services and features for your customers"
-          size="main"
-          actions={
-            <div className="flex items-center space-x-4">
-              <Link to="/catalog">
-                <button className="btn-secondary">
-                  Back to Catalog
-                </button>
-              </Link>
-              <ActionButton
-                label="Create Add-on"
-                onClick={() => setShowCreateModal(true)}
-                size="md"
-                animated={false}
-              />
-            </div>
-          }
-        />
+        {/* Action Bar */}
+        <div className="flex items-center justify-between">
+          <Link to="/catalog">
+            <button className="btn-secondary">
+              Back to Catalog
+            </button>
+          </Link>
+          <ActionButton
+            label="Create Add-on"
+            onClick={() => setShowCreateModal(true)}
+            size="md"
+            animated={false}
+          />
+        </div>
 
         {/* Quick Stats */}
         <motion.div 

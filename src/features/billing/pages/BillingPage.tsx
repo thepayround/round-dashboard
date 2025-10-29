@@ -1,25 +1,20 @@
 import { motion } from 'framer-motion'
 import { CreditCard, TrendingUp, DollarSign, Users, Clock, CheckCircle } from 'lucide-react'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { ActionButton, SectionHeader, Card } from '@/shared/components'
+import { ActionButton, Card } from '@/shared/components'
 
 export const BillingPage = () => (
   <DashboardLayout>
     <div className="space-y-8">
-      {/* Header */}
-      <SectionHeader
-        title="Billing Management"
-        subtitle="Manage your billing, subscriptions, and revenue tracking"
-        size="main"
-        actions={
-          <ActionButton
-            label="Create Invoice"
-            onClick={() => { /* Create invoice clicked */ }}
-            size="md"
-            animated={false}
-          />
-        }
-      />
+      {/* Action Bar */}
+      <div className="flex items-center justify-end">
+        <ActionButton
+          label="Create Invoice"
+          onClick={() => { /* Create invoice clicked */ }}
+          size="md"
+          animated={false}
+        />
+      </div>
 
       {/* Stats Cards */}
       <motion.div

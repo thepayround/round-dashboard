@@ -97,11 +97,11 @@ const ActionCardComponent = ({
       whileHover={{ y: -1, scale: 1.01 }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
-      <div className={`auth-card p-6 relative overflow-hidden group ${
+      <div className={`bg-[#171719] border border-[#1e1f22] rounded-lg p-6 relative overflow-hidden group hover:bg-[#1d1d20] hover:border-[#25262a] transition-all duration-200 ${
         disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
       } ${className}`}>
         {/* Hover Gradient Effect */}
-        <div className={`absolute inset-0 bg- ${colorConfig.gradient} opacity-0 group-hover:opacity-50 transition-opacity duration-200`} />
+        <div className={`absolute inset-0 bg-gradient-to-br ${colorConfig.gradient} opacity-0 group-hover:opacity-50 transition-opacity duration-200`} />
         
         {/* Content */}
         <div className="relative">
@@ -109,11 +109,11 @@ const ActionCardComponent = ({
             // Default Layout - Vertical Stack (matching original NavigationCard)
             <>
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-lg bg- ${colorConfig.iconBg} border ${colorConfig.border}`}>
+                <div className={`p-3 rounded-lg bg-gradient-to-br ${colorConfig.iconBg} border ${colorConfig.border}`}>
                   <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
                 </div>
               </div>
-              <h3 className={`text-lg font-normal tracking-tight tracking-tight text-white ${colorConfig.hoverColor} transition-colors mb-2`}>
+              <h3 className={`text-lg font-normal tracking-tight text-white ${colorConfig.hoverColor} transition-colors mb-2`}>
                 {title}
               </h3>
               <p className="text-gray-400 text-sm">
@@ -124,11 +124,11 @@ const ActionCardComponent = ({
             // Horizontal Layout - Compact
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className={`p-3 rounded-lg bg- ${colorConfig.iconBg} border ${colorConfig.border}`}>
+                <div className={`p-3 rounded-lg bg-gradient-to-br ${colorConfig.iconBg} border ${colorConfig.border}`}>
                   <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
                 </div>
                 <div>
-                  <h3 className={`text-lg font-normal tracking-tight tracking-tight text-white ${colorConfig.hoverColor} transition-colors`}>
+                  <h3 className={`text-lg font-normal tracking-tight text-white ${colorConfig.hoverColor} transition-colors`}>
                     {title}
                   </h3>
                   <p className="text-gray-400 text-sm">

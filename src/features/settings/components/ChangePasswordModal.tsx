@@ -220,7 +220,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
 
           {/* Current Password */}
           <div>
-            <label htmlFor="currentPassword" className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
+            <label htmlFor="currentPassword" className="block text-sm font-normal tracking-tight text-white/90 mb-2">
               Current Password
             </label>
             <div className="relative">
@@ -261,7 +261,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
 
           {/* New Password */}
           <div>
-            <label htmlFor="newPassword" className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
+            <label htmlFor="newPassword" className="block text-sm font-normal tracking-tight text-white/90 mb-2">
               New Password
             </label>
             <div className="relative">
@@ -321,7 +321,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
 
           {/* Confirm New Password */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-normal tracking-tight text-gray-300 mb-2">
+            <label htmlFor="confirmPassword" className="block text-sm font-normal tracking-tight text-white/90 mb-2">
               Confirm New Password
             </label>
             <div className="relative">

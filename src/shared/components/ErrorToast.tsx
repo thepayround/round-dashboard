@@ -51,7 +51,7 @@ export const ErrorToast = ({
                   <div className="mt-2 space-y-1">
                     {Object.entries(details).map(([field, error]) => (
                       <p key={field} className="text-red-300 text-xs">
-                        <span className="font-medium capitalize">{field}:</span> {error}
+                        <span className="font-normal">{field}:</span> {error}
                       </p>
                     ))}
                   </div>

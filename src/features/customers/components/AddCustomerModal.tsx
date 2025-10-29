@@ -4,6 +4,7 @@ import { X, User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Loader2, 
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CustomerCreateRequest } from '@/shared/services/api/customer.service'
+import { CustomerType } from '@/shared/types/customer.types'
 import { PhoneInput } from '@/shared/components'
 import { FormInput } from '@/shared/components/ui/FormInput'
 import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/components/ui/ApiDropdown'
@@ -48,7 +49,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
     }
 
     // Business customers must have a company name
-    if (formData.type === 2 && !formData.company?.trim()) {
+    if (formData.type === CustomerType.Business && !formData.company?.trim()) {
       return false
     }
 
@@ -67,7 +68,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
   }
   
   const [formData, setFormData] = useState<CustomerCreateRequest>({
-    type: 1, // Default to Individual
+    type: CustomerType.Individual, // Default to Individual
     email: '',
     firstName: '',
     lastName: '',
@@ -295,7 +296,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
       
       // Reset form
       setFormData({
-        type: 1, // Reset to Individual
+        type: CustomerType.Individual, // Reset to Individual
         email: '',
         firstName: '',
         lastName: '',
@@ -400,9 +401,9 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                     <div className="grid grid-cols-2 gap-3" id="customer-type-selection">
                       <button
                         type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, type: 1 }))}
+                        onClick={() => setFormData(prev => ({ ...prev, type: CustomerType.Individual }))}
                         className={`p-4 rounded-xl border-2 transition-all duration-200 flex items-center space-x-3 ${
-                          formData.type === 1
+                          formData.type === CustomerType.Individual
                             ? 'border-[#D417C8] bg-[#D417C8]/10 text-white'
                             : 'border-white/20 hover:border-white/40 text-white/70 hover:text-white'
                         }`}
@@ -415,9 +416,9 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                       </button>
                       <button
                         type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, type: 2 }))}
+                        onClick={() => setFormData(prev => ({ ...prev, type: CustomerType.Business }))}
                         className={`p-4 rounded-xl border-2 transition-all duration-200 flex items-center space-x-3 ${
-                          formData.type === 2
+                          formData.type === CustomerType.Business
                             ? 'border-[#14BDEA] bg-[#14BDEA]/10 text-white'
                             : 'border-white/20 hover:border-white/40 text-white/70 hover:text-white'
                         }`}
@@ -519,7 +520,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                     </div>
                     
                     {/* Company field - only for business customers */}
-                    {formData.type === 2 && (
+                    {formData.type === CustomerType.Business && (
                       <div>
                         <label htmlFor="company" className="auth-label">
                           Company <span className="text-red-400">*</span>
@@ -533,14 +534,14 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                             onChange={(e) => handleInputChange('company', e.target.value)}
                             placeholder="Acme Corporation"
                             className="auth-input input-with-icon-left"
-                            required={formData.type === 2}
+                            required={formData.type === CustomerType.Business}
                           />
                         </div>
                       </div>
                     )}
                     
                     {/* Tax Number field - only for business customers */}
-                    {formData.type === 2 && (
+                    {formData.type === CustomerType.Business && (
                       <div>
                         <label htmlFor="taxNumber" className="auth-label">
                           Tax Number

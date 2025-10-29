@@ -112,7 +112,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <label htmlFor={inputId} className={variant === 'auth' ? 'auth-label' : 'block text-sm font-medium text-gray-300'}>
+          <label htmlFor={inputId} className={variant === 'auth' ? 'auth-label' : 'block text-sm font-normal text-white/90 tracking-tight'}>
             {label}
           </label>
         )}

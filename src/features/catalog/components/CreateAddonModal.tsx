@@ -198,7 +198,7 @@ export const CreateAddonModal = ({
           >
             <div className="glass-card">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-white/10">
+              <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
                 <div className="flex items-center space-x-3">
                   <div className="p-2 rounded-lg bg-accent/20">
                     <Zap className="w-5 h-5 text-purple-400" />
@@ -468,7 +468,7 @@ export const CreateAddonModal = ({
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-end space-x-4 p-6 border-t border-white/10">
+              <div className="flex items-center justify-end space-x-4 p-6 border-t border-[#25262a]">
                 <button className="btn-secondary">
                   Cancel
                 </button>
