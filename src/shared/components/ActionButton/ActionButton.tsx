@@ -53,9 +53,9 @@ const ActionButton = ({
   
   const DefaultIcon = getDefaultIcon()
   const sizeClasses = {
-    sm: 'px-3 py-2 text-xs space-x-1.5 h-11 md:h-9 font-medium', // 44px mobile -> 36px desktop
-    md: 'px-4 py-2.5 text-sm space-x-2 h-11 md:h-9 font-medium', // 44px mobile -> 36px desktop
-    lg: 'px-5 py-3 text-sm space-x-2.5 h-11 md:h-9 font-medium tracking-tight' // 44px mobile -> 36px desktop
+    sm: 'px-3 py-2 text-xs space-x-1.5 h-[42px] md:h-9 font-medium', // 42px mobile -> 36px desktop
+    md: 'px-4 py-2.5 text-sm space-x-2 h-[42px] md:h-9 font-medium', // 42px mobile -> 36px desktop
+    lg: 'px-5 py-3 text-sm space-x-2.5 h-[42px] md:h-9 font-medium tracking-tight' // 42px mobile -> 36px desktop
   }
 
   const iconSizes = {

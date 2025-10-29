@@ -99,9 +99,9 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
             exit={{ opacity: 0, scale: 0.95 }}
             className="relative w-full max-w-lg overflow-hidden"
           >
-            <div className="bg-[#171719] border border-[#25262a] rounded-lg shadow-2xl">
+            <div className="bg-black/40 backdrop-blur-xl">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[#25262a]">
+          <div className="flex items-center justify-between p-6 border-b border-white/10">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-xl bg-destructive flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-white" />

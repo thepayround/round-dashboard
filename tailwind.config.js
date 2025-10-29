@@ -130,9 +130,9 @@ export default {
         focus: '0 0 0 3px hsla(var(--ring) / .35)',
       },
       borderRadius: {
-        lg: '0.75rem',
-        xl: '1rem',
-        '2xl': '1.25rem',
+        lg: '0.5rem',   // 8px - Polar.sh inspired, consistent everywhere
+        xl: '0.75rem',  // 12px - larger elements like cards
+        '2xl': '1rem',  // 16px - modals and overlays
       },
       spacing: {
         13: '3.25rem',

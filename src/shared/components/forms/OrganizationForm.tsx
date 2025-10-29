@@ -91,7 +91,7 @@ export const OrganizationForm = ({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="w-16 h-16 mx-auto rounded-lg bg-accent/[#32A1E4]/20 border border-[#25262a] flex items-center justify-center"
+            className="w-16 h-16 mx-auto rounded-lg bg-accent/[#32A1E4]/20 border border-white/10 flex items-center justify-center"
           >
             <Building className="w-8 h-8 text-[#32A1E4]" />
           </motion.div>
@@ -103,71 +103,69 @@ export const OrganizationForm = ({
         </div>
       )}
 
-      {/* Form Sections */}
-      <div className="space-y-6">
+      {/* Form Sections - Polar.sh style */}
+      <div className="flex flex-col divide-y divide-white/10">
         
         {/* Company Identity Section */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.3 : 0.1 }}
-          className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
+          className="relative flex flex-col gap-12 p-12"
         >
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-accent/[#32A1E4]/20 border border-[#25262a] flex items-center justify-center">
-              <Building className="w-4 h-4 text-[#32A1E4]" />
-            </div>
-            <div>
-              <h3 className="text-sm font-normal tracking-tight text-white">Company Identity</h3>
-              <p className="text-xs text-gray-400">Basic company information</p>
+          <div className="flex w-full flex-col gap-y-6">
+            <div className="flex flex-col gap-y-2">
+              <h2 className="text-lg font-medium">Company Identity</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Basic company information</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Company Name */}
-            <div>
-              <label htmlFor="companyName" className="auth-label">
-                Company Name <span className="text-red-400">*</span>
-              </label>
-              <div className="input-container">
-                <Building className="input-icon-left auth-icon-primary" />
-                <input
-                  id="companyName"
-                  type="text"
-                  value={data.companyName}
-                  onChange={handleInputChange('companyName')}
-                  placeholder="Acme Corporation"
-                  className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
-                  readOnly={readOnly}
-                  disabled={readOnly}
-                />
+          <div className="flex w-full flex-col gap-y-6">
+            {/* Company Name & Website Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label htmlFor="companyName" className="auth-label">
+                  Company Name <span className="text-red-400">*</span>
+                </label>
+                <div className="input-container">
+                  <Building className="input-icon-left auth-icon-primary" />
+                  <input
+                    id="companyName"
+                    type="text"
+                    value={data.companyName}
+                    onChange={handleInputChange('companyName')}
+                    placeholder="Acme Corporation"
+                    className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
+                    readOnly={readOnly}
+                    disabled={readOnly}
+                  />
+                </div>
+                {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
               </div>
-              {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
-            </div>
 
-            {/* Website */}
-            <div>
-              <label htmlFor="website" className="auth-label">
-                Website
-              </label>
-              <div className="input-container">
-                <ExternalLink className="input-icon-left auth-icon-primary" />
-                <input
-                  id="website"
-                  type="url"
-                  value={data.website}
-                  onChange={handleInputChange('website')}
-                  placeholder="https://www.example.com"
-                  className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
-                  readOnly={readOnly}
-                  disabled={readOnly}
-                />
+              <div className="space-y-2">
+                <label htmlFor="website" className="auth-label">
+                  Website
+                </label>
+                <div className="input-container">
+                  <ExternalLink className="input-icon-left auth-icon-primary" />
+                  <input
+                    id="website"
+                    type="url"
+                    value={data.website}
+                    onChange={handleInputChange('website')}
+                    placeholder="https://www.example.com"
+                    className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
+                    readOnly={readOnly}
+                    disabled={readOnly}
+                  />
+                </div>
+                {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
               </div>
-              {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
             </div>
 
             {/* Description - Full Width */}
-            <div className="md:col-span-2">
+            <div className="space-y-2">
               <label htmlFor="description" className="auth-label">
                 Description
               </label>
@@ -194,25 +192,23 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.4 : 0.2 }}
-          className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
+          className="relative flex flex-col gap-12 p-12"
         >
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-accent/[#14BDEA]/20 border border-[#25262a] flex items-center justify-center">
-              <Building className="w-4 h-4 text-[#14BDEA]" />
-            </div>
-            <div>
-              <h3 className="text-sm font-normal tracking-tight text-white">Business Details</h3>
-              <p className="text-xs text-gray-400">Industry and company classification</p>
+          <div className="flex w-full flex-col gap-y-6">
+            <div className="flex flex-col gap-y-2">
+              <h2 className="text-lg font-medium">Business Details</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Industry and company classification</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex w-full flex-col gap-4">
             {/* Country */}
-            <div>
-              <span className="block text-sm font-normal tracking-tight text-white/90 mb-2">
+            <div className="space-y-2">
+              <label htmlFor="country" className="auth-label">
                 Country <span className="text-red-400">*</span>
-              </span>
+              </label>
               <ApiDropdown
+                id="country"
                 config={countryDropdownConfig}
                 value={data.country}
                 onSelect={value => handleSelectChange('country', value)}
@@ -225,11 +221,12 @@ export const OrganizationForm = ({
             </div>
 
             {/* Industry */}
-            <div>
-              <span className="block text-sm font-normal tracking-tight text-white/90 mb-2">
+            <div className="space-y-2">
+              <label htmlFor="industry" className="auth-label">
                 Industry <span className="text-red-400">*</span>
-              </span>
+              </label>
               <ApiDropdown
+                id="industry"
                 config={industryDropdownConfig}
                 value={data.industry}
                 onSelect={value => handleSelectChange('industry', value)}
@@ -242,11 +239,12 @@ export const OrganizationForm = ({
             </div>
 
             {/* Company Size */}
-            <div>
-              <span className="block text-sm font-normal tracking-tight text-white/90 mb-2">
+            <div className="space-y-2">
+              <label htmlFor="companySize" className="auth-label">
                 Company Size <span className="text-red-400">*</span>
-              </span>
+              </label>
               <ApiDropdown
+                id="companySize"
                 config={companySizeDropdownConfig}
                 value={data.companySize}
                 onSelect={value => handleSelectChange('companySize', value)}
@@ -259,11 +257,12 @@ export const OrganizationForm = ({
             </div>
 
             {/* Organization Type */}
-            <div>
-              <span className="block text-sm font-normal tracking-tight text-white/90 mb-2">
+            <div className="space-y-2">
+              <label htmlFor="organizationType" className="auth-label">
                 Organization Type <span className="text-red-400">*</span>
-              </span>
+              </label>
               <ApiDropdown
+                id="organizationType"
                 config={organizationTypeDropdownConfig}
                 value={data.organizationType}
                 onSelect={value => handleSelectChange('organizationType', value)}
@@ -282,21 +281,18 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.45 : 0.25 }}
-          className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
+          className="relative flex flex-col gap-12 p-12"
         >
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-accent/[#14BDEA]/20 border border-[#25262a] flex items-center justify-center">
-              <Hash className="w-4 h-4 text-[#14BDEA]" />
-            </div>
-            <div>
-              <h3 className="text-sm font-normal tracking-tight text-white">Business Compliance</h3>
-              <p className="text-xs text-gray-400">Registration and compliance information</p>
+          <div className="flex w-full flex-col gap-y-6">
+            <div className="flex flex-col gap-y-2">
+              <h2 className="text-lg font-medium">Business Compliance</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Registration and compliance information</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex w-full flex-col gap-4">
             {/* Registration Number */}
-            <div>
+            <div className="space-y-2">
               <label htmlFor="registrationNumber" className="auth-label">
                 Registration Number <span className="text-red-400">*</span>
               </label>
@@ -317,7 +313,7 @@ export const OrganizationForm = ({
             </div>
 
             {/* Tax ID */}
-            <div>
+            <div className="space-y-2">
               <label htmlFor="taxId" className="auth-label">
                 Tax ID <span className="text-red-400">*</span>
               </label>
@@ -345,21 +341,18 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.5 : 0.3 }}
-            className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
+            className="relative flex flex-col gap-12 p-12"
           >
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-accent/[#7767DA]/20 border border-[#25262a] flex items-center justify-center">
-                <span className="text-sm font-normal tracking-tight tracking-tight text-[#7767DA]">{currencySymbol}</span>
-              </div>
-              <div>
-                <h3 className="text-sm font-normal tracking-tight text-white">Financial Information</h3>
-                <p className="text-xs text-gray-400">Revenue and currency settings</p>
+            <div className="flex w-full flex-col gap-y-6">
+              <div className="flex flex-col gap-y-2">
+                <h2 className="text-lg font-medium">Financial Information</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Revenue and currency settings</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex w-full flex-col gap-4">
               {/* Currency */}
-              <div>
+              <div className="space-y-2">
                 <label htmlFor="currency" className="auth-label">
                   Currency <span className="text-red-400">*</span>
                 </label>
@@ -376,13 +369,13 @@ export const OrganizationForm = ({
               </div>
 
               {/* Revenue */}
-              <div>
+              <div className="space-y-2">
                 <label htmlFor="revenue" className="auth-label">
                   Annual Revenue <span className="text-gray-500">(optional)</span>
                   <span className="text-gray-500 ml-2">({data.currency || 'USD'})</span>
                 </label>
                 <div className="input-container">
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
                     <span className="text-sm font-normal tracking-tight tracking-tight text-[#14BDEA]">
                       {currencySymbol}
                     </span>
@@ -394,7 +387,6 @@ export const OrganizationForm = ({
                     onChange={handleInputChange('revenue')}
                     placeholder="1000000"
                     className={`auth-input input-with-icon-left ${errors.revenue ? 'auth-input-error' : ''}`}
-                    style={{ paddingLeft: '3rem' }}
                     readOnly={readOnly}
                     disabled={readOnly}
                   />
@@ -411,21 +403,18 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.6 : 0.4 }}
-            className="bg-[#1d1d20] border border-[#25262a] rounded-lg p-6"
+            className="relative flex flex-col gap-12 p-12"
           >
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-accent/[#D417C8]/20 border border-[#25262a] flex items-center justify-center">
-                <span className="text-sm font-normal tracking-tight tracking-tight text-[#D417C8]">🌍</span>
-              </div>
-              <div>
-                <h3 className="text-sm font-normal tracking-tight text-white">Regional Settings</h3>
-                <p className="text-xs text-gray-400">Time zone and fiscal year settings</p>
+            <div className="flex w-full flex-col gap-y-6">
+              <div className="flex flex-col gap-y-2">
+                <h2 className="text-lg font-medium">Regional Settings</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Time zone and fiscal year settings</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex w-full flex-col gap-4">
               {/* Time Zone */}
-              <div>
+              <div className="space-y-2">
                 <label htmlFor="timeZone" className="auth-label">
                   Time Zone
                 </label>
@@ -443,7 +432,7 @@ export const OrganizationForm = ({
               </div>
 
               {/* Fiscal Year Start */}
-              <div>
+              <div className="space-y-2">
                 <label htmlFor="fiscalYearStart" className="auth-label">
                   Fiscal Year Start
                 </label>

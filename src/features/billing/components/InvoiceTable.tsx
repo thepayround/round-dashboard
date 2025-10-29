@@ -82,7 +82,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
   )
 
   return (
-    <div className="bg-[#171719] border border-[#1e1f22] rounded-lg overflow-hidden">
+    <div className="border border-white/10 rounded-lg overflow-hidden">
       {/* Loading Overlay */}
       {loading && (
         <div className="absolute inset-0 bg-[#101011]/90 z-10 flex items-center justify-center">
@@ -95,7 +95,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
 
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-[#171719] border-b border-[#1e1f22]">
+          <thead className="bg-[#171719] border-b border-white/10">
             <tr>
               <TableHeader field="id">Invoice ID</TableHeader>
               <TableHeader field="customer">Customer</TableHeader>

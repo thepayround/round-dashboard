@@ -176,7 +176,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
     <>
       <div className={className}>
         {/* Enhanced search toolbar with consistent styling */}
-        <div className="bg-[#171719] border border-[#1e1f22] rounded-lg p-6">
+        <div className="p-6">
           <div className="flex flex-col gap-3">
             {/* Main toolbar - aligned row */}
             <div className="flex flex-col xs:flex-row gap-3 xs:items-center">

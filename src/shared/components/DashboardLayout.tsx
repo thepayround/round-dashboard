@@ -900,7 +900,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.15 }}
-            className={`fixed bg-[#171719] border border-[#25262a] text-white rounded-lg pointer-events-none z-tooltip shadow-xl ${
+            className={`fixed bg-[#171719] border border-white/10 text-white rounded-lg pointer-events-none z-tooltip shadow-xl ${
               hoveredTooltip.isUser ? 'px-4 py-3 text-xs max-w-[250px]' : 'px-3 py-2 text-sm whitespace-nowrap'
             }`}
             style={{
@@ -944,7 +944,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="bg-[#171719] border border-[#25262a] rounded-lg p-6 max-w-md mx-4"
+              className="bg-[#171719] border border-white/10 rounded-lg p-6 max-w-md mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
@@ -1025,7 +1025,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
         onClick={toggleSidebar}
-        className="fixed top-16 lg:top-20 w-10 h-11 md:h-9 lg:w-8 lg:h-8 rounded-full bg-[#171719] border border-[#25262a] flex items-center justify-center hover:bg-[#1d1d20] hover:border-[#2c2d31] transition-all duration-200 z-50 lg:z-base"
+        className="fixed top-16 lg:top-20 w-10 h-11 md:h-9 lg:w-8 lg:h-8 rounded-full bg-[#171719] border border-white/10 flex items-center justify-center hover:bg-white/5 hover:border-white/20 transition-all duration-200 z-50 lg:z-base"
       >
         <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4 text-white" />
       </motion.button>

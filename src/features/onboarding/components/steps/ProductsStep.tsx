@@ -54,7 +54,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
       {/* Add Product Section */}
       <div className="space-y-6">
         <div className="text-center space-y-6">
-          <div className="p-8 rounded-lg bg-[#1d1d20] border border-[#25262a]">
+          <div className="p-8">
             <div className="space-y-4">
               <div className="w-12 h-12 mx-auto rounded-lg bg-secondary/20 border border-white/20 flex items-center justify-center">
                 <Package className="w-6 h-6 text-[#14BDEA]" />

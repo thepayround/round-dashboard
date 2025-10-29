@@ -79,7 +79,7 @@ export const AddressStep = ({
       </div>
 
       {/* Form */}
-      <div className="max-w-[520px] mx-auto bg-[#1d1d20] border border-[#25262a] rounded-lg p-6 space-y-6">
+      <div className="max-w-[520px] mx-auto space-y-6">
         {/* Address Name */}
         <FormInput
           label="Address Name"

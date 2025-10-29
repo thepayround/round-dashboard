@@ -45,7 +45,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
       <div className="space-y-6">
         {!data.isConnected ? (
           <div className="text-center space-y-6">
-            <div className="p-8 rounded-lg bg-[#1d1d20] border border-[#25262a]">
+            <div className="p-8">
               <div className="space-y-6">
                 {/* Stripe Logo & Info */}
                 <div className="flex items-center justify-center space-x-4">
