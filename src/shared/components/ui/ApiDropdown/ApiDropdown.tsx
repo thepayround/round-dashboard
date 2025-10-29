@@ -39,6 +39,7 @@ interface ApiDropdownProps<T = unknown> {
   error?: boolean
   allowClear?: boolean
   className?: string
+  id?: string
 }
 
 export const ApiDropdown = <T = unknown>({
@@ -50,6 +51,7 @@ export const ApiDropdown = <T = unknown>({
   error = false,
   allowClear = false,
   className = '',
+  id,
 }: ApiDropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -390,6 +392,7 @@ export const ApiDropdown = <T = unknown>({
       {/* Dropdown trigger */}
       <div
         ref={triggerRef}
+        id={id}
         onClick={disabled ? undefined : handleToggle}
         onKeyDown={disabled ? undefined : (e) => {
           if (e.key === 'Enter' || e.key === ' ') {

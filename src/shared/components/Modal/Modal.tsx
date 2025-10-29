@@ -120,7 +120,7 @@ export const Modal = ({
           >
               {/* Header */}
               {showHeader && (
-                <div className="flex items-start justify-between p-4 border-b border-[#25262a]">
+                <div className="flex items-start justify-between p-4 border-b border-white/10">
                   <div className="flex-1 min-w-0">
                     {title && (
                       <h2 className="text-lg font-medium text-white truncate tracking-tight">
@@ -137,8 +137,8 @@ export const Modal = ({
                     onClick={onClose}
                     className="
                       ml-3 p-1.5 rounded-md flex-shrink-0
-                      bg-[#1d1d20] hover:bg-[#212124]
-                      border border-[#25262a] hover:border-[#2c2d31]
+                      hover:bg-white/5
+                      border border-white/10 hover:border-white/20
                       text-[#a3a3a3] hover:text-white
                       transition-all duration-200
                     "

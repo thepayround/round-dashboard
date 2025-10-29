@@ -552,14 +552,14 @@ const CustomerDetailPage: React.FC = () => {
                 <div className="space-y-3">
                   <button
                     onClick={() => setIsEmailModalOpen(true)}
-                    className="w-full flex items-center gap-3 p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl hover:bg-[#212124] hover:border-[#14BDEA]/30 text-left transition-all duration-200 group"
+                    className="w-full flex items-center gap-3 p-3 border border-white/10 rounded-xl hover:bg-white/5 hover:border-[#14BDEA]/30 text-left transition-all duration-200 group"
                   >
                     <Mail className="w-4 h-4 text-[#14BDEA] group-hover:text-white" />
                     <span className="text-sm font-normal tracking-tight text-white">Send Email</span>
                   </button>
                   <button
                     onClick={() => setIsNotesModalOpen(true)}
-                    className="w-full flex items-center gap-3 p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl hover:bg-[#212124] hover:border-[#42E695]/30 text-left transition-all duration-200 group"
+                    className="w-full flex items-center gap-3 p-3 border border-white/10 rounded-xl hover:bg-white/5 hover:border-[#42E695]/30 text-left transition-all duration-200 group"
                   >
                     <FileText className="w-4 h-4 text-[#42E695] group-hover:text-white" />
                     <span className="text-sm font-normal tracking-tight text-white">View Notes</span>
@@ -595,7 +595,7 @@ const CustomerDetailPage: React.FC = () => {
                 </div>
                 
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl">
+                  <div className="flex justify-between items-center p-3 border border-white/10 rounded-xl">
                     <div className="flex items-center gap-2">
                       <Shield className="w-4 h-4 text-white/70" />
                       <span className="text-sm text-white">Portal Access</span>
@@ -608,7 +608,7 @@ const CustomerDetailPage: React.FC = () => {
                       {customer.portalAccess ? 'Enabled' : 'Disabled'}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl">
+                  <div className="flex justify-between items-center p-3 border border-white/10 rounded-xl">
                     <div className="flex items-center gap-2">
                       <CreditCard className="w-4 h-4 text-white/70" />
                       <span className="text-sm text-white">Auto Collection</span>
@@ -622,7 +622,7 @@ const CustomerDetailPage: React.FC = () => {
                     </span>
                   </div>
                   {customer.lastActivityDate && (
-                    <div className="flex justify-between items-center p-3 bg-[#1d1d20] border border-[#25262a] rounded-xl">
+                    <div className="flex justify-between items-center p-3 border border-white/10 rounded-xl">
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-white/70" />
                         <span className="text-sm text-white">Last Activity</span>

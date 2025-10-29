@@ -122,10 +122,10 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   )
 
   return (
-    <div className="bg-[#171719] border border-[#1e1f22] rounded-lg overflow-hidden">
+    <div className="border border-white/10 rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-[#171719] border-b border-[#1e1f22]">
+          <thead className="bg-[#171719] border-b border-white/10">
             <tr>
               {selectable && (
                 <TableHeader className="w-12">
@@ -139,7 +139,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                           transition-all duration-200
                           ${isAllSelected || isIndeterminate
                             ? 'bg-[#D417C8]/10 border-2 border-[#D417C8]' 
-                            : 'bg-[#1d1d20] border border-[#25262a] group-hover:bg-[#212124] group-hover:border-[#2c2d31]'
+                            : 'border border-white/10 group-hover:bg-white/5 group-hover:border-white/20'
                           }
                         `}
                       >
@@ -205,7 +205,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                           transition-all duration-200
                           ${selectedIds.includes(customer.id) 
                             ? 'bg-[#D417C8]/10 border-2 border-[#D417C8]' 
-                            : 'bg-[#1d1d20] border border-[#25262a] group-hover:bg-[#212124] group-hover:border-[#2c2d31]'
+                            : 'border border-white/10 group-hover:bg-white/5 group-hover:border-white/20'
                           }
                         `}
                       >
@@ -314,7 +314,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
 
       {/* Selection Info Bar */}
       {selectable && selectedIds.length > 0 && (
-        <div className="border-t border-[#1e1f22] px-6 py-3 bg-[#171719]">
+        <div className="border-t border-white/10 px-6 py-3 bg-[#171719]">
           <div className="flex items-center justify-between">
             <div className="text-sm text-[#a3a3a3]">
               {selectedIds.length} customer{selectedIds.length === 1 ? '' : 's'} selected

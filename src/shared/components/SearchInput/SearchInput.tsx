@@ -71,9 +71,9 @@ export const SearchInput: React.FC<SearchInputProps> = ({
             onClick={handleClear}
             className="
               flex items-center justify-center w-7 h-7 md:w-6 md:h-6 rounded-lg
-              bg-[#1d1d20] border border-[#25262a]
-              text-[#a3a3a3] hover:text-white hover:bg-[#212124]
-              hover:border-[#2c2d31]
+              border border-white/10
+              text-[#a3a3a3] hover:text-white hover:bg-white/5
+              hover:border-white/20
               active:bg-[#1d1d20] active:scale-95
               transition-all duration-200
               focus:outline-none focus:ring-2 focus:ring-[#14BDEA]

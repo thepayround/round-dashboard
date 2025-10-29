@@ -18,7 +18,7 @@ interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
 
 const variants = {
   primary: 'bg-[#D417C8] text-white font-normal tracking-tight hover:bg-[#BD2CD0] transition-all duration-150',
-  secondary: 'bg-transparent border border-[#25262a] text-white font-normal tracking-tight hover:bg-[#1d1d20] hover:border-[#2c2d31] transition-all duration-150',
+  secondary: 'bg-transparent border border-white/10 text-white font-normal tracking-tight hover:bg-white/5 hover:border-white/20 transition-all duration-150',
   ghost: 'bg-transparent border border-transparent text-[#a3a3a3] hover:text-white hover:bg-[#1d1d20] transition-all duration-150',
   danger: 'bg-red-600 text-white font-normal tracking-tight hover:bg-red-700 transition-all duration-150',
   success: 'bg-[#42E695] text-black font-normal tracking-tight hover:bg-[#3BD88B] transition-all duration-150',
@@ -26,10 +26,10 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'px-3 py-1.5 text-xs h-11 md:h-9',     // 44px mobile -> 36px desktop
-  md: 'px-4 py-1.5 text-xs h-11 md:h-9',     // 44px mobile -> 36px desktop
-  lg: 'px-5 py-1.5 text-xs h-11 md:h-9',     // 44px mobile -> 36px desktop
-  xl: 'px-6 py-1.5 text-sm h-11 md:h-9'      // 44px mobile -> 36px desktop
+  sm: 'px-3 py-1.5 text-xs h-[42px] md:h-9',     // 42px mobile -> 36px desktop
+  md: 'px-4 py-1.5 text-xs h-[42px] md:h-9',     // 42px mobile -> 36px desktop
+  lg: 'px-5 py-1.5 text-xs h-[42px] md:h-9',     // 42px mobile -> 36px desktop
+  xl: 'px-6 py-1.5 text-sm h-[42px] md:h-9'      // 42px mobile -> 36px desktop
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({

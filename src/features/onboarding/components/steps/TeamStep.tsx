@@ -184,7 +184,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
 
       {/* Invite Team Members Section */}
       <div className="space-y-6">
-        <div className="p-4 rounded-lg bg-[#1d1d20] border border-[#25262a]">
+        <div className="p-4">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <UserPlus className="w-4 h-4 text-[#32A1E4]" />
