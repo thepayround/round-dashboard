@@ -1,74 +1,57 @@
 import { motion } from 'framer-motion'
-import { Mail, ArrowLeft, AlertCircle } from 'lucide-react'
+import { Mail, ArrowLeft, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-
-import type { ValidationError } from '@/shared/utils/validation'
-import { validateEmail, hasFieldError, getFieldError } from '@/shared/utils/validation'
+import { ActionButton } from '@/shared/components'
+import { validators, handleApiError } from '@/shared/utils'
+import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
 
 export const ResendConfirmationPage = () => {
-  const [email, setEmail] = useState('')
-  const [errors, setErrors] = useState<ValidationError[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { loading: isSubmitting, execute } = useAsyncAction()
   const [apiError, setApiError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    setEmail(value)
-    setApiError('')
-    setSuccessMessage('')
-
-    // Clear field error when user starts typing
-    if (hasFieldError(errors, 'email')) {
-      setErrors(prev => prev.filter(error => error.field !== 'email'))
+  // Use form hook for validation
+  const { values, errors, handleChange, handleBlur, validateAll, resetForm } = useForm(
+    { email: '' },
+    {
+      email: (value: string) => {
+        if (!value.trim()) {
+          return { valid: false, message: 'Email is required' }
+        }
+        return validators.emailWithMessage(value)
+      },
     }
-  }
-
-  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    const emailValidation = validateEmail(value)
-    if (!emailValidation.isValid) {
-      setErrors(prev => [
-        ...prev.filter(error => error.field !== 'email'),
-        ...emailValidation.errors,
-      ])
-    }
-  }
+  )
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
     setApiError('')
     setSuccessMessage('')
 
-    // Validate email
-    const emailValidation = validateEmail(email)
-    if (!emailValidation.isValid) {
-      setErrors(emailValidation.errors)
-      setIsSubmitting(false)
+    if (!validateAll()) {
       return
     }
 
-    setErrors([])
-
-    try {
-      const response = await apiClient.resendConfirmationEmail(email)
+    await execute(async () => {
+      const response = await apiClient.resendConfirmationEmail(values.email)
 
       if (response.success) {
         setSuccessMessage(response.message ?? 'Confirmation email sent successfully!')
-        setEmail('')
+        resetForm()
       } else {
         setApiError(response.error ?? 'Failed to resend confirmation email')
       }
-    } catch (error) {
-      console.error('Resend confirmation error:', error)
-      setApiError('An unexpected error occurred. Please try again.')
-    } finally {
-      setIsSubmitting(false)
-    }
+    }, {
+      onError: (error) => {
+        const message = handleApiError(error, 'ResendConfirmation')
+        setApiError(message)
+      }
+    })
   }
+
+  const isFormValid = values.email.trim() !== '' && !errors.email
 
   return (
     <div className="auth-container">
@@ -145,40 +128,43 @@ export const ResendConfirmationPage = () => {
                 id="email"
                 type="email"
                 name="email"
-                value={email}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                placeholder="Enter your email address"
-                className={`auth-input input-with-icon-left ${
-                  hasFieldError(errors, 'email') ? 'auth-input-error' : ''
-                }`}
+                value={values.email}
+                onChange={handleChange('email')}
+                onBlur={handleBlur('email')}
+                placeholder="Enter your email"
+                className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
                 required
+                aria-required="true"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? 'email-error' : undefined}
               />
             </div>
-            {hasFieldError(errors, 'email') && (
+            {errors.email && (
               <motion.div
+                id="email-error"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                role="alert"
+                aria-live="polite"
               >
                 <AlertCircle className="w-4 h-4" />
-                <span>{getFieldError(errors, 'email')?.message}</span>
+                <span>{errors.email}</span>
               </motion.div>
             )}
           </div>
 
-          <button
+          <ActionButton
             type="submit"
-            disabled={isSubmitting || !email.trim()}
-            className={`w-full btn-primary ${
-              isSubmitting || !email.trim() ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            <span className="flex items-center justify-center space-x-2">
-              <Mail className="w-5 h-5" />
-              <span>{isSubmitting ? 'Sending...' : 'Send Confirmation Email'}</span>
-            </span>
-          </button>
+            label={isSubmitting ? 'Sending...' : 'Send Confirmation Email'}
+            disabled={!isFormValid || isSubmitting}
+            icon={ArrowRight}
+            loading={isSubmitting}
+            size="sm"
+            animated={false}
+            actionType="auth"
+            className="w-full"
+          />
         </form>
 
         {/* Back to Login */}

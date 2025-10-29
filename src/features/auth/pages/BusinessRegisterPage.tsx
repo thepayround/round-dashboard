@@ -12,24 +12,14 @@ import {
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ActionButton, AuthLogo, PhoneInput } from '@/shared/components'
+import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
 
 import type { CompanyInfo, BillingAddress } from '@/shared/types/business'
 import type { ValidationError } from '@/shared/utils/validation'
-import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
-import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
-import {
-  validateRegistrationForm,
-  validateField,
-  getFieldError,
-  hasFieldError,
-  validateEmail,
-  validatePassword,
-  validateFirstName,
-  validateLastName,
-} from '@/shared/utils/validation'
+import { validators } from '@/shared/utils/validators'
+import { handleApiError } from '@/shared/utils/errorHandler'
+import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
 import { validateCompanyInfo } from '@/shared/utils/companyValidation'
-import { phoneValidator } from '@/shared/utils/phoneValidation'
 
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { BillingAddressForm } from '../components/BillingAddressForm'
@@ -39,15 +29,6 @@ import { useOrganization } from '@/shared/hooks/api'
 // import { useAddress } from '@/shared/hooks/api'
 // import { useAuth } from '@/shared/contexts/AuthContext'
 
-interface PersonalFormData {
-  firstName: string
-  lastName: string
-  phone: string
-  countryPhoneCode: string
-  email: string
-  password: string
-}
-
 export const BusinessRegisterPage = () => {
   const navigate = useNavigate()
   const { registerBusiness } = useAuthAPI()
@@ -56,14 +37,25 @@ export const BusinessRegisterPage = () => {
   // const { login } = useAuth() // Not used in this component
 
   // Form state is hardcoded to 'business' for this page
-  const [personalData, setPersonalData] = useState<PersonalFormData>({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    countryPhoneCode: '',
-    email: '',
-    password: '',
-  })
+  // Use useForm hook for personal info fields (firstName, lastName, email, password)
+  const { values: personalValues, errors: personalErrors, handleChange: handlePersonalChange, handleBlur: handlePersonalBlur, validateAll: validatePersonalInfo } = useForm(
+    {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    },
+    {
+      firstName: (value) => validators.required(value, 'First name'),
+      lastName: (value) => validators.required(value, 'Last name'),
+      email: validators.emailWithMessage,
+      password: validators.password,
+    }
+  )
+  
+  // Use phone validation hook
+  const { phoneData, phoneError, handlePhoneChange, handlePhoneBlur, validatePhone } = usePhoneValidation('GR')
+  
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo>({
     companyName: '',
     registrationNumber: '',
@@ -77,10 +69,10 @@ export const BusinessRegisterPage = () => {
   })
   const [billingAddress, setBillingAddress] = useState<BillingAddress | undefined>(undefined)
 
-  // Validation state
-  const [personalErrors, setPersonalErrors] = useState<ValidationError[]>([])
+  // Company and billing validation errors (keeping ValidationError[] for child components)
   const [companyErrors, setCompanyErrors] = useState<ValidationError[]>([])
   const [billingErrors, setBillingErrors] = useState<ValidationError[]>([])
+  
   const [isPersonalValid, setIsPersonalValid] = useState(false)
   const [isCompanyValid, setIsCompanyValid] = useState(false)
   const [, setIsBillingValid] = useState(true) // Optional step
@@ -102,7 +94,7 @@ export const BusinessRegisterPage = () => {
 
   // UI state
   const [showPassword, setShowPassword] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { execute, loading: isSubmitting } = useAsyncAction()
   const [apiError, setApiError] = useState('')
 
   // Calculate progress based on current step and field completion
@@ -120,11 +112,11 @@ export const BusinessRegisterPage = () => {
     if (currentStep === 0) {
       // Personal info step - 5 required fields
       const filledFields = [
-        personalData.firstName.trim(),
-        personalData.lastName.trim(),
-        personalData.email.trim(),
-        personalData.phone.trim(),
-        personalData.password.trim(),
+        personalValues.firstName.trim(),
+        personalValues.lastName.trim(),
+        personalValues.email.trim(),
+        phoneData.phone.trim(),
+        personalValues.password.trim(),
       ].filter(field => field !== '').length
 
       currentStepProgress = (filledFields / 5) * progressPerStep
@@ -189,128 +181,30 @@ export const BusinessRegisterPage = () => {
 
   // Re-validate personal form when data changes
   useEffect(() => {
-    const isPersonalFormValid = validatePersonalForm(personalData)
+    const isPersonalFormValid = validatePersonalForm()
     setIsPersonalValid(isPersonalFormValid)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [personalData, personalErrors])
+  }, [personalValues, phoneData, personalErrors, phoneError])
 
-
-  // Handle personal form changes
-  const handlePersonalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setPersonalData(prev => ({ ...prev, [name]: value }))
-
-    // Clear field error when user starts typing
-    if (hasFieldError(personalErrors, name)) {
-      setPersonalErrors(prev => prev.filter(error => error.field !== name))
-    }
-
-    // Validate personal form excluding phone (handled separately)
-    const updatedData = { ...personalData, [name]: value }
-    const isPersonalFormValid = validatePersonalForm(updatedData)
-    setIsPersonalValid(isPersonalFormValid)
-  }
-
-  const handlePersonalPhoneChange = (phoneNumber: string) => {
-    setPersonalData(prev => ({ ...prev, phone: phoneNumber }))
-    
-    // Clear phone error when user starts typing (same as other fields)
-    if (hasFieldError(personalErrors, 'phone')) {
-      setPersonalErrors(prev => prev.filter(error => error.field !== 'phone'))
-    }
-
-    // Validate personal form
-    const updatedData = { ...personalData, phone: phoneNumber }
-    const isPersonalFormValid = validatePersonalForm(updatedData)
-    setIsPersonalValid(isPersonalFormValid)
-  }
-
-  const handlePersonalPhoneBlur = async (phoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
-    // Store the country phone code for backend submission
-    if (countryInfo?.phoneCode) {
-      setPersonalData(prev => ({ ...prev, countryPhoneCode: countryInfo.phoneCode }))
-    }
-
-    // Always validate phone when user leaves the field (same pattern as other fields)
-    
-    // If field is empty and required, show required error immediately
-    if (!phoneNumber?.trim()) {
-      setPersonalErrors(prev => [
-        ...prev.filter(error => error.field !== 'phone'),
-        { field: 'phone', message: 'Phone number is required', code: 'REQUIRED' }
-      ])
-      return
-    }
-
-    try {
-      // Use the provided phone number and country info
-      const countryCode = countryInfo?.countryCode ?? 'US'
-
-      // Call backend API for validation using service (follows platform pattern)
-      const result = await phoneValidationService.validatePhoneNumber({
-        phoneNumber: phoneNumber.trim(),
-        countryCode
-      })
-      
-      if (!result.isValid && result.error) {
-        setPersonalErrors(prev => [
-          ...prev.filter(error => error.field !== 'phone'),
-          { field: 'phone', message: result.error ?? 'Phone number is invalid', code: 'INVALID_PHONE' }
-        ])
-      }
-    } catch (error) {
-      console.error('Phone validation failed:', error)
-      // Don't show error for network issues, just log them
-    }
-  }
-
-  // Helper function to validate personal form with simple phone check
-  const validatePersonalForm = (data: PersonalFormData) => {
+  // Helper function to validate personal form
+  const validatePersonalForm = () => {
     // Check if all required fields are filled
     if (
-      !data.firstName.trim() ||
-      !data.lastName.trim() ||
-      !data.phone.trim() ||
-      !data.email.trim() ||
-      !data.password.trim()
+      !personalValues.firstName.trim() ||
+      !personalValues.lastName.trim() ||
+      !phoneData.phone.trim() ||
+      !personalValues.email.trim() ||
+      !personalValues.password.trim()
     ) {
       return false
     }
 
-    // Simple phone check - use client-side validation
-    if (!phoneValidator.hasMinimumContent(data.phone)) {
+    // Check individual error states from useForm and phone validation
+    if (personalErrors.firstName ?? personalErrors.lastName ?? personalErrors.email ?? personalErrors.password ?? phoneError) {
       return false
     }
 
-    // Check if there are any validation errors from other fields
-    const nonPhoneErrors = personalErrors.filter(error => error.field !== 'phone')
-    if (nonPhoneErrors.length > 0) {
-      return false
-    }
-
-    // Validate other fields
-    const emailValidation = validateEmail(data.email)
-    const passwordValidation = validatePassword(data.password)
-    const firstNameValidation = validateFirstName(data.firstName)
-    const lastNameValidation = validateLastName(data.lastName)
-
-    return (
-      emailValidation.isValid &&
-      passwordValidation.isValid &&
-      firstNameValidation.isValid &&
-      lastNameValidation.isValid
-    )
-  }
-
-  const handlePersonalInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    const fieldValidation = validateField(name, value)
-    if (!fieldValidation.isValid) {
-      setPersonalErrors(prev => [
-        ...prev.filter(error => error.field !== name),
-        ...fieldValidation.errors,
-      ])
-    }
+    return true
   }
 
   // Handle form completion
@@ -320,18 +214,17 @@ export const BusinessRegisterPage = () => {
       return
     }
 
-    setIsSubmitting(true)
     setApiError('')
 
-    try {
+    await execute(async () => {
       // Register business user with all company information using new endpoint
       const userResponse = await registerBusiness({
-        firstName: personalData.firstName,
-        lastName: personalData.lastName,
-        email: personalData.email,
-        password: personalData.password,
-        phoneNumber: personalData.phone,
-        countryPhoneCode: personalData.countryPhoneCode,
+        firstName: personalValues.firstName,
+        lastName: personalValues.lastName,
+        email: personalValues.email,
+        password: personalValues.password,
+        phoneNumber: phoneData.phone,
+        countryPhoneCode: phoneData.countryPhoneCode,
         companyInfo,
         billingAddress,
       })
@@ -339,41 +232,40 @@ export const BusinessRegisterPage = () => {
       if (!userResponse.success) {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         setApiError(('error' in userResponse && userResponse.error) || 'Business registration failed')
-        setIsSubmitting(false)
         return
       }
 
       // Navigate to confirmation pending page
       navigate('/auth/confirmation-pending', {
         state: {
-          email: personalData.email,
+          email: personalValues.email,
           accountType: 'business',
           hasBusinessData: true,
         },
         replace: true,
       })
-    } catch (error) {
-      console.error('Business registration error:', error)
-      setApiError('An unexpected error occurred. Please try again.')
-      setIsSubmitting(false)
-    }
+    }, {
+      onError: (error) => {
+        const message = handleApiError(error, 'Business registration', 'An unexpected error occurred. Please try again.')
+        setApiError(message)
+      }
+    })
   }
 
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-
+  // Handle navigation to next step
+  const handleNextStep = () => {
     if (multiStepForm.currentStep === 0) {
-      // Personal info step
-      const validation = validateRegistrationForm(personalData)
-      if (!validation.isValid) {
-        setPersonalErrors(validation.errors)
+      // Personal info step - validate all fields
+      const isFormValid = validatePersonalInfo()
+      const isPhoneValid = validatePhone()
+
+      if (!isFormValid || !isPhoneValid) {
         return
       }
-      setPersonalErrors([])
+      
       multiStepForm.completeAndGoToNext()
     } else if (multiStepForm.currentStep === 1) {
-      // Billing address step (optional)
+      // Billing address step (optional) - just continue
       multiStepForm.goToStep(2)
     } else if (multiStepForm.currentStep === 2) {
       // Company info step (final step)
@@ -388,11 +280,6 @@ export const BusinessRegisterPage = () => {
   const handleSkipBilling = () => {
     setBillingAddress(undefined)
     multiStepForm.completeAndGoToNext()
-  }
-
-  const handleButtonClick = () => {
-    const fakeEvent = { preventDefault: () => {} } as React.FormEvent
-    handleSubmit(fakeEvent)
   }
 
   // Render step content
@@ -425,7 +312,7 @@ export const BusinessRegisterPage = () => {
               </motion.p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-6">
               {/* Name Fields Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -438,22 +325,28 @@ export const BusinessRegisterPage = () => {
                       id="firstName"
                       type="text"
                       name="firstName"
-                      value={personalData.firstName}
-                      onChange={handlePersonalInputChange}
-                      onBlur={handlePersonalInputBlur}
+                      value={personalValues.firstName}
+                      onChange={handlePersonalChange('firstName')}
+                      onBlur={handlePersonalBlur('firstName')}
                       placeholder="John"
-                      className={`auth-input input-with-icon-left ${hasFieldError(personalErrors, 'firstName') ? 'auth-input-error' : ''}`}
+                      className={`auth-input input-with-icon-left ${personalErrors.firstName ? 'auth-input-error' : ''}`}
                       required
+                      aria-required="true"
+                      aria-invalid={!!personalErrors.firstName}
+                      aria-describedby={personalErrors.firstName ? 'firstName-error' : undefined}
                     />
                   </div>
-                  {hasFieldError(personalErrors, 'firstName') && (
+                  {personalErrors.firstName && (
                     <motion.div
+                      id="firstName-error"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                      role="alert"
+                      aria-live="polite"
                     >
                       <AlertCircle className="w-4 h-4" />
-                      <span>{getFieldError(personalErrors, 'firstName')?.message}</span>
+                      <span>{personalErrors.firstName}</span>
                     </motion.div>
                   )}
                 </div>
@@ -468,22 +361,28 @@ export const BusinessRegisterPage = () => {
                       id="lastName"
                       type="text"
                       name="lastName"
-                      value={personalData.lastName}
-                      onChange={handlePersonalInputChange}
-                      onBlur={handlePersonalInputBlur}
+                      value={personalValues.lastName}
+                      onChange={handlePersonalChange('lastName')}
+                      onBlur={handlePersonalBlur('lastName')}
                       placeholder="Doe"
-                      className={`auth-input input-with-icon-left ${hasFieldError(personalErrors, 'lastName') ? 'auth-input-error' : ''}`}
+                      className={`auth-input input-with-icon-left ${personalErrors.lastName ? 'auth-input-error' : ''}`}
                       required
+                      aria-required="true"
+                      aria-invalid={!!personalErrors.lastName}
+                      aria-describedby={personalErrors.lastName ? 'lastName-error' : undefined}
                     />
                   </div>
-                  {hasFieldError(personalErrors, 'lastName') && (
+                  {personalErrors.lastName && (
                     <motion.div
+                      id="lastName-error"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                      role="alert"
+                      aria-live="polite"
                     >
                       <AlertCircle className="w-4 h-4" />
-                      <span>{getFieldError(personalErrors, 'lastName')?.message}</span>
+                      <span>{personalErrors.lastName}</span>
                     </motion.div>
                   )}
                 </div>
@@ -500,22 +399,28 @@ export const BusinessRegisterPage = () => {
                     id="email"
                     type="email"
                     name="email"
-                    value={personalData.email}
-                    onChange={handlePersonalInputChange}
-                    onBlur={handlePersonalInputBlur}
+                    value={personalValues.email}
+                    onChange={handlePersonalChange('email')}
+                    onBlur={handlePersonalBlur('email')}
                     placeholder="john@company.com"
-                    className={`auth-input input-with-icon-left ${hasFieldError(personalErrors, 'email') ? 'auth-input-error' : ''}`}
+                    className={`auth-input input-with-icon-left ${personalErrors.email ? 'auth-input-error' : ''}`}
                     required
+                    aria-required="true"
+                    aria-invalid={!!personalErrors.email}
+                    aria-describedby={personalErrors.email ? 'email-error' : undefined}
                   />
                 </div>
-                {hasFieldError(personalErrors, 'email') && (
+                {personalErrors.email && (
                   <motion.div
+                    id="email-error"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                    role="alert"
+                    aria-live="polite"
                   >
                     <AlertCircle className="w-4 h-4" />
-                    <span>{getFieldError(personalErrors, 'email')?.message}</span>
+                    <span>{personalErrors.email}</span>
                   </motion.div>
                 )}
               </div>
@@ -525,24 +430,26 @@ export const BusinessRegisterPage = () => {
                 <PhoneInput
                   id="phone"
                   name="phone"
-                  value={personalData.phone}
-                  onChange={handlePersonalPhoneChange}
-                  onBlur={handlePersonalPhoneBlur}
+                  value={phoneData.phone}
+                  onChange={handlePhoneChange}
+                  onBlur={handlePhoneBlur}
                   validateOnBlur={false}
                   label="Phone Number"
                   placeholder="Phone number"
-                  error={hasFieldError(personalErrors, 'phone') ? getFieldError(personalErrors, 'phone')?.message : undefined}
+                  error={phoneError}
                   defaultCountry="GR"
                   showValidation={false}
                 />
-                {hasFieldError(personalErrors, 'phone') && (
+                {phoneError && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                    role="alert"
+                    aria-live="polite"
                   >
                     <AlertCircle className="w-4 h-4" />
-                    <span>{getFieldError(personalErrors, 'phone')?.message}</span>
+                    <span>{phoneError}</span>
                   </motion.div>
                 )}
               </div>
@@ -558,12 +465,15 @@ export const BusinessRegisterPage = () => {
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     name="password"
-                    value={personalData.password}
-                    onChange={handlePersonalInputChange}
-                    onBlur={handlePersonalInputBlur}
+                    value={personalValues.password}
+                    onChange={handlePersonalChange('password')}
+                    onBlur={handlePersonalBlur('password')}
                     placeholder="Create a strong password"
-                    className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(personalErrors, 'password') ? 'auth-input-error' : ''}`}
+                    className={`auth-input input-with-icon-left input-with-icon-right ${personalErrors.password ? 'auth-input-error' : ''}`}
                     required
+                    aria-required="true"
+                    aria-invalid={!!personalErrors.password}
+                    aria-describedby={personalErrors.password ? 'password-error' : undefined}
                   />
                   <button
                     type="button"
@@ -573,18 +483,32 @@ export const BusinessRegisterPage = () => {
                     {showPassword ? <EyeOff /> : <Eye />}
                   </button>
                 </div>
-                {hasFieldError(personalErrors, 'password') && (
+
+                {/* Password Strength Indicator */}
+                {personalValues.password && (
+                  <div className="mt-3">
+                    <PasswordStrengthIndicator 
+                      password={personalValues.password}
+                      showStrengthBar
+                    />
+                  </div>
+                )}
+
+                {personalErrors.password && (
                   <motion.div
+                    id="password-error"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                    role="alert"
+                    aria-live="polite"
                   >
                     <AlertCircle className="w-4 h-4" />
-                    <span>{getFieldError(personalErrors, 'password')?.message}</span>
+                    <span>{personalErrors.password}</span>
                   </motion.div>
                 )}
               </div>
-            </form>
+            </div>
           </motion.div>
         )
 
@@ -760,7 +684,7 @@ export const BusinessRegisterPage = () => {
                     if (multiStepForm.isLastStep) return 'Create Account'
                     return 'Continue'
                   })()}
-                  onClick={handleButtonClick}
+                  onClick={handleNextStep}
                   disabled={
                     isSubmitting ||
                     (multiStepForm.currentStep === 0 && !isPersonalValid) ||
@@ -771,7 +695,7 @@ export const BusinessRegisterPage = () => {
                   size="sm"
                   animated={false}
                   actionType={multiStepForm.isLastStep ? "auth" : "navigation"}
-                  className="min-w-[120px] sm:min-w-[160px] "
+                  className="min-w-[120px] sm:min-w-[160px]"
                 />
               )}
             </div>

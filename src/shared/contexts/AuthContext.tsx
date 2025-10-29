@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect } from 'react'
 import type { User } from '@/shared/types/auth'
+import { tokenManager } from '@/shared/utils/tokenManager'
 import {
   AuthContext,
   type AuthContextType,
@@ -92,7 +93,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     let isMounted = true // Prevent duplicate calls
 
     const checkExistingSession = async () => {
-      const token = localStorage.getItem('auth_token')
+      const token = tokenManager.getToken()
 
       if (!token) {
         dispatch({ type: 'SET_LOADING', payload: false })

@@ -2,198 +2,92 @@ import { motion } from 'framer-motion'
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ActionButton, AuthLogo, PhoneInput } from '@/shared/components'
+import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-
-import type { ValidationError } from '@/shared/utils/validation'
-import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
-import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
-import {
-  validateRegistrationForm,
-  getFieldError,
-  hasFieldError,
-  validateField,
-  validateEmail,
-  validatePassword,
-  validateFirstName,
-  validateLastName,
-} from '@/shared/utils/validation'
+import { validators, handleApiError } from '@/shared/utils'
+import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
-import { phoneValidator } from '@/shared/utils/phoneValidation'
-// import { useAuth } from '@/shared/contexts/AuthContext'
 
 export const PersonalRegisterPage = () => {
   const navigate = useNavigate()
   const { showSuccess, showError } = useGlobalToast()
-  // const { login } = useAuth() // Not used in this component
+  const { loading: isSubmitting, execute } = useAsyncAction()
+  
   const [showPassword, setShowPassword] = useState(false)
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    countryPhoneCode: '', 
-    email: '',
-    password: '',
-  })
-  const [errors, setErrors] = useState<ValidationError[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // Use usePhoneValidation hook for phone field with async validation
+  const { 
+    phoneData, 
+    phoneError, 
+    handlePhoneChange, 
+    handlePhoneBlur,
+    validatePhone,
+  } = usePhoneValidation('GR') // Default country Greece
 
-  // Form validation helper
-  const isFormValid = () => {
-    // Check if all required fields are filled
-    if (
-      !formData.firstName.trim() ||
-      !formData.lastName.trim() ||
-      !formData.phone.trim() ||
-      !formData.email.trim() ||
-      !formData.password.trim()
-    ) {
-      return false
+  // Use useForm hook for firstName, lastName, email, password
+  const { values, errors, handleChange, handleBlur, validateAll } = useForm(
+    {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    },
+    {
+      firstName: (value) => validators.required(value, 'First name'),
+      lastName: (value) => validators.required(value, 'Last name'),
+      email: validators.emailWithMessage,
+      password: validators.password,
     }
-
-    // Simple phone check - use client-side validation
-    if (!phoneValidator.hasMinimumContent(formData.phone)) {
-      return false
-    }
-
-    // Check if there are any validation errors from other fields
-    const nonPhoneErrors = errors.filter(error => error.field !== 'phone')
-    if (nonPhoneErrors.length > 0) {
-      return false
-    }
-
-    // Validate other fields
-    const emailValidation = validateEmail(formData.email)
-    const passwordValidation = validatePassword(formData.password)
-    const firstNameValidation = validateFirstName(formData.firstName)
-    const lastNameValidation = validateLastName(formData.lastName)
-
-    return (
-      emailValidation.isValid &&
-      passwordValidation.isValid &&
-      firstNameValidation.isValid &&
-      lastNameValidation.isValid
-    )
-  }
-
-  // Handle Enter key press
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && isFormValid()) {
-      e.preventDefault()
-      handleSubmit(e as React.FormEvent)
-    }
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-
-    // Clear field error when user starts typing
-    if (hasFieldError(errors, name)) {
-      setErrors(prev => prev.filter(error => error.field !== name))
-    }
-  }
-
-  const handlePhoneChange = (phoneNumber: string) => {
-    setFormData(prev => ({ ...prev, phone: phoneNumber }))
-    
-    // Clear phone error when user starts typing (same as other fields)
-    if (hasFieldError(errors, 'phone')) {
-      setErrors(prev => prev.filter(error => error.field !== 'phone'))
-    }
-  }
-
-  const handlePhoneBlur = async (phoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
-    // Store the country phone code for backend submission
-    if (countryInfo?.phoneCode) {
-      setFormData(prev => ({ ...prev, countryPhoneCode: countryInfo.phoneCode }))
-    }
-
-    // Validate phone when user leaves the field (same pattern as other fields)
-    if (!phoneNumber?.trim()) {
-      return // Don't validate empty fields on blur
-    }
-
-    try {
-      // Use the provided phone number and country info
-      const countryCode = countryInfo?.countryCode ?? 'GR'
-
-      // Call backend API for validation using service (follows platform pattern)
-      const result = await phoneValidationService.validatePhoneNumber({
-        phoneNumber: phoneNumber.trim(),
-        countryCode
-      })
-      
-      if (!result.isValid && result.error) {
-        setErrors(prev => [
-          ...prev.filter(error => error.field !== 'phone'),
-          { field: 'phone', message: result.error ?? 'Phone number is invalid', code: 'INVALID_PHONE' }
-        ])
-      }
-    } catch (error) {
-      console.error('Phone validation failed:', error)
-      // Don't show error for network issues, just log them
-    }
-  }
-
-  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-
-    // Validate field when user leaves it
-    const fieldValidation = validateField(name, value)
-    if (!fieldValidation.isValid) {
-      setErrors(prev => [...prev.filter(error => error.field !== name), ...fieldValidation.errors])
-    }
-  }
+  )
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
 
-    // Final validation check before submission
-    const validation = validateRegistrationForm(formData)
+    // Validate all form fields
+    const isFormValid = validateAll()
+    
+    // Validate phone using the hook
+    const isPhoneValid = validatePhone()
 
-    if (!validation.isValid) {
-      setErrors(validation.errors)
-      setIsSubmitting(false)
+    if (!isFormValid || !isPhoneValid) {
       return
     }
 
-    setErrors([])
-
-    try {
+    await execute(async () => {
       // Call real API
       const response = await apiClient.register({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-        phoneNumber: formData.phone,
-        countryPhoneCode: formData.countryPhoneCode,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password,
+        phoneNumber: phoneData.phone,
+        countryPhoneCode: phoneData.countryPhoneCode,
       })
 
       if (response.success && response.data) {
         // Navigate to confirmation pending page instead of auto-login
         navigate('/auth/confirmation-pending', {
-          state: { email: formData.email },
+          state: { email: values.email },
           replace: true,
         })
       } else {
         showError(response.error ?? 'Registration failed')
-        setIsSubmitting(false)
       }
-    } catch (error) {
-      console.error('Registration error:', error)
-      showError('An unexpected error occurred. Please try again.')
-      setIsSubmitting(false)
-    }
+    }, {
+      onError: (error) => {
+        const message = handleApiError(error, 'Registration')
+        showError(message)
+      }
+    })
   }
 
-  const handleButtonClick = () => {
-    const fakeEvent = { preventDefault: () => {} } as React.FormEvent
-    handleSubmit(fakeEvent)
-  }
+  const isFormValid = values.firstName.trim() !== '' && 
+                      values.lastName.trim() !== '' && 
+                      values.email.trim() !== '' && 
+                      values.password.trim() !== '' && 
+                      phoneData.phone.trim() !== '' &&
+                      !errors.firstName && !errors.lastName && !errors.email && !errors.password && !phoneError
 
   return (
     <div className="auth-container">
@@ -213,7 +107,6 @@ export const PersonalRegisterPage = () => {
           delay: 0.2,
         }}
         className="w-full max-w-[360px] mx-auto relative z-10"
-        onKeyDown={handleKeyDown}
       >
         {/* Centered Logo Above Form */}
         <AuthLogo />
@@ -249,22 +142,28 @@ export const PersonalRegisterPage = () => {
                   id="firstName"
                   type="text"
                   name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur}
+                  value={values.firstName}
+                  onChange={handleChange('firstName')}
+                  onBlur={handleBlur('firstName')}
                   placeholder="John"
-                  className={`auth-input input-with-icon-left ${hasFieldError(errors, 'firstName') ? 'auth-input-error' : ''}`}
+                  className={`auth-input input-with-icon-left ${errors.firstName ? 'auth-input-error' : ''}`}
                   required
+                  aria-required="true"
+                  aria-invalid={!!errors.firstName}
+                  aria-describedby={errors.firstName ? 'firstName-error' : undefined}
                 />
               </div>
-              {hasFieldError(errors, 'firstName') && (
+              {errors.firstName && (
                 <motion.div
+                  id="firstName-error"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  role="alert"
+                  aria-live="polite"
                 >
                   <AlertCircle className="w-4 h-4" />
-                  <span>{getFieldError(errors, 'firstName')?.message}</span>
+                  <span>{errors.firstName}</span>
                 </motion.div>
               )}
             </div>
@@ -280,22 +179,24 @@ export const PersonalRegisterPage = () => {
                   id="lastName"
                   type="text"
                   name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur}
+                  value={values.lastName}
+                  onChange={handleChange('lastName')}
+                  onBlur={handleBlur('lastName')}
                   placeholder="Doe"
-                  className={`auth-input input-with-icon-left ${hasFieldError(errors, 'lastName') ? 'auth-input-error' : ''}`}
+                  className={`auth-input input-with-icon-left ${errors.lastName ? 'auth-input-error' : ''}`}
                   required
                 />
               </div>
-              {hasFieldError(errors, 'lastName') && (
+              {errors.lastName && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  role="alert"
+                  aria-live="polite"
                 >
                   <AlertCircle className="w-4 h-4" />
-                  <span>{getFieldError(errors, 'lastName')?.message}</span>
+                  <span>{errors.lastName}</span>
                 </motion.div>
               )}
             </div>
@@ -312,22 +213,24 @@ export const PersonalRegisterPage = () => {
                 id="email"
                 type="email"
                 name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
+                value={values.email}
+                onChange={handleChange('email')}
+                onBlur={handleBlur('email')}
                 placeholder="example@gmail.com"
-                className={`auth-input input-with-icon-left ${hasFieldError(errors, 'email') ? 'auth-input-error' : ''}`}
+                className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
                 required
               />
             </div>
-            {hasFieldError(errors, 'email') && (
+            {errors.email && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                role="alert"
+                aria-live="polite"
               >
                 <AlertCircle className="w-4 h-4" />
-                <span>{getFieldError(errors, 'email')?.message}</span>
+                <span>{errors.email}</span>
               </motion.div>
             )}
           </div>
@@ -337,24 +240,26 @@ export const PersonalRegisterPage = () => {
             <PhoneInput
               id="phone"
               name="phone"
-              value={formData.phone}
+              value={phoneData.phone}
               onChange={handlePhoneChange}
               onBlur={handlePhoneBlur}
               validateOnBlur={false}
               label="Phone Number"
               placeholder="Phone number"
-              error={hasFieldError(errors, 'phone') ? getFieldError(errors, 'phone')?.message : undefined}
+              error={phoneError}
               defaultCountry="GR"
               showValidation={false}
             />
-            {hasFieldError(errors, 'phone') && (
+            {phoneError && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                role="alert"
+                aria-live="polite"
               >
                 <AlertCircle className="w-4 h-4" />
-                <span>{getFieldError(errors, 'phone')?.message}</span>
+                <span>{phoneError}</span>
               </motion.div>
             )}
           </div>
@@ -370,11 +275,11 @@ export const PersonalRegisterPage = () => {
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
+                value={values.password}
+                onChange={handleChange('password')}
+                onBlur={handleBlur('password')}
                 placeholder="Create a strong password"
-                className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(errors, 'password') ? 'auth-input-error' : ''}`}
+                className={`auth-input input-with-icon-left input-with-icon-right ${errors.password ? 'auth-input-error' : ''}`}
                 required
               />
               <button
@@ -385,14 +290,27 @@ export const PersonalRegisterPage = () => {
                 {showPassword ? <EyeOff /> : <Eye />}
               </button>
             </div>
-            {hasFieldError(errors, 'password') && (
+
+            {/* Password Strength Indicator */}
+            {values.password && (
+              <div className="mt-3">
+                <PasswordStrengthIndicator 
+                  password={values.password}
+                  showStrengthBar
+                />
+              </div>
+            )}
+
+            {errors.password && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                role="alert"
+                aria-live="polite"
               >
                 <AlertCircle className="w-4 h-4" />
-                <span>{getFieldError(errors, 'password')?.message}</span>
+                <span>{errors.password}</span>
               </motion.div>
             )}
           </div>
@@ -409,9 +327,9 @@ export const PersonalRegisterPage = () => {
 
           {/* Submit Button */}
           <ActionButton
+            type="submit"
             label={isSubmitting ? 'Creating Account...' : 'Create Personal Account'}
-            onClick={handleButtonClick}
-            disabled={!isFormValid()}
+            disabled={!isFormValid}
             icon={ArrowRight}
             loading={isSubmitting}
             size="sm"

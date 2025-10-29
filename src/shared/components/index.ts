@@ -11,6 +11,7 @@ export { AuthInput } from './AuthInput'
 export { PhoneInput } from './ui/PhoneInput'
 export { PhoneDisplay } from './ui/PhoneDisplay'
 export type { PhoneDisplayProps, CountryInfo } from './ui/PhoneDisplay'
+export { PasswordStrengthIndicator } from './PasswordStrengthIndicator'
 
 // UI Components
 export { Modal } from './Modal'

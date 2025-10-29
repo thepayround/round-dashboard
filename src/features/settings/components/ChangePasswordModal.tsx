@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, AlertCircle, Shield } from 'lucide-react'
-import { Modal, ActionButton } from '@/shared/components'
+import { Modal, ActionButton, PasswordStrengthIndicator } from '@/shared/components'
 import { apiClient } from '@/shared/services/apiClient'
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -158,23 +158,6 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
     }
   }
 
-  const getPasswordStrength = (password: string) => {
-    if (password.length === 0) return { score: 0, label: '', color: 'bg-gray-300' }
-    if (password.length < 6) return { score: 1, label: 'Weak', color: 'bg-red-500' }
-    if (password.length < 8) return { score: 2, label: 'Fair', color: 'bg-yellow-500' }
-    if (password.length < 12) return { score: 3, label: 'Good', color: 'bg-blue-500' }
-    return { score: 4, label: 'Strong', color: 'bg-green-500' }
-  }
-
-  const passwordStrength = getPasswordStrength(formData.newPassword)
-
-  const getPasswordTextColor = (score: number) => {
-    if (score <= 1) return 'text-red-400'
-    if (score === 2) return 'text-yellow-400'
-    if (score === 3) return 'text-blue-400'
-    return 'text-green-400'
-  }
-
   return (
     <Modal
       isOpen={isOpen}
@@ -291,19 +274,11 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
             
             {/* Password Strength Indicator */}
             {formData.newPassword && (
-              <div className="mt-2">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-gray-400">Password strength</span>
-                  <span className={`text-xs font-normal tracking-tight ${getPasswordTextColor(passwordStrength.score)}`}>
-                    {passwordStrength.label}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-1.5">
-                  <div
-                    className={`h-1.5 rounded-full transition-all duration-300 ${passwordStrength.color}`}
-                    style={{ width: `${(passwordStrength.score / 4) * 100}%` }}
-                  />
-                </div>
+              <div className="mt-3">
+                <PasswordStrengthIndicator 
+                  password={formData.newPassword}
+                  showStrengthBar
+                />
               </div>
             )}
 
