@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send, Paperclip, Type, Bold, Italic, Link as LinkIcon, Mail, FileText, Loader2 } from 'lucide-react'
+import { Send, Paperclip, Type, Bold, Italic, Link as LinkIcon, Mail, FileText, Loader2 } from 'lucide-react'
+import { Modal } from '@/shared/components/Modal'
 import { FormInput } from '@/shared/components/ui/FormInput'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
@@ -80,50 +80,15 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
     }))
   }
 
-  if (!isOpen) return null
-
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60"
-            onClick={onClose}
-          />
-          
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden"
-          >
-            <div className="bg-black/40 backdrop-blur-xl">
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-white/10">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                  <Send className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-medium tracking-tight text-white">Compose Email</h2>
-                  <p className="text-sm text-white/70">Send email to {customerName}</p>
-                </div>
-              </div>
-              <button
-                onClick={onClose}
-                className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Compose Email"
+      subtitle={`Send email to ${customerName}`}
+      size="lg"
+    >
+      <div className="space-y-6 max-h-[70vh] overflow-y-auto">
               {/* Email Details */}
               <div className="space-y-4">
                 <FormInput
@@ -255,11 +220,7 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
                   </button>
                 </div>
               </div>
-            </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+      </div>
+    </Modal>
   )
 }

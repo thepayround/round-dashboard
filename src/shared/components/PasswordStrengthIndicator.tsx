@@ -63,7 +63,7 @@ export const PasswordStrengthIndicator = ({
       color = 'text-blue-500'
     } else {
       label = 'Strong'
-      color = 'text-green-500'
+      color = 'text-emerald-500'
     }
 
     return { score: metRequirements, percentage, label, color }
@@ -80,14 +80,14 @@ export const PasswordStrengthIndicator = ({
       {showStrengthBar && password && (
         <div className="space-y-1">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-gray-400">Password Strength</span>
-            <span className={`font-medium ${strength.color}`}>{strength.label}</span>
+            <span className="text-white/60">Password Strength</span>
+            <span className={`font-normal ${strength.color}`}>{strength.label}</span>
           </div>
-          <div className="h-1.5 bg-gray-700/50 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-300 ${
                 (() => {
-                  if (strength.percentage === 100) return 'bg-green-500'
+                  if (strength.percentage === 100) return 'bg-emerald-500'
                   if (strength.percentage >= 80) return 'bg-blue-500'
                   if (strength.percentage >= 60) return 'bg-yellow-500'
                   if (strength.percentage >= 40) return 'bg-orange-500'
@@ -102,7 +102,7 @@ export const PasswordStrengthIndicator = ({
 
       {/* Requirements Checklist */}
       <div className="space-y-1.5">
-        <p className="text-xs font-medium text-gray-400">
+        <p className="text-xs font-normal text-white/60">
           {isAllMet ? 'All requirements met!' : 'Password must contain:'}
         </p>
         <ul className="space-y-1">
@@ -112,7 +112,7 @@ export const PasswordStrengthIndicator = ({
               <li
                 key={index}
                 className={`flex items-center gap-2 text-xs transition-colors ${
-                  isMet ? 'text-green-400' : 'text-gray-500'
+                  isMet ? 'text-emerald-400' : 'text-white/40'
                 }`}
               >
                 {isMet ? (

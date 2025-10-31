@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, AlertTriangle, Trash2, UserX } from 'lucide-react'
+import { Trash2, UserX, AlertTriangle } from 'lucide-react'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService, CustomerStatus } from '@/shared/services/api/customer.service'
+import { Modal } from '@/shared/components/Modal/Modal'
 
 interface DangerousActionsModalProps {
   isOpen: boolean
@@ -77,50 +77,15 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
     resetForm()
   }
 
-  if (!isOpen) return null
-
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60"
-            onClick={handleClose}
-          />
-          
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="relative w-full max-w-lg overflow-hidden"
-          >
-            <div className="bg-black/40 backdrop-blur-xl">
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-destructive flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h2 className="text-xl font-medium tracking-tight text-white">Dangerous Actions</h2>
-                <p className="text-sm text-white/70">Irreversible customer actions</p>
-              </div>
-            </div>
-            <button
-              onClick={handleClose}
-              className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Content */}
-          <div className="p-6">
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title="Dangerous Actions"
+      subtitle="Irreversible customer actions"
+      size="lg"
+    >
+      <div className="space-y-6">
             {!actionType ? (
               <div className="space-y-6">
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
@@ -291,11 +256,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                 )}
               </div>
             )}
-          </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+      </div>
+    </Modal>
   )
 }

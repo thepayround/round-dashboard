@@ -366,9 +366,9 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden"
           >
-            <div className="bg-black/40 backdrop-blur-xl">
+            <div className="bg-[#101011] border border-[#333333] rounded-lg shadow-2xl">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-white/10">
+              <div className="flex items-center justify-between p-6 border-b border-[#333333]">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
                     <User className="w-5 h-5 text-white" />

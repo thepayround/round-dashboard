@@ -70,6 +70,9 @@ export const Toast = ({
     <AnimatePresence>
       {isVisible && (
         <motion.div
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
           initial={{ opacity: 0, y: -100, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -100, scale: 0.9 }}

@@ -595,21 +595,6 @@ export const TeamManagementPage: React.FC = () => {
             onUpdateRole={handleUpdateRole}
           />
         )}
-
-        {showConfirmDelete && selectedMember && (
-          <ConfirmDialog
-            isOpen={showConfirmDelete}
-            onClose={() => {
-              setShowConfirmDelete(false)
-              setSelectedMember(null)
-            }}
-            onConfirm={confirmRemoveMember}
-            title="Remove Team Member"
-            message={`Are you sure you want to remove ${selectedMember.firstName} ${selectedMember.lastName} from the team? This action cannot be undone.`}
-            confirmLabel="Remove Member"
-            variant="danger"
-          />
-        )}
       </div>
 
       {/* Modals */}

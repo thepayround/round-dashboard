@@ -16,25 +16,26 @@ export const ProtectedRoute = ({ children, requireOnboarding = false }: Protecte
   // Show loading spinner while checking authentication
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#000000] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center space-y-6"
+          transition={{ duration: 0.2 }}
+          className="text-center space-y-4"
         >
           {/* Loading Spinner */}
-          <div className="w-16 h-16 mx-auto">
+          <div className="w-12 h-12 mx-auto">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-              className="w-16 h-16 border-4 border-white/20 border-t-[#D417C8] rounded-full"
+              transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
+              className="w-12 h-12 border-[3px] border-white/10 border-t-[#D417C8] rounded-full"
             />
           </div>
 
           {/* Loading Text */}
-          <div className="space-y-2">
-            <h2 className="text-2xl font-medium tracking-tight text-white">Loading...</h2>
-            <p className="text-gray-400">Checking your session</p>
+          <div className="space-y-1">
+            <h2 className="text-lg font-normal tracking-tight text-white">Loading...</h2>
+            <p className="text-sm text-white/60">Checking your session</p>
           </div>
         </motion.div>
       </div>
@@ -63,39 +64,3 @@ export const ProtectedRoute = ({ children, requireOnboarding = false }: Protecte
 
   return children
 }
-
-// Loading component for reuse
-export const LoadingScreen = () => (
-  <div className="min-h-screen bg-[#000000] flex items-center justify-center">
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="text-center space-y-6"
-    >
-      {/* Animated Logo */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-        className="w-20 h-20 mx-auto rounded-lg bg-primary/20 border border-white/20 flex items-center justify-center"
-      >
-        <div className="w-10 h-10 rounded-full bg-primary" />
-      </motion.div>
-
-      {/* Loading Spinner */}
-      <div className="w-12 h-12 mx-auto">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          className="w-12 h-12 border-3 border-white/20 border-t-[#D417C8] rounded-full"
-        />
-      </div>
-
-      {/* Loading Text */}
-      <div className="space-y-2">
-        <h2 className="text-2xl font-medium tracking-tight text-white">Loading Round</h2>
-        <p className="text-gray-400">Please wait while we prepare your dashboard</p>
-      </div>
-    </motion.div>
-  </div>
-)

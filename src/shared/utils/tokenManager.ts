@@ -3,8 +3,8 @@
  * Handles all token storage, retrieval, and management operations
  */
 
-const TOKEN_KEY = 'token'
-const REFRESH_TOKEN_KEY = 'refreshToken'
+const TOKEN_KEY = 'auth_token'
+const REFRESH_TOKEN_KEY = 'refresh_token'
 
 export const tokenManager = {
   /**

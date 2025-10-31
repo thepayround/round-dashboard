@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, Save, User, Building2, Mail, MapPin, Plus, Loader2, Languages, CreditCard, Globe, Settings, Truck, Hash } from 'lucide-react'
+import { Save, User, Building2, Mail, MapPin, Plus, Loader2, Languages, CreditCard, Globe, Settings, Truck, Hash, X } from 'lucide-react'
+import { Modal } from '@/shared/components/Modal'
 import { PhoneInput } from '@/shared/components/ui/PhoneInput/PhoneInput'
 import { FormInput } from '@/shared/components/ui/FormInput'
 import { ApiDropdown, currencyDropdownConfig, timezoneDropdownConfig, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
@@ -143,47 +143,15 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
   }
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60"
-            onClick={onClose}
-          />
-
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden"
-          >
-            <div className="bg-black/40 backdrop-blur-xl">
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-white/10">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                    <User className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-medium tracking-tight text-white">Edit Customer</h2>
-                    <p className="text-sm text-white/70">Update {customer.effectiveDisplayName}&apos;s information</p>
-                  </div>
-                </div>
-                <button
-                  onClick={onClose}
-                  className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Edit Customer"
+      subtitle={`Update ${customer.effectiveDisplayName}'s information`}
+      size="xl"
+    >
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-8 max-h-[70vh] overflow-y-auto">
                 {/* Basic Information */}
                 <div className="space-y-6">
                   <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
@@ -633,10 +601,8 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   </div>
                 </div>
 
-              </form>
-
               {/* Footer */}
-              <div className="flex items-center justify-end space-x-3 p-6 border-t border-white/10">
+              <div className="flex items-center justify-end space-x-3 pt-6 border-t border-white/10 mt-8">
                 <button
                   type="button"
                   onClick={onClose}
@@ -646,7 +612,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   Cancel
                 </button>
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   disabled={isSaving}
                   className="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -663,10 +629,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   )}
                 </button>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+            </form>
+    </Modal>
   )
 }
