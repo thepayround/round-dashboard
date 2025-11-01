@@ -3,97 +3,51 @@ import { Mail, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ActionButton, AuthLogo } from '@/shared/components'
-
-import type { ValidationError } from '@/shared/utils/validation'
-import {
-  validateEmail,
-  getFieldError,
-  hasFieldError,
-} from '@/shared/utils/validation'
+import { validators, handleApiError } from '@/shared/utils'
+import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
 
 export const ForgotPasswordPage = () => {
   const navigate = useNavigate()
-
-  const [email, setEmail] = useState('')
-  const [errors, setErrors] = useState<ValidationError[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
+  const { loading: isSubmitting, execute } = useAsyncAction()
   const [apiError, setApiError] = useState('')
+  const [isSuccess, setIsSuccess] = useState(false)
 
-  // Form validation helper
-  const isFormValid = () => {
-    const emailValidation = validateEmail(email)
-    return emailValidation.isValid && email.trim() !== ''
-  }
-
-  // Handle Enter key press
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && isFormValid()) {
-      e.preventDefault()
-      handleSubmit(e as React.FormEvent)
+  // Use form hook for validation
+  const { values, errors, handleChange, handleBlur, validateAll, resetForm } = useForm(
+    { email: '' },
+    {
+      email: (value: string) => {
+        if (!value.trim()) {
+          return { valid: false, message: 'Email is required' }
+        }
+        return validators.emailWithMessage(value)
+      },
     }
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    setEmail(value)
-
-    // Clear field error when user starts typing
-    if (hasFieldError(errors, 'email')) {
-      setErrors(prev => prev.filter(error => error.field !== 'email'))
-    }
-    setApiError('')
-  }
-
-  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    
-    if (value.trim() !== '') {
-      const emailValidation = validateEmail(value)
-      if (!emailValidation.isValid && emailValidation.errors.length > 0) {
-        setErrors(prev => {
-          const filtered = prev.filter(error => error.field !== 'email')
-          return [...filtered, emailValidation.errors[0]]
-        })
-      }
-    }
-  }
+  )
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
     setApiError('')
 
-    // Validate email
-    const emailValidation = validateEmail(email)
-    if (!emailValidation.isValid) {
-      setErrors(emailValidation.errors)
-      setIsSubmitting(false)
+    if (!validateAll()) {
       return
     }
 
-    try {
-      const response = await apiClient.forgotPassword(email.trim())
+    await execute(async () => {
+      const response = await apiClient.forgotPassword(values.email.trim())
 
       if (response.success) {
         setIsSuccess(true)
       } else {
         setApiError(response.error ?? 'Failed to send password reset email')
-        setIsSubmitting(false)
       }
-    } catch (error) {
-      console.error('Forgot password error:', error)
-      setApiError('An unexpected error occurred. Please try again.')
-      setIsSubmitting(false)
-    }
-  }
-
-  const handleButtonClick = () => {
-    if (!isSuccess) {
-      const fakeEvent = { preventDefault: () => {} } as React.FormEvent
-      handleSubmit(fakeEvent)
-    }
+    }, {
+      onError: (error) => {
+        const message = handleApiError(error, 'ForgotPassword')
+        setApiError(message)
+      }
+    })
   }
 
   const handleBackToLogin = () => {
@@ -102,11 +56,11 @@ export const ForgotPasswordPage = () => {
 
   const handleTryAgain = () => {
     setIsSuccess(false)
-    setIsSubmitting(false)
-    setEmail('')
-    setErrors([])
+    resetForm()
     setApiError('')
   }
+
+  const isFormValid = values.email.trim() !== '' && !errors.email
 
   return (
     <div className="auth-container">
@@ -126,7 +80,6 @@ export const ForgotPasswordPage = () => {
           delay: 0.2,
         }}
         className="w-full max-w-[360px] mx-auto relative z-10"
-        onKeyDown={handleKeyDown}
       >
         {/* Centered Logo Above Form */}
         <AuthLogo />
@@ -171,7 +124,7 @@ export const ForgotPasswordPage = () => {
                     Check Your Email
                   </h1>
                   <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
-                    We&apos;ve sent a password reset link to <strong className="text-white">{email}</strong>
+                    We&apos;ve sent a password reset link to <strong className="text-white">{values.email}</strong>
                   </p>
                 </>
               )}
@@ -207,32 +160,38 @@ export const ForgotPasswordPage = () => {
                       id="email"
                       type="email"
                       name="email"
-                      value={email}
-                      onChange={handleInputChange}
-                      onBlur={handleInputBlur}
-                      placeholder="example@gmail.com"
-                      className={`auth-input input-with-icon-left ${hasFieldError(errors, 'email') ? 'auth-input-error' : ''}`}
+                      value={values.email}
+                      onChange={handleChange('email')}
+                      onBlur={handleBlur('email')}
+                      placeholder="example@email.com"
+                      className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
                       required
                       autoComplete="email"
+                      aria-required="true"
+                      aria-invalid={!!errors.email}
+                      aria-describedby={errors.email ? 'email-error' : undefined}
                     />
                   </div>
-                  {hasFieldError(errors, 'email') && (
+                  {errors.email && (
                     <motion.div
+                      id="email-error"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                      role="alert"
+                      aria-live="polite"
                     >
                       <AlertCircle className="w-4 h-4" />
-                      <span>{getFieldError(errors, 'email')?.message}</span>
+                      <span>{errors.email}</span>
                     </motion.div>
                   )}
                 </div>
 
                 {/* Submit Button */}
                 <ActionButton
+                  type="submit"
                   label={isSubmitting ? 'Sending...' : 'Send Reset Link'}
-                  onClick={handleButtonClick}
-                  disabled={!isFormValid()}
+                  disabled={!isFormValid || isSubmitting}
                   icon={ArrowRight}
                   loading={isSubmitting}
                   size="sm"

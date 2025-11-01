@@ -24,6 +24,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
+      // @ts-expect-error - motion.button types conflict with button event handlers
       <motion.button
         ref={ref}
         type={type}
@@ -31,8 +32,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         whileTap={{ scale: 0.98 }}
         className={cn(baseClasses, variants[variant], sizes[size], className)}
         disabled={isLoading}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        {...(props as any)}
+        // eslint-disable-next-line react/jsx-props-no-spreading -- Required for button props forwarding
+        {...props}
       >
         {isLoading ? (
           <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />

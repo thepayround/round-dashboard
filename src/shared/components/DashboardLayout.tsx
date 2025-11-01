@@ -4,20 +4,7 @@ import {
   PanelLeftClose,
   PanelLeft,
   ChevronDown,
-  LayoutDashboard,
-  Users,
-  CreditCard,
-  FileText,
-  Package,
-  Settings,
-  PlusCircle,
-  HelpCircle,
   LogOut,
-  ShoppingCart,
-  Zap,
-  DollarSign,
-  Tag,
-  Grid3X3,
   X,
   User,
   ChevronUp,
@@ -29,67 +16,9 @@ import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
 import { apiClient } from '@/shared/services/apiClient'
 import { Breadcrumb } from '@/shared/components/Breadcrumb'
 import ColorLogo from '@/assets/logos/color-logo.svg'
-
-interface DashboardLayoutProps {
-  children: React.ReactNode
-}
-
-interface NavItem {
-  id: string
-  label: string
-  icon: React.ComponentType<{ className?: string }>
-  href: string
-  badge?: string
-  subItems?: NavItem[]
-}
-
-interface UserInfo {
-  firstName?: string
-  lastName?: string
-  email?: string
-  role?: string
-  company?: string
-}
-
-interface TooltipState {
-  id: string
-  label: string
-  badge?: string
-  position: { top: number; left: number }
-  isUser?: boolean
-  userInfo?: UserInfo
-}
-
-const navItems: NavItem[] = [
-  {
-    id: 'get-started',
-    label: 'Get Started',
-    icon: PlusCircle,
-    href: '/get-started',
-  },
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
-  { id: 'customers', label: 'Customers', icon: Users, href: '/customers' },
-  { id: 'billing', label: 'Billing', icon: CreditCard, href: '/billing' },
-  { id: 'invoices', label: 'Invoices', icon: FileText, href: '/invoices' },
-  { 
-    id: 'catalog', 
-    label: 'Catalog', 
-    icon: ShoppingCart, 
-    href: '/catalog',
-    subItems: [
-      { id: 'product-families', label: 'Product Families', icon: Grid3X3, href: '/catalog' },
-      { id: 'plans', label: 'Plans', icon: Package, href: '/catalog/plans' },
-      { id: 'addons', label: 'Add-ons', icon: Zap, href: '/catalog/addons' },
-      { id: 'charges', label: 'Charges', icon: DollarSign, href: '/catalog/charges' },
-      { id: 'coupons', label: 'Coupons', icon: Tag, href: '/catalog/coupons' }
-    ]
-  },
-]
-
-const bottomNavItems: NavItem[] = [
-  { id: 'settings', label: 'Settings', icon: Settings, href: '/settings' },
-  { id: 'help', label: 'Help & Support', icon: HelpCircle, href: '/help' },
-]
+import { LAYOUT_CONSTANTS } from '@/shared/components/DashboardLayout/constants'
+import type { DashboardLayoutProps, NavItem, TooltipState } from '@/shared/components/DashboardLayout/types'
+import { mainNavigationItems, bottomNavigationItems } from '@/shared/config/navigation.config'
 
 // User data comes from auth context and API
 
@@ -118,7 +47,7 @@ const CatalogSubItem = memo(({
         ? 'bg-primary/10 text-white border border-primary/20'
         : 'bg-primary/10 text-white border border-primary/20'
     }
-    return 'text-[#a3a3a3] hover:text-white'
+    return 'text-white/60 hover:text-white'
   }
 
   return (
@@ -143,12 +72,12 @@ const CatalogSubItem = memo(({
       }`} />
       
       {!isCollapsed && (
-        <span className="font-normal text-xs text-[#a3a3a3] whitespace-nowrap">{subItem.label}</span>
+        <span className="font-normal text-xs text-white/60 whitespace-nowrap">{subItem.label}</span>
       )}
 
       {/* Connection indicator for collapsed mode */}
       {isCollapsed && !isLastItem && (
-        <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-[#25262a]" />
+        <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/5" />
       )}
     </Link>
   )
@@ -199,7 +128,7 @@ const NavigationItem = memo(({
           ${
             isParentActive(item)
               ? 'bg-primary/10 text-white border border-primary/20'
-              : 'text-[#a3a3a3] hover:text-white'
+              : 'text-white/60 hover:text-white'
           }
           ${isCollapsed ? 'justify-center px-0' : 'px-6'}
           ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
@@ -215,7 +144,7 @@ const NavigationItem = memo(({
         
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
+            <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
             <ChevronDown 
               className={`w-4 h-4 transition-transform duration-200 ${
                 expandedItems.includes(item.id) ? 'transform rotate-180' : ''
@@ -240,7 +169,7 @@ const NavigationItem = memo(({
           ${
             isParentActive(item)
               ? 'bg-primary/10 text-white border border-primary/20'
-              : 'text-[#a3a3a3] hover:text-white'
+              : 'text-white/60 hover:text-white'
           }
           ${isCollapsed ? 'justify-center px-0' : 'px-6'}
           ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
@@ -254,7 +183,7 @@ const NavigationItem = memo(({
 
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
+            <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
             {item.badge && (
               <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-primary text-white rounded-full">
                 {item.badge}
@@ -307,7 +236,14 @@ const NavigationItem = memo(({
 
 NavigationItem.displayName = 'NavigationItem'
 
-export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
+export const DashboardLayout = memo(({ 
+  children,
+  navigationItems = mainNavigationItems,
+  bottomNavigationItems: bottomNavItemsProp = bottomNavigationItems,
+}: DashboardLayoutProps) => {
+  // Extract constants for cleaner code
+  const { SIDEBAR, LOGO, TOGGLE_BUTTON } = LAYOUT_CONSTANTS
+  
   const navigate = useNavigate()
   const { logout, state } = useAuth()
   const { token } = state
@@ -411,21 +347,21 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
   const getAllNavItems = useMemo(() => {
     const items: (NavItem & { isSubItem?: boolean; parentId?: string })[] = []
     
-    navItems.forEach(item => {
+    navigationItems.forEach((item: NavItem) => {
       items.push(item)
       if (item.subItems && (!isCollapsed && expandedItems.includes(item.id))) {
-        item.subItems.forEach(subItem => {
+        item.subItems.forEach((subItem: NavItem) => {
           items.push({ ...subItem, isSubItem: true, parentId: item.id })
         })
       }
     })
     
-    bottomNavItems.forEach(item => {
+    bottomNavItemsProp.forEach((item: NavItem) => {
       items.push(item)
     })
     
     return items
-  }, [isCollapsed, expandedItems])
+  }, [navigationItems, bottomNavItemsProp, isCollapsed, expandedItems])
 
   const toggleExpanded = useCallback((itemId: string) => {
     setExpandedItems(prev => {
@@ -664,8 +600,8 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
       <motion.aside
         initial={false}
         animate={{ 
-          width: isCollapsed ? 80 : 280,
-          x: (isMobile || isTablet) && isCollapsed ? -80 : 0
+          width: isCollapsed ? SIDEBAR.WIDTH_COLLAPSED : SIDEBAR.WIDTH_EXPANDED,
+          x: (isMobile || isTablet) && isCollapsed ? -SIDEBAR.WIDTH_COLLAPSED : 0
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
           className="fixed left-0 top-0 h-full z-50 lg:z-base bg-[#070708]"
@@ -674,7 +610,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         <Link
           to="/dashboard"
           className="flex items-center justify-center flex-shrink-0 transition-colors duration-200 cursor-pointer"
-          style={{ height: '97px' }}
+          style={{ height: LOGO.HEIGHT }}
         >
           {!isCollapsed ? (
             <div className="flex items-center space-x-4">
@@ -722,7 +658,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
             role="navigation"
             aria-label="Main navigation"
           >
-          {navItems.map(item => (
+          {navigationItems.map(item => (
             <NavigationItem
               key={item.id}
               item={item}
@@ -740,7 +676,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           ))}
 
           {/* Bottom Navigation Items - Include in main navigation */}
-          {bottomNavItems.map(item => (
+          {bottomNavItemsProp.map(item => (
             <Link
               key={item.id}
               to={item.href}
@@ -751,7 +687,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                 ${
                   isActive(item.href)
                     ? 'bg-primary/10 text-white border border-primary/20'
-                    : 'text-[#a3a3a3] hover:text-white'
+                    : 'text-white/60 hover:text-white'
                 }
                 ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                 ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id)
@@ -765,7 +701,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
 
               {!isCollapsed && (
                 <div className="overflow-hidden">
-                  <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
+                  <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
                 </div>
               )}
 
@@ -795,7 +731,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                     ${
                       isActive('/user-settings')
                         ? 'bg-primary/10 text-white border border-primary/20'
-                        : 'text-[#a3a3a3] hover:text-white'
+                        : 'text-white/60 hover:text-white'
                     }
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                   `}
@@ -805,7 +741,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
 
                   {!isCollapsed && (
                     <div className="overflow-hidden">
-                      <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">User Settings</span>
+                      <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">User Settings</span>
                     </div>
                   )}
 
@@ -820,7 +756,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                   onMouseLeave={handleTooltipLeave}
                   className={`
                     group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9 w-full
-                    text-gray-400 hover:text-red-400
+                    text-white/60 hover:text-red-400
                     ${isCollapsed ? 'justify-center px-0' : 'px-6'}
                   `}
                   aria-label="Logout"
@@ -829,7 +765,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
 
                   {!isCollapsed && (
                     <div className="overflow-hidden">
-                      <span className="font-medium whitespace-nowrap text-sm md:text-base lg:text-sm">Logout</span>
+                      <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">Logout</span>
                     </div>
                   )}
 
@@ -845,15 +781,12 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           <div className={`py-2 ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}>
             <div className="relative" ref={profileDropdownRef}>
             <button
-              onClick={() => {
-                // Always use inline menu for both collapsed and expanded states
-                setShowProfileDropdown(!showProfileDropdown)
-              }}
+              onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               onMouseEnter={handleUserTooltipEnter}
               onMouseLeave={handleTooltipLeave}
               className={`
                 group relative flex items-center rounded-lg transition-all duration-200 w-full
-                text-[#a3a3a3] hover:text-white
+                text-white/60 hover:text-white
                 ${isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
                 ${showProfileDropdown ? 'text-white' : ''}
               `}
@@ -867,8 +800,8 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                     {getInitials(state.user.firstName, state.user.lastName)}
                   </div>
                 ) : (
-                  <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
-                    <User className="w-4 h-4 text-gray-300" />
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+                    <User className="w-4 h-4 text-white/60" />
                   </div>
                 )}
               </div>
@@ -881,7 +814,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
                       ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
                       : state.user.firstName?.trim() || state.user.email || 'User'}
                   </div>
-                  <div className="text-xs text-gray-400 truncate">
+                  <div className="text-xs text-white/60 truncate">
                     {(() => {
                       if (isRoundAccountLoading) return 'Loading...'
                       if (roundAccount?.accountName) return roundAccount.accountName
@@ -930,7 +863,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           >
             {hoveredTooltip.isUser ? (
               <div>
-                <div className="font-medium mb-2 text-white tracking-tight">
+                <div className="font-normal mb-2 text-white tracking-tight">
                   {hoveredTooltip.label}
                 </div>
                 <div className="text-white/90 text-sm leading-relaxed space-y-1">
@@ -968,10 +901,10 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-white tracking-tight">Keyboard Shortcuts</h3>
+                <h3 className="text-lg font-normal text-white tracking-tight">Keyboard Shortcuts</h3>
                 <button
                   onClick={() => setShowShortcuts(false)}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-white/60 hover:text-white transition-colors"
                   aria-label="Close shortcuts help"
                 >
                   <X className="w-5 h-5" />
@@ -981,36 +914,36 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
               <div className="space-y-4 text-sm">
                 <div>
                   <h4 className="text-white font-normal mb-2 tracking-tight">Navigation</h4>
-                  <div className="space-y-1 text-[#a3a3a3]">
+                  <div className="space-y-1 text-white/60">
                     <div className="flex justify-between">
                       <span>Dashboard</span>
-                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+1</kbd>
+                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+1</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Customers</span>
-                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+2</kbd>
+                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+2</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Billing</span>
-                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+3</kbd>
+                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+3</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Invoices</span>
-                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+4</kbd>
+                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+4</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Catalog</span>
-                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Alt+5</kbd>
+                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+5</kbd>
                     </div>
                   </div>
                 </div>
                 
                 <div>
-                  <h4 className="text-white font-medium mb-2">Sidebar</h4>
-                  <div className="space-y-1 text-[#a3a3a3]">
+                  <h4 className="text-white font-normal mb-2">Sidebar</h4>
+                  <div className="space-y-1 text-white/60">
                     <div className="flex justify-between">
                       <span>Toggle Sidebar</span>
-                      <kbd className="px-2 py-1 bg-[#1e1f22] rounded text-xs">Ctrl+Shift+B</kbd>
+                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Ctrl+Shift+B</kbd>
                     </div>
                     <div className="flex justify-between">
                       <span>Arrow Navigation</span>
@@ -1032,7 +965,6 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         )}
       </AnimatePresence>
 
-
       {/* Main Content - Responsive margins */}
       <motion.main
         initial={false}
@@ -1041,7 +973,7 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
             if (isMobile || isTablet) {
               return 0
             }
-            return isCollapsed ? 80 : 280
+            return isCollapsed ? SIDEBAR.WIDTH_COLLAPSED : SIDEBAR.WIDTH_EXPANDED
           })()
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}

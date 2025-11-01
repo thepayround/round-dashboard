@@ -6,6 +6,7 @@
 import type { AxiosInstance, AxiosError } from 'axios'
 import axios from 'axios'
 import type { User } from '@/shared/types/auth'
+import { tokenManager } from '@/shared/utils/tokenManager'
 
 // Base URL for the API - fixed backend port
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
@@ -86,7 +87,7 @@ class ApiClient {
     // Request interceptor to add auth token
     this.client.interceptors.request.use(
       config => {
-        const token = this.getStoredToken()
+        const token = tokenManager.getToken()
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }
@@ -101,7 +102,7 @@ class ApiClient {
       (error: AxiosError) => {
         if (error.response?.status === 401) {
           // Token expired or invalid
-          this.clearStoredToken()
+          tokenManager.clearTokens()
           // Only redirect if not already on login page
           if (!window.location.pathname.includes('/login')) {
             window.location.href = '/login'
@@ -110,19 +111,6 @@ class ApiClient {
         return Promise.reject(error)
       }
     )
-  }
-
-  private getStoredToken(): string | null {
-    return localStorage.getItem('auth_token')
-  }
-
-  private setStoredToken(token: string): void {
-    localStorage.setItem('auth_token', token)
-  }
-
-  private clearStoredToken(): void {
-    localStorage.removeItem('auth_token')
-    localStorage.removeItem('refresh_token')
   }
 
   /**
@@ -141,11 +129,8 @@ class ApiClient {
       const response = await this.client.post<LoginResponse>('/identities/login', loginData)
 
       if (response.data.succeeded && response.data.token) {
-        // Store tokens
-        this.setStoredToken(response.data.token)
-        if (response.data.refreshToken) {
-          localStorage.setItem('refresh_token', response.data.refreshToken)
-        }
+        // Store tokens using tokenManager
+        tokenManager.setTokens(response.data.token, response.data.refreshToken)
 
         // Get user information using the token
         const userResponse = await this.getCurrentUser()
@@ -300,10 +285,7 @@ class ApiClient {
       })
 
       if (response.data.token) {
-        this.setStoredToken(response.data.token)
-        if (response.data.refreshToken) {
-          localStorage.setItem('refresh_token', response.data.refreshToken)
-        }
+        tokenManager.setTokens(response.data.token, response.data.refreshToken || refreshToken)
 
         return {
           success: true,
@@ -320,7 +302,7 @@ class ApiClient {
       }
     } catch (error) {
       console.error('Token refresh error:', error)
-      this.clearStoredToken()
+      tokenManager.clearTokens()
       return {
         success: false,
         error: 'Token refresh failed',
@@ -334,7 +316,7 @@ class ApiClient {
   async logout(): Promise<ApiResponse<null>> {
     try {
       await this.client.post('/identities/logout')
-      this.clearStoredToken()
+      tokenManager.clearTokens()
       return {
         success: true,
         message: 'Logout successful',
@@ -342,7 +324,7 @@ class ApiClient {
     } catch (error) {
       console.error('Logout error:', error)
       // Clear tokens even if logout fails
-      this.clearStoredToken()
+      tokenManager.clearTokens()
       return {
         success: true,
         message: 'Logout successful',
@@ -393,11 +375,8 @@ class ApiClient {
       const response = await this.client.post<LoginResponse>(url, {})
 
       if (response.data.succeeded && response.data.token) {
-        // Store tokens
-        this.setStoredToken(response.data.token)
-        if (response.data.refreshToken) {
-          localStorage.setItem('refresh_token', response.data.refreshToken)
-        }
+        // Store tokens using tokenManager
+        tokenManager.setTokens(response.data.token, response.data.refreshToken)
 
         // Create user object from the response
         // Note: The backend doesn't return user info in login response,
@@ -529,7 +508,7 @@ class ApiClient {
 
   async getCurrentUser(): Promise<ApiResponse<User>> {
     try {
-      const token = this.getStoredToken()
+      const token = tokenManager.getToken()
       if (!token) {
         return {
           success: false,
@@ -776,14 +755,14 @@ class ApiClient {
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {
-    return !!this.getStoredToken()
+    return tokenManager.hasToken()
   }
 
   /**
    * Get stored auth token
    */
   getToken(): string | null {
-    return this.getStoredToken()
+    return tokenManager.getToken()
   }
 
   /**

@@ -6,7 +6,7 @@ interface ActionButtonProps {
   /** The text to display after the icon (e.g., "Customer", "Plan", "Product", "Sign In", "Next") */
   label: string
   /** Click handler function */
-  onClick: () => void
+  onClick?: () => void
   /** Optional custom icon - defaults to Plus for create actions */
   icon?: LucideIcon
   /** Button size variant */
@@ -23,6 +23,8 @@ interface ActionButtonProps {
   animated?: boolean
   /** Loading state */
   loading?: boolean
+  /** HTML button type attribute */
+  type?: 'button' | 'submit' | 'reset'
 }
 
 const ActionButton = ({
@@ -35,7 +37,8 @@ const ActionButton = ({
   disabled = false,
   className = '',
   animated = true,
-  loading = false
+  loading = false,
+  type = 'button'
 }: ActionButtonProps) => {
   // Set default icon based on action type if no icon provided
   const getDefaultIcon = () => {
@@ -119,6 +122,7 @@ const ActionButton = ({
 
   return (
     <ButtonComponent
+      type={type}
       onClick={disabled || loading ? undefined : onClick}
       className={baseClasses}
       disabled={disabled || loading}

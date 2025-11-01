@@ -5,15 +5,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { ActionButton, AuthLogo } from '@/shared/components'
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-
-import type { ValidationError } from '@/shared/utils/validation'
-import {
-  validateLoginForm,
-  getFieldError,
-  hasFieldError,
-  validateEmail,
-  validatePassword,
-} from '@/shared/utils/validation'
+import { validators, handleApiError } from '@/shared/utils'
+import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
 import { useAuth } from '@/shared/hooks/useAuth'
 
@@ -22,14 +15,27 @@ export const PersonalLoginPage = () => {
   const location = useLocation()
   const { login } = useAuth()
   const { showSuccess, showError } = useGlobalToast()
-
+  const { loading: isSubmitting, execute } = useAsyncAction()
   const [showPassword, setShowPassword] = useState(false)
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  })
-  const [errors, setErrors] = useState<ValidationError[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Use form hook for validation
+  const { values, errors, handleChange, handleBlur, validateAll, setFieldValue } = useForm(
+    { email: '', password: '' },
+    {
+      email: (value: string) => {
+        if (!value.trim()) {
+          return { valid: false, message: 'Email is required' }
+        }
+        return validators.emailWithMessage(value)
+      },
+      password: (value: string) => {
+        if (!value.trim()) {
+          return { valid: false, message: 'Password is required' }
+        }
+        return validators.passwordBasic(value)
+      },
+    }
+  )
 
   // Handle success message from navigation state
   useEffect(() => {
@@ -37,71 +43,21 @@ export const PersonalLoginPage = () => {
     if (state?.message) {
       showSuccess(state.message)
       if (state.email) {
-        setFormData(prev => ({ ...prev, email: state.email! }))
+        setFieldValue('email', state.email)
       }
       navigate(location.pathname, { replace: true, state: {} })
     }
-  }, [location.state, location.pathname, navigate, showSuccess])
-
-  const isFormValid = () => {
-    const validation = validateLoginForm(formData)
-    return validation.isValid && formData.email.trim() !== '' && formData.password.trim() !== ''
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && isFormValid()) {
-      e.preventDefault()
-      handleSubmit(e as React.FormEvent)
-    }
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-
-    if (hasFieldError(errors, name)) {
-      setErrors(prev => prev.filter(error => error.field !== name))
-    }
-  }
-
-  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-
-    if (name === 'email') {
-      const emailValidation = validateEmail(value)
-      if (!emailValidation.isValid) {
-        setErrors(prev => [
-          ...prev.filter(error => error.field !== 'email'),
-          ...emailValidation.errors,
-        ])
-      }
-    } else if (name === 'password') {
-      const passwordValidation = validatePassword(value)
-      if (!passwordValidation.isValid) {
-        setErrors(prev => [
-          ...prev.filter(error => error.field !== 'password'),
-          ...passwordValidation.errors,
-        ])
-      }
-    }
-  }
+  }, [location.state, location.pathname, navigate, showSuccess, setFieldValue])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
 
-    const validation = validateLoginForm(formData)
-
-    if (!validation.isValid) {
-      setErrors(validation.errors)
-      setIsSubmitting(false)
+    if (!validateAll()) {
       return
     }
 
-    setErrors([])
-
-    try {
-      const response = await apiClient.login(formData)
+    await execute(async () => {
+      const response = await apiClient.login(values)
 
       if (response.success && response.data) {
         login(response.data.user, response.data.accessToken)
@@ -111,19 +67,16 @@ export const PersonalLoginPage = () => {
         navigate(from, { replace: true })
       } else {
         showError(response.error ?? 'Login failed')
-        setIsSubmitting(false)
       }
-    } catch (error) {
-      console.error('Login error:', error)
-      showError('An unexpected error occurred. Please try again.')
-      setIsSubmitting(false)
-    }
+    }, {
+      onError: (error) => {
+        const message = handleApiError(error, 'Login')
+        showError(message)
+      }
+    })
   }
 
-  const handleButtonClick = () => {
-    const fakeEvent = { preventDefault: () => {} } as React.FormEvent
-    handleSubmit(fakeEvent)
-  }
+  const isFormValid = values.email.trim() !== '' && values.password.trim() !== '' && !errors.email && !errors.password
 
   return (
     <div className="auth-container">
@@ -143,7 +96,6 @@ export const PersonalLoginPage = () => {
           delay: 0.2,
         }}
         className="w-full max-w-[360px] mx-auto relative z-10"
-        onKeyDown={handleKeyDown}
       >
 
         {/* Centered Logo Above Form */}
@@ -181,22 +133,22 @@ export const PersonalLoginPage = () => {
                   id="email"
                   type="email"
                   name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur}
+                  value={values.email}
+                  onChange={handleChange('email')}
+                  onBlur={handleBlur('email')}
                   placeholder="example@gmail.com"
-                  className={`auth-input input-with-icon-left ${hasFieldError(errors, 'email') ? 'auth-input-error' : ''}`}
+                  className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
                   required
                 />
               </div>
-              {hasFieldError(errors, 'email') && (
+              {errors.email && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
-                  <span>{getFieldError(errors, 'email')?.message}</span>
+                  <span>{errors.email}</span>
                 </motion.div>
               )}
             </div>
@@ -212,11 +164,11 @@ export const PersonalLoginPage = () => {
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  onBlur={handleInputBlur}
+                  value={values.password}
+                  onChange={handleChange('password')}
+                  onBlur={handleBlur('password')}
                   placeholder="Enter your password"
-                  className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(errors, 'password') ? 'auth-input-error' : ''}`}
+                  className={`auth-input input-with-icon-left input-with-icon-right ${errors.password ? 'auth-input-error' : ''}`}
                   required
                 />
                 <button
@@ -227,14 +179,14 @@ export const PersonalLoginPage = () => {
                   {showPassword ? <EyeOff /> : <Eye />}
                 </button>
               </div>
-              {hasFieldError(errors, 'password') && (
+              {errors.password && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
-                  <span>{getFieldError(errors, 'password')?.message}</span>
+                  <span>{errors.password}</span>
                 </motion.div>
               )}
               
@@ -247,9 +199,9 @@ export const PersonalLoginPage = () => {
 
             {/* Submit Button */}
             <ActionButton
+              type="submit"
               label={isSubmitting ? 'Signing In...' : 'Sign In'}
-              onClick={handleButtonClick}
-              disabled={!isFormValid()}
+              disabled={!isFormValid || isSubmitting}
               icon={ArrowRight}
               loading={isSubmitting}
               size="sm"

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, CheckCircle, AlertCircle, Lock, RotateCcw } from 'lucide-react'
-import { ActionButton } from '@/shared/components'
+import { ActionButton, PasswordStrengthIndicator } from '@/shared/components'
 import { apiClient } from '@/shared/services/apiClient'
 import {
   validatePassword,
@@ -266,6 +266,17 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                     {showNewPassword ? <EyeOff /> : <Eye />}
                   </button>
                 </div>
+
+                {/* Password Strength Indicator */}
+                {formData.newPassword && (
+                  <div className="mt-3">
+                    <PasswordStrengthIndicator 
+                      password={formData.newPassword}
+                      showStrengthBar
+                    />
+                  </div>
+                )}
+
                 {hasFieldError(errors, 'newPassword') && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}

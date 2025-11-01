@@ -22,7 +22,7 @@ import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { ActionButton } from '@/shared/components/ActionButton'
 import { Card } from '@/shared/components/Card'
 import { SearchFilterToolbar, ViewModeToggle } from '@/shared/components'
-import Pagination from '@/shared/components/Pagination'
+import { Pagination } from '@/shared/components/Pagination'
 import type { FilterField } from '@/shared/components'
 import type { ViewMode, ViewModeOption } from '@/shared/components/ViewModeToggle'
 import { useViewPreferences } from '@/shared/hooks/useViewPreferences'
@@ -91,6 +91,7 @@ const CustomersPage: React.FC = () => {
   // Data state
   const [customers, setCustomers] = useState<CustomerResponse[]>([])
   const [loading, setLoading] = useState(true)
+  const [skeletonLoading, setSkeletonLoading] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
   
   // UI state
@@ -154,9 +155,11 @@ const CustomersPage: React.FC = () => {
 
   const loadCustomers = useCallback(async () => {
     try {
-      // Show loading overlay only on first load
+      // Show loading overlay on first load, skeleton for subsequent loads
       if (isFirstLoadRef.current) {
         setLoading(true)
+      } else {
+        setSkeletonLoading(true)
       }
       
       // Build search params - ALL filtering and search done by BACKEND
@@ -217,6 +220,8 @@ const CustomersPage: React.FC = () => {
       if (isFirstLoadRef.current) {
         setLoading(false)
         isFirstLoadRef.current = false
+      } else {
+        setSkeletonLoading(false)
       }
     }
   }, [currentPage, itemsPerPage, sortConfig, searchQuery, selectedCustomerType, selectedStatus, selectedCurrency, selectedPortalAccess, showError])
@@ -508,7 +513,34 @@ const CustomersPage: React.FC = () => {
                 transition={{ duration: 0.3 }}
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
               >
-            {displayedCustomers.map((customer: CustomerResponse) => (
+            {skeletonLoading ? (
+              // Skeleton loading for grid view
+              Array.from({ length: itemsPerPage }).map((_, index) => (
+                <Card key={`skeleton-${index}`} padding="lg" className="h-full">
+                  <div className="animate-pulse space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-11 h-11 bg-white/5 rounded-xl" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-5 bg-white/5 rounded w-3/4" />
+                        <div className="h-4 bg-white/5 rounded w-1/2" />
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="h-4 bg-white/5 rounded" />
+                      <div className="h-4 bg-white/5 rounded w-5/6" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="h-6 bg-white/5 rounded w-16" />
+                      <div className="flex gap-2">
+                        <div className="w-8 h-8 bg-white/5 rounded-lg" />
+                        <div className="w-8 h-8 bg-white/5 rounded-lg" />
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              displayedCustomers.map((customer: CustomerResponse) => (
               <motion.div
                 key={customer.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -665,7 +697,8 @@ const CustomersPage: React.FC = () => {
                 )}
               </Card>
             </motion.div>
-          ))}
+          ))
+            )}
               </motion.div>
             ) : (
               <motion.div
@@ -679,7 +712,7 @@ const CustomersPage: React.FC = () => {
                   customers={displayedCustomers}
                   sortConfig={sortConfig}
                   onSort={handleSortChange}
-                  loading={loading}
+                  loading={loading || skeletonLoading}
                   selectable={selectionMode}
                   selectedIds={selectedCustomers}
                   onSelectionChange={setSelectedCustomers}

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, Plus, MessageSquare, User, Calendar, Edit3, Trash2, Save, RotateCcw, Loader2 } from 'lucide-react'
+import { Plus, MessageSquare, User, Calendar, Edit3, Trash2, Save, RotateCcw, Loader2 } from 'lucide-react'
+import { Modal } from '@/shared/components/Modal'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import type { CustomerNoteResponse, CustomerNoteCreateRequest } from '@/shared/services/api/customer.service'
 import { customerService } from '@/shared/services/api/customer.service'
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 
 interface CustomerNotesModalProps {
   isOpen: boolean
@@ -32,6 +33,8 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
   const [editContent, setEditContent] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+  const [noteToDelete, setNoteToDelete] = useState<string | null>(null)
 
   useEffect(() => {
     setNotes(initialNotes)
@@ -106,14 +109,21 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
     }
   }
 
-  const handleDeleteNote = async (noteId: string) => {
-    if (!confirm('Are you sure you want to delete this note?')) return
+  const handleDeleteNote = (noteId: string) => {
+    setNoteToDelete(noteId)
+    setShowConfirmDelete(true)
+  }
+
+  const confirmDeleteNote = async () => {
+    if (!noteToDelete) return
 
     setIsLoading(true)
     try {
-      await customerService.deleteNote(customerId, noteId)
-      setNotes(prev => prev.filter(note => note.id !== noteId))
+      await customerService.deleteNote(customerId, noteToDelete)
+      setNotes(prev => prev.filter(note => note.id !== noteToDelete))
       showSuccess('Note deleted successfully')
+      setShowConfirmDelete(false)
+      setNoteToDelete(null)
     } catch (error) {
       console.error('Failed to delete note:', error)
       showError('Failed to delete note')
@@ -132,52 +142,17 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
     setEditContent('')
   }
 
-  if (!isOpen) return null
-
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60"
-            onClick={onClose}
-          />
-          
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-3xl max-h-[90vh] overflow-hidden"
-          >
-            <div className="bg-black/40 backdrop-blur-xl">
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-white/10">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                    <MessageSquare className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-medium tracking-tight text-white">Customer Notes</h2>
-                    <p className="text-sm text-white/70">{customerName} - {notes.length} notes</p>
-                  </div>
-                </div>
-                <button
-                  onClick={onClose}
-                  className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-          {/* Content */}
-          <div className="flex flex-col h-full max-h-[calc(90vh-200px)]">
-            {/* Add New Note */}
-            <div className="p-6 border-b border-white/10">
+    <>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Customer Notes"
+      subtitle={`${customerName} - ${notes.length} notes`}
+      size="lg"
+    >
+      {/* Add New Note */}
+            <div className="border-b border-white/10 pb-6 mb-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3 mb-3">
                   <Plus className="w-4 h-4 text-[#14BDEA]" />
@@ -228,8 +203,7 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
             </div>
 
             {/* Notes List */}
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="space-y-4">
+            <div className="space-y-4 max-h-[60vh] overflow-y-auto">
                 {notes.length === 0 ? (
                   <div className="text-center py-12">
                     <MessageSquare className="w-12 h-12 text-white/30 mx-auto mb-4" />
@@ -238,10 +212,8 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                   </div>
                 ) : (
                   notes.map((note) => (
-                    <motion.div
+                    <div
                       key={note.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
                       className="bg-white/5 border border-white/10 rounded-lg p-4"
                     >
                       <div className="flex items-start justify-between mb-3">
@@ -314,16 +286,26 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                         </p>
                       )}
 
-                    </motion.div>
+                    </div>
                   ))
                 )}
-              </div>
             </div>
-          </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+    </Modal>
+
+    {/* Delete Confirmation Dialog */}
+    <ConfirmDialog
+      isOpen={showConfirmDelete}
+      onClose={() => {
+        setShowConfirmDelete(false)
+        setNoteToDelete(null)
+      }}
+      onConfirm={confirmDeleteNote}
+      title="Delete Note"
+      message="Are you sure you want to delete this note? This action cannot be undone."
+      confirmLabel="Delete Note"
+      variant="danger"
+      isLoading={isLoading}
+    />
+  </>
   )
 }

@@ -97,7 +97,7 @@ const Pagination: React.FC<PaginationProps> = ({
               className="border border-white/10 rounded-lg px-3 py-1 text-sm text-white focus:outline-none focus:border-[#14bdea]"
             >
               {pageSizeOptions.map(size => (
-                <option key={size} value={size} className="bg-gray-800">
+                <option key={size} value={size} className="bg-[#0a0a0a]">
                   {size}
                 </option>
               ))}
@@ -184,4 +184,4 @@ const Pagination: React.FC<PaginationProps> = ({
   )
 }
 
-export default Pagination
+export { Pagination }
