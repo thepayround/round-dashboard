@@ -36,7 +36,7 @@ export const BrandingSection: React.FC = () => {
             & Appearance
           </span>
         </h1>
-        <p className="text-sm text-gray-400 mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
           Customize your organization&apos;s visual identity and theme
         </p>
       </div>

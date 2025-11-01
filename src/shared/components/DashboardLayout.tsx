@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  ChevronLeft,
+  PanelLeftClose,
+  PanelLeft,
   ChevronDown,
   LayoutDashboard,
   Users,
@@ -693,6 +694,25 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
           )}
         </Link>
 
+        {/* Divider with toggle button */}
+        <div className="relative border-t border-white/10">
+          <button
+            onClick={toggleSidebar}
+            className="w-full px-4 py-3 flex items-center justify-center gap-2 text-xs text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200 group"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={isCollapsed ? "Expand sidebar (Ctrl+Shift+B)" : "Collapse sidebar (Ctrl+Shift+B)"}
+          >
+            {isCollapsed ? (
+              <PanelLeft className="w-4 h-4" />
+            ) : (
+              <>
+                <PanelLeftClose className="w-4 h-4" />
+                <span className="font-medium">Collapse</span>
+              </>
+            )}
+          </button>
+        </div>
+
         {/* Main Content Area - Flex container for navigation and bottom sections */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Navigation */}
@@ -1012,23 +1032,6 @@ export const DashboardLayout = memo(({ children }: DashboardLayoutProps) => {
         )}
       </AnimatePresence>
 
-      {/* Toggle Button - Responsive positioning */}
-      <motion.button
-        initial={false}
-        animate={{ 
-          left: (() => {
-            if (isMobile || isTablet) {
-              return isCollapsed ? 16 : 264
-            }
-            return isCollapsed ? 64 : 264
-          })()
-        }}
-        transition={{ duration: 0.15, ease: 'easeOut' }}
-        onClick={toggleSidebar}
-        className="fixed top-16 lg:top-20 w-10 h-11 md:h-9 lg:w-8 lg:h-8 rounded-full bg-[#171719] border border-white/10 flex items-center justify-center hover:bg-white/5 hover:border-white/20 transition-all duration-200 z-50 lg:z-base"
-      >
-        <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4 text-white" />
-      </motion.button>
 
       {/* Main Content - Responsive margins */}
       <motion.main

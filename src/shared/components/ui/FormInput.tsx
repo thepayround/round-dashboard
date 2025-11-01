@@ -154,7 +154,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         )}
         
         {helpText && !error && (
-          <p className="text-sm text-gray-500">{helpText}</p>
+          <p className="text-gray-500 dark:text-polar-500 leading-snug">{helpText}</p>
         )}
       </div>
     )

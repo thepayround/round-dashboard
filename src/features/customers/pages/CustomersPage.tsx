@@ -21,7 +21,7 @@ import {
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { ActionButton } from '@/shared/components/ActionButton'
 import { Card } from '@/shared/components/Card'
-import { SearchFilterToolbar } from '@/shared/components'
+import { SearchFilterToolbar, ViewModeToggle } from '@/shared/components'
 import Pagination from '@/shared/components/Pagination'
 import type { FilterField } from '@/shared/components'
 import type { ViewMode, ViewModeOption } from '@/shared/components/ViewModeToggle'
@@ -407,7 +407,18 @@ const CustomersPage: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Action Bar */}
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-between">
+          {/* View Mode Toggle - Left side */}
+          <div className="flex items-center">
+            <ViewModeToggle
+              value={viewMode}
+              onChange={handleViewModeChange}
+              options={viewModeOptions}
+              size="md"
+            />
+          </div>
+
+          {/* Actions - Right side */}
           <div className="flex items-center space-x-3">
             {selectionMode ? (
               <>
@@ -467,7 +478,7 @@ const CustomersPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Enhanced Search and View Controls */}
+        {/* Enhanced Search and Filter Controls */}
         <div className="space-y-4">
           <SearchFilterToolbar
             searchQuery={searchQuery}
@@ -477,9 +488,6 @@ const CustomersPage: React.FC = () => {
             onToggleFilters={() => setShowFilters(!showFilters)}
             filterFields={filterFields}
             onClearFilters={clearAllFilters}
-            viewMode={viewMode}
-            onViewModeChange={handleViewModeChange}
-            viewModeOptions={viewModeOptions}
             searchResults={{
               total: totalCount,
               filtered: displayedCustomers.length

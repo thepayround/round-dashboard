@@ -277,7 +277,7 @@ export const AddressManagementSection: React.FC = () => {
             Address
           </span>
         </h1>
-        <p className="text-sm text-gray-400 mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
           Manage your organization&apos;s billing address for invoicing and tax purposes
         </p>
       </div>

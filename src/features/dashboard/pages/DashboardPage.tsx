@@ -68,7 +68,7 @@ export const DashboardPage = () => {
                   : user.firstName?.trim() || user.email || 'User'
               }!
             </h1>
-            <p className="text-sm text-gray-400">Here&apos;s an overview of your Round account</p>
+            <p className="text-gray-500 dark:text-polar-500 leading-snug">Here&apos;s an overview of your Round account</p>
           </div>
           {roundAccount && (
             <motion.div
@@ -175,7 +175,7 @@ export const DashboardPage = () => {
                   </div>
                   <div className="flex-1">
                     <h2 className="text-xl font-normal tracking-tight text-white mb-2">Account details</h2>
-                    <p className="text-sm text-gray-400">Core account information and settings</p>
+                    <p className="text-gray-500 dark:text-polar-500 leading-snug">Core account information and settings</p>
                   </div>
                 </div>
 
@@ -279,7 +279,7 @@ export const DashboardPage = () => {
                     </div>
                     <div className="flex-1">
                       <h2 className="text-xl font-normal tracking-tight text-white mb-2">Organization details</h2>
-                      <p className="text-sm text-gray-400">Company information and settings</p>
+                      <p className="text-gray-500 dark:text-polar-500 leading-snug">Company information and settings</p>
                     </div>
                   </div>
 
@@ -467,7 +467,7 @@ export const DashboardPage = () => {
                 </div>
                 <div className="flex-1">
                   <h2 className="text-lg font-medium text-white mb-2">Account Addresses</h2>
-                  <p className="text-sm text-gray-400">Billing and shipping addresses</p>
+                  <p className="text-gray-500 dark:text-polar-500 leading-snug">Billing and shipping addresses</p>
                 </div>
               </div>
 
@@ -493,7 +493,7 @@ export const DashboardPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="text-sm text-gray-400 space-y-1">
+                    <div className="text-gray-500 dark:text-polar-500 leading-snug space-y-1">
                       <p>{address.number} {address.addressLine1}</p>
                       {address.addressLine2 && <p>{address.addressLine2}</p>}
                       <p>{address.city}, {address.state} {address.zipCode}</p>
@@ -520,7 +520,7 @@ export const DashboardPage = () => {
                 </div>
                 <div className="flex-1">
                   <h2 className="text-lg font-medium text-white mb-2">Account Users</h2>
-                  <p className="text-sm text-gray-400">Team members with access to this account</p>
+                  <p className="text-gray-500 dark:text-polar-500 leading-snug">Team members with access to this account</p>
                 </div>
               </div>
 

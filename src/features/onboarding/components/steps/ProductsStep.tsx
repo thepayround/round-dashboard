@@ -95,7 +95,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
                   <div className="flex items-center justify-between">
                     <div>
                       <h5 className="font-medium text-white">{product.name}</h5>
-                      <p className="text-sm text-gray-400">{product.description}</p>
+                      <p className="text-gray-500 dark:text-polar-500 leading-snug">{product.description}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-medium text-white">${product.price}</p>

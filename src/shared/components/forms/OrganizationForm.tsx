@@ -116,7 +116,7 @@ export const OrganizationForm = ({
           <div className="flex w-full flex-col gap-y-6">
             <div className="flex flex-col gap-y-2">
               <h2 className="text-lg font-medium">Company Identity</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Basic company information</p>
+              <p className="text-gray-500 dark:text-polar-500 leading-snug">Basic company information</p>
             </div>
           </div>
 
@@ -197,7 +197,7 @@ export const OrganizationForm = ({
           <div className="flex w-full flex-col gap-y-6">
             <div className="flex flex-col gap-y-2">
               <h2 className="text-lg font-medium">Business Details</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Industry and company classification</p>
+              <p className="text-gray-500 dark:text-polar-500 leading-snug">Industry and company classification</p>
             </div>
           </div>
 
@@ -286,7 +286,7 @@ export const OrganizationForm = ({
           <div className="flex w-full flex-col gap-y-6">
             <div className="flex flex-col gap-y-2">
               <h2 className="text-lg font-medium">Business Compliance</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Registration and compliance information</p>
+              <p className="text-gray-500 dark:text-polar-500 leading-snug">Registration and compliance information</p>
             </div>
           </div>
 
@@ -346,7 +346,7 @@ export const OrganizationForm = ({
             <div className="flex w-full flex-col gap-y-6">
               <div className="flex flex-col gap-y-2">
                 <h2 className="text-lg font-medium">Financial Information</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Revenue and currency settings</p>
+                <p className="text-gray-500 dark:text-polar-500 leading-snug">Revenue and currency settings</p>
               </div>
             </div>
 
@@ -408,7 +408,7 @@ export const OrganizationForm = ({
             <div className="flex w-full flex-col gap-y-6">
               <div className="flex flex-col gap-y-2">
                 <h2 className="text-lg font-medium">Regional Settings</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">Time zone and fiscal year settings</p>
+                <p className="text-gray-500 dark:text-polar-500 leading-snug">Time zone and fiscal year settings</p>
               </div>
             </div>
 

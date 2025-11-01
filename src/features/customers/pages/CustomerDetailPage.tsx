@@ -301,7 +301,7 @@ const CustomerDetailPage: React.FC = () => {
                     <h2 className="text-lg font-medium text-white mb-2">
                       {customer.isBusinessCustomer ? 'Business Information' : 'Customer Information'}
                     </h2>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-gray-500 dark:text-polar-500 leading-snug">
                       Core {customer.isBusinessCustomer ? 'business' : 'customer'} details and contact information
                     </p>
                   </div>
@@ -410,7 +410,7 @@ const CustomerDetailPage: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <h2 className="text-lg font-medium text-white mb-2">Addresses</h2>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-gray-500 dark:text-polar-500 leading-snug">
                       Customer billing and shipping addresses
                     </p>
                   </div>
@@ -482,7 +482,7 @@ const CustomerDetailPage: React.FC = () => {
                     </div>
                     <div className="flex-1">
                       <h2 className="text-lg font-medium text-white mb-2">Metadata</h2>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-gray-500 dark:text-polar-500 leading-snug">
                         Tags and custom fields
                       </p>
                     </div>
@@ -543,7 +543,7 @@ const CustomerDetailPage: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-lg font-medium text-white mb-2">Quick Actions</h2>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-gray-500 dark:text-polar-500 leading-snug">
                       Manage customer account
                     </p>
                   </div>
@@ -588,7 +588,7 @@ const CustomerDetailPage: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-lg font-medium text-white mb-2">Account Status</h2>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-gray-500 dark:text-polar-500 leading-snug">
                       Customer account settings
                     </p>
                   </div>

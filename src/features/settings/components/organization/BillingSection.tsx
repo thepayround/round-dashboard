@@ -17,7 +17,7 @@ export const BillingSection: React.FC = () => (
             & Subscription
           </span>
         </h1>
-        <p className="text-sm text-gray-400 mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
           Manage your subscription, billing information, and usage
         </p>
       </div>
@@ -85,7 +85,7 @@ export const BillingSection: React.FC = () => (
           <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-white mb-2">Billing Management</h3>
           <p className="text-gray-400 mb-4">View and manage your subscription, billing details, and usage.</p>
-          <p className="text-sm text-gray-500">This section is coming soon...</p>
+          <p className="text-gray-500 dark:text-polar-500 leading-snug">This section is coming soon...</p>
         </div>
       </Card>
     </motion.div>

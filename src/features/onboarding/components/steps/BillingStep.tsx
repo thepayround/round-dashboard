@@ -126,7 +126,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
 
         {/* Skip Option */}
         <div className="text-center">
-          <p className="text-sm text-gray-400">
+          <p className="text-gray-500 dark:text-polar-500 leading-snug">
             You can set up payment processing later in your billing settings
           </p>
         </div>

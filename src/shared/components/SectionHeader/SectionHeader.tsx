@@ -38,7 +38,7 @@ export const SectionHeader = ({
             {title}
           </h2>
           {subtitle && (
-            <p className={`${size === 'main' ? 'text-base' : 'text-sm'} text-gray-400 mt-1.5`}>
+            <p className={`${size === 'main' ? 'text-base' : ''} text-gray-500 dark:text-polar-500 leading-snug mt-1.5`}>
               {subtitle}
             </p>
           )}

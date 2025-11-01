@@ -17,7 +17,7 @@ export const SecuritySection: React.FC = () => (
             Settings
           </span>
         </h1>
-        <p className="text-sm text-gray-400 mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
           Manage security policies, authentication, and audit logs
         </p>
       </div>
@@ -87,7 +87,7 @@ export const SecuritySection: React.FC = () => (
           <AlertTriangle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-white mb-2">Security Monitoring</h3>
           <p className="text-gray-400 mb-4">Configure security policies, audit logs, and access controls.</p>
-          <p className="text-sm text-gray-500">This section is coming soon...</p>
+          <p className="text-gray-500 dark:text-polar-500 leading-snug">This section is coming soon...</p>
         </div>
       </Card>
     </motion.div>
