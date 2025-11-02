@@ -143,8 +143,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             exit={{ x: '100%' }}
             transition={panelTransition}
             className="fixed inset-y-0 right-0 w-full md:w-[400px] lg:w-[450px]
-                     bg-white/8
-                     border-l border-white/15
+                     bg-[#171719]
+                     border-l border-[#1e1f22]
                      shadow-2xl shadow-black/50
                      z-[70]
                      flex flex-col"
@@ -153,7 +153,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             aria-labelledby="filter-panel-title"
           >
             {/* Header */}
-            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-white/10 sticky top-0 bg-white/5 z-10">
+            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-[#1e1f22] sticky top-0 bg-[#171719] z-10">
               <h2 
                 id="filter-panel-title" 
                 className="text-xl font-medium tracking-tight text-white"
