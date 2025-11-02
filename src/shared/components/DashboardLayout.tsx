@@ -177,7 +177,7 @@ const NavigationItem = memo(({
               }`} />
 
               {!isCollapsed && (
-                <span className="font-normal text-xs text-white/60 whitespace-nowrap">{subItem.label}</span>
+                <span className="font-normal text-xs text-white/60 group-hover:text-white transition-colors duration-200 whitespace-nowrap">{subItem.label}</span>
               )}
 
               {/* Connection indicator for collapsed mode */}
