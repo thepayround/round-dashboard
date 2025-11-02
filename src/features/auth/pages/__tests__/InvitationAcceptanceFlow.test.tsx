@@ -1,9 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider } from '@/shared/contexts/AuthContext'
+
 import { InvitationAcceptancePage } from '../InvitationAcceptancePage'
-import { teamService } from '@/shared/services/api/team.service'
+
+import { AuthProvider } from '@/shared/contexts/AuthContext'
 import type { ValidateInvitationResponse } from '@/shared/services/api/team.service'
+import { teamService } from '@/shared/services/api/team.service'
 import { UserRole } from '@/shared/services/api/team.service'
 
 // Mock the team service

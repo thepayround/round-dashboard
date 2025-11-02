@@ -1,12 +1,14 @@
 import React, { useReducer, useEffect } from 'react'
-import type { User } from '@/shared/types/auth'
-import { tokenManager } from '@/shared/utils/tokenManager'
+
 import {
   AuthContext,
   type AuthContextType,
   type AuthState,
   type AuthAction,
 } from './AuthContextType'
+
+import type { User } from '@/shared/types/auth'
+import { tokenManager } from '@/shared/utils/tokenManager'
 
 // Initial state
 const initialState: AuthState = {

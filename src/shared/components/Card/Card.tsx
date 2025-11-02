@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion'
 import type { LucideIcon} from 'lucide-react';
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import type { ReactNode} from 'react';
 import { memo } from 'react'
-import { CardHeader } from './Card.Header'
+import { Link } from 'react-router-dom'
+
 import { CardContent } from './Card.Content'
 import { CardFooter } from './Card.Footer'
+import { CardHeader } from './Card.Header'
 
 export interface CardProps {
   children?: ReactNode

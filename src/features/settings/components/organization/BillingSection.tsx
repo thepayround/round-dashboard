@@ -1,7 +1,9 @@
-import React from 'react'
 import { motion } from 'framer-motion'
-import { Card } from '@/shared/components'
 import { CreditCard, Calendar, DollarSign, FileText, TrendingUp } from 'lucide-react'
+import React from 'react'
+
+import { Card } from '@/shared/components'
+
 
 export const BillingSection: React.FC = () => (
     <motion.div

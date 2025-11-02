@@ -3,8 +3,9 @@
  */
 
 import { useState } from 'react'
-import type { ApiResponse, AuthResponse } from '@/shared/types/api'
+
 import { authService } from '@/shared/services/api'
+import type { ApiResponse, AuthResponse } from '@/shared/types/api'
 
 export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false)

@@ -2,8 +2,9 @@
  * Industry API service
  */
 
-import { httpClient } from './base/client'
 import type { IndustryResponse } from '../../types/api/industry'
+
+import { httpClient } from './base/client'
 
 export class IndustryService {
   private readonly baseUrl = '/organizations/industries'

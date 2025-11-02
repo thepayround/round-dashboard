@@ -40,7 +40,7 @@ function deepEqual(obj1: unknown, obj2: unknown): boolean {
     return true
   }
 
-  if (obj1 == null || obj2 == null) {
+  if (obj1 === null || obj1 === undefined || obj2 === null || obj2 === undefined) {
     return obj1 === obj2
   }
 

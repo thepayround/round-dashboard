@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { createContext, useContext } from 'react'
+
 import type { ToastType } from '../components/Toast';
 import { Toast } from '../components/Toast'
 import { useToast } from '../hooks/useToast'

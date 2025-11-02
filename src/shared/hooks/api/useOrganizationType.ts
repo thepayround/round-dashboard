@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect } from 'react'
+
 import { organizationTypeService } from '../../services/api'
 import type { OrganizationTypeResponse } from '../../types/api/organizationType'
 

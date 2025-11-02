@@ -2,14 +2,14 @@ import { motion } from 'framer-motion'
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, Users, Building, Check } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
 
-import { validators } from '@/shared/utils/validators'
-import { handleApiError } from '@/shared/utils/errorHandler'
+import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
 import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
+import { useAuth } from '@/shared/hooks/useAuth'
 import { teamService } from '@/shared/services/api'
 import type { ValidateInvitationResponse } from '@/shared/services/api'
-import { useAuth } from '@/shared/hooks/useAuth'
+import { handleApiError } from '@/shared/utils/errorHandler'
+import { validators } from '@/shared/utils/validators'
 
 export const InvitationAcceptancePage = () => {
   const navigate = useNavigate()

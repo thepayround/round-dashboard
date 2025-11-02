@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { CreditCard, ExternalLink, CheckCircle } from 'lucide-react'
+
 import type { BillingSettings } from '../../types/onboarding'
 
 interface BillingStepProps {

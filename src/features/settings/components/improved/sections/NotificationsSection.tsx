@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Card } from '@/shared/components'
 import { 
   Bell, 
   Mail, 
@@ -10,6 +8,10 @@ import {
   CreditCard,
   Shield
 } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+
+import { Card } from '@/shared/components'
+
 
 interface NotificationPreference {
   notificationType: string

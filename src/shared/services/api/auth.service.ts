@@ -3,6 +3,10 @@
  */
 
 import axios from 'axios'
+
+import { httpClient } from './base/client'
+import { ENDPOINTS } from './base/config'
+
 import type {
   ApiResponse,
   LoginRequest,
@@ -11,8 +15,6 @@ import type {
   RefreshTokenResponse,
 } from '@/shared/types/api'
 import type { User } from '@/shared/types/auth'
-import { httpClient } from './base/client'
-import { ENDPOINTS } from './base/config'
 import { SecureFormData } from '@/shared/utils/encryption'
 
 export class AuthService {

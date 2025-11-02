@@ -1,7 +1,7 @@
-import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
 import { AlertCircle } from 'lucide-react'
+import { forwardRef } from 'react'
 
 interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string

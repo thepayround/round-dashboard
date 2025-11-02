@@ -5,6 +5,7 @@
 
 import type { AxiosInstance, AxiosError } from 'axios'
 import axios from 'axios'
+
 import type { User } from '@/shared/types/auth'
 import { tokenManager } from '@/shared/utils/tokenManager'
 

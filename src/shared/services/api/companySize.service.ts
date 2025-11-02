@@ -2,8 +2,9 @@
  * Company Size API service
  */
 
-import { httpClient } from './base/client'
 import type { CompanySizeResponse } from '../../types/api/companySize'
+
+import { httpClient } from './base/client'
 
 export class CompanySizeService {
   private readonly baseUrl = '/organizations/company-sizes'

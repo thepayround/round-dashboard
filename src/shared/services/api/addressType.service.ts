@@ -2,8 +2,9 @@
  * Address Type API service
  */
 
-import { httpClient } from './base/client'
 import type { AddressTypeResponse } from '../../types/api/addressType'
+
+import { httpClient } from './base/client'
 
 export class AddressTypeService {
   private readonly baseUrl = '/addresses/types'

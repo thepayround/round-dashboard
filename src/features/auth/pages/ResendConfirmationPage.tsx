@@ -2,10 +2,11 @@ import { motion } from 'framer-motion'
 import { Mail, ArrowLeft, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+
 import { ActionButton } from '@/shared/components'
-import { validators, handleApiError } from '@/shared/utils'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
+import { validators, handleApiError } from '@/shared/utils'
 
 export const ResendConfirmationPage = () => {
   const { loading: isSubmitting, execute } = useAsyncAction()

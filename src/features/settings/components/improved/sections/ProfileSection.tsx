@@ -1,8 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Card, ActionButton, PhoneDisplay } from '@/shared/components'
-import { FormInput } from '@/shared/components/ui/FormInput'
-import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
 import { 
   User as UserIcon, 
   Mail, 
@@ -14,12 +10,17 @@ import {
   Save,
   Info
 } from 'lucide-react'
+import React, { useState, useEffect, useCallback } from 'react'
+
+import { Card, ActionButton, PhoneDisplay } from '@/shared/components'
+import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
 import { 
   timezoneDropdownConfig,
   languageDropdownConfig,
   dateFormatDropdownConfig,
   timeFormatDropdownConfig
 } from '@/shared/components/ui/ApiDropdown/configs'
+import { FormInput } from '@/shared/components/ui/FormInput'
 import type { UserSettingsUpdateRequest, UserSettings } from '@/shared/services/api/userSettings.service'
 import type { User } from '@/shared/types/auth'
 

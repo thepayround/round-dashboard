@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Mail, RefreshCw, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+
 import { apiClient } from '@/shared/services/apiClient'
 
 export const ConfirmationPendingPage = () => {

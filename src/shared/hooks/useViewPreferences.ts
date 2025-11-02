@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+
 import type { ViewMode } from '@/shared/components/ViewModeToggle'
 
 interface ViewPreferences {

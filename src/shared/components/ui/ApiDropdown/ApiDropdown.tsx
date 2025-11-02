@@ -1,6 +1,6 @@
+import { ChevronDown, Search, X, Check } from 'lucide-react'
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { ChevronDown, Search, X, Check } from 'lucide-react'
 
 export interface ApiDropdownOption {
   value: string

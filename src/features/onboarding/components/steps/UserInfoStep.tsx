@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { User, Mail, Phone } from 'lucide-react'
+
 import type { UserInfo } from '../../types/onboarding'
 
 interface UserInfoStepProps {

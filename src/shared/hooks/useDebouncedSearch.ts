@@ -54,12 +54,12 @@ export function useDebouncedSearch<T>({
       result = result.filter(item => {
         try {
           const fieldsToSearch = searchFields(item)
-            .filter(field => field != null && field !== '')
+            .filter(field => field !== null && field !== undefined && field !== '')
             .join(' ')
             .toLowerCase()
           return fieldsToSearch.includes(lowercaseQuery)
         } catch (error) {
-          console.warn('Search error for item:', item, error)
+          // Search error - silently skip item to prevent breaking the search
           return false
         }
       })
@@ -71,7 +71,7 @@ export function useDebouncedSearch<T>({
         try {
           return filterFn(item, filters)
         } catch (error) {
-          console.warn('Filter error for item:', item, error)
+          // Filter error - silently skip item to prevent breaking the filter
           return false
         }
       })

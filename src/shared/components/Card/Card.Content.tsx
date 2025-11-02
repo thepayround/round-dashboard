@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
 import { TrendingUp, TrendingDown } from 'lucide-react'
+import type { ReactNode } from 'react'
 
 interface CardContentProps {
   children?: ReactNode

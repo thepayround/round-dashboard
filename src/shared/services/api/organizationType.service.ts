@@ -3,6 +3,7 @@
  */
 
 import { httpClient } from './base/client'
+
 import type { ApiResponse } from '@/shared/types/api'
 import type { OrganizationTypeResponse } from '@/shared/types/api/organizationType'
 

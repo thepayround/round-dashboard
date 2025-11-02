@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
 import { Send, Paperclip, Type, Bold, Italic, Link as LinkIcon, Mail, FileText, Loader2 } from 'lucide-react'
+import React, { useState } from 'react'
+
 import { Modal } from '@/shared/components/Modal'
 import { FormInput } from '@/shared/components/ui/FormInput'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'

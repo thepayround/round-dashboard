@@ -3,6 +3,10 @@
  */
 
 import axios from 'axios'
+
+import { httpClient } from './base/client'
+import { ENDPOINTS } from './base/config'
+
 import type {
   ApiResponse,
   OrganizationRequest,
@@ -13,8 +17,6 @@ import type {
   CreateAddressData,
   UpdateAddressData,
 } from '@/shared/types/api'
-import { httpClient } from './base/client'
-import { ENDPOINTS } from './base/config'
 
 export class OrganizationService {
   private client = httpClient.getClient()

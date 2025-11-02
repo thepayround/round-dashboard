@@ -1,6 +1,4 @@
-import React from 'react'
 import { motion } from 'framer-motion'
-import { Card, ActionButton } from '@/shared/components'
 import { 
   CreditCard, 
   Download, 
@@ -9,6 +7,10 @@ import {
   CheckCircle,
   Building
 } from 'lucide-react'
+import React from 'react'
+
+import { Card, ActionButton } from '@/shared/components'
+
 
 export const BillingSection: React.FC = () => (
     <motion.div

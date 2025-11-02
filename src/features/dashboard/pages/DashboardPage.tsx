@@ -13,11 +13,11 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
+import { ActionButton, Card } from '@/shared/components'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { useAuth } from '@/shared/hooks/useAuth'
 import { useCurrency } from '@/shared/hooks/useCurrency'
 import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
-import { ActionButton, Card } from '@/shared/components'
-import { useAuth } from '@/shared/hooks/useAuth'
 
 export const DashboardPage = () => {
   const navigate = useNavigate()

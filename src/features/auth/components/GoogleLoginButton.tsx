@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { authService } from '@/shared/services/api/auth.service'
+
 import { useAuth } from '@/shared/hooks/useAuth'
+import { authService } from '@/shared/services/api/auth.service'
 import type { User, BusinessUser, PersonalUser } from '@/shared/types/auth'
 
 interface GoogleLoginButtonProps {

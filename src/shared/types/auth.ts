@@ -1,4 +1,5 @@
 import type { CompanyInfo, BillingAddress } from './business'
+
 import type { OnboardingData } from '@/features/onboarding/types/onboarding'
 import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 

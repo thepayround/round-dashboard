@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
-import { beforeEach, vi } from 'vitest'
 import React from 'react'
+import { beforeEach, vi } from 'vitest'
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {

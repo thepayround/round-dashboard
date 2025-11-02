@@ -2,12 +2,13 @@
  * Country Currency API service
  */
 
-import { httpClient } from './base/client'
 import type {
   CountryCurrencyResponse,
   CurrencyResponse,
   CountryResponse,
 } from '../../types/api/countryCurrency'
+
+import { httpClient } from './base/client'
 
 export class CountryCurrencyService {
   private readonly baseUrl = '/country-currency'

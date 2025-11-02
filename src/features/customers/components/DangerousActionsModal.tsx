@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
 import { Trash2, UserX, AlertTriangle } from 'lucide-react'
+import React, { useState } from 'react'
+
+import { Modal } from '@/shared/components/Modal/Modal'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService, CustomerStatus } from '@/shared/services/api/customer.service'
-import { Modal } from '@/shared/components/Modal/Modal'
 
 interface DangerousActionsModalProps {
   isOpen: boolean

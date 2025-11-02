@@ -1,6 +1,7 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, CheckCircle, AlertCircle, Lock, RotateCcw } from 'lucide-react'
+import { useState } from 'react'
+
 import { ActionButton, PasswordStrengthIndicator } from '@/shared/components'
 import { apiClient } from '@/shared/services/apiClient'
 import {

@@ -19,6 +19,7 @@ import {
   ShoppingCart,
   Grid3X3,
 } from 'lucide-react'
+
 import type { NavItem } from '@/shared/components/DashboardLayout/types'
 
 export const mainNavigationItems: NavItem[] = [

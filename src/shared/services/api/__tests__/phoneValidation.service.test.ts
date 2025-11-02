@@ -1,5 +1,5 @@
-import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
 import { httpClient } from '@/shared/services/api/base/client'
+import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
 
 // Mock the HTTP client
 jest.mock('@/shared/services/api/base/client', () => ({

@@ -2,10 +2,11 @@ import { motion } from 'framer-motion'
 import { Mail, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+
 import { ActionButton, AuthLogo } from '@/shared/components'
-import { validators, handleApiError } from '@/shared/utils'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
+import { validators, handleApiError } from '@/shared/utils'
 
 export const ForgotPasswordPage = () => {
   const navigate = useNavigate()

@@ -5,9 +5,10 @@
  * All formatting and API calls should be handled at a higher level.
  */
 
-import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check, Copy, Flag, Phone } from 'lucide-react'
+import React, { useState } from 'react'
+
 import { cn } from '@/shared/utils/cn'
 
 // Display format variants

@@ -1,8 +1,12 @@
 import { Globe, DollarSign, Clock, Calendar, Building, User, MapPin, Languages, Shield } from 'lucide-react'
+import { useMemo } from 'react'
+
+import type { ApiDropdownConfig } from './ApiDropdown'
+
+import { useAddressTypes } from '@/shared/hooks/api/useAddressType'
+import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
 import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 import { useIndustries } from '@/shared/hooks/api/useIndustry'
-import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
-import { useAddressTypes } from '@/shared/hooks/api/useAddressType'
 import { useOrganizationTypes } from '@/shared/hooks/api/useOrganizationType'
 import { useTeamRoles } from '@/shared/hooks/api/useTeamRoles'
 import { 
@@ -11,20 +15,18 @@ import {
   useDateFormats, 
   useTimeFormats
 } from '@/shared/hooks/api/useUserSettingsOptions'
-import type { ApiDropdownConfig } from './ApiDropdown'
-import { useMemo } from 'react'
-import type { CurrencyResponse } from '@/shared/types/api/countryCurrency'
-import type { Month } from '@/shared/types/api/countryCurrency'
-import type { IndustryResponse } from '@/shared/types/api/industry'
-import type { CompanySizeResponse } from '@/shared/types/api/companySize'
-import type { AddressTypeResponse } from '@/shared/types/api/addressType'
-import type { OrganizationTypeResponse } from '@/shared/types/api/organizationType'
 import type { 
   TimezoneOption, 
   LanguageOption, 
   DateFormatOption, 
   TimeFormatOption 
 } from '@/shared/hooks/api/useUserSettingsOptions'
+import type { AddressTypeResponse } from '@/shared/types/api/addressType'
+import type { CompanySizeResponse } from '@/shared/types/api/companySize'
+import type { CurrencyResponse } from '@/shared/types/api/countryCurrency'
+import type { Month } from '@/shared/types/api/countryCurrency'
+import type { IndustryResponse } from '@/shared/types/api/industry'
+import type { OrganizationTypeResponse } from '@/shared/types/api/organizationType'
 
 
 

@@ -1,39 +1,41 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
+import { AuthLayout } from '@/features/auth/components/AuthLayout'
+import { BusinessLoginPage } from '@/features/auth/pages/BusinessLoginPage'
+import { BusinessRegisterPage } from '@/features/auth/pages/BusinessRegisterPage'
+import { ConfirmationPendingPage } from '@/features/auth/pages/ConfirmationPendingPage'
+import { EmailConfirmationPage } from '@/features/auth/pages/EmailConfirmationPage'
+import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage'
+import { InvitationAcceptancePage } from '@/features/auth/pages/InvitationAcceptancePage'
+import { PersonalLoginPage } from '@/features/auth/pages/PersonalLoginPage'
+import { PersonalRegisterPage } from '@/features/auth/pages/PersonalRegisterPage'
+import { RegisterPage } from '@/features/auth/pages/RegisterPage'
+import { ResendConfirmationPage } from '@/features/auth/pages/ResendConfirmationPage'
+import { ResetPasswordPage } from '@/features/auth/pages/ResetPasswordPage'
+import { WelcomePage } from '@/features/auth/pages/WelcomePage'
+import { PlansPage } from '@/features/catalog/pages/PlansPage'
+import { ProductCatalogPage } from '@/features/catalog/pages/ProductCatalogPage'
+import CustomerDetailPage from '@/features/customers/pages/CustomerDetailPage'
+import CustomersPage from '@/features/customers/pages/CustomersPage'
+import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
+import { HomePage } from '@/features/home/HomePage'
+import { GetStartedPage } from '@/features/onboarding/pages/GetStartedPage'
+import { UserSettingsPage, OrganizationSettingsPage } from '@/features/settings'
+import { ErrorBoundary } from '@/shared/components/ErrorBoundary'
+import { ProtectedRoute } from '@/shared/components/ProtectedRoute'
 import { AuthProvider } from '@/shared/contexts/AuthContext'
 import { ToastProvider } from '@/shared/contexts/ToastContext'
 import { useMobileOptimizations } from '@/shared/hooks/useMobileOptimizations'
-import { ProtectedRoute } from '@/shared/components/ProtectedRoute'
-import { AuthLayout } from '@/features/auth/components/AuthLayout'
-import { WelcomePage } from '@/features/auth/pages/WelcomePage'
-import { PersonalLoginPage } from '@/features/auth/pages/PersonalLoginPage'
-import { BusinessLoginPage } from '@/features/auth/pages/BusinessLoginPage'
-import { RegisterPage } from '@/features/auth/pages/RegisterPage'
-import { PersonalRegisterPage } from '@/features/auth/pages/PersonalRegisterPage'
-import { BusinessRegisterPage } from '@/features/auth/pages/BusinessRegisterPage'
-import { EmailConfirmationPage } from '@/features/auth/pages/EmailConfirmationPage'
-import { ConfirmationPendingPage } from '@/features/auth/pages/ConfirmationPendingPage'
-import { ResendConfirmationPage } from '@/features/auth/pages/ResendConfirmationPage'
-import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage'
-import { ResetPasswordPage } from '@/features/auth/pages/ResetPasswordPage'
-import { InvitationAcceptancePage } from '@/features/auth/pages/InvitationAcceptancePage'
-import { GetStartedPage } from '@/features/onboarding/pages/GetStartedPage'
-import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
-import { ProductCatalogPage } from '@/features/catalog/pages/ProductCatalogPage'
-import { PlansPage } from '@/features/catalog/pages/PlansPage'
-import CustomersPage from '@/features/customers/pages/CustomersPage'
-import CustomerDetailPage from '@/features/customers/pages/CustomerDetailPage'
-import { UserSettingsPage, OrganizationSettingsPage } from '@/features/settings'
-import { HomePage } from '@/features/home/HomePage'
 
 const App = () => {
   // Apply mobile optimizations
   useMobileOptimizations()
 
   return (
-    <ToastProvider>
-      <AuthProvider>
-        <Router>
+    <ErrorBoundary>
+      <ToastProvider>
+        <AuthProvider>
+          <Router>
       <Routes>
         {/* Clean modern auth routes outside /auth prefix */}
         <Route path="/login" element={<AuthLayout><PersonalLoginPage /></AuthLayout>} />
@@ -123,9 +125,10 @@ const App = () => {
         {/* Home page (can be accessed separately) */}
         <Route path="/home" element={<HomePage />} />
       </Routes>
-      </Router>
-      </AuthProvider>
-    </ToastProvider>
+        </Router>
+        </AuthProvider>
+      </ToastProvider>
+    </ErrorBoundary>
   )
 }
 

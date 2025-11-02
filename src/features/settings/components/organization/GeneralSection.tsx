@@ -1,7 +1,10 @@
-import React from 'react'
 import { motion } from 'framer-motion'
-import { Card } from '@/shared/components'
+import React from 'react'
+
 import { OrganizationSettingsForm } from '../OrganizationSettingsForm'
+
+import { Card } from '@/shared/components'
+
 
 export const GeneralSection: React.FC = () => (
     <motion.div

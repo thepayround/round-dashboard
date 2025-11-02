@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Package } from 'lucide-react'
 
 import type { ProductInfo } from '../../types/onboarding'
+
 import { ActionButton } from '@/shared/components'
 
 interface ProductsStepProps {

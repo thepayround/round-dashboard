@@ -1,31 +1,15 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Button } from '@/shared/components/Button'
-import { ActionButton } from '@/shared/components'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import { TabNavigation } from '../components/TabNavigation'
-import { useAuth } from '@/shared/hooks/useAuth'
-import { useOrganization } from '@/shared/hooks/api/useOrganization'
-import { useFormChangeDetection } from '@/shared/hooks/useFormChangeDetection'
-import { useDebouncedUpdate } from '@/shared/hooks/useDebouncedUpdate'
-import { organizationService } from '@/shared/services/api/organization.service'
-import { authService } from '@/shared/services/api/auth.service'
-import { addressService } from '@/shared/services/api/address.service'
-
-// Simple error parser utility
-const parseBackendError = (error: unknown) => {
-  if (error instanceof Error) {
-    return { message: error.message, details: error }
-  }
-  if (typeof error === 'string') {
-    return { message: error, details: error }
-  }
-  return { message: 'An unknown error occurred', details: error }
-}
-
-// Import proper types
+import { AddressStep } from '../components/steps/AddressStep'
+import { BillingStep } from '../components/steps/BillingStep'
+import { OrganizationStep } from '../components/steps/OrganizationStep'
+import { ProductsStep } from '../components/steps/ProductsStep'
+import { TeamStep } from '../components/steps/TeamStep'
+import { UserInfoStep } from '../components/steps/UserInfoStep'
 import type {
   OnboardingData,
   OnboardingStep,
@@ -37,21 +21,34 @@ import type {
   BillingSettings,
   TeamSettings
 } from '../types/onboarding'
+
+import { ActionButton } from '@/shared/components'
+import { Button } from '@/shared/components/Button'
+import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
+import { useOrganization } from '@/shared/hooks/api/useOrganization'
+import { useAuth } from '@/shared/hooks/useAuth'
+import { useDebouncedUpdate } from '@/shared/hooks/useDebouncedUpdate'
+import { useFormChangeDetection } from '@/shared/hooks/useFormChangeDetection'
+import { addressService } from '@/shared/services/api/address.service'
+import { authService } from '@/shared/services/api/auth.service'
+import { organizationService } from '@/shared/services/api/organization.service'
 import type {
   OrganizationResponse,
   OrganizationRequest,
   CreateAddressData
 } from '@/shared/types/api'
 
-// Import Step Components
-import { UserInfoStep } from '../components/steps/UserInfoStep'
-import { OrganizationStep } from '../components/steps/OrganizationStep'
-import { AddressStep } from '../components/steps/AddressStep'
-import { ProductsStep } from '../components/steps/ProductsStep'
-import { BillingStep } from '../components/steps/BillingStep'
-import { TeamStep } from '../components/steps/TeamStep'
-import { useGlobalToast } from '@/shared/contexts/ToastContext'
-
+// Simple error parser utility
+const parseBackendError = (error: unknown) => {
+  if (error instanceof Error) {
+    return { message: error.message, details: error }
+  }
+  if (typeof error === 'string') {
+    return { message: error, details: error }
+  }
+  return { message: 'An unknown error occurred', details: error }
+}
 
 // Constants
 const allSteps: OnboardingStep[] = ['organization', 'address', 'team', 'products', 'billing']

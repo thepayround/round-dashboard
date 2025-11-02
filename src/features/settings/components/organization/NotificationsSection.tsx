@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Card } from '@/shared/components'
 import { Bell, Mail, MessageSquare, Smartphone, Settings } from 'lucide-react'
+import React, { useState } from 'react'
+
+import { Card } from '@/shared/components'
+
 
 interface NotificationPreference {
   id: string

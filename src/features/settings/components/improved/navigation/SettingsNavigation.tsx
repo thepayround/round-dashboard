@@ -1,7 +1,9 @@
-import React from 'react'
 import { motion } from 'framer-motion'
-import { Card } from '@/shared/components'
 import { Settings } from 'lucide-react'
+import React from 'react'
+
+import { Card } from '@/shared/components'
+
 
 interface SettingsSection {
   id: string
