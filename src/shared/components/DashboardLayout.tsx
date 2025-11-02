@@ -557,10 +557,10 @@ export const DashboardLayout = memo(({
           className="fixed left-0 top-0 h-full z-50 lg:z-base bg-[#070708]"
       >
         {/* Logo Section with Collapse Button - ChatGPT Style */}
-        <div className="flex-shrink-0 border-b border-white/10">
+        <div className="flex-shrink-0">
           {!isCollapsed ? (
             // Expanded: Logo on left, button on right (same row)
-            <div className="flex items-center justify-between pl-8 pr-3 py-5">
+            <div className="flex items-center justify-between pl-8 pr-6 py-5">
               <Link
                 to="/dashboard"
                 className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
@@ -607,6 +607,9 @@ export const DashboardLayout = memo(({
             </div>
           )}
         </div>
+
+        {/* Divider below logo */}
+        <div className="border-t border-white/10 mx-2"></div>
 
         {/* Main Content Area - Flex container for navigation and bottom sections */}
         <div className="flex-1 flex flex-col overflow-hidden">
