@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion'
 import { Users, UserPlus, Mail, Trash2, Loader2 } from 'lucide-react'
 import { useState } from 'react'
+
 import type { TeamSettings } from '../../types/onboarding'
-import { useTeamInvitation, useTeamRoleUtils } from '@/shared/hooks/api/useTeam'
-import { UserRole } from '@/shared/services/api/team.service'
-import { useAuth } from '@/shared/hooks/useAuth'
+
 import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
 import { teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
+import { useTeamInvitation, useTeamRoleUtils } from '@/shared/hooks/api/useTeam'
+import { useAuth } from '@/shared/hooks/useAuth'
+import { UserRole } from '@/shared/services/api/team.service'
 
 interface TeamStepProps {
   data: TeamSettings

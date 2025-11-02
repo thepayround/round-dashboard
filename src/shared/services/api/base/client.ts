@@ -4,6 +4,7 @@
 
 import axios from 'axios'
 import type { AxiosInstance, AxiosError } from 'axios'
+
 import { API_CONFIG } from './config'
 
 class BaseHttpClient {

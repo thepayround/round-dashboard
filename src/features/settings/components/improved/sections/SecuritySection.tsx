@@ -1,8 +1,10 @@
-import React from 'react'
 import { motion } from 'framer-motion'
-import { Card } from '@/shared/components'
 import { Lock } from 'lucide-react'
+import React from 'react'
+
 import { ChangePasswordForm } from '../../ChangePasswordForm'
+
+import { Card } from '@/shared/components'
 import type { UserSettings } from '@/shared/services/api/userSettings.service'
 
 interface SecuritySectionProps {

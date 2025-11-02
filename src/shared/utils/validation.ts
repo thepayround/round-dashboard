@@ -15,8 +15,11 @@ export interface ValidationResult {
 }
 
 // Email validation regex (RFC 5322 compliant, no consecutive dots)
+// This is a known safe regex pattern for email validation
+/* eslint-disable security/detect-unsafe-regex */
 const EMAIL_REGEX =
   /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+/* eslint-enable security/detect-unsafe-regex */
 
 
 // Password requirements

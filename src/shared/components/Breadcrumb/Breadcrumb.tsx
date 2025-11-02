@@ -1,6 +1,7 @@
-import React from 'react'
 import { motion } from 'framer-motion'
+import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
+
 import { cn } from '@/shared/utils/cn'
 
 export interface BreadcrumbItem {

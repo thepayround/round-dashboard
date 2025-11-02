@@ -6,8 +6,9 @@
  */
 
 import { useState, useEffect, useMemo } from 'react'
-import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
+
 import type { CountryInfo } from '@/shared/components/ui/PhoneDisplay'
+import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
 
 interface PhoneFormattingResult {
   formattedNumber: string

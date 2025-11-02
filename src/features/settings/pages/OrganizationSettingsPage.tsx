@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import {
   Building2,
   Users,
@@ -10,6 +8,8 @@ import {
   Globe,
   MapPin
 } from 'lucide-react'
+import React, { useState } from 'react'
+
 import { SettingsNavigation } from '../components/improved/navigation/SettingsNavigation'
 import {
   GeneralSection,
@@ -21,6 +21,8 @@ import {
   IntegrationsSection,
   AddressManagementSection
 } from '../components/organization'
+
+import { DashboardLayout } from '@/shared/components/DashboardLayout'
 
 interface SettingsSection {
   id: string

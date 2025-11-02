@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { CollapseButton } from './CollapseButtonDesigns'
+
 import { Card } from '../Card'
+
+import { CollapseButton } from './CollapseButtonDesigns'
 
 /**
  * Showcase component to preview all 5 collapse button designs

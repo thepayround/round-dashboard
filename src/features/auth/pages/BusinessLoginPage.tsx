@@ -2,13 +2,15 @@ import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { ActionButton, AuthLogo } from '@/shared/components'
+
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
+
+import { ActionButton, AuthLogo } from '@/shared/components'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { validators, handleApiError } from '@/shared/utils'
 import { useAsyncAction, useForm } from '@/shared/hooks'
-import { apiClient } from '@/shared/services/apiClient'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { apiClient } from '@/shared/services/apiClient'
+import { validators, handleApiError } from '@/shared/utils'
 
 export const BusinessLoginPage = () => {
   const navigate = useNavigate()

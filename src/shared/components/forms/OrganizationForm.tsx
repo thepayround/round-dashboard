@@ -1,6 +1,7 @@
-import { useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Building, ExternalLink, AlignLeft, Hash, CreditCard } from 'lucide-react'
+import { useCallback } from 'react'
+
 import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig, currencyDropdownConfig, fiscalYearDropdownConfig, timezoneDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 

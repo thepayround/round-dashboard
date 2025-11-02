@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import {
   Eye,
   Edit,
@@ -10,6 +8,9 @@ import {
   ArrowDown,
   X
 } from 'lucide-react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
 
 interface SortConfig {

@@ -1,8 +1,9 @@
 import {} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import type { AccountType } from '@/shared/types/auth'
 import { AccountTypeSelector } from '../components/AccountTypeSelector'
+
+import type { AccountType } from '@/shared/types/auth'
 
 export const RegisterPage = () => {
   const navigate = useNavigate()

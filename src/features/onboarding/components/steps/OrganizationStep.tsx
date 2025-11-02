@@ -1,7 +1,9 @@
 import { useMemo } from 'react'
+
+import type { OrganizationInfo, BusinessSettings } from '../../types/onboarding'
+
 import type { OrganizationFormData } from '@/shared/components/forms/OrganizationForm';
 import { OrganizationForm } from '@/shared/components/forms/OrganizationForm'
-import type { OrganizationInfo, BusinessSettings } from '../../types/onboarding'
 
 interface OrganizationStepProps {
   data: OrganizationInfo

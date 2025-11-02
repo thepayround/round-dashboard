@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Card } from '@/shared/components'
 import { Palette, Upload, Eye, Download, Trash2, Image } from 'lucide-react'
+import React, { useState } from 'react'
+
+import { Card } from '@/shared/components'
+
 
 export const BrandingSection: React.FC = () => {
   const [logoPreview, setLogoPreview] = useState<string | null>(null)

@@ -1,10 +1,13 @@
-import { useState } from 'react'
-import { Modal } from '@/shared/components/Modal/Modal'
-import { ActionButton } from '@/shared/components/ActionButton'
-import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { Mail, UserPlus } from 'lucide-react'
-import { useGlobalToast } from '@/shared/contexts/ToastContext'
+import { useState } from 'react'
+
 import type { UserRole } from '../types/team.types'
+
+import { ActionButton } from '@/shared/components/ActionButton'
+import { Modal } from '@/shared/components/Modal/Modal'
+import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
+
 
 interface InviteMemberModalProps {
   isOpen: boolean

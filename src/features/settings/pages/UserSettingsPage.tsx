@@ -1,7 +1,4 @@
-import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Card } from '@/shared/components'
 import { 
   User as UserIcon, 
   Shield, 
@@ -10,10 +7,8 @@ import {
   Loader2, 
   AlertCircle
 } from 'lucide-react'
-import { useUserSettingsManager } from '@/shared/hooks/useUserSettingsManager'
-import { useAuth } from '@/shared/hooks/useAuth'
-import { usePhoneFormatting } from '@/shared/hooks/usePhoneFormatting'
-import { usePreloadAllOptions } from '@/shared/hooks/api/useUserSettingsOptions'
+import React, { useState } from 'react'
+
 import { 
   SettingsNavigation,
   ProfileSection,
@@ -21,6 +16,13 @@ import {
   NotificationsSection,
   BillingSection
 } from '../components/improved'
+
+import { Card } from '@/shared/components'
+import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { usePreloadAllOptions } from '@/shared/hooks/api/useUserSettingsOptions'
+import { useAuth } from '@/shared/hooks/useAuth'
+import { usePhoneFormatting } from '@/shared/hooks/usePhoneFormatting'
+import { useUserSettingsManager } from '@/shared/hooks/useUserSettingsManager'
 import type { UserSettingsUpdateRequest } from '@/shared/services/api/userSettings.service'
 
 interface UserSettingsPageProps {

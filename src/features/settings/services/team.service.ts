@@ -1,11 +1,12 @@
-import { apiClient } from '@/shared/services/apiClient'
-import { ENDPOINTS } from '@/shared/services/api/base/config'
 import type { 
   TeamMember, 
   TeamInvitation, 
   InviteMemberRequest, 
   UpdateMemberRoleRequest 
 } from '../types/team.types'
+
+import { ENDPOINTS } from '@/shared/services/api/base/config'
+import { apiClient } from '@/shared/services/apiClient'
 import type { ApiResponse } from '@/shared/types/api'
 
 class TeamService {

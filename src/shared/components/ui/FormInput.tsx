@@ -1,6 +1,7 @@
+import type { LucideIcon } from 'lucide-react'
 import type { InputHTMLAttributes } from 'react';
 import { forwardRef } from 'react'
-import type { LucideIcon } from 'lucide-react'
+
 import { cn } from '@/shared/utils/cn'
 
 interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {

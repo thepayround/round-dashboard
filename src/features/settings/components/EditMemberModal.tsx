@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react'
-import { Modal } from '@/shared/components/Modal/Modal'
-import { ActionButton } from '@/shared/components/ActionButton'
-import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { Edit, User, Crown, AlertCircle } from 'lucide-react'
-import { useAuth } from '@/shared/hooks/useAuth'
+import { useState, useEffect } from 'react'
+
 import type { UserRole, TeamMember } from '../types/team.types'
+
+import { ActionButton } from '@/shared/components/ActionButton'
+import { Modal } from '@/shared/components/Modal/Modal'
+import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { useAuth } from '@/shared/hooks/useAuth'
+
 
 interface EditMemberModalProps {
   isOpen: boolean

@@ -2,11 +2,11 @@ import { motion } from 'framer-motion'
 import { Building, Hash, CreditCard, AlertCircle } from 'lucide-react'
 import { useEffect } from 'react'
 
-import type { CompanyInfo, Currency } from '@/shared/types/business'
-import type { ValidationError } from '@/shared/utils/validation'
-import { validateCompanyField, validateCompanyInfo } from '@/shared/utils/companyValidation'
-import { getFieldError, hasFieldError } from '@/shared/utils/validation'
 import { ApiDropdown, currencyDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import type { CompanyInfo, Currency } from '@/shared/types/business'
+import { validateCompanyField, validateCompanyInfo } from '@/shared/utils/companyValidation'
+import type { ValidationError } from '@/shared/utils/validation'
+import { getFieldError, hasFieldError } from '@/shared/utils/validation'
 
 interface CompanyDetailsFormProps {
   companyInfo: CompanyInfo

@@ -1,7 +1,8 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
+import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, vi } from 'vitest'
+
 import type { BreadcrumbItem } from './Breadcrumb'
 import { Breadcrumb } from './Breadcrumb'
 

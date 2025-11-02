@@ -1,5 +1,3 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
   ArrowLeft,
@@ -23,17 +21,22 @@ import {
   Activity,
   Zap
 } from 'lucide-react'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useParams, Link } from 'react-router-dom'
+
+import { CustomerDetailSkeleton } from '../components/CustomerDetailSkeleton'
+import { CustomerNotesModal } from '../components/CustomerNotesModal'
+import { DangerousActionsModal } from '../components/DangerousActionsModal'
+import { EditCustomerModal } from '../components/EditCustomerModal'
+import { EmailComposeModal } from '../components/EmailComposeModal'
+
 import { ActionButton } from '@/shared/components/ActionButton'
 import { Card } from '@/shared/components/Card'
+import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CustomerResponse , CustomerStatus } from '@/shared/services/api/customer.service'
-import { EmailComposeModal } from '../components/EmailComposeModal'
-import { CustomerNotesModal } from '../components/CustomerNotesModal'
-import { EditCustomerModal } from '../components/EditCustomerModal'
-import { CustomerDetailSkeleton } from '../components/CustomerDetailSkeleton'
-import { DangerousActionsModal } from '../components/DangerousActionsModal'
+
 
 const CustomerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -57,7 +60,7 @@ const CustomerDetailPage: React.FC = () => {
       const errorMessage = (error as Error)?.message ?? 'Failed to load customer details'
       setError(errorMessage)
       showError(errorMessage)
-      console.error('Error loading customer:', error)
+      // Error is already logged via showError toast
     } finally {
       setLoading(false)
     }

@@ -3,8 +3,9 @@
  * Verifies that clicking the Push toggle doesn't affect the In-App toggle
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+
 import { useUserSettingsManager } from '@/shared/hooks/useUserSettingsManager'
 
 // Mock the dependencies

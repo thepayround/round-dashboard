@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
-import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Search, AlertCircle, X, Check } from 'lucide-react'
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { createPortal } from 'react-dom'
+
 import { phoneValidationService, type CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
-import { phoneValidator } from '@/shared/utils/phoneValidation'
 import { cn } from '@/shared/utils/cn'
+import { phoneValidator } from '@/shared/utils/phoneValidation'
 
 interface PhoneInputProps {
   value?: string

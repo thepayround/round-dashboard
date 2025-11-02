@@ -1,12 +1,13 @@
-import { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, AlertCircle, Edit, X } from 'lucide-react'
+import { useState, useCallback, useEffect } from 'react'
+
 import { ActionButton } from '@/shared/components'
+import type { OrganizationFormData } from '@/shared/components/forms/OrganizationForm';
+import { OrganizationForm } from '@/shared/components/forms/OrganizationForm'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
 import { organizationService } from '@/shared/services/api/organization.service'
-import type { OrganizationFormData } from '@/shared/components/forms/OrganizationForm';
-import { OrganizationForm } from '@/shared/components/forms/OrganizationForm'
 import type { OrganizationResponse, OrganizationRequest } from '@/shared/types/api'
 
 interface OrganizationSettingsFormProps {

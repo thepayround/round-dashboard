@@ -1,7 +1,8 @@
-import { Modal } from './Modal/Modal'
-import { ActionButton } from './ActionButton/ActionButton'
 import { AlertTriangle, Trash2, Info, CheckCircle, HelpCircle } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+
+import { ActionButton } from './ActionButton/ActionButton'
+import { Modal } from './Modal/Modal'
 
 interface ConfirmDialogProps {
   isOpen: boolean

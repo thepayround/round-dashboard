@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
 import { Plus, MessageSquare, User, Calendar, Edit3, Trash2, Save, RotateCcw, Loader2 } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import { Modal } from '@/shared/components/Modal'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import type { CustomerNoteResponse, CustomerNoteCreateRequest } from '@/shared/services/api/customer.service'
 import { customerService } from '@/shared/services/api/customer.service'
-import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 
 interface CustomerNotesModalProps {
   isOpen: boolean

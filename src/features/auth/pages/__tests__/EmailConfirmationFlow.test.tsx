@@ -1,9 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BrowserRouter, useSearchParams } from 'react-router-dom'
-import { EmailConfirmationPage } from '../EmailConfirmationPage'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+
 import { ConfirmationPendingPage } from '../ConfirmationPendingPage'
+import { EmailConfirmationPage } from '../EmailConfirmationPage'
 import { ResendConfirmationPage } from '../ResendConfirmationPage'
+
 import { apiClient } from '@/shared/services/apiClient'
 
 // Mock the API client

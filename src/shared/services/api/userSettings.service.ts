@@ -3,9 +3,11 @@
  */
 
 import axios from 'axios'
-import type { ApiResponse } from '@/shared/types/api'
+
 import { httpClient } from './base/client'
 import { ENDPOINTS } from './base/config'
+
+import type { ApiResponse } from '@/shared/types/api'
 
 // User Settings Types
 export interface UserSettings {

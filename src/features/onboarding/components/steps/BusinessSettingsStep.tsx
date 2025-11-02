@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
 import { Settings } from 'lucide-react'
+
 import type { BusinessSettings } from '../../types/onboarding'
+
 import { 
   ApiDropdown, 
   timezoneDropdownConfig, 

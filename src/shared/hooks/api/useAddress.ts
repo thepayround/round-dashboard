@@ -3,6 +3,9 @@
  */
 
 import { useState } from 'react'
+
+import { addressService } from '@/shared/services/api'
+import { organizationService } from '@/shared/services/api/organization.service'
 import type {
   ApiResponse,
   PagedResult,
@@ -11,8 +14,6 @@ import type {
   CreateAddressData,
   UpdateAddressData,
 } from '@/shared/types/api'
-import { addressService } from '@/shared/services/api'
-import { organizationService } from '@/shared/services/api/organization.service'
 
 export const useAddress = () => {
   const [isLoading, setIsLoading] = useState(false)

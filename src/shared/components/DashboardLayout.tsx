@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronDown,
@@ -9,16 +8,18 @@ import {
   PanelLeft,
   PanelLeftClose,
 } from 'lucide-react'
+import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+
+import ColorLogo from '@/assets/logos/color-logo.svg'
+import { Breadcrumb } from '@/shared/components/Breadcrumb'
+import { LAYOUT_CONSTANTS } from '@/shared/components/DashboardLayout/constants'
+import type { DashboardLayoutProps, NavItem, TooltipState } from '@/shared/components/DashboardLayout/types'
+import { mainNavigationItems, bottomNavigationItems } from '@/shared/config/navigation.config'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { useResponsive } from '@/shared/hooks/useResponsive'
 import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
 import { apiClient } from '@/shared/services/apiClient'
-import { Breadcrumb } from '@/shared/components/Breadcrumb'
-import ColorLogo from '@/assets/logos/color-logo.svg'
-import { LAYOUT_CONSTANTS } from '@/shared/components/DashboardLayout/constants'
-import type { DashboardLayoutProps, NavItem, TooltipState } from '@/shared/components/DashboardLayout/types'
-import { mainNavigationItems, bottomNavigationItems } from '@/shared/config/navigation.config'
 
 // User data comes from auth context and API
 

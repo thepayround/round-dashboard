@@ -2,14 +2,14 @@ import { motion } from 'framer-motion'
 import { MapPin, Building, AlertCircle, Truck } from 'lucide-react'
 import { useState } from 'react'
 
+import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { BillingAddress } from '@/shared/types/business'
-import type { ValidationError } from '@/shared/utils/validation'
 import {
   validateBillingAddress,
   validateBillingAddressField,
 } from '@/shared/utils/companyValidation'
+import type { ValidationError } from '@/shared/utils/validation'
 import { getFieldError, hasFieldError } from '@/shared/utils/validation'
-import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 
 /**
  * Enhanced AddressForm component with optional shipping address functionality

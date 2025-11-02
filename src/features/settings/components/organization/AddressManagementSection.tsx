@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, AlertCircle, Edit, X, MapPin } from 'lucide-react'
+import React, { useState, useEffect, useCallback } from 'react'
+
+import { AddressStep } from '@/features/onboarding/components/steps/AddressStep'
+import type { EnhancedAddressInfo } from '@/features/onboarding/types/onboarding'
 import { ActionButton, Card } from '@/shared/components'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { AddressStep } from '@/features/onboarding/components/steps/AddressStep'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
 import { organizationService } from '@/shared/services/api/organization.service'
-import type { EnhancedAddressInfo } from '@/features/onboarding/types/onboarding'
 import type { CreateAddressData, UpdateAddressData } from '@/shared/types/api'
 
 

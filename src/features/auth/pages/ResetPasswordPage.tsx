@@ -2,11 +2,12 @@ import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
 import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+
 import { ActionButton, AuthLogo, PasswordStrengthIndicator } from '@/shared/components'
-import { validators, handleApiError } from '@/shared/utils'
 import { useAsyncAction, useForm } from '@/shared/hooks'
-import { apiClient } from '@/shared/services/apiClient'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { apiClient } from '@/shared/services/apiClient'
+import { validators, handleApiError } from '@/shared/utils'
 
 export const ResetPasswordPage = () => {
   const navigate = useNavigate()

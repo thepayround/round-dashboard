@@ -1,6 +1,7 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, AlertCircle, Shield } from 'lucide-react'
+import { useState } from 'react'
+
 import { Modal, ActionButton, PasswordStrengthIndicator } from '@/shared/components'
 import { apiClient } from '@/shared/services/apiClient'
 import type { ValidationError } from '@/shared/utils/validation'

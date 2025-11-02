@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Card } from '@/shared/components/Card'
 
 export const CustomerDetailSkeleton: React.FC = () => (

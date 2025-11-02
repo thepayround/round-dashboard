@@ -5,14 +5,16 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
+
+import { useToast } from './useToast'
+
+import { useUserSettings as useUserSettingsAPI } from '@/shared/hooks/api'
 import type {
   UserSettings,
   UserSettingsUpdateRequest,
   NotificationPreferences,
   NotificationPreferencesRequest,
 } from '@/shared/services/api/userSettings.service'
-import { useUserSettings as useUserSettingsAPI } from '@/shared/hooks/api'
-import { useToast } from './useToast'
 
 interface UseUserSettingsManagerReturn {
   // Data state

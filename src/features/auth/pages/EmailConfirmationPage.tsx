@@ -2,9 +2,10 @@ import { motion } from 'framer-motion'
 import { CheckCircle, XCircle, Mail, RefreshCw, AlertCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
+
 import { useAuth as useAuthAPI, useOrganization } from '@/shared/hooks/api'
-import { organizationService } from '@/shared/services/api'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { organizationService } from '@/shared/services/api'
 import type { User } from '@/shared/types/auth'
 
 export const EmailConfirmationPage = () => {
@@ -26,7 +27,6 @@ export const EmailConfirmationPage = () => {
   useEffect(() => {
     const confirmEmail = async () => {
       if (!userId || !token) {
-        console.error('Missing userId or token:', { userId, token })
         setStatus('error')
         setMessage('Invalid confirmation link. Please check your email and try again.')
         return

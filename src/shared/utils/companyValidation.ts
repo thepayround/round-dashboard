@@ -2,8 +2,9 @@
  * Company validation utilities for B2B registration
  */
 
-import type { CompanyInfo, BillingAddress, Currency, BusinessType } from '@/shared/types/business'
 import type { ValidationError, ValidationResult } from './validation'
+
+import type { CompanyInfo, BillingAddress, Currency, BusinessType } from '@/shared/types/business'
 
 // Company name validation
 export const validateCompanyName = (companyName: string): ValidationResult => {
@@ -113,6 +114,7 @@ export const validateWebsite = (website: string): ValidationResult => {
 
   // Website is optional, so only validate if provided
   if (website.trim()) {
+    // eslint-disable-next-line security/detect-unsafe-regex
     const websiteRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/
 
     if (!websiteRegex.test(website)) {

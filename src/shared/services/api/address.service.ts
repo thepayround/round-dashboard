@@ -3,6 +3,10 @@
  */
 
 import axios from 'axios'
+
+import { httpClient } from './base/client'
+import { ENDPOINTS } from './base/config'
+
 import type {
   ApiResponse,
   PagedResult,
@@ -11,8 +15,6 @@ import type {
   CreateAddressData,
   UpdateAddressData,
 } from '@/shared/types/api'
-import { httpClient } from './base/client'
-import { ENDPOINTS } from './base/config'
 
 export class AddressService {
   private client = httpClient.getClient()

@@ -2,12 +2,14 @@ import { motion } from 'framer-motion'
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
+
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
+
+import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { validators, handleApiError } from '@/shared/utils'
 import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
+import { validators, handleApiError } from '@/shared/utils'
 
 export const PersonalRegisterPage = () => {
   const navigate = useNavigate()

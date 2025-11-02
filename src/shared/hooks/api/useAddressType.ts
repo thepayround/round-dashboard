@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react'
+
 import { addressTypeService } from '../../services/api/addressType.service'
 import type { AddressTypeResponse } from '../../types/api/addressType'
 

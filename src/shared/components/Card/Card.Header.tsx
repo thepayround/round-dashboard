@@ -1,7 +1,8 @@
 import type { LucideIcon } from 'lucide-react'
+import type { ReactNode } from 'react'
+
 import type { ActionMenuItem } from '../ActionMenu/ActionMenu';
 import { ActionMenu } from '../ActionMenu/ActionMenu'
-import type { ReactNode } from 'react'
 
 interface CardHeaderProps {
   icon?: LucideIcon

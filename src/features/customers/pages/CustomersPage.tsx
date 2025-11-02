@@ -1,5 +1,3 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Users,
@@ -18,20 +16,25 @@ import {
   CheckSquare,
   Square
 } from 'lucide-react'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { ActionButton } from '@/shared/components/ActionButton'
-import { Card } from '@/shared/components/Card'
-import { SearchFilterToolbar, ViewModeToggle } from '@/shared/components'
-import { Pagination } from '@/shared/components/Pagination'
-import type { FilterField } from '@/shared/components'
-import type { ViewMode, ViewModeOption } from '@/shared/components/ViewModeToggle'
-import { useViewPreferences } from '@/shared/hooks/useViewPreferences'
-import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { customerService } from '@/shared/services/api/customer.service'
-import type { CustomerResponse, CustomerSearchParams } from '@/shared/services/api/customer.service'
-import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { Link } from 'react-router-dom'
+
 import { AddCustomerModal } from '../components/AddCustomerModal'
 import CustomerTable from '../components/CustomerTable'
+
+import { SearchFilterToolbar, ViewModeToggle } from '@/shared/components'
+import type { FilterField } from '@/shared/components'
+import { ActionButton } from '@/shared/components/ActionButton'
+import { Card } from '@/shared/components/Card'
+import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { Pagination } from '@/shared/components/Pagination'
+import type { ViewMode, ViewModeOption } from '@/shared/components/ViewModeToggle'
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
+import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
+import { useViewPreferences } from '@/shared/hooks/useViewPreferences'
+import { customerService } from '@/shared/services/api/customer.service'
+import type { CustomerResponse, CustomerSearchParams } from '@/shared/services/api/customer.service'
+
 
 // CustomerStatus enum values from backend
 enum CustomerStatus {

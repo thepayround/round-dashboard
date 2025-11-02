@@ -3,14 +3,15 @@
  */
 
 import { useState, useCallback } from 'react'
-import type { ApiResponse } from '@/shared/types/api'
+
+import { userSettingsService } from '@/shared/services/api'
 import type {
   UserSettings,
   UserSettingsUpdateRequest,
   NotificationPreferences,
   NotificationPreferencesRequest,
 } from '@/shared/services/api/userSettings.service'
-import { userSettingsService } from '@/shared/services/api'
+import type { ApiResponse } from '@/shared/types/api'
 
 export const useUserSettings = () => {
   const [isLoading, setIsLoading] = useState(false)

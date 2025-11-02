@@ -1,11 +1,12 @@
-import React, { useMemo } from 'react'
 import { Filter } from 'lucide-react'
+import React, { useMemo } from 'react'
+
+import { FilterChipsBar, type ActiveFilter } from '../FilterChipsBar'
+import { FilterPanel } from '../FilterPanel'
 import { SearchInput } from '../SearchInput/SearchInput'
 import { ViewModeToggle } from '../ViewModeToggle'
-import { UiDropdown, type UiDropdownOption } from '../ui/UiDropdown'
 import type { ViewMode, ViewModeOption } from '../ViewModeToggle'
-import { FilterPanel } from '../FilterPanel'
-import { FilterChipsBar, type ActiveFilter } from '../FilterChipsBar'
+import { UiDropdown, type UiDropdownOption } from '../ui/UiDropdown'
 
 export interface FilterField {
   id: string

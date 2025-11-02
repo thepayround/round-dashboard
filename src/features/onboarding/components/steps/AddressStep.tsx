@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion'
 import { MapPin, Building, Hash, Info } from 'lucide-react'
-import { FormInput } from '@/shared/components/ui/FormInput'
-import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+
 import type { AddressInfo, EnhancedAddressInfo } from '../../types/onboarding'
+
+import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { FormInput } from '@/shared/components/ui/FormInput'
 
 interface AddressStepProps {
   data: EnhancedAddressInfo

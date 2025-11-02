@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react'
+
 import { companySizeService } from '../../services/api/companySize.service'
 import type { CompanySizeResponse } from '../../types/api/companySize'
 

@@ -1,8 +1,7 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
-import { GetStartedPage } from '../pages/GetStartedPage'
-import { organizationService } from '@/shared/services/api/organization.service'
+
 import { addressService } from '@/shared/services/api/address.service'
+import { organizationService } from '@/shared/services/api/organization.service'
 
 // Mock services
 vi.mock('@/shared/services/api/organization.service')
@@ -21,7 +20,9 @@ vi.mock('@/shared/hooks/api/useOrganization', () => ({
   })
 }))
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockOrganizationService = organizationService as any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockAddressService = addressService as any
 
 describe('GetStartedPage Change Detection', () => {

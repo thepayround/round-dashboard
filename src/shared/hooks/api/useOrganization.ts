@@ -5,8 +5,9 @@
  */
 
 import { useState, useCallback } from 'react'
-import type { ApiResponse, OrganizationResponse, CreateOrganizationData } from '@/shared/types/api'
+
 import { organizationService, authService } from '@/shared/services/api'
+import type { ApiResponse, OrganizationResponse, CreateOrganizationData } from '@/shared/types/api'
 
 export const useOrganization = () => {
   const [isLoading, setIsLoading] = useState(false)

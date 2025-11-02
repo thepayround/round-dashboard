@@ -2,9 +2,10 @@
  * Team Invitation API service
  */
 
-import { httpClient } from './base/client'
 import type { ApiResponse } from '../../types/api'
 import type { User } from '../../types/auth'
+
+import { httpClient } from './base/client'
 
 export interface InviteUserRequest {
   roundAccountId: string
