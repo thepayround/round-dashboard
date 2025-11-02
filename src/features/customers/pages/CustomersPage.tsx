@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom'
 import { AddCustomerModal } from '../components/AddCustomerModal'
 import CustomerTable from '../components/CustomerTable'
 
-import { SearchFilterToolbar, ViewModeToggle } from '@/shared/components'
+import { SearchFilterToolbar } from '@/shared/components'
 import type { FilterField } from '@/shared/components'
 import { ActionButton } from '@/shared/components/ActionButton'
 import { Card } from '@/shared/components/Card'
