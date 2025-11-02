@@ -610,7 +610,7 @@ export const DashboardLayout = memo(({
         <div className="flex-shrink-0 border-b border-white/10">
           {!isCollapsed ? (
             // Expanded: Logo on left, button on right (same row)
-            <div className="flex items-center justify-between pl-5 pr-3 py-5">
+            <div className="flex items-center justify-between pl-8 pr-3 py-5">
               <Link
                 to="/dashboard"
                 className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
