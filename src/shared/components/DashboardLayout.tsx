@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  PanelLeftClose,
-  PanelLeft,
   ChevronDown,
   LogOut,
   X,
   User,
   ChevronUp,
+  PanelLeft,
+  PanelLeftClose,
 } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/shared/hooks/useAuth'
@@ -242,8 +242,8 @@ export const DashboardLayout = memo(({
   bottomNavigationItems: bottomNavItemsProp = bottomNavigationItems,
 }: DashboardLayoutProps) => {
   // Extract constants for cleaner code
-  const { SIDEBAR, LOGO, TOGGLE_BUTTON } = LAYOUT_CONSTANTS
-  
+  const { SIDEBAR } = LAYOUT_CONSTANTS
+
   const navigate = useNavigate()
   const { logout, state } = useAuth()
   const { token } = state
@@ -606,47 +606,56 @@ export const DashboardLayout = memo(({
         transition={{ duration: 0.15, ease: 'easeOut' }}
           className="fixed left-0 top-0 h-full z-50 lg:z-base bg-[#070708]"
       >
-        {/* Logo Section - Clickable */}
-        <Link
-          to="/dashboard"
-          className="flex items-center justify-center flex-shrink-0 transition-colors duration-200 cursor-pointer"
-          style={{ height: LOGO.HEIGHT }}
-        >
+        {/* Logo Section with Collapse Button - ChatGPT Style */}
+        <div className="flex-shrink-0 border-b border-white/10">
           {!isCollapsed ? (
-            <div className="flex items-center space-x-4">
-              <img src={ColorLogo} alt="Round Logo" className="w-10 h-11 md:h-9" />
-              <div className="flex items-center space-x-0.5">
-                <span className="text-[#D417C8] font-light text-3xl tracking-wider transition-all duration-300">R</span>
-                <span className="text-[#BD2CD0] font-light text-3xl tracking-wider transition-all duration-300">O</span>
-                <span className="text-[#7767DA] font-light text-3xl tracking-wider transition-all duration-300">U</span>
-                <span className="text-[#32A1E4] font-light text-3xl tracking-wider transition-all duration-300">N</span>
-                <span className="text-[#14BDEA] font-light text-3xl tracking-wider transition-all duration-300">D</span>
-              </div>
+            // Expanded: Logo on left, button on right (same row)
+            <div className="flex items-center justify-between pl-5 pr-3 py-5">
+              <Link
+                to="/dashboard"
+                className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
+              >
+                <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
+                <div className="flex items-center space-x-0.5">
+                  <span className="text-[#D417C8] font-light text-xl tracking-wider transition-all duration-300">R</span>
+                  <span className="text-[#BD2CD0] font-light text-xl tracking-wider transition-all duration-300">O</span>
+                  <span className="text-[#7767DA] font-light text-xl tracking-wider transition-all duration-300">U</span>
+                  <span className="text-[#32A1E4] font-light text-xl tracking-wider transition-all duration-300">N</span>
+                  <span className="text-[#14BDEA] font-light text-xl tracking-wider transition-all duration-300">D</span>
+                </div>
+              </Link>
+              
+              {/* Collapse button at same height as logo */}
+              <button
+                onClick={toggleSidebar}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200 flex-shrink-0"
+                aria-label="Collapse sidebar"
+                title="Collapse sidebar (Ctrl+Shift+B)"
+              >
+                <PanelLeftClose className="w-5 h-5" />
+              </button>
             </div>
           ) : (
-            <div className="flex items-center justify-center">
-              <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
+            // Collapsed: Logo on top, button below
+            <div className="flex flex-col items-center py-5 space-y-3">
+              <Link
+                to="/dashboard"
+                className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
+              >
+                <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
+              </Link>
+              
+              {/* Expand button below logo */}
+              <button
+                onClick={toggleSidebar}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200"
+                aria-label="Expand sidebar"
+                title="Expand sidebar (Ctrl+Shift+B)"
+              >
+                <PanelLeft className="w-5 h-5" />
+              </button>
             </div>
           )}
-        </Link>
-
-        {/* Divider with toggle button */}
-        <div className="relative border-t border-white/10">
-          <button
-            onClick={toggleSidebar}
-            className="w-full px-4 py-3 flex items-center justify-center gap-2 text-xs text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200 group"
-            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={isCollapsed ? "Expand sidebar (Ctrl+Shift+B)" : "Collapse sidebar (Ctrl+Shift+B)"}
-          >
-            {isCollapsed ? (
-              <PanelLeft className="w-4 h-4" />
-            ) : (
-              <>
-                <PanelLeftClose className="w-4 h-4" />
-                <span className="font-medium">Collapse</span>
-              </>
-            )}
-          </button>
         </div>
 
         {/* Main Content Area - Flex container for navigation and bottom sections */}
