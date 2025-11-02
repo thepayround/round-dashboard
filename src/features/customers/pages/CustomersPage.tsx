@@ -411,79 +411,7 @@ const CustomersPage: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        {/* Action Bar */}
-        <div className="flex items-center justify-between">
-          {/* View Mode Toggle - Left side */}
-          <div className="flex items-center">
-            <ViewModeToggle
-              value={viewMode}
-              onChange={handleViewModeChange}
-              options={viewModeOptions}
-              size="md"
-            />
-          </div>
-
-          {/* Actions - Right side */}
-          <div className="flex items-center space-x-3">
-            {selectionMode ? (
-              <>
-                {selectedCustomers.length > 0 && (
-                  <>
-                    <ActionButton
-                      label={`Export (${selectedCustomers.length})`}
-                      variant="ghost"
-                      size="sm"
-                      icon={Download}
-                      onClick={handleExportSelected}
-                    />
-                    <ActionButton
-                      label={`Bulk Edit (${selectedCustomers.length})`}
-                      variant="ghost"
-                      size="sm"
-                      icon={Edit}
-                      onClick={handleBulkEdit}
-                    />
-                  </>
-                )}
-                <ActionButton
-                  label="Cancel Selection"
-                  variant="ghost"
-                  size="sm"
-                  icon={Square}
-                  onClick={() => {
-                    setSelectedCustomers([])
-                    setSelectionMode(false)
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                <ActionButton
-                  label="Select"
-                  variant="ghost"
-                  size="sm"
-                  icon={CheckSquare}
-                  onClick={() => setSelectionMode(true)}
-                />
-                <ActionButton
-                  label="Export All"
-                  variant="ghost"
-                  size="sm"
-                  icon={Download}
-                  onClick={() => showSuccess('Export functionality coming soon')}
-                />
-              </>
-            )}
-            <ActionButton
-              label="Add Customer"
-              variant="primary"
-              size="md"
-              onClick={() => setShowAddModal(true)}
-            />
-          </div>
-        </div>
-
-        {/* Enhanced Search and Filter Controls */}
+        {/* All-in-one Search and Action Toolbar */}
         <div className="space-y-4">
           <SearchFilterToolbar
             searchQuery={searchQuery}
@@ -497,6 +425,68 @@ const CustomersPage: React.FC = () => {
               total: totalCount,
               filtered: displayedCustomers.length
             }}
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+            viewModeOptions={viewModeOptions}
+            additionalActions={
+              <>
+                {selectionMode ? (
+                  <>
+                    {selectedCustomers.length > 0 && (
+                      <>
+                        <ActionButton
+                          label={`Export (${selectedCustomers.length})`}
+                          variant="ghost"
+                          size="sm"
+                          icon={Download}
+                          onClick={handleExportSelected}
+                        />
+                        <ActionButton
+                          label={`Bulk Edit (${selectedCustomers.length})`}
+                          variant="ghost"
+                          size="sm"
+                          icon={Edit}
+                          onClick={handleBulkEdit}
+                        />
+                      </>
+                    )}
+                    <ActionButton
+                      label="Cancel Selection"
+                      variant="ghost"
+                      size="sm"
+                      icon={Square}
+                      onClick={() => {
+                        setSelectedCustomers([])
+                        setSelectionMode(false)
+                      }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <ActionButton
+                      label="Select"
+                      variant="ghost"
+                      size="sm"
+                      icon={CheckSquare}
+                      onClick={() => setSelectionMode(true)}
+                    />
+                    <ActionButton
+                      label="Export All"
+                      variant="ghost"
+                      size="sm"
+                      icon={Download}
+                      onClick={() => showSuccess('Export functionality coming soon')}
+                    />
+                  </>
+                )}
+                <ActionButton
+                  label="Add Customer"
+                  variant="primary"
+                  size="md"
+                  onClick={() => setShowAddModal(true)}
+                />
+              </>
+            }
           />
         </div>
 

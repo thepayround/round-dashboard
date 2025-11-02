@@ -175,62 +175,59 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
   return (
     <>
       <div className={className}>
-        {/* Enhanced search toolbar with consistent styling */}
-        <div className="p-6">
+        {/* All-in-one toolbar - everything in a single row */}
+        <div>
           <div className="flex flex-col gap-3">
-            {/* Main toolbar - aligned row */}
-            <div className="flex flex-col xs:flex-row gap-3 xs:items-center">
-              {/* Search Input - fixed height container */}
-              <div className="flex-1 min-w-0">
-                <SearchInput
-                  value={searchQuery}
-                  onChange={onSearchChange}
-                  onClear={onClearSearch}
-                  placeholder={searchPlaceholder}
-                  isSearching={isSearching}
-                  className="w-full"
-                />
-              </div>
-              
-              {/* Actions Section - Mobile stacked, desktop inline */}
-              <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 flex-shrink-0">
-                {/* Additional Actions */}
-                {additionalActions && (
-                  <div className="flex items-center justify-center xs:justify-start">
-                    {additionalActions}
+            {/* Main toolbar - single row with all tools */}
+            <div className="flex items-center justify-between gap-2">
+              {/* Left Section - View Mode, Search, Filters */}
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                {/* View Mode Toggle - First on left */}
+                {viewMode && onViewModeChange && viewModeOptions && (
+                  <div className="flex-shrink-0">
+                    <ViewModeToggle
+                      value={viewMode}
+                      onChange={onViewModeChange}
+                      options={viewModeOptions}
+                    />
                   </div>
                 )}
                 
-                {/* Bottom row on mobile, inline on desktop */}
-                <div className="flex items-center gap-2">
-                  {/* Filters Button */}
-                  {filterFields.length > 0 && (
-                    <button
-                      onClick={onToggleFilters}
-                      className="btn-secondary flex items-center justify-center gap-2 flex-1 xs:flex-none"
-                    >
-                      <Filter className="w-4 h-4" />
-                      <span className="xs:inline">Filters</span>
-                    </button>
-                  )}
-                  
-                  {/* View Mode Toggle */}
-                  {viewMode && onViewModeChange && viewModeOptions && (
-                    <div className="flex-shrink-0">
-                      <ViewModeToggle
-                        value={viewMode}
-                        onChange={onViewModeChange}
-                        options={viewModeOptions}
-                      />
-                    </div>
-                  )}
+                {/* Search Input - Flexible middle section */}
+                <div className="flex-1 min-w-[200px] max-w-md">
+                  <SearchInput
+                    value={searchQuery}
+                    onChange={onSearchChange}
+                    onClear={onClearSearch}
+                    placeholder={searchPlaceholder}
+                    isSearching={isSearching}
+                    className="w-full"
+                  />
                 </div>
+                
+                {/* Filters Button */}
+                {filterFields.length > 0 && (
+                  <button
+                    onClick={onToggleFilters}
+                    className="btn-secondary flex items-center gap-2 flex-shrink-0"
+                  >
+                    <Filter className="w-4 h-4" />
+                    <span>Filters</span>
+                  </button>
+                )}
               </div>
+              
+              {/* Right Section - Additional Actions stay at far right */}
+              {additionalActions && (
+                <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
+                  {additionalActions}
+                </div>
+              )}
             </div>
 
             {/* Search Results Info - Enhanced styling */}
             {searchResults && (searchQuery || searchResults.filtered < searchResults.total) && (
-              <div className="flex items-center gap-3 text-sm -mt-2 px-2">
+              <div className="flex items-center gap-3 text-sm -mt-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-[#14BDEA]" />
                   <span className="text-white/70">
