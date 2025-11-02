@@ -173,7 +173,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormInput
-                          label={<span>First Name <span className="text-red-400">*</span></span>}
+                          label={<span>First Name <span className="text-[#D417C8]">*</span></span>}
                           leftIcon={User}
                           value={formData.firstName}
                           onChange={(e) => handleInputChange('firstName', e.target.value)}
@@ -182,7 +182,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                         />
                         
                         <FormInput
-                          label={<span>Last Name <span className="text-red-400">*</span></span>}
+                          label={<span>Last Name <span className="text-[#D417C8]">*</span></span>}
                           leftIcon={User}
                           value={formData.lastName}
                           onChange={(e) => handleInputChange('lastName', e.target.value)}
@@ -193,7 +193,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormInput
-                          label={<span>Email Address <span className="text-red-400">*</span></span>}
+                          label={<span>Email Address <span className="text-[#D417C8]">*</span></span>}
                           type="email"
                           leftIcon={Mail}
                           value={formData.email}
@@ -233,7 +233,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormInput
-                          label={<span>Company Name <span className="text-red-400">*</span></span>}
+                          label={<span>Company Name <span className="text-[#D417C8]">*</span></span>}
                           leftIcon={Building2}
                           value={formData.company}
                           onChange={(e) => handleInputChange('company', e.target.value)}
@@ -252,7 +252,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormInput
-                          label={<span>Contact Email <span className="text-red-400">*</span></span>}
+                          label={<span>Contact Email <span className="text-[#D417C8]">*</span></span>}
                           type="email"
                           leftIcon={Mail}
                           value={formData.email}

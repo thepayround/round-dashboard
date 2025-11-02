@@ -195,7 +195,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
               animate={{ opacity: 1, y: 0 }}
               className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
             >
-              <div className="flex items-center space-x-2 text-red-400">
+              <div className="flex items-center space-x-2 text-[#D417C8]">
                 <AlertCircle className="w-5 h-5" />
                 <span className="text-sm font-medium">{apiError}</span>
               </div>
@@ -235,7 +235,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 text-red-400 text-sm"
+                className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm"
               >
                 <AlertCircle className="w-4 h-4" />
                 <span>{getFieldError(errors, 'currentPassword')?.message}</span>
@@ -287,7 +287,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 text-red-400 text-sm"
+                className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm"
               >
                 <AlertCircle className="w-4 h-4" />
                 <span>{getFieldError(errors, 'newPassword')?.message}</span>
@@ -328,7 +328,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 text-red-400 text-sm"
+                className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm"
               >
                 <AlertCircle className="w-4 h-4" />
                 <span>{getFieldError(errors, 'confirmPassword')?.message}</span>

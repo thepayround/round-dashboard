@@ -149,7 +149,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         </div>
         
         {error && (
-          <p className={variant === 'auth' ? 'text-sm auth-validation-error flex items-center space-x-2' : 'text-sm text-red-400'}>
+          <p className={variant === 'auth' ? 'text-sm auth-validation-error flex items-center space-x-2' : 'text-sm text-[#D417C8]'}>
             {error}
           </p>
         )}

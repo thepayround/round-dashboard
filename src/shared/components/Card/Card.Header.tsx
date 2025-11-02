@@ -28,7 +28,7 @@ const statusVariants = {
   archived: 'text-gray-400 bg-gray-500/10 border-gray-500/20',
   success: 'text-green-400 bg-green-500/10 border-green-500/20',
   warning: 'text-orange-400 bg-orange-500/10 border-orange-500/20',
-  danger: 'text-red-400 bg-red-500/10 border-red-500/20'
+  danger: 'text-[#D417C8] bg-red-500/10 border-red-500/20'
 }
 
 const badgeVariants = {

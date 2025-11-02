@@ -126,7 +126,7 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
 
         {/* Error Message */}
         {error && (
-          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-[#D417C8] text-sm">
             {error}
           </div>
         )}

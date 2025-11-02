@@ -58,7 +58,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
       case 1: return 'bg-green-500/20 text-green-400 border border-green-500/30'
       case 2: return 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
       case 3: return 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
-      case 4: return 'bg-red-500/20 text-red-400 border border-red-500/30'
+      case 4: return 'bg-red-500/20 text-[#D417C8] border border-red-500/30'
       default: return 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
     }
   }
@@ -299,8 +299,8 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                     >
                       <Edit className="w-4 h-4" />
                     </Link>
-                    <button 
-                      className="p-2 text-[#a3a3a3] hover:text-white hover:bg-[#1d1d20] rounded-lg transition-all duration-200"
+                    <button
+                      className="p-2 text-[#a3a3a3] hover:text-white rounded-lg transition-all duration-200"
                       title="More actions"
                     >
                       <MoreHorizontal className="w-4 h-4" />

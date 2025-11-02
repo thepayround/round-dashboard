@@ -126,7 +126,7 @@ export const OrganizationForm = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label htmlFor="companyName" className="auth-label">
-                  Company Name <span className="text-red-400">*</span>
+                  Company Name <span className="text-[#D417C8]">*</span>
                 </label>
                 <div className="input-container">
                   <Building className="input-icon-left auth-icon-primary" />
@@ -141,7 +141,7 @@ export const OrganizationForm = ({
                     disabled={readOnly}
                   />
                 </div>
-                {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
+                {errors.companyName && <p className="mt-1 text-sm text-[#D417C8]">{errors.companyName}</p>}
               </div>
 
               <div className="space-y-2">
@@ -161,7 +161,7 @@ export const OrganizationForm = ({
                     disabled={readOnly}
                   />
                 </div>
-                {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
+                {errors.website && <p className="mt-1 text-sm text-[#D417C8]">{errors.website}</p>}
               </div>
             </div>
 
@@ -183,7 +183,7 @@ export const OrganizationForm = ({
                   disabled={readOnly}
                 />
               </div>
-              {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
+              {errors.description && <p className="mt-1 text-sm text-[#D417C8]">{errors.description}</p>}
             </div>
           </div>
         </motion.div>
@@ -206,7 +206,7 @@ export const OrganizationForm = ({
             {/* Country */}
             <div className="space-y-2">
               <label htmlFor="country" className="auth-label">
-                Country <span className="text-red-400">*</span>
+                Country <span className="text-[#D417C8]">*</span>
               </label>
               <ApiDropdown
                 id="country"
@@ -218,13 +218,13 @@ export const OrganizationForm = ({
                 allowClear
                 disabled={readOnly}
               />
-              {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
+              {errors.country && <p className="mt-1 text-sm text-[#D417C8]">{errors.country}</p>}
             </div>
 
             {/* Industry */}
             <div className="space-y-2">
               <label htmlFor="industry" className="auth-label">
-                Industry <span className="text-red-400">*</span>
+                Industry <span className="text-[#D417C8]">*</span>
               </label>
               <ApiDropdown
                 id="industry"
@@ -236,13 +236,13 @@ export const OrganizationForm = ({
                 allowClear
                 disabled={readOnly}
               />
-              {errors.industry && <p className="mt-1 text-sm text-red-400">{errors.industry}</p>}
+              {errors.industry && <p className="mt-1 text-sm text-[#D417C8]">{errors.industry}</p>}
             </div>
 
             {/* Company Size */}
             <div className="space-y-2">
               <label htmlFor="companySize" className="auth-label">
-                Company Size <span className="text-red-400">*</span>
+                Company Size <span className="text-[#D417C8]">*</span>
               </label>
               <ApiDropdown
                 id="companySize"
@@ -254,13 +254,13 @@ export const OrganizationForm = ({
                 allowClear
                 disabled={readOnly}
               />
-              {errors.companySize && <p className="mt-1 text-sm text-red-400">{errors.companySize}</p>}
+              {errors.companySize && <p className="mt-1 text-sm text-[#D417C8]">{errors.companySize}</p>}
             </div>
 
             {/* Organization Type */}
             <div className="space-y-2">
               <label htmlFor="organizationType" className="auth-label">
-                Organization Type <span className="text-red-400">*</span>
+                Organization Type <span className="text-[#D417C8]">*</span>
               </label>
               <ApiDropdown
                 id="organizationType"
@@ -272,7 +272,7 @@ export const OrganizationForm = ({
                 allowClear
                 disabled={readOnly}
               />
-              {errors.organizationType && <p className="mt-1 text-sm text-red-400">{errors.organizationType}</p>}
+              {errors.organizationType && <p className="mt-1 text-sm text-[#D417C8]">{errors.organizationType}</p>}
             </div>
           </div>
         </motion.div>
@@ -295,7 +295,7 @@ export const OrganizationForm = ({
             {/* Registration Number */}
             <div className="space-y-2">
               <label htmlFor="registrationNumber" className="auth-label">
-                Registration Number <span className="text-red-400">*</span>
+                Registration Number <span className="text-[#D417C8]">*</span>
               </label>
               <div className="input-container">
                 <Hash className="input-icon-left auth-icon-primary" />
@@ -310,13 +310,13 @@ export const OrganizationForm = ({
                   disabled={readOnly}
                 />
               </div>
-              {errors.registrationNumber && <p className="mt-1 text-sm text-red-400">{errors.registrationNumber}</p>}
+              {errors.registrationNumber && <p className="mt-1 text-sm text-[#D417C8]">{errors.registrationNumber}</p>}
             </div>
 
             {/* Tax ID */}
             <div className="space-y-2">
               <label htmlFor="taxId" className="auth-label">
-                Tax ID <span className="text-red-400">*</span>
+                Tax ID <span className="text-[#D417C8]">*</span>
               </label>
               <div className="input-container">
                 <CreditCard className="input-icon-left auth-icon-primary" />
@@ -331,7 +331,7 @@ export const OrganizationForm = ({
                   disabled={readOnly}
                 />
               </div>
-              {errors.taxId && <p className="mt-1 text-sm text-red-400">{errors.taxId}</p>}
+              {errors.taxId && <p className="mt-1 text-sm text-[#D417C8]">{errors.taxId}</p>}
             </div>
           </div>
         </motion.div>
@@ -355,7 +355,7 @@ export const OrganizationForm = ({
               {/* Currency */}
               <div className="space-y-2">
                 <label htmlFor="currency" className="auth-label">
-                  Currency <span className="text-red-400">*</span>
+                  Currency <span className="text-[#D417C8]">*</span>
                 </label>
                 <ApiDropdown
                   config={currencyDropdownConfig}
@@ -366,7 +366,7 @@ export const OrganizationForm = ({
                   allowClear
                   disabled={readOnly}
                 />
-                {errors.currency && <p className="mt-1 text-sm text-red-400">{errors.currency}</p>}
+                {errors.currency && <p className="mt-1 text-sm text-[#D417C8]">{errors.currency}</p>}
               </div>
 
               {/* Revenue */}
@@ -392,7 +392,7 @@ export const OrganizationForm = ({
                     disabled={readOnly}
                   />
                 </div>
-                {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}
+                {errors.revenue && <p className="mt-1 text-sm text-[#D417C8]">{errors.revenue}</p>}
               </div>
             </div>
           </motion.div>
@@ -428,7 +428,7 @@ export const OrganizationForm = ({
                   disabled={readOnly}
                 />
                 {errors.timeZone && (
-                  <p className="text-red-400 text-xs mt-1">{errors.timeZone}</p>
+                  <p className="text-[#D417C8] text-xs mt-1">{errors.timeZone}</p>
                 )}
               </div>
 

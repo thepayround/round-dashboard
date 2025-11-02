@@ -26,7 +26,7 @@ const toastStyles = {
     background: 'bg-red-500/10',
     border: 'border-red-500/20',
     icon: AlertTriangle,
-    iconColor: 'text-red-400',
+    iconColor: 'text-[#D417C8]',
     textColor: 'text-white'
   },
   warning: {

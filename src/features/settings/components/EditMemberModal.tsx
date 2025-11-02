@@ -149,7 +149,7 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
         {/* Error Message */}
         {error && (
           <div className="relative">
-            <div className="p-3 bg-red-500/15 border border-red-500/25 rounded-lg text-red-400 text-sm">
+            <div className="p-3 bg-red-500/15 border border-red-500/25 rounded-lg text-[#D417C8] text-sm">
               {error}
             </div>
           </div>

@@ -437,7 +437,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <label htmlFor="firstName" className="auth-label">
-                        First Name <span className="text-red-400">*</span>
+                        First Name <span className="text-[#D417C8]">*</span>
                       </label>
                       <div className="input-container">
                         <User className="input-icon-left auth-icon-primary" />
@@ -455,7 +455,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                     
                     <div>
                       <label htmlFor="lastName" className="auth-label">
-                        Last Name <span className="text-red-400">*</span>
+                        Last Name <span className="text-[#D417C8]">*</span>
                       </label>
                       <div className="input-container">
                         <User className="input-icon-left auth-icon-primary" />
@@ -473,7 +473,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                     
                     <div>
                       <label htmlFor="email" className="auth-label">
-                        Email Address <span className="text-red-400">*</span>
+                        Email Address <span className="text-[#D417C8]">*</span>
                       </label>
                       <div className="input-container">
                         <Mail className="input-icon-left auth-icon-primary" />
@@ -524,7 +524,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                     {formData.type === CustomerType.Business && (
                       <div>
                         <label htmlFor="company" className="auth-label">
-                          Company <span className="text-red-400">*</span>
+                          Company <span className="text-[#D417C8]">*</span>
                         </label>
                         <div className="input-container">
                           <Building2 className="input-icon-left auth-icon-primary" />

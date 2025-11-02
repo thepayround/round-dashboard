@@ -188,11 +188,6 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
       <div className="space-y-6">
         <div className="p-4">
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <UserPlus className="w-4 h-4 text-[#32A1E4]" />
-              <h3 className="text-sm font-normal tracking-tight text-white">Invite team members</h3>
-            </div>
-
             {/* Invite Form */}
             <div className="flex gap-3 items-end">
               <div className="flex-1">
@@ -264,7 +259,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                     </div>
                     <button
                       onClick={() => handleRemoveInvitation(invitation.id)}
-                      className="p-1.5 rounded text-red-400 hover:bg-red-400/10 transition-colors duration-200"
+                      className="p-1.5 rounded text-[#D417C8] hover:bg-red-400/10 transition-colors duration-200"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>

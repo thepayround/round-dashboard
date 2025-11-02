@@ -65,7 +65,7 @@ export const BusinessSettingsStep = ({
             error={!!errors.timezone}
             allowClear={false}
           />
-          {errors.timezone && <p className="mt-1 text-sm text-red-400">{errors.timezone}</p>}
+          {errors.timezone && <p className="mt-1 text-sm text-[#D417C8]">{errors.timezone}</p>}
         </div>
 
         {/* Fiscal Year Start */}
@@ -79,7 +79,7 @@ export const BusinessSettingsStep = ({
             allowClear={false}
           />
           {errors.fiscalYearStart && (
-            <p className="mt-1 text-sm text-red-400">{errors.fiscalYearStart}</p>
+            <p className="mt-1 text-sm text-[#D417C8]">{errors.fiscalYearStart}</p>
           )}
         </div>
       </div>

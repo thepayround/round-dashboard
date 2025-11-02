@@ -265,7 +265,7 @@ export const EmailConfirmationPage = () => {
               transition={{ delay: 0.5 }}
               className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
             >
-              <div className="flex items-center space-x-2 text-red-400">
+              <div className="flex items-center space-x-2 text-[#D417C8]">
                 <AlertCircle className="w-5 h-5" />
                 <span className="text-sm">
                   The confirmation link may have expired or is invalid.

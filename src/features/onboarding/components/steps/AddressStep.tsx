@@ -173,7 +173,7 @@ export const AddressStep = ({
               allowClear={!readOnly}
               disabled={readOnly}
             />
-            {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
+            {errors.country && <p className="mt-1 text-sm text-[#D417C8]">{errors.country}</p>}
           </div>
         </div>
       </div>

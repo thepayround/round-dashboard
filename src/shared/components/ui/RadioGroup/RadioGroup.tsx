@@ -45,7 +45,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
       {label && (
         <label className="block text-sm font-normal text-white/80 mb-3">
           {label}
-          {required && <span className="text-red-400 ml-1">*</span>}
+          {required && <span className="text-[#D417C8] ml-1">*</span>}
         </label>
       )}
 
@@ -96,7 +96,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
       </RadioGroupPrimitive.Root>
 
       {error && (
-        <p className="mt-2 text-sm text-red-400">{error}</p>
+        <p className="mt-2 text-sm text-[#D417C8]">{error}</p>
       )}
     </div>
   )

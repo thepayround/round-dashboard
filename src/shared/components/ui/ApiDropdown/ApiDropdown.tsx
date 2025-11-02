@@ -274,7 +274,7 @@ export const ApiDropdown = <T = unknown>({
         minWidth: '280px',
       }}
     >
-      <div className="bg-[#1a1d23] border border-white/20 rounded-lg shadow-2xl overflow-hidden max-h-80 flex flex-col ring-1 ring-white/10">
+      <div className="bg-[#101011] border border-white/20 rounded-lg shadow-2xl overflow-hidden max-h-80 flex flex-col ring-1 ring-white/10">
         {/* Search input */}
         <div className="p-2.5 border-b border-white/10">
             <div className="relative">

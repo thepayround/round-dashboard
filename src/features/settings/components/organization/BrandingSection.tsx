@@ -72,7 +72,7 @@ export const BrandingSection: React.FC = () => {
                       <Eye className="w-3 h-3" />
                       Preview
                     </button>
-                    <button className="flex items-center gap-1 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-xs rounded-lg">
+                    <button className="flex items-center gap-1 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-[#D417C8] text-xs rounded-lg">
                       <Trash2 className="w-3 h-3" />
                       Remove
                     </button>
@@ -115,7 +115,7 @@ export const BrandingSection: React.FC = () => {
                       <Eye className="w-3 h-3" />
                       Preview
                     </button>
-                    <button className="flex items-center gap-1 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-xs rounded-lg">
+                    <button className="flex items-center gap-1 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-[#D417C8] text-xs rounded-lg">
                       <Trash2 className="w-3 h-3" />
                       Remove
                     </button>

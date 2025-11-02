@@ -51,7 +51,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             className="block text-sm font-normal text-white/80 mb-2"
           >
             {label}
-            {required && <span className="text-red-400 ml-1">*</span>}
+            {required && <span className="text-[#D417C8] ml-1">*</span>}
           </label>
         )}
 
@@ -89,7 +89,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="flex items-center space-x-2 text-red-400 text-sm"
+                  className="flex items-center space-x-2 text-[#D417C8] text-sm"
                   role="alert"
                   aria-live="polite"
                 >

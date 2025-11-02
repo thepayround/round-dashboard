@@ -167,7 +167,7 @@ export const InvitationAcceptancePage = () => {
         <div className="w-full max-w-[360px] mx-auto relative z-10">
           <div className="auth-card text-center">
             <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <AlertCircle className="w-8 h-8 text-red-400" />
+              <AlertCircle className="w-8 h-8 text-[#D417C8]" />
             </div>
             <h1 className="text-2xl font-medium tracking-tight auth-text mb-2">Invalid Invitation</h1>
             <p className="auth-text-muted mb-6">{tokenError}</p>
@@ -259,7 +259,7 @@ export const InvitationAcceptancePage = () => {
               animate={{ opacity: 1, y: 0 }}
               className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
             >
-              <div className="flex items-center space-x-2 text-red-400">
+              <div className="flex items-center space-x-2 text-[#D417C8]">
                 <AlertCircle className="w-5 h-5" />
                 <span className="text-sm font-medium">{apiError}</span>
               </div>

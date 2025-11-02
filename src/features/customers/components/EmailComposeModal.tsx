@@ -102,7 +102,7 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
                 />
                 
                 <FormInput
-                  label={<span>Subject <span className="text-red-400">*</span></span>}
+                  label={<span>Subject <span className="text-[#D417C8]">*</span></span>}
                   leftIcon={FileText}
                   value={formData.subject}
                   onChange={(e) => handleInputChange('subject', e.target.value)}
@@ -138,7 +138,7 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="auth-label" htmlFor="message-textarea">
-                    Message <span className="text-red-400">*</span>
+                    Message <span className="text-[#D417C8]">*</span>
                   </label>
                   <div className="flex items-center gap-2">
                     <button

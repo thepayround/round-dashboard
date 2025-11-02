@@ -149,7 +149,7 @@ export const TeamManagementPage: React.FC = () => {
   ]
 
   const roleLabels: Record<UserRole, { label: string; color: string; icon: React.ElementType }> = {
-    SuperAdmin: { label: 'Super Admin', color: 'text-red-400', icon: Crown },
+    SuperAdmin: { label: 'Super Admin', color: 'text-[#D417C8]', icon: Crown },
     Admin: { label: 'Admin', color: 'text-orange-400', icon: Shield },
     TeamManager: { label: 'Team Manager', color: 'text-blue-400', icon: Shield },
     TeamMember: { label: 'Team Member', color: 'text-green-400', icon: Users },
@@ -248,16 +248,16 @@ export const TeamManagementPage: React.FC = () => {
     const expiryDate = new Date(invitation.expiresAt)
     
     if (expiryDate < now) {
-      return { label: 'Expired', icon: XCircle, color: 'text-red-400' }
+      return { label: 'Expired', icon: XCircle, color: 'text-[#D417C8]' }
     }
     
     switch (invitation.status) {
       case 'Accepted':
         return { label: 'Accepted', icon: CheckCircle, color: 'text-green-400' }
       case 'Cancelled':
-        return { label: 'Cancelled', icon: XCircle, color: 'text-red-400' }
+        return { label: 'Cancelled', icon: XCircle, color: 'text-[#D417C8]' }
       case 'Expired':
-        return { label: 'Expired', icon: XCircle, color: 'text-red-400' }
+        return { label: 'Expired', icon: XCircle, color: 'text-[#D417C8]' }
       default:
         return { label: 'Pending', icon: Clock, color: 'text-yellow-400' }
     }
@@ -464,7 +464,7 @@ export const TeamManagementPage: React.FC = () => {
                               {!member.isOwner && (
                                 <button
                                   onClick={() => handleRemoveMember(member)}
-                                  className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
+                                  className="p-2 text-[#D417C8] hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
                                   title="Remove Member"
                                 >
                                   <Trash2 className="w-4 h-4" />
@@ -562,7 +562,7 @@ export const TeamManagementPage: React.FC = () => {
                                   </button>
                                   <button
                                     onClick={() => handleCancelInvitation(invitation)}
-                                    className="px-3 py-1 text-xs bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors"
+                                    className="px-3 py-1 text-xs bg-red-500/20 text-[#D417C8] rounded-lg hover:bg-red-500/30 transition-colors"
                                   >
                                     Cancel
                                   </button>

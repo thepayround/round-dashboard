@@ -59,7 +59,7 @@ const colorVariants = {
     iconBg: 'from-red-500/30 to-red-500/10',
     iconColor: 'text-red-500',
     border: 'border-red-500/20',
-    hoverColor: 'group-hover:text-red-400'
+    hoverColor: 'group-hover:text-[#D417C8]'
   },
   neutral: {
     gradient: 'from-gray-500/20 via-transparent to-transparent',
@@ -97,7 +97,7 @@ const ActionCardComponent = ({
       whileHover={{ y: -1, scale: 1.01 }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
-      <div className={`bg-[#171719] border border-[#1e1f22] rounded-lg p-6 relative overflow-hidden group hover:bg-[#1d1d20] hover:border-[#25262a] transition-all duration-200 ${
+      <div className={`bg-[#171719] border border-[#1e1f22] rounded-lg p-6 relative overflow-hidden group hover:border-[#25262a] transition-all duration-200 ${
         disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
       } ${className}`}>
         {/* Hover Gradient Effect */}

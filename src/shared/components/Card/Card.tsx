@@ -87,10 +87,10 @@ const colorVariants = {
     iconBg: 'bg-red-500/10',
     border: 'border-red-500/20',
     iconColor: 'text-red-500',
-    hoverColor: 'group-hover:text-red-400'
+    hoverColor: 'group-hover:text-[#D417C8]'
   },
   neutral: {
-    iconBg: 'bg-[#1d1d20]',
+    iconBg: 'bg-transparent',
     border: 'border-[#25262a]',
     iconColor: 'text-[#a3a3a3]',
     hoverColor: 'group-hover:text-white'
@@ -133,10 +133,9 @@ const CardComponent = ({
   // Polar-inspired clean design
   const baseClasses = (nested || variant === 'nested')
     ? `
-      bg-[#1d1d20] border border-[#25262a] rounded-lg
       transition-all duration-200
       ${paddingClass}
-      ${clickable || onClick ? 'cursor-pointer hover:bg-[#212124] hover:border-[#2c2d31]' : ''}
+      ${clickable || onClick ? 'cursor-pointer hover:border-[#2c2d31]' : ''}
       ${className}
     `.trim()
     : `
@@ -144,7 +143,7 @@ const CardComponent = ({
       relative overflow-hidden group
       transition-all duration-200
       ${paddingClass}
-      ${clickable || onClick ? 'cursor-pointer hover:bg-[#1d1d20] hover:border-[#25262a]' : ''}
+      ${clickable || onClick ? 'cursor-pointer hover:border-[#25262a]' : ''}
       ${className}
     `.trim()
 

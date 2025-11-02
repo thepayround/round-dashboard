@@ -131,7 +131,7 @@ const CustomerDetailPage: React.FC = () => {
         label: 'Suspended'
       },
       4: { // Cancelled
-        variant: 'bg-red-500/20 text-red-400 border-red-500/30',
+        variant: 'bg-red-500/20 text-[#D417C8] border-red-500/30',
         icon: '✕',
         label: 'Cancelled'
       }
@@ -176,7 +176,7 @@ const CustomerDetailPage: React.FC = () => {
     return (
       <DashboardLayout>
         <div className="flex flex-col items-center justify-center py-24">
-          <AlertCircle className="w-16 h-16 text-red-400 mb-4" />
+          <AlertCircle className="w-16 h-16 text-[#D417C8] mb-4" />
           <h3 className="text-lg font-medium tracking-tight text-white mb-2">
             {error ? 'Error Loading Customer' : 'Customer Not Found'}
           </h3>
@@ -271,7 +271,7 @@ const CustomerDetailPage: React.FC = () => {
               </button>
               <button 
                 onClick={() => setIsDangerousActionsModalOpen(true)}
-                className="p-3 text-white/70 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200 border border-white/10"
+                className="p-3 text-white/70 hover:text-[#D417C8] hover:bg-red-500/10 rounded-lg transition-all duration-200 border border-white/10"
                 title="Dangerous Actions"
               >
                 <MoreHorizontal className="w-4 h-4" />
@@ -606,7 +606,7 @@ const CustomerDetailPage: React.FC = () => {
                     <span className={`text-sm px-3 py-1 rounded-lg font-normal tracking-tight ${
                       customer.portalAccess 
                         ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
-                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                        : 'bg-red-500/20 text-[#D417C8] border border-red-500/30'
                     }`}>
                       {customer.portalAccess ? 'Enabled' : 'Disabled'}
                     </span>
@@ -619,7 +619,7 @@ const CustomerDetailPage: React.FC = () => {
                     <span className={`text-sm px-3 py-1 rounded-lg font-normal tracking-tight ${
                       customer.autoCollection 
                         ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
-                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                        : 'bg-red-500/20 text-[#D417C8] border border-red-500/30'
                     }`}>
                       {customer.autoCollection ? 'Enabled' : 'Disabled'}
                     </span>

@@ -173,7 +173,7 @@ export const ConfirmationPendingPage = () => {
                   : 'bg-red-500/10 border-red-500/20'
               }`}
             >
-              <p className={`text-sm ${resendSuccess ? 'text-green-400' : 'text-red-400'}`}>
+              <p className={`text-sm ${resendSuccess ? 'text-green-400' : 'text-[#D417C8]'}`}>
                 {resendMessage}
               </p>
             </motion.div>

@@ -92,7 +92,7 @@ export const AuthInput = forwardRef<
       {label && (
         <label htmlFor={id} className="block text-sm font-normal text-white/90 tracking-tight">
           {label}
-          {props.required && <span className="text-red-400 ml-1">*</span>}
+          {props.required && <span className="text-[#D417C8] ml-1">*</span>}
         </label>
       )}
 
@@ -123,7 +123,7 @@ export const AuthInput = forwardRef<
         {/* Error Icon */}
         {error && !RightIcon && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10">
-            <AlertCircle className="w-4 h-4 text-red-400" />
+            <AlertCircle className="w-4 h-4 text-[#D417C8]" />
           </div>
         )}
       </div>
@@ -133,7 +133,7 @@ export const AuthInput = forwardRef<
         <motion.div
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center space-x-2 text-sm text-red-400"
+          className="flex items-center space-x-2 text-sm text-[#D417C8]"
         >
           <AlertCircle className="w-4 h-4" />
           <span>{error}</span>

@@ -90,7 +90,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
             {!actionType ? (
               <div className="space-y-6">
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
-                  <h3 className="text-sm font-normal tracking-tight tracking-tight text-red-400 mb-2 flex items-center gap-2">
+                  <h3 className="text-sm font-normal tracking-tight tracking-tight text-[#D417C8] mb-2 flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4" />
                     Warning
                   </h3>
@@ -128,7 +128,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                   <div className="bg-white/5 border border-red-500/20 rounded-xl p-5 hover:bg-red-500/5 transition-all duration-200">
                     <div className="flex items-start gap-4 mb-4">
                       <div className="p-2 bg-red-500/20 rounded-lg border border-red-500/30">
-                        <Trash2 className="w-5 h-5 text-red-400" />
+                        <Trash2 className="w-5 h-5 text-[#D417C8]" />
                       </div>
                       <div className="flex-1">
                         <h3 className="text-lg font-medium tracking-tight text-white mb-2">Delete Customer</h3>
@@ -139,7 +139,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                     </div>
                     <button
                       onClick={() => setActionType('delete')}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/30 hover:text-white transition-all duration-200 font-medium"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500/20 border border-red-500/30 text-[#D417C8] rounded-lg hover:bg-red-500/30 hover:text-white transition-all duration-200 font-medium"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete Permanently
@@ -205,11 +205,11 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                     
                     <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-5">
                       <div className="flex items-center gap-3 mb-3">
-                        <Trash2 className="w-5 h-5 text-red-400" />
-                        <h4 className="font-medium text-red-400 tracking-tight">Permanent Deletion</h4>
+                        <Trash2 className="w-5 h-5 text-[#D417C8]" />
+                        <h4 className="font-medium text-[#D417C8] tracking-tight">Permanent Deletion</h4>
                       </div>
                       <p className="text-sm text-white/80 leading-relaxed mb-4">
-                        You are about to <strong className="text-red-400">permanently delete</strong> {customerName} 
+                        You are about to <strong className="text-[#D417C8]">permanently delete</strong> {customerName} 
                         and all associated data. This action cannot be undone.
                       </p>
                       <p className="text-sm text-white/60">

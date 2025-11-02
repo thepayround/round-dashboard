@@ -176,9 +176,9 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-3 h-3 text-red-400 flex-shrink-0" />
+            <AlertCircle className="w-3 h-3 text-[#D417C8] flex-shrink-0" />
             <div>
-              <h4 className="text-red-400 font-normal text-xs">Password change failed</h4>
+              <h4 className="text-[#D417C8] font-normal text-xs">Password change failed</h4>
               <p className="text-red-300/80 text-sm mt-0.5">{error}</p>
             </div>
           </div>

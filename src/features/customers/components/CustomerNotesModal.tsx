@@ -246,7 +246,7 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                           </button>
                           <button
                             onClick={() => handleDeleteNote(note.id)}
-                            className="p-1.5 hover:bg-red-500/20 hover:text-red-400 rounded-lg transition-colors"
+                            className="p-1.5 hover:bg-red-500/20 hover:text-[#D417C8] rounded-lg transition-colors"
                             disabled={isLoading}
                           >
                             <Trash2 className="w-3.5 h-3.5 text-white/70" />

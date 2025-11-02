@@ -83,7 +83,7 @@ export const UserInfoStep = ({
                 className={`auth-input input-with-icon-left ${errors.firstName ? 'auth-input-error' : ''}`}
               />
             </div>
-            {errors.firstName && <p className="mt-1 text-sm text-red-400">{errors.firstName}</p>}
+            {errors.firstName && <p className="mt-1 text-sm text-[#D417C8]">{errors.firstName}</p>}
           </div>
 
           <div>
@@ -101,7 +101,7 @@ export const UserInfoStep = ({
                 className={`auth-input input-with-icon-left ${errors.lastName ? 'auth-input-error' : ''}`}
               />
             </div>
-            {errors.lastName && <p className="mt-1 text-sm text-red-400">{errors.lastName}</p>}
+            {errors.lastName && <p className="mt-1 text-sm text-[#D417C8]">{errors.lastName}</p>}
           </div>
         </div>
 
@@ -121,7 +121,7 @@ export const UserInfoStep = ({
               className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
             />
           </div>
-          {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
+          {errors.email && <p className="mt-1 text-sm text-[#D417C8]">{errors.email}</p>}
         </div>
 
         {/* Phone */}
@@ -140,7 +140,7 @@ export const UserInfoStep = ({
               className={`auth-input input-with-icon-left ${errors.phone ? 'auth-input-error' : ''}`}
             />
           </div>
-          {errors.phone && <p className="mt-1 text-sm text-red-400">{errors.phone}</p>}
+          {errors.phone && <p className="mt-1 text-sm text-[#D417C8]">{errors.phone}</p>}
         </div>
       </div>
     </motion.div>

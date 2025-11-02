@@ -258,7 +258,7 @@ export const UiDropdown = ({
         }}
       >
         <div className="
-          bg-[#1a1d23] border border-white/20
+          bg-[#101011] border border-white/20
           rounded-lg shadow-2xl overflow-hidden
           max-h-80 flex flex-col
           ring-1 ring-white/10

@@ -74,7 +74,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
               border border-white/10
               text-[#a3a3a3] hover:text-white hover:bg-white/5
               hover:border-white/20
-              active:bg-[#1d1d20] active:scale-95
+              active:scale-95
               transition-all duration-200
               focus:outline-none focus:ring-2 focus:ring-[#14BDEA]
             "
