@@ -74,24 +74,6 @@ export const mainNavigationItems: NavItem[] = [
         label: 'Plans',
         icon: Package,
         href: '/catalog/plans'
-      },
-      {
-        id: 'addons',
-        label: 'Add-ons',
-        icon: Zap,
-        href: '/catalog/addons'
-      },
-      {
-        id: 'charges',
-        label: 'Charges',
-        icon: DollarSign,
-        href: '/catalog/charges'
-      },
-      {
-        id: 'coupons',
-        label: 'Coupons',
-        icon: Tag,
-        href: '/catalog/coupons'
       }
     ]
   },

@@ -22,69 +22,6 @@ import { mainNavigationItems, bottomNavigationItems } from '@/shared/config/navi
 
 // User data comes from auth context and API
 
-// Memoized sub-item component to prevent unnecessary re-renders
-const CatalogSubItem = memo(({ 
-  subItem, 
-  index: _index, 
-  isCollapsed, 
-  isActive, 
-  handleTooltipEnter, 
-  handleTooltipLeave,
-  isLastItem 
-}: {
-  subItem: NavItem
-  index: number
-  isCollapsed: boolean
-  isActive: boolean
-  handleTooltipEnter: (itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => void
-  handleTooltipLeave: () => void
-  isLastItem: boolean
-}) => {
-  // Determine the className for active/inactive states
-  const getActiveStateClasses = () => {
-    if (isActive) {
-      return isCollapsed
-        ? 'bg-primary/10 text-white border border-primary/20'
-        : 'bg-primary/10 text-white border border-primary/20'
-    }
-    return 'text-white/60 hover:text-white'
-  }
-
-  return (
-    <Link
-      to={subItem.href}
-      onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
-      onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
-      className={`
-        group relative flex items-center rounded-lg transition-all duration-200
-        ${getActiveStateClasses()}
-        ${
-          isCollapsed 
-            ? 'justify-center w-8 h-8 px-0' 
-            : 'h-8 px-4 mx-2'
-        }
-      `}
-    >
-      <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${
-        isCollapsed 
-          ? 'w-3.5 h-3.5' 
-          : 'w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2'
-      }`} />
-      
-      {!isCollapsed && (
-        <span className="font-normal text-xs text-white/60 whitespace-nowrap">{subItem.label}</span>
-      )}
-
-      {/* Connection indicator for collapsed mode */}
-      {isCollapsed && !isLastItem && (
-        <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/5" />
-      )}
-    </Link>
-  )
-})
-
-CatalogSubItem.displayName = 'CatalogSubItem'
-
 // Memoized navigation item component
 const NavigationItem = memo(({ 
   item, 
@@ -213,16 +150,40 @@ const NavigationItem = memo(({
           )}
 
           {item.subItems.map((subItem, index) => (
-            <CatalogSubItem
+            <Link
               key={subItem.id}
-              subItem={subItem}
-              index={index}
-              isCollapsed={isCollapsed}
-              isActive={isActive(subItem.href)}
-              handleTooltipEnter={handleTooltipEnter}
-              handleTooltipLeave={handleTooltipLeave}
-              isLastItem={index === (item.subItems?.length ?? 0) - 1}
-            />
+              to={subItem.href}
+              onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
+              onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
+              className={`
+                group relative flex items-center rounded-lg transition-all duration-200
+                ${
+                  isActive(subItem.href)
+                    ? 'bg-primary/10 text-white border border-primary/20'
+                    : 'text-white/60 hover:text-white'
+                }
+                ${
+                  isCollapsed
+                    ? 'justify-center w-8 h-8 px-0'
+                    : 'h-8 px-4 mx-2'
+                }
+              `}
+            >
+              <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${
+                isCollapsed
+                  ? 'w-3.5 h-3.5'
+                  : 'w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2'
+              }`} />
+
+              {!isCollapsed && (
+                <span className="font-normal text-xs text-white/60 whitespace-nowrap">{subItem.label}</span>
+              )}
+
+              {/* Connection indicator for collapsed mode */}
+              {isCollapsed && index !== (item.subItems?.length ?? 0) - 1 && (
+                <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/5" />
+              )}
+            </Link>
           ))}
 
           {isCollapsed && (
@@ -276,7 +237,7 @@ export const DashboardLayout = memo(({
         // Fallback to default behavior
       }
     }
-    
+
     if (location.pathname.startsWith('/catalog')) {
       return ['catalog']
     }
@@ -322,7 +283,7 @@ export const DashboardLayout = memo(({
   useEffect(() => {
     if (location.pathname !== lastPathRef.current) {
       lastPathRef.current = location.pathname
-      
+
       if (location.pathname.startsWith('/catalog')) {
         setExpandedItems(prev => {
           if (!prev.includes('catalog')) {
