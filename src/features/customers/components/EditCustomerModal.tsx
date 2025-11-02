@@ -346,7 +346,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   {/* Customer Settings */}
                   <div className="grid grid-cols-1 gap-4">
                     {/* Portal Access Setting */}
-                    <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
+                    <label className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200 cursor-pointer">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 rounded-lg bg-[#42E695]/20 flex items-center justify-center">
                           <User className="w-5 h-5 text-[#42E695]" />
@@ -356,19 +356,20 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                           <p className="text-white/60 text-sm">Allow customer to access their portal dashboard</p>
                         </div>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer" aria-label="Customer Portal Access">
+                      <div className="relative inline-flex items-center">
                         <input
                           type="checkbox"
                           checked={formData.portalAccess}
                           onChange={(e) => handleInputChange('portalAccess', e.target.checked)}
                           className="sr-only peer"
+                          aria-label="Customer Portal Access"
                         />
                         <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#42E695]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#42E695]" />
-                      </label>
-                    </div>
+                      </div>
+                    </label>
 
                     {/* Auto Collection Setting */}
-                    <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
+                    <label className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200 cursor-pointer">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 rounded-lg bg-[#14BDEA]/20 flex items-center justify-center">
                           <Settings className="w-5 h-5 text-[#14BDEA]" />
@@ -378,16 +379,17 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                           <p className="text-white/60 text-sm">Automatically collect payments when invoices are due</p>
                         </div>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer" aria-label="Automatic Payment Collection">
+                      <div className="relative inline-flex items-center">
                         <input
                           type="checkbox"
                           checked={formData.autoCollection}
                           onChange={(e) => handleInputChange('autoCollection', e.target.checked)}
                           className="sr-only peer"
+                          aria-label="Automatic Payment Collection"
                         />
                         <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#14BDEA]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#14BDEA]" />
-                      </label>
-                    </div>
+                      </div>
+                    </label>
                   </div>
                 </div>
 

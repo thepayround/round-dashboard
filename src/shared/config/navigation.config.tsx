@@ -12,16 +12,11 @@
 import {
   LayoutDashboard,
   Users,
-  CreditCard,
-  FileText,
   Package,
   Settings,
   PlusCircle,
   HelpCircle,
   ShoppingCart,
-  Zap,
-  DollarSign,
-  Tag,
   Grid3X3,
 } from 'lucide-react'
 import type { NavItem } from '@/shared/components/DashboardLayout/types'
@@ -44,18 +39,6 @@ export const mainNavigationItems: NavItem[] = [
     label: 'Customers',
     icon: Users,
     href: '/customers'
-  },
-  {
-    id: 'billing',
-    label: 'Billing',
-    icon: CreditCard,
-    href: '/billing'
-  },
-  {
-    id: 'invoices',
-    label: 'Invoices',
-    icon: FileText,
-    href: '/invoices'
   },
   {
     id: 'catalog',

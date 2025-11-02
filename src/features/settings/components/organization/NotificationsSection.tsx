@@ -172,6 +172,7 @@ export const NotificationsSection: React.FC = () => {
                   checked={pref.email}
                   onChange={(e) => updatePreference(pref.id, 'email', e.target.checked)}
                   className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
+                  aria-label={`Enable email notifications for ${pref.title}`}
                 />
               </div>
               <div className="text-center">
@@ -180,6 +181,7 @@ export const NotificationsSection: React.FC = () => {
                   checked={pref.push}
                   onChange={(e) => updatePreference(pref.id, 'push', e.target.checked)}
                   className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
+                  aria-label={`Enable push notifications for ${pref.title}`}
                 />
               </div>
               <div className="text-center">
@@ -188,6 +190,7 @@ export const NotificationsSection: React.FC = () => {
                   checked={pref.sms}
                   onChange={(e) => updatePreference(pref.id, 'sms', e.target.checked)}
                   className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
+                  aria-label={`Enable SMS notifications for ${pref.title}`}
                 />
               </div>
             </div>

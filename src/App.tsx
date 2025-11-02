@@ -19,8 +19,6 @@ import { ResetPasswordPage } from '@/features/auth/pages/ResetPasswordPage'
 import { InvitationAcceptancePage } from '@/features/auth/pages/InvitationAcceptancePage'
 import { GetStartedPage } from '@/features/onboarding/pages/GetStartedPage'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
-import { BillingPage } from '@/features/billing/pages/BillingPage'
-import { InvoicesPage } from '@/features/billing/pages/InvoicesPage'
 import { ProductCatalogPage } from '@/features/catalog/pages/ProductCatalogPage'
 import { PlansPage } from '@/features/catalog/pages/PlansPage'
 import CustomersPage from '@/features/customers/pages/CustomersPage'
@@ -68,22 +66,6 @@ const App = () => {
           element={
             <ProtectedRoute>
               <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/billing"
-          element={
-            <ProtectedRoute>
-              <BillingPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/invoices"
-          element={
-            <ProtectedRoute>
-              <InvoicesPage />
             </ProtectedRoute>
           }
         />

@@ -74,9 +74,9 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       case 'select':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-normal text-white/80 tracking-tight mb-2">
+            <span className="block text-sm font-normal text-white/80 tracking-tight mb-2">
               {field.label}
-            </label>
+            </span>
             <UiDropdown
               options={field.options?.map((option): UiDropdownOption => ({
                 value: option.value ?? option.id,
@@ -127,9 +127,9 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       case 'custom':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-normal text-white/80 tracking-tight mb-2">
+            <span className="block text-sm font-normal text-white/80 tracking-tight mb-2">
               {field.label}
-            </label>
+            </span>
             {field.component}
           </div>
         )

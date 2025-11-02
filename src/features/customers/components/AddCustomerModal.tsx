@@ -397,8 +397,8 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                   
                   {/* Customer Type Selection */}
                   <div className="space-y-3">
-                    <label className="auth-label" htmlFor="customer-type-selection">Customer Type</label>
-                    <div className="grid grid-cols-2 gap-3" id="customer-type-selection">
+                    <span className="auth-label block">Customer Type</span>
+                    <div className="grid grid-cols-2 gap-3">
                       <button
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, type: CustomerType.Individual }))}
@@ -741,18 +741,19 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                       <span>Shipping Address</span>
                     </h3>
                     
-                    <div className="flex items-center space-x-3">
+                    <label className="flex items-center space-x-3 cursor-pointer">
                       <span className="text-sm text-white/70">Same as billing</span>
-                      <label className="relative inline-flex items-center cursor-pointer" aria-label="Use Billing as Shipping Address">
+                      <div className="relative inline-flex items-center">
                         <input
                           type="checkbox"
                           checked={sameAsBinding}
                           onChange={(e) => setSameAsBinding(e.target.checked)}
                           className="sr-only peer"
+                          aria-label="Use Billing as Shipping Address"
                         />
                         <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#00BCD4]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00BCD4]" />
-                      </label>
-                    </div>
+                      </div>
+                    </label>
                   </div>
                   
                   {/* Address Fields or Same as Billing Message */}
@@ -849,17 +850,18 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                   <div className="grid grid-cols-1 gap-4">
                     {/* Portal Access Setting */}
                     <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
-                      <div className="flex items-center space-x-3">
+                      <label htmlFor="portalAccess" className="flex items-center space-x-3 cursor-pointer flex-1">
                         <div className="w-10 h-10 rounded-lg bg-[#42E695]/20 flex items-center justify-center">
                           <User className="w-5 h-5 text-[#42E695]" />
                         </div>
                         <div>
                           <h4 className="text-white font-medium">Customer Portal Access</h4>
-                          <p className="text-white/60 text-sm">Allow customer to access their portal dashboard</p>
+                          <p className="text-white/60 text-sm" id="portal-access-description">Allow customer to access their portal dashboard</p>
                         </div>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer" aria-label="Customer Portal Access">
+                      </label>
+                      <div className="relative inline-flex items-center">
                         <input
+                          id="portalAccess"
                           type="checkbox"
                           checked={formData.portalAccess}
                           onChange={(e) => handleInputChange('portalAccess', e.target.checked)}
@@ -867,22 +869,23 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                           aria-describedby="portal-access-description"
                         />
                         <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#42E695]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#42E695]" />
-                      </label>
+                      </div>
                     </div>
 
                     {/* Auto Collection Setting */}
                     <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
-                      <div className="flex items-center space-x-3">
+                      <label htmlFor="autoCollection" className="flex items-center space-x-3 cursor-pointer flex-1">
                         <div className="w-10 h-10 rounded-lg bg-[#14BDEA]/20 flex items-center justify-center">
                           <Settings className="w-5 h-5 text-[#14BDEA]" />
                         </div>
                         <div>
                           <h4 className="text-white font-medium">Automatic Payment Collection</h4>
-                          <p className="text-white/60 text-sm">Automatically collect payments when invoices are due</p>
+                          <p className="text-white/60 text-sm" id="auto-collection-description">Automatically collect payments when invoices are due</p>
                         </div>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer" aria-label="Automatic Payment Collection">
+                      </label>
+                      <div className="relative inline-flex items-center">
                         <input
+                          id="autoCollection"
                           type="checkbox"
                           checked={formData.autoCollection}
                           onChange={(e) => handleInputChange('autoCollection', e.target.checked)}
@@ -890,7 +893,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                           aria-describedby="auto-collection-description"
                         />
                         <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#14BDEA]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#14BDEA]" />
-                      </label>
+                      </div>
                     </div>
                   </div>
                 </div>

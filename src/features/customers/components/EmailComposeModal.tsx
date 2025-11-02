@@ -112,10 +112,10 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
 
               {/* Quick Templates */}
               <div>
-                <label className="auth-label mb-2" htmlFor="quick-templates">
+                <span className="auth-label mb-2 block">
                   Quick Templates
-                </label>
-                <div className="flex flex-wrap gap-2" id="quick-templates">
+                </span>
+                <div className="flex flex-wrap gap-2">
                   {[
                     { key: 'greeting', label: 'Greeting' },
                     { key: 'followUp', label: 'Follow Up' },

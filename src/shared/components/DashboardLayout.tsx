@@ -476,18 +476,6 @@ export const DashboardLayout = memo(({
         case '3':
           if (event.altKey) {
             event.preventDefault()
-            navigate('/billing')
-          }
-          break
-        case '4':
-          if (event.altKey) {
-            event.preventDefault()
-            navigate('/invoices')
-          }
-          break
-        case '5':
-          if (event.altKey) {
-            event.preventDefault()
             navigate('/catalog')
           }
           break
@@ -894,16 +882,8 @@ export const DashboardLayout = memo(({
                       <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+2</kbd>
                     </div>
                     <div className="flex justify-between">
-                      <span>Billing</span>
-                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+3</kbd>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Invoices</span>
-                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+4</kbd>
-                    </div>
-                    <div className="flex justify-between">
                       <span>Catalog</span>
-                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+5</kbd>
+                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+3</kbd>
                     </div>
                   </div>
                 </div>

@@ -330,9 +330,9 @@ export const AddressForm = ({
             </div>
 
             <div>
-              <label htmlFor="billing-country" className="auth-label">
+              <span className="auth-label block">
                 Country {!isOptional && '*'}
-              </label>
+              </span>
               <ApiDropdown
                 config={countryDropdownConfig}
                 value={currentBillingAddress.country}
@@ -366,18 +366,19 @@ export const AddressForm = ({
               <span>Shipping Address</span>
             </h3>
 
-            <div className="flex items-center space-x-3">
+            <label className="flex items-center space-x-3 cursor-pointer">
               <span className="text-sm auth-text-muted">Same as billing</span>
-              <label className="relative inline-flex items-center cursor-pointer" aria-label="Use Billing as Shipping Address">
+              <div className="relative inline-flex items-center">
                 <input
                   type="checkbox"
                   checked={sameAsBilling}
                   onChange={(e) => handleSameAsBillingChange(e.target.checked)}
                   className="sr-only peer"
+                  aria-label="Use Billing as Shipping Address"
                 />
                 <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#00BCD4]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00BCD4]" />
-              </label>
-            </div>
+              </div>
+            </label>
           </div>
 
           {/* Shipping Address Fields or Same as Billing Message */}
@@ -492,9 +493,9 @@ export const AddressForm = ({
                 </div>
 
                 <div>
-                  <label htmlFor="shipping-country" className="auth-label">
+                  <span className="auth-label block">
                     Country {!isOptional && '*'}
-                  </label>
+                  </span>
                   <ApiDropdown
                     config={countryDropdownConfig}
                     value={currentShippingAddress.country}
