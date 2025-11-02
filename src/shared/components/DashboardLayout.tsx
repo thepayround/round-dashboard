@@ -577,7 +577,7 @@ export const DashboardLayout = memo(({
               {/* Collapse button at same height as logo */}
               <button
                 onClick={toggleSidebar}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200 flex-shrink-0"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200 flex-shrink-0"
                 aria-label="Collapse sidebar"
                 title="Collapse sidebar (Ctrl+Shift+B)"
               >
@@ -597,7 +597,7 @@ export const DashboardLayout = memo(({
               {/* Expand button below logo */}
               <button
                 onClick={toggleSidebar}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200"
                 aria-label="Expand sidebar"
                 title="Expand sidebar (Ctrl+Shift+B)"
               >
