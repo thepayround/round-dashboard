@@ -32,7 +32,7 @@ export const DashboardPage = () => {
         <div className="p-8">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3">
-              <div className="w-6 h-6 border-2 border-[#D417C8] border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border border-[#D417C8] border-t-transparent rounded-full animate-spin" />
               <p className="auth-text-muted">Loading your account...</p>
             </div>
           </div>

@@ -189,7 +189,7 @@ export const EmailConfirmationPage = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                className="w-16 h-16 border-4 border-[#D417C8] border-t-transparent rounded-full"
+                className="w-16 h-16 border border-[#D417C8] border-t-transparent rounded-full"
               />
             </div>
             <h2 className="text-2xl font-medium tracking-tight auth-text mb-4">Confirming Your Email</h2>

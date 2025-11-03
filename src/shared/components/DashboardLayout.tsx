@@ -361,9 +361,11 @@ export const DashboardLayout = memo(({
       left: buttonRect.right + 12 // Position to the right of sidebar
     }
     
-    const userName = state.user.firstName?.trim() && state.user.lastName?.trim()
-      ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
-      : state.user.firstName?.trim() || state.user.email || 'User'
+    const firstName = state.user.firstName && state.user.firstName !== 'undefined' ? state.user.firstName.trim() : ''
+    const lastName = state.user.lastName && state.user.lastName !== 'undefined' ? state.user.lastName.trim() : ''
+    const userName = firstName && lastName
+      ? `${firstName} ${lastName}`
+      : firstName || state.user.email || 'User'
     
     const companyName = (() => {
       if (isRoundAccountLoading) return 'Loading...'
@@ -510,8 +512,9 @@ export const DashboardLayout = memo(({
 
 
   const getInitials = (firstName?: string, lastName?: string) => {
-    const first = firstName?.trim()
-    const last = lastName?.trim()
+    // Handle undefined, null, or the string "undefined"
+    const first = firstName && firstName !== 'undefined' ? firstName.trim() : ''
+    const last = lastName && lastName !== 'undefined' ? lastName.trim() : ''
     
     if (first && last) {
       return `${first[0]}${last[0]}`.toUpperCase()
@@ -772,9 +775,19 @@ export const DashboardLayout = memo(({
               {!isCollapsed && state.user && (
                 <div className="flex-1 text-left overflow-hidden">
                   <div className="font-normal text-sm text-white truncate tracking-tight">
-                    {state.user.firstName?.trim() && state.user.lastName?.trim()
-                      ? `${state.user.firstName.trim()} ${state.user.lastName.trim()}`
-                      : state.user.firstName?.trim() || state.user.email || 'User'}
+                    {(() => {
+                      const firstName = state.user.firstName && state.user.firstName !== 'undefined' ? state.user.firstName.trim() : ''
+                      const lastName = state.user.lastName && state.user.lastName !== 'undefined' ? state.user.lastName.trim() : ''
+                      
+                      if (firstName && lastName) {
+                        return `${firstName} ${lastName}`
+                      } else if (firstName) {
+                        return firstName
+                      } else if (state.user.email) {
+                        return state.user.email
+                      }
+                      return 'User'
+                    })()}
                   </div>
                   <div className="text-xs text-white/60 truncate">
                     {(() => {

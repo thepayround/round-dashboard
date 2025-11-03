@@ -133,18 +133,18 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                   <div className="flex items-center">
                     <label htmlFor="select-all" className="flex items-center cursor-pointer group">
                       <span className="sr-only">Select all customers</span>
-                      <div 
+                      <div
                         className={`
                           flex items-center justify-center
                           w-9 h-9 rounded-lg
                           transition-all duration-200
                           ${isAllSelected || isIndeterminate
-                            ? 'bg-[#D417C8]/10 border-2 border-[#D417C8]' 
+                            ? 'bg-[#D417C8]/10 border border-[#D417C8]'
                             : 'border border-white/10 group-hover:bg-white/5 group-hover:border-white/20'
                           }
                         `}
                       >
-                        <div className={`flex items-center justify-center w-4 h-4 rounded border-2 transition-all ${
+                        <div className={`flex items-center justify-center w-4 h-4 rounded border transition-all ${
                           isAllSelected || isIndeterminate
                             ? 'bg-[#D417C8] border-[#D417C8]'
                             : 'bg-transparent border-[#2c2d31]'
@@ -199,18 +199,18 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                   <td className="px-6 py-4">
                     <label htmlFor={`select-${customer.id}`} className="flex items-center cursor-pointer group">
                       <span className="sr-only">Select customer {customer.displayName}</span>
-                      <div 
+                      <div
                         className={`
                           flex items-center justify-center
                           w-9 h-9 rounded-lg
                           transition-all duration-200
-                          ${selectedIds.includes(customer.id) 
-                            ? 'bg-[#D417C8]/10 border-2 border-[#D417C8]' 
+                          ${selectedIds.includes(customer.id)
+                            ? 'bg-[#D417C8]/10 border border-[#D417C8]'
                             : 'border border-white/10 group-hover:bg-white/5 group-hover:border-white/20'
                           }
                         `}
                       >
-                        <div className={`flex items-center justify-center w-4 h-4 rounded border-2 transition-all ${
+                        <div className={`flex items-center justify-center w-4 h-4 rounded border transition-all ${
                           selectedIds.includes(customer.id)
                             ? 'bg-[#D417C8] border-[#D417C8]'
                             : 'bg-transparent border-[#2c2d31]'

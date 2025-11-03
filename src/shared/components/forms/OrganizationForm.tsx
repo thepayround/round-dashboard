@@ -72,7 +72,7 @@ export const OrganizationForm = ({
   if (data.currency && currenciesLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="w-8 h-8 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+        <div className="w-8 h-8 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
         <span className="ml-3 text-white/60">Loading currency data for {data.currency}...</span>
       </div>
     )

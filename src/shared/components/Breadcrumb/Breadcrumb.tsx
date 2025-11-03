@@ -72,7 +72,7 @@ const BreadcrumbItem: React.FC<{ item: BreadcrumbItem; index: number }> = ({ ite
       className={cn(
         'transition-all duration-200 hover:transition-all',
         isActive
-          ? 'text-[#BD2CD0] font-medium drop-shadow-[0_0_8px_rgba(189,44,208,0.6)]'
+          ? 'text-[#BD2CD0] font-medium'
           : 'text-gray-400 hover:text-gray-200'
       )}
     >

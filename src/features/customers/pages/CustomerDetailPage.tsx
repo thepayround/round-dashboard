@@ -460,7 +460,7 @@ const CustomerDetailPage: React.FC = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="text-center py-12 border-2 border-dashed border-white/20 rounded-xl">
+                  <div className="text-center py-12 border border-dashed border-white/20 rounded-xl">
                     <MapPin className="w-12 h-12 text-white/40 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-white/70 mb-2">No addresses on file</h3>
                     <p className="text-sm text-white/50">

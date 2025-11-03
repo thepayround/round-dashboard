@@ -182,7 +182,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                       >
                         {isDeactivating ? (
                           <>
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <div className="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin" />
                             Deactivating...
                           </>
                         ) : (
@@ -242,7 +242,7 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                       >
                         {isDeleting ? (
                           <>
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <div className="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin" />
                             Deleting...
                           </>
                         ) : (

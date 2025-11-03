@@ -403,7 +403,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                       <button
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, type: CustomerType.Individual }))}
-                        className={`p-4 rounded-xl border-2 transition-all duration-200 flex items-center space-x-3 ${
+                        className={`p-4 rounded-xl border transition-all duration-200 flex items-center space-x-3 ${
                           formData.type === CustomerType.Individual
                             ? 'border-[#D417C8] bg-[#D417C8]/10 text-white'
                             : 'border-white/20 hover:border-white/40 text-white/70 hover:text-white'
@@ -418,7 +418,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                       <button
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, type: CustomerType.Business }))}
-                        className={`p-4 rounded-xl border-2 transition-all duration-200 flex items-center space-x-3 ${
+                        className={`p-4 rounded-xl border transition-all duration-200 flex items-center space-x-3 ${
                           formData.type === CustomerType.Business
                             ? 'border-[#14BDEA] bg-[#14BDEA]/10 text-white'
                             : 'border-white/20 hover:border-white/40 text-white/70 hover:text-white'

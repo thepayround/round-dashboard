@@ -571,11 +571,10 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           style={{ display: 'flex', alignItems: 'center' }}
           className={cn(
             'relative gap-2 h-full min-w-[120px] border-r cursor-pointer transition-all duration-150',
-            // Match auth-input responsive padding exactly  
+            // Match auth-input responsive padding exactly
             'px-3 md:px-4',
             // Match auth-input text styling exactly
             'text-white/95 text-xs md:text-xs font-normal outline-none',
-            '[text-shadow:0_1px_1px_rgba(0,0,0,0.2)]',
             // Use consistent border color from auth-input
             'border-white/10',
             // Match auth-input CSS cascade exactly
@@ -604,7 +603,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         >
           {(() => {
             if (isLoading) {
-              return <div className="w-4 h-4 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+              return <div className="w-4 h-4 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
             }
             if (selectedCountry) {
               return (
@@ -668,7 +667,6 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
               isFocused ? 'text-white' : 'text-white/95',
               'text-xs md:text-xs font-normal', // Match auth-input font size/weight
               'transition-all duration-150', // Match auth-input transition
-              '[text-shadow:0_1px_1px_rgba(0,0,0,0.2)]', // Match auth-input text shadow
               // Match auth-input placeholder styling exactly
               'placeholder:text-white/60 placeholder:font-normal',
               // Autofill/autocomplete styling fixes (same as FormInput)

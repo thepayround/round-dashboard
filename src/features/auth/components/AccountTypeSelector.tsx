@@ -95,7 +95,7 @@ export const AccountTypeSelector = ({
                   border border-white/20
                 `}
               >
-                <accountType.icon className="w-10 h-10 text-white drop-shadow-lg" />
+                <accountType.icon className="w-10 h-10 text-white" />
                 <div className="absolute inset-0 bg-white/10" />
               </div>
             </div>

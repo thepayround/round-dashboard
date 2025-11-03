@@ -35,7 +35,7 @@ export const Checkbox = React.forwardRef<
           checked={checked}
           onCheckedChange={onCheckedChange}
           className={cn(
-            'flex h-5 w-5 items-center justify-center rounded border-2 transition-all',
+            'flex h-5 w-5 items-center justify-center rounded border transition-all',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black',
             'disabled:cursor-not-allowed disabled:opacity-50',
             checked

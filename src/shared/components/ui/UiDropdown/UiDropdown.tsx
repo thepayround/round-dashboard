@@ -406,7 +406,6 @@ export const UiDropdown = ({
           relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
           bg-[#171719] border-[#333333] text-white cursor-pointer flex items-center justify-between
           font-light text-xs outline-none
-          [text-shadow:0_1px_2px_rgba(0,0,0,0.3)]
           ${error ? 'border-[#ef4444]' : ''}
           ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
           ${isOpen && !error ? 'border-[#14bdea] outline-none ring-0 shadow-[0_0_0_3px_rgba(20,189,234,0.15)] transform -translate-y-px' : ''}
@@ -443,7 +442,7 @@ export const UiDropdown = ({
         {/* Right side icons */}
         <div className="flex items-center space-x-1.5">
           {loading && (
-            <div className="w-4 h-4 border-2 border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+            <div className="w-4 h-4 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
           )}
 
           {allowClear && selectedOption && !loading && (

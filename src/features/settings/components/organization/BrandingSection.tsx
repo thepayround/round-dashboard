@@ -63,7 +63,7 @@ export const BrandingSection: React.FC = () => {
               <p className="text-xs text-gray-400">Recommended: 200x60px, PNG format</p>
             </div>
 
-            <div className="border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
+            <div className="border border-dashed border-white/20 rounded-lg p-6 text-center">
               {logoPreview ? (
                 <div className="space-y-3">
                   <img src={logoPreview} alt="Logo preview" className="max-h-16 mx-auto" />
@@ -106,7 +106,7 @@ export const BrandingSection: React.FC = () => {
               <p className="text-xs text-gray-400">Recommended: 32x32px, ICO or PNG format</p>
             </div>
 
-            <div className="border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
+            <div className="border border-dashed border-white/20 rounded-lg p-6 text-center">
               {faviconPreview ? (
                 <div className="space-y-3">
                   <img src={faviconPreview} alt="Favicon preview" className="w-8 h-8 mx-auto" />

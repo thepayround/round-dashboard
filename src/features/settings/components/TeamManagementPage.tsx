@@ -1,24 +1,21 @@
 import { motion } from 'framer-motion'
-import { 
-  Users, 
-  UserPlus, 
-  Mail, 
-  Shield, 
-  MoreHorizontal, 
+import {
+  Users,
+  UserPlus,
+  Mail,
+  Shield,
   Loader2,
   AlertCircle,
   Clock,
   CheckCircle,
   XCircle,
-  Trash2,
-  Edit,
-  Crown,
-
+  Crown
 } from 'lucide-react'
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { EditMemberModal } from '../components/EditMemberModal'
 import { InviteMemberModal } from '../components/InviteMemberModal'
+import TeamMembersTable from '../components/TeamMembersTable'
 import { useTeamManagement } from '../hooks/useTeamManagement'
 import type { TeamMember, TeamInvitation, UserRole } from '../types/team.types'
 
@@ -43,8 +40,12 @@ export const TeamManagementPage: React.FC = () => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
   const [_selectedInvitation, _setSelectedInvitation] = useState<TeamInvitation | null>(null)
+  const [sortConfig, setSortConfig] = useState<{ field: string; direction: 'asc' | 'desc' }>({
+    field: 'fullName',
+    direction: 'asc'
+  })
 
-  const { roundAccount } = useRoundAccount()
+  const { roundAccount} = useRoundAccount()
   const roundAccountId = roundAccount?.roundAccountId
 
   const {
@@ -233,6 +234,47 @@ export const TeamManagementPage: React.FC = () => {
     }
   }
 
+  const handleSort = (field: string) => {
+    setSortConfig(prev => ({
+      field,
+      direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc'
+    }))
+  }
+
+  const sortedMembers = React.useMemo(() => {
+    const sorted = [...filteredMembers]
+    sorted.sort((a, b) => {
+      let aValue: string | number = ''
+      let bValue: string | number = ''
+
+      switch (sortConfig.field) {
+        case 'fullName':
+          aValue = a.fullName || `${a.firstName} ${a.lastName}`
+          bValue = b.fullName || `${b.firstName} ${b.lastName}`
+          break
+        case 'email':
+          aValue = a.email
+          bValue = b.email
+          break
+        case 'role':
+          aValue = a.roleName || a.role
+          bValue = b.roleName || b.role
+          break
+        case 'joinedAt':
+          aValue = new Date(a.joinedAt).getTime()
+          bValue = new Date(b.joinedAt).getTime()
+          break
+        default:
+          return 0
+      }
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1
+      return 0
+    })
+    return sorted
+  }, [filteredMembers, sortConfig])
+
   const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -400,83 +442,14 @@ export const TeamManagementPage: React.FC = () => {
                   )}
                 </div>
               ) : (
-                <div className="space-y-4">
-                  {filteredMembers.map((member) => {
-                    const roleConfig = roleLabels[member.role] || roleLabels.TeamMember
-                    const RoleIcon = roleConfig.icon
-                    return (
-                      <motion.div
-                        key={member.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all duration-200"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                              <span className="text-white font-medium">
-                                {member.firstName[0]}{member.lastName[0]}
-                              </span>
-                            </div>
-                            <div>
-                              <div className="flex items-center space-x-2">
-                                <h3 className="text-white font-medium">
-                                  {member.fullName || `${member.firstName} ${member.lastName}`}
-                                </h3>
-                                {member.isOwner && (
-                                  <Crown className="w-4 h-4 text-yellow-400" />
-                                )}
-                              </div>
-                              <p className="text-gray-400 text-sm">{member.email}</p>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <RoleIcon className={`w-4 h-4 ${roleConfig.color}`} />
-                                <span className={`text-sm ${roleConfig.color}`}>
-                                  {member.roleName || roleConfig.label}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="text-right">
-                              <p className="text-xs text-gray-400">Joined</p>
-                              <p className="text-sm text-white">{formatDate(member.joinedAt)}</p>
-                            </div>
-                            <div className="relative">
-                              <button 
-                                className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-                                onClick={(e) => {
-                                  e.preventDefault()
-                                  // Toggle dropdown menu here
-                                }}
-                              >
-                                <MoreHorizontal className="w-4 h-4" />
-                              </button>
-                              {/* Dropdown menu would go here */}
-                            </div>
-                            <div className="flex space-x-2">
-                              <button
-                                onClick={() => handleEditMember(member)}
-                                className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-colors"
-                                title="Edit Role"
-                              >
-                                <Edit className="w-4 h-4" />
-                              </button>
-                              {!member.isOwner && (
-                                <button
-                                  onClick={() => handleRemoveMember(member)}
-                                  className="p-2 text-[#D417C8] hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
-                                  title="Remove Member"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )
-                  })}
-                </div>
+                <TeamMembersTable
+                  members={sortedMembers}
+                  sortConfig={sortConfig}
+                  onSort={handleSort}
+                  onEditMember={handleEditMember}
+                  onRemoveMember={handleRemoveMember}
+                  loading={isLoading}
+                />
               )}
             </div>
           ) : (

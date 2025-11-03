@@ -61,7 +61,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
           <div
             key={option.value}
             className={cn(
-              'flex items-center p-4 rounded-xl border-2 transition-all cursor-pointer',
+              'flex items-center p-4 rounded-xl border transition-all cursor-pointer',
               value === option.value
                 ? 'border-primary bg-primary/10'
                 : 'border-white/20 hover:border-white/40',
@@ -72,7 +72,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
               value={option.value}
               id={option.value}
               disabled={option.disabled}
-              className="flex-shrink-0 h-5 w-5 rounded-full border-2 border-white/40 bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="flex-shrink-0 h-5 w-5 rounded-full border border-white/40 bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               <RadioGroupPrimitive.Indicator className="flex items-center justify-center w-full h-full relative after:content-[''] after:block after:w-3 after:h-3 after:rounded-full after:bg-primary" />
             </RadioGroupPrimitive.Item>
