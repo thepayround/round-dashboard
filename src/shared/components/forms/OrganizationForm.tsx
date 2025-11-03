@@ -112,7 +112,7 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.3 : 0.1 }}
-          className="relative flex flex-col gap-12 p-12"
+          className="relative flex flex-col gap-8 p-8"
         >
           <div className="flex w-full flex-col gap-y-6">
             <div className="flex flex-col gap-y-2">
@@ -123,7 +123,7 @@ export const OrganizationForm = ({
 
           <div className="flex w-full flex-col gap-y-6">
             {/* Company Name & Website Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label htmlFor="companyName" className="auth-label">
                   Company Name <span className="text-[#D417C8]">*</span>
@@ -193,7 +193,7 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.4 : 0.2 }}
-          className="relative flex flex-col gap-12 p-12"
+          className="relative flex flex-col gap-8 p-8"
         >
           <div className="flex w-full flex-col gap-y-6">
             <div className="flex flex-col gap-y-2">
@@ -202,7 +202,7 @@ export const OrganizationForm = ({
             </div>
           </div>
 
-          <div className="flex w-full flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Country */}
             <div className="space-y-2">
               <label htmlFor="country" className="auth-label">
@@ -282,7 +282,7 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.45 : 0.25 }}
-          className="relative flex flex-col gap-12 p-12"
+          className="relative flex flex-col gap-8 p-8"
         >
           <div className="flex w-full flex-col gap-y-6">
             <div className="flex flex-col gap-y-2">
@@ -291,7 +291,7 @@ export const OrganizationForm = ({
             </div>
           </div>
 
-          <div className="flex w-full flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Registration Number */}
             <div className="space-y-2">
               <label htmlFor="registrationNumber" className="auth-label">
@@ -342,7 +342,7 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.5 : 0.3 }}
-            className="relative flex flex-col gap-12 p-12"
+            className="relative flex flex-col gap-8 p-8"
           >
             <div className="flex w-full flex-col gap-y-6">
               <div className="flex flex-col gap-y-2">
@@ -351,7 +351,7 @@ export const OrganizationForm = ({
               </div>
             </div>
 
-            <div className="flex w-full flex-col gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Currency */}
               <div className="space-y-2">
                 <label htmlFor="currency" className="auth-label">
@@ -404,7 +404,7 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.6 : 0.4 }}
-            className="relative flex flex-col gap-12 p-12"
+            className="relative flex flex-col gap-8 p-8"
           >
             <div className="flex w-full flex-col gap-y-6">
               <div className="flex flex-col gap-y-2">
@@ -413,7 +413,7 @@ export const OrganizationForm = ({
               </div>
             </div>
 
-            <div className="flex w-full flex-col gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Time Zone */}
               <div className="space-y-2">
                 <label htmlFor="timeZone" className="auth-label">
