@@ -1,6 +1,7 @@
-import { motion } from 'framer-motion'
-import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react'
 import { Plus, ArrowRight, LogIn, UserPlus } from 'lucide-react'
+
+import { Button } from '../Button'
 
 interface ActionButtonProps {
   /** The text to display after the icon (e.g., "Customer", "Plan", "Product", "Sign In", "Next") */
@@ -36,7 +37,7 @@ const ActionButton = ({
   actionType = 'create',
   disabled = false,
   className = '',
-  animated = true,
+  animated: _animated = true,
   loading = false,
   type = 'button'
 }: ActionButtonProps) => {
@@ -50,100 +51,26 @@ const ActionButton = ({
       default: return Plus
     }
   }
-  
+
   const DefaultIcon = getDefaultIcon()
-  const sizeClasses = {
-    sm: 'px-3 py-2 text-xs space-x-1.5 h-[42px] md:h-9 font-medium', // 42px mobile -> 36px desktop
-    md: 'px-4 py-2.5 text-sm space-x-2 h-[42px] md:h-9 font-medium', // 42px mobile -> 36px desktop
-    lg: 'px-5 py-3 text-sm space-x-2.5 h-[42px] md:h-9 font-medium tracking-tight' // 42px mobile -> 36px desktop
-  }
 
-  const iconSizes = {
-    sm: 'w-3.5 h-3.5', // 14px - balanced for 36px buttons
-    md: 'w-4 h-4', // 16px - balanced for 40px buttons  
-    lg: 'w-4 h-4'  // 16px - consistent small icons for premium feel
-  }
-
-  const variants = {
-    primary: `
-      bg-[#D417C8]/60
-      text-white
-      shadow-md shadow-black/10
-      hover:shadow-hover
-      hover:bg-[#D417C8]/70
-      transition-all duration-200 ease-out
-    `,
-    secondary: `
-      bg-white/4
-      text-gray-200 hover:text-white
-      shadow-md shadow-black/10
-      border border-white/8 hover:border-white/15
-      hover:bg-white/8
-      transition-all duration-200 ease-out
-    `,
-    ghost: `
-      bg-transparent
-      border border-white/10 hover:border-white/20
-      text-gray-300 hover:text-white
-      hover:bg-white/5
-      transition-all duration-200 ease-out
-    `,
-    success: `
-      bg-primary/80
-      text-white
-      shadow-md shadow-emerald-500/10
-      hover:shadow-[0_0_12px_rgba(34,197,94,0.25)]
-      hover:brightness-105
-      transition-all duration-200 ease-out
-    `
-  }
-
-  const baseClasses = `
-    rounded-lg inline-flex items-center justify-center
-    focus:outline-none
-    disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
-    disabled:hover:bg-white/6
-    relative isolate overflow-hidden
-    group
-    ${variants[variant]}
-    ${sizeClasses[size]} 
-    ${className}
-  `.trim()
-
-  const ButtonComponent = animated ? motion.button : 'button'
-  const motionProps = animated ? {
-    whileHover: disabled || loading ? {} : { 
-      y: -1,
-      transition: { type: "spring" as const, stiffness: 300, damping: 20 }
-    },
-    initial: { y: 0 },
-    transition: { type: "spring" as const, stiffness: 300, damping: 20 }
-  } : {}
+  // Map ActionButton variant to Button variant
+  const mappedVariant = variant === 'success' ? 'primary' : variant
 
   return (
-    <ButtonComponent
+    <Button
+      onClick={onClick}
+      icon={DefaultIcon}
+      iconPosition="right"
+      size={size}
+      variant={mappedVariant as 'primary' | 'secondary' | 'ghost'}
+      loading={loading}
+      disabled={disabled}
+      className={className}
       type={type}
-      onClick={disabled || loading ? undefined : onClick}
-      className={baseClasses}
-      disabled={disabled || loading}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...motionProps}
     >
-      
-      {loading ? (
-        <>
-          <div className="relative">
-            <div className="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin" />
-          </div>
-          <span className="relative z-10 text-xs">Loading...</span>
-        </>
-      ) : (
-        <>
-          <span className="relative z-10">{label}</span>
-          <DefaultIcon className={`${iconSizes[size]} relative z-10`} />
-        </>
-      )}
-    </ButtonComponent>
+      {label}
+    </Button>
   )
 }
 

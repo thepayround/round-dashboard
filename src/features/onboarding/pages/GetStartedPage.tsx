@@ -812,7 +812,6 @@ export const GetStartedPage = () => {
               <Button
                 onClick={handleBack}
                 variant="ghost"
-                enhanced
                 icon={ArrowLeft}
                 iconPosition="left"
                 size="sm"

@@ -11,6 +11,8 @@ import React, { useState } from 'react'
 
 import type { TeamMember, UserRole } from '../types/team.types'
 
+import { IconButton } from '@/shared/components/Button'
+
 interface SortConfig {
   field: string
   direction: 'asc' | 'desc'
@@ -140,21 +142,20 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end space-x-2">
-                      <button
+                      <IconButton
+                        icon={Edit}
                         onClick={() => onEditMember(member)}
-                        className="p-2 text-white/50 hover:text-[#14BDEA] hover:bg-[#14BDEA]/10 rounded-lg transition-all duration-200"
-                        title="Edit member role"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
+                        aria-label="Edit member role"
+                        size="md"
+                      />
                       {!member.isOwner && (
-                        <button
+                        <IconButton
+                          icon={Trash2}
                           onClick={() => onRemoveMember(member)}
-                          className="p-2 text-white/50 hover:text-[#D417C8] hover:bg-[#D417C8]/10 rounded-lg transition-all duration-200"
-                          title="Remove member"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                          aria-label="Remove member"
+                          variant="danger"
+                          size="md"
+                        />
                       )}
                     </div>
                   </td>

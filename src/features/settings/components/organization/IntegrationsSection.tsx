@@ -3,6 +3,7 @@ import { Plus, Settings, ExternalLink, Check, Key, Zap } from 'lucide-react'
 import React, { useState } from 'react'
 
 import { Card } from '@/shared/components'
+import { Button, IconButton } from '@/shared/components/Button'
 
 
 interface Integration {
@@ -151,10 +152,9 @@ export const IntegrationsSection: React.FC = () => {
               <p className="text-xs text-gray-400">Manage your API keys and access tokens</p>
             </div>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
-            <Plus className="w-3 h-3" />
+          <Button variant="primary" icon={Plus} iconPosition="left" size="sm">
             Generate New Key
-          </button>
+          </Button>
         </div>
 
         <div className="space-y-3">
@@ -166,9 +166,7 @@ export const IntegrationsSection: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <span className="px-2 py-1 text-xs bg-green-400/10 text-green-400 border border-green-400/20 rounded">Active</span>
-                <button className="p-2 hover:bg-white/10 rounded text-gray-400 hover:text-white">
-                  <Settings className="w-4 h-4" />
-                </button>
+                <IconButton icon={Settings} aria-label="API key settings" size="md" />
               </div>
             </div>
           </div>
@@ -181,9 +179,7 @@ export const IntegrationsSection: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <span className="px-2 py-1 text-xs bg-blue-400/10 text-blue-400 border border-blue-400/20 rounded">Development</span>
-                <button className="p-2 hover:bg-white/10 rounded text-gray-400 hover:text-white">
-                  <Settings className="w-4 h-4" />
-                </button>
+                <IconButton icon={Settings} aria-label="API key settings" size="md" />
               </div>
             </div>
           </div>
@@ -205,17 +201,14 @@ export const IntegrationsSection: React.FC = () => {
         {/* Category Filter */}
         <div className="flex flex-wrap gap-2 mb-6 p-2 bg-white/4 rounded-lg">
           {categories.map((category) => (
-            <button
+            <Button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`px-3 py-1.5 text-xs font-normal tracking-tight rounded-lg transition-all duration-200 ${
-                activeCategory === category.id
-                  ? 'bg-[#D417C8] text-white'
-                  : 'text-gray-400 hover:text-white hover:bg-white/10'
-              }`}
+              variant={activeCategory === category.id ? 'primary' : 'ghost'}
+              size="sm"
             >
               {category.label} ({category.count})
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -244,20 +237,16 @@ export const IntegrationsSection: React.FC = () => {
 
                 <div className="flex gap-1">
                   {integration.status === 'connected' && (
-                    <button className="p-1.5 hover:bg-white/10 rounded text-gray-400 hover:text-white">
-                      <Settings className="w-3 h-3" />
-                    </button>
+                    <IconButton icon={Settings} aria-label="Integration settings" size="sm" />
                   )}
-                  <button className="p-1.5 hover:bg-white/10 rounded text-gray-400 hover:text-white">
-                    <ExternalLink className="w-3 h-3" />
-                  </button>
+                  <IconButton icon={ExternalLink} aria-label="Open integration" size="sm" />
                 </div>
               </div>
 
               {integration.status === 'available' && (
-                <button className="w-full mt-3 px-3 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
+                <Button variant="primary" size="sm" fullWidth className="mt-3">
                   Connect Integration
-                </button>
+                </Button>
               )}
             </div>
           ))}

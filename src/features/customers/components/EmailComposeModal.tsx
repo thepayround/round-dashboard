@@ -1,6 +1,7 @@
-import { Send, Paperclip, Type, Bold, Italic, Link as LinkIcon, Mail, FileText, Loader2 } from 'lucide-react'
+import { Send, Paperclip, Type, Bold, Italic, Link as LinkIcon, Mail, FileText } from 'lucide-react'
 import React, { useState } from 'react'
 
+import { Button, IconButton } from '@/shared/components/Button'
 import { Modal } from '@/shared/components/Modal'
 import { FormInput } from '@/shared/components/ui/FormInput'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
@@ -123,13 +124,14 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
                     { key: 'welcome', label: 'Welcome' },
                     { key: 'support', label: 'Support' }
                   ].map((template) => (
-                    <button
+                    <Button
                       key={template.key}
                       onClick={() => insertTemplate(template.key)}
-                      className="px-3 py-1.5 bg-white/5 border border-white/10 text-white/70 text-xs rounded-lg hover:bg-white/8 hover:text-white transition-all duration-200"
+                      variant="ghost"
+                      size="sm"
                     >
                       {template.label}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
@@ -155,15 +157,9 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
                     </button>
                     {formData.isHtml && (
                       <div className="flex items-center gap-1">
-                        <button className="p-1 hover:bg-white/10 rounded text-white/70 hover:text-white transition-all duration-200">
-                          <Bold className="w-3 h-3" />
-                        </button>
-                        <button className="p-1 hover:bg-white/10 rounded text-white/70 hover:text-white transition-all duration-200">
-                          <Italic className="w-3 h-3" />
-                        </button>
-                        <button className="p-1 hover:bg-white/10 rounded text-white/70 hover:text-white transition-all duration-200">
-                          <LinkIcon className="w-3 h-3" />
-                        </button>
+                        <IconButton icon={Bold} aria-label="Bold" size="sm" />
+                        <IconButton icon={Italic} aria-label="Italic" size="sm" />
+                        <IconButton icon={LinkIcon} aria-label="Insert link" size="sm" />
                       </div>
                     )}
                   </div>
@@ -181,10 +177,9 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
 
               {/* Attachment placeholder */}
               <div>
-                <button className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white/70 hover:bg-white/8 hover:text-white transition-all duration-200">
-                  <Paperclip className="w-4 h-4" />
-                  <span className="text-sm">Add Attachment</span>
-                </button>
+                <Button variant="ghost" icon={Paperclip} iconPosition="left">
+                  Add Attachment
+                </Button>
               </div>
           </div>
 
@@ -195,30 +190,23 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
                   This email will be logged in the customer&apos;s activity history
                 </div>
                 <div className="flex items-center space-x-3">
-                  <button
+                  <Button
                     onClick={onClose}
                     disabled={isSending}
-                    className="px-4 py-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all disabled:opacity-50"
+                    variant="ghost"
                   >
                     Cancel
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={handleSend}
                     disabled={isSending || !formData.subject.trim() || !formData.message.trim()}
-                    className="flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:shadow-lg hover:shadow-[#D417C8]/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    variant="primary"
+                    icon={Send}
+                    iconPosition="left"
+                    loading={isSending}
                   >
-                    {isSending ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Sending...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        <span>Send Email</span>
-                      </>
-                    )}
-                  </button>
+                    Send Email
+                  </Button>
                 </div>
               </div>
       </div>

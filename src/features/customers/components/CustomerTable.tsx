@@ -11,6 +11,7 @@ import {
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import { IconButton } from '@/shared/components/Button'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
 
 interface SortConfig {
@@ -103,12 +104,12 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
       {field ? (
         <button
           onClick={() => onSort(field)}
-          className="flex items-center space-x-2 hover:text-white transition-colors group"
+          className="flex items-center space-x-2"
         >
           <span>{children}</span>
           {(() => {
             if (sortConfig.field !== field) {
-              return <ArrowUpDown className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity" />
+              return <ArrowUpDown className="w-4 h-4 opacity-30" />
             }
             if (sortConfig.direction === 'asc') {
               return <ArrowUp className="w-4 h-4" />
@@ -150,13 +151,13 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                             : 'bg-transparent border-[#2c2d31]'
                         }`}>
                           {isAllSelected && (
-                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            <svg className="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           )}
                           {isIndeterminate && !isAllSelected && (
-                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 12h14" />
+                            <svg className="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14" />
                             </svg>
                           )}
                         </div>
@@ -216,8 +217,8 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                             : 'bg-transparent border-[#2c2d31]'
                         }`}>
                           {selectedIds.includes(customer.id) && (
-                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            <svg className="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           )}
                         </div>
@@ -243,7 +244,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                           {customer.effectiveDisplayName ?? customer.displayName}
                         </div>
                         {customer.isBusinessCustomer && (
-                          <span className="px-2 py-1 bg-[#14BDEA]/20 text-[#14BDEA] border border-[#14BDEA]/30 rounded text-xs font-normal tracking-tight flex-shrink-0">
+                          <span className="px-2 py-1 bg-white/5 text-white/80 border border-white/10 rounded text-xs font-normal tracking-tight flex-shrink-0">
                             Business
                           </span>
                         )}
@@ -273,7 +274,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                       {getStatusText(customer.status)}
                     </span>
                     {customer.portalAccess && (
-                      <div className="w-2 h-2 bg-[#42E695] rounded-full" title="Portal Access Enabled" />
+                      <div className="w-2 h-2 bg-white/50 rounded-full" title="Portal Access Enabled" />
                     )}
                   </div>
                 </td>
@@ -287,24 +288,23 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                   <div className="flex items-center justify-end space-x-2">
                     <Link
                       to={`/customers/${customer.id}`}
-                      className="p-2 text-white/50 hover:text-[#14BDEA] hover:bg-[#14BDEA]/10 rounded-lg transition-all duration-200"
+                      className="inline-flex items-center justify-center p-1.5 w-8 h-8 text-white/50 rounded-lg transition-all duration-150 hover:opacity-90"
                       title="View customer"
                     >
                       <Eye className="w-4 h-4" />
                     </Link>
                     <Link
                       to={`/customers/${customer.id}/edit`}
-                      className="p-2 text-white/50 hover:text-[#D417C8] hover:bg-[#D417C8]/10 rounded-lg transition-all duration-200"
+                      className="inline-flex items-center justify-center p-1.5 w-8 h-8 text-white/50 rounded-lg transition-all duration-150 hover:opacity-90"
                       title="Edit customer"
                     >
                       <Edit className="w-4 h-4" />
                     </Link>
-                    <button
-                      className="p-2 text-[#a3a3a3] hover:text-white rounded-lg transition-all duration-200"
-                      title="More actions"
-                    >
-                      <MoreHorizontal className="w-4 h-4" />
-                    </button>
+                    <IconButton
+                      icon={MoreHorizontal}
+                      aria-label="More actions"
+                      size="md"
+                    />
                   </div>
                 </td>
               </motion.tr>

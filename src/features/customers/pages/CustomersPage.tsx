@@ -456,7 +456,7 @@ const CustomersPage: React.FC = () => {
                     <ActionButton
                       label="Cancel Selection"
                       variant="ghost"
-                      size="sm"
+                      size="md"
                       icon={Square}
                       onClick={() => {
                         setSelectedCustomers([])
@@ -469,14 +469,14 @@ const CustomersPage: React.FC = () => {
                     <ActionButton
                       label="Select"
                       variant="ghost"
-                      size="sm"
+                      size="md"
                       icon={CheckSquare}
                       onClick={() => setSelectionMode(true)}
                     />
                     <ActionButton
                       label="Export All"
                       variant="ghost"
-                      size="sm"
+                      size="md"
                       icon={Download}
                       onClick={() => showSuccess('Export functionality coming soon')}
                     />
