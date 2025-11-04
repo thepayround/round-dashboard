@@ -7,7 +7,10 @@
  */
 
 export { DashboardLayout as default } from '../DashboardLayout'
-export { LAYOUT_CONSTANTS } from './constants'
+export { LAYOUT_CONSTANTS, ANIMATION_VARIANTS, Z_INDEX } from './constants'
+export { NavigationItem } from './NavigationItem'
+export { SidebarHeader } from './SidebarHeader'
+export { SidebarFooter } from './SidebarFooter'
 export type { 
   DashboardLayoutProps, 
   NavItem, 

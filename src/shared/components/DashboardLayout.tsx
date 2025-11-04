@@ -1,202 +1,73 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  ChevronDown,
-  LogOut,
-  X,
-  User,
-  ChevronUp,
-  PanelLeft,
-  PanelLeftClose,
-} from 'lucide-react'
-import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react'
+import { PanelLeft, PanelLeftClose, User, LogOut, ChevronUp, X } from 'lucide-react'
+import { memo, useCallback, useMemo, useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import ColorLogo from '@/assets/logos/color-logo.svg'
 import { Breadcrumb } from '@/shared/components/Breadcrumb'
-import { LAYOUT_CONSTANTS } from '@/shared/components/DashboardLayout/constants'
-import type { DashboardLayoutProps, NavItem, TooltipState } from '@/shared/components/DashboardLayout/types'
+import { NavigationItem } from '@/shared/components/DashboardLayout/NavigationItem'
+import { LAYOUT_CONSTANTS, ANIMATION_VARIANTS } from '@/shared/components/DashboardLayout/constants'
+import type { DashboardLayoutProps } from '@/shared/components/DashboardLayout/types'
 import { mainNavigationItems, bottomNavigationItems } from '@/shared/config/navigation.config'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { useKeyboardNavigation } from '@/shared/hooks/useKeyboardNavigation'
+import { useReducedMotion } from '@/shared/hooks/useReducedMotion'
 import { useResponsive } from '@/shared/hooks/useResponsive'
 import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
+import { useSidebarState } from '@/shared/hooks/useSidebarState'
+import { useSwipeGesture } from '@/shared/hooks/useSwipeGesture'
 import { apiClient } from '@/shared/services/apiClient'
+import { cn } from '@/shared/utils/cn'
 
-// User data comes from auth context and API
-
-// Memoized navigation item component
-const NavigationItem = memo(({ 
-  item, 
-  isCollapsed, 
-  expandedItems, 
-  isParentActive, 
-  isActive,
-  toggleExpanded,
-  handleTooltipEnter,
-  handleTooltipLeave,
-  getAllNavItems,
-  focusedIndex,
-  isKeyboardNavigating
-}: {
-  item: NavItem
-  isCollapsed: boolean
-  expandedItems: string[]
-  isParentActive: (item: NavItem) => boolean
-  isActive: (href: string) => boolean
-  toggleExpanded: (itemId: string) => void
-  handleTooltipEnter: (itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => void
-  handleTooltipLeave: () => void
-  getAllNavItems: (NavItem & { isSubItem?: boolean; parentId?: string })[]
-  focusedIndex: number
-  isKeyboardNavigating: boolean
-}) => (
-  <div>
-    {/* Main Navigation Item */}
-    {item.subItems ? (
-      <button
-        type="button"
-        onClick={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          toggleExpanded(item.id)
-        }}
-        onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
-        onMouseLeave={handleTooltipLeave}
-        className={`
-          group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9 w-full
-          ${
-            isParentActive(item)
-              ? 'bg-primary/10 text-white border border-primary/20'
-              : 'text-white/60 hover:text-white'
-          }
-          ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-          ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
-            ? 'ring-2 ring-ring' : ''
-          }
-        `}
-        aria-expanded={expandedItems.includes(item.id)}
-        aria-haspopup="menu"
-        aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
-        tabIndex={isKeyboardNavigating ? -1 : 0}
-      >
-        <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
-        
-        {!isCollapsed && (
-          <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
-            <ChevronDown 
-              className={`w-4 h-4 transition-transform duration-200 ${
-                expandedItems.includes(item.id) ? 'transform rotate-180' : ''
-              }`} 
-            />
-          </div>
-        )}
-        
-        {!isCollapsed && item.badge && (
-          <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-primary text-white rounded-full">
-            {item.badge}
-          </span>
-        )}
-      </button>
-    ) : (
-      <Link
-        to={item.href}
-        onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
-        onMouseLeave={handleTooltipLeave}
-        className={`
-          group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
-          ${
-            isParentActive(item)
-              ? 'bg-primary/10 text-white border border-primary/20'
-              : 'text-white/60 hover:text-white'
-          }
-          ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-          ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) 
-            ? 'ring-2 ring-ring' : ''
-          }
-        `}
-        aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
-        tabIndex={isKeyboardNavigating ? -1 : 0}
-      >
-        <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
-
-        {!isCollapsed && (
-          <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
-            {item.badge && (
-              <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-primary text-white rounded-full">
-                {item.badge}
-              </span>
-            )}
-          </div>
-        )}
-      </Link>
-    )}
-
-    {/* Sub-items */}
-    <AnimatePresence>
-      {item.subItems && expandedItems.includes(item.id) && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.2 }}
-          className={`mt-1 ${
-            isCollapsed 
-              ? 'flex flex-col items-center space-y-1 py-1' 
-              : 'ml-6 space-y-1 border-l-2 border-pink-500/20 py-2'
-          }`}
-        >
-          {isCollapsed && (
-            <div className="w-8 h-px bg-pink-500/20 mb-1" />
-          )}
-
-          {item.subItems.map((subItem, index) => (
-            <Link
-              key={subItem.id}
-              to={subItem.href}
-              onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
-              onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
-              className={`
-                group relative flex items-center rounded-lg transition-all duration-200
-                ${
-                  isActive(subItem.href)
-                    ? 'bg-primary/10 text-white border border-primary/20'
-                    : 'text-white/60 hover:text-white'
-                }
-                ${
-                  isCollapsed
-                    ? 'justify-center w-8 h-8 px-0'
-                    : 'h-8 px-4 mx-2'
-                }
-              `}
-            >
-              <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${
-                isCollapsed
-                  ? 'w-3.5 h-3.5'
-                  : 'w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2'
-              }`} />
-
-              {!isCollapsed && (
-                <span className="font-normal text-xs text-white/60 group-hover:text-white transition-colors duration-200 whitespace-nowrap">{subItem.label}</span>
-              )}
-
-              {/* Connection indicator for collapsed mode */}
-              {isCollapsed && index !== (item.subItems?.length ?? 0) - 1 && (
-                <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/5" />
-              )}
-            </Link>
-          ))}
-
-          {isCollapsed && (
-            <div className="w-6 h-px bg-pink-500/20 mt-1" />
-          )}
-        </motion.div>
-      )}
-    </AnimatePresence>
+// Logo text component (reusable, kept here as it's small and only used in mobile header)
+const LogoText = memo(({ className = "text-xl" }: { className?: string }) => (
+  <div className="flex items-center space-x-0.5">
+    <span className={`text-[#D417C8] font-light ${className} tracking-wider transition-all duration-300`}>R</span>
+    <span className={`text-[#BD2CD0] font-light ${className} tracking-wider transition-all duration-300`}>O</span>
+    <span className={`text-[#7767DA] font-light ${className} tracking-wider transition-all duration-300`}>U</span>
+    <span className={`text-[#32A1E4] font-light ${className} tracking-wider transition-all duration-300`}>N</span>
+    <span className={`text-[#14BDEA] font-light ${className} tracking-wider transition-all duration-300`}>D</span>
   </div>
 ))
+LogoText.displayName = 'LogoText'
 
-NavigationItem.displayName = 'NavigationItem'
+// Mobile Header Component (kept here as it uses LogoText and is specific to mobile layout)
+const MobileHeader = memo(({ 
+  onMenuClick,
+  isMenuOpen 
+}: { 
+  onMenuClick: () => void
+  isMenuOpen: boolean
+}) => (
+  <div 
+    className="fixed top-0 left-0 right-0 h-16 bg-[#070708] border-b border-white/10 z-[50] flex items-center justify-between px-4"
+    style={{
+      paddingTop: 'max(1rem, var(--safe-area-inset-top))',
+      paddingLeft: 'max(1rem, var(--safe-area-inset-left))',
+      paddingRight: 'max(1rem, var(--safe-area-inset-right))',
+      height: 'calc(4rem + var(--safe-area-inset-top))'
+    }}
+  >
+    <button
+      onClick={onMenuClick}
+      className="p-2 rounded-lg text-gray-400 hover:text-white transition-all duration-200"
+      aria-label={isMenuOpen ? "Close sidebar" : "Open sidebar"}
+    >
+      <PanelLeft className="w-6 h-6" />
+    </button>
+
+    <Link to="/dashboard" className="flex items-center space-x-2">
+      <img src={ColorLogo} alt="Round Logo" className="w-7 h-7" />
+      <LogoText className="text-lg" />
+    </Link>
+
+    {/* Empty div for spacing to center the logo */}
+    <div className="w-10 h-10"></div>
+  </div>
+))
+MobileHeader.displayName = 'MobileHeader'
+
+// NavigationItem is now imported from separate file
 
 export const DashboardLayout = memo(({ 
   children,
@@ -212,185 +83,200 @@ export const DashboardLayout = memo(({
   const location = useLocation()
   const { isMobile, isTablet } = useResponsive()
   const { roundAccount, isLoading: isRoundAccountLoading } = useRoundAccount()
+  const prefersReducedMotion = useReducedMotion()
 
-  // Initialize sidebar state from localStorage - mobile first
-  const [isCollapsed, setIsCollapsed] = useState(() => {
-    if (typeof window === 'undefined') return true
-    const saved = localStorage.getItem('sidebar-collapsed')
-    // Default to collapsed on mobile, open on desktop
-    return saved ? saved === 'true' : (isMobile || isTablet)
-  })
+  // Memoize isMobileView for better performance
+  const isMobileView = useMemo(() => isMobile || isTablet, [isMobile, isTablet])
 
-  // Mobile overlay state
-  const [showMobileOverlay, setShowMobileOverlay] = useState(false)
-
-  // Track expanded menu items
-  const [expandedItems, setExpandedItems] = useState<string[]>(() => {
-    // Auto-expand catalog if user is on a catalog page
-    const savedExpanded = localStorage.getItem('sidebar-expanded-items')
-    if (savedExpanded) {
-      try {
-        const parsed = JSON.parse(savedExpanded)
-        if (Array.isArray(parsed)) {
-          return parsed
-        }
-      } catch (e) {
-        // Fallback to default behavior
-      }
-    }
-
-    if (location.pathname.startsWith('/catalog')) {
-      return ['catalog']
-    }
-    return []
-  })
-
-  
-  // Track tooltip state
-  const [hoveredTooltip, setHoveredTooltip] = useState<TooltipState | null>(null)
-
-  // UI state
+  // UI state for shortcuts modal  
   const [showShortcuts, setShowShortcuts] = useState(false)
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
 
-
-  // Keyboard navigation
-  const [focusedIndex, setFocusedIndex] = useState(-1)
-  const [isKeyboardNavigating, setIsKeyboardNavigating] = useState(false)
-  const navigationRef = useRef<HTMLElement>(null)
-  const profileDropdownRef = useRef<HTMLDivElement>(null)
-
-  // Handle responsive behavior
-  useEffect(() => {
-    if ((isMobile || isTablet) && !isCollapsed) {
-      setShowMobileOverlay(true)
-    } else {
-      setShowMobileOverlay(false)
-    }
-  }, [isMobile, isTablet, isCollapsed])
-
-  // Persist sidebar state to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('sidebar-collapsed', isCollapsed.toString())
-  }, [isCollapsed])
-
-  // Persist expanded items to localStorage
-  useEffect(() => {
-    localStorage.setItem('sidebar-expanded-items', JSON.stringify(expandedItems))
-  }, [expandedItems])
-
-  // Auto-expand catalog when navigating to catalog pages (only run once per path change)
-  const lastPathRef = useRef<string>('')
-  useEffect(() => {
-    if (location.pathname !== lastPathRef.current) {
-      lastPathRef.current = location.pathname
-
-      if (location.pathname.startsWith('/catalog')) {
-        setExpandedItems(prev => {
-          if (!prev.includes('catalog')) {
-            return [...prev, 'catalog']
-          }
-          return prev
-        })
-      }
-    }
-  }, [location.pathname])
-
-  const isActive = (href: string) => location.pathname === href
-
-  const isParentActive = (item: NavItem) => {
-    if (item.subItems) {
-      return item.subItems.some(subItem => isActive(subItem.href)) || isActive(item.href)
-    }
-    return isActive(item.href)
-  }
+  // Use custom hooks for sidebar state and keyboard navigation
+  const {
+    isCollapsed,
+    setIsCollapsed,
+    toggleSidebar,
+    expandedItems,
+    toggleExpanded,
+    showMobileOverlay,
+    showProfileDropdown,
+    setShowProfileDropdown
+  } = useSidebarState({ isMobileView })
 
   // Get all navigation items (flat list for keyboard navigation)
   const getAllNavItems = useMemo(() => {
-    const items: (NavItem & { isSubItem?: boolean; parentId?: string })[] = []
+    interface FlatNavItem {
+      id: string
+      label: string
+      href: string
+      icon: React.ComponentType<{ className?: string }>
+      badge?: string
+      subItems?: Array<{ id: string; label: string; href: string; icon: React.ComponentType<{ className?: string }> }>
+      isSubItem?: boolean
+      parentId?: string
+    }
     
-    navigationItems.forEach((item: NavItem) => {
+    const items: FlatNavItem[] = []
+    
+    navigationItems.forEach((item) => {
       items.push(item)
       if (item.subItems && (!isCollapsed && expandedItems.includes(item.id))) {
-        item.subItems.forEach((subItem: NavItem) => {
+        item.subItems.forEach((subItem) => {
           items.push({ ...subItem, isSubItem: true, parentId: item.id })
         })
       }
     })
     
-    bottomNavItemsProp.forEach((item: NavItem) => {
+    bottomNavItemsProp.forEach((item) => {
       items.push(item)
     })
     
     return items
   }, [navigationItems, bottomNavItemsProp, isCollapsed, expandedItems])
 
-  const toggleExpanded = useCallback((itemId: string) => {
-    setExpandedItems(prev => {
-      const isCurrentlyExpanded = prev.includes(itemId)
-      if (isCurrentlyExpanded) {
-        return prev.filter(id => id !== itemId)
-      } else {
-        return [...prev, itemId]
+  const {
+    focusedIndex,
+    isKeyboardNavigating,
+    navigationRef
+  } = useKeyboardNavigation({
+    getAllNavItems,
+    isCollapsed,
+    toggleSidebar,
+    toggleExpanded,
+    showShortcuts,
+    setShowShortcuts
+  })
+
+  // Swipe gesture state for visual feedback
+  const [swipeOffset, setSwipeOffset] = useState(0)
+
+  // Swipe gesture for mobile sidebar (swipe right to open, left to close)
+  const {
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+    isSwiping
+  } = useSwipeGesture({
+    enabled: isMobileView,
+    threshold: 50,
+    velocityThreshold: 0.3,
+    onSwipe: (direction) => {
+      if (direction === 'right' && isCollapsed) {
+        setIsCollapsed(false)
+      } else if (direction === 'left' && !isCollapsed) {
+        setIsCollapsed(true)
       }
-    })
+    },
+    onSwiping: (deltaX) => {
+      // Update sidebar offset during swipe for visual feedback
+      // Clamp the offset to reasonable bounds
+      if (isCollapsed && deltaX > 0) {
+        // Swipe right to open: allow positive offset up to sidebar width
+        setSwipeOffset(Math.min(deltaX, SIDEBAR.WIDTH_EXPANDED))
+      } else if (!isCollapsed && deltaX < 0) {
+        // Swipe left to close: allow negative offset up to sidebar width
+        setSwipeOffset(Math.max(deltaX, -SIDEBAR.WIDTH_EXPANDED))
+      }
+    },
+    onSwipeEnd: () => {
+      // Reset offset with animation
+      setSwipeOffset(0)
+    }
+  })
+
+  // Respect user's motion preferences (accessibility)
+  const transitionConfigs = useMemo(() => ({
+    fast: { duration: prefersReducedMotion ? 0 : 0.15 },
+    normal: { duration: prefersReducedMotion ? 0 : 0.2 },
+    sidebar: { duration: prefersReducedMotion ? 0 : 0.15, ease: 'easeOut' as const },
+  }), [prefersReducedMotion])
+
+  // Track tooltip state
+  const [hoveredTooltip, setHoveredTooltip] = useState<{ id: string; label: string; badge?: string; position: { top: number; left: number }; isUser?: boolean; userInfo?: { role: string; company: string; email: string } } | null>(null)
+
+  // Profile dropdown ref
+  const profileDropdownRef = useRef<HTMLDivElement>(null)
+
+  // Active state helpers
+  const isActive = useCallback((href: string) => location.pathname === href, [location.pathname])
+
+  const isParentActive = useCallback((item: typeof navigationItems[0]) => {
+    if (item.subItems) {
+      return item.subItems.some(subItem => isActive(subItem.href)) || isActive(item.href)
+    }
+    return isActive(item.href)
+  }, [isActive])
+
+  // Helper functions for user display
+  const getInitials = useCallback((firstName?: string, lastName?: string) => {
+    const first = firstName && firstName !== 'undefined' ? firstName.trim() : ''
+    const last = lastName && lastName !== 'undefined' ? lastName.trim() : ''
+    
+    if (first && last) return `${first[0]}${last[0]}`.toUpperCase()
+    if (first) return first.slice(0, 2).toUpperCase()
+    if (last) return last.slice(0, 2).toUpperCase()
+    return 'U'
   }, [])
 
-  const handleTooltipEnter = (itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => {
+  const getUserDisplayName = useCallback((user: typeof state.user) => {
+    if (!user) return 'User'
+    const firstName = user.firstName && user.firstName !== 'undefined' ? user.firstName.trim() : ''
+    const lastName = user.lastName && user.lastName !== 'undefined' ? user.lastName.trim() : ''
+    
+    if (firstName && lastName) return `${firstName} ${lastName}`
+    if (firstName) return firstName
+    if (user.email) return user.email
+    return 'User'
+  }, [])
+
+  const getCompanyDisplayName = useCallback(() => {
+    if (isRoundAccountLoading) return 'Loading...'
+    if (roundAccount?.accountName) return roundAccount.accountName
+    if (roundAccount?.organization?.name) return roundAccount.organization.name
+    if (state.user?.accountType === 'business' && 'companyInfo' in (state.user || {}) && state.user.companyInfo?.companyName) {
+      return state.user.companyInfo.companyName
+    }
+    return state.user?.accountType === 'business' ? 'Business Account' : 'Personal Account'
+  }, [isRoundAccountLoading, roundAccount, state])
+
+  // Tooltip handlers
+  const handleTooltipEnter = useCallback((itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => {
     if (!isCollapsed) return
     
     const buttonRect = (event.currentTarget as HTMLElement).getBoundingClientRect()
     const tooltipPosition = {
-      top: buttonRect.top + buttonRect.height / 2 - 20, // Center vertically
-      left: buttonRect.right + 12 // Position to the right of sidebar
+      top: buttonRect.top + buttonRect.height / 2 - 20,
+      left: buttonRect.right + 12
     }
     
     setHoveredTooltip({ id: itemId, label, badge, position: tooltipPosition })
-  }
+  }, [isCollapsed])
 
-  const handleTooltipLeave = () => {
+  const handleTooltipLeave = useCallback(() => {
     setHoveredTooltip(null)
-  }
+  }, [])
 
-  const handleUserTooltipEnter = (event: React.MouseEvent) => {
+  const handleUserTooltipEnter = useCallback((event: React.MouseEvent) => {
     if (!isCollapsed || !state.user) return
     
     const buttonRect = (event.currentTarget as HTMLElement).getBoundingClientRect()
     const tooltipPosition = {
-      top: buttonRect.top - 120, // Position above the user button
-      left: buttonRect.right + 12 // Position to the right of sidebar
+      top: buttonRect.top - 120,
+      left: buttonRect.right + 12
     }
-    
-    const firstName = state.user.firstName && state.user.firstName !== 'undefined' ? state.user.firstName.trim() : ''
-    const lastName = state.user.lastName && state.user.lastName !== 'undefined' ? state.user.lastName.trim() : ''
-    const userName = firstName && lastName
-      ? `${firstName} ${lastName}`
-      : firstName || state.user.email || 'User'
-    
-    const companyName = (() => {
-      if (isRoundAccountLoading) return 'Loading...'
-      if (roundAccount?.accountName) return roundAccount.accountName
-      if (roundAccount?.organization?.name) return roundAccount.organization.name
-      if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
-        return state.user.companyInfo.companyName
-      }
-      return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
-    })()
     
     setHoveredTooltip({ 
       id: 'user-profile', 
-      label: userName, 
+      label: getUserDisplayName(state.user), 
       position: tooltipPosition, 
       isUser: true,
       userInfo: {
         role: state.user.role,
-        company: companyName,
+        company: getCompanyDisplayName(),
         email: state.user.email
       }
     })
-  }
-
-
+  }, [isCollapsed, state.user, getUserDisplayName, getCompanyDisplayName])
 
   // Close profile dropdown when clicking outside
   useEffect(() => {
@@ -407,123 +293,15 @@ export const DashboardLayout = memo(({
       document.addEventListener('click', handleClickOutside)
       return () => document.removeEventListener('click', handleClickOutside)
     }
-  }, [showProfileDropdown])
+  }, [showProfileDropdown, setShowProfileDropdown])
 
-
-  const toggleSidebar = useCallback(() => {
-    setIsCollapsed(!isCollapsed)
-    if (isMobile || isTablet) {
-      setShowMobileOverlay(!isCollapsed)
-    }
-  }, [isCollapsed, isMobile, isTablet])
-
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Only handle keyboard navigation when sidebar is focused
-      if (!navigationRef.current?.contains(document.activeElement)) {
-        return
-      }
-
-      const allItems = getAllNavItems
-      
-      switch (event.key) {
-        case 'ArrowDown':
-          event.preventDefault()
-          setIsKeyboardNavigating(true)
-          setFocusedIndex(prev => {
-            const newIndex = prev < allItems.length - 1 ? prev + 1 : 0
-            return newIndex
-          })
-          break
-          
-        case 'ArrowUp':
-          event.preventDefault()
-          setIsKeyboardNavigating(true)
-          setFocusedIndex(prev => {
-            const newIndex = prev > 0 ? prev - 1 : allItems.length - 1
-            return newIndex
-          })
-          break
-          
-        case 'Enter':
-          event.preventDefault()
-          if (focusedIndex >= 0 && focusedIndex < allItems.length) {
-            const item = allItems[focusedIndex]
-            if (item.subItems && !isCollapsed) {
-              toggleExpanded(item.id)
-            } else {
-              navigate(item.href)
-            }
-          }
-          break
-          
-        case 'Escape':
-          setFocusedIndex(-1)
-          setIsKeyboardNavigating(false)
-          break
-          
-        // Quick navigation shortcuts
-        case '1':
-          if (event.altKey) {
-            event.preventDefault()
-            navigate('/dashboard')
-          }
-          break
-        case '2':
-          if (event.altKey) {
-            event.preventDefault()
-            navigate('/customers')
-          }
-          break
-        case '3':
-          if (event.altKey) {
-            event.preventDefault()
-            navigate('/catalog')
-          }
-          break
-        case 'b':
-          if (event.ctrlKey && event.shiftKey) {
-            event.preventDefault()
-            toggleSidebar()
-          }
-          break
-        case '?':
-          if (event.shiftKey) {
-            event.preventDefault()
-            setShowShortcuts(!showShortcuts)
-          }
-          break
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [focusedIndex, getAllNavItems, navigate, isCollapsed, showShortcuts, toggleSidebar, toggleExpanded])
-
+  // Helper functions (can't be extracted to hooks because they depend on component state)
   const handleLogout = async () => {
     if (token) {
       await apiClient.logout()
     }
     logout()
     navigate('/login')
-  }
-
-
-
-  const getInitials = (firstName?: string, lastName?: string) => {
-    // Handle undefined, null, or the string "undefined"
-    const first = firstName && firstName !== 'undefined' ? firstName.trim() : ''
-    const last = lastName && lastName !== 'undefined' ? lastName.trim() : ''
-    
-    if (first && last) {
-      return `${first[0]}${last[0]}`.toUpperCase()
-    } else if (first) {
-      return first.slice(0, 2).toUpperCase()
-    } else if (last) {
-      return last.slice(0, 2).toUpperCase()
-    }
-    return 'U' // Default fallback
   }
 
   return (
@@ -533,93 +311,159 @@ export const DashboardLayout = memo(({
         '--sidebar-width': isCollapsed ? '80px' : '280px'
       } as React.CSSProperties}
     >
+      {/* Skip to main content link for accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#070708]"
+      >
+        Skip to main content
+      </a>
+
       {/* Minimal background - no floating orbs */}
+
+      {/* Mobile Header - Fixed at top */}
+      {isMobileView && (
+        <MobileHeader 
+          onMenuClick={toggleSidebar}
+          isMenuOpen={!isCollapsed}
+        />
+      )}
 
       {/* Mobile Overlay */}
       <AnimatePresence>
         {showMobileOverlay && !isCollapsed && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            {...ANIMATION_VARIANTS.fadeIn}
+            transition={transitionConfigs.normal}
+            className="fixed inset-0 bg-black/50 z-[60] lg:hidden"
             onClick={() => setIsCollapsed(true)}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
           />
         )}
       </AnimatePresence>
+
+      {/* Swipe area on left edge to open sidebar on mobile (when closed) */}
+      {isMobileView && isCollapsed && (
+        <div
+          className="fixed left-0 top-0 bottom-0 w-6 z-[60]"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          aria-hidden="true"
+        />
+      )}
 
       {/* Sidebar */}
       <motion.aside
         initial={false}
         animate={{ 
-          width: isCollapsed ? SIDEBAR.WIDTH_COLLAPSED : SIDEBAR.WIDTH_EXPANDED,
-          x: (isMobile || isTablet) && isCollapsed ? -SIDEBAR.WIDTH_COLLAPSED : 0
+          width: isMobileView ? SIDEBAR.WIDTH_EXPANDED : (isCollapsed ? SIDEBAR.WIDTH_COLLAPSED : SIDEBAR.WIDTH_EXPANDED),
+          x: isMobileView && isCollapsed ? -SIDEBAR.WIDTH_EXPANDED : (isSwiping ? swipeOffset : 0)
         }}
-        transition={{ duration: 0.15, ease: 'easeOut' }}
-          className="fixed left-0 top-0 h-full z-50 lg:z-base bg-[#070708]"
+        transition={isSwiping ? { duration: 0 } : transitionConfigs.sidebar}
+        className={`fixed left-0 top-0 h-full bg-[#070708] ${isMobileView ? 'z-[70] shadow-2xl' : 'z-auto'}`}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        style={isMobileView ? {
+          touchAction: 'pan-y', // Allow vertical scrolling but control horizontal
+          paddingTop: 'var(--safe-area-inset-top)',
+          paddingBottom: 'var(--safe-area-inset-bottom)'
+        } : {
+          touchAction: 'auto'
+        }}
       >
-        {/* Logo Section with Collapse Button - ChatGPT Style */}
-        <div className="flex-shrink-0">
-          {!isCollapsed ? (
-            // Expanded: Logo on left, button on right (same row)
-            <div className="flex items-center justify-between pl-8 pr-6 py-5">
-              <Link
-                to="/dashboard"
-                className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
-              >
-                <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
-                <div className="flex items-center space-x-0.5">
-                  <span className="text-[#D417C8] font-light text-xl tracking-wider transition-all duration-300">R</span>
-                  <span className="text-[#BD2CD0] font-light text-xl tracking-wider transition-all duration-300">O</span>
-                  <span className="text-[#7767DA] font-light text-xl tracking-wider transition-all duration-300">U</span>
-                  <span className="text-[#32A1E4] font-light text-xl tracking-wider transition-all duration-300">N</span>
-                  <span className="text-[#14BDEA] font-light text-xl tracking-wider transition-all duration-300">D</span>
+        {/* Logo Section with Collapse Button - Desktop Only */}
+        {!isMobileView && (
+          <>
+            <div className="flex-shrink-0">
+              {!isCollapsed ? (
+                // Expanded: Logo on left, button on right (same row)
+                <div className="flex items-center justify-between pl-8 pr-6 py-5">
+                  <Link
+                    to="/dashboard"
+                    className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
+                  >
+                    <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
+                    <LogoText />
+                  </Link>
+                  
+                  {/* Collapse button at same height as logo */}
+                  <button
+                    onClick={toggleSidebar}
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200 flex-shrink-0"
+                    aria-label="Collapse sidebar"
+                    title="Collapse sidebar (Ctrl+Shift+B)"
+                  >
+                    <PanelLeftClose className="w-5 h-5" />
+                  </button>
                 </div>
-              </Link>
-              
-              {/* Collapse button at same height as logo */}
-              <button
-                onClick={toggleSidebar}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200 flex-shrink-0"
-                aria-label="Collapse sidebar"
-                title="Collapse sidebar (Ctrl+Shift+B)"
-              >
-                <PanelLeftClose className="w-5 h-5" />
-              </button>
+              ) : (
+                // Collapsed: Logo on top, button below
+                <div className="flex flex-col items-center py-5 space-y-3">
+                  <Link
+                    to="/dashboard"
+                    className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
+                  >
+                    <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
+                  </Link>
+                  
+                  {/* Expand button below logo */}
+                  <button
+                    onClick={toggleSidebar}
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200"
+                    aria-label="Expand sidebar"
+                    title="Expand sidebar (Ctrl+Shift+B)"
+                  >
+                    <PanelLeft className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
             </div>
-          ) : (
-            // Collapsed: Logo on top, button below
-            <div className="flex flex-col items-center py-5 space-y-3">
-              <Link
-                to="/dashboard"
-                className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
-              >
-                <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
-              </Link>
-              
-              {/* Expand button below logo */}
-              <button
-                onClick={toggleSidebar}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200"
-                aria-label="Expand sidebar"
-                title="Expand sidebar (Ctrl+Shift+B)"
-              >
-                <PanelLeft className="w-5 h-5" />
-              </button>
-            </div>
-          )}
-        </div>
 
-        {/* Divider below logo */}
-        <div className="border-t border-white/10 mx-2"></div>
+            {/* Divider below logo */}
+            <div className="border-t border-white/10 mx-2"></div>
+          </>
+        )}
+
+        {/* Mobile Header inside sidebar - Same as desktop */}
+        {isMobileView && !isCollapsed && (
+          <>
+            <div className="flex-shrink-0">
+              <div className="flex items-center justify-between pl-8 pr-6 py-5">
+                <Link
+                  to="/dashboard"
+                  className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
+                >
+                  <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
+                  <LogoText />
+                </Link>
+                
+                {/* Close button - same as desktop collapse button */}
+                <button
+                  onClick={toggleSidebar}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200 flex-shrink-0"
+                  aria-label="Close sidebar"
+                  title="Close sidebar"
+                >
+                  <PanelLeftClose className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Divider below logo */}
+            <div className="border-t border-white/10 mx-2"></div>
+          </>
+        )}
 
         {/* Main Content Area - Flex container for navigation and bottom sections */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Navigation */}
           <nav 
             ref={navigationRef}
-            className={`hide-scrollbar flex-1 py-4 md:py-5 lg:py-4 pb-24 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}
+            className={`hide-scrollbar flex-1 py-4 md:py-5 lg:py-4 pb-24 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}`}
             role="navigation"
             aria-label="Main navigation"
           >
@@ -637,6 +481,7 @@ export const DashboardLayout = memo(({
               getAllNavItems={getAllNavItems}
               focusedIndex={focusedIndex}
               isKeyboardNavigating={isKeyboardNavigating}
+              transitionConfigs={transitionConfigs}
             />
           ))}
 
@@ -647,18 +492,14 @@ export const DashboardLayout = memo(({
               to={item.href}
               onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, undefined, e)}
               onMouseLeave={handleTooltipLeave}
-              className={`
-                group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
-                ${
-                  isActive(item.href)
-                    ? 'bg-primary/10 text-white border border-primary/20'
-                    : 'text-white/60 hover:text-white'
-                }
-                ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-                ${isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id)
-                  ? 'ring-2 ring-ring' : ''
-                }
-              `}
+              className={cn(
+                'group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9',
+                isActive(item.href)
+                  ? 'bg-primary/10 text-white border border-primary/20'
+                  : 'text-white/60 hover:text-white',
+                isCollapsed ? 'justify-center px-0' : 'px-6',
+                isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-2 ring-ring'
+              )}
               aria-label={item.label}
               tabIndex={isKeyboardNavigating ? -1 : 0}
             >
@@ -672,20 +513,19 @@ export const DashboardLayout = memo(({
 
             </Link>
           ))}
+
         </nav>
 
         {/* Fixed User Profile Section at Bottom */}
         <div className="absolute bottom-0 left-0 right-0">
-          {/* Expandable Profile Menu Items */}
-          <AnimatePresence>
-            {showProfileDropdown && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className={`overflow-hidden border-t border-[#262626] mx-2 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
-              >
+            {/* Expandable Profile Menu Items */}
+            <AnimatePresence>
+              {showProfileDropdown && (
+                <motion.div
+                  {...ANIMATION_VARIANTS.expandCollapse}
+                  transition={transitionConfigs.normal}
+                  className={`overflow-hidden border-t border-[#262626] mx-2 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
+                >
                 <Link
                   to="/user-settings"
                   onClick={() => setShowProfileDropdown(false)}
@@ -743,18 +583,17 @@ export const DashboardLayout = memo(({
           <div className="border-t border-white/10 mx-2" />
           
           {/* User Profile */}
-          <div className={`py-2 ${isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4'}`}>
+          <div className={cn('py-2', isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}>
             <div className="relative" ref={profileDropdownRef}>
             <button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               onMouseEnter={handleUserTooltipEnter}
               onMouseLeave={handleTooltipLeave}
-              className={`
-                group relative flex items-center rounded-lg transition-all duration-200 w-full
-                text-white/60 hover:text-white
-                ${isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5'}
-                ${showProfileDropdown ? 'text-white' : ''}
-              `}
+              className={cn(
+                'group relative flex items-center rounded-lg transition-all duration-200 w-full text-white/60 hover:text-white',
+                isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5',
+                showProfileDropdown && 'text-white'
+              )}
               aria-label="User profile menu"
               aria-expanded={showProfileDropdown}
             >
@@ -775,30 +614,10 @@ export const DashboardLayout = memo(({
               {!isCollapsed && state.user && (
                 <div className="flex-1 text-left overflow-hidden">
                   <div className="font-normal text-sm text-white truncate tracking-tight">
-                    {(() => {
-                      const firstName = state.user.firstName && state.user.firstName !== 'undefined' ? state.user.firstName.trim() : ''
-                      const lastName = state.user.lastName && state.user.lastName !== 'undefined' ? state.user.lastName.trim() : ''
-                      
-                      if (firstName && lastName) {
-                        return `${firstName} ${lastName}`
-                      } else if (firstName) {
-                        return firstName
-                      } else if (state.user.email) {
-                        return state.user.email
-                      }
-                      return 'User'
-                    })()}
+                    {getUserDisplayName(state.user)}
                   </div>
                   <div className="text-xs text-white/60 truncate">
-                    {(() => {
-                      if (isRoundAccountLoading) return 'Loading...'
-                      if (roundAccount?.accountName) return roundAccount.accountName
-                      if (roundAccount?.organization?.name) return roundAccount.organization.name
-                      if (state.user.accountType === 'business' && 'companyInfo' in state.user && state.user.companyInfo?.companyName) {
-                        return state.user.companyInfo.companyName
-                      }
-                      return state.user.accountType === 'business' ? 'Business Account' : 'Personal Account'
-                    })()}
+                    {getCompanyDisplayName()}
                   </div>
                 </div>
               )}
@@ -815,7 +634,7 @@ export const DashboardLayout = memo(({
             </button>
             </div>
           </div>
-        </div>
+          </div>
         </div>
       </motion.aside>
 
@@ -824,10 +643,8 @@ export const DashboardLayout = memo(({
       <AnimatePresence>
         {hoveredTooltip && isCollapsed && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.15 }}
+            {...ANIMATION_VARIANTS.tooltip}
+            transition={transitionConfigs.fast}
             className={`fixed bg-[#171719] border border-white/10 text-white rounded-lg pointer-events-none z-tooltip shadow-xl ${
               hoveredTooltip.isUser ? 'px-4 py-3 text-xs max-w-[250px]' : 'px-3 py-2 text-sm whitespace-nowrap'
             }`}
@@ -860,18 +677,14 @@ export const DashboardLayout = memo(({
       <AnimatePresence>
         {showShortcuts && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            {...ANIMATION_VARIANTS.fadeIn}
+            transition={transitionConfigs.normal}
             className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
             onClick={() => setShowShortcuts(false)}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ duration: 0.2 }}
+              {...ANIMATION_VARIANTS.modal}
+              transition={transitionConfigs.normal}
               className="bg-[#171719] border border-white/10 rounded-lg p-6 max-w-md mx-4"
               onClick={(e) => e.stopPropagation()}
             >
@@ -934,20 +747,19 @@ export const DashboardLayout = memo(({
 
       {/* Main Content - Responsive margins */}
       <motion.main
+        id="main-content"
         initial={false}
         animate={{
-          marginLeft: (() => {
-            if (isMobile || isTablet) {
-              return 0
-            }
-            return isCollapsed ? SIDEBAR.WIDTH_COLLAPSED : SIDEBAR.WIDTH_EXPANDED
-          })()
+          marginLeft: isMobileView ? 0 : (isCollapsed ? SIDEBAR.WIDTH_COLLAPSED : SIDEBAR.WIDTH_EXPANDED)
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="relative z-10 p-2"
+        className={`relative z-10 ${isMobileView ? 'mt-16 p-0' : 'p-2'}`}
+        style={isMobileView ? {
+          paddingBottom: 'max(1rem, var(--safe-area-inset-bottom))'
+        } : undefined}
       >
-        <div className="h-[calc(100vh-1rem)] bg-[#101011] rounded-xl overflow-y-auto scrollbar-thin">
-          <div className="max-w-6xl lg:max-w-7xl xl:max-w-screen-2xl mx-auto px-6 py-6">
+        <div className={`bg-[#101011] overflow-y-auto scrollbar-thin ${isMobileView ? 'min-h-[calc(100vh-4rem)]' : 'h-[calc(100vh-1rem)] rounded-xl'}`}>
+          <div className={`max-w-6xl lg:max-w-7xl xl:max-w-screen-2xl mx-auto ${isMobileView ? 'px-4 py-4' : 'px-6 py-6'}`}>
             <Breadcrumb />
             {children}
           </div>
