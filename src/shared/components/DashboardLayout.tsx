@@ -463,7 +463,8 @@ export const DashboardLayout = memo(({
           {/* Navigation */}
           <nav 
             ref={navigationRef}
-            className={`hide-scrollbar flex-1 py-4 md:py-5 lg:py-4 pb-24 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}`}
+            className={`hide-scrollbar flex-1 py-4 md:py-5 lg:py-4 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}`}
+            style={{ paddingBottom: showProfileDropdown ? '16rem' : '8rem' }}
             role="navigation"
             aria-label="Main navigation"
           >
@@ -517,14 +518,14 @@ export const DashboardLayout = memo(({
         </nav>
 
         {/* Fixed User Profile Section at Bottom */}
-        <div className="absolute bottom-0 left-0 right-0">
+        <div className="absolute bottom-0 left-0 right-0 bg-[#070708] z-10">
             {/* Expandable Profile Menu Items */}
             <AnimatePresence>
               {showProfileDropdown && (
                 <motion.div
                   {...ANIMATION_VARIANTS.expandCollapse}
                   transition={transitionConfigs.normal}
-                  className={`overflow-hidden border-t border-[#262626] mx-2 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
+                  className={`overflow-hidden bg-[#070708] border-t border-[#262626] mx-2 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
                 >
                 <Link
                   to="/user-settings"
@@ -580,10 +581,10 @@ export const DashboardLayout = memo(({
           </AnimatePresence>
 
           {/* Divider */}
-          <div className="border-t border-white/10 mx-2" />
+          <div className="border-t border-white/10 mx-2 bg-[#070708]" />
           
           {/* User Profile */}
-          <div className={cn('py-2', isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}>
+          <div className={cn('py-2 bg-[#070708]', isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}>
             <div className="relative" ref={profileDropdownRef}>
             <button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
@@ -592,7 +593,7 @@ export const DashboardLayout = memo(({
               className={cn(
                 'group relative flex items-center rounded-lg transition-all duration-200 w-full text-white/60 hover:text-white',
                 isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5',
-                showProfileDropdown && 'text-white'
+                showProfileDropdown && 'text-white bg-white/5'
               )}
               aria-label="User profile menu"
               aria-expanded={showProfileDropdown}
