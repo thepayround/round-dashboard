@@ -1,112 +1,96 @@
-import type { HTMLMotionProps } from 'framer-motion';
-import { motion } from 'framer-motion'
-import type { LucideIcon} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react'
 import { Loader2 } from 'lucide-react'
+import type { ButtonHTMLAttributes } from 'react'
 import { forwardRef } from 'react'
 
-interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'success' | 'create'
+export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
+  /** Visual style variant */
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
+  /** Button size */
   size?: 'sm' | 'md' | 'lg' | 'xl'
+  /** Optional icon (Lucide icon component) */
   icon?: LucideIcon
+  /** Icon position relative to text */
   iconPosition?: 'left' | 'right'
+  /** Loading state - shows spinner and disables button */
   loading?: boolean
+  /** Makes button full width */
   fullWidth?: boolean
+  /** Button content */
   children: React.ReactNode
-  /** Enhanced styling for action buttons with better visual hierarchy */
-  enhanced?: boolean
 }
 
 const variants = {
-  primary: 'bg-[#D417C8] text-white font-normal tracking-tight hover:bg-[#BD2CD0] transition-all duration-150',
-  secondary: 'bg-transparent border border-white/10 text-white font-normal tracking-tight hover:bg-white/5 hover:border-white/20 transition-all duration-150',
-  ghost: 'bg-transparent border border-transparent text-[#a3a3a3] hover:text-white transition-all duration-150',
-  danger: 'bg-red-600 text-white font-normal tracking-tight hover:bg-red-700 transition-all duration-150',
-  success: 'bg-[#42E695] text-black font-normal tracking-tight hover:bg-[#3BD88B] transition-all duration-150',
-  create: 'bg-[#D417C8] text-white font-normal tracking-tight hover:bg-[#BD2CD0] transition-all duration-150'
+  primary: 'bg-[#D417C8] text-white border border-[#D417C8] hover:bg-[#E02DD8]',
+  secondary: 'bg-transparent text-white border border-white/20 hover:bg-white/5',
+  ghost: 'bg-transparent text-white/80 border border-transparent hover:bg-white/5',
+  danger: 'bg-transparent text-white border border-red-500/30 hover:bg-red-500/10'
 }
 
 const sizes = {
-  sm: 'px-3 py-1.5 text-xs h-[42px] md:h-9',     // 42px mobile -> 36px desktop
-  md: 'px-4 py-1.5 text-xs h-[42px] md:h-9',     // 42px mobile -> 36px desktop
-  lg: 'px-5 py-1.5 text-xs h-[42px] md:h-9',     // 42px mobile -> 36px desktop
-  xl: 'px-6 py-1.5 text-sm h-[42px] md:h-9'      // 42px mobile -> 36px desktop
+  sm: 'px-3 py-1.5 text-xs h-8',
+  md: 'px-4 py-1.5 text-sm h-9',
+  lg: 'px-4 py-1.5 text-sm h-9',
+  xl: 'px-5 py-2 text-base h-10'
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
-  variant = 'primary',
-  size = 'md',
-  icon: Icon,
-  iconPosition = 'left',
-  loading = false,
-  fullWidth = false,
-  enhanced = false,
-  children,
-  className = '',
-  disabled,
-  ...props
-}, ref) => {
-  const baseClasses = `
-    rounded-lg transition-all duration-150 flex items-center justify-center gap-1
-    focus:outline-none focus:ring-2 focus:ring-[#D417C8] focus:ring-offset-2 focus:ring-offset-[#000000]
-    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-    relative isolate font-normal tracking-tight
-  `
+const iconSizes = {
+  sm: 'w-3.5 h-3.5',
+  md: 'w-4 h-4',
+  lg: 'w-4 h-4',
+  xl: 'w-5 h-5'
+}
 
-  const variantClasses = variants[variant]
-  const sizeClasses = sizes[size]
-  const widthClasses = fullWidth ? 'w-full' : ''
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      variant = 'primary',
+      size = 'md',
+      icon: Icon,
+      iconPosition = 'left',
+      loading = false,
+      fullWidth = false,
+      children,
+      className = '',
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
+    const isDisabled = disabled ?? loading
 
-  const isDisabled = disabled ?? loading
-
-  const motionProps = enhanced ? {
-    whileHover: !isDisabled ? { scale: 1.02, y: -1 } : {},
-    whileTap: !isDisabled ? { scale: 0.98 } : {},
-    transition: { type: "spring" as const, stiffness: 400, damping: 10 }
-  } : {
-    whileHover: !isDisabled ? { scale: 1.05, y: -2 } : {},
-    whileTap: !isDisabled ? { scale: 0.95 } : {}
+    return (
+      <button
+        ref={ref}
+        className={`
+          inline-flex items-center justify-center gap-2
+          rounded-lg font-normal tracking-tight
+          transition-all duration-200
+          outline-none
+          disabled:opacity-50 disabled:cursor-not-allowed
+          ${variants[variant]}
+          ${sizes[size]}
+          ${fullWidth ? 'w-full' : ''}
+          ${className}
+        `}
+        disabled={isDisabled}
+        {...props}
+      >
+        {loading ? (
+          <>
+            <Loader2 className={`${iconSizes[size]} animate-spin`} />
+            <span>Loading...</span>
+          </>
+        ) : (
+          <>
+            {Icon && iconPosition === 'left' && <Icon className={iconSizes[size]} />}
+            <span>{children}</span>
+            {Icon && iconPosition === 'right' && <Icon className={iconSizes[size]} />}
+          </>
+        )}
+      </button>
+    )
   }
-
-  return (
-    <motion.button
-      ref={ref}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...motionProps}
-      className={`${baseClasses} ${variantClasses} ${sizeClasses} ${widthClasses} ${className}`}
-      disabled={isDisabled}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...props}
-    >
-      {loading ? (
-        <>
-          <Loader2 className="w-4 h-4 animate-spin" />
-          <span>Loading...</span>
-        </>
-      ) : (
-        <>
-          {Icon && iconPosition === 'left' && (
-            enhanced ? (
-              <div className={`flex items-center justify-center rounded-lg ${variant === 'primary' || variant === 'create' ? 'bg-white/15' : 'bg-white/5'} p-1`}>
-                <Icon className="w-5 h-5" />
-              </div>
-            ) : (
-              <Icon className="w-5 h-5" />
-            )
-          )}
-          <span className="font-normal tracking-tight">{children}</span>
-          {Icon && iconPosition === 'right' && (
-            enhanced ? (
-              <div className={`flex items-center justify-center rounded-lg ${variant === 'primary' || variant === 'create' ? 'bg-white/15' : 'bg-white/5'} p-1`}>
-                <Icon className="w-5 h-5" />
-              </div>
-            ) : (
-              <Icon className="w-5 h-5" />
-            )
-          )}
-        </>
-      )}
-    </motion.button>
-  )
-})
+)
 
 Button.displayName = 'Button'

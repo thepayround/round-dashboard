@@ -3,6 +3,7 @@ import { Palette, Upload, Eye, Download, Trash2, Image } from 'lucide-react'
 import React, { useState } from 'react'
 
 import { Card } from '@/shared/components'
+import { Button } from '@/shared/components/Button'
 
 
 export const BrandingSection: React.FC = () => {
@@ -68,14 +69,12 @@ export const BrandingSection: React.FC = () => {
                 <div className="space-y-3">
                   <img src={logoPreview} alt="Logo preview" className="max-h-16 mx-auto" />
                   <div className="flex gap-2 justify-center">
-                    <button className="flex items-center gap-1 px-3 py-1.5 bg-white/10 hover:bg-white/15 text-white text-xs rounded-lg">
-                      <Eye className="w-3 h-3" />
+                    <Button variant="ghost" icon={Eye} iconPosition="left" size="sm">
                       Preview
-                    </button>
-                    <button className="flex items-center gap-1 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-[#D417C8] text-xs rounded-lg">
-                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                    <Button variant="danger" icon={Trash2} iconPosition="left" size="sm">
                       Remove
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ) : (
@@ -111,14 +110,12 @@ export const BrandingSection: React.FC = () => {
                 <div className="space-y-3">
                   <img src={faviconPreview} alt="Favicon preview" className="w-8 h-8 mx-auto" />
                   <div className="flex gap-2 justify-center">
-                    <button className="flex items-center gap-1 px-3 py-1.5 bg-white/10 hover:bg-white/15 text-white text-xs rounded-lg">
-                      <Eye className="w-3 h-3" />
+                    <Button variant="ghost" icon={Eye} iconPosition="left" size="sm">
                       Preview
-                    </button>
-                    <button className="flex items-center gap-1 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-[#D417C8] text-xs rounded-lg">
-                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                    <Button variant="danger" icon={Trash2} iconPosition="left" size="sm">
                       Remove
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ) : (
@@ -223,13 +220,12 @@ export const BrandingSection: React.FC = () => {
         </div>
 
         <div className="mt-6 pt-6 border-t border-white/10 flex gap-3">
-          <button className="px-6 py-3 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-sm font-normal tracking-tight rounded-lg transition-colors duration-200">
+          <Button variant="primary" size="lg">
             Save Branding Settings
-          </button>
-          <button className="flex items-center gap-2 px-4 py-3 bg-white/10 hover:bg-white/15 text-white text-sm font-normal tracking-tight rounded-lg transition-colors duration-200">
-            <Download className="w-4 h-4" />
+          </Button>
+          <Button variant="secondary" icon={Download} iconPosition="left" size="lg">
             Export Brand Kit
-          </button>
+          </Button>
         </div>
       </Card>
     </motion.div>

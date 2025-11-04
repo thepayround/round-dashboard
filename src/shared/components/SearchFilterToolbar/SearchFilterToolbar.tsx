@@ -1,6 +1,7 @@
 import { Filter } from 'lucide-react'
 import React, { useMemo } from 'react'
 
+import { Button } from '../Button'
 import { FilterChipsBar, type ActiveFilter } from '../FilterChipsBar'
 import { FilterPanel } from '../FilterPanel'
 import { SearchInput } from '../SearchInput/SearchInput'
@@ -208,13 +209,15 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
                 
                 {/* Filters Button */}
                 {filterFields.length > 0 && (
-                  <button
+                  <Button
                     onClick={onToggleFilters}
-                    className="btn-secondary flex items-center gap-2 flex-shrink-0"
+                    variant="secondary"
+                    size="md"
+                    icon={Filter}
+                    iconPosition="left"
                   >
-                    <Filter className="w-4 h-4" />
-                    <span>Filters</span>
-                  </button>
+                    Filters
+                  </Button>
                 )}
               </div>
               

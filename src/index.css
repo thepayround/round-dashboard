@@ -474,15 +474,13 @@
     background: #D417C8 !important;
     color: white !important;
     font-weight: 500;
-    height: 2.5rem;
-    padding: 0 1.5rem;
+    height: 2.25rem;
+    padding: 0 1rem;
     border-radius: 0.5rem;
     border: none;
     outline: none;
     cursor: pointer;
-    transition:
-      background-color 0.2s ease,
-      transform 0.2s ease;
+    transition: background-color 0.2s ease;
     text-decoration: none !important;
     display: inline-flex;
     align-items: center;
@@ -492,30 +490,25 @@
   }
 
   .btn-primary:hover {
-    background: #BD2CD0 !important;
-    transform: translateY(-1px);
-  }
-
-  .btn-primary:active {
-    transform: translateY(0);
+    background: #E02DD8 !important;
   }
 
   .btn-primary:disabled {
     background: #525252 !important;
     cursor: not-allowed;
-    transform: none;
+    opacity: 0.5;
   }
 
   .btn-secondary {
     background: transparent;
     color: white;
     font-weight: 500;
-    height: 2.5rem;
-    padding: 0 1.5rem;
-    border: 2px solid #333333;
+    height: 2.25rem;
+    padding: 0 1rem;
+    border: 1px solid #333333;
     border-radius: 0.5rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease;
     outline: none;
     display: inline-flex;
     align-items: center;
@@ -525,26 +518,26 @@
   }
 
   .btn-secondary:hover {
-    border-color: #D417C8;
-    background: rgba(212, 23, 200, 0.1);
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .btn-secondary:disabled {
     border-color: #262626;
     color: #525252;
     cursor: not-allowed;
+    opacity: 0.5;
   }
 
   .btn-ghost {
     background: transparent;
     color: #a3a3a3;
     font-weight: 500;
-    height: 2.5rem;
+    height: 2.25rem;
     padding: 0 1rem;
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease;
     outline: none;
     display: inline-flex;
     align-items: center;
@@ -554,13 +547,13 @@
   }
 
   .btn-ghost:hover {
-    color: white;
-    background: #1a1a1a;
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .btn-ghost:disabled {
     color: #525252;
     cursor: not-allowed;
+    opacity: 0.5;
   }
 
   .auth-divider {
@@ -1032,8 +1025,8 @@
 
     /* Improve mobile button sizing */
     .btn-primary, .btn-secondary {
-      height: 2.75rem; /* 44px - optimal touch target on mobile */
-      padding: 0 1.25rem;
+      height: 2.25rem; /* 36px - consistent with desktop */
+      padding: 0 1rem;
       font-size: 0.875rem; /* 14px - consistent with desktop */
       border-radius: 8px; /* Consistent 8px everywhere */
     }
@@ -1285,9 +1278,9 @@
   }
 
   .premium-button {
-    height: 2.5rem; /* 40px mobile - larger than inputs */
+    height: 2.25rem; /* 36px - consistent with all buttons */
     padding: 0 1rem;
-    font-size: 0.8125rem; /* 13px - readable button text */
+    font-size: 0.875rem; /* 14px - clear and consistent */
     font-weight: 450; /* Medium weight for clarity */
     border-radius: 8px; /* Consistent 8px radius */
     transition: all 0.12s ease;
@@ -1295,8 +1288,8 @@
 
   @media (min-width: 768px) {
     .premium-button {
-      height: 2.75rem; /* 44px tablet+ - optimal interaction target */
-      padding: 0 1.5rem;
+      height: 2.25rem; /* 36px - consistent with desktop */
+      padding: 0 1rem;
       font-size: 0.875rem; /* 14px - clear on larger screens */
     }
   }
