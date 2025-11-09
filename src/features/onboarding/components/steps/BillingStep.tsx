@@ -3,6 +3,8 @@ import { CreditCard, ExternalLink, CheckCircle } from 'lucide-react'
 
 import type { BillingSettings } from '../../types/onboarding'
 
+import { Button } from '@/shared/components/Button'
+
 interface BillingStepProps {
   data: BillingSettings
   onChange: (data: BillingSettings) => void
@@ -84,13 +86,16 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                   </div>
                 </div>
 
-                <button
+                <Button
                   onClick={handleConnectStripe}
-                  className="inline-flex items-center space-x-2 px-6 py-3 rounded-lg bg-primary text-white font-medium hover:shadow-lg hover:shadow-[#D417C8]/30 transition-all duration-200 transform hover:scale-105"
+                  variant="primary"
+                  size="lg"
+                  icon={ExternalLink}
+                  iconPosition="right"
+                  className="hover:shadow-lg hover:shadow-[#D417C8]/30 transform hover:scale-105"
                 >
-                  <span>Connect Stripe</span>
-                  <ExternalLink className="w-5 h-5" />
-                </button>
+                  Connect Stripe
+                </Button>
               </div>
             </div>
           </div>

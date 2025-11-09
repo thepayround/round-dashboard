@@ -3,6 +3,8 @@ import { X } from 'lucide-react'
 import React, { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
+import { IconButton } from '@/shared/components/Button'
+
 export interface FilterPanelProps {
   isOpen: boolean
   onClose: () => void
@@ -160,14 +162,15 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               >
                 {title}
               </h2>
-              <button
+              <IconButton
                 ref={closeButtonRef}
                 onClick={onClose}
-                className="p-2 hover:bg-white/10 rounded-lg transition-all duration-200 group"
+                icon={X}
+                variant="ghost"
+                size="md"
                 aria-label="Close filters"
-              >
-                <X className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
-              </button>
+                className="hover:bg-white/10"
+              />
             </div>
 
             {/* Content */}

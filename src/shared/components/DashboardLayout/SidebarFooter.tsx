@@ -3,6 +3,7 @@ import { ChevronUp, LogOut, User } from 'lucide-react'
 import { memo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
+import { PlainButton } from '@/shared/components/Button'
 import { ANIMATION_VARIANTS } from '@/shared/components/DashboardLayout/constants'
 import { cn } from '@/shared/utils/cn'
 
@@ -126,7 +127,7 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
               onMouseEnter={(e) => handleTooltipEnter('user-settings', 'User Settings', undefined, e)}
               onMouseLeave={handleTooltipLeave}
               className={cn(
-                'group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9',
+                'group relative flex items-center rounded-lg transition-all duration-200 h-9',
                 isActive('/user-settings')
                   ? 'bg-primary/10 text-white border border-primary/20'
                   : 'text-white/60 hover:text-white',
@@ -143,16 +144,17 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
               )}
             </Link>
 
-            <button
+            <PlainButton
               onClick={handleLogoutClick}
               onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
               onMouseLeave={handleTooltipLeave}
               className={cn(
-                'group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9 w-full',
+                'group relative flex items-center rounded-lg transition-all duration-200 h-9 w-full',
                 'text-white/60 hover:text-[#D417C8]',
                 isCollapsed ? 'justify-center px-0' : 'px-6'
               )}
               aria-label="Logout"
+              unstyled
             >
               <LogOut className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
 
@@ -161,7 +163,7 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
                   <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">Logout</span>
                 </div>
               )}
-            </button>
+            </PlainButton>
           </motion.div>
         )}
       </AnimatePresence>
@@ -172,17 +174,18 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
       {/* User Profile */}
       <div className={cn('py-2', isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}>
         <div className="relative" ref={profileDropdownRef}>
-          <button
+          <PlainButton
             onClick={handleDropdownToggle}
             onMouseEnter={handleUserTooltipEnter}
             onMouseLeave={handleTooltipLeave}
             className={cn(
               'group relative flex items-center rounded-lg transition-all duration-200 w-full text-white/60 hover:text-white',
-              isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5',
+              isCollapsed ? 'justify-center px-0 h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5',
               showProfileDropdown && 'text-white'
             )}
             aria-label="User profile menu"
             aria-expanded={showProfileDropdown}
+            unstyled
           >
             {/* User Avatar */}
             <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
@@ -217,7 +220,7 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
                 }`} 
               />
             )}
-          </button>
+          </PlainButton>
         </div>
       </div>
     </div>

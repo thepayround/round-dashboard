@@ -3,6 +3,7 @@ import { Eye, EyeOff, CheckCircle, AlertCircle, Lock, RotateCcw } from 'lucide-r
 import { useState } from 'react'
 
 import { ActionButton, PasswordStrengthIndicator } from '@/shared/components'
+import { IconButton } from '@/shared/components/Button'
 import { apiClient } from '@/shared/services/apiClient'
 import {
   validatePassword,
@@ -212,13 +213,15 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                   required
                   disabled={isLoading}
                 />
-                <button
+                <IconButton
                   type="button"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
-                >
-                  {showCurrentPassword ? <EyeOff /> : <Eye />}
-                </button>
+                  icon={showCurrentPassword ? EyeOff : Eye}
+                  variant="ghost"
+                  size="md"
+                  aria-label={showCurrentPassword ? 'Hide current password' : 'Show current password'}
+                  className="input-icon-right"
+                />
               </div>
               {hasFieldError(errors, 'currentPassword') && (
                 <motion.div
@@ -259,13 +262,15 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                     required
                     disabled={isLoading}
                   />
-                  <button
+                  <IconButton
                     type="button"
                     onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
-                  >
-                    {showNewPassword ? <EyeOff /> : <Eye />}
-                  </button>
+                    icon={showNewPassword ? EyeOff : Eye}
+                    variant="ghost"
+                    size="md"
+                    aria-label={showNewPassword ? 'Hide new password' : 'Show new password'}
+                    className="input-icon-right"
+                  />
                 </div>
 
                 {/* Password Strength Indicator */}
@@ -309,13 +314,15 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                     required
                     disabled={isLoading}
                   />
-                  <button
+                  <IconButton
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
-                  >
-                    {showConfirmPassword ? <EyeOff /> : <Eye />}
-                  </button>
+                    icon={showConfirmPassword ? EyeOff : Eye}
+                    variant="ghost"
+                    size="md"
+                    aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                    className="input-icon-right"
+                  />
                 </div>
                 {hasFieldError(errors, 'confirmPassword') && (
                   <motion.div

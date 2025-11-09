@@ -11,7 +11,7 @@ import React, { useState } from 'react'
 
 import type { TeamMember, UserRole } from '../types/team.types'
 
-import { IconButton } from '@/shared/components/Button'
+import { IconButton, PlainButton } from '@/shared/components/Button'
 
 interface SortConfig {
   field: string
@@ -64,9 +64,10 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
   }) => (
     <th className={`px-6 py-4 text-left text-sm font-normal text-white/80 tracking-tight ${className}`}>
       {field ? (
-        <button
+        <PlainButton
           onClick={() => onSort(field)}
-          className="flex items-center space-x-2 hover:text-white transition-colors group"
+          className="flex items-center space-x-2 hover:text-white transition-colors group text-left"
+          unstyled
         >
           <span>{children}</span>
           {(() => {
@@ -78,7 +79,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
             }
             return <ArrowDown className="w-4 h-4" />
           })()}
-        </button>
+        </PlainButton>
       ) : (
         children
       )}

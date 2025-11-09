@@ -3,6 +3,7 @@ import { ChevronDown, Search, AlertCircle, X, Check } from 'lucide-react'
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 
+import { PlainButton } from '@/shared/components/Button'
 import { phoneValidationService, type CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 import { cn } from '@/shared/utils/cn'
 import { phoneValidator } from '@/shared/utils/phoneValidation'
@@ -486,14 +487,15 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                 "
               />
               {searchTerm && (
-                <button
+                <PlainButton
                   onClick={() => setSearchTerm('')}
                   className="absolute right-2.5 md:right-3 lg:right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 md:p-1 lg:p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
                   type="button"
                   aria-label="Clear search"
+                  unstyled
                 >
                   <X className="w-3 h-3 text-white/60 hover:text-white/90" />
-                </button>
+                </PlainButton>
               )}
             </div>
           </div>
@@ -536,8 +538,8 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
       {/* Phone Input Container */}
       <div className={cn(
         "relative flex w-full rounded-lg transition-all duration-300 overflow-hidden",
-        // Match auth-input responsive height exactly
-        "h-[42px] md:h-9",
+        // Match auth-input height exactly
+        "h-9",
         // Use consistent auth-input styling
         "bg-white/[0.06] border",
         (() => {

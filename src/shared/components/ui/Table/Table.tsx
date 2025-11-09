@@ -1,6 +1,7 @@
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import React from 'react'
 
+import { PlainButton } from '@/shared/components/Button'
 import { cn } from '@/shared/utils/cn'
 
 // Base Table Components
@@ -107,9 +108,10 @@ export const SortableTableHead: React.FC<SortableTableHeadProps> = ({
   return (
     <TableHead className={className} {...props}>
       {onSort ? (
-        <button
+        <PlainButton
           onClick={() => onSort(field)}
-          className="flex items-center space-x-2 hover:text-white transition-colors group w-full"
+          className="flex items-center space-x-2 hover:text-white transition-colors group w-full text-left"
+          unstyled
         >
           <span>{children}</span>
           {isSorted ? (
@@ -121,7 +123,7 @@ export const SortableTableHead: React.FC<SortableTableHeadProps> = ({
           ) : (
             <ArrowUpDown className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity" />
           )}
-        </button>
+        </PlainButton>
       ) : (
         children
       )}

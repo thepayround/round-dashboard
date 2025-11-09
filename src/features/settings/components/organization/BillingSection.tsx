@@ -3,6 +3,7 @@ import { CreditCard, Calendar, DollarSign, FileText, TrendingUp } from 'lucide-r
 import React from 'react'
 
 import { Card } from '@/shared/components'
+import { Button } from '@/shared/components/Button'
 
 
 export const BillingSection: React.FC = () => (
@@ -36,9 +37,12 @@ export const BillingSection: React.FC = () => (
               <p className="text-xs text-gray-400">Your active subscription</p>
             </div>
           </div>
-          <button className="px-4 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
+          <Button
+            variant="primary"
+            size="sm"
+          >
             Upgrade Plan
-          </button>
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

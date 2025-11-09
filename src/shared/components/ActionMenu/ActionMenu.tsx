@@ -3,6 +3,8 @@ import { MoreHorizontal } from 'lucide-react'
 import type { ReactNode } from 'react';
 import { useState, useRef, useEffect } from 'react'
 
+import { IconButton, PlainButton } from '../Button'
+
 export interface ActionMenuItem {
   id: string
   label: string
@@ -34,12 +36,6 @@ export const ActionMenu = ({
   const [focusedIndex, setFocusedIndex] = useState(-1)
   const menuRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
-
-  const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-5 h-5',
-    lg: 'w-6 h-6'
-  }
 
   const positionClasses = {
     left: 'right-full mr-1',
@@ -129,7 +125,7 @@ export const ActionMenu = ({
   return (
     <div className={`relative ${className}`}>
       {trigger ? (
-        <button
+        <PlainButton
           ref={triggerRef}
           onClick={handleTriggerClick}
           onKeyDown={handleKeyDown}
@@ -138,24 +134,24 @@ export const ActionMenu = ({
           aria-expanded={isOpen}
           aria-haspopup="menu"
           aria-label="Actions menu"
+          unstyled
         >
           {trigger}
-        </button>
+        </PlainButton>
       ) : (
-        <button
+        <IconButton
           ref={triggerRef}
           onClick={handleTriggerClick}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          className={`btn-secondary opacity-0 group-hover:opacity-100 transition-opacity ${
-            disabled ? 'cursor-not-allowed' : ''
-          }`}
+          icon={MoreHorizontal}
+          variant="ghost"
+          size={size}
+          className="opacity-0 group-hover:opacity-100 transition-opacity"
           aria-expanded={isOpen}
           aria-haspopup="menu"
           aria-label="Actions menu"
-        >
-          <MoreHorizontal className={sizeClasses[size]} />
-        </button>
+        />
       )}
 
       <AnimatePresence>
@@ -180,7 +176,7 @@ export const ActionMenu = ({
                   {item.divider && (
                     <div className="h-px bg-white/10 my-1" role="separator" />
                   )}
-                  <button
+                  <PlainButton
                     onClick={() => handleItemClick(item)}
                     disabled={item.disabled}
                     className={`w-full flex items-center space-x-2 px-3 py-2 text-sm transition-colors rounded-md mx-1 ${
@@ -193,10 +189,11 @@ export const ActionMenu = ({
                     role="menuitem"
                     tabIndex={isEnabled ? 0 : -1}
                     aria-disabled={item.disabled}
+                    unstyled
                   >
                     {Icon && <Icon className="w-4 h-4 flex-shrink-0" />}
                     <span>{item.label}</span>
-                  </button>
+                  </PlainButton>
                 </div>
               )
             })}

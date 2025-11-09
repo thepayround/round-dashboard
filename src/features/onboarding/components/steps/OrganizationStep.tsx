@@ -34,16 +34,15 @@ export const OrganizationStep = ({
     description: data.description ?? '',
     revenue: data.revenue ?? '',
     country: data.country,
-    currency: data.currency ?? '',
-    timeZone: businessSettings?.timezone ?? '',
-    fiscalYearStart: businessSettings?.fiscalYearStart ?? '',
-    registrationNumber: data.registrationNumber ?? '',
-    taxId: data.taxId ?? ''
+    currency: data.currency ?? 'USD',
+    timeZone: businessSettings?.timezone ?? data.timeZone ?? 'UTC',
+    fiscalYearStart: businessSettings?.fiscalYearStart ?? 'January'
   }), [data, businessSettings])
 
   // Handle form changes and convert back to onboarding format
   const handleFormChange = (formData: OrganizationFormData) => {
     onChange({
+      ...data,
       companyName: formData.companyName,
       industry: formData.industry,
       companySize: formData.companySize,
@@ -53,8 +52,7 @@ export const OrganizationStep = ({
       revenue: formData.revenue,
       country: formData.country,
       currency: formData.currency,
-      registrationNumber: formData.registrationNumber,
-      taxId: formData.taxId
+      timeZone: formData.timeZone
     })
   }
 
@@ -70,7 +68,7 @@ export const OrganizationStep = ({
           ? 'Review and complete your company profile'
           : 'Complete your company profile'}
         showFinancialSettings
-        showRegionalSettings
+        showRegionalSettings={false}
       />
     </div>
   )

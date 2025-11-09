@@ -277,17 +277,15 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
         {/* Clear All Button inside panel */}
         {onClearFilters && activeFilters.length > 0 && (
           <div className="mt-6 pt-6 border-t border-[#1e1f22]">
-            <button
+            <Button
               onClick={onClearFilters}
-              className="w-full px-6 py-3 text-sm 
-                       bg-destructive/20 
-                       hover:bg-destructive/30 
-                       border border-red-500/30 hover:border-red-400/40 
-                       rounded-lg text-red-300 hover:text-red-200 
-                       transition-all duration-200"
+              variant="danger"
+              size="md"
+              fullWidth
+              className="bg-destructive/20 hover:bg-destructive/30 border-red-500/30 hover:border-red-400/40 text-red-300 hover:text-red-200"
             >
               Clear All Filters
-            </button>
+            </Button>
           </div>
         )}
       </FilterPanel>

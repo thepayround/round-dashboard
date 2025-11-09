@@ -18,6 +18,7 @@ import {
 } from '../components/improved'
 
 import { Card } from '@/shared/components'
+import { Button } from '@/shared/components/Button'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { usePreloadAllOptions } from '@/shared/hooks/api/useUserSettingsOptions'
 import { useAuth } from '@/shared/hooks/useAuth'
@@ -114,12 +115,14 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
             </div>
             <h3 className="text-lg font-medium text-white mb-2">Settings Unavailable</h3>
             <p className="text-gray-400 mb-6">{error}</p>
-            <button
+            <Button
               onClick={clearError}
-              className="px-6 py-3 bg-[#D417C8] hover:bg-[#BD2CD0] text-white font-medium rounded-lg transition-colors duration-200"
+              variant="primary"
+              size="md"
+              className="px-6"
             >
               Try Again
-            </button>
+            </Button>
           </Card>
         </motion.div>
       )

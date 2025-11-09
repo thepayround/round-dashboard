@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
+import { PlainButton } from '@/shared/components/Button'
 import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { teamService } from '@/shared/services/api'
@@ -174,7 +175,7 @@ export const InvitationAcceptancePage = () => {
             <ActionButton
               label="Go to Login"
               onClick={() => navigate('/login')}
-              size="sm"
+              size="md"
               actionType="auth"
             />
           </div>
@@ -415,13 +416,14 @@ export const InvitationAcceptancePage = () => {
                   aria-invalid={!!errors.password}
                   aria-describedby={errors.password ? 'password-error' : undefined}
                 />
-                <button
+                <PlainButton
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
+                  unstyled
                 >
                   {showPassword ? <EyeOff /> : <Eye />}
-                </button>
+                </PlainButton>
               </div>
 
               {/* Password Strength Indicator */}
@@ -456,7 +458,7 @@ export const InvitationAcceptancePage = () => {
               disabled={!isFormValid}
               icon={ArrowRight}
               loading={isSubmitting}
-              size="sm"
+              size="md"
               animated={false}
               actionType="auth"
               className="mt-8 w-full"

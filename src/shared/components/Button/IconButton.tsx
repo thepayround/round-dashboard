@@ -23,15 +23,15 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'p-1 w-7 h-7',
-  md: 'p-1.5 w-8 h-8',
-  lg: 'p-2 w-10 h-10'
+  sm: 'p-1.5 w-9 h-9',
+  md: 'p-1.5 w-9 h-9',
+  lg: 'p-1.5 w-9 h-9'
 }
 
 const iconSizes = {
-  sm: 'w-3.5 h-3.5',
+  sm: 'w-4 h-4',
   md: 'w-4 h-4',
-  lg: 'w-5 h-5'
+  lg: 'w-4 h-4'
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(

@@ -28,10 +28,10 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'px-3 py-1.5 text-xs h-8',
+  sm: 'px-3 py-1.5 text-xs h-9',
   md: 'px-4 py-1.5 text-sm h-9',
   lg: 'px-4 py-1.5 text-sm h-9',
-  xl: 'px-5 py-2 text-base h-10'
+  xl: 'px-5 py-2 text-base h-9'
 }
 
 const iconSizes = {

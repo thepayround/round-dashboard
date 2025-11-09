@@ -3,6 +3,7 @@ import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
 import ColorLogo from '@/assets/logos/color-logo.svg'
+import { IconButton } from '@/shared/components/Button'
 import { cn } from '@/shared/utils/cn'
 
 /**
@@ -61,14 +62,15 @@ export const SidebarHeader = memo<SidebarHeaderProps>(({
               </Link>
               
               {/* Collapse button at same height as logo */}
-              <button
+              <IconButton
                 onClick={toggleSidebar}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200 flex-shrink-0"
+                icon={PanelLeftClose}
+                variant="ghost"
+                size="md"
                 aria-label="Collapse sidebar"
                 title="Collapse sidebar (Ctrl+Shift+B)"
-              >
-                <PanelLeftClose className="w-5 h-5" />
-              </button>
+                className="flex-shrink-0"
+              />
             </div>
           ) : (
             // Collapsed: Logo on top, button below
@@ -81,14 +83,14 @@ export const SidebarHeader = memo<SidebarHeaderProps>(({
               </Link>
               
               {/* Expand button below logo */}
-              <button
+              <IconButton
                 onClick={toggleSidebar}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200"
+                icon={PanelLeft}
+                variant="ghost"
+                size="md"
                 aria-label="Expand sidebar"
                 title="Expand sidebar (Ctrl+Shift+B)"
-              >
-                <PanelLeft className="w-5 h-5" />
-              </button>
+              />
             </div>
           )}
         </div>
@@ -112,14 +114,15 @@ export const SidebarHeader = memo<SidebarHeaderProps>(({
             </Link>
             
             {/* Close button - same as desktop collapse button */}
-            <button
+            <IconButton
               onClick={toggleSidebar}
-              className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200 flex-shrink-0"
+              icon={PanelLeftClose}
+              variant="ghost"
+              size="md"
               aria-label="Close sidebar"
               title="Close sidebar"
-            >
-              <PanelLeftClose className="w-5 h-5" />
-            </button>
+              className="flex-shrink-0"
+            />
           </div>
         </div>
 

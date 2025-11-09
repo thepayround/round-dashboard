@@ -1,30 +1,23 @@
-import {
-  Building2,
-  Users,
-  CreditCard,
-  Shield,
+import { 
+  Building2, 
+  Users, 
+  CreditCard, 
+  Shield, 
   Bell,
   Palette,
-  Globe,
-  MapPin
+  Globe
 } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-import { SettingsNavigation } from '../components/improved/navigation/SettingsNavigation'
-import {
-  GeneralSection,
-  TeamSection,
-  BillingSection,
-  SecuritySection,
-  NotificationsSection,
-  BrandingSection,
-  IntegrationsSection,
-  AddressManagementSection
-} from '../components/organization'
+import { OrganizationSettingsForm } from '../components/OrganizationSettingsForm'
+import { TeamManagementPage } from '../components/TeamManagementPage'
 
+import { PlainButton } from '@/shared/components/Button'
+import { Card } from '@/shared/components/Card'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 
-interface SettingsSection {
+
+interface TabItem {
   id: string
   label: string
   icon: React.ComponentType<{ className?: string }>
@@ -32,14 +25,14 @@ interface SettingsSection {
 }
 
 export const OrganizationSettingsPage: React.FC = () => {
-  const [activeSection, setActiveSection] = useState('general')
+  const [activeTab, setActiveTab] = useState('general')
 
-  const settingsSections: SettingsSection[] = [
+  const tabs: TabItem[] = [
     {
       id: 'general',
-      label: 'General Settings',
+      label: 'General',
       icon: Building2,
-      description: 'Organization information and basic settings'
+      description: 'Organization name, description, and basic settings'
     },
     {
       id: 'team',
@@ -48,83 +41,157 @@ export const OrganizationSettingsPage: React.FC = () => {
       description: 'Manage team members, roles, and invitations'
     },
     {
-      id: 'addresses',
-      label: 'Address Management',
-      icon: MapPin,
-      description: 'Manage billing, shipping, and office addresses'
-    },
-    {
       id: 'billing',
-      label: 'Billing & Subscription',
+      label: 'Billing & Plans',
       icon: CreditCard,
-      description: 'Subscription plans, billing, and usage'
+      description: 'Manage subscription, billing information, and usage'
     },
     {
       id: 'security',
-      label: 'Security & Privacy',
+      label: 'Security',
       icon: Shield,
-      description: 'Security policies and access controls'
+      description: 'Security settings, two-factor authentication, and audit logs'
     },
     {
       id: 'notifications',
       label: 'Notifications',
       icon: Bell,
-      description: 'Organization notification preferences'
+      description: 'Email notifications and alert preferences'
     },
     {
       id: 'branding',
-      label: 'Branding & Theme',
+      label: 'Branding',
       icon: Palette,
-      description: 'Visual identity and brand customization'
+      description: 'Custom branding, logos, and theme settings'
     },
     {
       id: 'integrations',
-      label: 'Integrations & API',
+      label: 'Integrations',
       icon: Globe,
-      description: 'Third-party services and API management'
+      description: 'Third-party integrations and API settings'
     }
   ]
 
-  const renderSectionContent = () => {
-    switch (activeSection) {
-      case 'general':
-        return <GeneralSection />
+  const renderTabContent = () => {
+    switch (activeTab) {
       case 'team':
-        return <TeamSection />
-      case 'addresses':
-        return <AddressManagementSection />
+        return <TeamManagementPage />
+      case 'general':
+        return (
+          <div className="max-w-4xl">
+            <OrganizationSettingsForm />
+          </div>
+        )
       case 'billing':
-        return <BillingSection />
+        return (
+          <Card title="Billing & Plans" description="Manage your subscription and billing information">
+            <div className="space-y-6">
+              <div className="text-center py-12">
+                <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-white mb-2">Billing Management</h3>
+                <p className="text-gray-400">View and manage your subscription, billing details, and usage.</p>
+                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+              </div>
+            </div>
+          </Card>
+        )
       case 'security':
-        return <SecuritySection />
+        return (
+          <Card title="Security Settings" description="Manage security and authentication settings">
+            <div className="space-y-6">
+              <div className="text-center py-12">
+                <Shield className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-white mb-2">Security Settings</h3>
+                <p className="text-gray-400">Configure two-factor authentication, security policies, and audit logs.</p>
+                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+              </div>
+            </div>
+          </Card>
+        )
       case 'notifications':
-        return <NotificationsSection />
+        return (
+          <Card title="Notification Settings" description="Configure email and alert preferences">
+            <div className="space-y-6">
+              <div className="text-center py-12">
+                <Bell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-white mb-2">Notification Preferences</h3>
+                <p className="text-gray-400">Manage email notifications and alert settings.</p>
+                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+              </div>
+            </div>
+          </Card>
+        )
       case 'branding':
-        return <BrandingSection />
+        return (
+          <Card title="Branding Settings" description="Customize your organization&apos;s appearance">
+            <div className="space-y-6">
+              <div className="text-center py-12">
+                <Palette className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-white mb-2">Branding & Appearance</h3>
+                <p className="text-gray-400">Upload logos, customize colors, and set branding preferences.</p>
+                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+              </div>
+            </div>
+          </Card>
+        )
       case 'integrations':
-        return <IntegrationsSection />
+        return (
+          <Card title="Integrations" description="Connect with third-party services">
+            <div className="space-y-6">
+              <div className="text-center py-12">
+                <Globe className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-white mb-2">Third-party Integrations</h3>
+                <p className="text-gray-400">Connect with external services and manage API access.</p>
+                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+              </div>
+            </div>
+          </Card>
+        )
       default:
-        return <GeneralSection />
+        return null
     }
   }
 
   return (
     <DashboardLayout>
-      <div className="space-y-4 md:space-y-6">
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 md:gap-6">
-          {/* Navigation Sidebar */}
-          <div className="lg:col-span-1 lg:sticky lg:top-6 lg:self-start">
-            <SettingsNavigation
-              sections={settingsSections}
-              activeSection={activeSection}
-              onSectionChange={setActiveSection}
-            />
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Organization Settings</h1>
+            <p className="text-gray-400 mt-1">
+              Manage your organization&apos;s settings, team, and preferences
+            </p>
+          </div>
+        </div>
+
+        {/* Custom Tabs */}
+        <div className="w-full">
+          {/* Tab List */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-2 p-2 bg-gray-800/50 rounded-lg">
+            {tabs.map((tab) => {
+              const IconComponent = tab.icon
+              return (
+                <PlainButton
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex flex-col items-center p-3 rounded-lg transition-all duration-200 ${
+                    activeTab === tab.id
+                      ? 'bg-purple-600/20 border border-purple-500/50 text-white'
+                      : 'hover:bg-gray-700/50 text-gray-300 hover:text-white'
+                  }`}
+                  unstyled
+                >
+                  <IconComponent className="w-5 h-5 mb-2" />
+                  <span className="text-xs font-medium">{tab.label}</span>
+                </PlainButton>
+              )
+            })}
           </div>
 
-          {/* Content Area */}
-          <div className="lg:col-span-4">
-            {renderSectionContent()}
+          {/* Tab Content */}
+          <div className="mt-6">
+            {renderTabContent()}
           </div>
         </div>
       </div>

@@ -1,6 +1,8 @@
 import { Search, X, Loader2 } from 'lucide-react'
 import React from 'react'
 
+import { IconButton } from '@/shared/components/Button'
+
 interface SearchInputProps {
   value: string
   onChange: (value: string) => void
@@ -46,7 +48,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         onChange={handleChange}
         disabled={disabled}
         className={`
-          w-full h-[42px] md:h-9 pl-10 pr-16 md:pr-20 px-3 py-1.5
+          w-full h-9 pl-10 pr-16 md:pr-20 px-3 py-1.5
           bg-[#171719] border border-[#333333] rounded-lg
           text-white placeholder-[#737373] text-xs font-light
           focus:outline-none focus:border-[#14bdea]
@@ -67,23 +69,16 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         )}
         
         {value && onClear && !isSearching && (
-          <button
+          <IconButton
             onClick={handleClear}
-            className="
-              flex items-center justify-center w-7 h-7 md:w-6 md:h-6 rounded-lg
-              border border-white/10
-              text-[#a3a3a3] hover:text-white hover:bg-white/5
-              hover:border-white/20
-              active:scale-95
-              transition-all duration-200
-              focus:outline-none focus:ring-2 focus:ring-[#14BDEA]
-            "
+            icon={X}
+            variant="ghost"
+            size="sm"
             type="button"
             disabled={disabled}
-            title="Clear search"
-          >
-            <X className="w-3.5 h-3.5 md:w-3 md:h-3" />
-          </button>
+            aria-label="Clear search"
+            className="w-9 h-9 border border-white/10 hover:border-white/20 focus:ring-2 focus:ring-[#14BDEA]"
+          />
         )}
       </div>
     </div>

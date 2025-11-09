@@ -1,6 +1,8 @@
 import { AlertCircle, X } from 'lucide-react'
 import React from 'react'
 
+import { Button, IconButton } from '@/shared/components/Button'
+
 interface CustomerErrorBoundaryProps {
   error?: string
   onRetry?: () => void
@@ -21,21 +23,25 @@ export const CustomerErrorDisplay: React.FC<CustomerErrorBoundaryProps> = ({
         <p className="text-red-200 text-sm font-medium">Error</p>
         <p className="text-red-300 text-sm mt-1">{error}</p>
         {onRetry && (
-          <button
+          <Button
             onClick={onRetry}
-            className="text-[#D417C8] hover:text-red-300 text-sm font-normal tracking-tight mt-2 underline"
+            variant="ghost"
+            size="sm"
+            className="mt-2 h-auto px-0 py-0 text-[#D417C8] hover:text-red-300 underline"
           >
             Try Again
-          </button>
+          </Button>
         )}
       </div>
       {onClose && (
-        <button
+        <IconButton
           onClick={onClose}
-          className="text-[#D417C8] hover:text-red-300 transition-colors"
-        >
-          <X className="w-4 h-4" />
-        </button>
+          icon={X}
+          variant="ghost"
+          size="sm"
+          aria-label="Close error"
+          className="text-[#D417C8] hover:text-red-300"
+        />
       )}
     </div>
   )

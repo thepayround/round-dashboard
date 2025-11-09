@@ -44,7 +44,7 @@ export const FormInput = forwardRef<
     text-white placeholder-[#737373] text-xs
     focus:outline-none focus:border-[#14bdea] transition-all duration-200
     disabled:opacity-50 disabled:cursor-not-allowed
-    h-[42px] md:h-9
+    h-9
   `
 
   const iconInputClasses = `

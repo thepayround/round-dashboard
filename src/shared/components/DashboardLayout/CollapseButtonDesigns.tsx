@@ -1,5 +1,7 @@
 import { PanelLeft, PanelLeftClose, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
 
+import { PlainButton } from '../Button'
+
 interface CollapseButtonProps {
   isCollapsed: boolean
   onClick: () => void
@@ -10,23 +12,24 @@ export const CollapseButton = ({ isCollapsed, onClick, design = 1 }: CollapseBut
   const designs = {
     // Design 1: Minimal Floating Circle with subtle glow
     1: (
-      <button
+      <PlainButton
         onClick={onClick}
         className="absolute -right-3 top-20 z-50 w-6 h-6 rounded-full bg-gradient-to-br from-[#D417C8] to-[#7767DA] shadow-lg shadow-[#D417C8]/20 hover:shadow-xl hover:shadow-[#D417C8]/30 flex items-center justify-center transition-all duration-300 hover:scale-110 border border-white/10"
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         title={isCollapsed ? "Expand sidebar (Ctrl+Shift+B)" : "Collapse sidebar (Ctrl+Shift+B)"}
+        unstyled
       >
         {isCollapsed ? (
           <ChevronRight className="w-3.5 h-3.5 text-white" />
         ) : (
           <ChevronLeft className="w-3.5 h-3.5 text-white" />
         )}
-      </button>
+      </PlainButton>
     ),
 
     // Design 2: Sleek Pill with Icon + Text (when expanded)
     2: (
-      <button
+      <PlainButton
         onClick={onClick}
         className={`w-full px-4 py-2.5 flex items-center gap-2 text-xs transition-all duration-200 group relative overflow-hidden ${
           isCollapsed 
@@ -35,6 +38,7 @@ export const CollapseButton = ({ isCollapsed, onClick, design = 1 }: CollapseBut
         } rounded-lg mx-2`}
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         title={isCollapsed ? "Expand sidebar (Ctrl+Shift+B)" : "Collapse sidebar (Ctrl+Shift+B)"}
+        unstyled
       >
         {/* Animated gradient background on hover */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#D417C8]/0 via-[#D417C8]/5 to-[#D417C8]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -50,20 +54,21 @@ export const CollapseButton = ({ isCollapsed, onClick, design = 1 }: CollapseBut
             <ChevronsLeft className="w-4 h-4 text-[#D417C8] relative z-10" />
           </>
         )}
-      </button>
+      </PlainButton>
     ),
 
     // Design 3: Split Design with Divider Line
     3: (
       <div className="relative">
         <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-2" />
-        <button
+        <PlainButton
           onClick={onClick}
           className={`w-full py-3 flex items-center text-xs text-gray-400 hover:text-white transition-all duration-200 group ${
             isCollapsed ? 'justify-center px-2' : 'justify-between px-4'
           }`}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           title={isCollapsed ? "Expand sidebar (Ctrl+Shift+B)" : "Collapse sidebar (Ctrl+Shift+B)"}
+          unstyled
         >
           {isCollapsed ? (
             <div className="relative">
@@ -79,14 +84,14 @@ export const CollapseButton = ({ isCollapsed, onClick, design = 1 }: CollapseBut
               <PanelLeftClose className="w-4 h-4 group-hover:text-[#D417C8] transition-colors" />
             </>
           )}
-        </button>
+        </PlainButton>
         <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-2" />
       </div>
     ),
 
     // Design 4: Glassmorphism Card Style
     4: (
-      <button
+      <PlainButton
         onClick={onClick}
         className={`w-full flex items-center gap-3 transition-all duration-300 group backdrop-blur-sm ${
           isCollapsed 
@@ -95,6 +100,7 @@ export const CollapseButton = ({ isCollapsed, onClick, design = 1 }: CollapseBut
         } rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#D417C8]/30 shadow-lg hover:shadow-[#D417C8]/10`}
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         title={isCollapsed ? "Expand sidebar (Ctrl+Shift+B)" : "Collapse sidebar (Ctrl+Shift+B)"}
+        unstyled
       >
         {isCollapsed ? (
           <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#7767DA]/20 group-hover:from-[#D417C8]/30 group-hover:to-[#7767DA]/30 transition-all">
@@ -113,19 +119,20 @@ export const CollapseButton = ({ isCollapsed, onClick, design = 1 }: CollapseBut
             </div>
           </>
         )}
-      </button>
+      </PlainButton>
     ),
 
     // Design 5: Minimalist Bottom Edge Button
     5: (
       <div className="relative">
-        <button
+        <PlainButton
           onClick={onClick}
           className={`w-full group relative overflow-hidden ${
             isCollapsed ? 'py-4' : 'py-3'
           }`}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           title={isCollapsed ? "Expand sidebar (Ctrl+Shift+B)" : "Collapse sidebar (Ctrl+Shift+B)"}
+          unstyled
         >
           {/* Top gradient line */}
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -152,7 +159,7 @@ export const CollapseButton = ({ isCollapsed, onClick, design = 1 }: CollapseBut
           
           {/* Bottom gradient line */}
           <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        </button>
+        </PlainButton>
       </div>
     )
   }

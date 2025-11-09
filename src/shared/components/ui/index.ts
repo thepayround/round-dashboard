@@ -5,7 +5,6 @@
  */
 
 // Form Components
-export * from './Button'
 export * from './Input'
 export * from './Textarea'
 export * from './Checkbox'
@@ -31,3 +30,6 @@ export * from '../ConfirmDialog'
 export * from '../PasswordStrengthIndicator'
 export * from './PhoneInput'
 export * from './PhoneDisplay'
+
+// Unified button primitives
+export * from '../Button'

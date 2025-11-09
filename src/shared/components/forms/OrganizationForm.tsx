@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
-import { Building, ExternalLink, AlignLeft, Hash, CreditCard } from 'lucide-react'
+import { Building, ExternalLink, AlignLeft } from 'lucide-react'
 import { useCallback } from 'react'
 
-import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig, currencyDropdownConfig, fiscalYearDropdownConfig, timezoneDropdownConfig } from '@/shared/components/ui/ApiDropdown'
-import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
+import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+import { useCurrency } from '@/shared/hooks/useCurrency'
 
 export interface OrganizationFormData {
   companyName: string
@@ -17,8 +17,6 @@ export interface OrganizationFormData {
   currency: string
   timeZone: string
   fiscalYearStart: string
-  registrationNumber: string
-  taxId: string
 }
 
 interface OrganizationFormProps {
@@ -31,7 +29,6 @@ interface OrganizationFormProps {
   showFinancialSettings?: boolean
   showRegionalSettings?: boolean
   className?: string
-  readOnly?: boolean
 }
 
 export const OrganizationForm = ({
@@ -43,11 +40,13 @@ export const OrganizationForm = ({
   headerSubtitle = 'Complete your company profile',
   showFinancialSettings = true,
   showRegionalSettings = true,
-  className = '',
-  readOnly = false
+  className = ''
 }: OrganizationFormProps) => {
-  const { data: currencies, isLoading: currenciesLoading } = useCurrencies()
-  
+  const { getCurrencySymbol, isLoading: currencyLoading } = useCurrency()
+
+  // Get currency symbol
+  const currencySymbol = getCurrencySymbol(data.currency || 'USD')
+
   // Handle input changes
   const handleInputChange = useCallback((field: keyof OrganizationFormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     onChange({
@@ -57,26 +56,11 @@ export const OrganizationForm = ({
   }, [data, onChange])
 
   const handleSelectChange = useCallback((field: keyof OrganizationFormData, value: string) => {
-    const newData = {
+    onChange({
       ...data,
       [field]: value,
-    }
-    onChange(newData)
+    })
   }, [data, onChange])
-  
-  // Get current currency symbol from backend - NO fallbacks, backend is source of truth
-  const currentCurrency = currencies?.find(currency => currency.currencyCodeAlpha === data.currency)
-  const currencySymbol = currentCurrency?.currencySymbol
-  
-  // If we have a saved currency but currencies are still loading, show loading state
-  if (data.currency && currenciesLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="w-8 h-8 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
-        <span className="ml-3 text-white/60">Loading currency data for {data.currency}...</span>
-      </div>
-    )
-  }
 
   return (
     <motion.div
@@ -92,81 +76,79 @@ export const OrganizationForm = ({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="w-16 h-16 mx-auto rounded-lg bg-accent/[#32A1E4]/20 border border-white/10 flex items-center justify-center"
+            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
           >
             <Building className="w-8 h-8 text-[#32A1E4]" />
           </motion.div>
 
           <div>
-            <h2 className="text-xl font-normal tracking-tight text-white mb-2">{headerTitle}</h2>
+            <h2 className="text-lg font-bold text-white mb-2">{headerTitle}</h2>
             <p className="text-gray-400 text-sm">{headerSubtitle}</p>
           </div>
         </div>
       )}
 
-      {/* Form Sections - Polar.sh style */}
-      <div className="flex flex-col divide-y divide-white/10">
+      {/* Form Sections */}
+      <div className="space-y-6">
         
         {/* Company Identity Section */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.3 : 0.1 }}
-          className="relative flex flex-col gap-8 p-8"
+          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
         >
-          <div className="flex w-full flex-col gap-y-6">
-            <div className="flex flex-col gap-y-2">
-              <h2 className="text-lg font-medium">Company Identity</h2>
-              <p className="text-gray-500 dark:text-polar-500 leading-snug">Basic company information</p>
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <Building className="w-4 h-4 text-[#32A1E4]" />
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-white">Company Identity</h3>
+              <p className="text-xs text-gray-400">Basic company information</p>
             </div>
           </div>
 
-          <div className="flex w-full flex-col gap-y-6">
-            {/* Company Name & Website Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-2">
-                <label htmlFor="companyName" className="auth-label">
-                  Company Name <span className="text-[#D417C8]">*</span>
-                </label>
-                <div className="input-container">
-                  <Building className="input-icon-left auth-icon-primary" />
-                  <input
-                    id="companyName"
-                    type="text"
-                    value={data.companyName}
-                    onChange={handleInputChange('companyName')}
-                    placeholder="Acme Corporation"
-                    className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
-                    readOnly={readOnly}
-                    disabled={readOnly}
-                  />
-                </div>
-                {errors.companyName && <p className="mt-1 text-sm text-[#D417C8]">{errors.companyName}</p>}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Company Name */}
+            <div>
+              <label htmlFor="companyName" className="auth-label">
+                Company Name <span className="text-red-400">*</span>
+              </label>
+              <div className="input-container">
+                <Building className="input-icon-left auth-icon-primary" />
+                <input
+                  id="companyName"
+                  type="text"
+                  value={data.companyName}
+                  onChange={handleInputChange('companyName')}
+                  placeholder="Acme Corporation"
+                  className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
+                />
               </div>
+              {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
+            </div>
 
-              <div className="space-y-2">
-                <label htmlFor="website" className="auth-label">
-                  Website
-                </label>
-                <div className="input-container">
-                  <ExternalLink className="input-icon-left auth-icon-primary" />
-                  <input
-                    id="website"
-                    type="url"
-                    value={data.website}
-                    onChange={handleInputChange('website')}
-                    placeholder="https://www.example.com"
-                    className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
-                    readOnly={readOnly}
-                    disabled={readOnly}
-                  />
-                </div>
-                {errors.website && <p className="mt-1 text-sm text-[#D417C8]">{errors.website}</p>}
+            {/* Website */}
+            <div>
+              <label htmlFor="website" className="auth-label">
+                Website
+              </label>
+              <div className="input-container">
+                <ExternalLink className="input-icon-left auth-icon-primary" />
+                <input
+                  id="website"
+                  type="url"
+                  value={data.website}
+                  onChange={handleInputChange('website')}
+                  placeholder="https://www.example.com"
+                  className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
+                />
               </div>
+              {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
             </div>
 
             {/* Description - Full Width */}
-            <div className="space-y-2">
+            <div className="md:col-span-2">
               <label htmlFor="description" className="auth-label">
                 Description
               </label>
@@ -179,11 +161,9 @@ export const OrganizationForm = ({
                   placeholder="Brief description of your company..."
                   rows={3}
                   className={`auth-input textarea input-with-icon-left resize-none ${errors.description ? 'auth-input-error' : ''}`}
-                  readOnly={readOnly}
-                  disabled={readOnly}
                 />
               </div>
-              {errors.description && <p className="mt-1 text-sm text-[#D417C8]">{errors.description}</p>}
+              {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
             </div>
           </div>
         </motion.div>
@@ -193,145 +173,81 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.4 : 0.2 }}
-          className="relative flex flex-col gap-8 p-8"
+          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
         >
-          <div className="flex w-full flex-col gap-y-6">
-            <div className="flex flex-col gap-y-2">
-              <h2 className="text-lg font-medium">Business Details</h2>
-              <p className="text-gray-500 dark:text-polar-500 leading-snug">Industry and company classification</p>
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <Building className="w-4 h-4 text-[#14BDEA]" />
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-white">Business Details</h3>
+              <p className="text-xs text-gray-400">Industry and company classification</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Country */}
-            <div className="space-y-2">
-              <label htmlFor="country" className="auth-label">
-                Country <span className="text-[#D417C8]">*</span>
-              </label>
+            <div>
+              <span className="block text-sm font-medium text-gray-300 mb-2">
+                Country <span className="text-red-400">*</span>
+              </span>
               <ApiDropdown
-                id="country"
                 config={countryDropdownConfig}
                 value={data.country}
                 onSelect={value => handleSelectChange('country', value)}
                 onClear={() => handleSelectChange('country', '')}
                 error={!!errors.country}
                 allowClear
-                disabled={readOnly}
               />
-              {errors.country && <p className="mt-1 text-sm text-[#D417C8]">{errors.country}</p>}
+              {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
             </div>
 
             {/* Industry */}
-            <div className="space-y-2">
-              <label htmlFor="industry" className="auth-label">
-                Industry <span className="text-[#D417C8]">*</span>
-              </label>
+            <div>
+              <span className="block text-sm font-medium text-gray-300 mb-2">
+                Industry <span className="text-red-400">*</span>
+              </span>
               <ApiDropdown
-                id="industry"
                 config={industryDropdownConfig}
                 value={data.industry}
                 onSelect={value => handleSelectChange('industry', value)}
                 onClear={() => handleSelectChange('industry', '')}
                 error={!!errors.industry}
                 allowClear
-                disabled={readOnly}
               />
-              {errors.industry && <p className="mt-1 text-sm text-[#D417C8]">{errors.industry}</p>}
+              {errors.industry && <p className="mt-1 text-sm text-red-400">{errors.industry}</p>}
             </div>
 
             {/* Company Size */}
-            <div className="space-y-2">
-              <label htmlFor="companySize" className="auth-label">
-                Company Size <span className="text-[#D417C8]">*</span>
-              </label>
+            <div>
+              <span className="block text-sm font-medium text-gray-300 mb-2">
+                Company Size <span className="text-red-400">*</span>
+              </span>
               <ApiDropdown
-                id="companySize"
                 config={companySizeDropdownConfig}
                 value={data.companySize}
                 onSelect={value => handleSelectChange('companySize', value)}
                 onClear={() => handleSelectChange('companySize', '')}
                 error={!!errors.companySize}
                 allowClear
-                disabled={readOnly}
               />
-              {errors.companySize && <p className="mt-1 text-sm text-[#D417C8]">{errors.companySize}</p>}
+              {errors.companySize && <p className="mt-1 text-sm text-red-400">{errors.companySize}</p>}
             </div>
 
             {/* Organization Type */}
-            <div className="space-y-2">
-              <label htmlFor="organizationType" className="auth-label">
-                Organization Type <span className="text-[#D417C8]">*</span>
-              </label>
+            <div>
+              <span className="block text-sm font-medium text-gray-300 mb-2">
+                Organization Type <span className="text-red-400">*</span>
+              </span>
               <ApiDropdown
-                id="organizationType"
                 config={organizationTypeDropdownConfig}
                 value={data.organizationType}
                 onSelect={value => handleSelectChange('organizationType', value)}
                 onClear={() => handleSelectChange('organizationType', '')}
                 error={!!errors.organizationType}
                 allowClear
-                disabled={readOnly}
               />
-              {errors.organizationType && <p className="mt-1 text-sm text-[#D417C8]">{errors.organizationType}</p>}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Business Compliance Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: showHeader ? 0.45 : 0.25 }}
-          className="relative flex flex-col gap-8 p-8"
-        >
-          <div className="flex w-full flex-col gap-y-6">
-            <div className="flex flex-col gap-y-2">
-              <h2 className="text-lg font-medium">Business Compliance</h2>
-              <p className="text-gray-500 dark:text-polar-500 leading-snug">Registration and compliance information</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Registration Number */}
-            <div className="space-y-2">
-              <label htmlFor="registrationNumber" className="auth-label">
-                Registration Number <span className="text-[#D417C8]">*</span>
-              </label>
-              <div className="input-container">
-                <Hash className="input-icon-left auth-icon-primary" />
-                <input
-                  id="registrationNumber"
-                  type="text"
-                  value={data.registrationNumber}
-                  onChange={handleInputChange('registrationNumber')}
-                  placeholder="12345678"
-                  className={`auth-input input-with-icon-left ${errors.registrationNumber ? 'auth-input-error' : ''}`}
-                  readOnly={readOnly}
-                  disabled={readOnly}
-                />
-              </div>
-              {errors.registrationNumber && <p className="mt-1 text-sm text-[#D417C8]">{errors.registrationNumber}</p>}
-            </div>
-
-            {/* Tax ID */}
-            <div className="space-y-2">
-              <label htmlFor="taxId" className="auth-label">
-                Tax ID <span className="text-[#D417C8]">*</span>
-              </label>
-              <div className="input-container">
-                <CreditCard className="input-icon-left auth-icon-primary" />
-                <input
-                  id="taxId"
-                  type="text"
-                  value={data.taxId}
-                  onChange={handleInputChange('taxId')}
-                  placeholder="XX-XXXXXXX"
-                  className={`auth-input input-with-icon-left ${errors.taxId ? 'auth-input-error' : ''}`}
-                  readOnly={readOnly}
-                  disabled={readOnly}
-                />
-              </div>
-              {errors.taxId && <p className="mt-1 text-sm text-[#D417C8]">{errors.taxId}</p>}
+              {errors.organizationType && <p className="mt-1 text-sm text-red-400">{errors.organizationType}</p>}
             </div>
           </div>
         </motion.div>
@@ -342,44 +258,60 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.5 : 0.3 }}
-            className="relative flex flex-col gap-8 p-8"
+            className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
           >
-            <div className="flex w-full flex-col gap-y-6">
-              <div className="flex flex-col gap-y-2">
-                <h2 className="text-lg font-medium">Financial Information</h2>
-                <p className="text-gray-500 dark:text-polar-500 leading-snug">Revenue and currency settings</p>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                <span className="text-sm font-semibold text-[#7767DA]">{currencySymbol}</span>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-white">Financial Information</h3>
+                <p className="text-xs text-gray-400">Revenue and currency settings</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Currency */}
-              <div className="space-y-2">
+              <div>
                 <label htmlFor="currency" className="auth-label">
-                  Currency <span className="text-[#D417C8]">*</span>
+                  Currency <span className="text-red-400">*</span>
                 </label>
-                <ApiDropdown
-                  config={currencyDropdownConfig}
-                  value={data.currency}
-                  onSelect={value => handleSelectChange('currency', value)}
-                  onClear={() => handleSelectChange('currency', '')}
-                  error={!!errors.currency}
-                  allowClear
-                  disabled={readOnly}
-                />
-                {errors.currency && <p className="mt-1 text-sm text-[#D417C8]">{errors.currency}</p>}
+                <div className="input-container">
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-[#14BDEA]">{currencySymbol}</span>
+                  </div>
+                  <select
+                    id="currency"
+                    value={data.currency}
+                    onChange={e => handleSelectChange('currency', e.target.value)}
+                    className="auth-input input-with-icon-left"
+                    style={{ paddingLeft: '3rem' }}
+                  >
+                    <option value="USD">USD - US Dollar</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="GBP">GBP - British Pound</option>
+                    <option value="CAD">CAD - Canadian Dollar</option>
+                    <option value="AUD">AUD - Australian Dollar</option>
+                    <option value="JPY">JPY - Japanese Yen</option>
+                  </select>
+                </div>
               </div>
 
               {/* Revenue */}
-              <div className="space-y-2">
+              <div>
                 <label htmlFor="revenue" className="auth-label">
-                  Annual Revenue <span className="text-gray-500">(optional)</span>
-                  <span className="text-gray-500 ml-2">({data.currency || 'USD'})</span>
+                  Annual Revenue
+                  <span className="text-gray-500 ml-2">({data.currency})</span>
                 </label>
                 <div className="input-container">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
-                    <span className="text-sm font-normal tracking-tight tracking-tight text-[#14BDEA]">
-                      {currencySymbol}
-                    </span>
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
+                    {currencyLoading ? (
+                      <div className="w-3 h-3 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+                    ) : (
+                      <span className="text-sm font-semibold text-[#14BDEA]">
+                        {currencySymbol}
+                      </span>
+                    )}
                   </div>
                   <input
                     id="revenue"
@@ -388,11 +320,10 @@ export const OrganizationForm = ({
                     onChange={handleInputChange('revenue')}
                     placeholder="1000000"
                     className={`auth-input input-with-icon-left ${errors.revenue ? 'auth-input-error' : ''}`}
-                    readOnly={readOnly}
-                    disabled={readOnly}
+                    style={{ paddingLeft: '3rem' }}
                   />
                 </div>
-                {errors.revenue && <p className="mt-1 text-sm text-[#D417C8]">{errors.revenue}</p>}
+                {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}
               </div>
             </div>
           </motion.div>
@@ -404,46 +335,65 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.6 : 0.4 }}
-            className="relative flex flex-col gap-8 p-8"
+            className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
           >
-            <div className="flex w-full flex-col gap-y-6">
-              <div className="flex flex-col gap-y-2">
-                <h2 className="text-lg font-medium">Regional Settings</h2>
-                <p className="text-gray-500 dark:text-polar-500 leading-snug">Time zone and fiscal year settings</p>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                <span className="text-sm font-semibold text-[#D417C8]">🌍</span>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-white">Regional Settings</h3>
+                <p className="text-xs text-gray-400">Time zone and fiscal year settings</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Time Zone */}
-              <div className="space-y-2">
+              <div>
                 <label htmlFor="timeZone" className="auth-label">
                   Time Zone
                 </label>
-                <ApiDropdown
-                  config={timezoneDropdownConfig}
+                <select
+                  id="timeZone"
                   value={data.timeZone}
-                  onSelect={(value) => handleSelectChange('timeZone', value)}
-                  error={!!errors.timeZone}
-                  allowClear
-                  disabled={readOnly}
-                />
-                {errors.timeZone && (
-                  <p className="text-[#D417C8] text-xs mt-1">{errors.timeZone}</p>
-                )}
+                  onChange={e => handleSelectChange('timeZone', e.target.value)}
+                  className="auth-input"
+                >
+                  <option value="UTC">UTC - Coordinated Universal Time</option>
+                  <option value="America/New_York">EST - Eastern Standard Time</option>
+                  <option value="America/Chicago">CST - Central Standard Time</option>
+                  <option value="America/Denver">MST - Mountain Standard Time</option>
+                  <option value="America/Los_Angeles">PST - Pacific Standard Time</option>
+                  <option value="Europe/London">GMT - Greenwich Mean Time</option>
+                  <option value="Europe/Paris">CET - Central European Time</option>
+                  <option value="Asia/Tokyo">JST - Japan Standard Time</option>
+                </select>
               </div>
 
               {/* Fiscal Year Start */}
-              <div className="space-y-2">
+              <div>
                 <label htmlFor="fiscalYearStart" className="auth-label">
                   Fiscal Year Start
                 </label>
-                <ApiDropdown
-                  config={fiscalYearDropdownConfig}
+                <select
+                  id="fiscalYearStart"
                   value={data.fiscalYearStart}
-                  onSelect={value => handleSelectChange('fiscalYearStart', value)}
-                  allowClear
-                  disabled={readOnly}
-                />
+                  onChange={e => handleSelectChange('fiscalYearStart', e.target.value)}
+                  className="auth-input"
+                >
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
               </div>
             </div>
           </motion.div>

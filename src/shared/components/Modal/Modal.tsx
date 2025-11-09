@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
+import { IconButton, PlainButton } from '@/shared/components/Button'
 import { useResponsive } from '@/shared/hooks/useResponsive'
 
 interface ModalProps {
@@ -104,11 +105,12 @@ export const Modal = ({
       role="dialog"
       aria-modal="true"
     >
-      <button
+      <PlainButton
         className="fixed inset-0 w-full h-full bg-transparent border-none cursor-default"
         onClick={onClose}
         aria-label="Close modal"
         tabIndex={-1}
+        unstyled
       />
           <div
             role="document"
@@ -134,18 +136,14 @@ export const Modal = ({
                       </p>
                     )}
                   </div>
-                  <button
+                  <IconButton
                     onClick={onClose}
-                    className="
-                      ml-3 p-1.5 rounded-md flex-shrink-0
-                      hover:bg-white/5
-                      border border-white/10 hover:border-white/20
-                      text-[#a3a3a3] hover:text-white
-                      transition-all duration-200
-                    "
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
+                    icon={X}
+                    variant="ghost"
+                    size="sm"
+                    aria-label="Close modal"
+                    className="ml-3 flex-shrink-0 border border-white/10 hover:border-white/20"
+                  />
                 </div>
               )}
 

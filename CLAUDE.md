@@ -16,6 +16,11 @@
 - Handle backend errors properly without masking them with fallbacks
 - Trust the backend data structure and content
 
+### Unified Button Components (NEW)
+- Always use the shared button primitives from `@/shared/components/Button` (`Button`, `IconButton`, `RoundButton`) for any interactive control.
+- **Do not** instantiate `PlainButton` directly in feature code—it's reserved for low-level shared components that need bespoke styling.
+- Never create ad-hoc `<button>` elements; route every case through the shared components so sizing, focus states, and accessibility remain centralized.
+
 ## Google OAuth Authentication Changes (IMPORTANT)
 
 ### Updated Google Registration Flow

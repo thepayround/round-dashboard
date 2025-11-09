@@ -143,18 +143,17 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
                     Message <span className="text-[#D417C8]">*</span>
                   </label>
                   <div className="flex items-center gap-2">
-                    <button
+                    <Button
                       type="button"
                       onClick={() => handleInputChange('isHtml', !formData.isHtml)}
-                      className={`flex items-center gap-1 px-2 py-1 text-xs rounded-lg transition-all duration-200 ${
-                        formData.isHtml 
-                          ? 'bg-[#14BDEA]/20 text-[#14BDEA] border border-[#14BDEA]/30' 
-                          : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/8 hover:text-white'
-                      }`}
+                      variant={formData.isHtml ? 'primary' : 'ghost'}
+                      size="sm"
+                      icon={Type}
+                      iconPosition="left"
+                      className={formData.isHtml ? 'bg-[#14BDEA]/20 text-[#14BDEA] border-[#14BDEA]/30' : ''}
                     >
-                      <Type className="w-3 h-3" />
                       HTML
-                    </button>
+                    </Button>
                     {formData.isHtml && (
                       <div className="flex items-center gap-1">
                         <IconButton icon={Bold} aria-label="Bold" size="sm" />

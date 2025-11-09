@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Loader2, Hash, Truck, Languages, AlertCircle } from 'lucide-react'
+import { X, User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Hash, Truck, Languages, AlertCircle } from 'lucide-react'
 import React, { useState } from 'react'
 
 import { PhoneInput } from '@/shared/components'
+import { IconButton, Button } from '@/shared/components/Button'
 import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
 import { FormInput } from '@/shared/components/ui/FormInput'
@@ -379,12 +380,14 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                     <p className="text-sm text-white/70">Create a new customer profile</p>
                   </div>
                 </div>
-                <button
+                <IconButton
                   onClick={onClose}
-                  className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                  icon={X}
+                  variant="ghost"
+                  size="sm"
+                  className="text-white/70 hover:text-white"
+                  aria-label="Close modal"
+                />
               </div>
 
               {/* Form */}
@@ -400,36 +403,44 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                   <div className="space-y-3">
                     <span className="auth-label block">Customer Type</span>
                     <div className="grid grid-cols-2 gap-3">
-                      <button
+                      <Button
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, type: CustomerType.Individual }))}
-                        className={`p-4 rounded-xl border transition-all duration-200 flex items-center space-x-3 ${
+                        variant={formData.type === CustomerType.Individual ? 'primary' : 'secondary'}
+                        size="md"
+                        icon={User}
+                        iconPosition="left"
+                        fullWidth
+                        className={`justify-start p-4 h-auto ${
                           formData.type === CustomerType.Individual
-                            ? 'border-[#D417C8] bg-[#D417C8]/10 text-white'
-                            : 'border-white/20 hover:border-white/40 text-white/70 hover:text-white'
+                            ? 'border-[#D417C8] bg-[#D417C8]/10'
+                            : ''
                         }`}
                       >
-                        <User className="w-5 h-5" />
                         <div className="text-left">
                           <div className="font-medium">Individual</div>
                           <div className="text-sm opacity-75">Personal customer</div>
                         </div>
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, type: CustomerType.Business }))}
-                        className={`p-4 rounded-xl border transition-all duration-200 flex items-center space-x-3 ${
+                        variant={formData.type === CustomerType.Business ? 'primary' : 'secondary'}
+                        size="md"
+                        icon={Building2}
+                        iconPosition="left"
+                        fullWidth
+                        className={`justify-start p-4 h-auto ${
                           formData.type === CustomerType.Business
-                            ? 'border-[#14BDEA] bg-[#14BDEA]/10 text-white'
-                            : 'border-white/20 hover:border-white/40 text-white/70 hover:text-white'
+                            ? 'border-[#14BDEA] bg-[#14BDEA]/10'
+                            : ''
                         }`}
                       >
-                        <Building2 className="w-5 h-5" />
                         <div className="text-left">
                           <div className="font-medium">Business</div>
                           <div className="text-sm opacity-75">Company customer</div>
                         </div>
-                      </button>
+                      </Button>
                     </div>
                   </div>
                   
@@ -627,13 +638,15 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                         className="px-3 py-1 bg-[#7767DA]/20 text-[#7767DA] border border-[#7767DA]/30 rounded-full text-sm flex items-center space-x-2"
                       >
                         <span>{tag}</span>
-                        <button
+                        <IconButton
                           type="button"
                           onClick={() => handleRemoveTag(tag)}
-                          className="text-[#7767DA]/70 hover:text-[#7767DA]"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
+                          icon={X}
+                          variant="ghost"
+                          size="sm"
+                          className="text-[#7767DA]/70 hover:text-[#7767DA] w-4 h-4 p-0"
+                          aria-label="Remove tag"
+                        />
                       </span>
                     ))}
                   </div>
@@ -647,13 +660,15 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                       className="flex-1 px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#7767DA]/50 focus:border-[#7767DA]/50 transition-all duration-200"
                       placeholder="Add a tag..."
                     />
-                    <button
+                    <Button
                       type="button"
                       onClick={handleAddTag}
-                      className="px-4 py-3 bg-[#7767DA]/20 text-[#7767DA] border border-[#7767DA]/30 rounded-lg hover:bg-[#7767DA]/30 transition-all duration-200"
+                      variant="secondary"
+                      size="md"
+                      className="bg-[#7767DA]/20 text-[#7767DA] border-[#7767DA]/30 hover:bg-[#7767DA]/30"
                     >
                       Add
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
@@ -902,30 +917,26 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
 
               {/* Footer */}
               <div className="flex items-center justify-end space-x-3 p-6 border-t border-white/10">
-                <button
+                <Button
                   type="button"
                   onClick={onClose}
-                  className="px-6 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
+                  variant="ghost"
+                  size="md"
+                  className="text-white/70 hover:text-white"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  variant="primary"
+                  size="md"
+                  icon={Save}
+                  iconPosition="left"
+                  loading={loading}
                 >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Creating...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Save className="w-4 h-4" />
-                      <span>Create Customer</span>
-                    </>
-                  )}
-                </button>
+                  {loading ? 'Creating...' : 'Create Customer'}
+                </Button>
               </div>
             </div>
           </motion.div>

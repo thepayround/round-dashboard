@@ -3,6 +3,7 @@ import { CheckCircle, XCircle, Mail, RefreshCw, AlertCircle } from 'lucide-react
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 
+import { Button } from '@/shared/components/Button'
 import { useAuth as useAuthAPI, useOrganization } from '@/shared/hooks/api'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { organizationService } from '@/shared/services/api'
@@ -287,18 +288,17 @@ export const EmailConfirmationPage = () => {
             )}
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
+              <Button
                 onClick={handleResendEmail}
                 disabled={isResending}
-                className="btn-secondary flex items-center space-x-2"
+                variant="secondary"
+                size="md"
+                icon={isResending ? RefreshCw : Mail}
+                iconPosition="left"
+                loading={isResending}
               >
-                {isResending ? (
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Mail className="w-4 h-4" />
-                )}
-                <span>{isResending ? 'Sending...' : 'Get Help'}</span>
-              </button>
+                {isResending ? 'Sending...' : 'Get Help'}
+              </Button>
 
               <Link
                 to="/login"

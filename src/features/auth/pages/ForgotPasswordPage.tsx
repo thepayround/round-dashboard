@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { ActionButton, AuthLogo } from '@/shared/components'
+import { Button } from '@/shared/components/Button'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
 import { validators, handleApiError } from '@/shared/utils'
@@ -195,7 +196,7 @@ export const ForgotPasswordPage = () => {
                   disabled={!isFormValid || isSubmitting}
                   icon={ArrowRight}
                   loading={isSubmitting}
-                  size="sm"
+                  size="md"
                   animated={false}
                   actionType="auth"
                   className="mt-8 w-full"
@@ -230,32 +231,36 @@ export const ForgotPasswordPage = () => {
                     label="Back to Sign In"
                     onClick={handleBackToLogin}
                     icon={ArrowLeft}
-                    size="sm"
+                    size="md"
                     animated={false}
                     actionType="auth"
                     className="w-full"
                   />
                   
-                  <button
+                  <Button
                     type="button"
                     onClick={handleTryAgain}
-                    className="w-full text-center auth-link text-sm brand-primary py-2"
+                    variant="ghost"
+                    size="md"
+                    className="w-full"
                   >
                     Send to a different email
-                  </button>
+                  </Button>
                 </div>
 
                 {/* Help Text */}
                 <div className="text-center">
                   <p className="auth-text-muted text-sm">
                     Didn&apos;t receive the email?{' '}
-                    <button
+                    <Button
                       type="button"
                       onClick={handleTryAgain}
-                      className="auth-link brand-primary"
+                      variant="ghost"
+                      size="sm"
+                      className="inline-flex h-auto px-0 py-0 text-[#D417C8] hover:text-[#E02DD8]"
                     >
                       Try again
-                    </button>
+                    </Button>
                   </p>
                 </div>
               </div>

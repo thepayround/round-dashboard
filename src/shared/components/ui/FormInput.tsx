@@ -45,9 +45,9 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     const inputId = id ?? `input-${Math.random().toString(36).substr(2, 9)}`
 
     const sizeClasses = {
-      sm: 'h-[42px] md:h-9 px-3 text-xs',
-      md: 'h-[42px] md:h-9 px-3 text-xs', 
-      lg: 'h-[42px] md:h-9 px-3 text-xs'
+      sm: 'h-9 px-3 text-xs',
+      md: 'h-9 px-3 text-xs', 
+      lg: 'h-9 px-3 text-xs'
     }
 
     const getInputClasses = () => {

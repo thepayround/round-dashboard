@@ -3,6 +3,8 @@ import type { LucideIcon } from 'lucide-react'
 import { AlertCircle } from 'lucide-react'
 import { forwardRef } from 'react'
 
+import { PlainButton } from '@/shared/components/Button'
+
 interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string
   error?: string
@@ -32,9 +34,9 @@ export const AuthInput = forwardRef<
   id,
   ...props
 }, ref) => {
-  // Responsive inputs - 42px mobile -> 36px desktop, smaller than buttons
+  // Unified input height at 36px to align with button sizing
   const baseInputClasses = `
-    w-full h-[42px] md:h-9 px-3 py-1.5
+    w-full h-9 px-3 py-1.5
     bg-[#171719] border border-[#333333] rounded-lg
     text-white placeholder-[#737373] text-xs font-light
     focus:outline-none focus:border-[#14bdea]
@@ -110,14 +112,15 @@ export const AuthInput = forwardRef<
 
         {/* Right Icon */}
         {RightIcon && (
-          <button
+          <PlainButton
             type="button"
             onClick={onRightIconClick}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 text-white/70 hover:text-white transition-colors duration-200"
             tabIndex={-1}
+            unstyled
           >
             <RightIcon className="w-4 h-4" />
-          </button>
+          </PlainButton>
         )}
 
         {/* Error Icon */}

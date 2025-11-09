@@ -1,7 +1,7 @@
 import { AlertTriangle } from 'lucide-react'
 import React, { Component, ErrorInfo, ReactNode } from 'react'
 
-import { Button } from '../ui/Button'
+import { Button } from '../Button'
 
 interface Props {
   children: ReactNode
@@ -75,7 +75,7 @@ export class ErrorBoundary extends Component<Props, State> {
             )}
 
             <div className="flex space-x-3 justify-center">
-              <Button variant="outline" onClick={this.handleReset}>
+              <Button variant="secondary" onClick={this.handleReset}>
                 Try Again
               </Button>
               <Button variant="primary" onClick={this.handleReload}>

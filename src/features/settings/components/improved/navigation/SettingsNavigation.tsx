@@ -3,6 +3,7 @@ import { Settings } from 'lucide-react'
 import React from 'react'
 
 import { Card } from '@/shared/components'
+import { PlainButton } from '@/shared/components/Button'
 
 
 interface SettingsSection {
@@ -43,7 +44,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
             const isActive = activeSection === section.id
             
             return (
-              <button
+              <PlainButton
                 key={section.id}
                 onClick={() => onSectionChange(section.id)}
                 className={`w-full flex items-center justify-between p-3 rounded-lg transition-all duration-200 group text-left mb-1 ${
@@ -51,6 +52,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
                     ? 'bg-primary/10 text-white border border-[#D417C8]/20 shadow-glass-sm'
                     : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
                 }`}
+                unstyled
               >
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <div className={`p-1.5 rounded-lg transition-all duration-200 ${
@@ -68,7 +70,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
                     <p className="text-xs font-normal tracking-tight truncate">{section.label}</p>
                   </div>
                 </div>
-              </button>
+              </PlainButton>
             )
           })}
         </nav>

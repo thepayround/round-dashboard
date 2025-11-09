@@ -25,6 +25,7 @@ import CustomerTable from '../components/CustomerTable'
 import { SearchFilterToolbar } from '@/shared/components'
 import type { FilterField } from '@/shared/components'
 import { ActionButton } from '@/shared/components/ActionButton'
+import { PlainButton } from '@/shared/components/Button'
 import { Card } from '@/shared/components/Card'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { Pagination } from '@/shared/components/Pagination'
@@ -591,9 +592,9 @@ const CustomersPage: React.FC = () => {
                       <p className="text-sm text-[#a3a3a3]">{customer.company}</p>
                     )}
                   </div>
-                  <button className="p-2 text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-all duration-200">
+                  <PlainButton className="p-2 text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-all duration-200" aria-label="Customer actions">
                     <MoreHorizontal className="w-4 h-4" />
-                  </button>
+                  </PlainButton>
                 </div>
 
                 {/* Information Cards */}

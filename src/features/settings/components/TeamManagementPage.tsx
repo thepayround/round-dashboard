@@ -21,6 +21,7 @@ import type { TeamMember, TeamInvitation, UserRole } from '../types/team.types'
 
 import type { FilterField } from '@/shared/components'
 import { ActionButton } from '@/shared/components/ActionButton'
+import { Button } from '@/shared/components/Button'
 import { Card } from '@/shared/components/Card'
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import { SearchFilterToolbar } from '@/shared/components/SearchFilterToolbar'
@@ -371,14 +372,12 @@ export const TeamManagementPage: React.FC = () => {
               const IconComponent = tab.icon
               const isActive = activeTab === tab.id
               return (
-                <button
+                <Button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 ${
-                    isActive
-                      ? 'bg-primary/20 text-white border border-white/20'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
-                  }`}
+                  variant={isActive ? 'primary' : 'ghost'}
+                  size="md"
+                  className={`space-x-2 ${isActive ? 'bg-primary/20 border-white/20' : ''}`}
                 >
                   <IconComponent className="w-4 h-4" />
                   <span className="font-medium">{tab.label}</span>
@@ -387,7 +386,7 @@ export const TeamManagementPage: React.FC = () => {
                   }`}>
                     {tab.count}
                   </span>
-                </button>
+                </Button>
               )
             })}
             </nav>
@@ -527,18 +526,22 @@ export const TeamManagementPage: React.FC = () => {
                             <div className="flex space-x-2">
                               {invitation.status === 'Pending' && (
                                 <>
-                                  <button
+                                  <Button
                                     onClick={() => handleResendInvitation(invitation)}
-                                    className="px-3 py-1 text-xs bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="bg-blue-500/20 text-blue-400 hover:bg-blue-500/30"
                                   >
                                     Resend
-                                  </button>
-                                  <button
+                                  </Button>
+                                  <Button
                                     onClick={() => handleCancelInvitation(invitation)}
-                                    className="px-3 py-1 text-xs bg-red-500/20 text-[#D417C8] rounded-lg hover:bg-red-500/30 transition-colors"
+                                    variant="danger"
+                                    size="sm"
+                                    className="bg-red-500/20"
                                   >
                                     Cancel
-                                  </button>
+                                  </Button>
                                 </>
                               )}
                             </div>

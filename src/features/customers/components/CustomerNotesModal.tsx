@@ -1,6 +1,7 @@
-import { Plus, MessageSquare, User, Calendar, Edit3, Trash2, Save, RotateCcw, Loader2 } from 'lucide-react'
+import { Plus, MessageSquare, User, Calendar, Edit3, Trash2, Save, RotateCcw } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 
+import { Button, IconButton } from '@/shared/components/Button'
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import { Modal } from '@/shared/components/Modal'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
@@ -182,23 +183,17 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                     </label>
                   </div>
                   
-                  <button
+                  <Button
                     onClick={handleAddNote}
                     disabled={isAdding || !newNote.content.trim()}
-                    className="flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:shadow-lg hover:shadow-[#D417C8]/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    variant="primary"
+                    size="md"
+                    icon={Plus}
+                    iconPosition="left"
+                    loading={isAdding}
                   >
-                    {isAdding ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Adding...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Plus className="w-4 h-4" />
-                        <span>Add Note</span>
-                      </>
-                    )}
-                  </button>
+                    {isAdding ? 'Adding...' : 'Add Note'}
+                  </Button>
                 </div>
               </div>
             </div>
@@ -237,20 +232,24 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                         </div>
                         
                         <div className="flex items-center gap-1">
-                          <button
+                          <IconButton
                             onClick={() => startEditing(note)}
-                            className="p-1.5 hover:bg-white/10 rounded-lg transition-all duration-200"
+                            icon={Edit3}
+                            variant="ghost"
+                            size="sm"
                             disabled={isLoading}
-                          >
-                            <Edit3 className="w-3.5 h-3.5 text-white/70" />
-                          </button>
-                          <button
+                            aria-label="Edit note"
+                            className="p-1"
+                          />
+                          <IconButton
                             onClick={() => handleDeleteNote(note.id)}
-                            className="p-1.5 hover:bg-red-500/20 hover:text-[#D417C8] rounded-lg transition-colors"
+                            icon={Trash2}
+                            variant="danger"
+                            size="sm"
                             disabled={isLoading}
-                          >
-                            <Trash2 className="w-3.5 h-3.5 text-white/70" />
-                          </button>
+                            aria-label="Delete note"
+                            className="p-1"
+                          />
                         </div>
                       </div>
                       
@@ -263,22 +262,27 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                             className="auth-input textarea resize-none text-sm focus:border-[#14BDEA]/50 focus:ring-1 focus:ring-[#14BDEA]/20"
                           />
                           <div className="flex items-center gap-2">
-                            <button
+                            <Button
                               onClick={() => handleEditNote(note.id)}
                               disabled={isLoading}
-                              className="flex items-center space-x-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-all disabled:opacity-50"
+                              variant="primary"
+                              size="sm"
+                              icon={Save}
+                              iconPosition="left"
+                              className="bg-green-600 hover:bg-green-700 border-green-600"
                             >
-                              <Save className="w-3 h-3" />
-                              <span>Save</span>
-                            </button>
-                            <button
+                              Save
+                            </Button>
+                            <Button
                               onClick={cancelEditing}
                               disabled={isLoading}
-                              className="flex items-center space-x-1 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg transition-all duration-200 disabled:opacity-50"
+                              variant="ghost"
+                              size="sm"
+                              icon={RotateCcw}
+                              iconPosition="left"
                             >
-                              <RotateCcw className="w-3 h-3" />
-                              <span>Cancel</span>
-                            </button>
+                              Cancel
+                            </Button>
                           </div>
                         </div>
                       ) : (

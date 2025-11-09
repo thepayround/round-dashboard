@@ -3,6 +3,7 @@ import { Mail, RefreshCw, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
+import { Button } from '@/shared/components/Button'
 import { apiClient } from '@/shared/services/apiClient'
 
 export const ConfirmationPendingPage = () => {
@@ -188,20 +189,18 @@ export const ConfirmationPendingPage = () => {
           >
             <div className="text-center">
               <p className="auth-text-muted text-sm mb-4">Didn&apos;t receive the email?</p>
-              <button
+              <Button
                 onClick={handleResendEmail}
                 disabled={isResending || !email}
-                className={`btn-secondary flex items-center space-x-2 mx-auto ${
-                  isResending || !email ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                variant="secondary"
+                size="md"
+                icon={isResending ? RefreshCw : Mail}
+                iconPosition="left"
+                loading={isResending}
+                className="mx-auto"
               >
-                {isResending ? (
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Mail className="w-4 h-4" />
-                )}
-                <span>{isResending ? 'Sending...' : 'Resend Email'}</span>
-              </button>
+                {isResending ? 'Sending...' : 'Resend Email'}
+              </Button>
             </div>
 
             <div className="flex items-center justify-center">

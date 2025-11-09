@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react'
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
+import { PlainButton } from '@/shared/components/Button'
 import { ANIMATION_VARIANTS } from '@/shared/components/DashboardLayout/constants'
 import type { NavItem } from '@/shared/components/DashboardLayout/types'
 import { cn } from '@/shared/utils/cn'
@@ -63,7 +64,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
   <div>
     {/* Main Navigation Item */}
     {item.subItems ? (
-      <button
+      <PlainButton
         type="button"
         onClick={(e) => {
           e.preventDefault()
@@ -73,7 +74,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
         onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={cn(
-          'group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9 w-full',
+          'group relative flex items-center rounded-lg transition-all duration-200 h-9 w-full',
           isParentActive(item)
             ? 'bg-primary/10 text-white border border-primary/20'
             : 'text-white/60 hover:text-white',
@@ -84,6 +85,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
         aria-haspopup="menu"
         aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
         tabIndex={isKeyboardNavigating ? -1 : 0}
+        unstyled
       >
         <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
         
@@ -103,14 +105,14 @@ export const NavigationItem = memo<NavigationItemProps>(({
             {item.badge}
           </span>
         )}
-      </button>
+      </PlainButton>
     ) : (
       <Link
         to={item.href}
         onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={cn(
-          'group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9',
+          'group relative flex items-center rounded-lg transition-all duration-200 h-9',
           isParentActive(item)
             ? 'bg-primary/10 text-white border border-primary/20'
             : 'text-white/60 hover:text-white',

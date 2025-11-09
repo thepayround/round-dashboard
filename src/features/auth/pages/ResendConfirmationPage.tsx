@@ -161,7 +161,7 @@ export const ResendConfirmationPage = () => {
             disabled={!isFormValid || isSubmitting}
             icon={ArrowRight}
             loading={isSubmitting}
-            size="sm"
+            size="md"
             animated={false}
             actionType="auth"
             className="w-full"

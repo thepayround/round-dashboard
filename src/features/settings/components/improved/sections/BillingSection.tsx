@@ -10,6 +10,7 @@ import {
 import React from 'react'
 
 import { Card, ActionButton } from '@/shared/components'
+import { PlainButton } from '@/shared/components/Button'
 
 
 export const BillingSection: React.FC = () => (
@@ -92,12 +93,12 @@ export const BillingSection: React.FC = () => (
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <button className="text-[#D417C8] hover:text-[#BD2CD0] text-sm font-normal transition-colors duration-200">
+                <PlainButton className="text-[#D417C8] hover:text-[#BD2CD0] text-sm font-normal transition-colors duration-200" unstyled>
                   Edit
-                </button>
-                <button className="text-white/90 hover:text-white text-sm font-normal transition-colors duration-200">
+                </PlainButton>
+                <PlainButton className="text-white/90 hover:text-white text-sm font-normal transition-colors duration-200" unstyled>
                   Remove
-                </button>
+                </PlainButton>
               </div>
             </div>
           </div>

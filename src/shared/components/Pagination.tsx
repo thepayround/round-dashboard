@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
 import React from 'react'
 
+import { Button, IconButton } from './Button'
+
 interface PaginationProps {
   currentPage: number
   totalPages: number
@@ -115,25 +117,28 @@ const Pagination: React.FC<PaginationProps> = ({
           
           {/* First page button */}
           {showGoToFirst && (
-            <button
+            <IconButton
               onClick={() => onPageChange(1)}
               disabled={currentPage === 1}
-              className="flex items-center justify-center w-10 h-10 text-white/60 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/5 rounded-lg transition-all"
-              title="First page"
-            >
-              <ChevronsLeft className="w-4 h-4" />
-            </button>
+              icon={ChevronsLeft}
+              variant="ghost"
+              size="lg"
+              aria-label="First page"
+            />
           )}
           
           {/* Previous page button */}
-          <button
+          <Button
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="flex items-center space-x-2 px-3 py-2 text-sm font-normal tracking-tight text-white/60 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/5 rounded-lg transition-all"
+            variant="ghost"
+            size="md"
+            icon={ChevronLeft}
+            iconPosition="left"
+            className="px-3"
           >
-            <ChevronLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Previous</span>
-          </button>
+          </Button>
           
           {/* Page numbers */}
           <div className="flex items-center space-x-1">
@@ -142,41 +147,42 @@ const Pagination: React.FC<PaginationProps> = ({
                 {page === '...' ? (
                   <span className="px-2 py-2 text-white/40">...</span>
                 ) : (
-                  <button
+                  <Button
                     onClick={() => onPageChange(page as number)}
-                    className={`w-10 h-10 rounded-lg text-sm font-normal tracking-tight transition-all ${
-                      currentPage === page
-                        ? 'bg-[#D417C8] text-white shadow-lg'
-                        : 'text-white/60 hover:text-white hover:bg-white/5'
-                    }`}
+                    variant={currentPage === page ? 'primary' : 'ghost'}
+                    size="md"
+                    className="w-10 px-0"
                   >
                     {page}
-                  </button>
+                  </Button>
                 )}
               </div>
             ))}
           </div>
           
           {/* Next page button */}
-          <button
+          <Button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="flex items-center space-x-2 px-3 py-2 text-sm font-normal tracking-tight text-white/60 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/5 rounded-lg transition-all"
+            variant="ghost"
+            size="md"
+            icon={ChevronRight}
+            iconPosition="right"
+            className="px-3"
           >
             <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="w-4 h-4" />
-          </button>
+          </Button>
           
           {/* Last page button */}
           {showGoToLast && (
-            <button
+            <IconButton
               onClick={() => onPageChange(totalPages)}
               disabled={currentPage === totalPages}
-              className="flex items-center justify-center w-10 h-10 text-white/60 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/5 rounded-lg transition-all"
-              title="Last page"
-            >
-              <ChevronsRight className="w-4 h-4" />
-            </button>
+              icon={ChevronsRight}
+              variant="ghost"
+              size="lg"
+              aria-label="Last page"
+            />
           )}
         </div>
       )}

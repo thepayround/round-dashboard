@@ -1,6 +1,7 @@
-import { Save, User, Building2, Mail, MapPin, Plus, Loader2, Languages, CreditCard, Globe, Settings, Truck, Hash, X } from 'lucide-react'
+import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck, Hash, X } from 'lucide-react'
 import React, { useState } from 'react'
 
+import { Button, IconButton } from '@/shared/components/Button'
 import { Modal } from '@/shared/components/Modal'
 import { ApiDropdown, currencyDropdownConfig, timezoneDropdownConfig, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
@@ -482,14 +483,17 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                         <Truck className="w-4 h-4 text-[#7767DA]" />
                         <span>Shipping Address</span>
                       </h4>
-                      <button
+                      <Button
                         type="button"
                         onClick={handleCopyBillingToShipping}
-                        className="flex items-center space-x-2 px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-lg hover:bg-blue-500/20 transition-all text-sm"
+                        variant="ghost"
+                        size="sm"
+                        icon={Plus}
+                        iconPosition="left"
+                        className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
                       >
-                        <Plus className="w-4 h-4" />
-                        <span>Copy from Billing</span>
-                      </button>
+                        Copy from Billing
+                      </Button>
                     </div>
                     
                     <div>
@@ -574,13 +578,15 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                         className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-[#14BDEA]/10 text-[#14BDEA] border border-[#14BDEA]/20"
                       >
                         {tag}
-                        <button
+                        <IconButton
                           type="button"
                           onClick={() => handleRemoveTag(tag)}
-                          className="ml-2 text-[#14BDEA]/70 hover:text-[#14BDEA]"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
+                          icon={X}
+                          variant="ghost"
+                          size="sm"
+                          aria-label={`Remove ${tag} tag`}
+                          className="ml-1 text-[#14BDEA]/70 hover:text-[#14BDEA] w-4 h-4 p-0"
+                        />
                       </span>
                     ))}
                   </div>
@@ -594,43 +600,40 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       className="flex-1 auth-input"
                       onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
                     />
-                    <button
+                    <IconButton
                       type="button"
                       onClick={handleAddTag}
-                      className="px-4 py-2 bg-[#14BDEA]/10 text-[#14BDEA] rounded-lg hover:bg-[#14BDEA]/20 transition-all"
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
+                      icon={Plus}
+                      variant="ghost"
+                      size="md"
+                      aria-label="Add tag"
+                      className="bg-[#14BDEA]/10 text-[#14BDEA] hover:bg-[#14BDEA]/20"
+                    />
                   </div>
                 </div>
 
               {/* Footer */}
               <div className="flex items-center justify-end space-x-3 pt-6 border-t border-white/10 mt-8">
-                <button
+                <Button
                   type="button"
                   onClick={onClose}
                   disabled={isSaving}
-                  className="px-6 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 disabled:opacity-50"
+                  variant="ghost"
+                  size="md"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   disabled={isSaving}
-                  className="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  variant="primary"
+                  size="md"
+                  icon={Save}
+                  iconPosition="left"
+                  loading={isSaving}
                 >
-                  {isSaving ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Saving...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Save className="w-4 h-4" />
-                      <span>Save Changes</span>
-                    </>
-                  )}
-                </button>
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </Button>
               </div>
             </form>
     </Modal>

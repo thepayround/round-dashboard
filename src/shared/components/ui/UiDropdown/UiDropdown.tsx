@@ -3,6 +3,8 @@ import { ChevronDown, Search, X, Check } from 'lucide-react'
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 
+import { Button, IconButton } from '../../Button'
+
 export interface UiDropdownOption {
   value: string
   label: string
@@ -225,7 +227,7 @@ export const UiDropdown = ({
   // Disabled state
   if (disabled) {
     return (
-      <div className="relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-light text-xs outline-none opacity-50 cursor-not-allowed">
+      <div className="relative w-full h-9 pl-9 pr-3 rounded-lg border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-light text-xs outline-none opacity-50 cursor-not-allowed">
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 flex items-center justify-center">
           <div className="w-4 h-4 flex items-center justify-center">
             {icon ?? <ChevronDown className="w-4 h-4" />}
@@ -283,38 +285,35 @@ export const UiDropdown = ({
                   "
                 />
                 {searchTerm && (
-                  <button
+                  <IconButton
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
-                    type="button"
+                    icon={X}
+                    variant="ghost"
+                    size="sm"
                     aria-label="Clear search"
-                  >
-                    <X className="w-3 h-3 text-white/60 hover:text-white/90" />
-                  </button>
+                    className="absolute right-2.5 top-1/2 transform -translate-y-1/2 w-5 h-5 p-0"
+                  />
                 )}
               </div>
 
               {/* Clear selection button */}
               {selectedOption && allowClear && (
-                <button
+                <Button
                   onClick={() => {
                     onClear?.()
                     setIsOpen(false)
                     setSearchTerm('')
                     setHighlightedIndex(-1)
                   }}
-                  className="
-                    mt-1.5 w-full px-2.5 py-1.5 text-xs
-                    bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg
-                    text-white/70 hover:text-white/90
-                    transition-all duration-200
-                    flex items-center justify-center space-x-1.5
-                  "
-                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  icon={X}
+                  iconPosition="left"
+                  fullWidth
+                  className="mt-1.5 bg-white/5 hover:bg-white/10 border border-white/20 text-white/70 hover:text-white/90"
                 >
-                  <X className="w-4 h-4" />
-                  <span>Clear selection</span>
-                </button>
+                  Clear selection
+                </Button>
               )}
             </div>
           )}
@@ -403,7 +402,7 @@ export const UiDropdown = ({
           }
         }}
         className={`
-          relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
+          relative w-full h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
           bg-[#171719] border-[#333333] text-white cursor-pointer flex items-center justify-between
           font-light text-xs outline-none
           ${error ? 'border-[#ef4444]' : ''}
@@ -446,14 +445,14 @@ export const UiDropdown = ({
           )}
 
           {allowClear && selectedOption && !loading && (
-            <button
+            <IconButton
               onClick={handleClear}
-              className="p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
-              type="button"
+              icon={X}
+              variant="ghost"
+              size="sm"
               aria-label="Clear selection"
-            >
-              <X className="w-4 h-4 text-white/60 hover:text-white/90" />
-            </button>
+              className="w-5 h-5 p-0"
+            />
           )}
 
           <ChevronDown

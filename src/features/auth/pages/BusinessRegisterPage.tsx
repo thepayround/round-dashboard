@@ -18,6 +18,7 @@ import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { useMultiStepForm } from '../hooks/useMultiStepForm'
 
 import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
+import { Button, IconButton } from '@/shared/components/Button'
 import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
 import { useAuth as useAuthAPI } from '@/shared/hooks/api'
 import { useOrganization } from '@/shared/hooks/api'
@@ -475,13 +476,15 @@ export const BusinessRegisterPage = () => {
                     aria-invalid={!!personalErrors.password}
                     aria-describedby={personalErrors.password ? 'password-error' : undefined}
                   />
-                  <button
+                  <IconButton
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
-                  >
-                    {showPassword ? <EyeOff /> : <Eye />}
-                  </button>
+                    icon={showPassword ? EyeOff : Eye}
+                    variant="ghost"
+                    size="md"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    className="input-icon-right"
+                  />
                 </div>
 
                 {/* Password Strength Indicator */}
@@ -643,37 +646,35 @@ export const BusinessRegisterPage = () => {
             className="flex items-center justify-between mt-8 sm:mt-10 gap-4"
           >
             {/* Previous Button - Always on left */}
-            <button
+            <Button
               type="button"
               onClick={multiStepForm.goToPrevious}
               disabled={!multiStepForm.canGoPrevious}
-              className={`
-                h-11 md:h-9 px-4 sm:px-6 rounded-lg font-normal tracking-tight transition-all duration-200 flex items-center justify-center space-x-2 min-w-[100px] sm:min-w-[140px] 
-                ${
-                  multiStepForm.canGoPrevious
-                    ? 'bg-white/8 border border-white/15 text-white hover:bg-white/12 hover:border-white/20'
-                    : 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/10'
-                }
-              `}
+              variant="ghost"
+              size="md"
+              icon={ArrowLeft}
+              iconPosition="left"
+              className="h-9 min-w-[100px] sm:min-w-[140px]"
             >
-              <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:inline">Previous</span>
               <span className="sm:hidden">Prev</span>
-            </button>
+            </Button>
 
             {/* Right side buttons container */}
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Skip button - only show on billing step when form is NOT complete */}
               {multiStepForm.currentStep === 1 && !isBillingComplete && (
-                <button
+                <Button
                   type="button"
                   onClick={handleSkipBilling}
                   disabled={isSubmitting}
-                  className="h-11 md:h-9 px-3 sm:px-4 bg-white/8 border border-white/15 text-white hover:bg-white/12 hover:border-white/20 disabled:opacity-50 min-w-[80px] sm:min-w-[100px] flex items-center justify-center rounded-lg text-sm font-normal tracking-tight transition-all duration-200"
+                  variant="ghost"
+                  size="md"
+                  className="h-9 min-w-[80px] sm:min-w-[100px]"
                 >
                   <span className="hidden sm:inline">Skip for now</span>
                   <span className="sm:hidden">Skip</span>
-                </button>
+                </Button>
               )}
 
               {/* Continue button - show on step 0, step 2, and step 1 when billing is complete */}
@@ -692,7 +693,7 @@ export const BusinessRegisterPage = () => {
                   }
                   icon={multiStepForm.isLastStep ? CheckCircle : ArrowRight}
                   loading={isSubmitting}
-                  size="sm"
+                  size="md"
                   animated={false}
                   actionType={multiStepForm.isLastStep ? "auth" : "navigation"}
                   className="min-w-[120px] sm:min-w-[160px]"

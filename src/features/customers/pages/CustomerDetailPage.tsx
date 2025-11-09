@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { 
+import {
   ArrowLeft,
   Edit,
   Mail,
@@ -24,6 +24,7 @@ import {
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 
+
 import { CustomerDetailSkeleton } from '../components/CustomerDetailSkeleton'
 import { CustomerNotesModal } from '../components/CustomerNotesModal'
 import { DangerousActionsModal } from '../components/DangerousActionsModal'
@@ -31,6 +32,7 @@ import { EditCustomerModal } from '../components/EditCustomerModal'
 import { EmailComposeModal } from '../components/EmailComposeModal'
 
 import { ActionButton } from '@/shared/components/ActionButton'
+import { IconButton, Button } from '@/shared/components/Button'
 import { Card } from '@/shared/components/Card'
 import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
@@ -255,27 +257,34 @@ const CustomerDetailPage: React.FC = () => {
             </div>
             
             <div className="flex items-center gap-3">
-              <button
+              <Button
                 onClick={() => setIsEmailModalOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-[#14BDEA]/20 border border-[#14BDEA]/30 text-[#14BDEA] rounded-lg hover:bg-[#14BDEA]/30 hover:text-white transition-all duration-200"
+                variant="secondary"
+                size="md"
+                icon={Mail}
+                iconPosition="left"
+                className="bg-[#14BDEA]/20 border-[#14BDEA]/30 text-[#14BDEA] hover:bg-[#14BDEA]/30 hover:text-white"
               >
-                <Mail className="w-4 h-4" />
-                <span className="text-sm font-medium">Send Email</span>
-              </button>
-              <button
+                Send Email
+              </Button>
+              <Button
                 onClick={() => setIsEditModalOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:shadow-lg hover:shadow-[#D417C8]/25 transition-all duration-200"
+                variant="primary"
+                size="md"
+                icon={Edit}
+                iconPosition="left"
               >
-                <Edit className="w-4 h-4" />
-                <span className="text-sm font-medium">Edit Details</span>
-              </button>
-              <button 
+                Edit Details
+              </Button>
+              <IconButton
                 onClick={() => setIsDangerousActionsModalOpen(true)}
-                className="p-3 text-white/70 hover:text-[#D417C8] hover:bg-red-500/10 rounded-lg transition-all duration-200 border border-white/10"
+                icon={MoreHorizontal}
+                variant="ghost"
+                size="md"
+                className="text-white/70 hover:text-[#D417C8] hover:bg-red-500/10 border border-white/10"
                 title="Dangerous Actions"
-              >
-                <MoreHorizontal className="w-4 h-4" />
-              </button>
+                aria-label="Dangerous Actions"
+              />
             </div>
           </div>
           </Card>
@@ -553,27 +562,39 @@ const CustomerDetailPage: React.FC = () => {
                 </div>
                 
                 <div className="space-y-3">
-                  <button
+                  <Button
                     onClick={() => setIsEmailModalOpen(true)}
-                    className="w-full flex items-center gap-3 p-3 border border-white/10 rounded-xl hover:bg-white/5 hover:border-[#14BDEA]/30 text-left transition-all duration-200 group"
+                    variant="ghost"
+                    size="md"
+                    icon={Mail}
+                    iconPosition="left"
+                    fullWidth
+                    className="justify-start p-3 border border-white/10 hover:bg-white/5 hover:border-[#14BDEA]/30"
                   >
-                    <Mail className="w-4 h-4 text-[#14BDEA] group-hover:text-white" />
-                    <span className="text-sm font-normal tracking-tight text-white">Send Email</span>
-                  </button>
-                  <button
+                    Send Email
+                  </Button>
+                  <Button
                     onClick={() => setIsNotesModalOpen(true)}
-                    className="w-full flex items-center gap-3 p-3 border border-white/10 rounded-xl hover:bg-white/5 hover:border-[#42E695]/30 text-left transition-all duration-200 group"
+                    variant="ghost"
+                    size="md"
+                    icon={FileText}
+                    iconPosition="left"
+                    fullWidth
+                    className="justify-start p-3 border border-white/10 hover:bg-white/5 hover:border-[#42E695]/30"
                   >
-                    <FileText className="w-4 h-4 text-[#42E695] group-hover:text-white" />
-                    <span className="text-sm font-normal tracking-tight text-white">View Notes</span>
-                  </button>
-                  <button
+                    View Notes
+                  </Button>
+                  <Button
                     onClick={() => setIsEditModalOpen(true)}
-                    className="w-full flex items-center gap-3 p-3 bg-primary/20 border border-primary/30 rounded-xl hover:bg-primary/30 text-left transition-all duration-200 group"
+                    variant="secondary"
+                    size="md"
+                    icon={Edit}
+                    iconPosition="left"
+                    fullWidth
+                    className="justify-start p-3 bg-primary/20 border-primary/30 hover:bg-primary/30"
                   >
-                    <Edit className="w-4 h-4 text-[#D417C8] group-hover:text-white" />
-                    <span className="text-sm font-normal tracking-tight text-white">Edit Details</span>
-                  </button>
+                    Edit Details
+                  </Button>
                 </div>
               </Card>
             </motion.div>

@@ -289,7 +289,7 @@
   /* Polar-inspired Input System - Clean and Solid */
   .auth-input {
     width: 100%;
-    height: 42px; /* Standardized: 42px mobile -> 36px desktop */
+    height: 36px; /* Standardized: 36px across breakpoints */
     padding: 0 0.75rem; /* Adjusted to match dropdowns: 12px */
     background-color: #171719 !important;
     background-image: none !important;
@@ -305,13 +305,6 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-  }
-
-  /* Responsive height - desktop breakpoint (md: 768px) */
-  @media (min-width: 768px) {
-    .auth-input {
-      height: 36px; /* Standardized: 36px on desktop */
-    }
   }
 
   .auth-input::placeholder {
@@ -562,6 +555,14 @@
     opacity: 0.5;
   }
 
+  .btn-social {
+    background: #171719 !important;
+  }
+
+  .btn-social:hover {
+    background: #1f1f21 !important;
+  }
+
   .auth-divider {
     position: relative;
     display: flex;
@@ -651,7 +652,7 @@
 
   .input-icon-left {
     position: absolute;
-    left: 0.75rem; /* 12px - optimized for 44px inputs */
+    left: 0.75rem; /* 12px - optimized for 36px inputs */
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
@@ -683,7 +684,7 @@
 
   .input-icon-right {
     position: absolute;
-    right: 0.75rem; /* 12px - optimized for 44px inputs */
+    right: 0.75rem; /* 12px - optimized for 36px inputs */
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
@@ -773,7 +774,7 @@
   /* Modal input styling - matches auth inputs */
   .modal-input {
     width: 100%;
-    height: 2.625rem; /* 42px - mobile inputs */
+    height: 2.25rem; /* 36px inputs */
     padding: 0 0.75rem;
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1003,14 +1004,14 @@
 
   /* Mobile-first responsive utilities */
   .touch-target {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 36px;
+    min-width: 36px;
   }
 
   @media (max-width: 1023px) {
     .touch-target {
-      min-height: 48px;
-      min-width: 48px;
+      min-height: 36px;
+      min-width: 36px;
     }
   }
 
@@ -1077,8 +1078,8 @@
 
     /* Smaller touch targets for very small screens */
     .touch-target {
-      min-height: 44px;
-      min-width: 44px;
+      min-height: 36px;
+      min-width: 36px;
     }
 
     /* Better typography for small screens */
@@ -1178,8 +1179,8 @@
 
     /* Larger tap targets on mobile */
     button, .btn, [role="button"] {
-      min-height: 44px;
-      min-width: 44px;
+      min-height: 36px;
+      min-width: 36px;
     }
 
     /* Improve mobile form inputs */
@@ -1190,7 +1191,7 @@
     textarea, 
     select {
       font-size: 16px !important; /* Prevent zoom on iOS */
-      min-height: 44px;
+      min-height: 36px;
     }
   }
 

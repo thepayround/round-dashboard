@@ -2,6 +2,8 @@ import { ChevronDown, Search, X, Check } from 'lucide-react'
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 
+import { Button, IconButton } from '../../Button'
+
 export interface ApiDropdownOption {
   value: string
   label: string
@@ -244,20 +246,21 @@ export const ApiDropdown = <T = unknown>({
   // Error state
   if (isError) {
     return (
-      <div className="relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-light text-xs outline-none opacity-50 cursor-not-allowed">
+      <div className="relative w-full h-9 pl-9 pr-3 rounded-lg border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-light text-xs outline-none opacity-50 cursor-not-allowed">
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 flex items-center justify-center">
           <div className="w-4 h-4 flex items-center justify-center">
             {config.icon}
           </div>
         </div>
         <span className="text-white/60">{config.errorText}</span>
-        <button 
+        <Button
           onClick={() => refetch()}
-          className="text-[#14BDEA] hover:text-[#14BDEA]/80 text-xs font-medium"
-          type="button"
+          variant="ghost"
+          size="sm"
+          className="text-[#14BDEA] hover:text-[#14BDEA]/80 text-xs h-auto px-2 py-1"
         >
           Retry
-        </button>
+        </Button>
       </div>
     )
   }
@@ -288,32 +291,35 @@ export const ApiDropdown = <T = unknown>({
                 className="w-full pl-9 pr-8 py-1.5 bg-[#171719] border border-[#333333] rounded-lg text-white/95 placeholder-[#737373] text-xs focus:border-[#14bdea] focus:outline-none"
               />
               {searchTerm && (
-                <button
+                <IconButton
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-white/10 rounded-lg"
-                  type="button"
+                  icon={X}
+                  variant="ghost"
+                  size="sm"
                   aria-label="Clear search"
-                >
-                  <X className="w-3 h-3 text-white/60 hover:text-white/90" />
-                </button>
+                  className="absolute right-2.5 top-1/2 transform -translate-y-1/2 w-5 h-5 p-0"
+                />
               )}
             </div>
             
             {/* Clear selection button */}
             {selectedOption && allowClear && (
-              <button
+              <Button
                 onClick={() => {
                   onClear?.()
                   setIsOpen(false)
                   setSearchTerm('')
                   setHighlightedIndex(-1)
                 }}
-                className="mt-1.5 w-full px-2.5 py-1.5 text-xs bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg text-white/70 hover:text-white/90 flex items-center justify-center space-x-1.5"
-                type="button"
+                variant="ghost"
+                size="sm"
+                icon={X}
+                iconPosition="left"
+                fullWidth
+                className="mt-1.5 bg-white/5 hover:bg-white/10 border border-white/20 text-white/70 hover:text-white/90"
               >
-                <X className="w-4 h-4" />
-                <span>Clear selection</span>
-              </button>
+                Clear selection
+              </Button>
             )}
           </div>
 
@@ -401,7 +407,7 @@ export const ApiDropdown = <T = unknown>({
           }
         }}
         className={`
-          relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
+          relative w-full h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
           bg-[#171719] border-[#333333] text-white flex items-center justify-between
           font-light text-xs outline-none
           ${error ? 'border-[#ef4444]' : ''}
@@ -445,14 +451,14 @@ export const ApiDropdown = <T = unknown>({
           )}
           
           {allowClear && selectedOption && !isLoading && (
-            <button
+            <IconButton
               onClick={handleClear}
-              className="p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
-              type="button"
+              icon={X}
+              variant="ghost"
+              size="sm"
               aria-label="Clear selection"
-            >
-              <X className="w-4 h-4 text-white/60 hover:text-white/90" />
-            </button>
+              className="w-5 h-5 p-0"
+            />
           )}
           
           <ChevronDown 

@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, AlertTriangle, CheckCircle, Info, AlertCircle } from 'lucide-react'
 import { useEffect } from 'react'
 
+import { IconButton } from '@/shared/components/Button'
+
 export type ToastType = 'success' | 'error' | 'warning' | 'info'
 
 interface ToastProps {
@@ -99,12 +101,14 @@ export const Toast = ({
                 )}
               </div>
               
-              <button
+              <IconButton
                 onClick={onClose}
-                className={`flex-shrink-0 w-6 h-6 rounded-full ${styles.background} hover:opacity-80 transition-opacity duration-200 flex items-center justify-center`}
-              >
-                <X className={`w-4 h-4 ${styles.iconColor}`} />
-              </button>
+                icon={X}
+                variant="ghost"
+                size="sm"
+                aria-label="Close toast"
+                className={`flex-shrink-0 w-6 h-6 rounded-full ${styles.background} hover:opacity-80`}
+              />
             </div>
           </div>
         </motion.div>

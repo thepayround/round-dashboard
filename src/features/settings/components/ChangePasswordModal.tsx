@@ -3,6 +3,7 @@ import { Lock, Eye, EyeOff, AlertCircle, Shield } from 'lucide-react'
 import { useState } from 'react'
 
 import { Modal, ActionButton, PasswordStrengthIndicator } from '@/shared/components'
+import { Button, IconButton } from '@/shared/components/Button'
 import { apiClient } from '@/shared/services/apiClient'
 import type { ValidationError } from '@/shared/utils/validation'
 import {
@@ -223,13 +224,15 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
                 required
                 autoComplete="current-password"
               />
-              <button
+              <IconButton
                 type="button"
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
-              >
-                {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
+                icon={showCurrentPassword ? EyeOff : Eye}
+                variant="ghost"
+                size="md"
+                aria-label={showCurrentPassword ? 'Hide current password' : 'Show current password'}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2"
+              />
             </div>
             {hasFieldError(errors, 'currentPassword') && (
               <motion.div
@@ -264,13 +267,15 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
                 required
                 autoComplete="new-password"
               />
-              <button
+              <IconButton
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
-              >
-                {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
+                icon={showNewPassword ? EyeOff : Eye}
+                variant="ghost"
+                size="md"
+                aria-label={showNewPassword ? 'Hide new password' : 'Show new password'}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2"
+              />
             </div>
             
             {/* Password Strength Indicator */}
@@ -316,13 +321,15 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
                 required
                 autoComplete="new-password"
               />
-              <button
+              <IconButton
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
-              >
-                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
+                icon={showConfirmPassword ? EyeOff : Eye}
+                variant="ghost"
+                size="md"
+                aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2"
+              />
             </div>
             {hasFieldError(errors, 'confirmPassword') && (
               <motion.div
@@ -350,14 +357,15 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
 
           {/* Submit Button */}
           <div className="flex justify-end space-x-3 pt-4">
-            <button
+            <Button
               type="button"
               onClick={handleClose}
               disabled={isSubmitting}
-              className="px-6 py-2.5 text-gray-300 hover:text-white transition-colors disabled:opacity-50"
+              variant="ghost"
+              size="md"
             >
               Cancel
-            </button>
+            </Button>
             <ActionButton
               label={isSubmitting ? 'Changing...' : 'Change Password'}
               onClick={() => {}}

@@ -3,6 +3,7 @@ import { Lock, Eye, AlertTriangle, Key, Users } from 'lucide-react'
 import React from 'react'
 
 import { Card } from '@/shared/components'
+import { Button } from '@/shared/components/Button'
 
 
 export const SecuritySection: React.FC = () => (
@@ -49,9 +50,13 @@ export const SecuritySection: React.FC = () => (
               </div>
             </div>
             <p className="text-xs text-gray-400 mb-3">Require 2FA for all organization members</p>
-            <button className="w-full px-3 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
+            <Button
+              variant="primary"
+              size="sm"
+              fullWidth
+            >
               Enable 2FA
-            </button>
+            </Button>
           </Card>
 
           <Card variant="nested" padding="lg">
@@ -66,9 +71,13 @@ export const SecuritySection: React.FC = () => (
               </div>
             </div>
             <p className="text-xs text-gray-400 mb-3">Single Sign-On with Google Workspace</p>
-            <button className="w-full px-3 py-2 bg-white/10 hover:bg-white/15 text-white text-xs font-normal tracking-tight rounded-lg transition-colors duration-200">
+            <Button
+              variant="ghost"
+              size="sm"
+              fullWidth
+            >
               Configure SSO
-            </button>
+            </Button>
           </Card>
         </div>
       </Card>

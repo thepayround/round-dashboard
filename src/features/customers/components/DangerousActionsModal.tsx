@@ -1,6 +1,7 @@
 import { Trash2, UserX, AlertTriangle } from 'lucide-react'
 import React, { useState } from 'react'
 
+import { Button } from '@/shared/components/Button'
 import { Modal } from '@/shared/components/Modal/Modal'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService, CustomerStatus } from '@/shared/services/api/customer.service'
@@ -114,13 +115,17 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                           </p>
                         </div>
                       </div>
-                      <button
+                      <Button
                         onClick={() => setActionType('deactivate')}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-500/20 border border-orange-500/30 text-orange-400 rounded-lg hover:bg-orange-500/30 hover:text-white transition-all duration-200 font-medium"
+                        variant="secondary"
+                        size="md"
+                        icon={UserX}
+                        iconPosition="left"
+                        fullWidth
+                        className="bg-orange-500/20 border-orange-500/30 text-orange-400 hover:bg-orange-500/30 hover:text-white"
                       >
-                        <UserX className="w-4 h-4" />
                         Deactivate Account
-                      </button>
+                      </Button>
                     </div>
                   )}
 
@@ -137,13 +142,17 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                         </p>
                       </div>
                     </div>
-                    <button
+                    <Button
                       onClick={() => setActionType('delete')}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500/20 border border-red-500/30 text-[#D417C8] rounded-lg hover:bg-red-500/30 hover:text-white transition-all duration-200 font-medium"
+                      variant="danger"
+                      size="md"
+                      icon={Trash2}
+                      iconPosition="left"
+                      fullWidth
+                      className="bg-red-500/20 border-red-500/30 hover:bg-red-500/30"
                     >
-                      <Trash2 className="w-4 h-4" />
                       Delete Permanently
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -168,30 +177,29 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                     </div>
                     
                     <div className="flex gap-3">
-                      <button
+                      <Button
                         onClick={() => setActionType(null)}
                         disabled={isDeactivating}
-                        className="flex-1 px-4 py-3 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition-all duration-200 font-medium disabled:opacity-50"
+                        variant="ghost"
+                        size="md"
+                        fullWidth
+                        className="bg-white/10 border-white/20 hover:bg-white/20"
                       >
                         Cancel
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={handleDeactivate}
                         disabled={isDeactivating}
-                        className="flex-1 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-all duration-200 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+                        variant="secondary"
+                        size="md"
+                        icon={UserX}
+                        iconPosition="left"
+                        loading={isDeactivating}
+                        fullWidth
+                        className="bg-orange-500 hover:bg-orange-600 border-orange-500"
                       >
-                        {isDeactivating ? (
-                          <>
-                            <div className="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin" />
-                            Deactivating...
-                          </>
-                        ) : (
-                          <>
-                            <UserX className="w-4 h-4" />
-                            Confirm Deactivation
-                          </>
-                        )}
-                      </button>
+                        {isDeactivating ? 'Deactivating...' : 'Confirm Deactivation'}
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -228,30 +236,29 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
                     </div>
                     
                     <div className="flex gap-3">
-                      <button
+                      <Button
                         onClick={() => setActionType(null)}
                         disabled={isDeleting}
-                        className="flex-1 px-4 py-3 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition-all duration-200 font-medium disabled:opacity-50"
+                        variant="ghost"
+                        size="md"
+                        fullWidth
+                        className="bg-white/10 border-white/20 hover:bg-white/20"
                       >
                         Cancel
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={handleDelete}
                         disabled={confirmText !== customerName || isDeleting}
-                        className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all duration-200 font-medium disabled:opacity-50 disabled:bg-gray-700 disabled:text-gray-500 flex items-center justify-center gap-2"
+                        variant="danger"
+                        size="md"
+                        icon={Trash2}
+                        iconPosition="left"
+                        loading={isDeleting}
+                        fullWidth
+                        className="bg-red-500 hover:bg-red-600 border-red-500 disabled:bg-gray-700 disabled:text-gray-500"
                       >
-                        {isDeleting ? (
-                          <>
-                            <div className="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin" />
-                            Deleting...
-                          </>
-                        ) : (
-                          <>
-                            <Trash2 className="w-4 h-4" />
-                            Delete Permanently
-                          </>
-                        )}
-                      </button>
+                        {isDeleting ? 'Deleting...' : 'Delete Permanently'}
+                      </Button>
                     </div>
                   </div>
                 )}

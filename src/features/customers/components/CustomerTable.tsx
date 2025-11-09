@@ -11,7 +11,7 @@ import {
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { IconButton } from '@/shared/components/Button'
+import { Button, IconButton, PlainButton } from '@/shared/components/Button'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
 
 interface SortConfig {
@@ -102,9 +102,10 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   }) => (
     <th className={`px-6 py-4 text-left text-sm font-normal text-white/80 tracking-tight ${className}`}>
       {field ? (
-        <button
+        <PlainButton
           onClick={() => onSort(field)}
-          className="flex items-center space-x-2"
+          className="flex items-center space-x-2 text-left"
+          unstyled
         >
           <span>{children}</span>
           {(() => {
@@ -116,7 +117,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
             }
             return <ArrowDown className="w-4 h-4" />
           })()}
-        </button>
+        </PlainButton>
       ) : (
         children
       )}
@@ -321,19 +322,27 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               {selectedIds.length} customer{selectedIds.length === 1 ? '' : 's'} selected
             </div>
             <div className="flex items-center space-x-2">
-              <button className="px-3 py-1 text-sm text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors">
-                Export Selected
-              </button>
-              <button className="px-3 py-1 text-sm text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors">
-                Bulk Edit
-              </button>
-              <button 
-                onClick={() => onSelectionChange?.([])}
-                className="p-1 text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors"
-                title="Clear selection"
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white/60 hover:text-white"
               >
-                <X className="w-4 h-4" />
-              </button>
+                Export Selected
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white/60 hover:text-white"
+              >
+                Bulk Edit
+              </Button>
+              <IconButton
+                onClick={() => onSelectionChange?.([])}
+                icon={X}
+                variant="ghost"
+                size="sm"
+                aria-label="Clear selection"
+              />
             </div>
           </div>
         </div>

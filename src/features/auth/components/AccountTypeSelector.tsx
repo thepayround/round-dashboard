@@ -1,5 +1,6 @@
 import { User, Building } from 'lucide-react'
 
+import { Button } from '@/shared/components/Button'
 import type { AccountType } from '@/shared/types/auth'
 
 interface AccountTypeOption {
@@ -63,18 +64,14 @@ export const AccountTypeSelector = ({
     {/* Account Type Cards */}
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
       {ACCOUNT_TYPES.map(accountType => (
-        <button
+        <Button
           key={accountType.type}
           type="button"
-          className="relative group cursor-pointer transition-all duration-500 transform w-full text-left hover:scale-102"
+          variant="ghost"
+          size="lg"
           onClick={() => onTypeSelect(accountType.type)}
-          onKeyDown={e => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault()
-              onTypeSelect(accountType.type)
-            }
-          }}
           aria-label={`Continue with ${accountType.title} account type`}
+          className="relative group cursor-pointer transition-all duration-500 transform w-full text-left hover:scale-102 p-0 h-auto"
         >
           {/* Glow effect */}
           <div
@@ -114,7 +111,7 @@ export const AccountTypeSelector = ({
               `}
             />
           </div>
-        </button>
+        </Button>
       ))}
     </div>
   </div>

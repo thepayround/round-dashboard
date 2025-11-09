@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import ColorLogo from '@/assets/logos/color-logo.svg'
 import { Breadcrumb } from '@/shared/components/Breadcrumb'
+import { Button, IconButton, PlainButton } from '@/shared/components/Button'
 import { NavigationItem } from '@/shared/components/DashboardLayout/NavigationItem'
 import { LAYOUT_CONSTANTS, ANIMATION_VARIANTS } from '@/shared/components/DashboardLayout/constants'
 import type { DashboardLayoutProps } from '@/shared/components/DashboardLayout/types'
@@ -17,6 +18,7 @@ import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
 import { useSidebarState } from '@/shared/hooks/useSidebarState'
 import { useSwipeGesture } from '@/shared/hooks/useSwipeGesture'
 import { apiClient } from '@/shared/services/apiClient'
+import type { User as AuthUser } from '@/shared/types/auth'
 import { cn } from '@/shared/utils/cn'
 
 // Logo text component (reusable, kept here as it's small and only used in mobile header)
@@ -48,13 +50,14 @@ const MobileHeader = memo(({
       height: 'calc(4rem + var(--safe-area-inset-top))'
     }}
   >
-    <button
+    <IconButton
       onClick={onMenuClick}
-      className="p-2 rounded-lg text-gray-400 hover:text-white transition-all duration-200"
+      icon={PanelLeft}
+      variant="ghost"
+      size="md"
+      className="text-gray-400 hover:text-white"
       aria-label={isMenuOpen ? "Close sidebar" : "Open sidebar"}
-    >
-      <PanelLeft className="w-6 h-6" />
-    </button>
+    />
 
     <Link to="/dashboard" className="flex items-center space-x-2">
       <img src={ColorLogo} alt="Round Logo" className="w-7 h-7" />
@@ -218,7 +221,7 @@ export const DashboardLayout = memo(({
     return 'U'
   }, [])
 
-  const getUserDisplayName = useCallback((user: typeof state.user) => {
+  const getUserDisplayName = useCallback((user?: AuthUser | null) => {
     if (!user) return 'User'
     const firstName = user.firstName && user.firstName !== 'undefined' ? user.firstName.trim() : ''
     const lastName = user.lastName && user.lastName !== 'undefined' ? user.lastName.trim() : ''
@@ -391,14 +394,15 @@ export const DashboardLayout = memo(({
                   </Link>
                   
                   {/* Collapse button at same height as logo */}
-                  <button
+                  <IconButton
                     onClick={toggleSidebar}
-                    className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200 flex-shrink-0"
+                    icon={PanelLeftClose}
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-400 hover:text-white flex-shrink-0"
                     aria-label="Collapse sidebar"
                     title="Collapse sidebar (Ctrl+Shift+B)"
-                  >
-                    <PanelLeftClose className="w-5 h-5" />
-                  </button>
+                  />
                 </div>
               ) : (
                 // Collapsed: Logo on top, button below
@@ -411,14 +415,15 @@ export const DashboardLayout = memo(({
                   </Link>
                   
                   {/* Expand button below logo */}
-                  <button
+                  <IconButton
                     onClick={toggleSidebar}
-                    className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200"
+                    icon={PanelLeft}
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-400 hover:text-white"
                     aria-label="Expand sidebar"
                     title="Expand sidebar (Ctrl+Shift+B)"
-                  >
-                    <PanelLeft className="w-5 h-5" />
-                  </button>
+                  />
                 </div>
               )}
             </div>
@@ -442,14 +447,15 @@ export const DashboardLayout = memo(({
                 </Link>
                 
                 {/* Close button - same as desktop collapse button */}
-                <button
+                <IconButton
                   onClick={toggleSidebar}
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all duration-200 flex-shrink-0"
+                  icon={PanelLeftClose}
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-400 hover:text-white flex-shrink-0"
                   aria-label="Close sidebar"
                   title="Close sidebar"
-                >
-                  <PanelLeftClose className="w-5 h-5" />
-                </button>
+                />
               </div>
             </div>
 
@@ -493,7 +499,7 @@ export const DashboardLayout = memo(({
               onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, undefined, e)}
               onMouseLeave={handleTooltipLeave}
               className={cn(
-                'group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9',
+                'group relative flex items-center rounded-lg transition-all duration-200 h-9',
                 isActive(item.href)
                   ? 'bg-primary/10 text-white border border-primary/20'
                   : 'text-white/60 hover:text-white',
@@ -532,7 +538,7 @@ export const DashboardLayout = memo(({
                   onMouseEnter={(e) => handleTooltipEnter('user-settings', 'User Settings', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
                   className={`
-                    group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9
+                    group relative flex items-center rounded-lg transition-all duration-200 h-9
                     ${
                       isActive('/user-settings')
                         ? 'bg-primary/10 text-white border border-primary/20'
@@ -552,18 +558,22 @@ export const DashboardLayout = memo(({
 
                 </Link>
 
-                <button
+                <Button
+                  type="button"
                   onClick={() => {
                     setShowProfileDropdown(false)
                     handleLogout()
                   }}
                   onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
-                  className={`
-                    group relative flex items-center rounded-lg transition-all duration-200 h-11 md:h-9 w-full
-                    text-white/60 hover:text-[#D417C8]
-                    ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-                  `}
+                  variant="ghost"
+                  size="sm"
+                  className={cn(
+                    'group relative flex items-center rounded-lg transition-all duration-200 h-9',
+                    'text-white/60 hover:text-white',
+                    isCollapsed ? 'justify-center px-0' : 'px-6',
+                    'w-full'
+                  )}
                   aria-label="Logout"
                 >
                   <LogOut className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
@@ -573,8 +583,7 @@ export const DashboardLayout = memo(({
                       <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">Logout</span>
                     </div>
                   )}
-
-                </button>
+                </Button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -585,17 +594,18 @@ export const DashboardLayout = memo(({
           {/* User Profile */}
           <div className={cn('py-2', isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}>
             <div className="relative" ref={profileDropdownRef}>
-            <button
+            <PlainButton
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               onMouseEnter={handleUserTooltipEnter}
               onMouseLeave={handleTooltipLeave}
               className={cn(
                 'group relative flex items-center rounded-lg transition-all duration-200 w-full text-white/60 hover:text-white',
-                isCollapsed ? 'justify-center px-0 h-11 md:h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5',
+                isCollapsed ? 'justify-center px-0 h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5',
                 showProfileDropdown && 'text-white'
               )}
               aria-label="User profile menu"
               aria-expanded={showProfileDropdown}
+              unstyled
             >
               {/* User Avatar */}
               <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
@@ -631,7 +641,7 @@ export const DashboardLayout = memo(({
                 />
               )}
 
-            </button>
+            </PlainButton>
             </div>
           </div>
           </div>
@@ -690,13 +700,14 @@ export const DashboardLayout = memo(({
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-normal text-white tracking-tight">Keyboard Shortcuts</h3>
-                <button
+                <IconButton
                   onClick={() => setShowShortcuts(false)}
-                  className="text-white/60 hover:text-white transition-colors"
+                  icon={X}
+                  variant="ghost"
+                  size="sm"
+                  className="text-white/60 hover:text-white"
                   aria-label="Close shortcuts help"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                />
               </div>
               
               <div className="space-y-4 text-sm">

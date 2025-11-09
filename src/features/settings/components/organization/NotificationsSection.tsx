@@ -3,6 +3,7 @@ import { Bell, Mail, MessageSquare, Smartphone, Settings } from 'lucide-react'
 import React, { useState } from 'react'
 
 import { Card } from '@/shared/components'
+import { Button } from '@/shared/components/Button'
 
 
 interface NotificationPreference {
@@ -200,9 +201,12 @@ export const NotificationsSection: React.FC = () => {
         </div>
 
         <div className="mt-6 pt-6 border-t border-white/10">
-          <button className="px-6 py-3 bg-[#D417C8] hover:bg-[#BD2CD0] text-white text-sm font-normal tracking-tight rounded-lg transition-colors duration-200">
+          <Button
+            variant="primary"
+            size="md"
+          >
             Save Notification Settings
-          </button>
+          </Button>
         </div>
       </Card>
     </motion.div>

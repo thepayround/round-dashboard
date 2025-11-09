@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import type { TeamSettings } from '../../types/onboarding'
 
+import { Button, IconButton } from '@/shared/components/Button'
 import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
 import { teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
 import { useTeamInvitation, useTeamRoleUtils } from '@/shared/hooks/api/useTeam'
@@ -212,14 +213,18 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                   onSelect={(value) => setInviteRole(value)}
                 />
               </div>
-              <button
+              <Button
                 onClick={handleInviteTeamMember}
                 disabled={!inviteEmail.trim() || isLoading}
-                className="px-4 py-2 h-9 rounded-lg bg-secondary hover:brightness-105 disabled:opacity-50 text-white text-xs font-normal tracking-tight flex items-center gap-2 shrink-0"
+                variant="secondary"
+                size="md"
+                icon={isLoading ? Loader2 : UserPlus}
+                iconPosition="left"
+                loading={isLoading}
+                className="shrink-0"
               >
-                {isLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <UserPlus className="w-3 h-3" />}
                 {isLoading ? 'Sending...' : 'Invite'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -257,12 +262,14 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                         </div>
                       </div>
                     </div>
-                    <button
+                    <IconButton
                       onClick={() => handleRemoveInvitation(invitation.id)}
-                      className="p-1.5 rounded text-[#D417C8] hover:bg-red-400/10 transition-colors duration-200"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
+                      icon={Trash2}
+                      variant="danger"
+                      size="sm"
+                      aria-label="Remove invitation"
+                      className="hover:bg-red-400/10"
+                    />
                   </div>
                 </motion.div>
               ))}

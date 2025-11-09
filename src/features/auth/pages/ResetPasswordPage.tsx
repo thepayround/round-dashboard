@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { ActionButton, AuthLogo, PasswordStrengthIndicator } from '@/shared/components'
+import { IconButton } from '@/shared/components/Button'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { apiClient } from '@/shared/services/apiClient'
@@ -284,13 +285,15 @@ export const ResetPasswordPage = () => {
                       aria-invalid={!!errors.newPassword}
                       aria-describedby={errors.newPassword ? 'newPassword-error' : undefined}
                     />
-                    <button
+                    <IconButton
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
-                    >
-                      {showPassword ? <EyeOff /> : <Eye />}
-                    </button>
+                      icon={showPassword ? EyeOff : Eye}
+                      variant="ghost"
+                      size="md"
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      className="input-icon-right"
+                    />
                   </div>
 
                   {errors.newPassword && (
@@ -330,13 +333,15 @@ export const ResetPasswordPage = () => {
                       aria-invalid={!!errors.confirmPassword}
                       aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
                     />
-                    <button
+                    <IconButton
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
-                    >
-                      {showConfirmPassword ? <EyeOff /> : <Eye />}
-                    </button>
+                      icon={showConfirmPassword ? EyeOff : Eye}
+                      variant="ghost"
+                      size="md"
+                      aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                      className="input-icon-right"
+                    />
                   </div>
                   {errors.confirmPassword && (
                     <motion.div
@@ -360,7 +365,7 @@ export const ResetPasswordPage = () => {
                   disabled={isSubmitting || !values.newPassword || !values.confirmPassword || !!errors.newPassword || !!errors.confirmPassword}
                   icon={ArrowRight}
                   loading={isSubmitting}
-                  size="sm"
+                  size="md"
                   animated={false}
                   actionType="auth"
                   className="mt-8 w-full"

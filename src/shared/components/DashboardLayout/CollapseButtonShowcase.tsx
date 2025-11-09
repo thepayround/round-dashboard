@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { PlainButton } from '../Button'
 import { Card } from '../Card'
 
 import { CollapseButton } from './CollapseButtonDesigns'
@@ -63,7 +64,7 @@ export const CollapseButtonShowcase = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-4 mb-12">
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-lg font-bold text-white">
             Collapse Button <span className="text-[#D417C8]">Designs</span>
           </h1>
           <p className="text-gray-400 max-w-2xl mx-auto">
@@ -128,12 +129,13 @@ export const CollapseButtonShowcase = () => {
               </div>
 
               {/* Action Button */}
-              <button
+              <PlainButton
                 onClick={() => design.setState(!design.state)}
                 className="w-full py-2 bg-gradient-to-r from-[#D417C8]/10 to-[#7767DA]/10 hover:from-[#D417C8]/20 hover:to-[#7767DA]/20 border border-[#D417C8]/30 text-white text-sm rounded-lg transition-all"
+                unstyled
               >
                 Toggle State
-              </button>
+              </PlainButton>
             </Card>
           ))}
         </div>

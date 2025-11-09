@@ -1,5 +1,7 @@
 import { Table, Grid3X3, List } from 'lucide-react'
 
+import { Button } from '@/shared/components/Button'
+
 export type ViewMode = 'table' | 'grid' | 'list'
 
 export interface ViewModeOption {
@@ -37,32 +39,23 @@ export const ViewModeToggle = ({
     lg: 'p-3'
   }
 
-  const iconSizeClasses = {
-    sm: 'w-3 h-3',
-    md: 'w-4 h-4',
-    lg: 'w-5 h-5'
-  }
-
   return (
     <div className={`flex items-center space-x-2 bg-black/20 rounded-lg p-1 ${className}`}>
       {options.map((option) => {
         const IconComponent = option.icon
         return (
-          <button
+          <Button
             key={option.value}
             onClick={() => onChange(option.value)}
-            className={`${sizeClasses[size]} rounded-md transition-all flex items-center space-x-2 ${
-              value === option.value
-                ? 'bg-white/10 text-white' 
-                : 'text-white/60 hover:text-white'
-            }`}
+            variant={value === option.value ? 'primary' : 'ghost'}
+            size="sm"
+            icon={IconComponent}
+            iconPosition="left"
+            className={`${sizeClasses[size]} ${value === option.value ? 'bg-white/10' : ''}`}
             title={option.label}
           >
-            <IconComponent className={iconSizeClasses[size]} />
-            {showLabels && (
-              <span className="text-sm font-normal">{option.label}</span>
-            )}
-          </button>
+            {showLabels && option.label}
+          </Button>
         )
       })}
     </div>
