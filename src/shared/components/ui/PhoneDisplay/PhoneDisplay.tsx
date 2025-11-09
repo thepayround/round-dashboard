@@ -3,9 +3,31 @@
  * 
  * A simple phone display component that only handles display and copy functionality.
  * All formatting and API calls should be handled at a higher level.
+ * 
+ * @example
+ * ```tsx
+ * // Copy button only (most common use case)
+ * <PhoneDisplay
+ *   phoneNumber="+1234567890"
+ *   copyButtonOnly
+ *   showCopyButton
+ *   showCountryFlag={false}
+ * />
+ * 
+ * // Full display with country info
+ * <PhoneDisplay
+ *   phoneNumber="+1234567890"
+ *   formattedPhoneNumber="+1 (234) 567-890"
+ *   countryInfo={{
+ *     countryCode: 'US',
+ *     countryName: 'United States',
+ *     phoneCode: '1',
+ *     flag: '🇺🇸'
+ *   }}
+ * />
+ * ```
  */
 
-import { motion } from 'framer-motion'
 import { Check, Copy, Flag, Phone } from 'lucide-react'
 import React, { useState } from 'react'
 
@@ -99,7 +121,7 @@ export const PhoneDisplay: React.FC<PhoneDisplayProps> = ({
             {countryInfo?.flag ? (
               <span className="text-lg">{countryInfo.flag}</span>
             ) : (
-              <Flag className="h-4 w-4 text-gray-400" />
+              <Flag className="h-4 w-4 text-white/60" />
             )}
             <span className="font-mono">
               {displayNumber}
@@ -116,10 +138,10 @@ export const PhoneDisplay: React.FC<PhoneDisplayProps> = ({
                 {countryInfo?.flag ? (
                   <span className="text-lg">{countryInfo.flag}</span>
                 ) : (
-                  <Flag className="h-4 w-4 text-gray-400" />
+                  <Flag className="h-4 w-4 text-white/60" />
                 )}
                 {countryInfo?.countryName && (
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-white/60">
                     {countryInfo.countryName}
                   </span>
                 )}
@@ -137,12 +159,12 @@ export const PhoneDisplay: React.FC<PhoneDisplayProps> = ({
     <div className={cn(
       copyButtonOnly 
         ? 'inline-flex' 
-        : 'flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2',
+        : 'flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2',
       className
     )}>
       {!copyButtonOnly && (
         <div className="flex items-center gap-2 min-w-0 flex-1">
-          <Phone className="h-4 w-4 text-gray-500 flex-shrink-0" />
+          <Phone className="h-4 w-4 text-white/60 flex-shrink-0" />
           <div className="min-w-0 flex-1">
             {renderContent()}
           </div>
@@ -150,37 +172,28 @@ export const PhoneDisplay: React.FC<PhoneDisplayProps> = ({
       )}
 
       {showCopyButton && (
-        <motion.button
-          type="button" // Prevent form submission
+        <button
+          type="button"
           onClick={handleCopy}
           className={cn(
+            'flex items-center justify-center',
             copyButtonOnly 
-              ? 'p-1 transition-all duration-200 cursor-pointer'
-              : 'ml-2 p-1 transition-all duration-200 cursor-pointer',
+              ? 'p-1' 
+              : 'ml-2 p-1',
             isCopied
-              ? 'text-emerald-400'
-              : 'text-white/60 hover:text-white/90'
+              ? 'text-[#14BDEA]'
+              : 'text-white/60 hover:text-white/90',
+            'transition-colors duration-150'
           )}
-          whileHover={isCopied ? {} : { scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
           title={isCopied ? 'Copied!' : 'Copy phone number'}
           aria-label="Copy phone number"
         >
-          <motion.div
-            initial={false}
-            animate={{ 
-              scale: isCopied ? [1, 1.2, 1] : 1,
-              rotate: isCopied ? [0, 15, 0] : 0
-            }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            {isCopied ? (
-              <Check className="h-4 w-4" />
-            ) : (
-              <Copy className="h-4 w-4" />
-            )}
-          </motion.div>
-        </motion.button>
+          {isCopied ? (
+            <Check className="h-4 w-4" />
+          ) : (
+            <Copy className="h-4 w-4" />
+          )}
+        </button>
       )}
     </div>
   )

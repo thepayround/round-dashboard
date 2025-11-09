@@ -1,6 +1,49 @@
+/**
+ * ApiDropdown Component
+ * 
+ * A fully accessible dropdown component for API-driven data with loading and error states.
+ * For static client-side data, use UiDropdown instead.
+ * 
+ * @example
+ * // Using a pre-configured dropdown
+ * import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
+ * 
+ * <ApiDropdown
+ *   config={countryDropdownConfig}
+ *   value={selectedCountry}
+ *   onSelect={setSelectedCountry}
+ *   allowClear
+ * />
+ * 
+ * @example
+ * // Custom configuration
+ * const customConfig: ApiDropdownConfig<Industry> = {
+ *   useHook: useIndustries,
+ *   mapToOptions: (industries) => industries.map(i => ({
+ *     value: i.id,
+ *     label: i.name,
+ *     icon: <Building />
+ *   })),
+ *   icon: <Building />,
+ *   placeholder: 'Select industry',
+ *   searchPlaceholder: 'Search industries...',
+ *   noResultsText: 'No industries found',
+ *   errorText: 'Failed to load industries'
+ * }
+ * 
+ * @accessibility
+ * - Full ARIA support (combobox pattern)
+ * - Keyboard navigation (Arrow keys, Enter, Escape)
+ * - Screen reader announcements for loading/error states
+ * - Focus management and aria-activedescendant
+ * - Automatic retry on error
+ */
 import { ChevronDown, Search, X, Check } from 'lucide-react'
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+
+// Import shared dropdown styles to ensure visual consistency
+import { dropdownStyles, getOptionClasses } from '../dropdown-styles.config'
 
 export interface ApiDropdownOption {
   value: string
@@ -31,15 +74,26 @@ export interface ApiDropdownConfig<TData = Record<string, unknown>> {
 }
 
 interface ApiDropdownProps<T = unknown> {
+  /** Configuration object defining API hook, data mapping, and UI settings */
   config: ApiDropdownConfig<T>
+  /** Currently selected value */
   value?: string
+  /** Callback when an option is selected */
   onSelect: (value: string) => void
+  /** Callback when selection is cleared (requires allowClear) */
   onClear?: () => void
+  /** Whether the dropdown is disabled */
   disabled?: boolean
+  /** Whether to show error state styling */
   error?: boolean
+  /** Whether to show a clear button when an option is selected */
   allowClear?: boolean
+  /** Additional CSS classes for the container */
   className?: string
+  /** ID for the dropdown (for form association) */
   id?: string
+  /** Label for the dropdown (for accessibility) */
+  label?: string
 }
 
 export const ApiDropdown = <T = unknown>({
@@ -52,6 +106,7 @@ export const ApiDropdown = <T = unknown>({
   allowClear = false,
   className = '',
   id,
+  label,
 }: ApiDropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -60,6 +115,8 @@ export const ApiDropdown = <T = unknown>({
   const dropdownRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const listboxId = `${id || 'api-dropdown'}-listbox`
+  const _triggerId = `${id || 'api-dropdown'}-trigger`
 
   // Use the provided hook to fetch data
   const { data, isLoading, isError, refetch } = config.useHook()
@@ -77,6 +134,11 @@ export const ApiDropdown = <T = unknown>({
     const searchText = option.searchText ?? option.label
     return searchText.toLowerCase().includes(searchTerm.toLowerCase())
   })
+
+  // Get the ID of the currently highlighted option for aria-activedescendant
+  const activeDescendantId = highlightedIndex >= 0 && filteredOptions[highlightedIndex]
+    ? `${listboxId}-option-${highlightedIndex}`
+    : undefined
 
   // Retry on error
   useEffect(() => {
@@ -266,7 +328,7 @@ export const ApiDropdown = <T = unknown>({
   const dropdownPortal = isOpen ? createPortal(
     <div
       ref={dropdownRef}
-      className="fixed z-[9999]"
+      className={dropdownStyles.container.positioning}
       style={{
         top: `${dropdownPosition.top}px`,
         left: `${dropdownPosition.left}px`,
@@ -274,27 +336,34 @@ export const ApiDropdown = <T = unknown>({
         minWidth: '280px',
       }}
     >
-      <div className="bg-[#101011] border border-white/20 rounded-lg shadow-2xl overflow-hidden max-h-80 flex flex-col ring-1 ring-white/10">
+      <div 
+        className={`${dropdownStyles.container.base} ${dropdownStyles.container.maxHeight}`}
+        role="listbox"
+        id={listboxId}
+        aria-label={label || config.placeholder}
+      >
         {/* Search input */}
-        <div className="p-2.5 border-b border-white/10">
+        <div className={dropdownStyles.search.container}>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+              <Search className={dropdownStyles.search.icon} />
               <input
                 ref={searchInputRef}
                 type="text"
                 value={searchTerm}
                 onChange={handleSearchChange}
                 placeholder={config.searchPlaceholder}
-                className="w-full pl-9 pr-8 py-1.5 bg-[#171719] border border-[#333333] rounded-lg text-white/95 placeholder-[#737373] text-xs focus:border-[#14bdea] focus:outline-none"
+                className={dropdownStyles.search.input}
+                aria-label="Search options"
+                aria-controls={listboxId}
               />
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-white/10 rounded-lg"
+                  className={dropdownStyles.search.clearButton}
                   type="button"
                   aria-label="Clear search"
                 >
-                  <X className="w-3 h-3 text-white/60 hover:text-white/90" />
+                  <X className={dropdownStyles.search.clearIcon} />
                 </button>
               )}
             </div>
@@ -318,18 +387,22 @@ export const ApiDropdown = <T = unknown>({
           </div>
 
           {/* Options list */}
-          <div className="flex-1 overflow-y-auto" onScroll={(e) => e.stopPropagation()}>
+          <div className={dropdownStyles.list.container} onScroll={(e) => e.stopPropagation()}>
             {filteredOptions.length === 0 ? (
-              <div className="p-3 text-center text-white/60 text-xs">
+              <div className={dropdownStyles.list.empty}>
                 {config.noResultsText}
               </div>
             ) : (
-              <div className="p-1.5 space-y-0.5">
+              <div className={`${dropdownStyles.list.padding} ${dropdownStyles.list.spacing}`}>
                 {filteredOptions.map((option, index) => (
                   <div
                     key={option.value || `option-${index}`}
+                    id={`${listboxId}-option-${index}`}
                     role="option"
                     aria-selected={value === option.value}
+                    aria-label={`${option.label}${option.description ? `, ${option.description}` : ''}`}
+                    aria-posinset={index + 1}
+                    aria-setsize={filteredOptions.length}
                     tabIndex={0}
                     onClick={(e) => {
                       e.preventDefault()
@@ -343,31 +416,23 @@ export const ApiDropdown = <T = unknown>({
                         handleSelect(option.value)
                       }
                     }}
-                    className={`
-                      px-2.5 py-2 rounded-lg cursor-pointer
-                      flex items-center justify-between
-                      ${index === highlightedIndex 
-                        ? 'bg-[#14BDEA]/20 border border-[#14BDEA]/30' 
-                        : 'hover:bg-white/10 border border-transparent'
-                      }
-                      ${option.value === value 
-                        ? 'bg-[#14bdea]/20 border-[#14bdea]/30' 
-                        : ''
-                      }
-                    `}
+                    className={getOptionClasses(
+                      index === highlightedIndex,
+                      option.value === value
+                    )}
                   >
-                    <div className="flex items-center space-x-2.5 flex-1 min-w-0">
+                    <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
                       {option.icon && (
                         <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
                           {option.icon}
                         </span>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="text-white/95 font-light truncate text-xs">
+                        <div className={dropdownStyles.option.label}>
                           {option.label}
                         </div>
                         {option.description && (
-                          <div className="text-white/60 text-xs truncate">
+                          <div className={dropdownStyles.option.description}>
                             {option.description}
                           </div>
                         )}
@@ -375,7 +440,7 @@ export const ApiDropdown = <T = unknown>({
                     </div>
                     
                     {option.value === value && (
-                      <Check className="w-4 h-4 text-[#14bdea] flex-shrink-0" />
+                      <Check className={dropdownStyles.option.checkIcon} />
                     )}
                   </div>
                 ))}
@@ -412,7 +477,12 @@ export const ApiDropdown = <T = unknown>({
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-controls="dropdown-options"
+        aria-controls={listboxId}
+        aria-activedescendant={activeDescendantId}
+        aria-label={label || config.placeholder}
+        aria-disabled={disabled}
+        aria-invalid={error}
+        aria-busy={isLoading}
         tabIndex={disabled ? -1 : 0}
       >
         {/* Left icon - show selected option icon if available, otherwise config icon */}

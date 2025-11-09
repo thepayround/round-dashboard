@@ -1,7 +1,62 @@
-import { motion, AnimatePresence } from 'framer-motion'
+/**
+ * UiDropdown Component
+ * 
+ * A fully accessible dropdown component for static client-side data.
+ * For API-driven data (countries, currencies, etc.), use ApiDropdown instead.
+ * 
+ * @example
+ * // Basic usage
+ * <UiDropdown
+ *   options={[
+ *     { value: 'active', label: 'Active' },
+ *     { value: 'pending', label: 'Pending' },
+ *     { value: 'inactive', label: 'Inactive' }
+ *   ]}
+ *   value={status}
+ *   onSelect={setStatus}
+ *   placeholder="Select status"
+ * />
+ * 
+ * @example
+ * // With icons and descriptions
+ * <UiDropdown
+ *   options={[
+ *     { 
+ *       value: 'pro', 
+ *       label: 'Pro Plan', 
+ *       icon: <Star />, 
+ *       description: 'Advanced features' 
+ *     }
+ *   ]}
+ *   value={plan}
+ *   onSelect={setPlan}
+ *   allowClear
+ * />
+ * 
+ * @example
+ * // With loading state
+ * <UiDropdown
+ *   options={options}
+ *   value={value}
+ *   onSelect={setValue}
+ *   loading={isProcessing}
+ *   disabled={!isReady}
+ * />
+ * 
+ * @accessibility
+ * - Full ARIA support (combobox pattern)
+ * - Keyboard navigation (Arrow keys, Enter, Escape)
+ * - Screen reader announcements for selection changes
+ * - Focus management (auto-focus search on open)
+ * - aria-activedescendant for highlighted option
+ * - Proper labeling and descriptions
+ */
 import { ChevronDown, Search, X, Check } from 'lucide-react'
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+
+// Import shared dropdown styles to ensure visual consistency
+import { dropdownStyles, getOptionClasses } from '../dropdown-styles.config'
 
 export interface UiDropdownOption {
   value: string
@@ -12,20 +67,38 @@ export interface UiDropdownOption {
 }
 
 interface UiDropdownProps {
+  /** Array of options to display in the dropdown */
   options: UiDropdownOption[]
+  /** Currently selected value */
   value?: string | null | undefined
+  /** Callback when an option is selected */
   onSelect: (value: string) => void
+  /** Callback when selection is cleared (requires allowClear) */
   onClear?: () => void
+  /** Placeholder text when no option is selected */
   placeholder?: string
+  /** Placeholder for the search input */
   searchPlaceholder?: string
+  /** Text to display when no results match the search */
   noResultsText?: string
+  /** Whether the dropdown is disabled */
   disabled?: boolean
+  /** Whether to show error state styling */
   error?: boolean
+  /** Whether to show a clear button when an option is selected */
   allowClear?: boolean
+  /** Whether to show the search input */
   allowSearch?: boolean
+  /** Additional CSS classes for the container */
   className?: string
+  /** Icon to display on the left side of the trigger */
   icon?: React.ReactNode
+  /** Whether to show loading state */
   loading?: boolean
+  /** Label for the dropdown (for accessibility) */
+  label?: string
+  /** ID for the dropdown (for form association) */
+  id?: string
 }
 
 export const UiDropdown = ({
@@ -42,7 +115,9 @@ export const UiDropdown = ({
   allowSearch = true,
   className = '',
   icon,
-  loading = false
+  loading = false,
+  label,
+  id
 }: UiDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -51,6 +126,8 @@ export const UiDropdown = ({
   const dropdownRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const listboxId = `${id || 'dropdown'}-listbox`
+  const triggerId = `${id || 'dropdown'}-trigger`
 
   // Filter options based on search term
   const filteredOptions = useMemo(() => options.filter(option => {
@@ -222,10 +299,22 @@ export const UiDropdown = ({
     setHighlightedIndex(-1)
   }
 
+  // Get the ID of the currently highlighted option for aria-activedescendant
+  const activeDescendantId = highlightedIndex >= 0 && filteredOptions[highlightedIndex]
+    ? `${listboxId}-option-${highlightedIndex}`
+    : undefined
+
   // Disabled state
   if (disabled) {
     return (
-      <div className="relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-light text-xs outline-none opacity-50 cursor-not-allowed">
+      <div 
+        className="relative w-full h-[42px] md:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300 bg-white/[0.12] border-white/20 text-white cursor-pointer flex items-center justify-between font-light text-xs outline-none opacity-50 cursor-not-allowed"
+        role="combobox"
+        aria-disabled="true"
+        aria-expanded="false"
+        aria-controls={listboxId}
+        aria-label={label || placeholder}
+      >
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 flex items-center justify-center">
           <div className="w-4 h-4 flex items-center justify-center">
             {icon ?? <ChevronDown className="w-4 h-4" />}
@@ -239,150 +328,134 @@ export const UiDropdown = ({
 
   // Create portal element
   const dropdownPortal = isOpen ? createPortal(
-    <AnimatePresence>
-      {/* Dropdown content */}
-      <motion.div
-        key="dropdown"
-        ref={dropdownRef}
-        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-        transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="fixed z-[9999] will-change-transform"
-        style={{
-          top: `${dropdownPosition.top}px`,
-          left: `${dropdownPosition.left}px`,
-          width: `${dropdownPosition.width}px`,
-          zIndex: 9999,
-          minWidth: '280px',
-        }}
+    <div
+      ref={dropdownRef}
+      className={dropdownStyles.container.positioning}
+      style={{
+        top: `${dropdownPosition.top}px`,
+        left: `${dropdownPosition.left}px`,
+        width: `${dropdownPosition.width}px`,
+        zIndex: 9999,
+        minWidth: '280px',
+      }}
+    >
+      <div 
+        className={`${dropdownStyles.container.base} ${dropdownStyles.container.maxHeight}`}
+        role="listbox"
+        id={listboxId}
+        aria-label={label || placeholder}
       >
-        <div className="
-          bg-[#101011] border border-white/20
-          rounded-lg shadow-2xl overflow-hidden
-          max-h-80 flex flex-col
-          ring-1 ring-white/10
-        ">
-          {/* Search input */}
-          {allowSearch && (
-            <div className="p-2.5 border-b border-white/10">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  placeholder={searchPlaceholder}
-                  className="
-                    w-full pl-9 pr-8 py-1.5
-                    bg-[#171719] border border-[#333333] rounded-lg
-                    text-white/95 placeholder-[#737373] text-xs
-                    focus:border-[#14bdea] focus:outline-none
-                    transition-all duration-200
-                  "
-                />
-                {searchTerm && (
-                  <button
-                    onClick={() => setSearchTerm('')}
-                    className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
-                    type="button"
-                    aria-label="Clear search"
-                  >
-                    <X className="w-3 h-3 text-white/60 hover:text-white/90" />
-                  </button>
-                )}
-              </div>
-
-              {/* Clear selection button */}
-              {selectedOption && allowClear && (
+        {/* Search input */}
+        {allowSearch && (
+          <div className={dropdownStyles.search.container}>
+            <div className="relative">
+              <Search className={dropdownStyles.search.icon} />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder={searchPlaceholder}
+                className={dropdownStyles.search.input}
+                aria-label="Search options"
+                aria-controls={listboxId}
+              />
+              {searchTerm && (
                 <button
-                  onClick={() => {
-                    onClear?.()
-                    setIsOpen(false)
-                    setSearchTerm('')
-                    setHighlightedIndex(-1)
-                  }}
-                  className="
-                    mt-1.5 w-full px-2.5 py-1.5 text-xs
-                    bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg
-                    text-white/70 hover:text-white/90
-                    transition-all duration-200
-                    flex items-center justify-center space-x-1.5
-                  "
+                  onClick={() => setSearchTerm('')}
+                  className={dropdownStyles.search.clearButton}
                   type="button"
+                  aria-label="Clear search"
                 >
-                  <X className="w-4 h-4" />
-                  <span>Clear selection</span>
+                  <X className={dropdownStyles.search.clearIcon} />
                 </button>
               )}
             </div>
-          )}
 
-          {/* Options list */}
-          <div className="flex-1 overflow-y-auto" onScroll={(e) => e.stopPropagation()}>
-            {filteredOptions.length === 0 ? (
-              <div className="p-3 text-center text-white/60 text-xs">
-                {noResultsText}
-              </div>
-            ) : (
-              <div className="p-1.5 space-y-0.5">
-                {filteredOptions.map((option, index) => (
-                  <motion.div
-                    key={option.value ? `${option.value}-${index}` : `empty-option-${index}`}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.02 }}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      handleSelect(option.value)
-                    }}
-                    className={`
-                      px-2.5 py-2 rounded-lg cursor-pointer
-                      flex items-center justify-between
-                      transition-all duration-200
-                      ${index === highlightedIndex
-                        ? 'bg-[#14BDEA]/20 border border-[#14BDEA]/30'
-                        : 'hover:bg-white/10 border border-transparent'
-                      }
-                      ${option.value === value
-                        ? 'bg-[#14bdea]/20 border-[#14bdea]/30'
-                        : ''
-                      }
-                    `}
-                    role="option"
-                    aria-selected={option.value === value}
-                  >
-                    <div className="flex items-center space-x-2.5 flex-1 min-w-0">
-                      {option.icon && (
-                        <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
-                          {option.icon}
-                        </span>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <div className="text-white/95 font-light truncate text-xs">
-                          {option.label}
-                        </div>
-                        {option.description && (
-                          <div className="text-white/60 text-xs truncate">
-                            {option.description}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {option.value === value && (
-                      <Check className="w-4 h-4 text-[#14bdea] flex-shrink-0" />
-                    )}
-                  </motion.div>
-                ))}
-              </div>
+            {/* Clear selection button */}
+            {selectedOption && allowClear && (
+              <button
+                onClick={() => {
+                  onClear?.()
+                  setIsOpen(false)
+                  setSearchTerm('')
+                  setHighlightedIndex(-1)
+                }}
+                className="
+                  mt-1.5 w-full px-2.5 py-1.5 text-xs
+                  bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg
+                  text-white/70 hover:text-white/90
+                  transition-all duration-200
+                  flex items-center justify-center space-x-1.5
+                "
+                type="button"
+              >
+                <X className="w-4 h-4" />
+                <span>Clear selection</span>
+              </button>
             )}
           </div>
+        )}
+
+        {/* Options list */}
+        <div className={dropdownStyles.list.container} onScroll={(e) => e.stopPropagation()}>
+          {filteredOptions.length === 0 ? (
+            <div className={dropdownStyles.list.empty}>
+              {noResultsText}
+            </div>
+          ) : (
+            <div className={`${dropdownStyles.list.padding} ${dropdownStyles.list.spacing}`}>
+              {filteredOptions.map((option, index) => (
+                <div
+                  key={option.value ? `${option.value}-${index}` : `empty-option-${index}`}
+                  id={`${listboxId}-option-${index}`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    handleSelect(option.value)
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      handleSelect(option.value)
+                    }
+                  }}
+                  className={getOptionClasses(index === highlightedIndex, option.value === value)}
+                  role="option"
+                  aria-selected={option.value === value}
+                  aria-label={`${option.label}${option.description ? `, ${option.description}` : ''}`}
+                  aria-posinset={index + 1}
+                  aria-setsize={filteredOptions.length}
+                  tabIndex={0}
+                >
+                  <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
+                    {option.icon && (
+                      <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
+                        {option.icon}
+                      </span>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className={dropdownStyles.option.label}>
+                        {option.label}
+                      </div>
+                      {option.description && (
+                        <div className={dropdownStyles.option.description}>
+                          {option.description}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {option.value === value && (
+                    <Check className={dropdownStyles.option.checkIcon} />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </motion.div>
-    </AnimatePresence>,
+      </div>
+    </div>,
     document.body
   ) : null
 
@@ -391,6 +464,7 @@ export const UiDropdown = ({
       {/* Dropdown trigger */}
       <div
         ref={triggerRef}
+        id={triggerId}
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -414,7 +488,12 @@ export const UiDropdown = ({
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-controls="dropdown-options"
+        aria-controls={listboxId}
+        aria-activedescendant={activeDescendantId}
+        aria-label={label || placeholder}
+        aria-disabled={disabled}
+        aria-invalid={error}
+        aria-busy={loading}
         tabIndex={disabled ? -1 : 0}
       >
         {/* Left icon - show selected option icon if available, otherwise show provided icon */}

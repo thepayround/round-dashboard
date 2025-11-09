@@ -1,17 +1,22 @@
-import { motion } from 'framer-motion'
 import {
   Eye,
   Edit,
   MoreHorizontal,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
   X
 } from 'lucide-react'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { IconButton } from '@/shared/components/Button'
+import { 
+  Table, 
+  TableHeader, 
+  TableBody, 
+  TableRow,
+  TableHead, 
+  TableCell,
+  SortableTableHead 
+} from '@/shared/components/ui'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
 
 interface SortConfig {
@@ -38,7 +43,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   onSelectionChange,
   selectedIds = []
 }) => {
-  const [hoveredRow, setHoveredRow] = useState<string | null>(null)
+  const [_hoveredRow, setHoveredRow] = useState<string | null>(null)
 
   const getStatusText = (status: number | string): string => {
     const statusValue = typeof status === 'string' ? parseInt(status) : status
@@ -95,42 +100,38 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   const isAllSelected = selectedIds.length === customers.length && customers.length > 0
   const isIndeterminate = selectedIds.length > 0 && selectedIds.length < customers.length
 
-  const TableHeader = ({ field, children, className = "" }: { 
-    field?: string; 
-    children: React.ReactNode; 
-    className?: string 
-  }) => (
-    <th className={`px-6 py-4 text-left text-sm font-normal text-white/80 tracking-tight ${className}`}>
-      {field ? (
-        <button
-          onClick={() => onSort(field)}
-          className="flex items-center space-x-2"
-        >
-          <span>{children}</span>
-          {(() => {
-            if (sortConfig.field !== field) {
-              return <ArrowUpDown className="w-4 h-4 opacity-30" />
-            }
-            if (sortConfig.direction === 'asc') {
-              return <ArrowUp className="w-4 h-4" />
-            }
-            return <ArrowDown className="w-4 h-4" />
-          })()}
-        </button>
-      ) : (
-        children
-      )}
-    </th>
-  )
-
   return (
     <div className="border border-white/10 rounded-lg overflow-hidden">
+      {/* Bulk actions bar - appears above table when items are selected */}
+      {selectable && selectedIds.length > 0 && (
+        <div className="bg-[#D417C8]/10 border-b border-[#D417C8]/30 backdrop-blur-sm">
+          <div className="px-6 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-white">
+                  {selectedIds.length} customer{selectedIds.length !== 1 ? 's' : ''} selected
+                </span>
+                {/* Add bulk action buttons here in the future */}
+              </div>
+              <button 
+                onClick={() => onSelectionChange?.([])}
+                className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                aria-label="Clear selection"
+                title="Clear selection"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-[#171719] border-b border-white/10">
+        <Table>
+          <TableHeader>
             <tr>
               {selectable && (
-                <TableHeader className="w-12">
+                <TableHead className="w-12">
                   <div className="flex items-center">
                     <label htmlFor="select-all" className="flex items-center cursor-pointer group">
                       <span className="sr-only">Select all customers</span>
@@ -171,33 +172,42 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                       </div>
                     </label>
                   </div>
-                </TableHeader>
+                </TableHead>
               )}
-              <TableHeader field="displayName">Customer</TableHeader>
-              <TableHeader field="email">Contact</TableHeader>
-              <TableHeader field="company">Company</TableHeader>
-              <TableHeader field="status">Status</TableHeader>
-              <TableHeader field="currency">Currency</TableHeader>
-              <TableHeader field="signupDate">Joined</TableHeader>
-              <TableHeader className="text-right">Actions</TableHeader>
+              <SortableTableHead field="displayName" sortConfig={sortConfig} onSort={onSort}>
+                Customer
+              </SortableTableHead>
+              <SortableTableHead field="email" sortConfig={sortConfig} onSort={onSort}>
+                Contact
+              </SortableTableHead>
+              <SortableTableHead field="company" sortConfig={sortConfig} onSort={onSort}>
+                Company
+              </SortableTableHead>
+              <SortableTableHead field="status" sortConfig={sortConfig} onSort={onSort}>
+                Status
+              </SortableTableHead>
+              <SortableTableHead field="currency" sortConfig={sortConfig} onSort={onSort}>
+                Currency
+              </SortableTableHead>
+              <SortableTableHead field="signupDate" sortConfig={sortConfig} onSort={onSort}>
+                Joined
+              </SortableTableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </tr>
-          </thead>
-          <tbody className="divide-y divide-[#16171a]">
+          </TableHeader>
+          <TableBody>
             {customers.map((customer) => (
-              <motion.tr
+              <TableRow
                 key={customer.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className={`transition-all duration-200 border-b border-[#16171a] bg-[#101011] ${(() => {
-                  if (hoveredRow === customer.id) return 'hover:bg-[#171719]'
+                className={`transition-colors duration-150 ${(() => {
                   if (selectedIds.includes(customer.id)) return 'bg-[#D417C8]/5'
-                  return 'hover:bg-[#171719]'
+                  return ''
                 })()}`}
                 onMouseEnter={() => setHoveredRow(customer.id)}
                 onMouseLeave={() => setHoveredRow(null)}
               >
                 {selectable && (
-                  <td className="px-6 py-4">
+                  <TableCell>
                     <label htmlFor={`select-${customer.id}`} className="flex items-center cursor-pointer group">
                       <span className="sr-only">Select customer {customer.displayName}</span>
                       <div
@@ -231,9 +241,9 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                         />
                       </div>
                     </label>
-                  </td>
+                  </TableCell>
                 )}
-                <td className="px-6 py-4">
+                <TableCell>
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-medium text-xs tracking-tight">
                       {getInitials(customer.displayName)}
@@ -254,21 +264,21 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                       </div>
                     </div>
                   </div>
-                </td>
-                <td className="px-6 py-4">
+                </TableCell>
+                <TableCell>
                   <div className="space-y-1">
                     <div className="text-sm text-white/80 truncate">{customer.email}</div>
                     {customer.phoneNumber && (
                       <div className="text-sm text-white/60 truncate">{customer.phoneNumber}</div>
                     )}
                   </div>
-                </td>
-                <td className="px-6 py-4">
+                </TableCell>
+                <TableCell>
                   <div className="text-sm text-white/80 truncate">
                     {customer.company ?? '-'}
                   </div>
-                </td>
-                <td className="px-6 py-4">
+                </TableCell>
+                <TableCell>
                   <div className="flex items-center space-x-2">
                     <span className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight ${getStatusClass(customer.status)}`}>
                       {getStatusText(customer.status)}
@@ -277,14 +287,14 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                       <div className="w-2 h-2 bg-white/50 rounded-full" title="Portal Access Enabled" />
                     )}
                   </div>
-                </td>
-                <td className="px-6 py-4">
+                </TableCell>
+                <TableCell>
                   <div className="text-sm text-white/80">{customer.currency}</div>
-                </td>
-                <td className="px-6 py-4">
+                </TableCell>
+                <TableCell>
                   <div className="text-sm text-white/80">{formatDate(customer.signupDate)}</div>
-                </td>
-                <td className="px-6 py-4">
+                </TableCell>
+                <TableCell>
                   <div className="flex items-center justify-end space-x-2">
                     <Link
                       to={`/customers/${customer.id}`}
@@ -306,38 +316,12 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                       size="md"
                     />
                   </div>
-                </td>
-              </motion.tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
-
-      {/* Selection Info Bar */}
-      {selectable && selectedIds.length > 0 && (
-        <div className="border-t border-white/10 px-6 py-3 bg-[#171719]">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-[#a3a3a3]">
-              {selectedIds.length} customer{selectedIds.length === 1 ? '' : 's'} selected
-            </div>
-            <div className="flex items-center space-x-2">
-              <button className="px-3 py-1 text-sm text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors">
-                Export Selected
-              </button>
-              <button className="px-3 py-1 text-sm text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors">
-                Bulk Edit
-              </button>
-              <button 
-                onClick={() => onSelectionChange?.([])}
-                className="p-1 text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors"
-                title="Clear selection"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Loading overlay */}
       {loading && (

@@ -1,3 +1,38 @@
+/**
+ * Table Component
+ * 
+ * A comprehensive table system with sortable headers and proper accessibility.
+ * Used for data tables throughout the platform (customers, team members, etc.)
+ * 
+ * @example
+ * // Basic table
+ * <div className="border border-white/10 rounded-lg overflow-hidden">
+ *   <div className="overflow-x-auto">
+ *     <Table>
+ *       <TableHeader>
+ *         <tr>
+ *           <SortableTableHead field="name" sortConfig={sortConfig} onSort={handleSort}>
+ *             Name
+ *           </SortableTableHead>
+ *           <TableHead>Email</TableHead>
+ *         </tr>
+ *       </TableHeader>
+ *       <TableBody>
+ *         <TableRow>
+ *           <TableCell>John Doe</TableCell>
+ *           <TableCell>john@example.com</TableCell>
+ *         </TableRow>
+ *       </TableBody>
+ *     </Table>
+ *   </div>
+ * </div>
+ * 
+ * @accessibility
+ * - SortableTableHead includes aria-sort for screen readers
+ * - Semantic table structure with proper roles
+ * - Keyboard navigation support
+ * - Focus indicators on interactive elements
+ */
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import React from 'react'
 
@@ -8,13 +43,12 @@ export const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="w-full overflow-auto">
-    <table
-      ref={ref}
-      className={cn('w-full caption-bottom text-sm', className)}
-      {...props}
-    />
-  </div>
+  <table
+    ref={ref}
+    className={cn('w-full caption-bottom text-sm', className)}
+    role="table"
+    {...props}
+  />
 ))
 Table.displayName = 'Table'
 
@@ -52,6 +86,7 @@ export const TableRow = React.forwardRef<
       'border-b border-[#16171a] bg-[#101011] hover:bg-[#171719] transition-colors',
       className
     )}
+    role="row"
     {...props}
   />
 ))
@@ -63,7 +98,8 @@ export const TableHead = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <th
     ref={ref}
-    className={cn('px-6 py-4 text-left text-sm font-normal text-white/80', className)}
+    className={cn('px-6 py-4 text-left text-sm font-normal text-white/80 tracking-tight', className)}
+    role="columnheader"
     {...props}
   />
 ))
@@ -104,22 +140,34 @@ export const SortableTableHead: React.FC<SortableTableHeadProps> = ({
   const isSorted = sortConfig?.field === field
   const direction = sortConfig?.direction
 
+  // Determine aria-sort value for accessibility
+  const ariaSort = isSorted 
+    ? direction === 'asc' 
+      ? 'ascending' as const
+      : 'descending' as const
+    : 'none' as const
+
   return (
-    <TableHead className={className} {...props}>
+    <TableHead 
+      className={className} 
+      aria-sort={ariaSort}
+      {...props}
+    >
       {onSort ? (
         <button
           onClick={() => onSort(field)}
           className="flex items-center space-x-2 hover:text-white transition-colors group w-full"
+          aria-label={`Sort by ${children}${isSorted ? ` (currently sorted ${direction === 'asc' ? 'ascending' : 'descending'})` : ''}`}
         >
           <span>{children}</span>
           {isSorted ? (
             direction === 'asc' ? (
-              <ArrowUp className="w-4 h-4" />
+              <ArrowUp className="w-4 h-4" aria-hidden="true" />
             ) : (
-              <ArrowDown className="w-4 h-4" />
+              <ArrowDown className="w-4 h-4" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity" />
+            <ArrowUpDown className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity" aria-hidden="true" />
           )}
         </button>
       ) : (

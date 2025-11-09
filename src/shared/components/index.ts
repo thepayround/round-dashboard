@@ -6,7 +6,7 @@ export { AuthLogo } from './AuthLogo'
 
 // Form Components
 export { Button } from './Button'
-export { FormInput } from './FormInput'
+export { FormInput } from './ui/FormInput'
 export { AuthInput } from './AuthInput'
 export { PhoneInput } from './ui/PhoneInput'
 export { PhoneDisplay } from './ui/PhoneDisplay'

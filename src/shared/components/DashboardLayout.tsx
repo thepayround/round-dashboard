@@ -227,7 +227,7 @@ export const DashboardLayout = memo(({
     if (firstName) return firstName
     if (user.email) return user.email
     return 'User'
-  }, [])
+  }, [state])
 
   const getCompanyDisplayName = useCallback(() => {
     if (isRoundAccountLoading) return 'Loading...'

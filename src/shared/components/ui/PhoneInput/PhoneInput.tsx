@@ -1,30 +1,98 @@
-import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Search, AlertCircle, X, Check } from 'lucide-react'
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+
+// Import shared dropdown styles to ensure visual consistency with ApiDropdown/UiDropdown
+// When dropdown styles change in dropdown-styles.config.ts, they automatically apply here
+import { dropdownStyles, getOptionClasses } from '../dropdown-styles.config'
 
 import { phoneValidationService, type CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 import { cn } from '@/shared/utils/cn'
 import { phoneValidator } from '@/shared/utils/phoneValidation'
 
 interface PhoneInputProps {
+  /** Current phone number value */
   value?: string
+  /** Callback when phone number changes */
   onChange: (phoneNumber: string) => void
+  /** Callback when validation state changes */
   onValidationChange?: (isValid: boolean, error?: string) => void
-  onBlur?: (phoneNumber: string, country: CountryPhoneInfo | null) => void // Updated to pass phone number and country
+  /** Callback when input loses focus - receives raw phone number and selected country */
+  onBlur?: (phoneNumber: string, country: CountryPhoneInfo | null) => void
+  /** Label text for the input */
   label?: string
+  /** Placeholder text */
   placeholder?: string
+  /** Disabled state */
   disabled?: boolean
+  /** External error message (takes precedence over internal validation) */
   error?: string
+  /** Required field indicator */
   required?: boolean
+  /** Container class name */
   className?: string
-  defaultCountry?: string // ISO country code (e.g., 'US', 'GR')
+  /** Default country code (e.g., 'US', 'GR') */
+  defaultCountry?: string
+  /** Show validation errors */
   showValidation?: boolean
+  /** HTML id attribute */
   id?: string
+  /** HTML name attribute */
   name?: string
-  validateOnBlur?: boolean // New prop to control when to validate
+  /** Enable backend validation on blur (requires API call) */
+  validateOnBlur?: boolean
 }
 
+/**
+ * PhoneInput Component
+ * 
+ * An international phone number input with country selection dropdown.
+ * Features country search, smart validation, and full accessibility support.
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <PhoneInput
+ *   label="Phone Number"
+ *   value={phone}
+ *   onChange={setPhone}
+ *   defaultCountry="US"
+ * />
+ * 
+ * // With validation
+ * <PhoneInput
+ *   label="Contact Number"
+ *   value={phone}
+ *   onChange={setPhone}
+ *   onValidationChange={(isValid, error) => {
+ *     console.log('Valid:', isValid, 'Error:', error)
+ *   }}
+ *   validateOnBlur={true}
+ *   required
+ *   error={backendError}
+ * />
+ * 
+ * // Without auto-validation (manual backend validation)
+ * <PhoneInput
+ *   value={phone}
+ *   onChange={setPhone}
+ *   onBlur={(number, country) => {
+ *     // Validate on backend
+ *   }}
+ *   validateOnBlur={false}
+ *   showValidation={false}
+ *   error={serverError}
+ * />
+ * ```
+ * 
+ * @accessibility
+ * - Full ARIA support (combobox pattern, aria-required, aria-invalid)
+ * - Keyboard navigation (Arrow keys, Enter, Escape, Tab)
+ * - Screen reader friendly with proper labels and descriptions
+ * - Focus visible indicators for keyboard users
+ * - Error announcements with role="alert" and aria-live
+ * - Country flags with descriptive aria-labels
+ */
 export const PhoneInput: React.FC<PhoneInputProps> = ({
   value = '',
   onChange,
@@ -53,14 +121,23 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 })
   const [_isValidating, setIsValidating] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
-  const [debounceTimeoutId, setDebounceTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
   const dropdownRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const phoneInputRef = useRef<HTMLInputElement>(null)
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Load countries on mount
+  // Generate unique IDs for ARIA relationships - must be called unconditionally
+  const generatedLabelId = React.useId()
+  const generatedErrorId = React.useId()
+  const generatedInputId = React.useId()
+  
+  const labelId = `phone-label-${generatedLabelId}`
+  const errorId = `phone-error-${generatedErrorId}`
+  const inputId = id || `phone-input-${generatedInputId}`
+
+  // Load countries on mount and set default country
   useEffect(() => {
     const loadCountries = async () => {
       try {
@@ -69,10 +146,12 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
         setCountries(allCountries)
 
-        // Set default country
-        const defaultCountryInfo = allCountries.find((c: CountryPhoneInfo) => c.countryCode === defaultCountry) ?? allCountries[0]
-        if (defaultCountryInfo && !selectedCountry) {
-          setSelectedCountry(defaultCountryInfo)
+        // Set default country only if not already set
+        if (!selectedCountry) {
+          const defaultCountryInfo = allCountries.find((c: CountryPhoneInfo) => c.countryCode === defaultCountry) ?? allCountries[0]
+          if (defaultCountryInfo) {
+            setSelectedCountry(defaultCountryInfo)
+          }
         }
       } catch (error) {
         console.error('Failed to load countries:', error)
@@ -82,17 +161,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     }
 
     loadCountries()
-  }, [defaultCountry, selectedCountry]) // Add missing dependencies
-
-  // Set default country when countries are loaded
-  useEffect(() => {
-    if (countries.length > 0 && !selectedCountry) {
-      const defaultCountryInfo = countries.find((c: CountryPhoneInfo) => c.countryCode === defaultCountry) ?? countries[0]
-      if (defaultCountryInfo) {
-        setSelectedCountry(defaultCountryInfo)
-      }
-    }
-  }, [countries, defaultCountry, selectedCountry])
+  }, [defaultCountry, selectedCountry]) // Add selectedCountry to dependencies
 
   // Parse initial value only once on mount when value is provided
   useEffect(() => {
@@ -127,8 +196,8 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     }
 
     // Clear any existing timeout
-    if (debounceTimeoutId) {
-      clearTimeout(debounceTimeoutId)
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current)
     }
 
     // Set new timeout for debounced validation
@@ -148,8 +217,8 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
       }
     }, 500) // 500ms debounce delay
 
-    setDebounceTimeoutId(timeoutId)
-  }, [validateOnBlur, onValidationChange, debounceTimeoutId])
+    debounceTimeoutRef.current = timeoutId
+  }, [validateOnBlur, onValidationChange])
 
   // Immediate validation function (for blur events)
   const validatePhoneNumberImmediate = async (phoneNum: string, country: CountryPhoneInfo) => {
@@ -176,10 +245,10 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
   // Cleanup timeout on unmount
   useEffect(() => () => {
-      if (debounceTimeoutId) {
-        clearTimeout(debounceTimeoutId)
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current)
       }
-    }, [debounceTimeoutId])
+    }, [])
 
 
   // Filter countries based on search
@@ -399,9 +468,9 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
       // If basic validation passes and backend validation is enabled, validate with API immediately
       if (validateOnBlur && selectedCountry && phoneNumber.trim()) {
         // Cancel any pending debounced validation and validate immediately on blur
-        if (debounceTimeoutId) {
-          clearTimeout(debounceTimeoutId)
-          setDebounceTimeoutId(null)
+        if (debounceTimeoutRef.current) {
+          clearTimeout(debounceTimeoutRef.current)
+          debounceTimeoutRef.current = null
         }
         await validatePhoneNumberImmediate(phoneNumber, selectedCountry)
       } else {
@@ -426,32 +495,33 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
   // Country dropdown portal (same styling as ApiDropdown)
   const dropdownPortal = isDropdownOpen ? createPortal(
-    <AnimatePresence>
+    <>
       {/* Backdrop overlay */}
-      <motion.div
-        key="backdrop"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9998] bg-black/5"
-        onMouseDown={(e) => {
+      <div
+        className={`${dropdownStyles.backdrop.base} ${dropdownStyles.backdrop.zIndex}`}
+        onClick={(e) => {
           if (e.target === e.currentTarget) {
             setIsDropdownOpen(false)
             setSearchTerm('')
             setHighlightedIndex(-1)
           }
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            setIsDropdownOpen(false)
+            setSearchTerm('')
+            setHighlightedIndex(-1)
+          }
+        }}
+        role="button"
+        tabIndex={-1}
+        aria-label="Close dropdown"
       />
       
       {/* Dropdown content */}
-      <motion.div
-        key="dropdown"
+      <div
         ref={dropdownRef}
-        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-        transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="fixed z-[9999] will-change-transform"
+        className={dropdownStyles.container.positioning}
         style={{
           top: `${dropdownPosition.top}px`,
           left: `${dropdownPosition.left}px`,
@@ -460,52 +530,40 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           minWidth: '280px',
         }}
       >
-        <div className="
-          bg-white/[0.04] border border-white/10 
-          rounded-lg shadow-2xl overflow-hidden
-          max-h-80 flex flex-col
-          bg-white/[0.05]
-          ring-1 ring-white/5
-        ">
+        <div className={`${dropdownStyles.container.base} ${dropdownStyles.container.maxHeight}`}>
           {/* Search input */}
-          <div className="p-2.5 md:p-3 lg:p-2.5 border-b border-white/10">
+          <div className={dropdownStyles.search.container}>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+              <Search className={dropdownStyles.search.icon} />
               <input
                 ref={searchInputRef}
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search countries..."
-                className="
-                  w-full pl-9 md:pl-10 lg:pl-9 pr-8 md:pr-10 lg:pr-8 py-1.5 md:py-2 lg:py-1.5 
-                  bg-[#171719] border border-[#333333] rounded-lg
-                  text-white/95 placeholder-[#737373] text-xs md:text-sm lg:text-xs
-                  focus:border-[#14bdea] focus:outline-none
-                  transition-all duration-200
-                "
+                className={dropdownStyles.search.input}
               />
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-2.5 md:right-3 lg:right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 md:p-1 lg:p-0.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
+                  className={dropdownStyles.search.clearButton}
                   type="button"
                   aria-label="Clear search"
                 >
-                  <X className="w-3 h-3 text-white/60 hover:text-white/90" />
+                  <X className={dropdownStyles.search.clearIcon} />
                 </button>
               )}
             </div>
           </div>
 
           {/* Countries list */}
-          <div id="phone-countries-listbox" className="flex-1 overflow-y-auto" onScroll={(e) => e.stopPropagation()}>
+          <div id="phone-countries-listbox" className={dropdownStyles.list.container} onScroll={(e) => e.stopPropagation()}>
             {filteredCountries.length === 0 ? (
-              <div className="p-3 md:p-4 lg:p-3 text-center text-white/60 text-xs md:text-sm lg:text-xs">
+              <div className={dropdownStyles.list.empty}>
                 No countries found
               </div>
             ) : (
-              <div className="p-1.5 md:p-2 lg:p-1.5 space-y-0.5 md:space-y-1 lg:space-y-0.5">
+              <div className={`${dropdownStyles.list.padding} ${dropdownStyles.list.spacing}`}>
                 {filteredCountries.map((country, index) => (
                   <CountryOption
                     key={country.countryCode}
@@ -519,8 +577,8 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             )}
           </div>
         </div>
-      </motion.div>
-    </AnimatePresence>,
+      </div>
+    </>,
     document.body
   ) : null
 
@@ -528,33 +586,38 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     <div className={className}>
       {/* Label */}
       {label && (
-        <label htmlFor={id} className="auth-label">
+        <label 
+          id={labelId}
+          htmlFor={inputId} 
+          className="auth-label"
+        >
           {label}
+          {required && <span className="text-[#D417C8] ml-1" aria-label="required">*</span>}
         </label>
       )}
 
       {/* Phone Input Container */}
       <div className={cn(
-        "relative flex w-full rounded-lg transition-all duration-300 overflow-hidden",
+        "relative flex w-full rounded-lg overflow-hidden",
         // Match auth-input responsive height exactly
         "h-[42px] md:h-9",
-        // Use consistent auth-input styling
-        "bg-white/[0.06] border",
+        // Match auth-input background and border exactly
+        "bg-[#171719] border transition-[border-color] duration-200",
         (() => {
-          // Exactly match auth-input CSS cascade: .auth-input:focus then .auth-input-error:focus
+          // Match auth-input CSS: simple border color change on focus
           if ((isFocused || isDropdownOpen) && hasError) {
-            // Red border + red shadow + blue outline (error focus inherits auth-input:focus-visible outline)
-            return "border-[#ef4444] bg-[rgba(255,255,255,0.18)] shadow-[0_0_0_3px_rgba(239,68,68,0.25)] transform -translate-y-px outline outline-2 outline-[rgba(20,189,234,0.4)] outline-offset-2"
+            // Red border on error focus
+            return "border-[#ef4444]"
           }
           if (isFocused || isDropdownOpen) {
-            // Normal blue focus state with outline (3-layer effect: border + shadow + outline)
-            return "border-[rgba(20,189,234,0.5)] bg-[rgba(255,255,255,0.18)] shadow-[0_0_0_3px_rgba(20,189,234,0.15),0_4px_16px_rgba(20,189,234,0.2)] transform -translate-y-px outline outline-2 outline-[rgba(20,189,234,0.4)] outline-offset-2"
+            // Blue border on focus (matches auth-input:focus)
+            return "border-[#14bdea]"
           }
           if (hasError) {
             // Error state without focus
             return "border-[#ef4444] bg-[rgba(239,68,68,0.12)]"
           }
-          return "border-white/10"
+          return "border-[#333333]"
         })(),
         disabled && "opacity-50 cursor-not-allowed"
       )}>
@@ -570,25 +633,17 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           }}
           style={{ display: 'flex', alignItems: 'center' }}
           className={cn(
-            'relative gap-2 h-full min-w-[120px] border-r cursor-pointer transition-all duration-150',
-            // Match auth-input responsive padding exactly
-            'px-3 md:px-4',
+            'relative gap-2 h-full min-w-[120px] border-r cursor-pointer',
+            // Match auth-input consistent padding (12px)
+            'px-3',
             // Match auth-input text styling exactly
-            'text-white/95 text-xs md:text-xs font-normal outline-none',
-            // Use consistent border color from auth-input
-            'border-white/10',
-            // Match auth-input CSS cascade exactly
+            'text-white/95 text-xs font-light outline-none',
+            // Match auth-input border color
+            'border-[#333333]',
+            // Simple background states without animations
             (() => {
-              if (isDropdownOpen && hasError) {
-                // Red shadow + blue outline (matching container)
-                return 'bg-[rgba(255,255,255,0.18)] shadow-[0_0_0_3px_rgba(239,68,68,0.25)] transform -translate-y-px outline outline-2 outline-[rgba(20,189,234,0.4)] outline-offset-2'
-              }
-              if (isDropdownOpen) {
-                // Normal blue focus state with outline
-                return 'bg-[rgba(255,255,255,0.18)] shadow-[0_0_0_3px_rgba(20,189,234,0.15),0_4px_16px_rgba(20,189,234,0.2)] transform -translate-y-px outline outline-2 outline-[rgba(20,189,234,0.4)] outline-offset-2'
-              }
               if (hasError) {
-                // Error state without focus
+                // Error state
                 return 'bg-[rgba(239,68,68,0.12)]'
               }
               return 'bg-transparent hover:bg-white/[0.08]'
@@ -648,7 +703,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           <input
             ref={phoneInputRef}
             type="tel"
-            id={id}
+            id={inputId}
             name={name}
             value={phoneNumber}
             onChange={handlePhoneChange}
@@ -659,16 +714,21 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             }}
             placeholder={getPlaceholder()}
             disabled={disabled}
+            required={required}
+            aria-labelledby={label ? labelId : undefined}
+            aria-label={!label ? 'Phone number' : undefined}
+            aria-required={required}
+            aria-invalid={hasError}
+            aria-describedby={hasError && displayError ? errorId : undefined}
             className={cn(
               'w-full bg-transparent focus:outline-none',
-              // Match auth-input responsive padding exactly
-              'pl-3 pr-3 md:pl-4 md:pr-4',
+              // Match auth-input consistent padding (12px)
+              'px-3',
               // Match auth-input text color and size exactly
               isFocused ? 'text-white' : 'text-white/95',
-              'text-xs md:text-xs font-normal', // Match auth-input font size/weight
-              'transition-all duration-150', // Match auth-input transition
+              'text-xs font-light', // Match auth-input font size/weight
               // Match auth-input placeholder styling exactly
-              'placeholder:text-white/60 placeholder:font-normal',
+              'placeholder:text-white/60 placeholder:font-light',
               // Autofill/autocomplete styling fixes (same as FormInput)
               '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
               '[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
@@ -707,14 +767,15 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
       {/* Error Message - Only show if showValidation is true */}
       {showValidation && hasError && displayError && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
+        <p
+          id={errorId}
           className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+          role="alert"
+          aria-live="polite"
         >
-          <AlertCircle className="w-4 h-4" />
+          <AlertCircle className="w-4 h-4" aria-hidden="true" />
           <span>{displayError}</span>
-        </motion.div>
+        </p>
       )}
 
       {/* Portal-rendered dropdown */}
@@ -737,42 +798,35 @@ const CountryOption: React.FC<CountryOptionProps> = ({
   isHighlighted, 
   onClick 
 }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -10 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay: 0.02 }}
+  <div
     onClick={onClick}
-    className={cn(
-      'px-2.5 md:px-3 lg:px-2.5 py-2 md:py-2.5 lg:py-2 rounded-lg cursor-pointer',
-      'flex items-center justify-between transition-all duration-200',
-      isHighlighted 
-        ? 'bg-[#14BDEA]/20 border border-[#14BDEA]/30' 
-        : 'hover:bg-white/10 border border-transparent',
-      isSelected 
-        ? 'bg-[#D417C8]/20 border-[#D417C8]/30' 
-        : ''
-    )}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        onClick()
+      }
+    }}
+    className={getOptionClasses(isHighlighted, isSelected)}
     role="option"
     aria-selected={isSelected}
+    tabIndex={0}
   >
-    <div className="flex items-center space-x-2.5 md:space-x-3 lg:space-x-2.5 flex-1 min-w-0">
-      <div className="w-5 h-5 rounded-full bg-primary/20 border border-white/20 flex items-center justify-center flex-shrink-0">
-        <span className="text-sm" role="img" aria-label={country.countryName}>
-          {country.flag}
-        </span>
-      </div>
+    <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
+      <span className="text-sm flex-shrink-0" role="img" aria-label={country.countryName}>
+        {country.flag}
+      </span>
       <div className="flex-1 min-w-0">
-        <div className="text-white/95 font-medium truncate text-xs md:text-sm lg:text-xs">
+        <div className={`${dropdownStyles.option.label} truncate`}>
           {country.countryName}
         </div>
-        <div className="text-white/60 text-xs truncate">
+        <div className={`${dropdownStyles.option.description} truncate`}>
           +{country.phoneCode}
         </div>
       </div>
     </div>
     
     {isSelected && (
-      <Check className="w-4 h-4 text-[#D417C8] flex-shrink-0" />
+      <Check className={dropdownStyles.option.checkIcon} />
     )}
-  </motion.div>
+  </div>
 )

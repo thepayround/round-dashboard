@@ -188,28 +188,6 @@ A **lighter, cleaner typography system** with Inter font family:
 - **Minimal weight variation** keeps the UI calm and professional
 - **No heavy fonts** - max weight is `font-medium` (500)
 
-#### NO Animations Policy
-
-**CRITICAL RULE**: Interactive components (dropdowns, buttons, inputs) must have ZERO animations:
-
-- **NO Framer Motion** on dropdowns, buttons, or form inputs
-- **NO CSS transitions** (`transition-all`, `transition-colors`, etc.) on interactive elements
-- **NO will-change-transform** (causes compositor issues)
-- **NO staggered animations** (causes cascading glitches)
-- **Instant interactions** - immediate visual feedback only
-
-**Why No Animations:**
-- Prevents glitching and cascading effects
-- Provides instant, professional feel
-- Reduces complexity and performance issues
-- Matches Polar.sh's clean, instant interaction model
-
-**When animations ARE acceptable:**
-- Page transitions (route changes)
-- Toast notifications entering/exiting
-- Modal overlays appearing/disappearing
-- NOT on interactive elements within those components
-
 ### Dropdown Component Guidelines
 
 The dashboard includes two dropdown components with distinct purposes:

@@ -99,30 +99,83 @@ This document outlines the reusable UI components created for consistent glassmo
 />
 ```
 
-### 5. FormInput Component (`/shared/components/FormInput`)
+### 5. FormInput Component (`/shared/components/ui/FormInput`)
 
-**Purpose**: Enhanced form inputs with glassmorphism styling
+**Purpose**: Comprehensive form input with two variants for auth pages and general forms
 
 **Features**:
-- Multiple input types (input, textarea, select)
+- Two variants: `auth` (CSS-based, default) and `default` (Tailwind-based)
 - Icon support (left/right positioning)
-- Error handling with animations
-- Hint text support
-- Consistent focus states and animations
-- Accessibility features
+- Error handling with ARIA attributes
+- Help text support
+- Loading state with spinner
+- Size variants (sm, md, lg)
+- Full accessibility support (ARIA attributes, screen reader friendly)
+- Autofill handling for Chrome/Safari
+- Keyboard navigation for interactive elements
+- Required field indicators
 
 **Usage**:
 ```tsx
+// Auth variant (for auth pages, onboarding)
 <FormInput
-  label="Product Name"
-  name="name"
-  value={value}
-  onChange={onChange}
-  placeholder="Enter product name"
-  icon={Package}
-  error={errorMessage}
-  hint="This will be displayed to customers"
+  label="Email Address"
+  leftIcon={Mail}
+  type="email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  error={errors.email}
   required
+/>
+
+// Default variant (for settings, modals)
+<FormInput
+  variant="default"
+  label="First Name"
+  leftIcon={User}
+  value={firstName}
+  onChange={(e) => setFirstName(e.target.value)}
+  helpText="Enter your legal first name"
+  size="lg"
+/>
+
+// With loading state
+<FormInput
+  label="Company Name"
+  leftIcon={Building}
+  value={company}
+  onChange={(e) => setCompany(e.target.value)}
+  loading={isFetching}
+  loadingText="Loading..."
+/>
+```
+
+**Accessibility Features**:
+- `aria-invalid` set when error present
+- `aria-describedby` links to error/help text
+- `aria-busy` during loading states
+- `role="alert"` on error messages
+- `aria-live="polite"` for screen readers
+- Keyboard navigation support for icons
+- Automatic required indicator (*)
+
+**Migration from raw HTML**:
+```tsx
+// Before (raw HTML)
+<label htmlFor="email" className="auth-label">Email</label>
+<input 
+  id="email"
+  type="email" 
+  className="auth-input input-with-icon-left"
+/>
+
+// After (component)
+<FormInput
+  label="Email"
+  leftIcon={Mail}
+  type="email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
 />
 ```
 

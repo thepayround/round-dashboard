@@ -1,4 +1,54 @@
+/**
+ * FormInput Component
+ * 
+ * A comprehensive form input component with two variants:
+ * - `auth`: Uses global CSS classes for auth pages (default)
+ * - `default`: Uses Tailwind utilities for general forms
+ * 
+ * @example
+ * // Auth variant (auth pages, onboarding)
+ * <FormInput
+ *   label="Email Address"
+ *   leftIcon={Mail}
+ *   type="email"
+ *   value={email}
+ *   onChange={(e) => setEmail(e.target.value)}
+ *   error={errors.email}
+ *   required
+ * />
+ * 
+ * @example
+ * // Default variant (settings, modals)
+ * <FormInput
+ *   variant="default"
+ *   label="First Name"
+ *   leftIcon={User}
+ *   value={firstName}
+ *   onChange={(e) => setFirstName(e.target.value)}
+ *   helpText="Enter your legal first name"
+ *   size="lg"
+ * />
+ * 
+ * @example
+ * // With loading state
+ * <FormInput
+ *   label="Company Name"
+ *   leftIcon={Building}
+ *   value={company}
+ *   onChange={(e) => setCompany(e.target.value)}
+ *   loading={isFetching}
+ *   loadingText="Loading..."
+ * />
+ * 
+ * @accessibility
+ * - Automatically links errors/help text with `aria-describedby`
+ * - Sets `aria-invalid` when error is present
+ * - Sets `aria-busy` during loading
+ * - Supports keyboard navigation for clickable icons
+ * - Required fields show visual indicator (*)
+ */
 import type { LucideIcon } from 'lucide-react'
+import { AlertCircle, Loader2 } from 'lucide-react'
 import type { InputHTMLAttributes } from 'react';
 import { forwardRef } from 'react'
 
@@ -13,6 +63,9 @@ interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'si
   helpText?: string
   variant?: 'default' | 'auth'
   size?: 'sm' | 'md' | 'lg'
+  containerClassName?: string
+  loading?: boolean
+  loadingText?: string
 }
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
@@ -27,6 +80,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       variant = 'auth', // Changed default to 'auth' for better consistency
       size = 'md',
       className,
+      containerClassName = '',
       id,
       type = 'text',
       placeholder,
@@ -38,11 +92,17 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       required,
       name,
       autoComplete,
+      loading = false,
+      loadingText,
       ...restProps
     },
     ref
   ) => {
     const inputId = id ?? `input-${Math.random().toString(36).substr(2, 9)}`
+    const errorId = error ? `${inputId}-error` : undefined
+    const helpTextId = helpText ? `${inputId}-help` : undefined
+    const hasError = Boolean(error)
+    const isDisabled = disabled || loading
 
     const sizeClasses = {
       sm: 'h-[42px] md:h-9 px-3 text-xs',
@@ -98,6 +158,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         'w-full rounded-lg sm:rounded-lg border transition-all duration-200',
         'bg-[#171719] border-[#333333] text-white placeholder-[#737373]',
         'focus:border-[#14bdea] focus:outline-none',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]',
         // Mobile-specific improvements
         'text-base sm:text-sm md:text-base', // Prevent iOS zoom on focus
         'leading-normal sm:leading-relaxed',
@@ -106,56 +167,98 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         LeftIcon && 'pl-10',
         RightIcon && 'pr-10',
         error && 'border-red-400 focus:border-red-400',
+        isDisabled && 'opacity-50 cursor-not-allowed',
         className
       )
     }
 
     return (
-      <div className="space-y-2">
+      <div className={cn('space-y-2', containerClassName)}>
         {label && (
-          <label htmlFor={inputId} className={variant === 'auth' ? 'auth-label' : 'block text-sm font-normal text-white/90 tracking-tight'}>
+          <label 
+            htmlFor={inputId} 
+            className={variant === 'auth' ? 'auth-label' : 'block text-sm font-normal text-white/90 tracking-tight'}
+          >
             {label}
+            {required && <span className="text-[#D417C8] ml-1">*</span>}
           </label>
         )}
         
         <div className="relative">
-          {LeftIcon && (
-            <LeftIcon className={variant === 'auth' ? 'input-icon-left auth-icon-primary' : 'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400'} />
+          {loading && variant === 'default' && (
+            <Loader2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-primary animate-spin z-10" />
+          )}
+          
+          {!loading && LeftIcon && (
+            <LeftIcon 
+              className={variant === 'auth' 
+                ? 'input-icon-left auth-icon-primary' 
+                : 'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400'
+              } 
+            />
           )}
           
           <input
             ref={ref}
             id={inputId}
             type={type}
-            placeholder={placeholder}
+            placeholder={loading && loadingText ? loadingText : placeholder}
             value={value}
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            disabled={disabled}
+            disabled={isDisabled}
             required={required}
             name={name}
             autoComplete={autoComplete}
             className={getInputClasses()}
+            aria-invalid={hasError}
+            aria-describedby={cn(
+              errorId,
+              helpTextId
+            )}
+            aria-busy={loading}
             {...restProps} // eslint-disable-line react/jsx-props-no-spreading
           />
           
-          {RightIcon && (
+          {loading && variant === 'auth' && (
+            <Loader2 className="input-icon-right auth-icon animate-spin" />
+          )}
+          
+          {!loading && RightIcon && (
             <RightIcon 
-              className={variant === 'auth' ? 'input-icon-right auth-icon' : 'absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 cursor-pointer'}
+              className={variant === 'auth' 
+                ? 'input-icon-right auth-icon' 
+                : 'absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 cursor-pointer'
+              }
               onClick={onRightIconClick}
+              {...(onRightIconClick && { role: 'button', tabIndex: 0 })}
             />
           )}
         </div>
         
         {error && (
-          <p className={variant === 'auth' ? 'text-sm auth-validation-error flex items-center space-x-2' : 'text-sm text-[#D417C8]'}>
-            {error}
+          <p 
+            id={errorId}
+            className={variant === 'auth' 
+              ? 'text-sm auth-validation-error flex items-center space-x-2' 
+              : 'text-sm text-[#D417C8] flex items-center space-x-1'
+            }
+            role="alert"
+            aria-live="polite"
+          >
+            {variant !== 'auth' && <AlertCircle className="w-3.5 h-3.5" />}
+            <span>{error}</span>
           </p>
         )}
         
         {helpText && !error && (
-          <p className="text-gray-500 dark:text-polar-500 leading-snug">{helpText}</p>
+          <p 
+            id={helpTextId}
+            className="text-xs text-gray-500 dark:text-polar-500 leading-snug"
+          >
+            {helpText}
+          </p>
         )}
       </div>
     )
