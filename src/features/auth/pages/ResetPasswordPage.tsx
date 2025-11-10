@@ -1,13 +1,15 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
 import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
-import { ActionButton, AuthLogo, PasswordStrengthIndicator } from '@/shared/components'
-import { IconButton } from '@/shared/components/Button'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { apiClient } from '@/shared/services/apiClient'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { AuthLogo } from '@/shared/ui/AuthLogo'
+import { IconButton } from '@/shared/ui/Button'
+import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { validators, handleApiError } from '@/shared/utils'
 
 export const ResetPasswordPage = () => {
@@ -408,3 +410,4 @@ export const ResetPasswordPage = () => {
     </div>
   )
 }
+

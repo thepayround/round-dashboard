@@ -1,4 +1,4 @@
-/**
+﻿/**
  * usePhoneFormatting Hook
  * 
  * Handles phone number formatting and country info fetching at the page level.
@@ -7,8 +7,8 @@
 
 import { useState, useEffect, useMemo } from 'react'
 
-import type { CountryInfo } from '@/shared/components/ui/PhoneDisplay'
 import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
+import type { CountryInfo } from '@/shared/ui/PhoneDisplay'
 
 interface PhoneFormattingResult {
   formattedNumber: string
@@ -80,3 +80,4 @@ export const usePhoneFormatting = (phoneNumber: string | null | undefined): Phon
 
   return result
 }
+

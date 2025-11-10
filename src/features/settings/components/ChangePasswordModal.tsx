@@ -1,9 +1,11 @@
-import { Lock, Eye, EyeOff, AlertCircle, Shield } from 'lucide-react'
+﻿import { Lock, Eye, EyeOff, AlertCircle, Shield } from 'lucide-react'
 import { useState } from 'react'
 
-import { Modal, ActionButton, PasswordStrengthIndicator } from '@/shared/components'
-import { Button, IconButton } from '@/shared/components/Button'
 import { apiClient } from '@/shared/services/apiClient'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { Button, IconButton } from '@/shared/ui/Button'
+import { Modal } from '@/shared/ui/Modal'
+import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import type { ValidationError } from '@/shared/utils/validation'
 import {
   validatePassword,
@@ -329,9 +331,9 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
             <div className="text-blue-400 text-sm">
               <p className="font-medium mb-1">Password Requirements:</p>
               <ul className="text-xs space-y-1 opacity-90">
-                <li>• At least 8 characters long</li>
-                <li>• Contains uppercase and lowercase letters</li>
-                <li>• Includes at least one number or special character</li>
+                <li>β€Ά At least 8 characters long</li>
+                <li>β€Ά Contains uppercase and lowercase letters</li>
+                <li>β€Ά Includes at least one number or special character</li>
               </ul>
             </div>
           </div>
@@ -363,3 +365,4 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
     </Modal>
   )
 }
+

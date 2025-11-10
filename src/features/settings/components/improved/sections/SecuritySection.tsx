@@ -4,8 +4,8 @@ import React from 'react'
 
 import { ChangePasswordForm } from '../../ChangePasswordForm'
 
-import { Card } from '@/shared/components'
 import type { UserSettings } from '@/shared/services/api/userSettings.service'
+import { Card } from '@/shared/ui/Card'
 
 interface SecuritySectionProps {
   settings?: UserSettings | null

@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Settings } from 'lucide-react'
 import React from 'react'
 
-import { Card } from '@/shared/components'
-import { PlainButton } from '@/shared/components/Button'
+import { PlainButton } from '@/shared/ui/Button'
+import { Card } from '@/shared/ui/Card'
 
 
 interface SettingsSection {
@@ -77,3 +77,4 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
       </Card>
     </motion.div>
   )
+

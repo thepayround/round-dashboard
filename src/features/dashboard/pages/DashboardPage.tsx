@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import {
   User,
   Building,
@@ -13,11 +13,12 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { ActionButton, Card } from '@/shared/components'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { useCurrency } from '@/shared/hooks/useCurrency'
 import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
+import { DashboardLayout } from '@/shared/layout/DashboardLayout'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { Card } from '@/shared/ui/Card'
 
 export const DashboardPage = () => {
   const navigate = useNavigate()
@@ -590,3 +591,4 @@ export const DashboardPage = () => {
     </DashboardLayout>
   )
 }
+

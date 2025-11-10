@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Plus, Settings, ExternalLink, Check, Key, Zap } from 'lucide-react'
 import React, { useState } from 'react'
 
-import { Card } from '@/shared/components'
-import { Button, IconButton } from '@/shared/components/Button'
+import { Button, IconButton } from '@/shared/ui/Button'
+import { Card } from '@/shared/ui/Card'
 
 
 interface Integration {
@@ -23,7 +23,7 @@ export const IntegrationsSection: React.FC = () => {
       id: 'stripe',
       name: 'Stripe',
       description: 'Payment processing and subscription management',
-      icon: '💳',
+      icon: 'π’³',
       status: 'connected',
       category: 'payment'
     },
@@ -31,7 +31,7 @@ export const IntegrationsSection: React.FC = () => {
       id: 'google-analytics',
       name: 'Google Analytics',
       description: 'Track user behavior and website analytics',
-      icon: '📊',
+      icon: 'π“',
       status: 'configured',
       category: 'analytics'
     },
@@ -39,7 +39,7 @@ export const IntegrationsSection: React.FC = () => {
       id: 'slack',
       name: 'Slack',
       description: 'Team communication and notifications',
-      icon: '💬',
+      icon: 'π’¬',
       status: 'available',
       category: 'communication'
     },
@@ -47,7 +47,7 @@ export const IntegrationsSection: React.FC = () => {
       id: 'zapier',
       name: 'Zapier',
       description: 'Automate workflows between apps',
-      icon: '⚡',
+      icon: 'β΅',
       status: 'available',
       category: 'productivity'
     },
@@ -55,7 +55,7 @@ export const IntegrationsSection: React.FC = () => {
       id: 'auth0',
       name: 'Auth0',
       description: 'Identity and access management',
-      icon: '🔐',
+      icon: 'π”',
       status: 'configured',
       category: 'security'
     },
@@ -63,7 +63,7 @@ export const IntegrationsSection: React.FC = () => {
       id: 'mailchimp',
       name: 'Mailchimp',
       description: 'Email marketing and automation',
-      icon: '📧',
+      icon: 'π“§',
       status: 'available',
       category: 'communication'
     }
@@ -162,7 +162,7 @@ export const IntegrationsSection: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h4 className="text-xs font-normal tracking-tight text-white">Production API Key</h4>
-                <p className="text-xs text-gray-400 font-mono">rnd_prod_••••••••••••••••</p>
+                <p className="text-xs text-gray-400 font-mono">rnd_prod_β€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Ά</p>
               </div>
               <div className="flex items-center gap-2">
                 <span className="px-2 py-1 text-xs bg-green-400/10 text-green-400 border border-green-400/20 rounded">Active</span>
@@ -175,7 +175,7 @@ export const IntegrationsSection: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h4 className="text-xs font-normal tracking-tight text-white">Development API Key</h4>
-                <p className="text-xs text-gray-400 font-mono">rnd_dev_••••••••••••••••</p>
+                <p className="text-xs text-gray-400 font-mono">rnd_dev_β€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Άβ€Ά</p>
               </div>
               <div className="flex items-center gap-2">
                 <span className="px-2 py-1 text-xs bg-blue-400/10 text-blue-400 border border-blue-400/20 rounded">Development</span>

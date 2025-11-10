@@ -1,12 +1,12 @@
-import { Loader2 } from 'lucide-react'
+﻿import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { GoogleIcon } from '@/features/auth/components/icons/SocialIcons'
-import { Button } from '@/shared/components/Button'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { authService } from '@/shared/services/api/auth.service'
 import type { User, BusinessUser, PersonalUser } from '@/shared/types/auth'
+import { Button } from '@/shared/ui/Button'
 
 interface GoogleLoginButtonProps {
   onSuccess?: () => void
@@ -182,3 +182,4 @@ export const GoogleLoginButton = ({ onSuccess, onError, accountType }: GoogleLog
     </Button>
   )
 }
+

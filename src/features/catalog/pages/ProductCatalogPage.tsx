@@ -1,4 +1,4 @@
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
+﻿import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 
 export const ProductCatalogPage = () => (
     <DashboardLayout>
@@ -10,3 +10,4 @@ export const ProductCatalogPage = () => (
       </div>
     </DashboardLayout>
   )
+

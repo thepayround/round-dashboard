@@ -1,0 +1,30 @@
+/**
+ * Shared UI surface area. Prefer importing directly from here instead of the
+ * legacy '@/shared/components' barrel.
+ */
+
+export { Button, IconButton, PlainButton, RoundButton, UserButton } from './Button'
+export { ActionButton } from './ActionButton'
+export { AuthInput } from './AuthInput'
+export { AuthLogo } from './AuthLogo'
+export { WhiteLogo } from './WhiteLogo'
+export { Card, ActionCard } from './Card'
+export { Checkbox } from './Checkbox'
+export { Input } from './Input'
+export { RadioGroup } from './RadioGroup'
+export { Modal } from './Modal'
+export { SearchInput } from './SearchInput'
+export { SectionHeader } from './SectionHeader'
+export { ViewModeToggle } from './ViewModeToggle'
+export type { ViewMode, ViewModeOption } from './ViewModeToggle'
+export { Pagination } from './Pagination'
+export { PasswordStrengthIndicator } from './PasswordStrengthIndicator'
+export { Toast } from './Toast'
+export { PhoneInput } from './PhoneInput'
+export { PhoneDisplay } from './PhoneDisplay'
+export type { PhoneDisplayProps, CountryInfo } from './PhoneDisplay'
+export { FormInput } from './FormInput'
+export { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig, type ApiDropdownConfig, type ApiDropdownOption } from './ApiDropdown'
+export { UiDropdown, type UiDropdownOption } from './UiDropdown'
+export { dropdownStyles, getOptionClasses } from './dropdown-styles.config'
+export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, SortableTableHead } from './Table'

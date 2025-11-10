@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Building, Hash, CreditCard, AlertCircle } from 'lucide-react'
 import { useEffect } from 'react'
 
-import { ApiDropdown, currencyDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { CompanyInfo, Currency } from '@/shared/types/business'
+import { ApiDropdown, currencyDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { validateCompanyField, validateCompanyInfo } from '@/shared/utils/companyValidation'
 import type { ValidationError } from '@/shared/utils/validation'
 import { getFieldError, hasFieldError } from '@/shared/utils/validation'
@@ -223,4 +223,5 @@ export const CompanyDetailsForm = ({
     </motion.div>
   )
 }
+
 

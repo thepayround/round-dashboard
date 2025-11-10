@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
@@ -6,12 +6,13 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
 
 import { FacebookIcon } from '@/features/auth/components/icons/SocialIcons'
-import { ActionButton, AuthLogo } from '@/shared/components'
-import { Button, IconButton } from '@/shared/components/Button'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { apiClient } from '@/shared/services/apiClient'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { AuthLogo } from '@/shared/ui/AuthLogo'
+import { Button, IconButton } from '@/shared/ui/Button'
 import { validators, handleApiError } from '@/shared/utils'
 
 export const BusinessLoginPage = () => {
@@ -255,3 +256,4 @@ export const BusinessLoginPage = () => {
     </div>
   )
 }
+

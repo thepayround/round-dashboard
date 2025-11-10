@@ -1,6 +1,6 @@
-import React from 'react'
+﻿import React from 'react'
 
-import { Card } from '@/shared/components/Card'
+import { Card } from '@/shared/ui/Card'
 
 export const CustomerDetailSkeleton: React.FC = () => (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

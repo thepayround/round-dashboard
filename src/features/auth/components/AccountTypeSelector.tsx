@@ -1,7 +1,7 @@
-import { User, Building } from 'lucide-react'
+﻿import { User, Building } from 'lucide-react'
 
-import { Button } from '@/shared/components/Button'
 import type { AccountType } from '@/shared/types/auth'
+import { Button } from '@/shared/ui/Button'
 
 interface AccountTypeOption {
   type: AccountType
@@ -116,3 +116,4 @@ export const AccountTypeSelector = ({
     </div>
   </div>
 )
+

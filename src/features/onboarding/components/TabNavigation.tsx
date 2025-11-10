@@ -1,7 +1,7 @@
-import type { OnboardingStep } from '../types/onboarding'
+﻿import type { OnboardingStep } from '../types/onboarding'
 
-import { Stepper } from '@/shared/components/Stepper'
-import type { Step } from '@/shared/components/Stepper'
+import { Stepper } from '@/shared/widgets/Stepper'
+import type { Step } from '@/shared/widgets/Stepper'
 
 interface TabNavigationProps {
   currentStep: OnboardingStep
@@ -54,3 +54,4 @@ export const TabNavigation = ({
     </nav>
   )
 }
+

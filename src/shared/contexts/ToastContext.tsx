@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { createContext, useContext } from 'react'
 
-import type { ToastType } from '../components/Toast';
-import { Toast } from '../components/Toast'
 import { useToast } from '../hooks/useToast'
+import type { ToastType } from '../ui/Toast'
+import { Toast } from '../ui/Toast'
 
 interface ToastContextValue {
   showToast: (type: ToastType, message: string, details?: Record<string, string>) => void

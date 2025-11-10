@@ -160,10 +160,3 @@ export const usePreloadAllOptions = () => {
 
   return { isLoading, isError, preloadAll }
 }
-
-// Helper to clear cache if needed
-export const clearOptionsCache = () => {
-  Object.keys(optionsCache).forEach(key => {
-    optionsCache[key as keyof OptionsCache] = { data: [], loaded: false }
-  })
-}

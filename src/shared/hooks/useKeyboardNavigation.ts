@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import type { NavItem } from '@/shared/components/DashboardLayout/types'
+import type { NavItem } from '@/shared/layout/DashboardLayout/types'
 
 /**
  * Options for the useKeyboardNavigation hook
@@ -171,3 +171,4 @@ export function useKeyboardNavigation({
     navigationRef,
   }
 }
+

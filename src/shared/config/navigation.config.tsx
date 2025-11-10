@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Navigation configuration
  * Following industry best practices - external configuration like Vercel, Linear, GitHub
  * 
@@ -20,7 +20,7 @@ import {
   Grid3X3,
 } from 'lucide-react'
 
-import type { NavItem } from '@/shared/components/DashboardLayout/types'
+import type { NavItem } from '@/shared/layout/DashboardLayout/types'
 
 export const mainNavigationItems: NavItem[] = [
   {
@@ -86,4 +86,5 @@ export const getNavigationForUser = (_userRole?: string): NavItem[] =>
   // Future: Filter navigation based on role
   // For now, return all items
    mainNavigationItems
+
 

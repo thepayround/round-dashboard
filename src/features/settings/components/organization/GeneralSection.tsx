@@ -3,7 +3,7 @@ import React from 'react'
 
 import { OrganizationSettingsForm } from '../OrganizationSettingsForm'
 
-import { Card } from '@/shared/components'
+import { Card } from '@/shared/ui/Card'
 
 
 export const GeneralSection: React.FC = () => (

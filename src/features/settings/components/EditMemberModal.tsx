@@ -1,12 +1,12 @@
-import { Edit, User, Crown, AlertCircle } from 'lucide-react'
+﻿import { Edit, User, Crown, AlertCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 import type { UserRole, TeamMember } from '../types/team.types'
 
-import { ActionButton } from '@/shared/components/ActionButton'
-import { Modal } from '@/shared/components/Modal/Modal'
-import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/ui/ApiDropdown'
+import { Modal } from '@/shared/ui/Modal/Modal'
 
 
 interface EditMemberModalProps {
@@ -178,3 +178,4 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
     </Modal>
   )
 }
+

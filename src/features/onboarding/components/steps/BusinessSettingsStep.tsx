@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Settings } from 'lucide-react'
 
 import type { BusinessSettings } from '../../types/onboarding'
@@ -7,7 +7,7 @@ import {
   ApiDropdown, 
   timezoneDropdownConfig, 
   fiscalYearDropdownConfig 
-} from '@/shared/components/ui/ApiDropdown'
+} from '@/shared/ui/ApiDropdown'
 
 interface BusinessSettingsStepProps {
   data: BusinessSettings
@@ -86,3 +86,4 @@ export const BusinessSettingsStep = ({
     </motion.div>
   )
 }
+

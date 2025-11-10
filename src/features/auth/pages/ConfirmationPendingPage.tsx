@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Mail, RefreshCw, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
-import { Button } from '@/shared/components/Button'
 import { apiClient } from '@/shared/services/apiClient'
+import { Button } from '@/shared/ui/Button'
 
 export const ConfirmationPendingPage = () => {
   const location = useLocation()
@@ -118,7 +118,7 @@ export const ConfirmationPendingPage = () => {
             {hasBusinessData && (
               <div className="mt-4 p-4 rounded-lg bg-primary/10 border border-accent/20">
                 <p className="text-sm text-[#32A1E4] font-medium">
-                  🏢 Your business information has been saved and will be set up automatically after
+                  πΆ Your business information has been saved and will be set up automatically after
                   email confirmation.
                 </p>
               </div>
@@ -218,3 +218,4 @@ export const ConfirmationPendingPage = () => {
     </div>
   )
 }
+

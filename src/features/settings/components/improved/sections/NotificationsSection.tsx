@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 
-import { Card } from '@/shared/components'
+import { Card } from '@/shared/ui/Card'
 
 
 interface NotificationPreference {

@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { MapPin, Building, AlertCircle, Truck } from 'lucide-react'
 import { useState } from 'react'
 
-import { ApiDropdown, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import type { BillingAddress } from '@/shared/types/business'
+import { ApiDropdown, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
 import {
   validateBillingAddress,
   validateBillingAddressField,
@@ -532,3 +532,4 @@ export const BillingAddressForm = ({
       showShipping={false}
     />
   )
+

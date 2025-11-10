@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { 
   User as UserIcon, 
   Mail, 
@@ -12,17 +12,19 @@ import {
 } from 'lucide-react'
 import React, { useState, useEffect, useCallback } from 'react'
 
-import { Card, ActionButton, PhoneDisplay } from '@/shared/components'
-import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
+import type { UserSettingsUpdateRequest, UserSettings } from '@/shared/services/api/userSettings.service'
+import type { User } from '@/shared/types/auth'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { ApiDropdown } from '@/shared/ui/ApiDropdown'
 import { 
   timezoneDropdownConfig,
   languageDropdownConfig,
   dateFormatDropdownConfig,
   timeFormatDropdownConfig
-} from '@/shared/components/ui/ApiDropdown/configs'
-import { FormInput } from '@/shared/components/ui/FormInput'
-import type { UserSettingsUpdateRequest, UserSettings } from '@/shared/services/api/userSettings.service'
-import type { User } from '@/shared/types/auth'
+} from '@/shared/ui/ApiDropdown/configs'
+import { Card } from '@/shared/ui/Card'
+import { FormInput } from '@/shared/ui/FormInput'
+import { PhoneDisplay } from '@/shared/ui/PhoneDisplay'
 
 interface ProfileSectionProps {
   user: User | null
@@ -310,3 +312,4 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
     </motion.div>
   )
 }
+

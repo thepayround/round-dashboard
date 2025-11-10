@@ -1,18 +1,18 @@
-import { motion, AnimatePresence } from 'framer-motion'
+﻿import { motion, AnimatePresence } from 'framer-motion'
 import { X, User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Hash, Truck, Languages, AlertCircle } from 'lucide-react'
 import React, { useState } from 'react'
 
-import { PhoneInput } from '@/shared/components'
-import { IconButton, Button } from '@/shared/components/Button'
-import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/components/ui/ApiDropdown'
-import { languageDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
-import { FormInput } from '@/shared/components/ui/FormInput'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import type { CustomerCreateRequest } from '@/shared/services/api/customer.service'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
 import { CustomerType } from '@/shared/types/customer.types'
+import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/ui/ApiDropdown'
+import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
+import { IconButton, Button } from '@/shared/ui/Button'
+import { FormInput } from '@/shared/ui/FormInput'
+import { PhoneInput } from '@/shared/ui/PhoneInput'
 import { phoneValidator } from '@/shared/utils/phoneValidation'
 import type { ValidationError } from '@/shared/utils/validation'
 
@@ -939,3 +939,4 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
     </AnimatePresence>
   )
 }
+

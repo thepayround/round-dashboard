@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,12 +17,15 @@ import { BillingAddressForm } from '../components/BillingAddressForm'
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { useMultiStepForm } from '../hooks/useMultiStepForm'
 
-import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
-import { Button, IconButton } from '@/shared/components/Button'
 import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
 import { useAuth as useAuthAPI } from '@/shared/hooks/api'
 import { useOrganization } from '@/shared/hooks/api'
 import type { CompanyInfo, BillingAddress } from '@/shared/types/business'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { AuthLogo } from '@/shared/ui/AuthLogo'
+import { Button, IconButton } from '@/shared/ui/Button'
+import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
+import { PhoneInput } from '@/shared/ui/PhoneInput'
 import { validateCompanyInfo } from '@/shared/utils/companyValidation'
 import { handleApiError } from '@/shared/utils/errorHandler'
 import type { ValidationError } from '@/shared/utils/validation'
@@ -717,3 +720,4 @@ export const BusinessRegisterPage = () => {
     </div>
   )
 }
+

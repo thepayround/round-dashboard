@@ -1,11 +1,11 @@
-import { Send, Paperclip, Type, Bold, Italic, Link as LinkIcon, Mail, FileText } from 'lucide-react'
+﻿import { Send, Paperclip, Type, Bold, Italic, Link as LinkIcon, Mail, FileText } from 'lucide-react'
 import React, { useState } from 'react'
 
-import { Button, IconButton } from '@/shared/components/Button'
-import { Modal } from '@/shared/components/Modal'
-import { FormInput } from '@/shared/components/ui/FormInput'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
+import { Button, IconButton } from '@/shared/ui/Button'
+import { FormInput } from '@/shared/ui/FormInput'
+import { Modal } from '@/shared/ui/Modal'
 
 interface EmailComposeModalProps {
   isOpen: boolean

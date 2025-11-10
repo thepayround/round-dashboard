@@ -1,13 +1,13 @@
-import { Save } from 'lucide-react'
+﻿import { Save } from 'lucide-react'
 import { useState, useCallback, useEffect } from 'react'
 
-import { Button } from '@/shared/components/Button'
-import type { OrganizationFormData } from '@/shared/components/forms/OrganizationForm';
-import { OrganizationForm } from '@/shared/components/forms/OrganizationForm'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
 import { organizationService } from '@/shared/services/api/organization.service'
 import type { OrganizationResponse, OrganizationRequest } from '@/shared/types/api'
+import { Button } from '@/shared/ui/Button'
+import { OrganizationForm } from '@/shared/widgets/forms/OrganizationForm'
+import type { OrganizationFormData } from '@/shared/widgets/forms/OrganizationForm';
 
 interface OrganizationSettingsFormProps {
   className?: string
@@ -214,3 +214,4 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
     </div>
   )
 }
+

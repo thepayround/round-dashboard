@@ -1,12 +1,13 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Mail, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { ActionButton, AuthLogo } from '@/shared/components'
-import { Button } from '@/shared/components/Button'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { AuthLogo } from '@/shared/ui/AuthLogo'
+import { Button } from '@/shared/ui/Button'
 import { validators, handleApiError } from '@/shared/utils'
 
 export const ForgotPasswordPage = () => {
@@ -271,3 +272,4 @@ export const ForgotPasswordPage = () => {
     </div>
   )
 }
+

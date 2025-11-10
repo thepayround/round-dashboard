@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import {
   ArrowLeft,
   Edit,
@@ -31,13 +31,13 @@ import { DangerousActionsModal } from '../components/DangerousActionsModal'
 import { EditCustomerModal } from '../components/EditCustomerModal'
 import { EmailComposeModal } from '../components/EmailComposeModal'
 
-import { ActionButton } from '@/shared/components/ActionButton'
-import { IconButton, Button } from '@/shared/components/Button'
-import { Card } from '@/shared/components/Card'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
+import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CustomerResponse , CustomerStatus } from '@/shared/services/api/customer.service'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { IconButton, Button } from '@/shared/ui/Button'
+import { Card } from '@/shared/ui/Card'
 
 
 const CustomerDetailPage: React.FC = () => {
@@ -119,22 +119,22 @@ const CustomerDetailPage: React.FC = () => {
     const statusConfig = {
       1: { // Active
         variant: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-        icon: '●',
+        icon: 'β—',
         label: 'Active'
       },
       2: { // Inactive
         variant: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
-        icon: '○',
+        icon: 'β—‹',
         label: 'Inactive'
       },
       3: { // Suspended
         variant: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-        icon: '⏸',
+        icon: 'βΈ',
         label: 'Suspended'
       },
       4: { // Cancelled
         variant: 'bg-red-500/20 text-[#D417C8] border-red-500/30',
-        icon: '✕',
+        icon: 'β•',
         label: 'Cancelled'
       }
     }
@@ -705,3 +705,4 @@ const CustomerDetailPage: React.FC = () => {
 }
 
 export default CustomerDetailPage
+

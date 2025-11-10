@@ -3,9 +3,9 @@ import { Mail, ArrowLeft, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { ActionButton } from '@/shared/components'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
+import { ActionButton } from '@/shared/ui/ActionButton'
 import { validators, handleApiError } from '@/shared/utils'
 
 export const ResendConfirmationPage = () => {

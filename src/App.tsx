@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+﻿import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import { BusinessLoginPage } from '@/features/auth/pages/BusinessLoginPage'
@@ -21,11 +21,11 @@ import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { HomePage } from '@/features/home/HomePage'
 import { GetStartedPage } from '@/features/onboarding/pages/GetStartedPage'
 import { UserSettingsPage, OrganizationSettingsPage } from '@/features/settings'
-import { ErrorBoundary } from '@/shared/components/ErrorBoundary'
-import { ProtectedRoute } from '@/shared/components/ProtectedRoute'
 import { AuthProvider } from '@/shared/contexts/AuthContext'
 import { ToastProvider } from '@/shared/contexts/ToastContext'
 import { useMobileOptimizations } from '@/shared/hooks/useMobileOptimizations'
+import { ErrorBoundary } from '@/shared/layout/ErrorBoundary'
+import { ProtectedRoute } from '@/shared/layout/ProtectedRoute'
 
 const App = () => {
   // Apply mobile optimizations
@@ -133,3 +133,4 @@ const App = () => {
 }
 
 export default App
+

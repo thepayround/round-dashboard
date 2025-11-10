@@ -1,4 +1,4 @@
-import { 
+﻿import { 
   Building2, 
   Users, 
   CreditCard, 
@@ -12,9 +12,9 @@ import { useState } from 'react'
 import { OrganizationSettingsForm } from '../components/OrganizationSettingsForm'
 import { TeamManagementPage } from '../components/TeamManagementPage'
 
-import { PlainButton } from '@/shared/components/Button'
-import { Card } from '@/shared/components/Card'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
+import { DashboardLayout } from '@/shared/layout/DashboardLayout'
+import { PlainButton } from '@/shared/ui/Button'
+import { Card } from '@/shared/ui/Card'
 
 
 interface TabItem {
@@ -198,3 +198,4 @@ export const OrganizationSettingsPage: React.FC = () => {
     </DashboardLayout>
   )
 }
+

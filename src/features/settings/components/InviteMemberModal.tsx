@@ -1,12 +1,12 @@
-import { Mail, UserPlus } from 'lucide-react'
+﻿import { Mail, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 
 import type { UserRole } from '../types/team.types'
 
-import { ActionButton } from '@/shared/components/ActionButton'
-import { Modal } from '@/shared/components/Modal/Modal'
-import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/ui/ApiDropdown'
+import { Modal } from '@/shared/ui/Modal/Modal'
 
 
 interface InviteMemberModalProps {
@@ -154,3 +154,4 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
     </Modal>
   )
 }
+

@@ -1,13 +1,13 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { CheckCircle, XCircle, Mail, RefreshCw, AlertCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 
-import { Button } from '@/shared/components/Button'
 import { useAuth as useAuthAPI, useOrganization } from '@/shared/hooks/api'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { organizationService } from '@/shared/services/api'
 import type { User } from '@/shared/types/auth'
+import { Button } from '@/shared/ui/Button'
 
 export const EmailConfirmationPage = () => {
   const [searchParams] = useSearchParams()
@@ -224,7 +224,7 @@ export const EmailConfirmationPage = () => {
               className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 mb-6"
             >
               <p className="text-green-400 text-sm">
-                🎉 Welcome to Round! You&apos;re now logged in and will be redirected to get started
+                π‰ Welcome to Round! You&apos;re now logged in and will be redirected to get started
                 in a few seconds...
               </p>
             </motion.div>
@@ -235,7 +235,7 @@ export const EmailConfirmationPage = () => {
                 animate={{ x: [0, 4, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
               >
-                →
+                β†’
               </motion.span>
             </Link>
           </motion.div>
@@ -354,3 +354,4 @@ export const EmailConfirmationPage = () => {
     </div>
   )
 }
+

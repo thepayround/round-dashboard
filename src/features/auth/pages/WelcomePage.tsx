@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { User, Building2, ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { AuthLogo } from '@/shared/components'
+import { AuthLogo } from '@/shared/ui/AuthLogo'
 
 export const WelcomePage = () => {
   const navigate = useNavigate()

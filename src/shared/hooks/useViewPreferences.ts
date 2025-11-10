@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 
-import type { ViewMode } from '@/shared/components/ViewModeToggle'
+import type { ViewMode } from '@/shared/ui/ViewModeToggle'
 
 interface ViewPreferences {
   viewMode: ViewMode

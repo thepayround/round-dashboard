@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -6,11 +6,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
 
 import { FacebookIcon } from '@/features/auth/components/icons/SocialIcons'
-import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
-import { IconButton, Button } from '@/shared/components/Button'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { AuthLogo } from '@/shared/ui/AuthLogo'
+import { IconButton, Button } from '@/shared/ui/Button'
+import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
+import { PhoneInput } from '@/shared/ui/PhoneInput'
 import { validators, handleApiError } from '@/shared/utils'
 
 export const PersonalRegisterPage = () => {
@@ -388,3 +391,4 @@ export const PersonalRegisterPage = () => {
     </div>
   )
 }
+

@@ -1,12 +1,12 @@
-import { Plus, MessageSquare, User, Calendar, Edit3, Trash2, Save, RotateCcw } from 'lucide-react'
+﻿import { Plus, MessageSquare, User, Calendar, Edit3, Trash2, Save, RotateCcw } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 
-import { Button, IconButton } from '@/shared/components/Button'
-import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
-import { Modal } from '@/shared/components/Modal'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import type { CustomerNoteResponse, CustomerNoteCreateRequest } from '@/shared/services/api/customer.service'
 import { customerService } from '@/shared/services/api/customer.service'
+import { Button, IconButton } from '@/shared/ui/Button'
+import { Modal } from '@/shared/ui/Modal'
+import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
 
 interface CustomerNotesModalProps {
   isOpen: boolean
@@ -317,3 +317,4 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
   </>
   )
 }
+

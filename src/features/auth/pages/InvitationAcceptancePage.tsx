@@ -1,14 +1,17 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, Users, Building, Check } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { ActionButton, AuthLogo, PhoneInput, PasswordStrengthIndicator } from '@/shared/components'
-import { PlainButton } from '@/shared/components/Button'
 import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { teamService } from '@/shared/services/api'
 import type { ValidateInvitationResponse } from '@/shared/services/api'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { AuthLogo } from '@/shared/ui/AuthLogo'
+import { PlainButton } from '@/shared/ui/Button'
+import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
+import { PhoneInput } from '@/shared/ui/PhoneInput'
 import { handleApiError } from '@/shared/utils/errorHandler'
 import { validators } from '@/shared/utils/validators'
 
@@ -477,3 +480,4 @@ export const InvitationAcceptancePage = () => {
     </div>
   )
 }
+

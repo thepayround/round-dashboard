@@ -1,33 +1,46 @@
-// Layout Components
-export { DashboardLayout } from './DashboardLayout'
-export { Breadcrumb } from './Breadcrumb'
-export { WhiteLogo } from './WhiteLogo'
-export { AuthLogo } from './AuthLogo'
+/**
+ * Backwards-compatible barrel that now re-exports from the new shared/ui,
+ * shared/layout, and shared/widgets packages. Prefer importing from those
+ * packages directly in new code.
+ */
 
-// Form Components
-export { Button } from './Button'
-export { FormInput } from './ui/FormInput'
-export { AuthInput } from './AuthInput'
-export { PhoneInput } from './ui/PhoneInput'
-export { PhoneDisplay } from './ui/PhoneDisplay'
-export type { PhoneDisplayProps, CountryInfo } from './ui/PhoneDisplay'
-export { PasswordStrengthIndicator } from './PasswordStrengthIndicator'
+// Layout
+export { DashboardLayout } from '../layout/DashboardLayout'
+export { Breadcrumb } from '../layout/Breadcrumb'
+export { ErrorBoundary } from '../layout/ErrorBoundary'
+export { ProtectedRoute } from '../layout/ProtectedRoute'
 
-// UI Components
-export { Modal } from './Modal'
-export { Card, ActionCard } from './Card'
-export { SectionHeader } from './SectionHeader'
-export { ViewModeToggle } from './ViewModeToggle/ViewModeToggle'
-export type { ViewMode, ViewModeOption } from './ViewModeToggle/ViewModeToggle'
-export { ActionButton } from './ActionButton'
-export { SearchFilterToolbar } from './SearchFilterToolbar'
-export type { SearchFilterToolbarProps, FilterField } from './SearchFilterToolbar'
-export { ConfirmDialog } from './ConfirmDialog'
-export { FilterPanel } from './FilterPanel'
-export type { FilterPanelProps } from './FilterPanel'
-export { FilterChip } from './FilterChip'
-export type { FilterChipProps } from './FilterChip'
-export { FilterChipsBar } from './FilterChipsBar'
-export type { FilterChipsBarProps, ActiveFilter } from './FilterChipsBar'
-export { Stepper, StepIndicator } from './Stepper'
-export type { Step, StepperProps, StepIndicatorProps } from './Stepper'
+// Branding
+export { WhiteLogo } from '../ui/WhiteLogo'
+export { AuthLogo } from '../ui/AuthLogo'
+
+// UI primitives
+export { Button, IconButton, PlainButton, RoundButton, UserButton } from '../ui/Button'
+export { ActionButton } from '../ui/ActionButton'
+export { AuthInput } from '../ui/AuthInput'
+export { FormInput } from '../ui/FormInput'
+export { Modal } from '../ui/Modal'
+export { Card, ActionCard } from '../ui/Card'
+export { SectionHeader } from '../ui/SectionHeader'
+export { ViewModeToggle } from '../ui/ViewModeToggle'
+export type { ViewMode, ViewModeOption } from '../ui/ViewModeToggle'
+export { SearchInput } from '../ui/SearchInput'
+export { Pagination } from '../ui/Pagination'
+export { PasswordStrengthIndicator } from '../ui/PasswordStrengthIndicator'
+export { Toast } from '../ui/Toast'
+export { PhoneInput } from '../ui/PhoneInput'
+export { PhoneDisplay } from '../ui/PhoneDisplay'
+export type { PhoneDisplayProps, CountryInfo } from '../ui/PhoneDisplay'
+
+// Widgets
+export { FilterChip } from '../widgets/FilterChip'
+export type { FilterChipProps } from '../widgets/FilterChip'
+export { FilterChipsBar } from '../widgets/FilterChipsBar'
+export type { FilterChipsBarProps, ActiveFilter } from '../widgets/FilterChipsBar'
+export { FilterPanel } from '../widgets/FilterPanel'
+export type { FilterPanelProps } from '../widgets/FilterPanel'
+export { SearchFilterToolbar } from '../widgets/SearchFilterToolbar'
+export type { SearchFilterToolbarProps, FilterField } from '../widgets/SearchFilterToolbar'
+export { ConfirmDialog } from '../widgets/ConfirmDialog'
+export { Stepper, StepIndicator } from '../widgets/Stepper'
+export type { Step, StepperProps, StepIndicatorProps } from '../widgets/Stepper'

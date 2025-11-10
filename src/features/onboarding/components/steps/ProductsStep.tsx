@@ -3,7 +3,7 @@ import { Package } from 'lucide-react'
 
 import type { ProductInfo } from '../../types/onboarding'
 
-import { ActionButton } from '@/shared/components'
+import { ActionButton } from '@/shared/ui/ActionButton'
 
 interface ProductsStepProps {
   data: ProductInfo

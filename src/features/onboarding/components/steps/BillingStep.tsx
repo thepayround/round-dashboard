@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { CreditCard, ExternalLink, CheckCircle } from 'lucide-react'
 
 import type { BillingSettings } from '../../types/onboarding'
 
-import { Button } from '@/shared/components/Button'
+import { Button } from '@/shared/ui/Button'
 
 interface BillingStepProps {
   data: BillingSettings
@@ -140,3 +140,4 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
     </motion.div>
   )
 }
+

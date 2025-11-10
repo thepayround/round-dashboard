@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { 
   CreditCard, 
   Download, 
@@ -9,8 +9,9 @@ import {
 } from 'lucide-react'
 import React from 'react'
 
-import { Card, ActionButton } from '@/shared/components'
-import { PlainButton } from '@/shared/components/Button'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { PlainButton } from '@/shared/ui/Button'
+import { Card } from '@/shared/ui/Card'
 
 
 export const BillingSection: React.FC = () => (
@@ -39,7 +40,7 @@ export const BillingSection: React.FC = () => (
           <div className="flex items-center justify-between mb-2">
             <div>
               <h3 className="text-xs font-normal tracking-tight text-white mb-0.5">Professional Plan</h3>
-              <p className="text-xs text-white/90">Billed monthly • Next billing: March 15, 2024</p>
+              <p className="text-xs text-white/90">Billed monthly β€Ά Next billing: March 15, 2024</p>
             </div>
             <div className="text-right">
               <div className="text-sm font-normal tracking-tight text-white">$49</div>
@@ -80,7 +81,7 @@ export const BillingSection: React.FC = () => (
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-white font-medium text-xs">•••• •••• •••• 4242</span>
+                    <span className="text-white font-medium text-xs">β€Άβ€Άβ€Άβ€Ά β€Άβ€Άβ€Άβ€Ά β€Άβ€Άβ€Άβ€Ά 4242</span>
                     <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-green-500/15 border border-green-400/20 rounded-full text-green-400 text-xs">
                       <div className="w-1 h-1 bg-green-400 rounded-full" />
                       Primary
@@ -184,3 +185,4 @@ export const BillingSection: React.FC = () => (
       </div>
     </motion.div>
   )
+

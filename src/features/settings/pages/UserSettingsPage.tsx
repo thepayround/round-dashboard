@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { 
   User as UserIcon, 
   Shield, 
@@ -17,14 +17,14 @@ import {
   BillingSection
 } from '../components/improved'
 
-import { Card } from '@/shared/components'
-import { Button } from '@/shared/components/Button'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { usePreloadAllOptions } from '@/shared/hooks/api/useUserSettingsOptions'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { usePhoneFormatting } from '@/shared/hooks/usePhoneFormatting'
 import { useUserSettingsManager } from '@/shared/hooks/useUserSettingsManager'
+import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { UserSettingsUpdateRequest } from '@/shared/services/api/userSettings.service'
+import { Button } from '@/shared/ui/Button'
+import { Card } from '@/shared/ui/Card'
 
 interface UserSettingsPageProps {
   // Props can be added here if needed in the future
@@ -197,3 +197,4 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
 }
 
 export default UserSettingsPage
+

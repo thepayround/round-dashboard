@@ -1,10 +1,11 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Eye, EyeOff, CheckCircle, AlertCircle, Lock, RotateCcw } from 'lucide-react'
 import { useState } from 'react'
 
-import { ActionButton, PasswordStrengthIndicator } from '@/shared/components'
-import { IconButton } from '@/shared/components/Button'
 import { apiClient } from '@/shared/services/apiClient'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { IconButton } from '@/shared/ui/Button'
+import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import {
   validatePassword,
   getFieldError,
@@ -365,3 +366,4 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
     </div>
   )
 }
+

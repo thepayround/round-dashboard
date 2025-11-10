@@ -1,16 +1,16 @@
-import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck, Hash, X } from 'lucide-react'
+﻿import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck, Hash, X } from 'lucide-react'
 import React, { useState } from 'react'
 
-import { Button, IconButton } from '@/shared/components/Button'
-import { Modal } from '@/shared/components/Modal'
-import { ApiDropdown, currencyDropdownConfig, timezoneDropdownConfig, countryDropdownConfig } from '@/shared/components/ui/ApiDropdown'
-import { languageDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
-import { FormInput } from '@/shared/components/ui/FormInput'
-import { PhoneInput } from '@/shared/components/ui/PhoneInput/PhoneInput'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CustomerResponse, CustomerUpdateRequest, CustomerAddressCreateRequest } from '@/shared/services/api/customer.service'
 import { CustomerType } from '@/shared/types/customer.types'
+import { ApiDropdown, currencyDropdownConfig, timezoneDropdownConfig, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
+import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
+import { Button, IconButton } from '@/shared/ui/Button'
+import { FormInput } from '@/shared/ui/FormInput'
+import { Modal } from '@/shared/ui/Modal'
+import { PhoneInput } from '@/shared/ui/PhoneInput/PhoneInput'
 
 interface EditCustomerModalProps {
   isOpen: boolean
@@ -640,3 +640,4 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
     </Modal>
   )
 }
+

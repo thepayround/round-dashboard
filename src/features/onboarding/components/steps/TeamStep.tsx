@@ -1,15 +1,15 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Users, UserPlus, Mail, Trash2, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 
 import type { TeamSettings } from '../../types/onboarding'
 
-import { Button, IconButton } from '@/shared/components/Button'
-import { ApiDropdown } from '@/shared/components/ui/ApiDropdown'
-import { teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
 import { useTeamInvitation, useTeamRoleUtils } from '@/shared/hooks/api/useTeam'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { UserRole } from '@/shared/services/api/team.service'
+import { ApiDropdown } from '@/shared/ui/ApiDropdown'
+import { teamRoleDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
+import { Button, IconButton } from '@/shared/ui/Button'
 
 interface TeamStepProps {
   data: TeamSettings
@@ -289,3 +289,4 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
     </motion.div>
   )
 }
+

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import {
   Users,
   UserPlus,
@@ -19,15 +19,15 @@ import TeamMembersTable from '../components/TeamMembersTable'
 import { useTeamManagement } from '../hooks/useTeamManagement'
 import type { TeamMember, TeamInvitation, UserRole } from '../types/team.types'
 
-import type { FilterField } from '@/shared/components'
-import { ActionButton } from '@/shared/components/ActionButton'
-import { Button } from '@/shared/components/Button'
-import { Card } from '@/shared/components/Card'
-import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
-import { SearchFilterToolbar } from '@/shared/components/SearchFilterToolbar'
-import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
 import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/ui/ApiDropdown'
+import { Button } from '@/shared/ui/Button'
+import { Card } from '@/shared/ui/Card'
+import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
+import type { FilterField } from '@/shared/widgets/SearchFilterToolbar'
+import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
 
 
 
@@ -618,3 +618,4 @@ export const TeamManagementPage: React.FC = () => {
 }
 
 export default TeamManagementPage
+

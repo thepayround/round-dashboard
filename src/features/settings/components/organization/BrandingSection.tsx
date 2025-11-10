@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Palette, Upload, Eye, Download, Trash2, Image } from 'lucide-react'
 import React, { useState } from 'react'
 
-import { Card } from '@/shared/components'
-import { Button } from '@/shared/components/Button'
+import { Button } from '@/shared/ui/Button'
+import { Card } from '@/shared/ui/Card'
 
 
 export const BrandingSection: React.FC = () => {

@@ -1,4 +1,4 @@
-import {
+﻿import {
   Eye,
   Edit,
   MoreHorizontal,
@@ -7,7 +7,7 @@ import {
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Button, IconButton } from '@/shared/components/Button'
+import type { CustomerResponse } from '@/shared/services/api/customer.service'
 import { 
   Table, 
   TableHeader, 
@@ -16,8 +16,8 @@ import {
   TableHead, 
   TableCell,
   SortableTableHead 
-} from '@/shared/components/ui'
-import type { CustomerResponse } from '@/shared/services/api/customer.service'
+} from '@/shared/ui'
+import { Button, IconButton } from '@/shared/ui/Button'
 
 interface SortConfig {
   field: string
@@ -367,3 +367,4 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
 }
 
 export default CustomerTable
+

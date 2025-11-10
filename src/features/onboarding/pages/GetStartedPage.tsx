@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+﻿import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -22,14 +22,12 @@ import type {
   TeamSettings
 } from '../types/onboarding'
 
-import { ActionButton } from '@/shared/components'
-import { Button } from '@/shared/components/Button'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { useDebouncedUpdate } from '@/shared/hooks/useDebouncedUpdate'
 import { useFormChangeDetection } from '@/shared/hooks/useFormChangeDetection'
+import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import { addressService } from '@/shared/services/api/address.service'
 import { authService } from '@/shared/services/api/auth.service'
 import { organizationService } from '@/shared/services/api/organization.service'
@@ -38,6 +36,8 @@ import type {
   OrganizationRequest,
   CreateAddressData
 } from '@/shared/types/api'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { Button } from '@/shared/ui/Button'
 
 // Simple error parser utility
 const parseBackendError = (error: unknown) => {
@@ -838,3 +838,4 @@ export const GetStartedPage = () => {
     </DashboardLayout>
   )
 }
+

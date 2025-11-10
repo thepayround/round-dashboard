@@ -1,4 +1,4 @@
-import {
+﻿import {
   Edit,
   Trash2,
   Crown
@@ -7,7 +7,6 @@ import React, { useState } from 'react'
 
 import type { TeamMember, UserRole } from '../types/team.types'
 
-import { IconButton } from '@/shared/components/Button'
 import { 
   Table, 
   TableHeader, 
@@ -16,7 +15,8 @@ import {
   TableHead, 
   TableCell,
   SortableTableHead 
-} from '@/shared/components/ui'
+} from '@/shared/ui'
+import { IconButton } from '@/shared/ui/Button'
 
 interface SortConfig {
   field: string
@@ -158,3 +158,4 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
 }
 
 export default TeamMembersTable
+

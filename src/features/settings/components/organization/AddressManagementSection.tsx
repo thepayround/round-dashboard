@@ -4,11 +4,12 @@ import React, { useState, useEffect, useCallback } from 'react'
 
 import { AddressStep } from '@/features/onboarding/components/steps/AddressStep'
 import type { EnhancedAddressInfo } from '@/features/onboarding/types/onboarding'
-import { ActionButton, Card } from '@/shared/components'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useOrganization } from '@/shared/hooks/api/useOrganization'
 import { organizationService } from '@/shared/services/api/organization.service'
 import type { CreateAddressData, UpdateAddressData } from '@/shared/types/api'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { Card } from '@/shared/ui/Card'
 
 
 export const AddressManagementSection: React.FC = () => {

@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+﻿import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Users,
   Eye,
@@ -22,19 +22,19 @@ import { Link } from 'react-router-dom'
 import { AddCustomerModal } from '../components/AddCustomerModal'
 import CustomerTable from '../components/CustomerTable'
 
-import { SearchFilterToolbar } from '@/shared/components'
-import type { FilterField } from '@/shared/components'
-import { ActionButton } from '@/shared/components/ActionButton'
-import { PlainButton } from '@/shared/components/Button'
-import { Card } from '@/shared/components/Card'
-import { DashboardLayout } from '@/shared/components/DashboardLayout'
-import { Pagination } from '@/shared/components/Pagination'
-import type { ViewMode, ViewModeOption } from '@/shared/components/ViewModeToggle'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 import { useViewPreferences } from '@/shared/hooks/useViewPreferences'
+import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import { customerService } from '@/shared/services/api/customer.service'
 import type { CustomerResponse, CustomerSearchParams } from '@/shared/services/api/customer.service'
+import { ActionButton } from '@/shared/ui/ActionButton'
+import { PlainButton } from '@/shared/ui/Button'
+import { Card } from '@/shared/ui/Card'
+import { Pagination } from '@/shared/ui/Pagination'
+import type { ViewMode, ViewModeOption } from '@/shared/ui/ViewModeToggle'
+import type { FilterField } from '@/shared/widgets/SearchFilterToolbar'
+import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
 
 
 // CustomerStatus enum values from backend
@@ -767,3 +767,4 @@ const CustomersPage: React.FC = () => {
 }
 
 export default CustomersPage
+
