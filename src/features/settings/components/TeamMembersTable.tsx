@@ -1,17 +1,22 @@
-import { motion } from 'framer-motion'
 import {
   Edit,
   Trash2,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
   Crown
 } from 'lucide-react'
 import React, { useState } from 'react'
 
 import type { TeamMember, UserRole } from '../types/team.types'
 
-import { IconButton, PlainButton } from '@/shared/components/Button'
+import { IconButton } from '@/shared/components/Button'
+import { 
+  Table, 
+  TableHeader, 
+  TableBody,
+  TableRow,
+  TableHead, 
+  TableCell,
+  SortableTableHead 
+} from '@/shared/components/ui'
 
 interface SortConfig {
   field: string
@@ -35,7 +40,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
   onRemoveMember,
   loading = false
 }) => {
-  const [hoveredRow, setHoveredRow] = useState<string | null>(null)
+  const [_hoveredRow, setHoveredRow] = useState<string | null>(null)
 
   const roleLabels: Record<UserRole, { label: string; color: string }> = {
     SuperAdmin: { label: 'Super Admin', color: 'text-green-400' },
@@ -57,63 +62,38 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
   const getInitials = (firstName: string, lastName: string) =>
     `${firstName[0]}${lastName[0]}`.toUpperCase()
 
-  const TableHeader = ({ field, children, className = '' }: {
-    field?: string
-    children: React.ReactNode
-    className?: string
-  }) => (
-    <th className={`px-6 py-4 text-left text-sm font-normal text-white/80 tracking-tight ${className}`}>
-      {field ? (
-        <PlainButton
-          onClick={() => onSort(field)}
-          className="flex items-center space-x-2 hover:text-white transition-colors group text-left"
-          unstyled
-        >
-          <span>{children}</span>
-          {(() => {
-            if (sortConfig.field !== field) {
-              return <ArrowUpDown className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity" />
-            }
-            if (sortConfig.direction === 'asc') {
-              return <ArrowUp className="w-4 h-4" />
-            }
-            return <ArrowDown className="w-4 h-4" />
-          })()}
-        </PlainButton>
-      ) : (
-        children
-      )}
-    </th>
-  )
-
   return (
-    <div className="border border-white/10 rounded-lg overflow-hidden">
+    <div className="border border-white/10 rounded-lg overflow-hidden relative">
       <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-[#171719] border-b border-white/10">
-            <tr>
-              <TableHeader field="fullName">Member</TableHeader>
-              <TableHeader field="email">Email</TableHeader>
-              <TableHeader field="role">Role</TableHeader>
-              <TableHeader field="joinedAt">Joined</TableHeader>
-              <TableHeader className="text-right">Actions</TableHeader>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#16171a]">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <SortableTableHead field="fullName" sortConfig={sortConfig} onSort={onSort}>
+                Member
+              </SortableTableHead>
+              <SortableTableHead field="email" sortConfig={sortConfig} onSort={onSort}>
+                Email
+              </SortableTableHead>
+              <SortableTableHead field="role" sortConfig={sortConfig} onSort={onSort}>
+                Role
+              </SortableTableHead>
+              <SortableTableHead field="joinedAt" sortConfig={sortConfig} onSort={onSort}>
+                Joined
+              </SortableTableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {members.map((member) => {
               const roleConfig = roleLabels[member.role] || roleLabels.TeamMember
               return (
-                <motion.tr
+                <TableRow
                   key={member.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className={`transition-all duration-200 border-b border-[#16171a] bg-[#101011] ${
-                    hoveredRow === member.id ? 'hover:bg-[#171719]' : 'hover:bg-[#171719]'
-                  }`}
+                  className="transition-colors duration-150"
                   onMouseEnter={() => setHoveredRow(member.id)}
                   onMouseLeave={() => setHoveredRow(null)}
                 >
-                  <td className="px-6 py-4">
+                  <TableCell>
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-medium text-xs tracking-tight">
                         {getInitials(member.firstName, member.lastName)}
@@ -129,19 +109,19 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                         </div>
                       </div>
                     </div>
-                  </td>
-                  <td className="px-6 py-4">
+                  </TableCell>
+                  <TableCell>
                     <div className="text-sm text-white/80 truncate">{member.email}</div>
-                  </td>
-                  <td className="px-6 py-4">
+                  </TableCell>
+                  <TableCell>
                     <span className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight bg-${roleConfig.color.split('-')[1]}-500/20 ${roleConfig.color} border border-${roleConfig.color.split('-')[1]}-500/30`}>
                       {member.roleName || roleConfig.label}
                     </span>
-                  </td>
-                  <td className="px-6 py-4">
+                  </TableCell>
+                  <TableCell>
                     <div className="text-sm text-white/80">{formatDate(member.joinedAt)}</div>
-                  </td>
-                  <td className="px-6 py-4">
+                  </TableCell>
+                  <TableCell>
                     <div className="flex items-center justify-end space-x-2">
                       <IconButton
                         icon={Edit}
@@ -159,12 +139,12 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                         />
                       )}
                     </div>
-                  </td>
-                </motion.tr>
+                  </TableCell>
+                </TableRow>
               )
             })}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       {/* Loading overlay */}

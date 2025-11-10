@@ -1,11 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { PanelLeft, PanelLeftClose, User, LogOut, ChevronUp, X } from 'lucide-react'
+import { PanelLeft, PanelLeftClose, User, LogOut, X } from 'lucide-react'
 import { memo, useCallback, useMemo, useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import ColorLogo from '@/assets/logos/color-logo.svg'
 import { Breadcrumb } from '@/shared/components/Breadcrumb'
-import { Button, IconButton, PlainButton } from '@/shared/components/Button'
+import { IconButton, UserButton } from '@/shared/components/Button'
 import { NavigationItem } from '@/shared/components/DashboardLayout/NavigationItem'
 import { LAYOUT_CONSTANTS, ANIMATION_VARIANTS } from '@/shared/components/DashboardLayout/constants'
 import type { DashboardLayoutProps } from '@/shared/components/DashboardLayout/types'
@@ -194,6 +194,36 @@ export const DashboardLayout = memo(({
     sidebar: { duration: prefersReducedMotion ? 0 : 0.15, ease: 'easeOut' as const },
   }), [prefersReducedMotion])
 
+  const handleSkipToMainContent = useCallback(() => {
+    if (typeof document === 'undefined') {
+      return
+    }
+
+    const mainContent = document.getElementById('main-content')
+
+    if (mainContent instanceof HTMLElement) {
+      const hadTabIndex = mainContent.hasAttribute('tabindex')
+
+      if (!hadTabIndex) {
+        mainContent.setAttribute('tabindex', '-1')
+      }
+
+      mainContent.focus({ preventScroll: true })
+      mainContent.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        block: 'start'
+      })
+
+      if (!hadTabIndex) {
+        const removeTabIndex = () => {
+          mainContent.removeAttribute('tabindex')
+        }
+
+        mainContent.addEventListener('blur', removeTabIndex, { once: true })
+      }
+    }
+  }, [prefersReducedMotion])
+
   // Track tooltip state
   const [hoveredTooltip, setHoveredTooltip] = useState<{ id: string; label: string; badge?: string; position: { top: number; left: number }; isUser?: boolean; userInfo?: { role: string; company: string; email: string } } | null>(null)
 
@@ -240,7 +270,35 @@ export const DashboardLayout = memo(({
       return state.user.companyInfo.companyName
     }
     return state.user?.accountType === 'business' ? 'Business Account' : 'Personal Account'
-  }, [isRoundAccountLoading, roundAccount, state])
+  }, [isRoundAccountLoading, roundAccount, state.user])
+
+  const userDisplayName = useMemo(
+    () => getUserDisplayName(state.user),
+    [getUserDisplayName, state.user]
+  )
+
+  const secondaryUserInfo = useMemo(() => {
+    if (!state.user) return getCompanyDisplayName()
+    const companyLabel = getCompanyDisplayName()
+    const normalizedCompany = companyLabel?.trim().toLowerCase()
+    const normalizedUser = userDisplayName?.trim().toLowerCase()
+
+    if (!companyLabel || normalizedCompany === normalizedUser) {
+      return state.user.email ?? companyLabel
+    }
+
+    return companyLabel
+  }, [getCompanyDisplayName, state.user, userDisplayName])
+
+  const userAvatar = state.user ? (
+    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-normal tracking-tight">
+      {getInitials(state.user.firstName, state.user.lastName)}
+    </div>
+  ) : (
+    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+      <User className="w-4 h-4 text-white/60" />
+    </div>
+  )
 
   // Tooltip handlers
   const handleTooltipEnter = useCallback((itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => {
@@ -315,12 +373,13 @@ export const DashboardLayout = memo(({
       } as React.CSSProperties}
     >
       {/* Skip to main content link for accessibility */}
-      <a 
-        href="#main-content" 
+      <button
+        type="button"
+        onClick={handleSkipToMainContent}
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#070708]"
       >
         Skip to main content
-      </a>
+      </button>
 
       {/* Minimal background - no floating orbs */}
 
@@ -469,7 +528,8 @@ export const DashboardLayout = memo(({
           {/* Navigation */}
           <nav 
             ref={navigationRef}
-            className={`hide-scrollbar flex-1 py-4 md:py-5 lg:py-4 pb-24 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}`}
+            className={`hide-scrollbar flex-1 py-4 md:py-5 lg:py-4 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}`}
+            style={{ paddingBottom: showProfileDropdown ? '16rem' : '8rem' }}
             role="navigation"
             aria-label="Main navigation"
           >
@@ -523,42 +583,39 @@ export const DashboardLayout = memo(({
         </nav>
 
         {/* Fixed User Profile Section at Bottom */}
-        <div className="absolute bottom-0 left-0 right-0">
+        <div className="absolute bottom-0 left-0 right-0 bg-[#070708] z-10">
             {/* Expandable Profile Menu Items */}
             <AnimatePresence>
               {showProfileDropdown && (
                 <motion.div
                   {...ANIMATION_VARIANTS.expandCollapse}
                   transition={transitionConfigs.normal}
-                  className={`overflow-hidden border-t border-[#262626] mx-2 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
+                  className={`overflow-hidden bg-[#070708] border-t border-[#262626] mx-2 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
                 >
                 <Link
                   to="/user-settings"
                   onClick={() => setShowProfileDropdown(false)}
                   onMouseEnter={(e) => handleTooltipEnter('user-settings', 'User Settings', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
-                  className={`
-                    group relative flex items-center rounded-lg transition-all duration-200 h-9
-                    ${
-                      isActive('/user-settings')
-                        ? 'bg-primary/10 text-white border border-primary/20'
-                        : 'text-white/60 hover:text-white'
-                    }
-                    ${isCollapsed ? 'justify-center px-0' : 'px-6'}
-                  `}
+                  className={cn(
+                    'group relative flex items-center rounded-lg transition-all duration-200 h-9',
+                    isActive('/user-settings')
+                      ? 'bg-primary/10 text-white border border-primary/20'
+                      : 'text-white/60 hover:text-white',
+                    isCollapsed ? 'justify-center px-0' : 'justify-start gap-2'
+                  )}
                   aria-label="User Settings"
                 >
-                  <User className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
-
+                  <User className="w-4 h-4 flex-shrink-0" />
                   {!isCollapsed && (
-                    <div className="overflow-hidden">
-                      <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">User Settings</span>
-                    </div>
+                    <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">
+                      User Settings
+                    </span>
                   )}
 
                 </Link>
 
-                <Button
+                <button
                   type="button"
                   onClick={() => {
                     setShowProfileDropdown(false)
@@ -566,82 +623,41 @@ export const DashboardLayout = memo(({
                   }}
                   onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
-                  variant="ghost"
-                  size="sm"
                   className={cn(
-                    'group relative flex items-center rounded-lg transition-all duration-200 h-9',
-                    'text-white/60 hover:text-white',
-                    isCollapsed ? 'justify-center px-0' : 'px-6',
-                    'w-full'
+                    'w-full group relative flex items-center rounded-lg transition-all duration-200 h-9 text-white/60 hover:text-white',
+                    isCollapsed ? 'justify-center px-0' : 'justify-start gap-3'
                   )}
                   aria-label="Logout"
                 >
-                  <LogOut className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
-
+                  <LogOut className="w-4 h-4 flex-shrink-0" />
                   {!isCollapsed && (
-                    <div className="overflow-hidden">
-                      <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">Logout</span>
-                    </div>
+                    <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">
+                      Logout
+                    </span>
                   )}
-                </Button>
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
 
           {/* Divider */}
-          <div className="border-t border-white/10 mx-2" />
+          <div className="border-t border-white/10 mx-2 bg-[#070708]" />
           
           {/* User Profile */}
-          <div className={cn('py-2', isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}>
+          <div className={cn('py-2 bg-[#070708]', isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}>
             <div className="relative" ref={profileDropdownRef}>
-            <PlainButton
-              onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-              onMouseEnter={handleUserTooltipEnter}
-              onMouseLeave={handleTooltipLeave}
-              className={cn(
-                'group relative flex items-center rounded-lg transition-all duration-200 w-full text-white/60 hover:text-white',
-                isCollapsed ? 'justify-center px-0 h-9' : 'px-3 py-2.5 md:py-2 lg:py-1.5',
-                showProfileDropdown && 'text-white'
-              )}
-              aria-label="User profile menu"
-              aria-expanded={showProfileDropdown}
-              unstyled
-            >
-              {/* User Avatar */}
-              <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
-                {state.user ? (
-                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-normal tracking-tight">
-                    {getInitials(state.user.firstName, state.user.lastName)}
-                  </div>
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                    <User className="w-4 h-4 text-white/60" />
-                  </div>
-                )}
-              </div>
-
-              {/* User Info - Only show when expanded */}
-              {!isCollapsed && state.user && (
-                <div className="flex-1 text-left overflow-hidden">
-                  <div className="font-normal text-sm text-white truncate tracking-tight">
-                    {getUserDisplayName(state.user)}
-                  </div>
-                  <div className="text-xs text-white/60 truncate">
-                    {getCompanyDisplayName()}
-                  </div>
-                </div>
-              )}
-
-              {/* Dropdown Arrow - Only show when expanded */}
-              {!isCollapsed && (
-                <ChevronUp 
-                  className={`w-4 h-4 transition-transform duration-200 flex-shrink-0 ${
-                    showProfileDropdown ? 'rotate-0' : 'rotate-180'
-                  }`} 
-                />
-              )}
-
-            </PlainButton>
+              <UserButton
+                onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                onMouseEnter={handleUserTooltipEnter}
+                onMouseLeave={handleTooltipLeave}
+                collapsed={isCollapsed}
+                isExpanded={showProfileDropdown}
+                name={userDisplayName}
+                subtitle={secondaryUserInfo}
+                avatar={userAvatar}
+                aria-label="User profile menu"
+                aria-expanded={showProfileDropdown}
+              />
             </div>
           </div>
           </div>
