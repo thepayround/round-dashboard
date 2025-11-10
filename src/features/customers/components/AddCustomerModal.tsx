@@ -1,8 +1,8 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Loader2, Hash, Truck, Languages, AlertCircle } from 'lucide-react'
+import { User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Loader2, Hash, Truck, Languages, AlertCircle, X } from 'lucide-react'
 import React, { useState } from 'react'
 
 import { PhoneInput } from '@/shared/components'
+import { Modal } from '@/shared/components/Modal/Modal'
 import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/components/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/components/ui/ApiDropdown/configs'
 import { FormInput } from '@/shared/components/ui/FormInput'
@@ -348,53 +348,22 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
   }
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60"
-            onClick={onClose}
-          />
-
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden"
-          >
-            <div className="bg-[#101011] border border-[#333333] rounded-lg shadow-2xl">
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-[#333333]">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                    <User className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-medium tracking-tight text-white">Add New Customer</h2>
-                    <p className="text-sm text-white/70">Create a new customer profile</p>
-                  </div>
-                </div>
-                <button
-                  onClick={onClose}
-                  className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
-                {/* Basic Information */}
-                <div className="space-y-6">
-                  <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-                    <User className="w-5 h-5 text-[#D417C8]" />
-                    <span>Basic Information</span>
-                  </h3>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Add New Customer"
+      subtitle="Create a new customer profile"
+      icon={User}
+      size="xl"
+    >
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
+        {/* Basic Information */}
+        <div className="space-y-6">
+          <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
+            <User className="w-5 h-5 text-[#D417C8]" />
+            <span>Basic Information</span>
+          </h3>
                   
                   {/* Customer Type Selection */}
                   <div className="space-y-3">
@@ -506,18 +475,12 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                         showValidation={false}
                         error={hasFieldError('phoneNumber') ? getFieldError('phoneNumber') : undefined}
                       />
-                      <AnimatePresence>
-                        {hasFieldError('phoneNumber') && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
-                          >
-                            <AlertCircle className="w-4 h-4" />
-                            <span>{getFieldError('phoneNumber')}</span>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      {hasFieldError('phoneNumber') && (
+                        <div className="mt-2 flex items-center space-x-2 auth-validation-error text-sm">
+                          <AlertCircle className="w-4 h-4" />
+                          <span>{getFieldError('phoneNumber')}</span>
+                        </div>
+                      )}
                     </div>
                     
                     {/* Company field - only for business customers */}
@@ -927,10 +890,6 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                   )}
                 </button>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+    </Modal>
   )
 }

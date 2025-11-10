@@ -84,9 +84,10 @@ export const DangerousActionsModal: React.FC<DangerousActionsModalProps> = ({
       onClose={handleClose}
       title="Dangerous Actions"
       subtitle="Irreversible customer actions"
+      icon={AlertTriangle}
       size="lg"
     >
-      <div className="space-y-6">
+      <div className="p-6 space-y-6">
             {!actionType ? (
               <div className="space-y-6">
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">

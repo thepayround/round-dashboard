@@ -12,6 +12,7 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   showHeader?: boolean
   className?: string
+  icon?: React.ComponentType<{ className?: string }>
 }
 
 const sizeClasses = {
@@ -29,7 +30,8 @@ export const Modal = ({
   children,
   size = 'md',
   showHeader = true,
-  className = ''
+  className = '',
+  icon: Icon
 }: ModalProps) => {
   const { isMobile, isTablet } = useResponsive()
 
@@ -96,7 +98,7 @@ export const Modal = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
       style={{
         left: getModalPositioning().left,
         width: getModalPositioning().width
@@ -114,46 +116,44 @@ export const Modal = ({
             role="document"
             className={`
               relative w-full ${sizeClasses[size]} max-h-[90vh] mx-auto
-              bg-[#171719] border border-[#1e1f22]
-              rounded-lg shadow-xl overflow-hidden
+              bg-[#101011] border border-[#333333]
+              rounded-lg shadow-2xl overflow-hidden
               ${className}
             `}
           >
               {/* Header */}
               {showHeader && (
-                <div className="flex items-start justify-between p-4 border-b border-white/10">
-                  <div className="flex-1 min-w-0">
-                    {title && (
-                      <h2 className="text-lg font-medium text-white truncate tracking-tight">
-                        {title}
-                      </h2>
+                <div className="flex items-center justify-between p-6 border-b border-[#333333]">
+                  <div className="flex items-center space-x-3">
+                    {Icon && (
+                      <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-white" />
+                      </div>
                     )}
-                    {subtitle && (
-                      <p className="text-sm text-[#a3a3a3] mt-1 truncate">
-                        {subtitle}
-                      </p>
-                    )}
+                    <div>
+                      {title && (
+                        <h2 className="text-xl font-medium tracking-tight text-white">
+                          {title}
+                        </h2>
+                      )}
+                      {subtitle && (
+                        <p className="text-sm text-white/70">
+                          {subtitle}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <button
                     onClick={onClose}
-                    className="
-                      ml-3 p-1.5 rounded-md flex-shrink-0
-                      hover:bg-white/5
-                      border border-white/10 hover:border-white/20
-                      text-[#a3a3a3] hover:text-white
-                      transition-all duration-200
-                    "
+                    className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
               )}
 
               {/* Content */}
-              <div className={`
-                overflow-y-auto max-h-[calc(90vh-${showHeader ? '80px' : '0px'})]
-                ${showHeader ? 'p-6' : 'p-6'}
-              `}>
+              <div className="max-h-[calc(90vh-88px)]">
                 {children}
               </div>
             </div>
