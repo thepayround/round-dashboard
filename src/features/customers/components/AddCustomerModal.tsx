@@ -517,18 +517,12 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                         showValidation={false}
                         error={hasFieldError('phoneNumber') ? getFieldError('phoneNumber') : undefined}
                       />
-                      <AnimatePresence>
-                        {hasFieldError('phoneNumber') && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
-                          >
-                            <AlertCircle className="w-4 h-4" />
-                            <span>{getFieldError('phoneNumber')}</span>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      {hasFieldError('phoneNumber') && (
+                        <div className="mt-2 flex items-center space-x-2 auth-validation-error text-sm">
+                          <AlertCircle className="w-4 h-4" />
+                          <span>{getFieldError('phoneNumber')}</span>
+                        </div>
+                      )}
                     </div>
                     
                     {/* Company field - only for business customers */}

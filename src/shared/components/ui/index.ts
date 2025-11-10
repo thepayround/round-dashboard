@@ -14,7 +14,6 @@ export * from './UiDropdown'
 export * from './ApiDropdown'
 
 // Layout Components
-export * from './Modal'
 export * from './Table'
 export * from './Badge'
 

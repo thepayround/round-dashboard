@@ -151,15 +151,17 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
       onClose={onClose}
       title="Customer Notes"
       subtitle={`${customerName} - ${notes.length} notes`}
+      icon={MessageSquare}
       size="lg"
     >
-      {/* Add New Note */}
-            <div className="border-b border-white/10 pb-6 mb-6">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <Plus className="w-4 h-4 text-[#14BDEA]" />
-                  <span className="text-sm font-normal tracking-tight text-white">Add New Note</span>
-                </div>
+      <div className="p-6 space-y-6">
+        {/* Add New Note */}
+        <div className="border-b border-white/10 pb-6">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 mb-3">
+              <Plus className="w-4 h-4 text-[#14BDEA]" />
+              <span className="text-sm font-normal tracking-tight text-white">Add New Note</span>
+            </div>
                 
                 <textarea
                   value={newNote.content}
@@ -295,6 +297,7 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                   ))
                 )}
             </div>
+      </div>
     </Modal>
 
     {/* Delete Confirmation Dialog */}

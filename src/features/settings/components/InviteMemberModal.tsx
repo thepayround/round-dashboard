@@ -85,9 +85,10 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
       onClose={handleClose}
       title="Invite Team Member"
       subtitle="Send an invitation to join your team"
+      icon={UserPlus}
       size="lg"
     >
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="p-6 space-y-6">
         {/* Email Input */}
         <div>
           <label htmlFor="invite-email" className="modal-label">

@@ -150,10 +150,11 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
       onClose={onClose}
       title="Edit Customer"
       subtitle={`Update ${customer.effectiveDisplayName}'s information`}
+      icon={User}
       size="xl"
     >
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-8 max-h-[70vh] overflow-y-auto">
+      <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
                 {/* Basic Information */}
                 <div className="space-y-6">
                   <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">

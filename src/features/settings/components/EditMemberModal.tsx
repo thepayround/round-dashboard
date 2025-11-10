@@ -86,9 +86,10 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
       onClose={handleClose}
       title="Edit Team Member"
       subtitle={`Update role for ${member.fullName}`}
+      icon={Edit}
       size="lg"
     >
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="p-6 space-y-6">
         {/* Member Info */}
         <div className="bg-white/[0.06] border border-white/15 rounded-lg p-4">
           <div className="flex items-center space-x-3">

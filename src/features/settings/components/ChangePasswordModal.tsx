@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, AlertCircle, Shield } from 'lucide-react'
 import { useState } from 'react'
 
@@ -166,14 +165,12 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
       onClose={handleClose}
       title={isSuccess ? "Password Changed" : "Change Password"}
       subtitle={isSuccess ? "Your password has been updated successfully" : "Update your account password"}
+      icon={Lock}
       size="md"
     >
+      <div className="p-6">
       {isSuccess ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center py-8"
-        >
+        <div className="text-center py-8">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary flex items-center justify-center">
             <Shield className="w-8 h-8 text-white" />
           </div>
@@ -186,21 +183,17 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
               All existing sessions have been invalidated for security.
             </div>
           </div>
-        </motion.div>
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* API Error Message */}
           {apiError && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="p-4 rounded-lg bg-red-500/10 border border-red-500/20"
-            >
+            <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
               <div className="flex items-center space-x-2 text-[#D417C8]">
                 <AlertCircle className="w-5 h-5" />
                 <span className="text-sm font-medium">{apiError}</span>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Current Password */}
@@ -235,14 +228,10 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
               />
             </div>
             {hasFieldError(errors, 'currentPassword') && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm"
-              >
+              <div className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm">
                 <AlertCircle className="w-4 h-4" />
                 <span>{getFieldError(errors, 'currentPassword')?.message}</span>
-              </motion.div>
+              </div>
             )}
           </div>
 
@@ -289,14 +278,10 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
             )}
 
             {hasFieldError(errors, 'newPassword') && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm"
-              >
+              <div className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm">
                 <AlertCircle className="w-4 h-4" />
                 <span>{getFieldError(errors, 'newPassword')?.message}</span>
-              </motion.div>
+              </div>
             )}
           </div>
 
@@ -332,14 +317,10 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
               />
             </div>
             {hasFieldError(errors, 'confirmPassword') && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm"
-              >
+              <div className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm">
                 <AlertCircle className="w-4 h-4" />
                 <span>{getFieldError(errors, 'confirmPassword')?.message}</span>
-              </motion.div>
+              </div>
             )}
           </div>
 
@@ -378,6 +359,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
           </div>
         </form>
       )}
+      </div>
     </Modal>
   )
 }

@@ -88,9 +88,10 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
       onClose={onClose}
       title="Compose Email"
       subtitle={`Send email to ${customerName}`}
+      icon={Mail}
       size="lg"
     >
-      <div className="space-y-6 max-h-[70vh] overflow-y-auto">
+      <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
               {/* Email Details */}
               <div className="space-y-4">
                 <FormInput
@@ -183,7 +184,7 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
           </div>
 
             {/* Footer */}
-            <div className="border-t border-white/10 p-6 bg-gray-900/50">
+            <div className="border-t border-white/10 p-6">
               <div className="flex items-center justify-between">
                 <div className="text-xs text-white/60">
                   This email will be logged in the customer&apos;s activity history
@@ -208,7 +209,7 @@ export const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
                   </Button>
                 </div>
               </div>
-      </div>
+            </div>
     </Modal>
   )
 }
