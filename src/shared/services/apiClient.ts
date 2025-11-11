@@ -6,6 +6,7 @@
 import type { AxiosInstance, AxiosError } from 'axios'
 import axios from 'axios'
 
+import { API_ENDPOINTS } from '@/shared/config/api-endpoints'
 import type { User } from '@/shared/types/auth'
 import { tokenManager } from '@/shared/utils/tokenManager'
 
@@ -127,7 +128,7 @@ class ApiClient {
         password: credentials.password,
       }
 
-      const response = await this.client.post<LoginResponse>('/identities/login', loginData)
+      const response = await this.client.post<LoginResponse>(API_ENDPOINTS.AUTH.LOGIN, loginData)
 
       if (response.data.succeeded && response.data.token) {
         // Store tokens using tokenManager
@@ -158,8 +159,6 @@ class ApiClient {
         }
       }
     } catch (error) {
-      console.error('Login error:', error)
-
       if (axios.isAxiosError(error) && error.response) {
         let errorMessage = 'Login failed'
 
@@ -215,7 +214,7 @@ class ApiClient {
       }
 
       const response = await this.client.post<RegisterResponse>(
-        '/identities/register',
+        API_ENDPOINTS.AUTH.REGISTER,
         registerData
       )
 
@@ -236,8 +235,6 @@ class ApiClient {
         }
       }
     } catch (error) {
-      console.error('Registration error:', error)
-
       if (axios.isAxiosError(error) && error.response) {
         let errorMessage = 'Registration failed'
 
@@ -281,7 +278,7 @@ class ApiClient {
         }
       }
 
-      const response = await this.client.post('/identities/refresh-token', {
+      const response = await this.client.post(API_ENDPOINTS.AUTH.REFRESH_TOKEN, {
         refreshToken,
       })
 
@@ -302,7 +299,6 @@ class ApiClient {
         error: 'Token refresh failed',
       }
     } catch (error) {
-      console.error('Token refresh error:', error)
       tokenManager.clearTokens()
       return {
         success: false,
@@ -316,14 +312,13 @@ class ApiClient {
    */
   async logout(): Promise<ApiResponse<null>> {
     try {
-      await this.client.post('/identities/logout')
+      await this.client.post(API_ENDPOINTS.AUTH.LOGOUT)
       tokenManager.clearTokens()
       return {
         success: true,
         message: 'Logout successful',
       }
     } catch (error) {
-      console.error('Logout error:', error)
       // Clear tokens even if logout fails
       tokenManager.clearTokens()
       return {
@@ -339,7 +334,7 @@ class ApiClient {
   async confirmEmail(userId: string, token: string): Promise<ApiResponse<{ message: string }>> {
     try {
       const response = await this.client.get(
-        `/identities/confirm-email?userId=${encodeURIComponent(userId)}&token=${encodeURIComponent(token)}`
+        `${API_ENDPOINTS.AUTH.CONFIRM_EMAIL}?userId=${encodeURIComponent(userId)}&token=${encodeURIComponent(token)}`
       )
 
       return {
@@ -348,8 +343,6 @@ class ApiClient {
         message: 'Email confirmed successfully',
       }
     } catch (error) {
-      console.error('Email confirmation error:', error)
-
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
           error.response.data?.message || error.response.data?.error || 'Email confirmation failed'
@@ -371,7 +364,7 @@ class ApiClient {
    */
   async confirmEmailAndLogin(userId: string, token: string): Promise<ApiResponse<AuthResponse>> {
     try {
-      const url = `/identities/confirm-email-and-login?userId=${encodeURIComponent(userId)}&token=${encodeURIComponent(token)}`
+      const url = `${API_ENDPOINTS.AUTH.CONFIRM_EMAIL_AND_LOGIN}?userId=${encodeURIComponent(userId)}&token=${encodeURIComponent(token)}`
 
       const response = await this.client.post<LoginResponse>(url, {})
 
@@ -410,15 +403,7 @@ class ApiClient {
         }
       }
     } catch (error) {
-      console.error('Email confirmation and login error:', error)
-
       if (axios.isAxiosError(error) && error.response) {
-        console.error('API Error Response:', {
-          status: error.response.status,
-          data: error.response.data,
-          headers: error.response.headers,
-        })
-
         let errorMessage = 'Email confirmation failed'
 
         // Handle IdentityResult.Errors array format from backend
@@ -454,7 +439,7 @@ class ApiClient {
   async resendConfirmationEmail(email: string): Promise<ApiResponse<{ message: string }>> {
     try {
       // Use longer timeout for email operations (SMTP can be slow)
-      const response = await this.client.post('/identities/resend', { email }, {
+      const response = await this.client.post(API_ENDPOINTS.AUTH.RESEND_CONFIRMATION, { email }, {
         timeout: 30000 // 30 seconds to match backend SMTP timeout
       })
 
@@ -464,8 +449,6 @@ class ApiClient {
         message: 'Confirmation email sent successfully',
       }
     } catch (error) {
-      console.error('Resend confirmation error:', error)
-
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
           error.response.data?.message ||
@@ -502,7 +485,6 @@ class ApiClient {
       )
       return JSON.parse(jsonPayload)
     } catch (error) {
-      console.error('Error decoding JWT:', error)
       return null
     }
   }
@@ -518,7 +500,7 @@ class ApiClient {
       }
 
       // Use the /identities/me endpoint - no need to decode JWT as backend handles it
-      const response = await this.client.get('/identities/me')
+      const response = await this.client.get(API_ENDPOINTS.AUTH.CURRENT_USER)
 
       if (response.data) {
         const userData = response.data
@@ -777,8 +759,6 @@ class ApiClient {
         data: response.data,
       }
     } catch (error) {
-      console.error(`POST ${endpoint} error:`, error)
-
       if (axios.isAxiosError(error) && error.response) {
         let errorMessage = 'Request failed'
 
@@ -820,8 +800,6 @@ class ApiClient {
         data: response.data,
       }
     } catch (error) {
-      console.error(`GET ${endpoint} error:`, error)
-
       if (axios.isAxiosError(error) && error.response) {
         let errorMessage = 'Request failed'
 
@@ -855,8 +833,6 @@ class ApiClient {
         data: response.data,
       }
     } catch (error) {
-      console.error(`PUT ${endpoint} error:`, error)
-
       if (axios.isAxiosError(error) && error.response) {
         let errorMessage = 'Request failed'
 
@@ -890,8 +866,6 @@ class ApiClient {
         data: response.data,
       }
     } catch (error) {
-      console.error(`DELETE ${endpoint} error:`, error)
-
       if (axios.isAxiosError(error) && error.response) {
         let errorMessage = 'Request failed'
 
@@ -920,7 +894,7 @@ class ApiClient {
   async forgotPassword(email: string): Promise<ApiResponse<{ message: string }>> {
     try {
       // Use longer timeout for email operations (SMTP can be slow)
-      const response = await this.client.post('/identities/forgot-password', { email }, {
+      const response = await this.client.post(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, { email }, {
         timeout: 30000 // 30 seconds to match backend SMTP timeout
       })
 
@@ -930,8 +904,6 @@ class ApiClient {
         message: 'Password reset email sent successfully',
       }
     } catch (error) {
-      console.error('Forgot password error:', error)
-
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
           error.response.data?.message ||
@@ -960,7 +932,7 @@ class ApiClient {
     confirmPassword: string
   ): Promise<ApiResponse<{ message: string; token?: string; refreshToken?: string }>> {
     try {
-      const response = await this.client.post('/identities/reset-password', {
+      const response = await this.client.post(API_ENDPOINTS.AUTH.RESET_PASSWORD, {
         email,
         token,
         newPassword,
@@ -977,8 +949,6 @@ class ApiClient {
         message: 'Password reset successfully',
       }
     } catch (error) {
-      console.error('Reset password error:', error)
-
       if (axios.isAxiosError(error) && error.response) {
         let errorMessage = 'Failed to reset password'
 
@@ -1018,7 +988,7 @@ class ApiClient {
     confirmPassword: string
   ): Promise<ApiResponse<{ message: string }>> {
     try {
-      const response = await this.client.post('/identities/change-password', {
+      const response = await this.client.post(API_ENDPOINTS.AUTH.CHANGE_PASSWORD, {
         currentPassword,
         newPassword,
         confirmPassword,
@@ -1032,8 +1002,6 @@ class ApiClient {
         message: 'Password changed successfully',
       }
     } catch (error) {
-      console.error('Change password error:', error)
-
       if (axios.isAxiosError(error) && error.response) {
         let errorMessage = 'Failed to change password'
 

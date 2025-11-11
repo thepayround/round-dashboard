@@ -136,7 +136,6 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
         setIsSubmitting(false)
       }
     } catch (error) {
-      console.error('Change password error:', error)
       setApiError('An unexpected error occurred. Please try again.')
       setIsSubmitting(false)
     }

@@ -234,7 +234,6 @@ export const GetStartedPage = () => {
       }
 
       if (!result?.success) {
-        console.error('Organization save failed:', result)
         const errorMessage = result?.error ?? 'Failed to save organization'
         throw new Error(errorMessage)
       }

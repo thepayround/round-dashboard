@@ -67,7 +67,6 @@ export const EditMemberModal = ({ isOpen, onClose, member, onUpdateRole, isLoadi
       }
     } catch (err) {
       setError('An error occurred while updating the member role')
-      console.error('Update member role error:', err)
     }
   }
 
