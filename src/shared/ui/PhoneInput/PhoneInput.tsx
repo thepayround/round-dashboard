@@ -1,4 +1,4 @@
-﻿import { ChevronDown, Search, AlertCircle, X, Check } from 'lucide-react'
+import { ChevronDown, Search, AlertCircle, X, Check } from 'lucide-react'
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -10,6 +10,39 @@ import { PlainButton } from '@/shared/ui/Button'
 // When dropdown styles change in dropdown-styles.config.ts, they automatically apply here
 import { cn } from '@/shared/utils/cn'
 import { phoneValidator } from '@/shared/utils/phoneValidation'
+
+const REGIONAL_START = 0x1f1e6
+const REGIONAL_END = 0x1f1ff
+
+const toFlagEmoji = (alphaCode: string) => {
+  const code = alphaCode.trim().toUpperCase()
+  if (code.length !== 2 || !/^[A-Z]{2}$/.test(code)) {
+    return code
+  }
+  const OFFSET = 127397
+  return String.fromCodePoint(code.charCodeAt(0) + OFFSET) + String.fromCodePoint(code.charCodeAt(1) + OFFSET)
+}
+
+const isEmojiFlag = (value: string) => {
+  if (!value) return false
+  for (const char of Array.from(value)) {
+    const point = char.codePointAt(0) ?? 0
+    if (point >= REGIONAL_START && point <= REGIONAL_END) {
+      return true
+    }
+  }
+  return false
+}
+
+const getFlagForCountry = (countryCode?: string, fallbackFlag?: string) => {
+  if (fallbackFlag && fallbackFlag.trim()) {
+    return isEmojiFlag(fallbackFlag) ? fallbackFlag : toFlagEmoji(fallbackFlag)
+  }
+  if (countryCode) {
+    return toFlagEmoji(countryCode)
+  }
+  return ''
+}
 
 interface PhoneInputProps {
   /** Current phone number value */
@@ -671,7 +704,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                     role="img" 
                     aria-label={selectedCountry.countryName}
                   >
-                    {selectedCountry.flag}
+                    {selectedCountry.flag || getFlagForCountry(selectedCountry.countryCode)}
                   </span>
                   <span 
                     className="text-xs md:text-xs text-white/95 truncate flex items-center"
@@ -815,7 +848,7 @@ const CountryOption: React.FC<CountryOptionProps> = ({
   >
     <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
       <span className="text-sm flex-shrink-0" role="img" aria-label={country.countryName}>
-        {country.flag}
+        {country.flag || getFlagForCountry(country.countryCode)}
       </span>
       <div className="flex-1 min-w-0">
         <div className={`${dropdownStyles.option.label} truncate`}>
@@ -832,4 +865,7 @@ const CountryOption: React.FC<CountryOptionProps> = ({
     )}
   </div>
 )
+
+
+
 
