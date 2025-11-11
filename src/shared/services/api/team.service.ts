@@ -13,13 +13,6 @@ export interface InviteUserRequest {
   role: UserRole
 }
 
-// Backend request format (PascalCase JSON)
-interface BackendInviteUserRequest {
-  RoundAccountId: string
-  Email: string
-  Role: UserRole
-}
-
 export interface RegisterWithInvitationRequest {
   firstName: string
   lastName: string
@@ -97,16 +90,10 @@ export class TeamService {
    */
   async inviteUser(request: InviteUserRequest): Promise<ApiResponse<{ message: string }>> {
     try {
-      // Convert camelCase to PascalCase for backend
-      const backendRequest: BackendInviteUserRequest = {
-        RoundAccountId: request.roundAccountId,
-        Email: request.email,
-        Role: request.role
-      }
-      
+      // Backend API respects camelCase JSON policy set in Program.cs
       const response = await httpClient.getClient().post<{ message: string }>(
         `${this.baseUrl}/invite-user`, 
-        backendRequest
+        request
       )
       
       return {

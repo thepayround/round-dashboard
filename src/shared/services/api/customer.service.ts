@@ -1,8 +1,9 @@
 import { httpClient } from './base/client'
 
 import type { PagedResult } from '@/shared/types/api/common'
+import { isCustomerResponse, validateApiResponse } from '@/shared/types/api/guards'
 
-// Customer Types - Use string enums to match backend validation
+// Customer Types - Use string enums to match backend JsonStringEnumConverter
 export enum CustomerType {
   Individual = 'Individual',
   Business = 'Business'
@@ -200,7 +201,7 @@ export class CustomerService {
 
   async get(id: string): Promise<CustomerResponse> {
     const response = await this.client.get<CustomerResponse>(CUSTOMER_ENDPOINTS.BY_ID(id))
-    return response.data
+    return validateApiResponse(response.data, isCustomerResponse, 'Customer response validation failed')
   }
 
   async search(params: CustomerSearchRequest): Promise<CustomerResponse[]> {
@@ -218,22 +219,15 @@ export class CustomerService {
   }
 
   async create(request: CustomerCreateRequest): Promise<CustomerResponse> {
-    // Convert type from string enum to numeric value for backend
-    const requestWithNumericType = {
-      ...request,
-      type: request.type === CustomerType.Individual ? 1 : 2
-    }
-    const response = await this.client.post<CustomerResponse>(this.baseUrl, requestWithNumericType)
-    return response.data
+    // Enum values now match backend numeric values directly
+    const response = await this.client.post<CustomerResponse>(this.baseUrl, request)
+    return validateApiResponse(response.data, isCustomerResponse, 'Customer create response validation failed')
   }
 
   async update(id: string, request: CustomerUpdateRequest): Promise<CustomerResponse> {
-    // Convert type from string enum to numeric value for backend if present
-    const requestWithNumericType = request.type !== undefined 
-      ? { ...request, type: request.type === CustomerType.Individual ? 1 : 2 }
-      : request
-    const response = await this.client.put<CustomerResponse>(CUSTOMER_ENDPOINTS.BY_ID(id), requestWithNumericType)
-    return response.data
+    // Enum values now match backend numeric values directly
+    const response = await this.client.put<CustomerResponse>(CUSTOMER_ENDPOINTS.BY_ID(id), request)
+    return validateApiResponse(response.data, isCustomerResponse, 'Customer update response validation failed')
   }
 
   async delete(id: string): Promise<void> {

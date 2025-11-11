@@ -17,6 +17,7 @@ export interface RegisterRequest {
   userName?: string
   password: string
   phoneNumber: string
+  countryPhoneCode: string
 }
 
 export interface LoginResponse {
