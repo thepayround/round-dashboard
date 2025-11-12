@@ -11,23 +11,52 @@ import {
   Calendar,
   Building2
 } from 'lucide-react'
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useAuth } from '@/shared/hooks/useAuth'
-import { useCurrency } from '@/shared/hooks/useCurrency'
-import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
+import { useDashboardPageController } from '../hooks/useDashboardPageController'
+import type { DateRangePreset } from '../hooks/useDashboardPageController'
+
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import { ActionButton } from '@/shared/ui/ActionButton'
+import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 
 export const DashboardPage = () => {
   const navigate = useNavigate()
-  const { state } = useAuth()
-  const { user, isLoading } = state
-  const { roundAccount, isLoading: isRoundAccountLoading } = useRoundAccount()
-  const { formatCurrency } = useCurrency()
+  const {
+    isAuthLoading,
+    isRoundAccountLoading,
+    user,
+    roundAccount,
+    welcomeName,
+    formatCurrency,
+    filters,
+    filterSummary,
+    dateRangeOptions,
+    segmentOptions,
+    handleDateRangeChange,
+    handleSegmentChange,
+    refreshMetrics,
+    isRefreshing,
+    isMetricsLoading,
+    metricsError,
+    kpis,
+    chartData,
+    metricsCurrency,
+    lastUpdated,
+  } = useDashboardPageController()
 
-  if (isLoading || isRoundAccountLoading) {
+  const maxChartValue = useMemo(
+    () =>
+      chartData.reduce(
+        (acc, point) => Math.max(acc, point.primaryValue, point.goalValue),
+        0
+      ) || 1,
+    [chartData]
+  )
+
+  if (isAuthLoading || isRoundAccountLoading) {
     return (
       <DashboardLayout>
         <div className="p-8">
@@ -63,11 +92,7 @@ export const DashboardPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-normal tracking-tight text-white mb-1">
-              Welcome back, {
-                user.firstName?.trim() && user.lastName?.trim()
-                  ? `${user.firstName.trim()} ${user.lastName.trim()}`
-                  : user.firstName?.trim() || user.email || 'User'
-              }!
+              Welcome back, {welcomeName}!
             </h1>
             <p className="text-gray-500 dark:text-polar-500 leading-snug">Here&apos;s an overview of your Round account</p>
           </div>
@@ -93,6 +118,154 @@ export const DashboardPage = () => {
             </motion.div>
           )}
         </div>
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-sm font-medium text-white">Performance snapshot</p>
+              <p className="text-xs text-white/60">
+                {filterSummary.segmentLabel} • {filterSummary.dateRangeLabel}
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <div>
+                <label htmlFor="date-range-select" className="text-xs uppercase tracking-wide text-white/60">Date range</label>
+                <select
+                  id="date-range-select"
+                  className="mt-1 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#D417C8] focus:outline-none"
+                  value={filters.dateRange.preset}
+                  onChange={(event) => handleDateRangeChange(event.target.value as DateRangePreset)}
+                >
+                  {dateRangeOptions.map(option => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="segment-select" className="text-xs uppercase tracking-wide text-white/60">Segment</label>
+                <select
+                  id="segment-select"
+                  className="mt-1 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#D417C8] focus:outline-none"
+                  value={filters.segmentId}
+                  onChange={(event) => handleSegmentChange(event.target.value)}
+                >
+                  {segmentOptions.map(option => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={refreshMetrics}
+                loading={isRefreshing}
+              >
+                Refresh
+              </Button>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-white/60">
+            {isMetricsLoading && (
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full border border-[#D417C8] border-t-transparent animate-spin" />
+                <span>Refreshing metrics…</span>
+              </div>
+            )}
+            {lastUpdated && (
+              <span>Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            )}
+          </div>
+        </div>
+        {metricsError && (
+          <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            {metricsError}
+          </div>
+        )}
+
+        {kpis.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
+          >
+            {kpis.map(kpi => (
+              <Card key={kpi.id} padding="lg">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-white/60">{kpi.label}</p>
+                    <p className="mt-2 text-2xl font-normal tracking-tight text-white">{kpi.formattedValue}</p>
+                  </div>
+                  <span
+                    className={`text-xs font-medium ${
+                      kpi.trend === 'up'
+                        ? 'text-[#42E695]'
+                        : kpi.trend === 'down'
+                          ? 'text-[#FF6B6B]'
+                          : 'text-white/50'
+                    }`}
+                  >
+                    {kpi.delta > 0 ? `+${kpi.delta}` : kpi.delta}
+                    <span className="ml-1 text-white/50">%</span>
+                  </span>
+                </div>
+              </Card>
+            ))}
+          </motion.div>
+        )}
+
+        {chartData.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18 }}
+          >
+            <Card padding="lg">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h3 className="text-lg font-medium text-white">Revenue trend</h3>
+                  <p className="text-sm text-white/60">{filterSummary.dateRangeLabel}</p>
+                </div>
+                <div className="text-xs text-white/60">
+                  Goal vs. actual ({segmentOptions.find(option => option.id === filters.segmentId)?.label ?? 'All'})
+                </div>
+              </div>
+              <div className="mt-6 space-y-4">
+                {chartData.map(point => {
+                  const primaryWidth = Math.max(6, (point.primaryValue / maxChartValue) * 100)
+                  const goalWidth = Math.max(6, (point.goalValue / maxChartValue) * 100)
+
+                  return (
+                    <div key={point.label}>
+                      <div className="flex items-center justify-between text-xs text-white/60">
+                        <span>{point.label}</span>
+                        <span>{formatCurrency(point.primaryValue, metricsCurrency)}</span>
+                      </div>
+                      <div className="relative mt-2 h-3 rounded-full bg-white/5">
+                        <div
+                          className="absolute inset-y-0 left-0 rounded-full bg-white/15"
+                          style={{ width: `${goalWidth}%` }}
+                        />
+                        <div
+                          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#D417C8] to-[#7767DA]"
+                          style={{ width: `${primaryWidth}%` }}
+                        />
+                      </div>
+                      <div className="mt-1 flex items-center justify-between text-[11px] text-white/50">
+                        <span>Goal: {formatCurrency(point.goalValue, metricsCurrency)}</span>
+                        <span>Δ {(point.primaryValue - point.goalValue).toFixed(0)}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Round Account Quick Stats */}
         {roundAccount && (
