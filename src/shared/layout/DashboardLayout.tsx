@@ -1,23 +1,15 @@
-﻿import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { PanelLeft, PanelLeftClose, User, LogOut, X } from 'lucide-react'
-import { memo, useCallback, useMemo, useState, useEffect, useRef } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { memo } from 'react'
+import { Link } from 'react-router-dom'
 
 import ColorLogo from '@/assets/logos/color-logo.svg'
 import { mainNavigationItems, bottomNavigationItems } from '@/shared/config/navigation.config'
-import { useAuth } from '@/shared/hooks/useAuth'
-import { useKeyboardNavigation } from '@/shared/hooks/useKeyboardNavigation'
-import { useReducedMotion } from '@/shared/hooks/useReducedMotion'
-import { useResponsive } from '@/shared/hooks/useResponsive'
-import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
-import { useSidebarState } from '@/shared/hooks/useSidebarState'
-import { useSwipeGesture } from '@/shared/hooks/useSwipeGesture'
 import { Breadcrumb } from '@/shared/layout/Breadcrumb'
 import { NavigationItem } from '@/shared/layout/DashboardLayout/NavigationItem'
 import { LAYOUT_CONSTANTS, ANIMATION_VARIANTS } from '@/shared/layout/DashboardLayout/constants'
 import type { DashboardLayoutProps } from '@/shared/layout/DashboardLayout/types'
-import { apiClient } from '@/shared/services/apiClient'
-import type { User as AuthUser } from '@/shared/types/auth'
+import { useDashboardLayoutController } from '@/shared/layout/DashboardLayout/useDashboardLayoutController'
 import { IconButton, UserButton } from '@/shared/ui/Button'
 import { cn } from '@/shared/utils/cn'
 
@@ -72,298 +64,53 @@ MobileHeader.displayName = 'MobileHeader'
 
 // NavigationItem is now imported from separate file
 
-export const DashboardLayout = memo(({ 
+export const DashboardLayout = memo(({
   children,
   navigationItems = mainNavigationItems,
   bottomNavigationItems: bottomNavItemsProp = bottomNavigationItems,
 }: DashboardLayoutProps) => {
-  // Extract constants for cleaner code
-  const { SIDEBAR } = LAYOUT_CONSTANTS
-
-  const navigate = useNavigate()
-  const { logout, state } = useAuth()
-  const { token } = state
-  const location = useLocation()
-  const { isMobile, isTablet } = useResponsive()
-  const { roundAccount, isLoading: isRoundAccountLoading } = useRoundAccount()
-  const prefersReducedMotion = useReducedMotion()
-
-  // Memoize isMobileView for better performance
-  const isMobileView = useMemo(() => isMobile || isTablet, [isMobile, isTablet])
-
-  // UI state for shortcuts modal  
-  const [showShortcuts, setShowShortcuts] = useState(false)
-
-  // Use custom hooks for sidebar state and keyboard navigation
   const {
+    navigationItems: resolvedNavigationItems,
+    bottomNavigationItems: resolvedBottomNavItems,
+    isMobileView,
     isCollapsed,
     setIsCollapsed,
     toggleSidebar,
-    expandedItems,
-    toggleExpanded,
     showMobileOverlay,
-    showProfileDropdown,
-    setShowProfileDropdown
-  } = useSidebarState({ isMobileView })
-
-  // Get all navigation items (flat list for keyboard navigation)
-  const getAllNavItems = useMemo(() => {
-    interface FlatNavItem {
-      id: string
-      label: string
-      href: string
-      icon: React.ComponentType<{ className?: string }>
-      badge?: string
-      subItems?: Array<{ id: string; label: string; href: string; icon: React.ComponentType<{ className?: string }> }>
-      isSubItem?: boolean
-      parentId?: string
-    }
-    
-    const items: FlatNavItem[] = []
-    
-    navigationItems.forEach((item) => {
-      items.push(item)
-      if (item.subItems && (!isCollapsed && expandedItems.includes(item.id))) {
-        item.subItems.forEach((subItem) => {
-          items.push({ ...subItem, isSubItem: true, parentId: item.id })
-        })
-      }
-    })
-    
-    bottomNavItemsProp.forEach((item) => {
-      items.push(item)
-    })
-    
-    return items
-  }, [navigationItems, bottomNavItemsProp, isCollapsed, expandedItems])
-
-  const {
-    focusedIndex,
-    isKeyboardNavigating,
-    navigationRef
-  } = useKeyboardNavigation({
-    getAllNavItems,
-    isCollapsed,
-    toggleSidebar,
-    toggleExpanded,
-    showShortcuts,
-    setShowShortcuts
-  })
-
-  // Swipe gesture state for visual feedback
-  const [swipeOffset, setSwipeOffset] = useState(0)
-
-  // Swipe gesture for mobile sidebar (swipe right to open, left to close)
-  const {
     onTouchStart,
     onTouchMove,
     onTouchEnd,
-    isSwiping
-  } = useSwipeGesture({
-    enabled: isMobileView,
-    threshold: 50,
-    velocityThreshold: 0.3,
-    onSwipe: (direction) => {
-      if (direction === 'right' && isCollapsed) {
-        setIsCollapsed(false)
-      } else if (direction === 'left' && !isCollapsed) {
-        setIsCollapsed(true)
-      }
-    },
-    onSwiping: (deltaX) => {
-      // Update sidebar offset during swipe for visual feedback
-      // Clamp the offset to reasonable bounds
-      if (isCollapsed && deltaX > 0) {
-        // Swipe right to open: allow positive offset up to sidebar width
-        setSwipeOffset(Math.min(deltaX, SIDEBAR.WIDTH_EXPANDED))
-      } else if (!isCollapsed && deltaX < 0) {
-        // Swipe left to close: allow negative offset up to sidebar width
-        setSwipeOffset(Math.max(deltaX, -SIDEBAR.WIDTH_EXPANDED))
-      }
-    },
-    onSwipeEnd: () => {
-      // Reset offset with animation
-      setSwipeOffset(0)
-    }
+    isSwiping,
+    swipeOffset,
+    transitionConfigs,
+    handleSkipToMainContent,
+    showShortcuts,
+    setShowShortcuts,
+    expandedItems,
+    toggleExpanded,
+    navigationRef,
+    focusedIndex,
+    isKeyboardNavigating,
+    handleTooltipEnter,
+    handleTooltipLeave,
+    handleUserTooltipEnter,
+    hoveredTooltip,
+    showProfileDropdown,
+    setShowProfileDropdown,
+    profileDropdownRef,
+    userDisplayName,
+    secondaryUserInfo,
+    userAvatar,
+    getAllNavItems,
+    isActive,
+    isParentActive,
+    handleLogout,
+  } = useDashboardLayoutController({
+    navigationItems,
+    bottomNavigationItems: bottomNavItemsProp,
   })
 
-  // Respect user's motion preferences (accessibility)
-  const transitionConfigs = useMemo(() => ({
-    fast: { duration: prefersReducedMotion ? 0 : 0.15 },
-    normal: { duration: prefersReducedMotion ? 0 : 0.2 },
-    sidebar: { duration: prefersReducedMotion ? 0 : 0.15, ease: 'easeOut' as const },
-  }), [prefersReducedMotion])
-
-  const handleSkipToMainContent = useCallback(() => {
-    if (typeof document === 'undefined') {
-      return
-    }
-
-    const mainContent = document.getElementById('main-content')
-
-    if (mainContent instanceof HTMLElement) {
-      const hadTabIndex = mainContent.hasAttribute('tabindex')
-
-      if (!hadTabIndex) {
-        mainContent.setAttribute('tabindex', '-1')
-      }
-
-      mainContent.focus({ preventScroll: true })
-      mainContent.scrollIntoView({
-        behavior: prefersReducedMotion ? 'auto' : 'smooth',
-        block: 'start'
-      })
-
-      if (!hadTabIndex) {
-        const removeTabIndex = () => {
-          mainContent.removeAttribute('tabindex')
-        }
-
-        mainContent.addEventListener('blur', removeTabIndex, { once: true })
-      }
-    }
-  }, [prefersReducedMotion])
-
-  // Track tooltip state
-  const [hoveredTooltip, setHoveredTooltip] = useState<{ id: string; label: string; badge?: string; position: { top: number; left: number }; isUser?: boolean; userInfo?: { role: string; company: string; email: string } } | null>(null)
-
-  // Profile dropdown ref
-  const profileDropdownRef = useRef<HTMLDivElement>(null)
-
-  // Active state helpers
-  const isActive = useCallback((href: string) => location.pathname === href, [location.pathname])
-
-  const isParentActive = useCallback((item: typeof navigationItems[0]) => {
-    if (item.subItems) {
-      return item.subItems.some(subItem => isActive(subItem.href)) || isActive(item.href)
-    }
-    return isActive(item.href)
-  }, [isActive])
-
-  // Helper functions for user display
-  const getInitials = useCallback((firstName?: string, lastName?: string) => {
-    const first = firstName && firstName !== 'undefined' ? firstName.trim() : ''
-    const last = lastName && lastName !== 'undefined' ? lastName.trim() : ''
-    
-    if (first && last) return `${first[0]}${last[0]}`.toUpperCase()
-    if (first) return first.slice(0, 2).toUpperCase()
-    if (last) return last.slice(0, 2).toUpperCase()
-    return 'U'
-  }, [])
-
-  const getUserDisplayName = useCallback((user?: AuthUser | null) => {
-    if (!user) return 'User'
-    const firstName = user.firstName && user.firstName !== 'undefined' ? user.firstName.trim() : ''
-    const lastName = user.lastName && user.lastName !== 'undefined' ? user.lastName.trim() : ''
-    
-    if (firstName && lastName) return `${firstName} ${lastName}`
-    if (firstName) return firstName
-    if (user.email) return user.email
-    return 'User'
-  }, [])
-
-  const getCompanyDisplayName = useCallback(() => {
-    if (isRoundAccountLoading) return 'Loading...'
-    if (roundAccount?.accountName) return roundAccount.accountName
-    if (roundAccount?.organization?.name) return roundAccount.organization.name
-    if (state.user?.accountType === 'business' && 'companyInfo' in (state.user || {}) && state.user.companyInfo?.companyName) {
-      return state.user.companyInfo.companyName
-    }
-    return state.user?.accountType === 'business' ? 'Business Account' : 'Personal Account'
-  }, [isRoundAccountLoading, roundAccount, state.user])
-
-  const userDisplayName = useMemo(
-    () => getUserDisplayName(state.user),
-    [getUserDisplayName, state.user]
-  )
-
-  const secondaryUserInfo = useMemo(() => {
-    if (!state.user) return getCompanyDisplayName()
-    const companyLabel = getCompanyDisplayName()
-    const normalizedCompany = companyLabel?.trim().toLowerCase()
-    const normalizedUser = userDisplayName?.trim().toLowerCase()
-
-    if (!companyLabel || normalizedCompany === normalizedUser) {
-      return state.user.email ?? companyLabel
-    }
-
-    return companyLabel
-  }, [getCompanyDisplayName, state.user, userDisplayName])
-
-  const userAvatar = state.user ? (
-    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-normal tracking-tight">
-      {getInitials(state.user.firstName, state.user.lastName)}
-    </div>
-  ) : (
-    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-      <User className="w-4 h-4 text-white/60" />
-    </div>
-  )
-
-  // Tooltip handlers
-  const handleTooltipEnter = useCallback((itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => {
-    if (!isCollapsed) return
-    
-    const buttonRect = (event.currentTarget as HTMLElement).getBoundingClientRect()
-    const tooltipPosition = {
-      top: buttonRect.top + buttonRect.height / 2 - 20,
-      left: buttonRect.right + 12
-    }
-    
-    setHoveredTooltip({ id: itemId, label, badge, position: tooltipPosition })
-  }, [isCollapsed])
-
-  const handleTooltipLeave = useCallback(() => {
-    setHoveredTooltip(null)
-  }, [])
-
-  const handleUserTooltipEnter = useCallback((event: React.MouseEvent) => {
-    if (!isCollapsed || !state.user) return
-    
-    const buttonRect = (event.currentTarget as HTMLElement).getBoundingClientRect()
-    const tooltipPosition = {
-      top: buttonRect.top - 120,
-      left: buttonRect.right + 12
-    }
-    
-    setHoveredTooltip({ 
-      id: 'user-profile', 
-      label: getUserDisplayName(state.user), 
-      position: tooltipPosition, 
-      isUser: true,
-      userInfo: {
-        role: state.user.role,
-        company: getCompanyDisplayName(),
-        email: state.user.email
-      }
-    })
-  }, [isCollapsed, state.user, getUserDisplayName, getCompanyDisplayName])
-
-  // Close profile dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showProfileDropdown && profileDropdownRef.current) {
-        const target = event.target as Element
-        if (!profileDropdownRef.current.contains(target)) {
-          setShowProfileDropdown(false)
-        }
-      }
-    }
-
-    if (showProfileDropdown) {
-      document.addEventListener('click', handleClickOutside)
-      return () => document.removeEventListener('click', handleClickOutside)
-    }
-  }, [showProfileDropdown, setShowProfileDropdown])
-
-  // Helper functions (can't be extracted to hooks because they depend on component state)
-  const handleLogout = async () => {
-    if (token) {
-      await apiClient.logout()
-    }
-    logout()
-    navigate('/login')
-  }
+  const { SIDEBAR } = LAYOUT_CONSTANTS
 
   return (
     <div
@@ -533,7 +280,7 @@ export const DashboardLayout = memo(({
             role="navigation"
             aria-label="Main navigation"
           >
-          {navigationItems.map(item => (
+          {resolvedNavigationItems.map(item => (
             <NavigationItem
               key={item.id}
               item={item}
@@ -552,7 +299,7 @@ export const DashboardLayout = memo(({
           ))}
 
           {/* Bottom Navigation Items - Include in main navigation */}
-          {bottomNavItemsProp.map(item => (
+          {resolvedBottomNavItems.map(item => (
             <Link
               key={item.id}
               to={item.href}
