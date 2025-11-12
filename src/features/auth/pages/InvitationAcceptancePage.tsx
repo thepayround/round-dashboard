@@ -1,144 +1,34 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, Users, Building, Check } from 'lucide-react'
-import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
-import { useAuth } from '@/shared/hooks/useAuth'
-import { teamService } from '@/shared/services/api'
-import type { ValidateInvitationResponse } from '@/shared/services/api'
+import { useInvitationAcceptanceController } from '../hooks/useInvitationAcceptanceController'
+
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { PlainButton } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
-import { handleApiError } from '@/shared/utils/errorHandler'
-import { validators } from '@/shared/utils/validators'
 
 export const InvitationAcceptancePage = () => {
   const navigate = useNavigate()
-  const { login } = useAuth()
-  const [searchParams] = useSearchParams()
-  const token = searchParams.get('token')
+  const {
+    tokenError,
+    apiError,
+    isValidatingToken,
+    isSubmitting,
+    invitation,
+    form,
+    phone,
+    showPassword,
+    togglePasswordVisibility,
+    handleSubmit,
+    isFormReady,
+  } = useInvitationAcceptanceController()
 
-  const [showPassword, setShowPassword] = useState(false)
-  
-  // Use usePhoneValidation hook for phone field with async validation
-  const { 
-    phoneData, 
-    phoneError, 
-    handlePhoneChange, 
-    handlePhoneBlur,
-    validatePhone,
-  } = usePhoneValidation('US') // Default country US
-  
-  const { execute, loading: isSubmitting } = useAsyncAction()
-  const [isValidatingToken, setIsValidatingToken] = useState(true)
-  const [apiError, setApiError] = useState('')
-  const [invitation, setInvitation] = useState<ValidateInvitationResponse | null>(null)
-  const [tokenError, setTokenError] = useState('')
+  const { values, errors, handleChange, handleBlur } = form
+  const { phoneData, phoneError, handlePhoneChange, handlePhoneBlur } = phone
 
-  // Use useForm hook for firstName, lastName, password
-  const { values, errors, handleChange, handleBlur, validateAll } = useForm(
-    {
-      firstName: '',
-      lastName: '',
-      password: '',
-    },
-    {
-      firstName: (value) => validators.required(value, 'First name'),
-      lastName: (value) => validators.required(value, 'Last name'),
-      password: validators.password,
-    }
-  )
-
-  // Validate invitation token on component mount
-  useEffect(() => {
-    const validateToken = async () => {
-      if (!token) {
-        setTokenError('Missing invitation token')
-        setIsValidatingToken(false)
-        return
-      }
-
-      try {
-        const response = await teamService.validateInvitation(token)
-        
-        if (response.success && response.data) {
-          setInvitation(response.data)
-        } else {
-          setTokenError(response.message ?? 'Invalid invitation token')
-        }
-      } catch (error) {
-        setTokenError('Unable to validate invitation. Please try again.')
-      } finally {
-        setIsValidatingToken(false)
-      }
-    }
-
-    validateToken()
-  }, [token])
-
-  // Form validation helper
-  const isFormValid = values.firstName.trim() !== '' &&
-      values.lastName.trim() !== '' &&
-      phoneData.phone.trim() !== '' &&
-      values.password.trim() !== '' &&
-      !errors.firstName && !errors.lastName && !errors.password && !phoneError
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setApiError('')
-
-    if (!invitation || !token) {
-      setApiError('Invalid invitation')
-      return
-    }
-
-    // Validate all fields
-    const isFormValid = validateAll()
-    
-    // Validate phone using the hook
-    const isPhoneValid = validatePhone()
-
-    if (!isFormValid || !isPhoneValid) {
-      return
-    }
-
-    await execute(async () => {
-      const registrationRequest = {
-        firstName: values.firstName.trim(),
-        lastName: values.lastName.trim(),
-        email: invitation.email,
-        password: values.password,
-        phoneNumber: phoneData.phone.trim(),
-        countryPhoneCode: phoneData.countryPhoneCode,
-        token,
-      }
-
-      const response = await teamService.registerWithInvitation(registrationRequest)
-
-      if (response.success && response.data) {
-        // Auto-login with the returned tokens and user data
-        const { token, refreshToken, user } = response.data
-        
-        // Log the user in with complete data from API (includes formatted phone number)
-        login(user, token, refreshToken)
-        
-        // Navigate to dashboard
-        navigate('/dashboard', { replace: true })
-      } else {
-        setApiError(response.message ?? 'Registration failed')
-      }
-    }, {
-      onError: (error) => {
-        const message = handleApiError(error, 'Registration')
-        setApiError(message)
-      }
-    })
-  }
-
-  // Loading state
   if (isValidatingToken) {
     return (
       <div className="auth-container">
@@ -147,7 +37,7 @@ export const InvitationAcceptancePage = () => {
           <div className="floating-orb" />
           <div className="floating-orb" />
         </div>
-        
+
         <div className="w-full max-w-[360px] mx-auto relative z-10">
           <div className="auth-card text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#14BDEA] mx-auto mb-4" />
@@ -158,7 +48,7 @@ export const InvitationAcceptancePage = () => {
     )
   }
 
-  // Token error state
+// Token error state
   if (tokenError) {
     return (
       <div className="auth-container">
@@ -421,7 +311,7 @@ export const InvitationAcceptancePage = () => {
                 />
                 <PlainButton
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={togglePasswordVisibility}
                   className="input-icon-right auth-icon hover:text-gray-600 transition-colors"
                   unstyled
                 >
@@ -458,7 +348,7 @@ export const InvitationAcceptancePage = () => {
             <ActionButton
               type="submit"
               label={isSubmitting ? 'Joining Organization...' : `Join ${invitation.organizationName}`}
-              disabled={!isFormValid}
+              disabled={!isFormReady}
               icon={ArrowRight}
               loading={isSubmitting}
               size="md"
@@ -480,4 +370,7 @@ export const InvitationAcceptancePage = () => {
     </div>
   )
 }
+
+
+
 

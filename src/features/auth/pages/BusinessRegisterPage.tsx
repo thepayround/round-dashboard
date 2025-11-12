@@ -10,281 +10,67 @@ import {
   EyeOff,
   AlertCircle,
 } from 'lucide-react'
-import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { BillingAddressForm } from '../components/BillingAddressForm'
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
-import { useMultiStepForm } from '../hooks/useMultiStepForm'
+import { useBusinessRegisterController } from '../hooks/useBusinessRegisterController'
 
-import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
-import { useAuth as useAuthAPI } from '@/shared/hooks/api'
-import { useOrganization } from '@/shared/hooks/api'
-import type { CompanyInfo, BillingAddress } from '@/shared/types/business'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { Button, IconButton } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
-import { validateCompanyInfo } from '@/shared/utils/companyValidation'
-import { handleApiError } from '@/shared/utils/errorHandler'
-import type { ValidationError } from '@/shared/utils/validation'
-import { validators } from '@/shared/utils/validators'
-// import { useAddress } from '@/shared/hooks/api'
-// import { useAuth } from '@/shared/contexts/AuthContext'
 
 export const BusinessRegisterPage = () => {
-  const navigate = useNavigate()
-  const { registerBusiness } = useAuthAPI()
-  const { create: _createOrganization } = useOrganization()
-  // const { createOrganizationAddress } = useAddress()
-  // const { login } = useAuth() // Not used in this component
+  const {
+    personalForm,
+    phone,
+    companyForm,
+    billingForm,
+    multiStepForm,
+    showPassword,
+    togglePasswordVisibility,
+    detailedProgress,
+    apiError,
+    isSubmitting,
+    isPersonalValid,
+    isCompanyValid,
+    isCompanyComplete,
+    isBillingComplete,
+    handleNextStep,
+    handleSkipBilling,
+  } = useBusinessRegisterController()
 
-  // Form state is hardcoded to 'business' for this page
-  // Use useForm hook for personal info fields (firstName, lastName, email, password)
-  const { values: personalValues, errors: personalErrors, handleChange: handlePersonalChange, handleBlur: handlePersonalBlur, validateAll: validatePersonalInfo } = useForm(
-    {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-    },
-    {
-      firstName: (value) => validators.required(value, 'First name'),
-      lastName: (value) => validators.required(value, 'Last name'),
-      email: validators.emailWithMessage,
-      password: validators.password,
-    }
-  )
-  
-  // Use phone validation hook
-  const { phoneData, phoneError, handlePhoneChange, handlePhoneBlur, validatePhone } = usePhoneValidation('GR')
-  
-  const [companyInfo, setCompanyInfo] = useState<CompanyInfo>({
-    companyName: '',
-    registrationNumber: '',
-    taxId: '',
-    currency: undefined, // No preselected currency
-    industry: undefined,
-    businessType: undefined,
-    website: '',
-    employeeCount: undefined,
-    description: '',
-  })
-  const [billingAddress, setBillingAddress] = useState<BillingAddress | undefined>(undefined)
+  const {
+    values: personalValues,
+    errors: personalErrors,
+    handleChange: handlePersonalChange,
+    handleBlur: handlePersonalBlur,
+  } = personalForm
 
-  // Company and billing validation errors (keeping ValidationError[] for child components)
-  const [companyErrors, setCompanyErrors] = useState<ValidationError[]>([])
-  const [billingErrors, setBillingErrors] = useState<ValidationError[]>([])
-  
-  const [isPersonalValid, setIsPersonalValid] = useState(false)
-  const [isCompanyValid, setIsCompanyValid] = useState(false)
-  const [, setIsBillingValid] = useState(true) // Optional step
+  const {
+    phoneData,
+    phoneError,
+    handlePhoneChange,
+    handlePhoneBlur,
+  } = phone
 
-  // Check if billing address is complete
-  const isBillingComplete =
-    billingAddress &&
-    billingAddress.street.trim() !== '' &&
-    billingAddress.city.trim() !== '' &&
-    billingAddress.state.trim() !== '' &&
-    billingAddress.zipCode.trim() !== '' &&
-    billingAddress.country.trim() !== ''
+  const {
+    info: companyInfo,
+    setInfo: setCompanyInfo,
+    errors: companyErrors,
+    setErrors: setCompanyErrors,
+    onValidationChange: onCompanyValidationChange,
+  } = companyForm
 
-  // Check if company details are complete (required fields only)
-  const isCompanyComplete =
-    companyInfo.companyName.trim() !== '' &&
-    companyInfo.registrationNumber.trim() !== '' &&
-    companyInfo.currency !== undefined // Check if currency is selected
-
-  // UI state
-  const [showPassword, setShowPassword] = useState(false)
-  const { execute, loading: isSubmitting } = useAsyncAction()
-  const [apiError, setApiError] = useState('')
-
-  // Calculate progress based on current step and field completion
-  const calculateDetailedProgress = () => {
-    const { currentStep } = multiStepForm
-    const totalSteps = 3
-
-    // Base progress for reaching this step
-    const stepProgress = (currentStep / totalSteps) * 100
-
-    // Additional progress within current step
-    let currentStepProgress = 0
-    const progressPerStep = 100 / totalSteps
-
-    if (currentStep === 0) {
-      // Personal info step - 5 required fields
-      const filledFields = [
-        personalValues.firstName.trim(),
-        personalValues.lastName.trim(),
-        personalValues.email.trim(),
-        phoneData.phone.trim(),
-        personalValues.password.trim(),
-      ].filter(field => field !== '').length
-
-      currentStepProgress = (filledFields / 5) * progressPerStep
-    } else if (currentStep === 1) {
-      // Billing address step - optional, show as partially complete if any fields filled
-      if (billingAddress) {
-        const filledFields = [
-          billingAddress.street?.trim(),
-          billingAddress.city?.trim(),
-          billingAddress.state?.trim(),
-          billingAddress.zipCode?.trim(),
-          billingAddress.country?.trim(),
-        ].filter(field => field && field !== '').length
-
-        currentStepProgress = Math.min(filledFields / 5, 1) * progressPerStep
-      }
-    } else if (currentStep === 2) {
-      // Company info step - count filled required fields
-      const filledFields = [
-        companyInfo.companyName.trim(),
-        companyInfo.registrationNumber.trim(),
-        companyInfo.currency ?? '',
-      ].filter(field => field !== '').length
-
-      currentStepProgress = (filledFields / 3) * progressPerStep
-    }
-
-    return Math.round(Math.min(stepProgress + currentStepProgress, 100))
-  }
-
-  // Multi-step form management
-  const multiStepForm = useMultiStepForm({
-    initialSteps: [
-      {
-        id: 'personal-info',
-        title: 'Personal Information',
-        description: 'Your personal details',
-        isCompleted: false,
-      },
-      {
-        id: 'billing-address',
-        title: 'Billing Address',
-        description: 'Your billing information',
-        isCompleted: false,
-        isOptional: true,
-      },
-      {
-        id: 'company-info',
-        title: 'Company Information',
-        description: 'Your company details',
-        isCompleted: false,
-      },
-    ],
-    onComplete: handleFormComplete,
-  })
-
-  // Initialize company validation state on mount and when companyInfo changes
-  useEffect(() => {
-    const validation = validateCompanyInfo(companyInfo)
-    setIsCompanyValid(validation.isValid)
-  }, [companyInfo])
-
-  // Re-validate personal form when data changes
-  useEffect(() => {
-    const isPersonalFormValid = validatePersonalForm()
-    setIsPersonalValid(isPersonalFormValid)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [personalValues, phoneData, personalErrors, phoneError])
-
-  // Helper function to validate personal form
-  const validatePersonalForm = () => {
-    // Check if all required fields are filled
-    if (
-      !personalValues.firstName.trim() ||
-      !personalValues.lastName.trim() ||
-      !phoneData.phone.trim() ||
-      !personalValues.email.trim() ||
-      !personalValues.password.trim()
-    ) {
-      return false
-    }
-
-    // Check individual error states from useForm and phone validation
-    if (personalErrors.firstName ?? personalErrors.lastName ?? personalErrors.email ?? personalErrors.password ?? phoneError) {
-      return false
-    }
-
-    return true
-  }
-
-  // Handle form completion
-  async function handleFormComplete() {
-    // Prevent multiple submissions
-    if (isSubmitting) {
-      return
-    }
-
-    setApiError('')
-
-    await execute(async () => {
-      // Register business user with all company information using new endpoint
-      const userResponse = await registerBusiness({
-        firstName: personalValues.firstName,
-        lastName: personalValues.lastName,
-        email: personalValues.email,
-        password: personalValues.password,
-        phoneNumber: phoneData.phone,
-        countryPhoneCode: phoneData.countryPhoneCode,
-        companyInfo,
-        billingAddress,
-      })
-
-      if (!userResponse.success) {
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        setApiError(('error' in userResponse && userResponse.error) || 'Business registration failed')
-        return
-      }
-
-      // Navigate to confirmation pending page
-      navigate('/auth/confirmation-pending', {
-        state: {
-          email: personalValues.email,
-          accountType: 'business',
-          hasBusinessData: true,
-        },
-        replace: true,
-      })
-    }, {
-      onError: (error) => {
-        const message = handleApiError(error, 'Business registration', 'An unexpected error occurred. Please try again.')
-        setApiError(message)
-      }
-    })
-  }
-
-  // Handle navigation to next step
-  const handleNextStep = () => {
-    if (multiStepForm.currentStep === 0) {
-      // Personal info step - validate all fields
-      const isFormValid = validatePersonalInfo()
-      const isPhoneValid = validatePhone()
-
-      if (!isFormValid || !isPhoneValid) {
-        return
-      }
-      
-      multiStepForm.completeAndGoToNext()
-    } else if (multiStepForm.currentStep === 1) {
-      // Billing address step (optional) - just continue
-      multiStepForm.goToStep(2)
-    } else if (multiStepForm.currentStep === 2) {
-      // Company info step (final step)
-      if (isCompanyValid && isCompanyComplete) {
-        // completeCurrentStep automatically calls handleFormComplete via onComplete
-        multiStepForm.completeCurrentStep()
-      }
-    }
-  }
-
-  // Skip billing address
-  const handleSkipBilling = () => {
-    setBillingAddress(undefined)
-    multiStepForm.completeAndGoToNext()
-  }
+  const {
+    address: billingAddress,
+    setAddress: setBillingAddress,
+    errors: billingErrors,
+    setErrors: setBillingErrors,
+    onValidationChange: onBillingValidationChange,
+  } = billingForm
 
   // Render step content
   const renderStepContent = () => {
@@ -481,7 +267,7 @@ export const BusinessRegisterPage = () => {
                   />
                   <IconButton
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={togglePasswordVisibility}
                     icon={showPassword ? EyeOff : Eye}
                     variant="ghost"
                     size="md"
@@ -529,7 +315,7 @@ export const BusinessRegisterPage = () => {
             <BillingAddressForm
               billingAddress={billingAddress}
               onBillingAddressChange={setBillingAddress}
-              onValidationChange={setIsBillingValid}
+              onValidationChange={onBillingValidationChange}
               errors={billingErrors}
               onErrorsChange={setBillingErrors}
               isOptional
@@ -548,7 +334,7 @@ export const BusinessRegisterPage = () => {
             <CompanyDetailsForm
               companyInfo={companyInfo}
               onCompanyInfoChange={setCompanyInfo}
-              onValidationChange={setIsCompanyValid}
+              onValidationChange={onCompanyValidationChange}
               errors={companyErrors}
               onErrorsChange={setCompanyErrors}
             />
@@ -609,13 +395,13 @@ export const BusinessRegisterPage = () => {
                 Step {multiStepForm.currentStep + 1} of {multiStepForm.getTotalSteps()}
               </span>
               <span className="text-sm auth-text-muted">
-                {calculateDetailedProgress()}% Complete
+                {detailedProgress}% Complete
               </span>
             </div>
             <div className="w-full bg-white/10 rounded-full h-2">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${calculateDetailedProgress()}%` }}
+                animate={{ width: `${detailedProgress}%` }}
                 transition={{ duration: 0.3 }}
                 className="bg-primary h-2 rounded-full"
               />

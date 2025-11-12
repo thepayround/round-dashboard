@@ -1,100 +1,33 @@
 ﻿import { motion } from 'framer-motion'
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
-import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
+import { usePersonalRegisterController } from '../hooks/usePersonalRegisterController'
 
 import { FacebookIcon } from '@/features/auth/components/icons/SocialIcons'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { useAsyncAction, useForm, usePhoneValidation } from '@/shared/hooks'
-import { apiClient } from '@/shared/services/apiClient'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { IconButton, Button } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
-import { validators, handleApiError } from '@/shared/utils'
 
 export const PersonalRegisterPage = () => {
   const navigate = useNavigate()
   const { showSuccess, showError } = useGlobalToast()
-  const { loading: isSubmitting, execute } = useAsyncAction()
-  
-  const [showPassword, setShowPassword] = useState(false)
-  
-  // Use usePhoneValidation hook for phone field with async validation
-  const { 
-    phoneData, 
-    phoneError, 
-    handlePhoneChange, 
-    handlePhoneBlur,
-    validatePhone,
-  } = usePhoneValidation('GR') // Default country Greece
+  const {
+    form,
+    phone,
+    showPassword,
+    togglePasswordVisibility,
+    isSubmitting,
+    handleSubmit,
+    isFormReady,
+  } = usePersonalRegisterController()
 
-  // Use useForm hook for firstName, lastName, email, password
-  const { values, errors, handleChange, handleBlur, validateAll } = useForm(
-    {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-    },
-    {
-      firstName: (value) => validators.required(value, 'First name'),
-      lastName: (value) => validators.required(value, 'Last name'),
-      email: validators.emailWithMessage,
-      password: validators.password,
-    }
-  )
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // Validate all form fields
-    const isFormValid = validateAll()
-    
-    // Validate phone using the hook
-    const isPhoneValid = validatePhone()
-
-    if (!isFormValid || !isPhoneValid) {
-      return
-    }
-
-    await execute(async () => {
-      // Call real API
-      const response = await apiClient.register({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        password: values.password,
-        phoneNumber: phoneData.phone,
-        countryPhoneCode: phoneData.countryPhoneCode,
-      })
-
-      if (response.success && response.data) {
-        // Navigate to confirmation pending page instead of auto-login
-        navigate('/auth/confirmation-pending', {
-          state: { email: values.email },
-          replace: true,
-        })
-      } else {
-        showError(response.error ?? 'Registration failed')
-      }
-    }, {
-      onError: (error) => {
-        const message = handleApiError(error, 'Registration')
-        showError(message)
-      }
-    })
-  }
-
-  const isFormValid = values.firstName.trim() !== '' && 
-                      values.lastName.trim() !== '' && 
-                      values.email.trim() !== '' && 
-                      values.password.trim() !== '' && 
-                      phoneData.phone.trim() !== '' &&
-                      !errors.firstName && !errors.lastName && !errors.email && !errors.password && !phoneError
+  const { values, errors, handleChange, handleBlur } = form
+  const { phoneData, phoneError, handlePhoneChange, handlePhoneBlur } = phone
 
   return (
     <div className="auth-container">
@@ -272,11 +205,11 @@ export const PersonalRegisterPage = () => {
           </div>
 
           {/* Password */}
-          <div>
-            <label htmlFor="password" className="auth-label">
-              Password
-            </label>
-            <div className="input-container">
+            <div>
+              <label htmlFor="password" className="auth-label">
+                Password
+              </label>
+              <div className="input-container">
               <Lock className="input-icon-left auth-icon-primary" />
               <input
                 id="password"
@@ -291,7 +224,7 @@ export const PersonalRegisterPage = () => {
               />
               <IconButton
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={togglePasswordVisibility}
                 icon={showPassword ? EyeOff : Eye}
                 variant="ghost"
                 size="sm"
@@ -338,7 +271,7 @@ export const PersonalRegisterPage = () => {
           <ActionButton
             type="submit"
             label={isSubmitting ? 'Creating Account...' : 'Create Personal Account'}
-            disabled={!isFormValid}
+            disabled={!isFormReady}
             icon={ArrowRight}
             loading={isSubmitting}
             size="md"
