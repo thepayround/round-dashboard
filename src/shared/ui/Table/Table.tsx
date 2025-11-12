@@ -84,7 +84,9 @@ export const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b border-[#16171a] bg-[#101011] hover:bg-[#171719] transition-colors',
+      'border-b border-[#16171a]',
+      // Only apply background and hover styles in tbody, not in thead
+      '[tbody_&]:bg-[#101011] [tbody_&]:hover:bg-[#171719] [tbody_&]:transition-colors',
       className
     )}
     role="row"

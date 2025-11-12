@@ -1,27 +1,16 @@
-// Customer type enums - Use string values to match backend validation
+// Customer type enums - Use string values to match backend JsonStringEnumConverter
 export enum CustomerType {
   Individual = 'Individual',
   Business = 'Business'
 }
 
-// Customer status enum - Use string values to match backend validation
+// Customer status enum - Use string values to match backend
 export enum CustomerStatus {
   Active = 'Active',
   Inactive = 'Inactive',
   Suspended = 'Suspended',
   Cancelled = 'Cancelled'
 }
-
-// Mapping utilities for backward compatibility with numeric values
-export const CustomerTypeNumericMap = {
-  1: CustomerType.Individual,
-  2: CustomerType.Business
-} as const;
-
-export const CustomerTypeToNumeric = {
-  [CustomerType.Individual]: 1,
-  [CustomerType.Business]: 2
-} as const;
 
 export const CustomerStatusNumericMap = {
   1: CustomerStatus.Active,

@@ -1,7 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion'
+import { RotateCcw } from 'lucide-react'
 import React from 'react'
 
 import { FilterChip } from '../FilterChip'
+
+import { Button } from '@/shared/ui/Button'
 
 export interface ActiveFilter {
   id: string
@@ -54,19 +57,17 @@ export const FilterChipsBar: React.FC<FilterChipsBarProps> = ({
       </AnimatePresence>
 
       {onClearAll && filters.length > 0 && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+        <Button
           onClick={onClearAll}
-          className="ml-2 px-3 py-1.5 text-sm
-                   bg-destructive/20 
-                   hover:bg-destructive/30 
-                   border border-red-500/30 hover:border-red-400/40 
-                   rounded-lg text-red-300 hover:text-red-200 
-                   transition-all duration-200"
+          variant="danger"
+          size="sm"
+          icon={RotateCcw}
+          iconPosition="left"
+          className="ml-2"
+          aria-label="Clear all filters"
         >
           Clear All
-        </motion.button>
+        </Button>
       )}
     </motion.div>
   )

@@ -61,7 +61,6 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
         })
       }
     } catch (error) {
-      console.error('Failed to load organization data:', error)
       showError('Failed to load organization data')
     } finally {
       setIsLoading(false)
@@ -160,7 +159,6 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
         throw new Error(result?.error ?? 'Failed to save organization')
       }
     } catch (error) {
-      console.error('Save error:', error)
       showError(error instanceof Error ? error.message : 'Failed to save organization settings')
     } finally {
       setIsSaving(false)

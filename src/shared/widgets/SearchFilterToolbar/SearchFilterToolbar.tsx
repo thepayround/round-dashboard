@@ -1,4 +1,4 @@
-import { Filter } from 'lucide-react'
+import { Filter, RotateCcw } from 'lucide-react'
 import React, { useMemo } from 'react'
 
 import { Button } from '../../ui/Button'
@@ -281,8 +281,10 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               onClick={onClearFilters}
               variant="danger"
               size="md"
+              icon={RotateCcw}
+              iconPosition="left"
               fullWidth
-              className="bg-destructive/20 hover:bg-destructive/30 border-red-500/30 hover:border-red-400/40 text-red-300 hover:text-red-200"
+              aria-label="Clear all filters"
             >
               Clear All Filters
             </Button>

@@ -65,7 +65,6 @@ export class PhoneValidator {
         error: response.error
       }
     } catch (error) {
-      console.error('Phone validation failed:', error)
       return {
         isValid: false,
         error: 'Unable to validate phone number. Please try again.'
@@ -94,7 +93,6 @@ export class PhoneValidator {
         error: response.error
       }
     } catch (error) {
-      console.error('Phone parsing failed:', error)
       return {
         isValid: false,
         error: 'Unable to parse phone number. Please try again.'
