@@ -9,6 +9,7 @@ export { DashboardLayout } from '../layout/DashboardLayout'
 export { Breadcrumb } from '../layout/Breadcrumb'
 export { ErrorBoundary } from '../layout/ErrorBoundary'
 export { ProtectedRoute } from '../layout/ProtectedRoute'
+export { FullScreenLoader } from './FullScreenLoader'
 
 // Branding
 export { WhiteLogo } from '../ui/WhiteLogo'

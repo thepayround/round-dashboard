@@ -1,5 +1,5 @@
 ﻿import { motion, AnimatePresence } from 'framer-motion'
-import { 
+import {
   Users,
   Eye,
   Edit,
@@ -8,32 +8,25 @@ import {
   Calendar,
   MapPin,
   MoreHorizontal,
-  Grid3X3,
-  List,
   Download,
   Building2,
   User,
   CheckSquare,
-  Square
+  Square,
 } from 'lucide-react'
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { AddCustomerModal } from '../components/AddCustomerModal'
 import CustomerTable from '../components/CustomerTable'
+import { useCustomersController } from '../hooks/useCustomersController'
 
-import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
-import { useViewPreferences } from '@/shared/hooks/useViewPreferences'
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
-import { customerService } from '@/shared/services/api/customer.service'
-import type { CustomerResponse, CustomerSearchParams } from '@/shared/services/api/customer.service'
+import type { CustomerResponse } from '@/shared/services/api/customer.service'
 import { ActionButton } from '@/shared/ui/ActionButton'
-import { PlainButton } from '@/shared/ui/Button'
+import { IconButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 import { Pagination } from '@/shared/ui/Pagination'
-import type { ViewMode, ViewModeOption } from '@/shared/ui/ViewModeToggle'
-import type { FilterField } from '@/shared/widgets/SearchFilterToolbar'
 import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
 
 
@@ -67,181 +60,57 @@ const getStatusClass = (status: number | string): string => {
   
   switch (statusValue) {
     case CustomerStatus.Active:
-      return 'bg-green-500/20 text-green-400 border border-green-500/30'
+      return 'bg-[#38D39F]/10 text-[#38D39F] border border-[#38D39F]/40'
     case CustomerStatus.Inactive:
-      return 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+      return 'bg-[#262626] text-white/60 border border-white/10'
     case CustomerStatus.Suspended:
-      return 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+      return 'bg-[#FF9F0A]/10 text-[#FF9F0A] border border-[#FF9F0A]/40'
     case CustomerStatus.Cancelled:
-      return 'bg-red-500/20 text-[#D417C8] border border-red-500/30'
+      return 'bg-[#FF3B30]/10 text-[#FF3B30] border border-[#FF3B30]/40'
     default:
-      return 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+      return 'bg-[#262626] text-white/60 border border-white/10'
   }
-}
-
-// Sort configuration
-type SortField = 'displayName' | 'email' | 'company' | 'status' | 'signupDate' | 'currency'
-type SortDirection = 'asc' | 'desc'
-
-interface SortConfig {
-  field: SortField
-  direction: SortDirection
 }
 
 const CustomersPage: React.FC = () => {
-  const { showError, showSuccess } = useGlobalToast()
-  const { preferences, setViewMode, setItemsPerPage, setSortConfig } = useViewPreferences()
-  
-  // Data state
-  const [customers, setCustomers] = useState<CustomerResponse[]>([])
-  const [loading, setLoading] = useState(true)
-  const [skeletonLoading, setSkeletonLoading] = useState(false)
-  const [totalCount, setTotalCount] = useState(0)
-  
-  // UI state
-  const [showFilters, setShowFilters] = useState(false)
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [selectedCustomers, setSelectedCustomers] = useState<string[]>([])
-  const [selectionMode, setSelectionMode] = useState(false)
-  
-  // View and pagination state
-  const [viewMode, setViewModeState] = useState<ViewMode>(preferences.viewMode)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPageState] = useState(preferences.itemsPerPage)
-  
-  // Sort state
-  const [sortConfig, setSortConfigState] = useState<SortConfig>({
-    field: preferences.sortField as SortField,
-    direction: preferences.sortDirection
-  })
+  const {
+    customers: displayedCustomers,
+    totalCount,
+    totalPages,
+    loading,
+    skeletonLoading,
+    initialLoading,
+    hasActiveFilters,
+    viewMode,
+    viewModeOptions,
+    handleViewModeChange,
+    searchQuery,
+    setSearchQuery,
+    showFilters,
+    toggleFilters,
+    filterFields,
+    clearAllFilters,
+    showAddModal,
+    openAddModal,
+    closeAddModal,
+    currentPage,
+    handlePageChange,
+    itemsPerPage,
+    handleItemsPerPageChange,
+    sortConfig,
+    handleSortChange,
+    selectionMode,
+    setSelectionMode,
+    selectedCustomers,
+    setSelectedCustomers,
+    handleCustomerAdded,
+    handleExportSelected,
+    handleBulkEdit,
+    handleExportAll,
+    searchSummary,
+  } = useCustomersController()
 
-  // Filter state
-  const [selectedCustomerType, setSelectedCustomerType] = useState<string>('')
-  const [selectedStatus, setSelectedStatus] = useState<string>('')
-  const [selectedCurrency, setSelectedCurrency] = useState<string>('')
-  const [selectedPortalAccess, setSelectedPortalAccess] = useState<string>('')
-  
-  // Search state - will be sent to backend
-  const [searchQuery, setSearchQuery] = useState<string>('')
-  
-  // Track if this is the first load to show full loading overlay
-  const isFirstLoadRef = useRef(true)
-
-  // Fetch currencies for dynamic currency filter
-  const { data: currenciesData } = useCurrencies()
-
-  // View mode options for the toolbar
-  const viewModeOptions: ViewModeOption[] = [
-    { value: 'table', icon: List, label: 'Table' },
-    { value: 'grid', icon: Grid3X3, label: 'Cards' }
-  ]
-
-  // Update view mode and persist preferences
-  const handleViewModeChange = (mode: ViewMode) => {
-    setViewModeState(mode)
-    setViewMode(mode)
-  }
-
-  // Update items per page and persist preferences
-  const handleItemsPerPageChange = (items: number) => {
-    setItemsPerPageState(items)
-    setItemsPerPage(items)
-    setCurrentPage(1)
-  }
-
-  // Update sort config and persist preferences
-  const handleSortChange = (field: string) => {
-    const sortField = field as SortField
-    const newDirection = sortConfig.field === sortField && sortConfig.direction === 'asc' ? 'desc' : 'asc'
-    setSortConfigState({ field: sortField, direction: newDirection })
-    setSortConfig(sortField, newDirection)
-  }
-
-  const loadCustomers = useCallback(async () => {
-    try {
-      // Show loading overlay on first load, skeleton for subsequent loads
-      if (isFirstLoadRef.current) {
-        setLoading(true)
-      } else {
-        setSkeletonLoading(true)
-      }
-      
-      // Build search params - ALL filtering and search done by BACKEND
-      const searchParams: CustomerSearchParams = {
-        pageNumber: currentPage,
-        pageSize: itemsPerPage,
-        searchQuery: searchQuery.trim() || undefined,
-        orderBy: (() => {
-          if (sortConfig.field === 'displayName') return 'FirstName'
-          if (sortConfig.field === 'signupDate') return 'CreatedDate'
-          return sortConfig.field.charAt(0).toUpperCase() + sortConfig.field.slice(1)
-        })(),
-        isAscending: sortConfig.direction === 'asc',
-        // Multiple filters - all sent simultaneously
-        Status: selectedStatus || undefined,
-        Type: selectedCustomerType || undefined,
-        Currency: selectedCurrency || undefined,
-        PortalAccess: selectedPortalAccess || undefined
-      }
-
-      const response = await customerService.getAll(searchParams)
-      
-      // Use backend data directly - NO client-side filtering or searching
-      setCustomers(response.items)
-      setTotalCount(response.totalCount)
-    } catch (error: unknown) {
-      // Enhanced error handling with specific messages
-      let errorMessage = 'Failed to load customers'
-      
-      // Type guard to check if error has response property
-      const hasResponse = (err: unknown): err is { response: { status: number; data?: { errors?: Record<string, string[]> } } } => typeof err === 'object' && err !== null && 'response' in err
-
-      // Type guard for network errors
-      const hasNetworkProps = (err: unknown): err is { code?: string; message?: string } => typeof err === 'object' && err !== null
-      
-      if (hasResponse(error) && error.response?.status === 400) {
-        // Validation error - show specific field errors
-        const validationErrors = error.response.data?.errors
-        if (validationErrors) {
-          const errorMessages = Object.entries(validationErrors)
-            .map(([field, errors]) => `${field}: ${(errors as string[]).join(', ')}`)
-            .join('\n')
-          errorMessage = `Invalid filters:\n${errorMessages}`
-        } else {
-          errorMessage = 'Invalid filter parameters. Please check your selections.'
-        }
-      } else if (hasResponse(error) && (error.response?.status === 401 || error.response?.status === 403)) {
-        errorMessage = 'You are not authorized to view customers'
-      } else if (hasResponse(error) && error.response?.status >= 500) {
-        errorMessage = 'Server error. Please try again later.'
-      } else if (hasNetworkProps(error) && (error.code === 'ECONNABORTED' || error.message === 'Network Error')) {
-        errorMessage = 'Network error. Please check your connection.'
-      }
-      
-      showError(errorMessage)
-      console.error('Error loading customers:', error)
-    } finally {
-      if (isFirstLoadRef.current) {
-        setLoading(false)
-        isFirstLoadRef.current = false
-      } else {
-        setSkeletonLoading(false)
-      }
-    }
-  }, [currentPage, itemsPerPage, sortConfig, searchQuery, selectedCustomerType, selectedStatus, selectedCurrency, selectedPortalAccess, showError])
-
-  useEffect(() => {
-    loadCustomers()
-  }, [loadCustomers])
-
-  // Client-side search - now handled by backend
-  // Search queries are sent to backend via searchParams.searchQuery
-
-  // Display customers directly from backend (already filtered/searched)
-  const displayedCustomers = customers
-
-  // Calculate pagination info
-  const totalPages = Math.ceil(totalCount / itemsPerPage)
+  const hasSearchOrFilters = Boolean(searchQuery) || hasActiveFilters
 
   const formatDate = (dateString: string) => new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
@@ -249,131 +118,8 @@ const CustomersPage: React.FC = () => {
       day: 'numeric'
     }).format(new Date(dateString))
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const handleCustomerAdded = () => {
-    loadCustomers()
-    setShowAddModal(false)
-    showSuccess('Customer added successfully')
-  }
-
-  const handleExportSelected = () => {
-    if (selectedCustomers.length === 0) {
-      showError('Please select customers to export')
-      return
-    }
-    showSuccess('Export functionality coming soon')
-  }
-
-  const handleBulkEdit = () => {
-    if (selectedCustomers.length === 0) {
-      showError('Please select customers to edit')
-      return
-    }
-    showSuccess('Bulk edit functionality coming soon')
-  }
-
-  // Clear all filters function
-  const clearAllFilters = () => {
-    setSelectedCustomerType('')
-    setSelectedStatus('')
-    setSelectedCurrency('')
-    setSelectedPortalAccess('')
-    setCurrentPage(1)
-  }
-
-  // Build currency options from API data
-  const currencyOptions = [
-    { id: '', name: 'All Currencies' },
-    ...(currenciesData?.map(currency => ({
-      id: currency.currencyCodeAlpha,
-      name: `${currency.currencyCodeAlpha} - ${currency.currencyName}`
-    })).sort((a, b) => a.id.localeCompare(b.id)) || [])
-  ]
-
-  // Filter fields for the search toolbar
-  const filterFields: FilterField[] = [
-    {
-      id: 'customerType',
-      label: 'Customer Type',
-      type: 'select',
-      value: selectedCustomerType,
-      onChange: (value: string) => {
-        setSelectedCustomerType(value)
-        setCurrentPage(1)
-      },
-      onClear: () => {
-        setSelectedCustomerType('')
-        setCurrentPage(1)
-      },
-      options: [
-        { id: '', name: 'All Types' },
-        { id: 'Individual', name: 'Individual' },
-        { id: 'Business', name: 'Business' }
-      ]
-    },
-    {
-      id: 'status',
-      label: 'Status',
-      type: 'select',
-      value: selectedStatus,
-      onChange: (value: string) => {
-        setSelectedStatus(value)
-        setCurrentPage(1)
-      },
-      onClear: () => {
-        setSelectedStatus('')
-        setCurrentPage(1)
-      },
-      options: [
-        { id: '', name: 'All Status' },
-        { id: 'Active', name: 'Active' },
-        { id: 'Inactive', name: 'Inactive' },
-        { id: 'Suspended', name: 'Suspended' },
-        { id: 'Cancelled', name: 'Cancelled' }
-      ]
-    },
-    {
-      id: 'currency',
-      label: 'Currency',
-      type: 'select',
-      value: selectedCurrency,
-      onChange: (value: string) => {
-        setSelectedCurrency(value)
-        setCurrentPage(1)
-      },
-      onClear: () => {
-        setSelectedCurrency('')
-        setCurrentPage(1)
-      },
-      options: currencyOptions
-    },
-    {
-      id: 'portalAccess',
-      label: 'Portal Access',
-      type: 'select',
-      value: selectedPortalAccess,
-      onChange: (value: string) => {
-        setSelectedPortalAccess(value)
-        setCurrentPage(1)
-      },
-      onClear: () => {
-        setSelectedPortalAccess('')
-        setCurrentPage(1)
-      },
-      options: [
-        { id: '', name: 'All' },
-        { id: 'true', name: 'Enabled' },
-        { id: 'false', name: 'Disabled' }
-      ]
-    }
-  ]
-
   // Show skeleton loading only on first load
-  if (isFirstLoadRef.current && loading) {
+  if (initialLoading) {
     return (
       <DashboardLayout>
         <div className="space-y-6">
@@ -422,13 +168,10 @@ const CustomersPage: React.FC = () => {
             onSearchChange={setSearchQuery}
             searchPlaceholder="Search customers by name, email, company, phone, or tags..."
             showFilters={showFilters}
-            onToggleFilters={() => setShowFilters(!showFilters)}
+            onToggleFilters={toggleFilters}
             filterFields={filterFields}
             onClearFilters={clearAllFilters}
-            searchResults={{
-              total: totalCount,
-              filtered: displayedCustomers.length
-            }}
+            searchResults={searchSummary}
             viewMode={viewMode}
             onViewModeChange={handleViewModeChange}
             viewModeOptions={viewModeOptions}
@@ -479,7 +222,7 @@ const CustomersPage: React.FC = () => {
                       variant="ghost"
                       size="md"
                       icon={Download}
-                      onClick={() => showSuccess('Export functionality coming soon')}
+                      onClick={handleExportAll}
                     />
                   </>
                 )}
@@ -487,7 +230,7 @@ const CustomersPage: React.FC = () => {
                   label="Add Customer"
                   variant="primary"
                   size="md"
-                  onClick={() => setShowAddModal(true)}
+                  onClick={openAddModal}
                 />
               </>
             }
@@ -592,9 +335,13 @@ const CustomersPage: React.FC = () => {
                       <p className="text-sm text-[#a3a3a3]">{customer.company}</p>
                     )}
                   </div>
-                  <PlainButton className="p-2 text-[#a3a3a3] hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-all duration-200" aria-label="Customer actions">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </PlainButton>
+                  <IconButton
+                    icon={MoreHorizontal}
+                    variant="ghost"
+                    size="sm"
+                    aria-label="Customer actions"
+                    className="text-white/50 hover:text-white"
+                  />
                 </div>
 
                 {/* Information Cards */}
@@ -740,16 +487,16 @@ const CustomersPage: React.FC = () => {
             </div>
             <h3 className="text-xl font-medium tracking-tight text-white mb-2">No customers found</h3>
             <p className="text-[#a3a3a3] mb-6">
-              {searchQuery || selectedCustomerType || selectedStatus || selectedCurrency
-                ? 'No customers match your current filters. Try adjusting your search criteria or clearing some filters.' 
+              {hasSearchOrFilters
+                ? 'No customers match your current filters. Try adjusting your search criteria or clearing some filters.'
                 : 'Get started by adding your first customer'}
             </p>
-            {!searchQuery && (
+            {!hasSearchOrFilters && (
               <ActionButton
                 label="Add Customer"
                 variant="primary"
                 size="md"
-                onClick={() => setShowAddModal(true)}
+                onClick={openAddModal}
               />
             )}
           </div>
@@ -758,7 +505,7 @@ const CustomersPage: React.FC = () => {
         {/* Add Customer Modal */}
         <AddCustomerModal
           isOpen={showAddModal}
-          onClose={() => setShowAddModal(false)}
+          onClose={closeAddModal}
           onCustomerAdded={handleCustomerAdded}
         />
       </div>
