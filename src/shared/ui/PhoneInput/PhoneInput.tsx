@@ -11,39 +11,6 @@ import { PlainButton } from '@/shared/ui/Button'
 import { cn } from '@/shared/utils/cn'
 import { phoneValidator } from '@/shared/utils/phoneValidation'
 
-const REGIONAL_START = 0x1f1e6
-const REGIONAL_END = 0x1f1ff
-
-const toFlagEmoji = (alphaCode: string) => {
-  const code = alphaCode.trim().toUpperCase()
-  if (code.length !== 2 || !/^[A-Z]{2}$/.test(code)) {
-    return code
-  }
-  const OFFSET = 127397
-  return String.fromCodePoint(code.charCodeAt(0) + OFFSET) + String.fromCodePoint(code.charCodeAt(1) + OFFSET)
-}
-
-const isEmojiFlag = (value: string) => {
-  if (!value) return false
-  for (const char of Array.from(value)) {
-    const point = char.codePointAt(0) ?? 0
-    if (point >= REGIONAL_START && point <= REGIONAL_END) {
-      return true
-    }
-  }
-  return false
-}
-
-const getFlagForCountry = (countryCode?: string, fallbackFlag?: string) => {
-  if (fallbackFlag && fallbackFlag.trim()) {
-    return isEmojiFlag(fallbackFlag) ? fallbackFlag : toFlagEmoji(fallbackFlag)
-  }
-  if (countryCode) {
-    return toFlagEmoji(countryCode)
-  }
-  return ''
-}
-
 interface PhoneInputProps {
   /** Current phone number value */
   value?: string
@@ -698,15 +665,13 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             if (selectedCountry) {
               return (
                 <>
-                  <span 
-                    className="text-sm flex-shrink-0 flex items-center" 
-                    style={{ lineHeight: '1' }}
-                    role="img" 
+                  <span
+                    className={`fi fi-${selectedCountry.countryCode.toLowerCase()} fis flex-shrink-0`}
+                    style={{ fontSize: '1.25rem', lineHeight: '1' }}
+                    role="img"
                     aria-label={selectedCountry.countryName}
-                  >
-                    {selectedCountry.flag || getFlagForCountry(selectedCountry.countryCode)}
-                  </span>
-                  <span 
+                  />
+                  <span
                     className="text-xs md:text-xs text-white/95 truncate flex items-center"
                     style={{ lineHeight: '1' }}
                   >
@@ -716,7 +681,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
               )
             }
             return (
-              <span 
+              <span
                 className="text-xs md:text-xs text-white/60 flex items-center"
                 style={{ lineHeight: '1' }}
               >
@@ -847,9 +812,12 @@ const CountryOption: React.FC<CountryOptionProps> = ({
     tabIndex={0}
   >
     <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
-      <span className="text-sm flex-shrink-0" role="img" aria-label={country.countryName}>
-        {country.flag || getFlagForCountry(country.countryCode)}
-      </span>
+      <span
+        className={`fi fi-${country.countryCode.toLowerCase()} fis flex-shrink-0`}
+        style={{ fontSize: '1.25rem' }}
+        role="img"
+        aria-label={country.countryName}
+      />
       <div className="flex-1 min-w-0">
         <div className={`${dropdownStyles.option.label} truncate`}>
           {country.countryName}
