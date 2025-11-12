@@ -1,11 +1,8 @@
 import { X, User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Hash, Truck, Languages, AlertCircle } from 'lucide-react'
-import React, { useState } from 'react'
+import React from 'react'
 
-import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import type { CustomerCreateRequest } from '@/shared/services/api/customer.service'
-import { customerService } from '@/shared/services/api/customer.service'
-import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
-import { phoneValidationService } from '@/shared/services/api/phoneValidation.service'
+import { useAddCustomerModalController } from '../hooks/useAddCustomerModalController'
+
 import { CustomerType } from '@/shared/types/customer.types'
 import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
@@ -13,8 +10,6 @@ import { IconButton, Button } from '@/shared/ui/Button'
 import { FormInput } from '@/shared/ui/FormInput'
 import { Modal } from '@/shared/ui/Modal'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
-import { phoneValidator } from '@/shared/utils/phoneValidation'
-import type { ValidationError } from '@/shared/utils/validation'
 
 interface AddCustomerModalProps {
   isOpen: boolean
@@ -22,331 +17,25 @@ interface AddCustomerModalProps {
   onCustomerAdded: () => void
 }
 
-export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
-  isOpen,
-  onClose,
-  onCustomerAdded
-}) => {
-  const { showSuccess, showError } = useGlobalToast()
-  const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState<ValidationError[]>([])
-  
-  // Helper functions for error handling (matching registration pattern)
-  const hasFieldError = (field: string) => errors.some(error => error.field === field)
-
-  const getFieldError = (field: string) => {
-    const error = errors.find(error => error.field === field)
-    return error?.message ?? ''
-  }
-
-  // Form validation helper (matching registration pattern)
-  const isFormValid = () => {
-    // Check if all required fields are filled
-    if (
-      !formData.firstName.trim() ||
-      !formData.lastName.trim() ||
-      !formData.email.trim()
-    ) {
-      return false
-    }
-
-    // Business customers must have a company name
-    if (formData.type === CustomerType.Business && !formData.company?.trim()) {
-      return false
-    }
-
-    // Simple phone check - use client-side validation (same as registration)
-    if (formData.phoneNumber?.trim() && !phoneValidator.hasMinimumContent(formData.phoneNumber)) {
-      return false
-    }
-
-    // Check if there are any validation errors from other fields
-    const nonPhoneErrors = errors.filter(error => error.field !== 'phoneNumber')
-    if (nonPhoneErrors.length > 0) {
-      return false
-    }
-
-    return true
-  }
-  
-  const [formData, setFormData] = useState<CustomerCreateRequest>({
-    type: CustomerType.Individual, // Default to Individual
-    email: '',
-    firstName: '',
-    lastName: '',
-    company: '',
-    phoneNumber: '',
-    countryPhoneCode: '',
-    taxNumber: '',
-    locale: 'en',
-    timezone: '',
-    currency: '',
-    portalAccess: true,
-    autoCollection: true,
-    tags: [],
-    customFields: {},
-    billingAddress: {
-      line1: '',
-      line2: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: ''
-    },
-    shippingAddress: {
-      line1: '',
-      line2: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: ''
-    }
-  })
-
-  const [currentTag, setCurrentTag] = useState('')
-  const [sameAsBinding, setSameAsBinding] = useState(true)
-
-  const handleInputChange = (field: string, value: string | boolean | number) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }))
-
-    // Clear field error when user starts typing (matching registration pattern)
-    if (hasFieldError(field)) {
-      setErrors(prev => prev.filter(error => error.field !== field))
-    }
-  }
-
-  const handleAddressChange = (addressType: 'billingAddress' | 'shippingAddress', field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [addressType]: {
-        ...prev[addressType],
-        [field]: value
-      }
-    }))
-
-    // If same as billing is checked, update shipping address too
-    if (addressType === 'billingAddress' && sameAsBinding) {
-      setFormData(prev => ({
-        ...prev,
-        shippingAddress: {
-          line1: field === 'line1' ? value : prev.billingAddress?.line1 ?? '',
-          line2: field === 'line2' ? value : prev.billingAddress?.line2 ?? '',
-          city: field === 'city' ? value : prev.billingAddress?.city ?? '',
-          state: field === 'state' ? value : prev.billingAddress?.state ?? '',
-          country: field === 'country' ? value : prev.billingAddress?.country ?? '',
-          zipCode: field === 'zipCode' ? value : prev.billingAddress?.zipCode ?? ''
-        }
-      }))
-    }
-  }
-
-  const handleAddTag = () => {
-    if (currentTag.trim() && !(formData.tags ?? []).includes(currentTag.trim())) {
-      setFormData(prev => ({
-        ...prev,
-        tags: [...(prev.tags ?? []), currentTag.trim()]
-      }))
-      setCurrentTag('')
-    }
-  }
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setFormData(prev => ({
-      ...prev,
-      tags: (prev.tags ?? []).filter(tag => tag !== tagToRemove)
-    }))
-  }
-
-  const handlePhoneChange = (phoneNumber: string) => {
-    setFormData(prev => ({ ...prev, phoneNumber }))
-    
-    // Clear phone error when user starts typing (same as registration pattern)
-    if (hasFieldError('phoneNumber')) {
-      setErrors(prev => prev.filter(error => error.field !== 'phoneNumber'))
-    }
-  }
-
-  const handlePhoneBlur = async (phoneNumber: string, countryInfo: CountryPhoneInfo | null) => {
-    // Store the country phone code for backend submission
-    if (countryInfo?.phoneCode) {
-      setFormData(prev => ({ ...prev, countryPhoneCode: countryInfo.phoneCode }))
-    }
-
-    // Validate phone when user leaves the field (same pattern as registration)
-    if (!phoneNumber?.trim()) {
-      return // Don't validate empty fields on blur
-    }
-
-    try {
-      // Use the provided phone number and country info
-      const countryCode = countryInfo?.countryCode ?? 'GR'
-
-      // Call backend API for validation using proper service (consistent with platform pattern)
-      const result = await phoneValidationService.validatePhoneNumber({
-        phoneNumber: phoneNumber.trim(),
-        countryCode
-      })
-      
-      if (!result.isValid && result.error) {
-        setErrors(prev => [
-          ...prev.filter(error => error.field !== 'phoneNumber'),
-          { field: 'phoneNumber', message: result.error ?? 'Phone number is invalid', code: 'INVALID_PHONE' }
-        ])
-      }
-    } catch (error) {
-      console.error('Phone validation failed:', error)
-      // Don't show error for network issues, just log them
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-
-    // Final validation check before submission (matching registration pattern)
-    if (!isFormValid()) {
-      showError('Please fill in all required fields correctly')
-      setLoading(false)
-      return
-    }
-
-    // Check for any existing validation errors
-    if (errors.length > 0) {
-      showError('Please fix the validation errors before submitting')
-      setLoading(false)
-      return
-    }
-
-    try {
-      
-      // Clean up the data before sending to API - using camelCase as configured in backend
-      const cleanCustomerData: CustomerCreateRequest = {
-        type: formData.type,
-        email: formData.email.trim(),
-        firstName: formData.firstName.trim(),
-        lastName: formData.lastName.trim(),
-        company: formData.company?.trim() ?? undefined,
-        phoneNumber: formData.phoneNumber?.trim() ?? undefined,
-        countryPhoneCode: formData.countryPhoneCode ?? undefined,
-        taxNumber: formData.taxNumber?.trim() ?? undefined,
-        locale: formData.locale ?? 'en-US',
-        timezone: formData.timezone ?? 'UTC',
-        currency: formData.currency ?? 'USD',
-        portalAccess: formData.portalAccess,
-        autoCollection: formData.autoCollection,
-        tags: formData.tags && formData.tags.length > 0 ? formData.tags : [],
-        customFields: formData.customFields ?? {},
-      }
-
-      // Only add addresses if they have all required fields
-      // Transform billing address to backend format if present
-      if (formData.billingAddress?.line1?.trim() && 
-          formData.billingAddress.city?.trim() && 
-          formData.billingAddress.country?.trim() && 
-          formData.billingAddress.zipCode?.trim()) {
-        cleanCustomerData.billingAddress = {
-          type: 'billing',
-          isPrimary: true,
-          name: 'Billing Address',
-          line1: formData.billingAddress.line1.trim(),
-          line2: formData.billingAddress.line2?.trim() ?? undefined,
-          number: '1', // Required field for backend
-          city: formData.billingAddress.city.trim(),
-          state: formData.billingAddress.state?.trim() ?? undefined,
-          country: formData.billingAddress.country.trim(),
-          zipCode: formData.billingAddress.zipCode.trim(),
-        }
-
-        // Transform shipping address to backend format if present
-        if (sameAsBinding) {
-          // Copy billing address for shipping
-          cleanCustomerData.shippingAddress = {
-            ...cleanCustomerData.billingAddress,
-            type: 'shipping',
-            isPrimary: false,
-            name: 'Shipping Address',
-          }
-        }
-      }
-
-      // Add separate shipping address if not same as billing
-      if (!sameAsBinding && formData.shippingAddress?.line1?.trim() && 
-          formData.shippingAddress.city?.trim() && 
-          formData.shippingAddress.country?.trim() && 
-          formData.shippingAddress.zipCode?.trim()) {
-        cleanCustomerData.shippingAddress = {
-          type: 'shipping',
-          isPrimary: false,
-          name: 'Shipping Address',
-          line1: formData.shippingAddress.line1.trim(),
-          line2: formData.shippingAddress.line2?.trim() ?? undefined,
-          number: '1', // Required field for backend
-          city: formData.shippingAddress.city.trim(),
-          state: formData.shippingAddress.state?.trim() ?? undefined,
-          country: formData.shippingAddress.country.trim(),
-          zipCode: formData.shippingAddress.zipCode.trim(),
-        }
-      }
-
-      await customerService.create(cleanCustomerData)
-      showSuccess('Customer created successfully')
-      onCustomerAdded()
-      onClose()
-      
-      // Reset form
-      setFormData({
-        type: CustomerType.Individual, // Reset to Individual
-        email: '',
-        firstName: '',
-        lastName: '',
-        company: '',
-        phoneNumber: '',
-        countryPhoneCode: '',
-        taxNumber: '',
-        locale: 'en',
-        timezone: '',
-        currency: '',
-        portalAccess: true,
-        autoCollection: true,
-        tags: [],
-        customFields: {},
-        billingAddress: {
-          line1: '',
-          line2: '',
-          city: '',
-          state: '',
-          zipCode: '',
-          country: ''
-        },
-        shippingAddress: {
-          line1: '',
-          line2: '',
-          city: '',
-          state: '',
-          zipCode: '',
-          country: ''
-        }
-      })
-    } catch (error) {
-      if (error instanceof Error) {
-        showError(`Failed to create customer: ${error.message}`)
-      } else if (error && typeof error === 'object' && 'response' in error) {
-        const apiError = error as { response?: { data?: { message?: string } } }
-        if (apiError.response?.data?.message) {
-          showError(`Failed to create customer: ${apiError.response.data.message}`)
-        } else {
-          showError('Failed to create customer: API Error')
-        }
-      } else {
-        showError('Failed to create customer: Unknown error')
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
+export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onClose, onCustomerAdded }) => {
+  const {
+    formData,
+    loading,
+    currentTag,
+    sameAsBilling,
+    hasFieldError,
+    getFieldError,
+    handleCustomerTypeChange,
+    handleInputChange,
+    handleAddressChange,
+    handleAddTag,
+    handleRemoveTag,
+    handleTagInputChange,
+    handlePhoneChange,
+    handlePhoneBlur,
+    handleSameAsBillingChange,
+    handleSubmit,
+  } = useAddCustomerModalController({ onClose, onCustomerAdded })
 
   return (
     <Modal
@@ -372,7 +61,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
             <div className="grid grid-cols-2 gap-3">
               <Button
                 type="button"
-                onClick={() => setFormData(prev => ({ ...prev, type: CustomerType.Individual }))}
+                onClick={() => handleCustomerTypeChange(CustomerType.Individual)}
                 variant={formData.type === CustomerType.Individual ? 'primary' : 'secondary'}
                 size="md"
                 icon={User}
@@ -391,7 +80,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
               </Button>
               <Button
                 type="button"
-                onClick={() => setFormData(prev => ({ ...prev, type: CustomerType.Business }))}
+                onClick={() => handleCustomerTypeChange(CustomerType.Business)}
                 variant={formData.type === CustomerType.Business ? 'primary' : 'secondary'}
                 size="md"
                 icon={Building2}
@@ -613,10 +302,10 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
           </div>
           
           <div className="flex space-x-2">
-            <input
-              type="text"
-              value={currentTag}
-              onChange={(e) => setCurrentTag(e.target.value)}
+                    <input
+                      type="text"
+                      value={currentTag}
+                      onChange={(e) => handleTagInputChange(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
               className="flex-1 px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#7767DA]/50 focus:border-[#7767DA]/50 transition-all duration-200"
               placeholder="Add a tag..."
@@ -723,8 +412,8 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
               <div className="relative inline-flex items-center">
                 <input
                   type="checkbox"
-                  checked={sameAsBinding}
-                  onChange={(e) => setSameAsBinding(e.target.checked)}
+                  checked={sameAsBilling}
+                  onChange={(e) => handleSameAsBillingChange(e.target.checked)}
                   className="sr-only peer"
                   aria-label="Use Billing as Shipping Address"
                 />
@@ -734,7 +423,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
           </div>
           
           {/* Address Fields or Same as Billing Message */}
-          {sameAsBinding ? (
+          {sameAsBilling ? (
             <div className="p-4 bg-[#00BCD4]/10 border border-[#00BCD4]/30 rounded-lg">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 rounded-full bg-[#00BCD4]/20 flex items-center justify-center">

@@ -1,16 +1,16 @@
-﻿import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck, Hash, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck, Hash, X } from 'lucide-react'
+import React from 'react'
 
-import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { customerService } from '@/shared/services/api/customer.service'
-import type { CustomerResponse, CustomerUpdateRequest, CustomerAddressCreateRequest } from '@/shared/services/api/customer.service'
+import { useEditCustomerModalController } from '../hooks/useEditCustomerModalController'
+
+import type { CustomerResponse } from '@/shared/services/api/customer.service'
 import { CustomerType } from '@/shared/types/customer.types'
 import { ApiDropdown, currencyDropdownConfig, timezoneDropdownConfig, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
 import { Button, IconButton } from '@/shared/ui/Button'
 import { FormInput } from '@/shared/ui/FormInput'
 import { Modal } from '@/shared/ui/Modal'
-import { PhoneInput } from '@/shared/ui/PhoneInput/PhoneInput'
+import { PhoneInput } from '@/shared/ui/PhoneInput'
 
 interface EditCustomerModalProps {
   isOpen: boolean
@@ -25,124 +25,22 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
   customer,
   onCustomerUpdated
 }) => {
-  const { showSuccess, showError } = useGlobalToast()
-  const [formData, setFormData] = useState<CustomerUpdateRequest>({
-    type: customer.type,
-    email: customer.email,
-    firstName: customer.firstName,
-    lastName: customer.lastName,
-    company: customer.company ?? '',
-    phoneNumber: customer.phoneNumber ?? '',
-    countryPhoneCode: '',
-    taxNumber: customer.taxNumber ?? '',
-    locale: customer.locale ?? 'en',
-    timezone: customer.timezone ?? '',
-    currency: customer.currency,
-    portalAccess: customer.portalAccess,
-    autoCollection: customer.autoCollection,
-    tags: customer.tags,
-    customFields: customer.customFields
-  })
-  
-  const [billingAddress, setBillingAddress] = useState<CustomerAddressCreateRequest>({
-    type: 'billing',
-    isPrimary: true,
-    line1: customer.billingAddress?.line1 ?? '',
-    line2: customer.billingAddress?.line2 ?? '',
-    city: customer.billingAddress?.city ?? '',
-    state: customer.billingAddress?.state ?? '',
-    country: customer.billingAddress?.country ?? '',
-    zipCode: customer.billingAddress?.zipCode ?? ''
-  })
-  
-  const [shippingAddress, setShippingAddress] = useState<CustomerAddressCreateRequest>({
-    type: 'shipping',
-    isPrimary: false,
-    line1: customer.shippingAddress?.line1 ?? '',
-    line2: customer.shippingAddress?.line2 ?? '',
-    city: customer.shippingAddress?.city ?? '',
-    state: customer.shippingAddress?.state ?? '',
-    country: customer.shippingAddress?.country ?? '',
-    zipCode: customer.shippingAddress?.zipCode ?? ''
-  })
-  
-  const [newTag, setNewTag] = useState('')
-  const [isSaving, setIsSaving] = useState(false)
-
-
-
-  const handleInputChange = (field: string, value: string | number | boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }))
-  }
-
-  const handleAddTag = () => {
-    if (newTag.trim() && !formData.tags?.includes(newTag.trim())) {
-      setFormData(prev => ({
-        ...prev,
-        tags: [...(prev.tags || []), newTag.trim()]
-      }))
-      setNewTag('')
-    }
-  }
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setFormData(prev => ({
-      ...prev,
-      tags: (prev.tags || []).filter(tag => tag !== tagToRemove)
-    }))
-  }
-
-  const handleAddressChange = (addressType: 'billing' | 'shipping', field: string, value: string) => {
-    const setter = addressType === 'billing' ? setBillingAddress : setShippingAddress
-    setter(prev => ({
-      ...prev,
-      [field]: value
-    }))
-  }
-
-  const handleCopyBillingToShipping = () => {
-    setShippingAddress({
-      ...billingAddress,
-      type: 'shipping',
-      isPrimary: false
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSaving(true)
-
-    try {
-      // Helper function to check if address has any data
-      const hasAddressData = (address: CustomerAddressCreateRequest) => address.line1.trim() || address.city.trim() || address.country.trim()
-
-      // Create update payload including addresses only if they have data
-      const updatePayload = {
-        ...formData,
-        type: customer.type, // Ensure type remains as original customer type
-        billingAddress: hasAddressData(billingAddress) ? billingAddress : null,
-        shippingAddress: hasAddressData(shippingAddress) ? shippingAddress : null
-      }
-      
-      // Update customer with addresses
-      const updatedCustomer = await customerService.update(customer.id, updatePayload)
-      
-      showSuccess('Customer updated successfully')
-      onCustomerUpdated(updatedCustomer)
-      onClose()
-    } catch (error) {
-      if (error instanceof Error) {
-        showError(`Failed to update customer: ${error.message}`)
-      } else {
-        showError('Failed to update customer: Unknown error')
-      }
-    } finally {
-      setIsSaving(false)
-    }
-  }
+  const {
+    formData,
+    billingAddress,
+    shippingAddress,
+    newTag,
+    isSaving,
+    handleInputChange,
+    handleAddTag,
+    handleRemoveTag,
+    handleTagInputChange,
+    handlePhoneChange,
+    handlePhoneBlur,
+    handleAddressChange,
+    handleCopyBillingToShipping,
+    handleSubmit,
+  } = useEditCustomerModalController({ customer, onCustomerUpdated, onClose })
 
   return (
     <Modal
@@ -209,7 +107,8 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                             id="phoneNumber"
                             name="phoneNumber"
                             value={formData.phoneNumber}
-                            onChange={(phoneNumber: string) => handleInputChange('phoneNumber', phoneNumber)}
+                            onChange={handlePhoneChange}
+                            onBlur={handlePhoneBlur}
                             validateOnBlur={false}
                             label="Phone Number"
                             placeholder="Enter phone number"
@@ -268,7 +167,8 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                             id="phoneNumber"
                             name="phoneNumber"
                             value={formData.phoneNumber}
-                            onChange={(phoneNumber: string) => handleInputChange('phoneNumber', phoneNumber)}
+                            onChange={handlePhoneChange}
+                            onBlur={handlePhoneBlur}
                             validateOnBlur={false}
                             label="Business Phone"
                             placeholder="Enter business phone"
@@ -596,7 +496,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                     <input
                       type="text"
                       value={newTag}
-                      onChange={(e) => setNewTag(e.target.value)}
+                      onChange={(e) => handleTagInputChange(e.target.value)}
                       placeholder="Add tag"
                       className="flex-1 auth-input"
                       onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
