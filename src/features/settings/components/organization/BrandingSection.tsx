@@ -1,29 +1,24 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Palette, Upload, Eye, Download, Trash2, Image } from 'lucide-react'
-import React, { useState } from 'react'
+import React from 'react'
+
+import { useBrandingController } from '../../hooks/useBrandingController'
 
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 
 
 export const BrandingSection: React.FC = () => {
-  const [logoPreview, setLogoPreview] = useState<string | null>(null)
-  const [faviconPreview, setFaviconPreview] = useState<string | null>(null)
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'favicon') => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        if (type === 'logo') {
-          setLogoPreview(reader.result as string)
-        } else {
-          setFaviconPreview(reader.result as string)
-        }
-      }
-      reader.readAsDataURL(file)
-    }
-  }
+  const {
+    logoPreview,
+    faviconPreview,
+    isSaving,
+    disableSave,
+    error,
+    handleFileUpload,
+    handleRemoveAsset,
+    handleSaveBranding,
+  } = useBrandingController()
 
   return (
     <motion.div
@@ -34,17 +29,13 @@ export const BrandingSection: React.FC = () => {
     >
       <div>
         <h1 className="text-lg font-medium text-white mb-4">
-          Branding{' '}
-          <span className="text-primary">
-            & Appearance
-          </span>
+          Branding <span className="text-primary">& Appearance</span>
         </h1>
         <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
           Customize your organization&apos;s visual identity and theme
         </p>
       </div>
 
-      {/* Logo & Assets */}
       <Card animate={false} padding="lg">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-primary/20 rounded-lg">
@@ -57,7 +48,6 @@ export const BrandingSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Company Logo */}
           <div className="space-y-4">
             <div>
               <h4 className="text-xs font-normal tracking-tight text-white mb-2">Company Logo</h4>
@@ -72,7 +62,16 @@ export const BrandingSection: React.FC = () => {
                     <Button variant="ghost" icon={Eye} iconPosition="left" size="sm">
                       Preview
                     </Button>
-                    <Button variant="danger" icon={Trash2} iconPosition="left" size="sm">
+                    <Button variant="ghost" icon={Download} iconPosition="left" size="sm">
+                      Download
+                    </Button>
+                    <Button
+                      variant="danger"
+                      icon={Trash2}
+                      iconPosition="left"
+                      size="sm"
+                      onClick={() => handleRemoveAsset('logo')}
+                    >
                       Remove
                     </Button>
                   </div>
@@ -89,7 +88,7 @@ export const BrandingSection: React.FC = () => {
                       id="logo-upload"
                       type="file"
                       accept="image/*"
-                      onChange={(e) => handleFileUpload(e, 'logo')}
+                      onChange={(event) => handleFileUpload(event, 'logo')}
                       className="hidden"
                     />
                   </div>
@@ -98,7 +97,6 @@ export const BrandingSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Favicon */}
           <div className="space-y-4">
             <div>
               <h4 className="text-xs font-normal tracking-tight text-white mb-2">Favicon</h4>
@@ -113,14 +111,23 @@ export const BrandingSection: React.FC = () => {
                     <Button variant="ghost" icon={Eye} iconPosition="left" size="sm">
                       Preview
                     </Button>
-                    <Button variant="danger" icon={Trash2} iconPosition="left" size="sm">
+                    <Button variant="ghost" icon={Download} iconPosition="left" size="sm">
+                      Download
+                    </Button>
+                    <Button
+                      variant="danger"
+                      icon={Trash2}
+                      iconPosition="left"
+                      size="sm"
+                      onClick={() => handleRemoveAsset('favicon')}
+                    >
                       Remove
                     </Button>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <Upload className="w-6 h-6 text-gray-400 mx-auto" />
+                  <Upload className="w-8 h-8 text-gray-400 mx-auto" />
                   <div>
                     <label htmlFor="favicon-upload" className="cursor-pointer">
                       <span className="text-xs text-[#D417C8] hover:text-[#BD2CD0]">Click to upload</span>
@@ -130,7 +137,7 @@ export const BrandingSection: React.FC = () => {
                       id="favicon-upload"
                       type="file"
                       accept="image/*"
-                      onChange={(e) => handleFileUpload(e, 'favicon')}
+                      onChange={(event) => handleFileUpload(event, 'favicon')}
                       className="hidden"
                     />
                   </div>
@@ -139,92 +146,20 @@ export const BrandingSection: React.FC = () => {
             </div>
           </div>
         </div>
-      </Card>
 
-      {/* Color Scheme */}
-      <Card animate={false} padding="lg">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-primary/20 rounded-lg">
-            <Palette className="w-5 h-5 text-[#32A1E4]" />
-          </div>
-          <div>
-            <h3 className="text-sm font-normal tracking-tight text-white">Color Scheme</h3>
-            <p className="text-xs text-gray-400">Customize your brand colors and theme</p>
-          </div>
-        </div>
+        {error && <p className="text-sm text-red-400 mt-4">{error}</p>}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="primary-color" className="text-xs font-normal tracking-tight text-white block mb-2">Primary Brand Color</label>
-              <div className="flex items-center gap-3">
-                <input
-                  id="primary-color"
-                  type="color"
-                  defaultValue="#D417C8"
-                  className="w-12 h-10 rounded-lg border border-white/20 bg-white/10"
-                />
-                <input
-                  type="text"
-                  defaultValue="#D417C8"
-                  className="flex-1 px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-xs text-white placeholder-gray-400 focus:outline-none focus:border-[#14bdea]"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="secondary-color" className="text-xs font-normal tracking-tight text-white block mb-2">Secondary Brand Color</label>
-              <div className="flex items-center gap-3">
-                <input
-                  id="secondary-color"
-                  type="color"
-                  defaultValue="#14BDEA"
-                  className="w-12 h-10 rounded-lg border border-white/20 bg-white/10"
-                />
-                <input
-                  type="text"
-                  defaultValue="#14BDEA"
-                  className="flex-1 px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-xs text-white placeholder-gray-400 focus:outline-none focus:border-[#14bdea]"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="accent-color" className="text-xs font-normal tracking-tight text-white block mb-2">Accent Color</label>
-              <div className="flex items-center gap-3">
-                <input
-                  id="accent-color"
-                  type="color"
-                  defaultValue="#7767DA"
-                  className="w-12 h-10 rounded-lg border border-white/20 bg-white/10"
-                />
-                <input
-                  type="text"
-                  defaultValue="#7767DA"
-                  className="flex-1 px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-xs text-white placeholder-gray-400 focus:outline-none focus:border-[#14bdea]"
-                />
-              </div>
-            </div>
-
-            <div className="p-4 bg-white/4 rounded-lg border border-white/8">
-              <h4 className="text-xs font-normal tracking-tight text-white mb-2">Color Preview</h4>
-              <div className="flex gap-2">
-                <div className="w-8 h-8 bg-[#D417C8] rounded-lg" />
-                <div className="w-8 h-8 bg-[#14BDEA] rounded-lg" />
-                <div className="w-8 h-8 bg-[#7767DA] rounded-lg" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 pt-6 border-t border-white/10 flex gap-3">
-          <Button variant="primary" size="lg">
-            Save Branding Settings
-          </Button>
-          <Button variant="secondary" icon={Download} iconPosition="left" size="lg">
-            Export Brand Kit
+        <div className="flex justify-end mt-8">
+          <Button
+            onClick={handleSaveBranding}
+            disabled={disableSave}
+            loading={isSaving}
+            icon={Palette}
+            iconPosition="left"
+            variant="primary"
+            size="sm"
+          >
+            {isSaving ? 'Saving...' : 'Save Branding'}
           </Button>
         </div>
       </Card>
