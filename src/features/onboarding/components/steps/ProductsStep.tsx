@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Package } from 'lucide-react'
 
+import { useProductsStepController } from '../../hooks/useProductsStepController'
 import type { ProductInfo } from '../../types/onboarding'
 
 import { ActionButton } from '@/shared/ui/ActionButton'
@@ -11,22 +12,7 @@ interface ProductsStepProps {
 }
 
 export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
-  const handleAddProduct = () => {
-    // This would typically open a modal or navigate to a product creation form
-    onChange({
-      ...data,
-      hasProducts: true,
-      products: [
-        ...data.products,
-        {
-          id: Date.now().toString(),
-          name: 'Sample Product',
-          description: 'Description for your first product',
-          price: 0,
-        },
-      ],
-    })
-  }
+  const { products, hasProducts, handleAddProduct } = useProductsStepController({ data, onChange })
 
   return (
     <motion.div
@@ -80,7 +66,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
         </div>
 
         {/* Products List (if any) */}
-        {data.products.length > 0 && (
+        {hasProducts && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -88,7 +74,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
           >
             <h4 className="text-lg font-medium text-white">Your Products</h4>
             <div className="space-y-3">
-              {data.products.map(product => (
+              {products.map(product => (
                 <div
                   key={product.id}
                   className="p-4 rounded-lg bg-[#212124] border border-[#2c2d31]"

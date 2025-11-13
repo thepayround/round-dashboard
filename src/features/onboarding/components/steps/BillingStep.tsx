@@ -1,6 +1,7 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { CreditCard, ExternalLink, CheckCircle } from 'lucide-react'
 
+import { useBillingStepController } from '../../hooks/useBillingStepController'
 import type { BillingSettings } from '../../types/onboarding'
 
 import { Button } from '@/shared/ui/Button'
@@ -11,14 +12,7 @@ interface BillingStepProps {
 }
 
 export const BillingStep = ({ data, onChange }: BillingStepProps) => {
-  const handleConnectStripe = () => {
-    // This would typically redirect to Stripe Connect or open integration flow
-    onChange({
-      ...data,
-      isConnected: true,
-      provider: 'stripe',
-    })
-  }
+  const { isConnected, handleConnect } = useBillingStepController({ data, onChange })
 
   return (
     <motion.div
@@ -46,7 +40,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
 
       {/* Connect Payment Method Section */}
       <div className="space-y-6">
-        {!data.isConnected ? (
+        {!isConnected ? (
           <div className="text-center space-y-6">
             <div className="p-8">
               <div className="space-y-6">
@@ -87,7 +81,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                 </div>
 
                 <Button
-                  onClick={handleConnectStripe}
+                  onClick={handleConnect}
                   variant="primary"
                   size="lg"
                   icon={ExternalLink}

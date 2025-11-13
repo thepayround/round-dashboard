@@ -1,7 +1,8 @@
 ﻿import { motion } from 'framer-motion'
 import { MapPin, Building, Hash, Info } from 'lucide-react'
 
-import type { AddressInfo, EnhancedAddressInfo } from '../../types/onboarding'
+import { useAddressStepController } from '../../hooks/useAddressStepController'
+import type { EnhancedAddressInfo } from '../../types/onboarding'
 
 import { ApiDropdown, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { FormInput } from '@/shared/ui/FormInput'
@@ -22,34 +23,10 @@ export const AddressStep = ({
   isPrePopulated = false,
   readOnly = false,
 }: AddressStepProps) => {
-  // Initialize billing address if not provided
-  const billingAddress: AddressInfo = data.billingAddress ?? {
-    name: '',
-    street: '',
-    addressLine1: '',
-    addressLine2: '',
-    number: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
-    addressType: 'billing',
-    isPrimary: true,
-  }
-
-  const handleAddressChange = (field: keyof AddressInfo, value: string) => {
-    const updatedBilling = { ...billingAddress, [field]: value, addressType: 'billing' }
-    const updatedData: EnhancedAddressInfo = {
-      ...data,
-      billingAddress: updatedBilling,
-    }
-
-    onChange(updatedData)
-  }
-
-  const handleSelectChange = (field: keyof AddressInfo, value: string) => {
-    handleAddressChange(field, value)
-  }
+  const { billingAddress, handleAddressChange, handleSelectChange } = useAddressStepController({
+    data,
+    onChange,
+  })
 
 
   return (

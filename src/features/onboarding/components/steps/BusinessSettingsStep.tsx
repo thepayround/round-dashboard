@@ -1,6 +1,7 @@
 ﻿import { motion } from 'framer-motion'
 import { Settings } from 'lucide-react'
 
+import { useBusinessSettingsStepController } from '../../hooks/useBusinessSettingsStepController'
 import type { BusinessSettings } from '../../types/onboarding'
 
 import { 
@@ -20,13 +21,7 @@ export const BusinessSettingsStep = ({
   onChange,
   errors = {},
 }: BusinessSettingsStepProps) => {
-
-  const handleSelectChange = (field: keyof BusinessSettings, value: string) => {
-    onChange({
-      ...data,
-      [field]: value,
-    })
-  }
+  const { handleSelectChange } = useBusinessSettingsStepController({ data, onChange })
 
 
   return (

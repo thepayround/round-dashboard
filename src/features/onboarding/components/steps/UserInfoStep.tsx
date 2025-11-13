@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { User, Mail, Phone } from 'lucide-react'
 
+import { useUserInfoStepController } from '../../hooks/useUserInfoStepController'
 import type { UserInfo } from '../../types/onboarding'
 
 interface UserInfoStepProps {
@@ -16,12 +17,7 @@ export const UserInfoStep = ({
   errors = {},
   isPrePopulated = false,
 }: UserInfoStepProps) => {
-  const handleInputChange = (field: keyof UserInfo) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({
-      ...data,
-      [field]: e.target.value,
-    })
-  }
+  const { handleInputChange } = useUserInfoStepController({ data, onChange })
 
 
   return (
