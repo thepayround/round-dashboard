@@ -1,196 +1,80 @@
-﻿import { motion } from 'framer-motion'
-import { Eye, EyeOff, CheckCircle, AlertCircle, Lock, RotateCcw } from 'lucide-react'
-import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Eye, EyeOff, CheckCircle, AlertCircle, Lock, RotateCcw, Shield } from 'lucide-react'
 
-import { apiClient } from '@/shared/services/apiClient'
+import { useChangePasswordController } from '../hooks/useChangePasswordController'
+
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { IconButton } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
-import {
-  validatePassword,
-  getFieldError,
-  hasFieldError,
-  type ValidationError
-} from '@/shared/utils/validation'
+import { getFieldError, hasFieldError } from '@/shared/utils/validation'
+
 
 interface ChangePasswordFormProps {
   className?: string
 }
 
 export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ className = '' }) => {
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
-  const [showNewPassword, setShowNewPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [errors, setErrors] = useState<ValidationError[]>([])
-  
-  const [formData, setFormData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  })
-
-  const handleInputChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [field]: e.target.value }))
-    setError(null)
-    setIsSuccess(false)
-
-    // Clear field error when user starts typing
-    if (hasFieldError(errors, field)) {
-      setErrors(prev => prev.filter(error => error.field !== field))
-    }
-
-    // If changing new password, also clear confirm password errors
-    if (field === 'newPassword' && hasFieldError(errors, 'confirmPassword')) {
-      setErrors(prev => prev.filter(error => error.field !== 'confirmPassword'))
-    }
-  }
-
-  const handleInputBlur = (field: keyof typeof formData) => (e: React.FocusEvent<HTMLInputElement>) => {
-    const { value } = e.target
-
-    // Don't validate empty fields on blur
-    if (!value?.trim()) {
-      return
-    }
-
-    // Validate field when user leaves it
-    if (field === 'currentPassword') {
-      const fieldValidation = validatePassword(value)
-      if (!fieldValidation.isValid) {
-        // Map the field name from 'password' to 'currentPassword'
-        const mappedErrors = fieldValidation.errors.map(error => ({
-          ...error,
-          field: 'currentPassword'
-        }))
-        setErrors(prev => [...prev.filter(error => error.field !== field), ...mappedErrors])
-      }
-    } else if (field === 'newPassword') {
-      const fieldValidation = validatePassword(value)
-      if (!fieldValidation.isValid) {
-        // Map the field name from 'password' to 'newPassword'
-        const mappedErrors = fieldValidation.errors.map(error => ({
-          ...error,
-          field: 'newPassword'
-        }))
-        setErrors(prev => [...prev.filter(error => error.field !== field), ...mappedErrors])
-      }
-    } else if (field === 'confirmPassword') {
-      // Validate password confirmation
-      if (value && value !== formData.newPassword) {
-        setErrors(prev => [
-          ...prev.filter(error => error.field !== field),
-          { field: 'confirmPassword', message: 'Passwords do not match', code: 'PASSWORD_MISMATCH' }
-        ])
-      }
-    }
-  }
-
-  const handleSubmitClick = () => {
-    const fakeEvent = { preventDefault: () => {} } as React.FormEvent
-    handleSubmit(fakeEvent)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setIsLoading(true)
-
-    try {
-      // Client-side validation - use the same validation as registration
-      if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
-        throw new Error('All fields are required')
-      }
-
-      // Validate new password using registration validation
-      const passwordValidation = validatePassword(formData.newPassword)
-      if (!passwordValidation.isValid) {
-        // Map the field name from 'password' to 'newPassword'
-        const mappedErrors = passwordValidation.errors.map(error => ({
-          ...error,
-          field: 'newPassword'
-        }))
-        setErrors(mappedErrors)
-        setIsLoading(false)
-        return
-      }
-
-      // Validate password confirmation
-      if (formData.newPassword !== formData.confirmPassword) {
-        setErrors([{ field: 'confirmPassword', message: 'Passwords do not match', code: 'PASSWORD_MISMATCH' }])
-        return
-      }
-
-      const response = await apiClient.changePassword(
-        formData.currentPassword,
-        formData.newPassword,
-        formData.confirmPassword
-      )
-
-      if (response.success) {
-        setIsSuccess(true)
-        setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })
-        setErrors([])
-        
-        // Clear success message after 5 seconds
-        setTimeout(() => {
-          setIsSuccess(false)
-        }, 5000)
-      } else {
-        throw new Error(response.message ?? 'Failed to change password')
-      }
-      
-    } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } }; message?: string }
-      setError(error.response?.data?.message ?? error.message ?? 'Failed to change password')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleReset = () => {
-    setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })
-    setError(null)
-    setIsSuccess(false)
-    setErrors([])
-  }
+  const {
+    formData,
+    errors,
+    apiError,
+    isLoading,
+    isSuccess,
+    visibility,
+    handleInputChange,
+    handleInputBlur,
+    toggleVisibility,
+    handleSubmit,
+    handleReset,
+    disableSubmit,
+  } = useChangePasswordController()
 
   return (
-    <div className={`${className}`}>
-      {/* Success State */}
+    <div className={`bg-[#0F1115] border border-white/5 rounded-2xl p-6 md:p-8 lg:p-10 shadow-2xl shadow-primary/5 ${className}`}>
+      <div className="text-center mb-10">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#D417C8]/15 mb-5 border border-[#D417C8]/30">
+          <Lock className="w-6 h-6 text-[#D417C8]" />
+        </div>
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-2 bg-white/[0.03] px-3 py-1 rounded-full border border-white/[0.08] text-white/70 text-sm">
+            <Shield className="w-4 h-4" />
+            Enhanced security enabled
+          </div>
+          <div>
+            <h2 className="text-2xl font-normal tracking-tight text-white">Secure Password Update</h2>
+            <p className="text-gray-400 text-sm mt-2 max-w-lg mx-auto">
+              Update your password regularly to keep your account secure. New passwords must meet strict security requirements.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {isSuccess && (
-        <div className="mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-3 h-3 text-green-400 flex-shrink-0" />
+        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 text-emerald-50 text-sm mb-6">
+          <div className="flex items-start gap-3">
+            <CheckCircle className="w-5 h-5 text-emerald-400" />
             <div>
-              <h4 className="text-green-400 font-normal text-xs">Password updated successfully</h4>
-              <p className="text-green-300/80 text-sm mt-0.5">
-                Your password has been changed securely.
-              </p>
+              <h4 className="text-white font-medium mb-1">Password changed successfully</h4>
+              <p className="text-emerald-50/80 text-sm">A confirmation email has been sent to your account.</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Error State */}
-      {error && (
-        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="w-3 h-3 text-[#D417C8] flex-shrink-0" />
+      {apiError && (
+        <div className="bg-[#D417C8]/10 border border-[#D417C8]/30 rounded-2xl p-4 text-[#fda4af] text-sm mb-6">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-4 h-4 text-[#D417C8]" />
             <div>
-              <h4 className="text-[#D417C8] font-normal text-xs">Password change failed</h4>
-              <p className="text-red-300/80 text-sm mt-0.5">{error}</p>
+              <h4 className="text-white font-medium mb-1">Failed to change password</h4>
+              <p className="text-[#fda4af]/80 text-sm">{apiError}</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Form */}
       <div className="max-w-md mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Current Password Section */}
+        <form onSubmit={event => handleSubmit(event)} className="space-y-6">
           <div className="p-4 bg-white/[0.02] rounded-lg border border-white/8">
             <h3 className="text-sm font-normal tracking-tight text-white mb-3 flex items-center gap-2">
               <Lock className="w-4 h-4 text-gray-400" />
@@ -204,7 +88,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                 <Lock className="input-icon-left auth-icon-primary" />
                 <input
                   id="currentPassword"
-                  type={showCurrentPassword ? 'text' : 'password'}
+                  type={visibility.currentPassword ? 'text' : 'password'}
                   name="currentPassword"
                   value={formData.currentPassword}
                   onChange={handleInputChange('currentPassword')}
@@ -216,11 +100,11 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                 />
                 <IconButton
                   type="button"
-                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  icon={showCurrentPassword ? EyeOff : Eye}
+                  onClick={() => toggleVisibility('currentPassword')}
+                  icon={visibility.currentPassword ? EyeOff : Eye}
                   variant="ghost"
                   size="md"
-                  aria-label={showCurrentPassword ? 'Hide current password' : 'Show current password'}
+                  aria-label={visibility.currentPassword ? 'Hide current password' : 'Show current password'}
                   className="input-icon-right"
                 />
               </div>
@@ -237,14 +121,12 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
             </div>
           </div>
 
-          {/* New Password Section */}
           <div className="p-4 bg-white/[0.02] rounded-lg border border-white/8">
             <h3 className="text-sm font-normal tracking-tight text-white mb-3 flex items-center gap-2">
               <Lock className="w-4 h-4 text-emerald-400" />
               New Password
             </h3>
             <div className="space-y-4">
-              {/* New Password */}
               <div>
                 <label htmlFor="newPassword" className="auth-label">
                   New Password
@@ -253,7 +135,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                   <Lock className="input-icon-left auth-icon-primary" />
                   <input
                     id="newPassword"
-                    type={showNewPassword ? 'text' : 'password'}
+                    type={visibility.newPassword ? 'text' : 'password'}
                     name="newPassword"
                     value={formData.newPassword}
                     onChange={handleInputChange('newPassword')}
@@ -265,22 +147,18 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                   />
                   <IconButton
                     type="button"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    icon={showNewPassword ? EyeOff : Eye}
+                    onClick={() => toggleVisibility('newPassword')}
+                    icon={visibility.newPassword ? EyeOff : Eye}
                     variant="ghost"
                     size="md"
-                    aria-label={showNewPassword ? 'Hide new password' : 'Show new password'}
+                    aria-label={visibility.newPassword ? 'Hide new password' : 'Show new password'}
                     className="input-icon-right"
                   />
                 </div>
 
-                {/* Password Strength Indicator */}
                 {formData.newPassword && (
                   <div className="mt-3">
-                    <PasswordStrengthIndicator 
-                      password={formData.newPassword}
-                      showStrengthBar
-                    />
+                    <PasswordStrengthIndicator password={formData.newPassword} showStrengthBar />
                   </div>
                 )}
 
@@ -296,7 +174,6 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                 )}
               </div>
 
-              {/* Confirm New Password */}
               <div>
                 <label htmlFor="confirmPassword" className="auth-label">
                   Confirm New Password
@@ -305,7 +182,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                   <Lock className="input-icon-left auth-icon-primary" />
                   <input
                     id="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
+                    type={visibility.confirmPassword ? 'text' : 'password'}
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleInputChange('confirmPassword')}
@@ -317,11 +194,11 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
                   />
                   <IconButton
                     type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    icon={showConfirmPassword ? EyeOff : Eye}
+                    onClick={() => toggleVisibility('confirmPassword')}
+                    icon={visibility.confirmPassword ? EyeOff : Eye}
                     variant="ghost"
                     size="md"
-                    aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                    aria-label={visibility.confirmPassword ? 'Hide confirm password' : 'Show confirm password'}
                     className="input-icon-right"
                   />
                 </div>
@@ -339,7 +216,6 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex justify-center gap-3 pt-2">
             <ActionButton
               label="Reset"
@@ -353,8 +229,8 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
             />
             <ActionButton
               label={isLoading ? 'Changing...' : 'Change Password'}
-              onClick={handleSubmitClick}
-              disabled={isLoading || !formData.currentPassword || !formData.newPassword || !formData.confirmPassword}
+              onClick={() => handleSubmit()}
+              disabled={disableSubmit}
               size="sm"
               actionType="general"
               loading={isLoading}
@@ -366,4 +242,3 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
     </div>
   )
 }
-
