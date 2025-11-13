@@ -1,13 +1,17 @@
 import { motion } from 'framer-motion'
-import type { LucideIcon} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react'
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react'
-import type { ReactNode} from 'react';
+import type { ReactNode } from 'react'
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
+
 
 import { CardContent } from './Card.Content'
 import { CardFooter } from './Card.Footer'
 import { CardHeader } from './Card.Header'
+import { useCardController } from './useCardController'
+
+import { cn } from '@/shared/utils/cn'
 
 export interface CardProps {
   children?: ReactNode
@@ -119,6 +123,14 @@ const CardComponent = ({
 }: CardProps) => {
   const colorConfig = colorVariants[color]
   const paddingClass = paddingVariants[padding]
+  const isNavigationLink = variant === 'navigation' && Boolean(href)
+  const isInteractive = Boolean(onClick) || clickable || isNavigationLink
+
+  const { isFocused, isPressed, interactionProps } = useCardController({
+    clickable: isInteractive,
+    onPress: onClick,
+    isInteractiveElement: isNavigationLink,
+  })
   
   const getTrendColor = (direction: 'up' | 'down' | 'neutral') => {
     switch (direction) {
@@ -132,20 +144,23 @@ const CardComponent = ({
 
   // Polar-inspired clean design
   const baseClasses = (nested || variant === 'nested')
-    ? `
-      transition-all duration-200
-      ${paddingClass}
-      ${clickable || onClick ? 'cursor-pointer hover:border-[#2c2d31]' : ''}
-      ${className}
-    `.trim()
-    : `
-      bg-[#171719] border border-[#1e1f22] rounded-lg
-      relative overflow-hidden group
-      transition-all duration-200
-      ${paddingClass}
-      ${clickable || onClick ? 'cursor-pointer hover:border-[#25262a]' : ''}
-      ${className}
-    `.trim()
+    ? cn(
+        'transition-all duration-200',
+        paddingClass,
+        isInteractive && 'cursor-pointer hover:border-[#2c2d31]',
+        isFocused && 'ring-1 ring-white/10',
+        isPressed && 'scale-[0.995]',
+        className
+      )
+    : cn(
+        'bg-[#171719] border border-[#1e1f22] rounded-lg relative overflow-hidden group',
+        'transition-all duration-200',
+        paddingClass,
+        isInteractive && 'cursor-pointer hover:border-[#25262a]',
+        isFocused && 'ring-1 ring-white/10',
+        isPressed && 'scale-[0.995]',
+        className
+      )
 
   const CardContent = () => (
     <div className="relative">
@@ -269,6 +284,8 @@ const CardComponent = ({
           className={baseClasses}
           onClick={onClick}
           // eslint-disable-next-line react/jsx-props-no-spreading
+          {...interactionProps}
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...motionProps}
         >
           <CardContent />
@@ -278,10 +295,15 @@ const CardComponent = ({
 
     return (
       <motion.div
-        // eslint-disable-next-line react/jsx-props-no-spreading
         {...motionProps}
       >
-        <Link to={href} className={baseClasses} onClick={onClick}>
+        <Link
+          to={href}
+          className={baseClasses}
+          onClick={onClick}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...interactionProps}
+        >
           <CardContent />
         </Link>
       </motion.div>
@@ -293,6 +315,8 @@ const CardComponent = ({
     <motion.div
       className={baseClasses}
       onClick={onClick}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...interactionProps}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...motionProps}
     >

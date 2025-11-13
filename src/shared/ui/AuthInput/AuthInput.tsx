@@ -1,9 +1,11 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Eye, EyeOff } from 'lucide-react'
 import { forwardRef } from 'react'
+import type { FocusEventHandler } from 'react'
 
 import { PlainButton } from '@/shared/ui/Button'
+import { useFormInputController } from '@/shared/ui/hooks/useFormInputController'
 
 interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string
@@ -15,26 +17,61 @@ interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement | HT
   inputType?: 'input' | 'textarea'
   rows?: number
   containerClassName?: string
+  passwordToggle?: boolean
 }
 
 export const AuthInput = forwardRef<
   HTMLInputElement | HTMLTextAreaElement,
   AuthInputProps
->(({
-  label,
-  error,
-  hint,
-  leftIcon: LeftIcon,
-  rightIcon: RightIcon,
-  onRightIconClick,
-  inputType = 'input',
-  rows = 3,
-  containerClassName = '',
-  className = '',
-  id,
-  ...props
-}, ref) => {
-  // Unified input height at 36px to align with button sizing
+>((
+  {
+    label,
+    error,
+    hint,
+    leftIcon: LeftIcon,
+    rightIcon: RightIcon,
+    onRightIconClick,
+    inputType = 'input',
+    rows = 3,
+    containerClassName = '',
+    className = '',
+    id,
+    passwordToggle,
+    type = 'text',
+    ...inputProps
+  },
+  ref
+) => {
+  const { onFocus, onBlur, ...restInputProps } = inputProps
+  const normalizedOnFocus = onFocus as FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+  const normalizedOnBlur = onBlur as FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+  const shouldEnablePasswordToggle = (passwordToggle ?? type === 'password') && inputType !== 'textarea' && !RightIcon
+
+  const {
+    inputId,
+    errorId,
+    helpTextId,
+    hasError,
+    isFocused,
+    resolvedType,
+    shouldShowPasswordToggle,
+    rightIconAriaLabel,
+    handleFocus,
+    handleBlur,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleRightIconClick,
+  } = useFormInputController({
+    id,
+    type,
+    error,
+    helpText: hint,
+    onFocus: normalizedOnFocus,
+    onBlur: normalizedOnBlur,
+    onRightIconClick,
+    enablePasswordToggle: shouldEnablePasswordToggle,
+  })
+
   const baseInputClasses = `
     w-full h-9 px-3 py-1.5
     bg-[#171719] border border-[#333333] rounded-lg
@@ -55,17 +92,24 @@ export const AuthInput = forwardRef<
 
   const iconInputClasses = `
     ${LeftIcon ? 'pl-10' : 'pl-3'}
-    ${RightIcon ? 'pr-10' : 'pr-3'}
+    ${(RightIcon || shouldShowPasswordToggle) ? 'pr-10' : 'pr-3'}
   `
 
   const errorClasses = error ? 'border-red-400/50 focus:border-red-400/70' : ''
+  const focusClasses = isFocused ? 'ring-1 ring-[#14bdea]/40' : ''
 
   const renderInput = () => {
     const inputClasses = inputType === 'textarea' ? textareaClasses : baseInputClasses
     const baseProps = {
-      ...props,
-      id,
-      className: `${inputClasses} ${iconInputClasses} ${errorClasses} ${className}`,
+      ...restInputProps,
+      id: inputId,
+      className: `${inputClasses} ${iconInputClasses} ${errorClasses} ${focusClasses} ${className}`,
+      onFocus: handleFocus,
+      onBlur: handleBlur,
+      onMouseEnter: handleMouseEnter,
+      onMouseLeave: handleMouseLeave,
+      'aria-invalid': hasError,
+      'aria-describedby': errorId,
     }
 
     if (inputType === 'textarea') {
@@ -81,6 +125,7 @@ export const AuthInput = forwardRef<
 
     return (
       <input
+        type={resolvedType}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...baseProps}
         ref={ref as React.ForwardedRef<HTMLInputElement>}
@@ -90,31 +135,26 @@ export const AuthInput = forwardRef<
 
   return (
     <div className={`space-y-2 ${containerClassName}`}>
-      {/* Label */}
       {label && (
-        <label htmlFor={id} className="block text-sm font-normal text-white/90 tracking-tight">
+        <label htmlFor={inputId} className="block text-sm font-normal text-white/90 tracking-tight">
           {label}
-          {props.required && <span className="text-[#D417C8] ml-1">*</span>}
+          {restInputProps.required && <span className="text-[#D417C8] ml-1">*</span>}
         </label>
       )}
 
-      {/* Input Container */}
       <div className="relative">
-        {/* Left Icon */}
         {LeftIcon && (
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10">
             <LeftIcon className="w-4 h-4 text-[#14BDEA]" />
           </div>
         )}
 
-        {/* Input Field */}
         {renderInput()}
 
-        {/* Right Icon */}
         {RightIcon && (
           <PlainButton
             type="button"
-            onClick={onRightIconClick}
+            onClick={handleRightIconClick}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 text-white/70 hover:text-white transition-colors duration-200"
             tabIndex={-1}
             unstyled
@@ -123,33 +163,45 @@ export const AuthInput = forwardRef<
           </PlainButton>
         )}
 
-        {/* Error Icon */}
-        {error && !RightIcon && (
+        {!RightIcon && shouldShowPasswordToggle && (
+          <PlainButton
+            type="button"
+            onClick={handleRightIconClick}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 text-white/70 hover:text-white transition-colors duration-200"
+            tabIndex={-1}
+            aria-label={rightIconAriaLabel}
+            unstyled
+          >
+            {resolvedType === 'password' ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+          </PlainButton>
+        )}
+
+        {error && !RightIcon && !shouldShowPasswordToggle && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10">
             <AlertCircle className="w-4 h-4 text-[#D417C8]" />
           </div>
         )}
       </div>
 
-      {/* Error Message */}
       {error && (
         <motion.div
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center space-x-2 text-sm text-[#D417C8]"
+          id={errorId}
         >
           <AlertCircle className="w-4 h-4" />
           <span>{error}</span>
         </motion.div>
       )}
 
-      {/* Hint Text */}
       {hint && !error && (
-        <p className="text-sm text-white/60">{hint}</p>
+        <p className="text-sm text-white/60" id={helpTextId}>
+          {hint}
+        </p>
       )}
     </div>
   )
 })
 
 AuthInput.displayName = 'AuthInput'
-

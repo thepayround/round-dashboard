@@ -48,10 +48,12 @@
  * - Required fields show visual indicator (*)
  */
 import type { LucideIcon } from 'lucide-react'
-import { AlertCircle, Loader2 } from 'lucide-react'
-import type { InputHTMLAttributes } from 'react';
+import { AlertCircle, Eye, EyeOff, Loader2 } from 'lucide-react'
+import type { FocusEventHandler, InputHTMLAttributes } from 'react';
 import { forwardRef } from 'react'
 
+import { PlainButton } from '@/shared/ui/Button'
+import { useFormInputController } from '@/shared/ui/hooks/useFormInputController'
 import { cn } from '@/shared/utils/cn'
 
 interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
@@ -66,6 +68,7 @@ interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'si
   containerClassName?: string
   loading?: boolean
   loadingText?: string
+  passwordToggle?: boolean
 }
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
@@ -94,15 +97,40 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       autoComplete,
       loading = false,
       loadingText,
+      passwordToggle,
       ...restProps
     },
     ref
   ) => {
-    const inputId = id ?? `input-${Math.random().toString(36).substr(2, 9)}`
-    const errorId = error ? `${inputId}-error` : undefined
-    const helpTextId = helpText ? `${inputId}-help` : undefined
-    const hasError = Boolean(error)
     const isDisabled = disabled || loading
+    const normalizedOnFocus = onFocus as FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+    const normalizedOnBlur = onBlur as FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
+    const shouldEnablePasswordToggle = (passwordToggle ?? type === 'password') && !RightIcon
+
+    const {
+      inputId,
+      errorId,
+      helpTextId,
+      hasError,
+      isFocused,
+      resolvedType,
+      shouldShowPasswordToggle,
+      rightIconAriaLabel,
+      handleFocus,
+      handleBlur,
+      handleMouseEnter,
+      handleMouseLeave,
+      handleRightIconClick,
+    } = useFormInputController({
+      id,
+      type,
+      error,
+      helpText,
+      onFocus: normalizedOnFocus,
+      onBlur: normalizedOnBlur,
+      onRightIconClick,
+      enablePasswordToggle: shouldEnablePasswordToggle,
+    })
 
     const sizeClasses = {
       sm: 'h-9 px-3 text-xs',
@@ -116,7 +144,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
           'auth-input',
           LeftIcon && 'input-with-icon-left',
           RightIcon && 'input-with-icon-right',
-          error && 'auth-input-error',
+          hasError && 'auth-input-error',
           className
         )
       }
@@ -166,8 +194,9 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         sizeClasses[size],
         LeftIcon && 'pl-10',
         RightIcon && 'pr-10',
-        error && 'border-red-400 focus:border-red-400',
+        hasError && 'border-red-400 focus:border-red-400',
         isDisabled && 'opacity-50 cursor-not-allowed',
+        isFocused && 'ring-1 ring-[#14bdea]/40',
         className
       )
     }
@@ -201,12 +230,14 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
           <input
             ref={ref}
             id={inputId}
-            type={type}
+            type={resolvedType}
             placeholder={loading && loadingText ? loadingText : placeholder}
             value={value}
             onChange={onChange}
-            onBlur={onBlur}
-            onFocus={onFocus}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             disabled={isDisabled}
             required={required}
             name={name}
@@ -229,11 +260,27 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             <RightIcon 
               className={variant === 'auth' 
                 ? 'input-icon-right auth-icon' 
-                : 'absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 cursor-pointer'
+                : cn(
+                    'absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400',
+                    onRightIconClick && 'cursor-pointer'
+                  )
               }
-              onClick={onRightIconClick}
+              onClick={handleRightIconClick}
               {...(onRightIconClick && { role: 'button', tabIndex: 0 })}
             />
+          )}
+
+          {!loading && shouldShowPasswordToggle && (
+            <PlainButton
+              type="button"
+              onClick={handleRightIconClick}
+              className={variant === 'auth'
+                ? 'input-icon-right auth-icon'
+                : 'absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-white transition-colors'}
+              aria-label={rightIconAriaLabel}
+            >
+              {resolvedType === 'password' ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+            </PlainButton>
           )}
         </div>
         

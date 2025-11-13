@@ -1,7 +1,12 @@
 import { motion } from 'framer-motion'
-import type { LucideIcon} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react'
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
+
+import { useCardController } from './useCardController'
+
+import { cn } from '@/shared/utils/cn'
+
 
 interface ActionCardProps {
   title: string
@@ -85,6 +90,14 @@ const ActionCardComponent = ({
   disabled = false
 }: ActionCardProps) => {
   const colorConfig = colorVariants[color]
+  const isLink = Boolean(href)
+  const isInteractive = !disabled && (Boolean(onClick) || isLink)
+  const { isFocused, isPressed, interactionProps } = useCardController({
+    clickable: isInteractive,
+    disabled,
+    onPress: onClick,
+    isInteractiveElement: isLink,
+  })
   
   const motionProps = animate ? {
     initial: { opacity: 0, y: 20 },
@@ -92,14 +105,20 @@ const ActionCardComponent = ({
     transition: { delay, duration: 0.4 }
   } : {}
 
+  const surfaceClasses = cn(
+    'bg-[#171719] border border-[#1e1f22] rounded-lg p-6 relative overflow-hidden group transition-all duration-200',
+    disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-[#25262a] cursor-pointer',
+    isFocused && 'ring-1 ring-white/10',
+    isPressed && 'scale-[0.995]',
+    className
+  )
+
   const CardContent = () => (
     <motion.div 
-      whileHover={{ y: -1, scale: 1.01 }}
+      whileHover={{ y: disabled ? 0 : -1, scale: disabled ? 1 : 1.01 }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
-      <div className={`bg-[#171719] border border-[#1e1f22] rounded-lg p-6 relative overflow-hidden group hover:border-[#25262a] transition-all duration-200 ${
-        disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-      } ${className}`}>
+      <div className={surfaceClasses}>
         {/* Hover Gradient Effect */}
         <div className={`absolute inset-0 bg-gradient-to-br ${colorConfig.gradient} opacity-0 group-hover:opacity-50 transition-opacity duration-200`} />
         
@@ -160,6 +179,8 @@ const ActionCardComponent = ({
           target="_blank"
           rel="noopener noreferrer"
           // eslint-disable-next-line react/jsx-props-no-spreading
+          {...interactionProps}
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...motionProps}
         >
           <CardContent />
@@ -170,7 +191,11 @@ const ActionCardComponent = ({
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading
       <motion.div {...motionProps}>
-        <Link to={href}>
+        <Link
+          to={href}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...interactionProps}
+        >
           <CardContent />
         </Link>
       </motion.div>
@@ -180,6 +205,8 @@ const ActionCardComponent = ({
   return (
     <motion.div
       onClick={onClick}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...interactionProps}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...motionProps}
     >
