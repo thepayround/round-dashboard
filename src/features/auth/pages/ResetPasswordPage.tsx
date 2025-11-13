@@ -1,158 +1,35 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
-import { useState, useEffect, useCallback } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import { useAsyncAction, useForm } from '@/shared/hooks'
-import { useAuth } from '@/shared/hooks/useAuth'
-import { apiClient } from '@/shared/services/apiClient'
+import { useResetPasswordController } from '../hooks/useResetPasswordController'
+
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { IconButton } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
-import { validators, handleApiError } from '@/shared/utils'
 
 export const ResetPasswordPage = () => {
-  const navigate = useNavigate()
-  const { login } = useAuth()
-  const [searchParams] = useSearchParams()
-  const { loading: isSubmitting, execute } = useAsyncAction()
-
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [tokenData, setTokenData] = useState({
-    email: '',
-    token: ''
-  })
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [apiError, setApiError] = useState('')
-
-  // Use form hook for password validation with matching
-  const { values, errors, handleChange, handleBlur, validateAll, validateField } = useForm(
-    { newPassword: '', confirmPassword: '' },
-    {
-      newPassword: (value: string) => {
-        if (!value.trim()) {
-          return { valid: false, message: 'Password is required' }
-        }
-        return validators.password(value)
-      },
-      confirmPassword: (value: string) => {
-        if (!value.trim()) {
-          return { valid: false, message: 'Confirm password is required' }
-        }
-        if (value !== values.newPassword) {
-          return { valid: false, message: 'Passwords do not match' }
-        }
-        return { valid: true }
-      },
-    }
-  )
-
-  useEffect(() => {
-    // Extract email and token from URL parameters
-    // Handle both 'email' and 'userId' parameters for backward compatibility
-    const email = searchParams.get('email') ?? searchParams.get('userId') ?? ''
-    const token = searchParams.get('token') ?? ''
-    
-    if (!email || !token) {
-      console.error('Missing parameters:', { email, token, allParams: Object.fromEntries(searchParams.entries()) })
-      setApiError('Invalid or missing reset link parameters. Please request a new password reset.')
-      return
-    }
-
-    setTokenData({
-      email: decodeURIComponent(email),
-      token: decodeURIComponent(token)
-    })
-  }, [searchParams])
-
-  // Handle password change and revalidate confirm password
-  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    handleChange('newPassword')(e)
-    setApiError('')
-    // Revalidate confirm password when new password changes
-    if (values.confirmPassword) {
-      setTimeout(() => validateField('confirmPassword', values.confirmPassword), 0)
-    }
-  }, [handleChange, values.confirmPassword, validateField, setApiError])
-
-  // Handle confirm password change
-  const handleConfirmPasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    handleChange('confirmPassword')(e)
-    setApiError('')
-  }, [handleChange, setApiError])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setApiError('')
-
-    if (!validateAll()) {
-      return
-    }
-
-    await execute(async () => {
-      const response = await apiClient.resetPassword(
-        tokenData.email,
-        tokenData.token,
-        values.newPassword,
-        values.confirmPassword
-      )
-
-      if (response.success) {
-        setIsSuccess(true)
-        
-        // Try to auto-login with the new password after a brief delay
-        setTimeout(async () => {
-          await handleAutoLogin()
-        }, 1500) // Give user time to see success message
-      } else {
-        setApiError(response.error ?? 'Failed to reset password')
-      }
-    }, {
-      onError: (error) => {
-        const message = handleApiError(error, 'ResetPassword')
-        setApiError(message)
-      }
-    })
-  }
-
-  const handleAutoLogin = async () => {
-    try {
-      const response = await apiClient.login({
-        email: tokenData.email,
-        password: values.newPassword
-      })
-
-      if (response.success && response.data) {
-        // Use the auth context to properly log in the user
-        login(response.data.user, response.data.accessToken, response.data.refreshToken)
-        
-        // Navigate to dashboard
-        navigate('/dashboard', { replace: true })
-      } else {
-        console.error('Auto-login failed:', response.error)
-        // If auto-login fails, just go to login page with a message
-        navigate('/login', { 
-          state: { 
-            message: 'Password reset successful. Please sign in with your new password.',
-            email: tokenData.email
-          }
-        })
-      }
-    } catch (error) {
-      console.error('Auto-login failed:', error)
-      // If auto-login fails, just go to login page with a message
-      navigate('/login', { 
-        state: { 
-          message: 'Password reset successful. Please sign in with your new password.',
-          email: tokenData.email
-        }
-      })
-    }
-  }
-
-  if (!tokenData.email || !tokenData.token) {
+  const {
+    values,
+    errors,
+    handleBlur,
+    handlePasswordChange,
+    handleConfirmPasswordChange,
+    handleSubmit,
+    isSubmitting,
+    apiError,
+    isSuccess,
+    showPassword,
+    showConfirmPassword,
+    toggleShowPassword,
+    toggleShowConfirmPassword,
+    disableSubmit,
+    goToLogin,
+    tokenError,
+    tokenEmail,
+  } = useResetPasswordController()
+  if (tokenError) {
     return (
       <div className="auth-container">
         <div className="auth-background">
@@ -174,7 +51,7 @@ export const ResetPasswordPage = () => {
               </div>
               <h1 className="text-2xl font-medium tracking-tight auth-text mb-4">Invalid Reset Link</h1>
               <p className="auth-text-muted mb-6">
-                This password reset link is invalid or has expired. Please request a new one.
+                {tokenError}
               </p>
               <Link
                 to="/auth/forgot-password"
@@ -228,7 +105,7 @@ export const ResetPasswordPage = () => {
                     Reset Password
                   </h1>
                   <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
-                    Enter your new password for <strong className="text-white">{tokenData.email}</strong>
+                    Enter your new password for <strong className="text-white">{tokenEmail}</strong>
                   </p>
                 </>
               ) : (
@@ -289,7 +166,7 @@ export const ResetPasswordPage = () => {
                     />
                     <IconButton
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={toggleShowPassword}
                       icon={showPassword ? EyeOff : Eye}
                       variant="ghost"
                       size="md"
@@ -337,7 +214,7 @@ export const ResetPasswordPage = () => {
                     />
                     <IconButton
                       type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={toggleShowConfirmPassword}
                       icon={showConfirmPassword ? EyeOff : Eye}
                       variant="ghost"
                       size="md"
@@ -364,7 +241,7 @@ export const ResetPasswordPage = () => {
                 <ActionButton
                   type="submit"
                   label={isSubmitting ? 'Resetting Password...' : 'Reset Password'}
-                  disabled={isSubmitting || !values.newPassword || !values.confirmPassword || !!errors.newPassword || !!errors.confirmPassword}
+                  disabled={disableSubmit}
                   icon={ArrowRight}
                   loading={isSubmitting}
                   size="md"
@@ -395,7 +272,7 @@ export const ResetPasswordPage = () => {
                 {/* Action Button */}
                 <ActionButton
                   label="Continue to Sign In"
-                  onClick={() => navigate('/login')}
+                  onClick={goToLogin}
                   icon={ArrowRight}
                   size="md"
                   animated={false}
@@ -410,4 +287,6 @@ export const ResetPasswordPage = () => {
     </div>
   )
 }
+
+
 

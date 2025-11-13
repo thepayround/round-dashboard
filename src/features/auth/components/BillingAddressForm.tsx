@@ -1,15 +1,12 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { MapPin, Building, AlertCircle, Truck } from 'lucide-react'
-import { useState } from 'react'
+
+import { useBillingAddressFormController } from '../hooks/useBillingAddressFormController'
 
 import type { BillingAddress } from '@/shared/types/business'
 import { ApiDropdown, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
-import {
-  validateBillingAddress,
-  validateBillingAddressField,
-} from '@/shared/utils/companyValidation'
 import type { ValidationError } from '@/shared/utils/validation'
-import { getFieldError, hasFieldError } from '@/shared/utils/validation'
+
 
 /**
  * Enhanced AddressForm component with optional shipping address functionality
@@ -72,81 +69,31 @@ export const AddressForm = ({
   isOptional = false,
   showShipping = false,
 }: AddressFormProps) => {
-  const [sameAsBilling, setSameAsBilling] = useState(true)
+  const {
+    currentBillingAddress,
+    currentShippingAddress,
+    sameAsBilling,
+    handleAddressChange,
+    handleFieldBlur,
+    hasBillingErrors,
+    getBillingError,
+    handleSameAsBillingToggle,
+    showShipping: resolvedShowShipping,
+  } = useBillingAddressFormController({
+    billingAddress,
+    shippingAddress,
+    onBillingAddressChange,
+    onShippingAddressChange,
+    onValidationChange,
+    errors,
+    onErrorsChange,
+    isOptional,
+    showShipping,
+  })
 
-  // Initialize addresses
-  const currentBillingAddress: BillingAddress = billingAddress ?? {
-    street: '',
-    street2: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
-  }
-
-  const currentShippingAddress: BillingAddress = shippingAddress ?? {
-    street: '',
-    street2: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
-  }
-
-  const handleAddressChange = (addressType: 'billing' | 'shipping', field: keyof BillingAddress, value: string) => {
-    if (addressType === 'billing') {
-      const updatedAddress = { ...currentBillingAddress, [field]: value }
-      onBillingAddressChange(updatedAddress)
-
-      // If same as billing is checked and we have a shipping handler, update shipping too
-      if (sameAsBilling && onShippingAddressChange) {
-        onShippingAddressChange(updatedAddress)
-      }
-    } else if (addressType === 'shipping' && onShippingAddressChange) {
-      const updatedAddress = { ...currentShippingAddress, [field]: value }
-      onShippingAddressChange(updatedAddress)
-    }
-
-    // Clear field error when user starts typing
-    if (hasFieldError(errors, field)) {
-      onErrorsChange(errors.filter(error => error.field !== field))
-    }
-
-    // Validate entire form
-    if (!isOptional) {
-      const validation = validateBillingAddress(currentBillingAddress)
-      onValidationChange(validation.isValid)
-    } else {
-      const hasAnyValue = Object.values(currentBillingAddress).some(val => val?.trim())
-      if (hasAnyValue) {
-        const validation = validateBillingAddress(currentBillingAddress)
-        onValidationChange(validation.isValid)
-      } else {
-        onValidationChange(true)
-      }
-    }
-  }
-
+  const showShippingEnabled = resolvedShowShipping
   const handleInputBlur = (field: keyof BillingAddress, value: string) => {
-    const hasAnyValue = Object.values(currentBillingAddress).some(val => val?.trim())
-
-    if (!isOptional || hasAnyValue) {
-      const fieldValidation = validateBillingAddressField(field, value)
-      if (!fieldValidation.isValid) {
-        onErrorsChange([
-          ...errors.filter(error => error.field !== field),
-          ...fieldValidation.errors,
-        ])
-      }
-    }
-  }
-
-  const handleSameAsBillingChange = (checked: boolean) => {
-    setSameAsBilling(checked)
-    if (checked && onShippingAddressChange) {
-      // Copy billing address to shipping when checked
-      onShippingAddressChange(currentBillingAddress)
-    }
+    handleFieldBlur(field, value)
   }
 
   return (
@@ -196,19 +143,19 @@ export const AddressForm = ({
                 onBlur={e => handleInputBlur('street', e.target.value)}
                 placeholder="123 Main Street"
                 className={`auth-input input-with-icon-left ${
-                  hasFieldError(errors, 'street') ? 'auth-input-error' : ''
+                  hasBillingErrors('street') ? 'auth-input-error' : ''
                 }`}
                 required={!isOptional}
               />
             </div>
-            {hasFieldError(errors, 'street') && (
+            {hasBillingErrors('street') && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
               >
                 <AlertCircle className="w-4 h-4" />
-                <span>{getFieldError(errors, 'street')?.message}</span>
+                <span>{getBillingError('street')}</span>
               </motion.div>
             )}
           </div>
@@ -247,19 +194,19 @@ export const AddressForm = ({
                   onBlur={e => handleInputBlur('city', e.target.value)}
                   placeholder="New York"
                   className={`auth-input input-with-icon-left ${
-                    hasFieldError(errors, 'city') ? 'auth-input-error' : ''
+                    hasBillingErrors('city') ? 'auth-input-error' : ''
                   }`}
                   required={!isOptional}
                 />
               </div>
-              {hasFieldError(errors, 'city') && (
+              {hasBillingErrors('city') && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
-                  <span>{getFieldError(errors, 'city')?.message}</span>
+                  <span>{getBillingError('city')}</span>
                 </motion.div>
               )}
             </div>
@@ -278,19 +225,19 @@ export const AddressForm = ({
                   onBlur={e => handleInputBlur('state', e.target.value)}
                   placeholder="NY"
                   className={`auth-input input-with-icon-left ${
-                    hasFieldError(errors, 'state') ? 'auth-input-error' : ''
+                    hasBillingErrors('state') ? 'auth-input-error' : ''
                   }`}
                   required={!isOptional}
                 />
               </div>
-              {hasFieldError(errors, 'state') && (
+              {hasBillingErrors('state') && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
-                  <span>{getFieldError(errors, 'state')?.message}</span>
+                  <span>{getBillingError('state')}</span>
                 </motion.div>
               )}
             </div>
@@ -312,19 +259,19 @@ export const AddressForm = ({
                   onBlur={e => handleInputBlur('zipCode', e.target.value)}
                   placeholder="10001"
                   className={`auth-input input-with-icon-left ${
-                    hasFieldError(errors, 'zipCode') ? 'auth-input-error' : ''
+                    hasBillingErrors('zipCode') ? 'auth-input-error' : ''
                   }`}
                   required={!isOptional}
                 />
               </div>
-              {hasFieldError(errors, 'zipCode') && (
+              {hasBillingErrors('zipCode') && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
-                  <span>{getFieldError(errors, 'zipCode')?.message}</span>
+                  <span>{getBillingError('zipCode')}</span>
                 </motion.div>
               )}
             </div>
@@ -338,17 +285,17 @@ export const AddressForm = ({
                 value={currentBillingAddress.country}
                 onSelect={value => handleAddressChange('billing', 'country', value)}
                 onClear={() => handleAddressChange('billing', 'country', '')}
-                error={hasFieldError(errors, 'country')}
+                error={hasBillingErrors('country')}
                 allowClear={isOptional}
               />
-              {hasFieldError(errors, 'country') && (
+              {hasBillingErrors('country') && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
-                  <span>{getFieldError(errors, 'country')?.message}</span>
+                  <span>{getBillingError('country')}</span>
                 </motion.div>
               )}
             </div>
@@ -357,7 +304,7 @@ export const AddressForm = ({
       </div>
 
       {/* Shipping Address Section */}
-      {showShipping && (
+    {showShippingEnabled && (
         <div className="space-y-6">
           {/* Header with Toggle */}
           <div className="flex items-center justify-between">
@@ -372,7 +319,7 @@ export const AddressForm = ({
                 <input
                   type="checkbox"
                   checked={sameAsBilling}
-                  onChange={(e) => handleSameAsBillingChange(e.target.checked)}
+                  onChange={(e) => handleSameAsBillingToggle(e.target.checked)}
                   className="sr-only peer"
                   aria-label="Use Billing as Shipping Address"
                 />
@@ -532,4 +479,11 @@ export const BillingAddressForm = ({
       showShipping={false}
     />
   )
+
+
+
+
+
+
+
 

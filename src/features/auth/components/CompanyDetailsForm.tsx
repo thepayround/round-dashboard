@@ -1,12 +1,12 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Building, Hash, CreditCard, AlertCircle } from 'lucide-react'
-import { useEffect } from 'react'
+
+import { useCompanyDetailsFormController } from '../hooks/useCompanyDetailsFormController'
 
 import type { CompanyInfo, Currency } from '@/shared/types/business'
 import { ApiDropdown, currencyDropdownConfig } from '@/shared/ui/ApiDropdown'
-import { validateCompanyField, validateCompanyInfo } from '@/shared/utils/companyValidation'
 import type { ValidationError } from '@/shared/utils/validation'
-import { getFieldError, hasFieldError } from '@/shared/utils/validation'
+
 
 interface CompanyDetailsFormProps {
   companyInfo: CompanyInfo
@@ -23,47 +23,19 @@ export const CompanyDetailsForm = ({
   errors,
   onErrorsChange,
 }: CompanyDetailsFormProps) => {
-  const handleInputChange = (field: keyof CompanyInfo, value: string | number) => {
-    const updatedCompanyInfo = { ...companyInfo, [field]: value }
-    onCompanyInfoChange(updatedCompanyInfo)
-
-    // Clear field error when user starts typing
-    if (hasFieldError(errors, field)) {
-      onErrorsChange(errors.filter(error => error.field !== field))
-    }
-
-    // Validate entire form to update parent component
-    const validation = validateCompanyInfo(updatedCompanyInfo)
-    onValidationChange(validation.isValid)
-  }
-
-  const handleInputBlur = (field: keyof CompanyInfo, value: string) => {
-    // Only validate string fields on blur
-    if (typeof value === 'string') {
-      const fieldValidation = validateCompanyField(field, value)
-      if (!fieldValidation.isValid) {
-        onErrorsChange([
-          ...errors.filter(error => error.field !== field),
-          ...fieldValidation.errors,
-        ])
-      }
-    }
-  }
-
-  const handleSelectChange = (field: keyof CompanyInfo, value: string) => {
-    handleInputChange(field, value)
-    
-    // Trigger validation immediately for select fields
-    const updatedCompanyInfo = { ...companyInfo, [field]: value }
-    const validation = validateCompanyInfo(updatedCompanyInfo)
-    onValidationChange(validation.isValid)
-  }
-
-  // Run initial validation when component mounts or companyInfo changes
-  useEffect(() => {
-    const validation = validateCompanyInfo(companyInfo)
-    onValidationChange(validation.isValid)
-  }, [companyInfo, onValidationChange])
+  const {
+    handleInputChange,
+    handleInputBlur,
+    handleSelectChange,
+    hasCompanyError,
+    getCompanyError,
+  } = useCompanyDetailsFormController({
+    companyInfo,
+    onCompanyInfoChange,
+    onValidationChange,
+    errors,
+    onErrorsChange,
+  })
 
   return (
     <motion.div
@@ -107,19 +79,19 @@ export const CompanyDetailsForm = ({
             onBlur={e => handleInputBlur('companyName', e.target.value)}
             placeholder="Acme Corporation"
             className={`auth-input input-with-icon-left ${
-              hasFieldError(errors, 'companyName') ? 'auth-input-error' : ''
+              hasCompanyError('companyName') ? 'auth-input-error' : ''
             }`}
             required
           />
         </div>
-        {hasFieldError(errors, 'companyName') && (
+        {hasCompanyError('companyName') && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
           >
             <AlertCircle className="w-4 h-4" />
-            <span>{getFieldError(errors, 'companyName')?.message}</span>
+            <span>{getCompanyError('companyName')}</span>
           </motion.div>
         )}
       </div>
@@ -141,19 +113,19 @@ export const CompanyDetailsForm = ({
               onBlur={e => handleInputBlur('registrationNumber', e.target.value)}
               placeholder="12345678"
               className={`auth-input input-with-icon-left ${
-                hasFieldError(errors, 'registrationNumber') ? 'auth-input-error' : ''
+                hasCompanyError('registrationNumber') ? 'auth-input-error' : ''
               }`}
               required
             />
           </div>
-          {hasFieldError(errors, 'registrationNumber') && (
+          {hasCompanyError('registrationNumber') && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
             >
               <AlertCircle className="w-4 h-4" />
-              <span>{getFieldError(errors, 'registrationNumber')?.message}</span>
+              <span>{getCompanyError('registrationNumber')}</span>
             </motion.div>
           )}
         </div>
@@ -173,18 +145,18 @@ export const CompanyDetailsForm = ({
               onBlur={e => handleInputBlur('taxId', e.target.value)}
               placeholder="XX-XXXXXXX"
               className={`auth-input input-with-icon-left ${
-                hasFieldError(errors, 'taxId') ? 'auth-input-error' : ''
+                hasCompanyError('taxId') ? 'auth-input-error' : ''
               }`}
             />
           </div>
-          {hasFieldError(errors, 'taxId') && (
+          {hasCompanyError('taxId') && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
             >
               <AlertCircle className="w-4 h-4" />
-              <span>{getFieldError(errors, 'taxId')?.message}</span>
+              <span>{getCompanyError('taxId')}</span>
             </motion.div>
           )}
         </div>
@@ -201,27 +173,30 @@ export const CompanyDetailsForm = ({
           onSelect={value => {
             handleSelectChange('currency', value as Currency)
             // Clear any existing currency error when selection is made
-            if (hasFieldError(errors, 'currency')) {
+            if (hasCompanyError('currency')) {
               onErrorsChange(errors.filter(error => error.field !== 'currency'))
             }
           }}
           onClear={() => handleSelectChange('currency', '')}
-          error={hasFieldError(errors, 'currency')}
+          error={hasCompanyError('currency')}
           allowClear
         />
-        {hasFieldError(errors, 'currency') && (
+        {hasCompanyError('currency') && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
           >
             <AlertCircle className="w-4 h-4" />
-            <span>{getFieldError(errors, 'currency')?.message}</span>
+            <span>{getCompanyError('currency')}</span>
           </motion.div>
         )}
       </div>
     </motion.div>
   )
 }
+
+
+
 
 

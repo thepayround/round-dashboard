@@ -1,69 +1,27 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Mail, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react'
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import { useAsyncAction, useForm } from '@/shared/hooks'
-import { apiClient } from '@/shared/services/apiClient'
+import { useForgotPasswordController } from '../hooks/useForgotPasswordController'
+
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { Button } from '@/shared/ui/Button'
-import { validators, handleApiError } from '@/shared/utils'
 
 export const ForgotPasswordPage = () => {
-  const navigate = useNavigate()
-  const { loading: isSubmitting, execute } = useAsyncAction()
-  const [apiError, setApiError] = useState('')
-  const [isSuccess, setIsSuccess] = useState(false)
-
-  // Use form hook for validation
-  const { values, errors, handleChange, handleBlur, validateAll, resetForm } = useForm(
-    { email: '' },
-    {
-      email: (value: string) => {
-        if (!value.trim()) {
-          return { valid: false, message: 'Email is required' }
-        }
-        return validators.emailWithMessage(value)
-      },
-    }
-  )
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setApiError('')
-
-    if (!validateAll()) {
-      return
-    }
-
-    await execute(async () => {
-      const response = await apiClient.forgotPassword(values.email.trim())
-
-      if (response.success) {
-        setIsSuccess(true)
-      } else {
-        setApiError(response.error ?? 'Failed to send password reset email')
-      }
-    }, {
-      onError: (error) => {
-        const message = handleApiError(error, 'ForgotPassword')
-        setApiError(message)
-      }
-    })
-  }
-
-  const handleBackToLogin = () => {
-    navigate('/login')
-  }
-
-  const handleTryAgain = () => {
-    setIsSuccess(false)
-    resetForm()
-    setApiError('')
-  }
-
-  const isFormValid = values.email.trim() !== '' && !errors.email
+  const {
+    values,
+    errors,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    handleBackToLogin,
+    handleTryAgain,
+    isSubmitting,
+    apiError,
+    isSuccess,
+    isFormValid,
+  } = useForgotPasswordController()
 
   return (
     <div className="auth-container">
@@ -272,4 +230,5 @@ export const ForgotPasswordPage = () => {
     </div>
   )
 }
+
 
