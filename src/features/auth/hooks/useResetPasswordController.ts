@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { apiClient } from '@/shared/services/apiClient'
+import type { User } from '@/shared/types/auth'
 import { handleApiError, validators } from '@/shared/utils'
 
 export const useResetPasswordController = () => {
@@ -70,9 +71,9 @@ export const useResetPasswordController = () => {
         const loginData = response.data as unknown as Record<string, unknown>
         const token = typeof loginData.token === 'string' ? loginData.token : ''
         const refreshToken = typeof loginData.refreshToken === 'string' ? loginData.refreshToken : undefined
-        const user = loginData.user as Record<string, unknown> | undefined
+        const user = loginData.user as User | undefined
         if (user && token) {
-          login(user as any, token, refreshToken)
+          login(user, token, refreshToken)
         }
         navigate('/dashboard', { replace: true })
       } else {
@@ -138,7 +139,7 @@ export const useResetPasswordController = () => {
         }
       )
     },
-    [execute, handleAutoLogin, tokenData.email, tokenData.token, validateAll, values.confirmPassword, values.newPassword]
+    [execute, handleAutoLogin, tokenData.email, tokenData.token, tokenError, validateAll, values.confirmPassword, values.newPassword]
   )
 
   const disableSubmit = useMemo(
