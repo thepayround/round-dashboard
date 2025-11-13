@@ -1,13 +1,14 @@
 import { Filter, RotateCcw } from 'lucide-react'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import { Button } from '../../ui/Button'
 import { SearchInput } from '../../ui/SearchInput'
-import { UiDropdown, type UiDropdownOption } from '../../ui/UiDropdown'
 import { ViewModeToggle } from '../../ui/ViewModeToggle'
 import type { ViewMode, ViewModeOption } from '../../ui/ViewModeToggle'
-import { FilterChipsBar, type ActiveFilter } from '../FilterChipsBar'
+import { FilterChipsBar } from '../FilterChipsBar'
 import { FilterPanel } from '../FilterPanel'
+
+import { useSearchFilterToolbarController } from './useSearchFilterToolbarController'
 
 export interface FilterField {
   id: string
@@ -71,108 +72,17 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
   className = '',
   additionalActions
 }) => {
-  const renderFilterField = (field: FilterField) => {
-    switch (field.type) {
-      case 'select':
-        return (
-          <div key={field.id}>
-            <span className="block text-sm font-normal text-white/80 tracking-tight mb-2">
-              {field.label}
-            </span>
-            <UiDropdown
-              options={field.options?.map((option): UiDropdownOption => ({
-                value: option.value ?? option.id,
-                label: option.name
-              })) ?? []}
-              value={String(field.value)}
-              onSelect={(selectedValue: string) => field.onChange(selectedValue)}
-              onClear={field.onClear}
-              placeholder={field.placeholder ?? `Select ${field.label.toLowerCase()}`}
-              allowClear
-            />
-          </div>
-        )
-
-      case 'input':
-        return (
-          <div key={field.id}>
-            <label htmlFor={field.id} className="block text-sm font-normal text-white/80 tracking-tight mb-2">
-              {field.label}
-            </label>
-            <input
-              id={field.id}
-              type="text"
-              value={field.value}
-              onChange={(e) => field.onChange(e.target.value)}
-              placeholder={field.placeholder}
-              className="w-full bg-[#171719] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#737373] focus:outline-none focus:border-[#14bdea] transition-all"
-            />
-          </div>
-        )
-
-      case 'date':
-        return (
-          <div key={field.id}>
-            <label htmlFor={field.id} className="block text-sm font-normal text-white/80 tracking-tight mb-2">
-              {field.label}
-            </label>
-            <input
-              id={field.id}
-              type="date"
-              value={field.value}
-              onChange={(e) => field.onChange(e.target.value)}
-              className="w-full bg-[#171719] border border-[#333333] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#14bdea] transition-all"
-            />
-          </div>
-        )
-
-      case 'custom':
-        return (
-          <div key={field.id}>
-            <span className="block text-sm font-normal text-white/80 tracking-tight mb-2">
-              {field.label}
-            </span>
-            {field.component}
-          </div>
-        )
-      
-      default:
-        return null
-    }
-  }
-
-  // Calculate active filters for chips
-  const activeFilters: ActiveFilter[] = useMemo(() => filterFields
-      .filter(field => {
-        const {value} = field
-        return value !== '' && value !== null && value !== undefined
-      })
-      .map(field => {
-        // Find display value from options if available
-        let displayValue = String(field.value)
-        if (field.options && field.type === 'select') {
-          const option = field.options.find(opt => 
-            (opt.value ?? opt.id) === String(field.value)
-          )
-          if (option) {
-            displayValue = option.name
-          }
-        }
-
-        return {
-          id: field.id,
-          label: field.label,
-          value: String(field.value),
-          displayValue,
-          onRemove: () => {
-            if (field.onClear) {
-              field.onClear()
-            } else {
-              field.onChange('')
-            }
-          }
-        }
-      }), [filterFields])
+  const {
+    activeFilters,
+    hasActiveFilters,
+    renderFilterField,
+    shouldShowSearchSummary,
+    searchSummaryLabel,
+  } = useSearchFilterToolbarController({
+    filterFields,
+    searchQuery,
+    searchResults,
+  })
 
   return (
     <>
@@ -230,15 +140,12 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             </div>
 
             {/* Search Results Info - Enhanced styling */}
-            {searchResults && (searchQuery || searchResults.filtered < searchResults.total) && (
+            {shouldShowSearchSummary && (
               <div className="flex items-center gap-3 text-sm -mt-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-[#14BDEA]" />
                   <span className="text-white/70">
-                    {searchResults.filtered === searchResults.total 
-                      ? `${searchResults.total} result${searchResults.total !== 1 ? 's' : ''}`
-                      : `${searchResults.filtered} of ${searchResults.total} result${searchResults.total !== 1 ? 's' : ''}`
-                    }
+                    {searchSummaryLabel}
                   </span>
                 </div>
                 {searchQuery && (
@@ -256,7 +163,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
         </div>
 
         {/* Active Filter Chips */}
-        {activeFilters.length > 0 && (
+        {hasActiveFilters && (
           <div className="mt-4">
             <FilterChipsBar
               filters={activeFilters}
@@ -275,7 +182,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
         {filterFields.map(renderFilterField)}
         
         {/* Clear All Button inside panel */}
-        {onClearFilters && activeFilters.length > 0 && (
+        {onClearFilters && hasActiveFilters && (
           <div className="mt-6 pt-6 border-t border-[#1e1f22]">
             <Button
               onClick={onClearFilters}
