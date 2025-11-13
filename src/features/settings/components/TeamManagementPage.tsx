@@ -11,129 +11,81 @@ import {
   XCircle,
   Crown
 } from 'lucide-react'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { EditMemberModal } from '../components/EditMemberModal'
 import { InviteMemberModal } from '../components/InviteMemberModal'
 import TeamMembersTable from '../components/TeamMembersTable'
-import { useTeamManagement } from '../hooks/useTeamManagement'
-import type { TeamMember, TeamInvitation, UserRole } from '../types/team.types'
+import { useTeamManagementController } from '../hooks/useTeamManagementController'
+import type { TeamInvitation, UserRole } from '../types/team.types'
 
-import { useDebouncedSearch } from '@/shared/hooks/useDebouncedSearch'
-import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
 import { ActionButton } from '@/shared/ui/ActionButton'
-import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
-import type { FilterField } from '@/shared/widgets/SearchFilterToolbar'
 import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
 
 
 
 
 export const TeamManagementPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'members' | 'invitations'>('members')
-  const [roleFilter, setRoleFilter] = useState<UserRole | 'all'>('all')
-  const [showFilters, setShowFilters] = useState(false)
-  const [showInviteModal, setShowInviteModal] = useState(false)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
-  const [_selectedInvitation, _setSelectedInvitation] = useState<TeamInvitation | null>(null)
   const [sortConfig, setSortConfig] = useState<{ field: string; direction: 'asc' | 'desc' }>({
     field: 'fullName',
     direction: 'asc'
   })
 
-  const { roundAccount} = useRoundAccount()
-  const roundAccountId = roundAccount?.roundAccountId
-
   const {
-    members,
-    invitations,
+    activeTab,
+    setActiveTab,
+    roleFilter,
+    filterFields,
+    membersCount,
+    invitationsCount,
+    showFilters,
+    toggleFilters,
+    showInviteModal,
+    openInviteModal,
+    closeInviteModal,
+    showEditModal,
+    openEditModal,
+    closeEditModal,
+    showDeleteConfirm,
+    openDeleteConfirm,
+    closeDeleteConfirm,
+    selectedMember,
     isLoading,
     error,
-    inviteMember,
-    updateMemberRole,
-    removeMember,
-    resendInvitation,
-    cancelInvitation,
-    refresh
-  } = useTeamManagement()
+    memberSearch,
+    invitationSearch,
+    handleInviteMember,
+    handleUpdateRole,
+    handleRemoveMember,
+    handleResendInvitation,
+    handleCancelInvitation,
+    refreshTeam,
+    formatDate,
+  } = useTeamManagementController()
 
-
-  useEffect(() => {
-    if (roundAccountId) {
-      refresh(roundAccountId)
-    }
-  }, [refresh, roundAccountId])
-
-  // Search fields extraction functions - Memoized for stability
-  const getMemberSearchFields = useCallback((member: TeamMember): string[] => [
-    member.firstName || '',
-    member.lastName || '',
-    member.fullName || '',
-    member.email || '',
-    member.roleName || ''
-  ], [])
-
-  const getInvitationSearchFields = useCallback((invitation: TeamInvitation): string[] => [
-    invitation.email || '',
-    invitation.roleName || '',
-    invitation.invitedByName || ''
-  ], [])
-
-  // Filter function for role filtering - Stable implementation
-  const memberFilterFn = useCallback((member: TeamMember, filters: { roleFilter?: UserRole | 'all' }): boolean => {
-    if (filters.roleFilter && filters.roleFilter !== 'all' && member.role !== filters.roleFilter) {
-      return false
-    }
-    return true
-  }, [])
-
-  const invitationFilterFn = useCallback((invitation: TeamInvitation, filters: { roleFilter?: UserRole | 'all' }): boolean => {
-    if (filters.roleFilter && filters.roleFilter !== 'all' && invitation.role !== filters.roleFilter) {
-      return false
-    }
-    return true
-  }, [])
-
-  // Debounced search for members
   const {
     searchQuery: memberSearchQuery,
     setSearchQuery: setMemberSearchQuery,
-    filteredItems: searchFilteredMembers,
+    filteredItems: filteredMembers,
     isSearching: isMemberSearching,
     clearSearch: clearMemberSearch,
     totalCount: memberTotalCount,
-    filteredCount: memberFilteredCount
-  } = useDebouncedSearch({
-    items: members,
-    searchFields: getMemberSearchFields,
-    debounceMs: 300,
-    filters: { roleFilter },
-    filterFn: memberFilterFn
-  })
+    filteredCount: memberFilteredCount,
+  } = memberSearch
 
-  // Debounced search for invitations
   const {
     searchQuery: invitationSearchQuery,
     setSearchQuery: setInvitationSearchQuery,
-    filteredItems: searchFilteredInvitations,
+    filteredItems: filteredInvitations,
     isSearching: isInvitationSearching,
     clearSearch: clearInvitationSearch,
     totalCount: invitationTotalCount,
-    filteredCount: invitationFilteredCount
-  } = useDebouncedSearch({
-    items: invitations,
-    searchFields: getInvitationSearchFields,
-    debounceMs: 300,
-    filters: { roleFilter },
-    filterFn: invitationFilterFn
-  })
+    filteredCount: invitationFilteredCount,
+  } = invitationSearch
 
-  // Get current search values based on active tab
   const currentSearchQuery = activeTab === 'members' ? memberSearchQuery : invitationSearchQuery
   const setCurrentSearchQuery = activeTab === 'members' ? setMemberSearchQuery : setInvitationSearchQuery
   const isCurrentSearching = activeTab === 'members' ? isMemberSearching : isInvitationSearching
@@ -141,13 +93,9 @@ export const TeamManagementPage: React.FC = () => {
   const currentTotalCount = activeTab === 'members' ? memberTotalCount : invitationTotalCount
   const currentFilteredCount = activeTab === 'members' ? memberFilteredCount : invitationFilteredCount
 
-  // Final filtered results
-  const filteredMembers = searchFilteredMembers
-  const filteredInvitations = searchFilteredInvitations
-
   const tabs = [
-    { id: 'members' as const, label: 'Team Members', icon: Users, count: members.length },
-    { id: 'invitations' as const, label: 'Invitations', icon: Mail, count: invitations.length }
+    { id: 'members' as const, label: 'Team Members', icon: Users, count: membersCount.total },
+    { id: 'invitations' as const, label: 'Invitations', icon: Mail, count: invitationsCount.total },
   ]
 
   const roleLabels: Record<UserRole, { label: string; color: string; icon: React.ElementType }> = {
@@ -161,80 +109,6 @@ export const TeamManagementPage: React.FC = () => {
     Viewer: { label: 'Viewer', color: 'text-gray-400', icon: Users }
   }
 
-  // Filter fields configuration
-  const filterFields: FilterField[] = [
-    {
-      id: 'roleFilter',
-      label: 'Role',
-      type: 'custom',
-      value: roleFilter,
-      onChange: (value: string) => setRoleFilter(value as UserRole | 'all'),
-      component: (
-        <ApiDropdown
-          config={teamRoleDropdownConfig}
-          value={roleFilter === 'all' ? '' : roleFilter}
-          onSelect={(value) => setRoleFilter(value as UserRole)}
-          allowClear
-          onClear={() => setRoleFilter('all')}
-          className="w-full"
-        />
-      )
-    }
-  ]
-
-  const handleInviteMember = async (email: string, role: UserRole): Promise<boolean> => {
-    if (!roundAccountId) return false
-    const success = await inviteMember(roundAccountId, email, role)
-    if (success) {
-      setShowInviteModal(false)
-    }
-    return success
-  }
-
-  const handleEditMember = (member: TeamMember) => {
-    setSelectedMember(member)
-    setShowEditModal(true)
-  }
-
-  const handleUpdateRole = async (userId: string, role: UserRole): Promise<boolean> => {
-    if (roundAccountId) {
-      const success = await updateMemberRole(roundAccountId, userId, role)
-      if (success) {
-        setShowEditModal(false)
-        setSelectedMember(null)
-      }
-      return success
-    }
-    return false
-  }
-
-  const handleRemoveMember = (member: TeamMember) => {
-    setSelectedMember(member)
-    setShowConfirmDelete(true)
-  }
-
-  const confirmRemoveMember = async () => {
-    if (selectedMember && roundAccountId) {
-      const success = await removeMember(roundAccountId, selectedMember.id)
-      if (success) {
-        setShowConfirmDelete(false)
-        setSelectedMember(null)
-      }
-    }
-  }
-
-  const handleResendInvitation = async (invitation: TeamInvitation) => {
-    if (roundAccountId) {
-      await resendInvitation(roundAccountId, invitation.id)
-    }
-  }
-
-  const handleCancelInvitation = async (invitation: TeamInvitation) => {
-    if (roundAccountId) {
-      await cancelInvitation(roundAccountId, invitation.id)
-    }
-  }
-
   const handleSort = (field: string) => {
     setSortConfig(prev => ({
       field,
@@ -242,7 +116,7 @@ export const TeamManagementPage: React.FC = () => {
     }))
   }
 
-  const sortedMembers = React.useMemo(() => {
+  const sortedMembers = useMemo(() => {
     const sorted = [...filteredMembers]
     sorted.sort((a, b) => {
       let aValue: string | number = ''
@@ -276,12 +150,6 @@ export const TeamManagementPage: React.FC = () => {
     return sorted
   }, [filteredMembers, sortConfig])
 
-  const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    })
-
   const getInvitationStatus = (invitation: TeamInvitation) => {
     if (!invitation.expiresAt) {
       return { label: invitation.status, icon: Clock, color: 'text-yellow-400' }
@@ -306,7 +174,7 @@ export const TeamManagementPage: React.FC = () => {
     }
   }
 
-  if (isLoading && members.length === 0) {
+  if (isLoading && membersCount.total === 0) {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
@@ -326,7 +194,7 @@ export const TeamManagementPage: React.FC = () => {
           <p className="text-gray-400 mb-4">{error}</p>
           <ActionButton
             label="Retry"
-            onClick={() => roundAccountId && refresh(roundAccountId)}
+            onClick={refreshTeam}
             variant="secondary"
             size="sm"
             actionType="general"
@@ -355,7 +223,7 @@ export const TeamManagementPage: React.FC = () => {
             </div>
             <ActionButton
               label="Invite Member"
-              onClick={() => setShowInviteModal(true)}
+              onClick={openInviteModal}
               icon={UserPlus}
               variant="primary"
               size="md"
@@ -405,7 +273,7 @@ export const TeamManagementPage: React.FC = () => {
             filtered: currentFilteredCount
           }}
           showFilters={showFilters}
-          onToggleFilters={() => setShowFilters(!showFilters)}
+          onToggleFilters={toggleFilters}
           filterFields={filterFields}
           className="mb-6"
         />
@@ -433,7 +301,7 @@ export const TeamManagementPage: React.FC = () => {
                   {!currentSearchQuery && roleFilter === 'all' && (
                     <ActionButton
                       label="Invite First Member"
-                      onClick={() => setShowInviteModal(true)}
+                      onClick={openInviteModal}
                       icon={UserPlus}
                       variant="primary"
                       size="sm"
@@ -445,8 +313,8 @@ export const TeamManagementPage: React.FC = () => {
                   members={sortedMembers}
                   sortConfig={sortConfig}
                   onSort={handleSort}
-                  onEditMember={handleEditMember}
-                  onRemoveMember={handleRemoveMember}
+                  onEditMember={openEditModal}
+                  onRemoveMember={openDeleteConfirm}
                   loading={isLoading}
                 />
               )}
@@ -560,7 +428,7 @@ export const TeamManagementPage: React.FC = () => {
         {showInviteModal && (
           <InviteMemberModal
             isOpen={showInviteModal}
-            onClose={() => setShowInviteModal(false)}
+            onClose={closeInviteModal}
             onInvite={handleInviteMember}
           />
         )}
@@ -569,44 +437,19 @@ export const TeamManagementPage: React.FC = () => {
           <EditMemberModal
             isOpen={showEditModal}
             member={selectedMember}
-            onClose={() => {
-              setShowEditModal(false)
-              setSelectedMember(null)
-            }}
+            onClose={closeEditModal}
             onUpdateRole={handleUpdateRole}
           />
         )}
       </div>
 
-      {/* Modals */}
-      {showInviteModal && (
-        <InviteMemberModal
-          isOpen={showInviteModal}
-          onClose={() => setShowInviteModal(false)}
-          onInvite={handleInviteMember}
-        />
-      )}
-
-      {showEditModal && selectedMember && (
-        <EditMemberModal
-          isOpen={showEditModal}
-          member={selectedMember}
-          onClose={() => {
-            setShowEditModal(false)
-            setSelectedMember(null)
-          }}
-          onUpdateRole={handleUpdateRole}
-        />
-      )}
-
-      {showConfirmDelete && selectedMember && (
+      {showDeleteConfirm && selectedMember && (
         <ConfirmDialog
-          isOpen={showConfirmDelete}
-          onClose={() => {
-            setShowConfirmDelete(false)
-            setSelectedMember(null)
+          isOpen={showDeleteConfirm}
+          onClose={closeDeleteConfirm}
+          onConfirm={async () => {
+            await handleRemoveMember()
           }}
-          onConfirm={confirmRemoveMember}
           title="Remove Team Member"
           message={`Are you sure you want to remove ${selectedMember.firstName} ${selectedMember.lastName} from the team? This action cannot be undone.`}
           confirmLabel="Remove Member"

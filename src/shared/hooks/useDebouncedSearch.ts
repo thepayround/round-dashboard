@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 
-interface UseDebouncedSearchProps<T> {
+export interface UseDebouncedSearchProps<T> {
   items: T[]
   searchFields: (item: T) => string[]
   debounceMs?: number
@@ -8,7 +8,7 @@ interface UseDebouncedSearchProps<T> {
   filterFn?: (item: T, filters: Record<string, unknown>) => boolean
 }
 
-interface UseDebouncedSearchReturn<T> {
+export interface UseDebouncedSearchReturn<T> {
   searchQuery: string
   setSearchQuery: (query: string) => void
   filteredItems: T[]
