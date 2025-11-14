@@ -1,12 +1,23 @@
-﻿import { Plus, MessageSquare, User, Calendar, Edit3, Trash2, Save, RotateCcw } from 'lucide-react'
-import React, { useState, useEffect } from 'react'
+import {
+  Plus,
+  MessageSquare,
+  User,
+  Calendar,
+  Edit3,
+  Trash2,
+  Save,
+  RotateCcw,
+} from 'lucide-react'
 
-import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import type { CustomerNoteResponse, CustomerNoteCreateRequest } from '@/shared/services/api/customer.service'
-import { customerService } from '@/shared/services/api/customer.service'
+import { useCustomerNotesModalController } from '../hooks/useCustomerNotesModalController'
+
+import type { CustomerNoteResponse } from '@/shared/services/api/customer.service'
 import { Button, IconButton } from '@/shared/ui/Button'
 import { Modal } from '@/shared/ui/Modal'
+import { Textarea } from '@/shared/ui/Textarea'
+import { cn } from '@/shared/utils/cn'
 import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
+
 
 interface CustomerNotesModalProps {
   isOpen: boolean
@@ -16,180 +27,109 @@ interface CustomerNotesModalProps {
   initialNotes: CustomerNoteResponse[]
 }
 
-interface NewNote {
-  content: string
-  isInternal: boolean
-}
-
-export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
+export const CustomerNotesModal = ({
   isOpen,
   onClose,
   customerId,
   customerName,
-  initialNotes
-}) => {
-  const { showSuccess, showError } = useGlobalToast()
-  const [notes, setNotes] = useState<CustomerNoteResponse[]>(initialNotes)
-  const [newNote, setNewNote] = useState<NewNote>({ content: '', isInternal: true })
-  const [editingNoteId, setEditingNoteId] = useState<string | null>(null)
-  const [editContent, setEditContent] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [isAdding, setIsAdding] = useState(false)
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-  const [noteToDelete, setNoteToDelete] = useState<string | null>(null)
-
-  useEffect(() => {
-    setNotes(initialNotes)
-  }, [initialNotes])
-
-  const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-
-  const handleAddNote = async () => {
-    if (!newNote.content.trim()) {
-      showError('Please enter a note')
-      return
-    }
-
-    setIsAdding(true)
-    try {
-      const request: CustomerNoteCreateRequest = {
-        content: newNote.content,
-        isInternal: newNote.isInternal,
-        createdBy: 'Current User' // TODO: Get from auth context
-      }
-
-      const createdNote = await customerService.createNote(customerId, request)
-      setNotes(prev => [createdNote, ...prev])
-      setNewNote({ content: '', isInternal: true })
-      showSuccess('Note added successfully')
-    } catch (error) {
-      console.error('Failed to add note:', error)
-      showError('Failed to add note')
-    } finally {
-      setIsAdding(false)
-    }
-  }
-
-  const handleEditNote = async (noteId: string) => {
-    if (!editContent.trim()) {
-      showError('Note content cannot be empty')
-      return
-    }
-
-    setIsLoading(true)
-    try {
-      const currentNote = notes.find(note => note.id === noteId)
-      if (!currentNote) {
-        showError('Note not found')
-        return
-      }
-
-      const request: CustomerNoteCreateRequest = {
-        content: editContent,
-        isInternal: currentNote.isInternal,
-        createdBy: 'Current User' // TODO: Get from auth context
-      }
-
-      const updatedNote = await customerService.updateNote(customerId, noteId, request)
-      setNotes(prev => prev.map(note => 
-        note.id === noteId ? updatedNote : note
-      ))
-      setEditingNoteId(null)
-      setEditContent('')
-      showSuccess('Note updated successfully')
-    } catch (error) {
-      console.error('Failed to update note:', error)
-      showError('Failed to update note')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleDeleteNote = (noteId: string) => {
-    setNoteToDelete(noteId)
-    setShowConfirmDelete(true)
-  }
-
-  const confirmDeleteNote = async () => {
-    if (!noteToDelete) return
-
-    setIsLoading(true)
-    try {
-      await customerService.deleteNote(customerId, noteToDelete)
-      setNotes(prev => prev.filter(note => note.id !== noteToDelete))
-      showSuccess('Note deleted successfully')
-      setShowConfirmDelete(false)
-      setNoteToDelete(null)
-    } catch (error) {
-      console.error('Failed to delete note:', error)
-      showError('Failed to delete note')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const startEditing = (note: CustomerNoteResponse) => {
-    setEditingNoteId(note.id)
-    setEditContent(note.content)
-  }
-
-  const cancelEditing = () => {
-    setEditingNoteId(null)
-    setEditContent('')
-  }
+  initialNotes,
+}: CustomerNotesModalProps) => {
+  const {
+    notes,
+    newNoteContent,
+    isInternal,
+    editingNoteId,
+    editContent,
+    isLoading,
+    isAdding,
+    showConfirmDelete,
+    formatDate,
+    handleNewNoteChange,
+    toggleInternal,
+    handleAddNote,
+    startEditing,
+    cancelEditing,
+    handleEditContentChange,
+    handleSaveEdit,
+    requestDeleteNote,
+    confirmDeleteNote,
+    cancelDelete,
+  } = useCustomerNotesModalController({
+    customerId,
+    customerName,
+    initialNotes,
+  })
 
   return (
     <>
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Customer Notes"
-      subtitle={`${customerName} - ${notes.length} notes`}
-      icon={MessageSquare}
-      size="lg"
-    >
-      <div className="p-6 space-y-6">
-        {/* Add New Note */}
-        <div className="border-b border-white/10 pb-6">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 mb-3">
-              <Plus className="w-4 h-4 text-[#14BDEA]" />
-              <span className="text-sm font-normal tracking-tight text-white">Add New Note</span>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title="Customer Notes"
+        subtitle={`Notes for ${customerName}`}
+        icon={MessageSquare}
+        size="lg"
+      >
+        <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+          <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4">
+            <div className="flex items-start space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-[#D417C8]/10 border border-[#D417C8]/30 flex items-center justify-center">
+                <MessageSquare className="w-5 h-5 text-[#D417C8]" />
+              </div>
+              <div>
+                <h3 className="text-sm font-normal tracking-tight text-white mb-1">
+                  Add a new internal note
+                </h3>
+                <p className="text-xs text-white/60">Share context with your team. Customers cannot see internal notes.</p>
+              </div>
             </div>
-                
-                <textarea
-                  value={newNote.content}
-                  onChange={(e) => setNewNote(prev => ({ ...prev, content: e.target.value }))}
-                  rows={3}
-                  className="auth-input textarea resize-none"
-                  placeholder="Add a note about this customer..."
-                />
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="isInternal"
-                      checked={newNote.isInternal}
-                      onChange={(e) => setNewNote(prev => ({ ...prev, isInternal: e.target.checked }))}
-                      className="w-4 h-4 text-[#14BDEA] bg-white/5 border-white/20 rounded focus:ring-[#14BDEA]/20"
-                    />
-                    <label htmlFor="isInternal" className="text-sm text-white/70">
-                      Internal note (not visible to customer)
-                    </label>
-                  </div>
-                  
+
+            <div className="space-y-4">
+              <Textarea
+                value={newNoteContent}
+                onChange={event => handleNewNoteChange(event.target.value)}
+                placeholder="Write an internal note..."
+                rows={3}
+                size="sm"
+              />
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center space-x-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    onClick={toggleInternal}
+                    className={cn(
+                      'px-3 py-1 rounded-full text-xs font-medium border transition-all',
+                      isInternal
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                        : 'bg-white/5 border-white/10 text-white/60'
+                    )}
+                  >
+                    Internal Note
+                  </Button>
+                  <span className="text-xs text-white/60">Only your team can see internal notes</span>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon={RotateCcw}
+                    onClick={() => {
+                      handleNewNoteChange('')
+                      if (!isInternal) {
+                        toggleInternal()
+                      }
+                    }}
+                  >
+                    Reset
+                  </Button>
                   <Button
                     onClick={handleAddNote}
-                    disabled={isAdding || !newNote.content.trim()}
+                    disabled={isAdding}
                     variant="primary"
-                    size="md"
                     icon={Plus}
                     iconPosition="left"
                     loading={isAdding}
@@ -199,122 +139,103 @@ export const CustomerNotesModal: React.FC<CustomerNotesModalProps> = ({
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Notes List */}
-            <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-                {notes.length === 0 ? (
-                  <div className="text-center py-12">
-                    <MessageSquare className="w-12 h-12 text-white/30 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-white/70 mb-2">No notes yet</h3>
-                    <p className="text-sm text-white/50">Add your first note about this customer above.</p>
-                  </div>
-                ) : (
-                  notes.map((note) => (
-                    <div
-                      key={note.id}
-                      className="bg-white/5 border border-white/10 rounded-lg p-4"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <div className="p-1.5 bg-white/10 rounded-full">
-                            <User className="w-3 h-3 text-white/70" />
-                          </div>
-                          <div>
-                            <span className="text-sm font-normal tracking-tight text-white">{note.author}</span>
-                            <div className="flex items-center gap-2 mt-1">
-                              <Calendar className="w-3 h-3 text-white/50" />
-                              <span className="text-xs text-white/50">{formatDate(note.createdDate)}</span>
-                              {note.isInternal && (
-                                <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded-full">
-                                  Internal
-                                </span>
-                              )}
-                            </div>
-                          </div>
+          <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
+            {notes.length === 0 ? (
+              <div className="text-center py-12">
+                <MessageSquare className="w-12 h-12 text-white/30 mx-auto mb-4" />
+                <h3 className="text-base font-medium text-white mb-2">No notes yet</h3>
+                <p className="text-sm text-white/60">
+                  Start documenting important updates and interactions about {customerName}.
+                </p>
+              </div>
+            ) : (
+              notes.map(note => (
+                <div key={note.id} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 rounded-lg bg-[#14BDEA]/10 border border-[#14BDEA]/30 flex items-center justify-center">
+                        <User className="w-5 h-5 text-[#14BDEA]" />
+                      </div>
+                      <div>
+                        <div className="flex items-center space-x-2">
+                          <p className="text-sm font-medium text-white">{note.author || 'Team member'}</p>
+                          {note.isInternal && (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#F97316]/10 text-[#F97316] border border-[#F97316]/30">
+                              Internal
+                            </span>
+                          )}
                         </div>
-                        
-                        <div className="flex items-center gap-1">
-                          <IconButton
-                            onClick={() => startEditing(note)}
-                            icon={Edit3}
-                            variant="ghost"
-                            size="sm"
-                            disabled={isLoading}
-                            aria-label="Edit note"
-                            className="p-1"
-                          />
-                          <IconButton
-                            onClick={() => handleDeleteNote(note.id)}
-                            icon={Trash2}
-                            variant="danger"
-                            size="sm"
-                            disabled={isLoading}
-                            aria-label="Delete note"
-                            className="p-1"
-                          />
+                        <div className="flex items-center space-x-2 text-xs text-white/50">
+                          <Calendar className="w-3 h-3" />
+                          <span>{formatDate(note.createdDate)}</span>
                         </div>
                       </div>
-                      
-                      {editingNoteId === note.id ? (
-                        <div className="space-y-3">
-                          <textarea
-                            value={editContent}
-                            onChange={(e) => setEditContent(e.target.value)}
-                            rows={3}
-                            className="auth-input textarea resize-none text-sm focus:border-[#14BDEA]/50 focus:ring-1 focus:ring-[#14BDEA]/20"
-                          />
-                          <div className="flex items-center gap-2">
-                            <Button
-                              onClick={() => handleEditNote(note.id)}
-                              disabled={isLoading}
-                              variant="primary"
-                              size="sm"
-                              icon={Save}
-                              iconPosition="left"
-                              className="bg-green-600 hover:bg-green-700 border-green-600"
-                            >
-                              Save
-                            </Button>
-                            <Button
-                              onClick={cancelEditing}
-                              disabled={isLoading}
-                              variant="ghost"
-                              size="sm"
-                              icon={RotateCcw}
-                              iconPosition="left"
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
-                          {note.content}
-                        </p>
-                      )}
-
                     </div>
-                  ))
-                )}
-            </div>
-      </div>
-    </Modal>
 
-    {/* Delete Confirmation Dialog */}
-    <ConfirmDialog
-      isOpen={showConfirmDelete}
-      onClose={() => {
-        setShowConfirmDelete(false)
-        setNoteToDelete(null)
-      }}
-      onConfirm={confirmDeleteNote}
-      title="Delete Note"
-      message="Are you sure you want to delete this note? This action cannot be undone."
-      confirmLabel="Delete Note"
-      variant="danger"
-      isLoading={isLoading}
-    />
-  </>
+                    <div className="flex items-center space-x-2">
+                      <IconButton
+                        icon={Edit3}
+                        aria-label="Edit note"
+                        size="sm"
+                        onClick={() => startEditing(note.id, note.content)}
+                      />
+                      <IconButton
+                        icon={Trash2}
+                        aria-label="Delete note"
+                        variant="danger"
+                        size="sm"
+                        onClick={() => requestDeleteNote(note.id)}
+                      />
+                    </div>
+                  </div>
+
+                  {editingNoteId === note.id ? (
+                    <div className="space-y-3">
+                      <Textarea
+                        value={editContent}
+                        onChange={event => handleEditContentChange(event.target.value)}
+                        rows={4}
+                        size="sm"
+                      />
+                      <div className="flex items-center justify-end space-x-2">
+                        <Button variant="ghost" size="sm" onClick={cancelEditing}>
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          icon={Save}
+                          loading={isLoading}
+                          disabled={isLoading}
+                          onClick={() => handleSaveEdit(note.id)}
+                        >
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-white/80 whitespace-pre-wrap">{note.content}</p>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </Modal>
+
+      {showConfirmDelete && (
+        <ConfirmDialog
+          isOpen={showConfirmDelete}
+          onClose={cancelDelete}
+          onConfirm={confirmDeleteNote}
+          title="Delete Note"
+          message="Are you sure you want to delete this note? This action cannot be undone."
+          confirmLabel="Delete Note"
+          variant="danger"
+        />
+      )}
+    </>
   )
 }
-

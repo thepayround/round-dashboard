@@ -226,8 +226,14 @@ export class CustomerService {
 
   async update(id: string, request: CustomerUpdateRequest): Promise<CustomerResponse> {
     // Enum values now match backend numeric values directly
-    const response = await this.client.put<CustomerResponse>(CUSTOMER_ENDPOINTS.BY_ID(id), request)
-    return validateApiResponse(response.data, isCustomerResponse, 'Customer update response validation failed')
+    const response = await this.client.put<CustomerResponse | null>(CUSTOMER_ENDPOINTS.BY_ID(id), request)
+
+    try {
+      return validateApiResponse(response.data, isCustomerResponse, 'Customer update response validation failed')
+    } catch {
+      // Some endpoints return 200/204 without a response body. Fallback to re-fetching the customer.
+      return this.get(id)
+    }
   }
 
   async delete(id: string): Promise<void> {

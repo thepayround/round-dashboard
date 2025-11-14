@@ -10,7 +10,7 @@ import { NavigationItem } from '@/shared/layout/DashboardLayout/NavigationItem'
 import { LAYOUT_CONSTANTS, ANIMATION_VARIANTS } from '@/shared/layout/DashboardLayout/constants'
 import type { DashboardLayoutProps } from '@/shared/layout/DashboardLayout/types'
 import { useDashboardLayoutController } from '@/shared/layout/DashboardLayout/useDashboardLayoutController'
-import { IconButton, UserButton } from '@/shared/ui/Button'
+import { Button, IconButton, UserButton } from '@/shared/ui/Button'
 import { cn } from '@/shared/utils/cn'
 
 // Logo text component (reusable, kept here as it's small and only used in mobile header)
@@ -120,13 +120,14 @@ export const DashboardLayout = memo(({
       } as React.CSSProperties}
     >
       {/* Skip to main content link for accessibility */}
-      <button
+      <Button
         type="button"
         onClick={handleSkipToMainContent}
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#070708]"
+        variant="primary"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#070708]"
       >
         Skip to main content
-      </button>
+      </Button>
 
       {/* Minimal background - no floating orbs */}
 
@@ -362,7 +363,7 @@ export const DashboardLayout = memo(({
 
                 </Link>
 
-                <button
+                <Button
                   type="button"
                   onClick={() => {
                     setShowProfileDropdown(false)
@@ -370,19 +371,17 @@ export const DashboardLayout = memo(({
                   }}
                   onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
+                  variant="ghost"
                   className={cn(
-                    'w-full group relative flex items-center rounded-lg transition-all duration-200 h-9 text-white/60 hover:text-white',
-                    isCollapsed ? 'justify-center px-0' : 'justify-start gap-3'
+                    'w-full group relative flex items-center rounded-lg h-9 text-white/60 hover:text-white justify-start',
+                    isCollapsed ? 'justify-center px-0' : 'gap-3'
                   )}
                   aria-label="Logout"
+                  icon={LogOut}
+                  iconPosition="left"
                 >
-                  <LogOut className="w-4 h-4 flex-shrink-0" />
-                  {!isCollapsed && (
-                    <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">
-                      Logout
-                    </span>
-                  )}
-                </button>
+                  {!isCollapsed && 'Logout'}
+                </Button>
               </motion.div>
             )}
           </AnimatePresence>

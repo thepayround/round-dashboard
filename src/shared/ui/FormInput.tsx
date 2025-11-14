@@ -249,7 +249,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               helpTextId
             )}
             aria-busy={loading}
-            {...restProps} // eslint-disable-line react/jsx-props-no-spreading
+            {...restProps}
           />
           
           {loading && variant === 'auth' && (

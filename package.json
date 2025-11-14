@@ -11,6 +11,7 @@
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "format": "node node_modules/prettier/index.cjs --write .",
     "type-check": "tsc --noEmit",
+    "validate:components": "node scripts/validate-components.js",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",

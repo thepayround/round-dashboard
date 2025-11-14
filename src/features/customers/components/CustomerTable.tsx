@@ -4,7 +4,7 @@
   MoreHorizontal,
   X
 } from 'lucide-react'
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { useCustomerTableController } from '../hooks/useCustomerTableController'
@@ -45,8 +45,6 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   onSelectionChange,
   selectedIds = []
 }) => {
-  const [_hoveredRow, setHoveredRow] = useState<string | null>(null)
-
   const {
     getStatusMeta,
     formatDate,
@@ -78,14 +76,15 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                 </span>
                 {/* Add bulk action buttons here in the future */}
               </div>
-              <button 
+              <IconButton
                 onClick={clearSelection}
-                className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                icon={X}
                 aria-label="Clear selection"
                 title="Clear selection"
-              >
-                <X className="w-4 h-4" />
-              </button>
+                variant="ghost"
+                size="sm"
+                className="text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              />
             </div>
           </div>
         </div>
@@ -165,15 +164,13 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               const statusMeta = getStatusMeta(customer.status)
 
               return (
-                <TableRow
-                  key={customer.id}
-                  className={`transition-colors duration-150 ${(() => {
-                    if (selectedIds.includes(customer.id)) return 'bg-[#D417C8]/5'
-                    return ''
-                  })()}`}
-                  onMouseEnter={() => setHoveredRow(customer.id)}
-                  onMouseLeave={() => setHoveredRow(null)}
-                >
+              <TableRow
+                key={customer.id}
+                className={`transition-colors duration-150 ${(() => {
+                  if (selectedIds.includes(customer.id)) return 'bg-[#D417C8]/5'
+                  return ''
+                })()}`}
+              >
                   {selectable && (
                     <TableCell>
                       <label htmlFor={`select-${customer.id}`} className="flex items-center cursor-pointer group">
@@ -272,7 +269,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                         <Eye className="w-4 h-4" />
                       </Link>
                       <Link
-                        to={`/customers/${customer.id}/edit`}
+                        to={`/customers/${customer.id}?mode=edit`}
                         className="inline-flex items-center justify-center p-1.5 w-8 h-8 text-white/50 rounded-lg transition-all duration-150 hover:opacity-90"
                         title="Edit customer"
                       >

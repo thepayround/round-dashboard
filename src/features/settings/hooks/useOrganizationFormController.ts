@@ -149,9 +149,44 @@ export const useOrganizationFormController = () => {
       setIsSaving(true)
       const payload = mapFormToRequest(formData, organizationMeta)
       const organizationId = organizationMeta?.organizationId
-      const response = organizationId
-        ? await organizationService.update(organizationId, payload)
-        : await organizationService.create(payload)
+      if (organizationId) {
+        const response = await organizationService.update(organizationId, payload)
+        if (!response.success) {
+          throw new Error(response.error ?? 'Failed to save organization settings')
+        }
+
+        const updatedMeta = organizationMeta
+          ? ({
+              ...organizationMeta,
+              name: payload.name,
+              description: payload.description,
+              website: payload.website,
+              size: payload.size,
+              revenue: payload.revenue,
+              category: payload.category,
+              type: payload.type,
+              registrationNumber: payload.registrationNumber,
+              currency: payload.currency,
+              timeZone: payload.timeZone,
+              country: payload.country,
+              fiscalYearStart: payload.fiscalYearStart,
+            } satisfies OrganizationResponse)
+          : null
+
+        if (updatedMeta) {
+          const mapped = mapOrganizationToForm(updatedMeta)
+          setFormData(mapped)
+          setInitialData(mapped)
+          setOrganizationMeta(updatedMeta)
+        } else {
+          setInitialData(formData)
+        }
+
+        showSuccess('Organization settings saved successfully')
+        return
+      }
+
+      const response = await organizationService.create(payload)
 
       if (response.success && response.data) {
         const mapped = mapOrganizationToForm(response.data)

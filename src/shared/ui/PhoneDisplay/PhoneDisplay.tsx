@@ -31,6 +31,7 @@
 import { Check, Copy, Flag, Phone } from 'lucide-react'
 import React, { useState } from 'react'
 
+import { IconButton } from '@/shared/ui/Button'
 import { cn } from '@/shared/utils/cn'
 
 // Display format variants
@@ -172,28 +173,22 @@ export const PhoneDisplay: React.FC<PhoneDisplayProps> = ({
       )}
 
       {showCopyButton && (
-        <button
-          type="button"
+        <IconButton
+          icon={isCopied ? Check : Copy}
           onClick={handleCopy}
+          variant="ghost"
+          size="sm"
           className={cn(
-            'flex items-center justify-center',
-            copyButtonOnly 
-              ? 'p-1' 
+            copyButtonOnly
+              ? 'p-1'
               : 'ml-2 p-1',
             isCopied
               ? 'text-[#14BDEA]'
-              : 'text-white/60 hover:text-white/90',
-            'transition-colors duration-150'
+              : 'text-white/60 hover:text-white/90'
           )}
           title={isCopied ? 'Copied!' : 'Copy phone number'}
           aria-label="Copy phone number"
-        >
-          {isCopied ? (
-            <Check className="h-4 w-4" />
-          ) : (
-            <Copy className="h-4 w-4" />
-          )}
-        </button>
+        />
       )}
     </div>
   )

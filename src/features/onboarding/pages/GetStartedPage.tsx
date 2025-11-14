@@ -33,6 +33,7 @@ export const GetStartedPage = () => {
     getButtonText,
     updateUserInfo,
     updateOrganization,
+    updateBusinessSettings,
     updateAddress,
     updateProducts,
     updateBilling,
@@ -60,6 +61,7 @@ export const GetStartedPage = () => {
             onChange={updateOrganization}
             isPrePopulated={!!onboardingData.organization.companyName}
             businessSettings={onboardingData.businessSettings}
+            onBusinessSettingsChange={updateBusinessSettings}
           />
         )
       case 'address':

@@ -16,6 +16,16 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined)
 
+const noop = () => undefined
+const fallbackContext: ToastContextValue = {
+  showToast: noop,
+  showSuccess: noop,
+  showError: noop,
+  showWarning: noop,
+  showInfo: noop,
+  hideToast: noop,
+}
+
 interface ToastProviderProps {
   children: ReactNode
 }
@@ -60,7 +70,10 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
 export const useGlobalToast = () => {
   const context = useContext(ToastContext)
   if (context === undefined) {
-    throw new Error('useGlobalToast must be used within a ToastProvider')
+    if (import.meta?.env?.DEV) {
+      console.warn('useGlobalToast called outside of ToastProvider. Falling back to no-op handlers.')
+    }
+    return fallbackContext
   }
   return context
 }

@@ -55,6 +55,9 @@ export interface UseTeamManagementControllerReturn {
   handleCancelInvitation: (invitation: TeamInvitation) => Promise<void>
   refreshTeam: () => void
   formatDate: (value: string) => string
+  sortConfig: { field: string; direction: 'asc' | 'desc' }
+  handleSort: (field: string) => void
+  sortedMembers: TeamMember[]
 }
 
 export const useTeamManagementController = (): UseTeamManagementControllerReturn => {
@@ -69,6 +72,10 @@ export const useTeamManagementController = (): UseTeamManagementControllerReturn
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
+  const [sortConfig, setSortConfig] = useState<{ field: string; direction: 'asc' | 'desc' }>({
+    field: 'fullName',
+    direction: 'asc',
+  })
 
   const {
     members,
@@ -270,6 +277,50 @@ export const useTeamManagementController = (): UseTeamManagementControllerReturn
     }
   }, [])
 
+  const sortedMembers = useMemo(() => {
+    const sorted = [...memberSearch.filteredItems]
+    sorted.sort((a, b) => {
+      let aValue: string | number = ''
+      let bValue: string | number = ''
+
+      switch (sortConfig.field) {
+        case 'fullName':
+          aValue = a.fullName || `${a.firstName} ${a.lastName}`
+          bValue = b.fullName || `${b.firstName} ${b.lastName}`
+          break
+        case 'email':
+          aValue = a.email
+          bValue = b.email
+          break
+        case 'role':
+          aValue = a.roleName || a.role
+          bValue = b.roleName || b.role
+          break
+        case 'joinedAt':
+          aValue = new Date(a.joinedAt).getTime()
+          bValue = new Date(b.joinedAt).getTime()
+          break
+        default:
+          return 0
+      }
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1
+      return 0
+    })
+    return sorted
+  }, [memberSearch.filteredItems, sortConfig])
+
+  const handleSort = useCallback(
+    (field: string) => {
+      setSortConfig(prev => ({
+        field,
+        direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc',
+      }))
+    },
+    []
+  )
+
   return {
     activeTab,
     setActiveTab,
@@ -312,5 +363,8 @@ export const useTeamManagementController = (): UseTeamManagementControllerReturn
     handleCancelInvitation,
     refreshTeam: loadTeam,
     formatDate,
+    sortConfig,
+    handleSort,
+    sortedMembers,
   }
 }

@@ -8,9 +8,12 @@ import {
   CreditCard,
   Shield
 } from 'lucide-react'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+
+import { useAdvancedNotificationsController } from '../../../hooks/useAdvancedNotificationsController'
 
 import { Card } from '@/shared/ui/Card'
+
 
 
 interface NotificationPreference {
@@ -26,15 +29,15 @@ interface NotificationsSectionProps {
   updateNotificationPreference: (type: string, enabled: boolean, channel?: 'email' | 'inApp' | 'push' | 'sms') => Promise<boolean>
 }
 
-export const NotificationsSection: React.FC<NotificationsSectionProps> = ({ 
-  notifications, 
-  updateNotificationPreference 
+export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
+  notifications,
+  updateNotificationPreference,
 }) => {
-  const [localNotifications, setLocalNotifications] = useState(notifications)
-  
-  useEffect(() => {
-    setLocalNotifications(notifications)
-  }, [notifications])
+  const { getNotificationSetting, handleToggleChange } =
+    useAdvancedNotificationsController({
+      notifications,
+      updateNotificationPreference,
+    })
 
   const notificationTypes = [
     { 
@@ -82,32 +85,6 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
     { id: 'sms', label: 'SMS', icon: MessageCircle, description: 'Text message notifications' }
   ]
 
-  const getNotificationSetting = (type: string, channel: 'email' | 'inApp' | 'push' | 'sms'): boolean => {
-    const notification = localNotifications.find(n => n.notificationType === type)
-    if (!notification) return false
-    
-    switch (channel) {
-      case 'email': return notification.emailEnabled
-      case 'inApp': return notification.inAppEnabled
-      case 'push': return notification.pushEnabled
-      case 'sms': return notification.smsEnabled
-      default: return false
-    }
-  }
-
-  const handleToggleChange = async (type: string, channel: 'email' | 'inApp' | 'push' | 'sms', enabled: boolean) => {
-    // Optimistic update
-    setLocalNotifications(prev => 
-      prev.map(notification => 
-        notification.notificationType === type 
-          ? { ...notification, [`${channel}Enabled`]: enabled }
-          : notification
-      )
-    )
-    
-    await updateNotificationPreference(type, enabled, channel)
-  }
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -151,12 +128,12 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
                             className="relative inline-flex items-center cursor-pointer"
                             whileTap={{ scale: 0.95 }}
                           >
-                            <input 
-                              type="checkbox" 
-                              className="sr-only peer" 
+                            <input
+                              type="checkbox"
+                              className="sr-only peer"
                               checked={getNotificationSetting(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms')}
                               onChange={(e) => handleToggleChange(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms', e.target.checked)}
-                            />
+                                          />
                             <div className="w-8 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#D417C8]/20 rounded-full peer peer-checked:after:translate-x-3 peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary" />
                           </motion.label>
                         </div>

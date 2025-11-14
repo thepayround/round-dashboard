@@ -43,6 +43,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       loading = false,
       className = '',
       disabled,
+      type = 'button',
       ...props
     },
     ref
@@ -52,6 +53,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     return (
       <button
         ref={ref}
+        type={type}
         className={`
           inline-flex items-center justify-center
           rounded-lg

@@ -1,11 +1,11 @@
-﻿import { Mail, UserPlus } from 'lucide-react'
-import { useState } from 'react'
+import { Mail, UserPlus } from 'lucide-react'
 
+import { useInviteMemberModalController } from '../hooks/useInviteMemberModalController'
 import type { UserRole } from '../types/team.types'
 
-import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { ApiDropdown, teamRoleDropdownConfig } from '@/shared/ui/ApiDropdown'
+import { Input } from '@/shared/ui/Input'
 import { Modal } from '@/shared/ui/Modal/Modal'
 
 
@@ -16,68 +16,22 @@ interface InviteMemberModalProps {
   isLoading?: boolean
 }
 
-
-export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false }: InviteMemberModalProps) => {
-  const [email, setEmail] = useState('')
-  const [selectedRole, setSelectedRole] = useState<UserRole>('TeamMember')
-  const [error, setError] = useState('')
-  const { showError, showSuccess } = useGlobalToast()
-
-
-  const handleInviteClick = () => {
-    const event = {
-      preventDefault: () => {},
-      currentTarget: {} as HTMLFormElement,
-      target: {} as HTMLFormElement
-    } as unknown as React.FormEvent<HTMLFormElement>
-    handleSubmit(event)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-
-    // Validation
-    if (!email.trim()) {
-      setError('Email address is required')
-      return
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      setError('Please enter a valid email address')
-      return
-    }
-
-    try {
-      const success = await onInvite(email.trim(), selectedRole)
-
-      if (success) {
-        // Reset form and close modal on success
-        setEmail('')
-        setSelectedRole('TeamMember')
-        setError('')
-        showSuccess('Invitation sent successfully!')
-        onClose()
-      } else {
-        // Show error toast and keep modal open
-        setError('')
-        showError('Failed to send invitation. This email may already have a pending invitation.')
-        // Modal stays open for user to try again
-      }
-    } catch (err: unknown) {
-      setError('')
-      showError('An unexpected error occurred. Please try again.')
-      // Modal stays open for user to try again
-    }
-  }
-
-  const handleClose = () => {
-    setEmail('')
-    setSelectedRole('TeamMember')
-    setError('')
-    onClose()
-  }
+export const InviteMemberModal = ({
+  isOpen,
+  onClose,
+  onInvite,
+  isLoading = false,
+}: InviteMemberModalProps) => {
+  const {
+    email,
+    selectedRole,
+    error,
+    isSubmitDisabled,
+    handleEmailChange,
+    handleRoleChange,
+    handleSubmit,
+    handleClose,
+  } = useInviteMemberModalController({ onInvite, onClose })
 
   return (
     <Modal
@@ -88,8 +42,13 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
       icon={UserPlus}
       size="lg"
     >
-      <form onSubmit={handleSubmit} className="p-6 space-y-6">
-        {/* Email Input */}
+      <form
+        onSubmit={event => {
+          event.preventDefault()
+          handleSubmit()
+        }}
+        className="p-6 space-y-6"
+      >
         <div>
           <label htmlFor="invite-email" className="modal-label">
             Email Address
@@ -98,11 +57,11 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center pointer-events-none">
               <Mail className="w-4 h-4 text-white/60" />
             </div>
-            <input
+            <Input
               id="invite-email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={event => handleEmailChange(event.target.value)}
               placeholder="colleague@company.com"
               className="modal-input pl-10"
               required
@@ -110,7 +69,6 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
           </div>
         </div>
 
-        {/* Role Selection */}
         <div>
           <label htmlFor="invite-role" className="modal-label">
             Select Role
@@ -119,20 +77,18 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
             <ApiDropdown
               config={teamRoleDropdownConfig}
               value={selectedRole}
-              onSelect={(value) => setSelectedRole(value as UserRole)}
+              onSelect={value => handleRoleChange(value as UserRole)}
               className="w-full"
             />
           </div>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-[#D417C8] text-sm">
             {error}
           </div>
         )}
 
-        {/* Actions */}
         <div className="flex justify-end space-x-3 pt-4">
           <ActionButton
             label="Cancel"
@@ -143,9 +99,9 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
           />
           <ActionButton
             label="Send Invitation"
-            onClick={handleInviteClick}
+            onClick={handleSubmit}
             loading={isLoading}
-            disabled={isLoading || !email.trim()}
+            disabled={isLoading || isSubmitDisabled}
             icon={UserPlus}
             actionType="general"
           />
@@ -154,4 +110,3 @@ export const InviteMemberModal = ({ isOpen, onClose, onInvite, isLoading = false
     </Modal>
   )
 }
-

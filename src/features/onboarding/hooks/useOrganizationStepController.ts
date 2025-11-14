@@ -8,6 +8,7 @@ interface UseOrganizationStepControllerParams {
   data: OrganizationInfo
   onChange: (data: OrganizationInfo) => void
   businessSettings?: BusinessSettings
+  onBusinessSettingsChange?: (settings: BusinessSettings) => void
 }
 
 interface UseOrganizationStepControllerReturn {
@@ -19,6 +20,7 @@ export const useOrganizationStepController = ({
   data,
   onChange,
   businessSettings,
+  onBusinessSettingsChange,
 }: UseOrganizationStepControllerParams): UseOrganizationStepControllerReturn => {
   const formData = useMemo<OrganizationFormData>(
     () => ({
@@ -52,8 +54,13 @@ export const useOrganizationStepController = ({
         currency: updatedForm.currency,
         timeZone: updatedForm.timeZone,
       })
+
+      onBusinessSettingsChange?.({
+        timezone: updatedForm.timeZone,
+        fiscalYearStart: updatedForm.fiscalYearStart,
+      })
     },
-    [data, onChange]
+    [data, onChange, onBusinessSettingsChange]
   )
 
   return {

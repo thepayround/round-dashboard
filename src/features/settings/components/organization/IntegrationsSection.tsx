@@ -79,19 +79,21 @@ export const IntegrationsSection: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
           {categories.map(category => (
-            <button
+            <Button
               key={category.id}
+              type="button"
               onClick={() => handleCategoryChange(category.id)}
-              className={`flex items-center justify-between rounded-lg border px-4 py-3 text-left transition ${
-                activeCategory === category.id ? 'border-primary text-white bg-primary/10' : 'border-white/10 text-white/70'
+              variant={activeCategory === category.id ? 'primary' : 'ghost'}
+              className={`justify-between h-auto py-3 ${
+                activeCategory === category.id ? 'bg-primary/10' : ''
               }`}
             >
-              <div>
+              <div className="text-left">
                 <p className="text-sm font-medium tracking-tight">{category.label}</p>
                 <p className="text-xs text-white/50">{category.count} integrations</p>
               </div>
-              <Zap className="w-4 h-4 text-primary" />
-            </button>
+              <Zap className="w-4 h-4 text-primary ml-2" />
+            </Button>
           ))}
         </div>
       </Card>

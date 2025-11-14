@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Rules for enforcing reusable components instead of raw HTML elements",
+  "rules": [
+    {
+      "name": "No raw button elements",
+      "pattern": "<button",
+      "message": "Use <Button> or <IconButton> component from @/shared/ui/Button instead of raw <button> elements",
+      "suggestion": "import { Button, IconButton } from '@/shared/ui/Button'",
+      "severity": "error",
+      "excludePaths": [
+        "src/shared/ui/Button/",
+        "*.test.tsx",
+        "*.test.ts",
+        "*.spec.tsx",
+        "*.spec.ts"
+      ]
+    },
+    {
+      "name": "No raw input elements",
+      "pattern": "<input",
+      "message": "Use <Input> component from @/shared/ui/Input instead of raw <input> elements (except hidden/file/checkbox/radio inputs)",
+      "suggestion": "import { Input } from '@/shared/ui/Input'",
+      "severity": "error",
+      "excludePaths": [
+        "src/shared/ui/Input/",
+        "src/shared/ui/PhoneInput/",
+        "src/shared/ui/AuthInput/",
+        "src/shared/ui/FormInput.tsx",
+        "*.test.tsx",
+        "*.test.ts"
+      ]
+    },
+    {
+      "name": "No raw select elements",
+      "pattern": "<select",
+      "message": "Use <Dropdown> component from @/shared/ui/Dropdown instead of raw <select> elements",
+      "suggestion": "import { Dropdown } from '@/shared/ui/Dropdown'",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/Dropdown/",
+        "*.test.tsx",
+        "*.test.ts"
+      ]
+    },
+    {
+      "name": "No raw textarea elements",
+      "pattern": "<textarea",
+      "message": "Use <Textarea> component from @/shared/ui/Textarea instead of raw <textarea> elements",
+      "suggestion": "import { Textarea } from '@/shared/ui/Textarea'",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/Textarea/",
+        "src/shared/ui/AuthInput/",
+        "*.test.tsx",
+        "*.test.ts"
+      ]
+    }
+  ]
+}

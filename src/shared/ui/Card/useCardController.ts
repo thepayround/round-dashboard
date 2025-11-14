@@ -16,12 +16,12 @@ interface UseCardControllerReturn {
   isFocused: boolean
   isPressed: boolean
   interactionProps: {
-    onMouseEnter: () => void
-    onMouseLeave: () => void
-    onMouseDown: () => void
-    onMouseUp: () => void
-    onFocus: () => void
-    onBlur: () => void
+    onMouseEnter?: () => void
+    onMouseLeave?: () => void
+    onMouseDown?: () => void
+    onMouseUp?: () => void
+    onFocus?: () => void
+    onBlur?: () => void
     onKeyDown?: (event: KeyboardEvent) => void
     onKeyUp?: (event: KeyboardEvent) => void
     role?: string
@@ -68,6 +68,11 @@ export const useCardController = ({
   )
 
   const interactionProps = useMemo(() => {
+    // If not clickable, don't add any interaction handlers at all
+    if (!clickable) {
+      return {} as Record<string, never>
+    }
+
     const baseHandlers = {
       onMouseEnter: () => setIsHovered(true),
       onMouseLeave: () => {
@@ -85,7 +90,7 @@ export const useCardController = ({
       },
     }
 
-    if (!clickable || disabled) {
+    if (disabled) {
       return baseHandlers
     }
 

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import type { LucideIcon } from 'lucide-react'
 import {
   Activity,
   AlertCircle,
@@ -21,8 +22,8 @@ import {
   Zap,
   Clock,
 } from 'lucide-react'
-import React from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useCallback, useEffect, useRef } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { CustomerDetailSkeleton } from '../components/CustomerDetailSkeleton'
 import { CustomerNotesModal } from '../components/CustomerNotesModal'
@@ -34,6 +35,7 @@ import { useCustomerDetailController, type CustomerDetailTab } from '../hooks/us
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import { Button, IconButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
+import { cn } from '@/shared/utils/cn'
 
 const DETAIL_TABS: { id: CustomerDetailTab; label: string }[] = [
   { id: 'overview', label: 'Overview' },
@@ -66,6 +68,64 @@ const CustomerDetailPage: React.FC = () => {
     handleCustomerUpdated,
     handleCustomerDeleted,
   } = useCustomerDetailController(id)
+  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const hasOpenedEditModalFromQueryRef = useRef(false)
+
+  const handleBackNavigation = useCallback(() => {
+    navigate('/customers', { replace: true })
+  }, [navigate])
+
+  useEffect(() => {
+    const shouldOpenEditModal = searchParams.get('mode') === 'edit'
+
+    if (!shouldOpenEditModal) {
+      hasOpenedEditModalFromQueryRef.current = false
+      return
+    }
+
+    if (!customer || hasOpenedEditModalFromQueryRef.current) {
+      return
+    }
+
+    hasOpenedEditModalFromQueryRef.current = true
+    openEditModal()
+
+    const nextParams = new URLSearchParams(searchParams)
+    nextParams.delete('mode')
+    setSearchParams(nextParams, { replace: true })
+  }, [customer, openEditModal, searchParams, setSearchParams])
+
+  const QuickActionButton = ({
+    label,
+    icon,
+    onClick,
+    variant = 'ghost',
+    className = '',
+  }: {
+    label: string
+    icon: LucideIcon
+    onClick: () => void
+    variant?: 'ghost' | 'secondary'
+    className?: string
+  }) => (
+    <Button
+      type="button"
+      onClick={onClick}
+      variant={variant}
+      size="md"
+      icon={icon}
+      iconPosition="left"
+      fullWidth
+      className={cn(
+        'justify-start border border-white/10',
+        variant === 'secondary' && 'bg-primary/20 border-primary/30 hover:bg-primary/30',
+        className
+      )}
+    >
+      {label}
+    </Button>
+  )
 
   const formatDate = (dateString: string) =>
     new Intl.DateTimeFormat('en-US', {
@@ -242,7 +302,7 @@ const CustomerDetailPage: React.FC = () => {
             {customer.billingAddress || customer.shippingAddress ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {customer.billingAddress && (
-                  <Card variant="nested" padding="lg" className="hover:bg-white/10">
+                  <Card variant="nested" padding="lg">
                     <div className="flex items-center gap-3 mb-3">
                       <CreditCard className="w-5 h-5 text-[#42E695]" />
                       <h3 className="text-sm font-normal tracking-tight text-white">Billing Address</h3>
@@ -259,7 +319,7 @@ const CustomerDetailPage: React.FC = () => {
                 )}
 
                 {customer.shippingAddress && (
-                  <Card variant="nested" padding="lg" className="hover:bg-white/10">
+                  <Card variant="nested" padding="lg">
                     <div className="flex items-center gap-3 mb-3">
                       <Truck className="w-5 h-5 text-[#7767DA]" />
                       <h3 className="text-sm font-normal tracking-tight text-white">Shipping Address</h3>
@@ -341,39 +401,9 @@ const CustomerDetailPage: React.FC = () => {
             </div>
 
             <div className="space-y-3">
-              <Button
-                onClick={openEmailModal}
-                variant="ghost"
-                size="md"
-                icon={Mail}
-                iconPosition="left"
-                fullWidth
-                className="justify-start p-3 border border-white/10 hover:bg-white/5 hover:border-[#14BDEA]/30"
-              >
-                Send Email
-              </Button>
-              <Button
-                onClick={openNotesModal}
-                variant="ghost"
-                size="md"
-                icon={FileText}
-                iconPosition="left"
-                fullWidth
-                className="justify-start p-3 border border-white/10 hover:bg-white/5 hover:border-[#42E695]/30"
-              >
-                View Notes
-              </Button>
-              <Button
-                onClick={openEditModal}
-                variant="secondary"
-                size="md"
-                icon={Edit}
-                iconPosition="left"
-                fullWidth
-                className="justify-start p-3 bg-primary/20 border-primary/30 hover:bg-primary/30"
-              >
-                Edit Details
-              </Button>
+              <QuickActionButton label="Send Email" icon={Mail} onClick={openEmailModal} />
+              <QuickActionButton label="View Notes" icon={FileText} onClick={openNotesModal} />
+              <QuickActionButton label="Edit Details" icon={Edit} onClick={openEditModal} variant="secondary" />
             </div>
           </Card>
 
@@ -490,7 +520,7 @@ const CustomerDetailPage: React.FC = () => {
         <p className="text-sm text-white/60 mb-4">Invoices will appear here once billing is connected.</p>
         <Link
           to="/billing"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-lg text-sm text-white hover:bg-primary/30 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-lg text-sm text-white"
         >
           Go to Billing
         </Link>
@@ -503,7 +533,7 @@ const CustomerDetailPage: React.FC = () => {
       <DashboardLayout>
         <div className="max-w-7xl mx-auto p-6">
           <div className="flex items-center gap-4 mb-6">
-            <Link to="/customers" className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+            <Link to="/customers" className="p-2 text-gray-400 rounded-lg">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
@@ -517,27 +547,31 @@ const CustomerDetailPage: React.FC = () => {
     )
   }
 
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  if (error || !customer) {
+  const hasError = Boolean(error)
+
+  if (hasError || !customer) {
     return (
       <DashboardLayout>
         <div className="flex flex-col items-center justify-center py-24">
           <AlertCircle className="w-16 h-16 text-[#D417C8] mb-4" />
           <h3 className="text-lg font-medium tracking-tight text-white mb-2">
-            {error ? 'Error Loading Customer' : 'Customer Not Found'}
+            {hasError ? 'Error Loading Customer' : 'Customer Not Found'}
           </h3>
           <p className="text-gray-400 text-center mb-6">
-            {error ?? "The customer you're looking for doesn't exist or you don't have permission to view it."}
+            {hasError ? error : "The customer you're looking for doesn't exist or you don't have permission to view it."}
           </p>
           <div className="flex items-center gap-4">
-            <Link
-              to="/customers"
-              className="flex items-center gap-2 px-4 py-2 bg-[#D417C8] hover:bg-[#BD2CD0] text-white rounded-lg font-medium transition-colors"
+            <Button
+              type="button"
+              onClick={() => handleBackNavigation()}
+              variant="primary"
+              size="md"
+              icon={ArrowLeft}
+              iconPosition="left"
             >
-              <ArrowLeft className="w-4 h-4" />
               Back to Customers
-            </Link>
-            {error && (
+            </Button>
+            {hasError && (
               <Button onClick={handleRetry} variant="secondary" size="sm" icon={CheckCircle} iconPosition="left">
                 Try Again
               </Button>
@@ -551,16 +585,21 @@ const CustomerDetailPage: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <Card padding="lg">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <Card padding="lg" clickable={false}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
-                <Link
-                  to="/customers"
-                  className="p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 border border-white/10"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </Link>
+                <IconButton
+                  icon={ArrowLeft}
+                  onClick={() => navigate('/customers')}
+                  variant="ghost"
+                  size="lg"
+                  className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl border border-white/10"
+                  aria-label="Back to customers"
+                />
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
                     {customer.isBusinessCustomer ? <Building2 className="w-6 h-6 text-white" /> : <User className="w-6 h-6 text-white" />}
@@ -591,24 +630,26 @@ const CustomerDetailPage: React.FC = () => {
 
               <div className="flex items-center gap-3">
                 <Button
+                  type="button"
                   onClick={openEmailModal}
                   variant="secondary"
                   size="md"
                   icon={Mail}
                   iconPosition="left"
-                  className="bg-[#14BDEA]/20 border-[#14BDEA]/30 text-[#14BDEA] hover:bg-[#14BDEA]/30 hover:text-white"
+                  className="bg-[#14BDEA]/20 border-[#14BDEA]/30 text-[#14BDEA]"
                 >
                   Send Email
                 </Button>
-                <Button onClick={openEditModal} variant="primary" size="md" icon={Edit} iconPosition="left">
+                <Button type="button" onClick={openEditModal} variant="primary" size="md" icon={Edit} iconPosition="left">
                   Edit Details
                 </Button>
                 <IconButton
+                  type="button"
                   onClick={openDangerousActionsModal}
                   icon={MoreHorizontal}
                   variant="ghost"
                   size="md"
-                  className="text-white/70 hover:text-[#D417C8] hover:bg-red-500/10 border border-white/10"
+                  className="text-white/70 border border-white/10"
                   title="Dangerous Actions"
                   aria-label="Dangerous Actions"
                 />
@@ -619,16 +660,21 @@ const CustomerDetailPage: React.FC = () => {
 
         <div className="flex gap-2 border-b border-white/10 pb-2 overflow-x-auto">
           {DETAIL_TABS.map(tab => (
-            <button
+            <Button
               key={tab.id}
               type="button"
               onClick={() => setCurrentTab(tab.id)}
-              className={`px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
-                currentTab === tab.id ? 'bg-white/15 text-white' : 'text-white/60 hover:text-white hover:bg-white/5'
-              }`}
+              size="sm"
+              variant={currentTab === tab.id ? 'primary' : 'ghost'}
+              className={cn(
+                'rounded-lg px-4',
+                currentTab === tab.id
+                  ? 'bg-white/15 text-white border border-white/20'
+                  : 'text-white/60 border border-transparent hover:text-white'
+              )}
             >
               {tab.label}
-            </button>
+            </Button>
           ))}
         </div>
 

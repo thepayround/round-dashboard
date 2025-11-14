@@ -11,7 +11,7 @@ import {
   XCircle,
   Crown
 } from 'lucide-react'
-import React, { useMemo, useState } from 'react'
+import React from 'react'
 
 import { EditMemberModal } from '../components/EditMemberModal'
 import { InviteMemberModal } from '../components/InviteMemberModal'
@@ -29,11 +29,6 @@ import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
 
 
 export const TeamManagementPage: React.FC = () => {
-  const [sortConfig, setSortConfig] = useState<{ field: string; direction: 'asc' | 'desc' }>({
-    field: 'fullName',
-    direction: 'asc'
-  })
-
   const {
     activeTab,
     setActiveTab,
@@ -64,6 +59,9 @@ export const TeamManagementPage: React.FC = () => {
     handleCancelInvitation,
     refreshTeam,
     formatDate,
+    sortConfig,
+    handleSort,
+    sortedMembers,
   } = useTeamManagementController()
 
   const {
@@ -108,47 +106,6 @@ export const TeamManagementPage: React.FC = () => {
     Support: { label: 'Support', color: 'text-indigo-400', icon: Shield },
     Viewer: { label: 'Viewer', color: 'text-gray-400', icon: Users }
   }
-
-  const handleSort = (field: string) => {
-    setSortConfig(prev => ({
-      field,
-      direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc'
-    }))
-  }
-
-  const sortedMembers = useMemo(() => {
-    const sorted = [...filteredMembers]
-    sorted.sort((a, b) => {
-      let aValue: string | number = ''
-      let bValue: string | number = ''
-
-      switch (sortConfig.field) {
-        case 'fullName':
-          aValue = a.fullName || `${a.firstName} ${a.lastName}`
-          bValue = b.fullName || `${b.firstName} ${b.lastName}`
-          break
-        case 'email':
-          aValue = a.email
-          bValue = b.email
-          break
-        case 'role':
-          aValue = a.roleName || a.role
-          bValue = b.roleName || b.role
-          break
-        case 'joinedAt':
-          aValue = new Date(a.joinedAt).getTime()
-          bValue = new Date(b.joinedAt).getTime()
-          break
-        default:
-          return 0
-      }
-
-      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1
-      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1
-      return 0
-    })
-    return sorted
-  }, [filteredMembers, sortConfig])
 
   const getInvitationStatus = (invitation: TeamInvitation) => {
     if (!invitation.expiresAt) {

@@ -10,21 +10,24 @@ import {
   Save,
   Info
 } from 'lucide-react'
-import React, { useState, useEffect, useCallback } from 'react'
+import React from 'react'
+
+import { useProfileSectionController } from '../../../hooks/useProfileSectionController'
 
 import type { UserSettingsUpdateRequest, UserSettings } from '@/shared/services/api/userSettings.service'
 import type { User } from '@/shared/types/auth'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { ApiDropdown } from '@/shared/ui/ApiDropdown'
-import { 
+import {
   timezoneDropdownConfig,
   languageDropdownConfig,
   dateFormatDropdownConfig,
-  timeFormatDropdownConfig
+  timeFormatDropdownConfig,
 } from '@/shared/ui/ApiDropdown/configs'
 import { Card } from '@/shared/ui/Card'
 import { FormInput } from '@/shared/ui/FormInput'
 import { PhoneDisplay } from '@/shared/ui/PhoneDisplay'
+
 
 interface ProfileSectionProps {
   user: User | null
@@ -39,86 +42,11 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
   updateSettings, 
   isSaving 
 }) => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    timezone: 'UTC',
-    language: 'en',
-    dateFormat: 'MM/dd/yyyy',
-    timeFormat: '12h'
+  const { formData, hasChanges, handleInputChange, handleSubmit } = useProfileSectionController({
+    user,
+    settings,
+    updateSettings,
   })
-  
-  const [hasChanges, setHasChanges] = useState(false)
-  const [originalSettings, setOriginalSettings] = useState<UserSettingsUpdateRequest | null>(null)
-
-  useEffect(() => {
-    if (user && settings) {
-      const initialData = {
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
-        email: user.email || '',
-        phone: user.phone || '',
-        timezone: settings.timezone || 'UTC',
-        language: settings.language || 'en',
-        dateFormat: settings.dateFormat || 'MM/dd/yyyy',
-        timeFormat: settings.timeFormat || '12h'
-      }
-      setFormData(initialData)
-      
-      const originalSettingsData = {
-        timezone: settings.timezone || 'UTC',
-        language: settings.language || 'en',
-        dateFormat: settings.dateFormat || 'MM/dd/yyyy',
-        timeFormat: settings.timeFormat || '12h'
-      }
-      setOriginalSettings(originalSettingsData)
-      setHasChanges(false)
-    }
-  }, [user, settings])
-
-  const handleInputChange = useCallback((field: string, value: string) => {
-    setFormData(prev => {
-      const newData = { ...prev, [field]: value }
-      
-      if (['timezone', 'language', 'dateFormat', 'timeFormat'].includes(field) && originalSettings) {
-        const currentSettings = {
-          timezone: newData.timezone,
-          language: newData.language,
-          dateFormat: newData.dateFormat,
-          timeFormat: newData.timeFormat
-        }
-        
-        const hasChanged = Object.keys(currentSettings).some(
-          key => {
-            const settingKey = key as keyof typeof currentSettings
-            return currentSettings[settingKey] !== originalSettings[settingKey]
-          }
-        )
-        setHasChanges(hasChanged)
-      }
-      
-      return newData
-    })
-  }, [originalSettings])
-
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault()
-    
-    const settingsUpdate: UserSettingsUpdateRequest = {
-      timezone: formData.timezone,
-      language: formData.language,
-      dateFormat: formData.dateFormat,
-      timeFormat: formData.timeFormat
-    }
-    
-    const success = await updateSettings(settingsUpdate)
-    if (success) {
-      setOriginalSettings(settingsUpdate)
-      setHasChanges(false)
-    }
-  }
 
   return (
     <motion.div

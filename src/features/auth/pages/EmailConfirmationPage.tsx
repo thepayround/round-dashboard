@@ -108,11 +108,11 @@ export const EmailConfirmationPage = () => {
 
         if (response.success && 'data' in response && response.data) {
           setStatus('success')
-          setMessage(
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            ('message' in response && response.message) ||
-              'Email confirmed and logged in successfully!'
-          )
+          const successMessage =
+            'message' in response && response.message
+              ? response.message
+              : 'Email confirmed and logged in successfully!'
+          setMessage(successMessage)
 
           // Automatically log in the user
           login(response.data.user as User, response.data.accessToken, response.data.refreshToken)
@@ -140,11 +140,11 @@ export const EmailConfirmationPage = () => {
             'error' in response ? response.error : 'Unknown error'
           )
           setStatus('error')
-          setMessage(
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            ('error' in response && response.error) ||
-              'Email confirmation failed. Please try again.'
-          )
+          const errorMessage =
+            'error' in response && response.error
+              ? response.error
+              : 'Email confirmation failed. Please try again.'
+          setMessage(errorMessage)
         }
       } catch (error) {
         console.error('Email confirmation error:', error)

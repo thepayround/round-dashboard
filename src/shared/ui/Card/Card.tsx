@@ -283,9 +283,7 @@ const CardComponent = ({
           rel="noopener noreferrer"
           className={baseClasses}
           onClick={onClick}
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...interactionProps}
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...motionProps}
         >
           <CardContent />
@@ -301,7 +299,6 @@ const CardComponent = ({
           to={href}
           className={baseClasses}
           onClick={onClick}
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...interactionProps}
         >
           <CardContent />
@@ -315,9 +312,7 @@ const CardComponent = ({
     <motion.div
       className={baseClasses}
       onClick={onClick}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...interactionProps}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...motionProps}
     >
       <CardContent />

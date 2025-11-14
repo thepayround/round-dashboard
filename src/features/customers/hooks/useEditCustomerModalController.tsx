@@ -185,14 +185,19 @@ export const useEditCustomerModalController = ({
         const hasAddressData = (address: CustomerAddressCreateRequest) =>
           Boolean(address.line1.trim() || address.city.trim() || address.country.trim())
 
-        const updatePayload: CustomerUpdateRequest & {
-          billingAddress: CustomerAddressCreateRequest | null
-          shippingAddress: CustomerAddressCreateRequest | null
-        } = {
+        const updatePayload: CustomerUpdateRequest = {
           ...formData,
           type: customer.type,
-          billingAddress: hasAddressData(billingAddress) ? billingAddress : null,
-          shippingAddress: hasAddressData(shippingAddress) ? shippingAddress : null,
+          tags: formData.tags ?? [],
+          customFields: formData.customFields ?? {},
+        }
+
+        if (hasAddressData(billingAddress)) {
+          updatePayload.billingAddress = billingAddress
+        }
+
+        if (hasAddressData(shippingAddress)) {
+          updatePayload.shippingAddress = shippingAddress
         }
 
         const updatedCustomer = await customerService.update(customer.id, updatePayload)

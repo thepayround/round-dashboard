@@ -1,5 +1,9 @@
 echo "🔍 Running pre-commit checks..."
 
+# Validate component usage (run first to catch issues early)
+echo "🔍 Validating component usage..."
+node scripts/validate-components.js
+
 # Format code with Prettier
 echo "💅 Formatting code..."
 npm run format
@@ -19,4 +23,4 @@ echo "🧪 Running tests..."
 # Add formatted files back to staging
 git add -A
 
-echo "✅ Pre-commit checks passed\!"
+echo "✅ Pre-commit checks passed!"

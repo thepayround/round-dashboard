@@ -164,7 +164,6 @@ const ActionCardComponent = ({
 
   if (disabled) {
     return (
-      // eslint-disable-next-line react/jsx-props-no-spreading
       <motion.div {...motionProps}>
         <CardContent />
       </motion.div>
@@ -178,9 +177,7 @@ const ActionCardComponent = ({
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...interactionProps}
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...motionProps}
         >
           <CardContent />
@@ -189,11 +186,9 @@ const ActionCardComponent = ({
     }
 
     return (
-      // eslint-disable-next-line react/jsx-props-no-spreading
       <motion.div {...motionProps}>
         <Link
           to={href}
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...interactionProps}
         >
           <CardContent />
@@ -205,9 +200,7 @@ const ActionCardComponent = ({
   return (
     <motion.div
       onClick={onClick}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...interactionProps}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...motionProps}
     >
       <CardContent />

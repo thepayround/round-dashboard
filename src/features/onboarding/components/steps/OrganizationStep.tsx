@@ -9,6 +9,7 @@ interface OrganizationStepProps {
   errors?: Record<string, string>
   isPrePopulated?: boolean
   businessSettings?: BusinessSettings
+  onBusinessSettingsChange?: (settings: BusinessSettings) => void
 }
 
 export const OrganizationStep = ({
@@ -17,11 +18,13 @@ export const OrganizationStep = ({
   errors = {},
   isPrePopulated = false,
   businessSettings,
+  onBusinessSettingsChange,
 }: OrganizationStepProps) => {
   const { formData, handleFormChange } = useOrganizationStepController({
     data,
     onChange,
     businessSettings,
+    onBusinessSettingsChange,
   })
 
   return (

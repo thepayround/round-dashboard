@@ -408,7 +408,7 @@ const CustomersPage: React.FC = () => {
                       <Eye className="w-4 h-4" />
                     </Link>
                     <Link
-                      to={`/customers/${customer.id}/edit`}
+                      to={`/customers/${customer.id}?mode=edit`}
                       className="p-2 text-white/50 hover:text-[#D417C8] hover:bg-[#D417C8]/10 rounded-lg transition-all duration-200"
                     >
                       <Edit className="w-4 h-4" />

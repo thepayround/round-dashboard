@@ -1,69 +1,14 @@
 ﻿import { motion } from 'framer-motion'
 import { Bell, Mail, MessageSquare, Smartphone, Settings } from 'lucide-react'
-import React, { useState } from 'react'
+
+import { useOrganizationNotificationsController } from '../../hooks/useOrganizationNotificationsController'
 
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 
 
-interface NotificationPreference {
-  id: string
-  title: string
-  description: string
-  email: boolean
-  push: boolean
-  sms: boolean
-}
-
 export const NotificationsSection: React.FC = () => {
-  const [preferences, setPreferences] = useState<NotificationPreference[]>([
-    {
-      id: 'billing',
-      title: 'Billing Notifications',
-      description: 'Payment confirmations, failed payments, and subscription changes',
-      email: true,
-      push: false,
-      sms: false
-    },
-    {
-      id: 'security',
-      title: 'Security Alerts',
-      description: 'Login attempts, suspicious activity, and security policy changes',
-      email: true,
-      push: true,
-      sms: true
-    },
-    {
-      id: 'team',
-      title: 'Team Activities',
-      description: 'New member invitations, role changes, and team updates',
-      email: true,
-      push: false,
-      sms: false
-    },
-    {
-      id: 'system',
-      title: 'System Updates',
-      description: 'Maintenance notifications, feature releases, and service updates',
-      email: false,
-      push: true,
-      sms: false
-    },
-    {
-      id: 'usage',
-      title: 'Usage Alerts',
-      description: 'API limit warnings, quota notifications, and usage reports',
-      email: true,
-      push: true,
-      sms: false
-    }
-  ])
-
-  const updatePreference = (id: string, channel: 'email' | 'push' | 'sms', value: boolean) => {
-    setPreferences(prev => prev.map(pref =>
-      pref.id === id ? { ...pref, [channel]: value } : pref
-    ))
-  }
+  const { preferences, updatePreference } = useOrganizationNotificationsController()
 
   return (
     <motion.div
@@ -176,7 +121,7 @@ export const NotificationsSection: React.FC = () => {
                   onChange={(e) => updatePreference(pref.id, 'email', e.target.checked)}
                   className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
                   aria-label={`Enable email notifications for ${pref.title}`}
-                />
+                  />
               </div>
               <div className="text-center">
                 <input
@@ -185,7 +130,7 @@ export const NotificationsSection: React.FC = () => {
                   onChange={(e) => updatePreference(pref.id, 'push', e.target.checked)}
                   className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
                   aria-label={`Enable push notifications for ${pref.title}`}
-                />
+                  />
               </div>
               <div className="text-center">
                 <input
@@ -194,7 +139,7 @@ export const NotificationsSection: React.FC = () => {
                   onChange={(e) => updatePreference(pref.id, 'sms', e.target.checked)}
                   className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
                   aria-label={`Enable SMS notifications for ${pref.title}`}
-                />
+                  />
               </div>
             </div>
           ))}

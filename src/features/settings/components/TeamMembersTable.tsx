@@ -3,7 +3,7 @@
   Trash2,
   Crown
 } from 'lucide-react'
-import React, { useState } from 'react'
+import React from 'react'
 
 import type { TeamMember, UserRole } from '../types/team.types'
 
@@ -40,8 +40,6 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
   onRemoveMember,
   loading = false
 }) => {
-  const [_hoveredRow, setHoveredRow] = useState<string | null>(null)
-
   const roleLabels: Record<UserRole, { label: string; color: string }> = {
     SuperAdmin: { label: 'Super Admin', color: 'text-green-400' },
     Admin: { label: 'Admin', color: 'text-orange-400' },
@@ -90,8 +88,6 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                 <TableRow
                   key={member.id}
                   className="transition-colors duration-150"
-                  onMouseEnter={() => setHoveredRow(member.id)}
-                  onMouseLeave={() => setHoveredRow(null)}
                 >
                   <TableCell>
                     <div className="flex items-center space-x-3">
