@@ -350,37 +350,38 @@ export const DashboardLayout = memo(({
                     isActive('/user-settings')
                       ? 'bg-primary/10 text-white border border-primary/20'
                       : 'text-white/60 hover:text-white',
-                    isCollapsed ? 'justify-center px-0' : 'justify-start gap-2'
+                    isCollapsed ? 'justify-center px-0' : 'px-6'
                   )}
                   aria-label="User Settings"
                 >
-                  <User className="w-4 h-4 flex-shrink-0" />
+                  <User className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
                   {!isCollapsed && (
-                    <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">
-                      User Settings
-                    </span>
+                    <div className="overflow-hidden">
+                      <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">
+                        User Settings
+                      </span>
+                    </div>
                   )}
-
                 </Link>
 
                 <Button
                   type="button"
+                  variant="link"
+                  icon={LogOut}
+                  iconPosition="left"
                   onClick={() => {
                     setShowProfileDropdown(false)
                     handleLogout()
                   }}
                   onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
-                  variant="ghost"
                   className={cn(
-                    'w-full group relative flex items-center rounded-lg h-9 text-white/60 hover:text-white justify-start',
-                    isCollapsed ? 'justify-center px-0' : 'gap-3'
+                    'group relative rounded-lg transition-all duration-200 h-9',
+                    isCollapsed ? 'justify-center px-0' : 'px-6'
                   )}
                   aria-label="Logout"
-                  icon={LogOut}
-                  iconPosition="left"
                 >
-                  {!isCollapsed && 'Logout'}
+                  {!isCollapsed ? 'Logout' : ''}
                 </Button>
               </motion.div>
             )}

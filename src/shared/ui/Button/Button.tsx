@@ -5,7 +5,7 @@ import { forwardRef } from 'react'
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /** Visual style variant */
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
   /** Button size */
   size?: 'sm' | 'md' | 'lg' | 'xl'
   /** Optional icon (Lucide icon component) */
@@ -24,7 +24,8 @@ const variants = {
   primary: 'bg-[#D417C8] text-white border border-[#D417C8] hover:bg-[#E02DD8]',
   secondary: 'bg-transparent text-white border border-white/20 hover:bg-white/5',
   ghost: 'bg-transparent text-white/80 border border-transparent hover:bg-white/5',
-  danger: 'bg-transparent text-white border border-red-500/30 hover:bg-red-500/10'
+  danger: 'bg-transparent text-white border border-red-500/30 hover:bg-red-500/10',
+  link: 'bg-transparent text-white/60 border border-transparent hover:text-white'
 }
 
 const sizes = {
