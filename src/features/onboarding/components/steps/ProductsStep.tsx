@@ -1,15 +1,13 @@
 import { motion } from 'framer-motion'
 import { Package } from 'lucide-react'
 
+import type { StepComponentProps } from '../../config/types'
 import { useProductsStepController } from '../../hooks/useProductsStepController'
 import type { ProductInfo } from '../../types/onboarding'
 
 import { ActionButton } from '@/shared/ui/ActionButton'
 
-interface ProductsStepProps {
-  data: ProductInfo
-  onChange: (data: ProductInfo) => void
-}
+type ProductsStepProps = StepComponentProps<ProductInfo>
 
 export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
   const { products, hasProducts, handleAddProduct } = useProductsStepController({ data, onChange })

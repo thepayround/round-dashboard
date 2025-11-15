@@ -1,13 +1,11 @@
+import type { StepComponentProps } from '../../config/types'
 import { useOrganizationStepController } from '../../hooks/useOrganizationStepController'
 import type { OrganizationInfo, BusinessSettings } from '../../types/onboarding'
 
 import { OrganizationForm } from '@/shared/widgets/forms/OrganizationForm'
 
-interface OrganizationStepProps {
-  data: OrganizationInfo
-  onChange: (data: OrganizationInfo) => void
+interface OrganizationStepProps extends StepComponentProps<OrganizationInfo> {
   errors?: Record<string, string>
-  isPrePopulated?: boolean
   businessSettings?: BusinessSettings
   onBusinessSettingsChange?: (settings: BusinessSettings) => void
 }

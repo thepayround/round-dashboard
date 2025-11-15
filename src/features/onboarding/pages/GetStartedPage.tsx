@@ -3,12 +3,7 @@ import { ArrowLeft, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
 import React from 'react'
 
 import { TabNavigation } from '../components/TabNavigation'
-import { AddressStep } from '../components/steps/AddressStep'
-import { BillingStep } from '../components/steps/BillingStep'
-import { OrganizationStep } from '../components/steps/OrganizationStep'
-import { ProductsStep } from '../components/steps/ProductsStep'
-import { TeamStep } from '../components/steps/TeamStep'
-import { UserInfoStep } from '../components/steps/UserInfoStep'
+import { getStepConfig } from '../config/stepsConfig'
 import { useGetStartedController } from '../hooks/useGetStartedController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
@@ -31,7 +26,6 @@ export const GetStartedPage = () => {
     isLastStep,
     isStepValid,
     getButtonText,
-    updateUserInfo,
     updateOrganization,
     updateBusinessSettings,
     updateAddress,
@@ -43,20 +37,34 @@ export const GetStartedPage = () => {
   } = useGetStartedController()
 
   const renderCurrentStep = () => {
-    switch (currentStep) {
-      case 'userInfo':
-        return <UserInfoStep data={onboardingData.userInfo} onChange={updateUserInfo} />
-      case 'organization':
-        if (isLoadingData && !onboardingData.organization.companyName) {
-          return (
-            <div className="flex items-center justify-center py-12">
-              <div className="w-8 h-8 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
-              <span className="ml-3 text-white/60">Loading organization data...</span>
-            </div>
-          )
-        }
+    const stepConfig = getStepConfig(currentStep)
+    if (!stepConfig) {
+      return null
+    }
+
+    // Show loading state for steps that require data fetching
+    if (stepConfig.requiresDataFetch && isLoadingData) {
+      const shouldShowLoading =
+        (currentStep === 'organization' && !onboardingData.organization.companyName) ||
+        (currentStep === 'address' && !onboardingData.address.billingAddress.name)
+
+      if (shouldShowLoading) {
         return (
-          <OrganizationStep
+          <div className="flex items-center justify-center py-12">
+            <div className="w-8 h-8 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+            <span className="ml-3 text-white/60">Loading {stepConfig.title.toLowerCase()} data...</span>
+          </div>
+        )
+      }
+    }
+
+    const StepComponent = stepConfig.component
+
+    // Render step with appropriate props based on step ID
+    switch (currentStep) {
+      case 'organization':
+        return (
+          <StepComponent
             data={onboardingData.organization}
             onChange={updateOrganization}
             isPrePopulated={!!onboardingData.organization.companyName}
@@ -65,28 +73,25 @@ export const GetStartedPage = () => {
           />
         )
       case 'address':
-        if (isLoadingData && !onboardingData.address.billingAddress.name) {
-          return (
-            <div className="flex items-center justify-center py-12">
-              <div className="w-8 h-8 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
-              <span className="ml-3 text-white/60">Loading address data...</span>
-            </div>
-          )
-        }
         return (
-          <AddressStep
+          <StepComponent
             data={onboardingData.address}
             onChange={updateAddress}
             isPrePopulated={completedSteps.includes('address')}
           />
         )
       case 'products':
-        return <ProductsStep data={onboardingData.products} onChange={updateProducts} />
+        return <StepComponent data={onboardingData.products} onChange={updateProducts} />
       case 'billing':
-        return <BillingStep data={onboardingData.billing} onChange={updateBilling} />
+        return <StepComponent data={onboardingData.billing} onChange={updateBilling} />
       case 'team':
         return (
-          <TeamStep data={onboardingData.team} onChange={updateTeam} showSuccess={showSuccess} showError={showError} />
+          <StepComponent
+            data={onboardingData.team}
+            onChange={updateTeam}
+            showSuccess={showSuccess}
+            showError={showError}
+          />
         )
       default:
         return null

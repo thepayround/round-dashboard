@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { stepsConfig, getStepConfig } from '../config/stepsConfig'
 import type {
   OnboardingData,
   OnboardingStep,
@@ -35,7 +36,8 @@ const parseBackendError = (error: unknown) => {
   return { message: 'An unknown error occurred', details: error }
 }
 
-const allSteps: OnboardingStep[] = ['organization', 'address', 'team', 'products', 'billing']
+// Get all step IDs from the registry
+const allSteps: OnboardingStep[] = stepsConfig.map((step) => step.id) as OnboardingStep[]
 
 const defaultOnboardingData: OnboardingData = {
   userInfo: {
@@ -134,43 +136,11 @@ export const useGetStartedController = () => {
 
   const isStepValid = useCallback(
     (step: OnboardingStep): boolean => {
-      switch (step) {
-        case 'organization': {
-          const { organization, businessSettings } = onboardingData
-          if (!organization) return false
-          return (
-            organization.companyName?.trim() !== '' &&
-            organization.industry !== '' &&
-            organization.companySize !== '' &&
-            organization.organizationType !== '' &&
-            organization.country !== '' &&
-            organization.registrationNumber?.trim() !== '' &&
-            organization.taxId?.trim() !== '' &&
-            businessSettings?.timezone !== '' &&
-            businessSettings?.fiscalYearStart !== ''
-          )
-        }
-        case 'address': {
-          const { address } = onboardingData
-          if (!address?.billingAddress) return false
-          const billing = address.billingAddress
-          return (
-            billing.name?.trim() !== '' &&
-            billing.addressLine1?.trim() !== '' &&
-            billing.number?.trim() !== '' &&
-            billing.city?.trim() !== '' &&
-            billing.state?.trim() !== '' &&
-            billing.zipCode?.trim() !== '' &&
-            billing.country !== ''
-          )
-        }
-        case 'products':
-        case 'billing':
-        case 'team':
-          return true
-        default:
-          return false
+      const stepConfig = getStepConfig(step)
+      if (!stepConfig) {
+        return false
       }
+      return stepConfig.validation(onboardingData)
     },
     [onboardingData]
   )

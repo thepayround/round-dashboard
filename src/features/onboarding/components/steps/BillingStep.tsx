@@ -1,15 +1,13 @@
 import { motion } from 'framer-motion'
 import { CreditCard, ExternalLink, CheckCircle } from 'lucide-react'
 
+import type { StepComponentProps } from '../../config/types'
 import { useBillingStepController } from '../../hooks/useBillingStepController'
 import type { BillingSettings } from '../../types/onboarding'
 
 import { Button } from '@/shared/ui/Button'
 
-interface BillingStepProps {
-  data: BillingSettings
-  onChange: (data: BillingSettings) => void
-}
+type BillingStepProps = StepComponentProps<BillingSettings>
 
 export const BillingStep = ({ data, onChange }: BillingStepProps) => {
   const { isConnected, handleConnect } = useBillingStepController({ data, onChange })

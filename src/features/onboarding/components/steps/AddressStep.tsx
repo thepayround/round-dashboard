@@ -1,17 +1,15 @@
 ﻿import { motion } from 'framer-motion'
 import { MapPin, Building, Hash, Info } from 'lucide-react'
 
+import type { StepComponentProps } from '../../config/types'
 import { useAddressStepController } from '../../hooks/useAddressStepController'
 import type { EnhancedAddressInfo } from '../../types/onboarding'
 
 import { ApiDropdown, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { FormInput } from '@/shared/ui/FormInput'
 
-interface AddressStepProps {
-  data: EnhancedAddressInfo
-  onChange: (data: EnhancedAddressInfo) => void
+interface AddressStepProps extends StepComponentProps<EnhancedAddressInfo> {
   errors?: Record<string, string>
-  isPrePopulated?: boolean
   readOnly?: boolean
 }
 

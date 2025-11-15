@@ -1,87 +1,31 @@
 ﻿import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
-import { useState, useEffect } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Mail, Lock, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
+import { useBusinessLoginController } from '../hooks/useBusinessLoginController'
 
 import { FacebookIcon } from '@/features/auth/components/icons/SocialIcons'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { useAsyncAction, useForm } from '@/shared/hooks'
-import { useAuth } from '@/shared/hooks/useAuth'
-import { apiClient } from '@/shared/services/apiClient'
 import { ActionButton } from '@/shared/ui/ActionButton'
+import { AuthInput } from '@/shared/ui/AuthInput'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
-import { Button, IconButton } from '@/shared/ui/Button'
-import { validators, handleApiError } from '@/shared/utils'
+import { Button } from '@/shared/ui/Button'
 
 export const BusinessLoginPage = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { login } = useAuth()
   const { showSuccess, showError } = useGlobalToast()
-  const { loading: isSubmitting, execute } = useAsyncAction()
-  const [showPassword, setShowPassword] = useState(false)
-
-  // Use form hook for validation
-  const { values, errors, handleChange, handleBlur, validateAll, setFieldValue } = useForm(
-    { email: '', password: '' },
-    {
-      email: (value: string) => {
-        if (!value.trim()) {
-          return { valid: false, message: 'Email is required' }
-        }
-        return validators.emailWithMessage(value)
-      },
-      password: (value: string) => {
-        if (!value.trim()) {
-          return { valid: false, message: 'Password is required' }
-        }
-        return validators.passwordBasic(value)
-      },
-    }
-  )
-
-  // Handle success message from navigation state
-  useEffect(() => {
-    const state = location.state as { message?: string; email?: string }
-    if (state?.message) {
-      showSuccess(state.message)
-      if (state.email) {
-        setFieldValue('email', state.email)
-      }
-      navigate(location.pathname, { replace: true, state: {} })
-    }
-  }, [location.state, location.pathname, navigate, showSuccess, setFieldValue])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!validateAll()) {
-      return
-    }
-
-    await execute(async () => {
-      const response = await apiClient.login(values)
-
-      if (response.success && response.data) {
-        login(response.data.user, response.data.accessToken)
-        
-        const from =
-          (location.state as { from?: { pathname?: string } })?.from?.pathname ?? '/get-started'
-        navigate(from, { replace: true })
-      } else {
-        showError(response.error ?? 'Login failed')
-      }
-    }, {
-      onError: (error) => {
-        const message = handleApiError(error, 'Login')
-        showError(message)
-      }
-    })
-  }
-
-  const isFormValid = values.email.trim() !== '' && values.password.trim() !== '' && !errors.email && !errors.password
+  const {
+    email,
+    password,
+    handleEmailChange,
+    handlePasswordChange,
+    handleEmailBlur,
+    handlePasswordBlur,
+    handleSubmit,
+    errors,
+    isFormValid,
+    isLoading,
+  } = useBusinessLoginController()
 
   return (
     <div className="auth-container">
@@ -128,76 +72,38 @@ export const BusinessLoginPage = () => {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
             {/* Email Address */}
-            <div>
-              <label htmlFor="email" className="auth-label">
-                Email Address
-              </label>
-              <div className="input-container">
-                <Mail className="input-icon-left auth-icon-primary" />
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  value={values.email}
-                  onChange={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  placeholder="example@company.com"
-                  className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
-                  required
-                />
-              </div>
-              {errors.email && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  <span>{errors.email}</span>
-                </motion.div>
-              )}
-            </div>
+            <AuthInput
+              id="email"
+              type="email"
+              name="email"
+              label="Email Address"
+              value={email}
+              onChange={(e) => handleEmailChange(e as React.ChangeEvent<HTMLInputElement>)}
+              onBlur={handleEmailBlur}
+              placeholder="example@company.com"
+              leftIcon={Mail}
+              error={errors.email}
+              required
+            />
 
             {/* Password */}
-            <div>
-              <label htmlFor="password" className="auth-label">
-                Password
-              </label>
-              <div className="input-container">
-                <Lock className="input-icon-left auth-icon-primary" />
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={values.password}
-                  onChange={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  placeholder="Enter your password"
-                  className={`auth-input input-with-icon-left input-with-icon-right ${errors.password ? 'auth-input-error' : ''}`}
-                  required
-                />
-                <IconButton
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  icon={showPassword ? EyeOff : Eye}
-                  variant="ghost"
-                  size="md"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="input-icon-right"
-                />
-              </div>
-              {errors.password && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  <span>{errors.password}</span>
-                </motion.div>
-              )}
-              
-              <div className="text-right mt-2">
+            <div className="space-y-2">
+              <AuthInput
+                id="password"
+                type="password"
+                name="password"
+                label="Password"
+                value={password}
+                onChange={(e) => handlePasswordChange(e as React.ChangeEvent<HTMLInputElement>)}
+                onBlur={handlePasswordBlur}
+                placeholder="Enter your password"
+                leftIcon={Lock}
+                error={errors.password}
+                passwordToggle
+                required
+              />
+
+              <div className="text-right">
                 <Link to="/auth/forgot-password" className="auth-link text-sm brand-primary">
                   Forgot your password?
                 </Link>
@@ -207,10 +113,10 @@ export const BusinessLoginPage = () => {
             {/* Submit Button */}
             <ActionButton
               type="submit"
-              label={isSubmitting ? 'Signing In...' : 'Sign In'}
-              disabled={!isFormValid || isSubmitting}
+              label={isLoading ? 'Signing In...' : 'Sign In'}
+              disabled={!isFormValid || isLoading}
               icon={ArrowRight}
-              loading={isSubmitting}
+              loading={isLoading}
               size="md"
               animated={false}
               actionType="auth"

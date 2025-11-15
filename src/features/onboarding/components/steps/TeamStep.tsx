@@ -1,17 +1,17 @@
 import { motion } from 'framer-motion'
 import { Users, UserPlus, Mail, Trash2, Loader2 } from 'lucide-react'
 
+import type { StepComponentProps } from '../../config/types'
 import { useTeamStepController } from '../../hooks/useTeamStepController'
 import type { TeamSettings } from '../../types/onboarding'
 
 import { ApiDropdown } from '@/shared/ui/ApiDropdown'
 import { teamRoleDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
 import { Button, IconButton } from '@/shared/ui/Button'
+import { Input } from '@/shared/ui/Input'
 
 
-interface TeamStepProps {
-  data: TeamSettings
-  onChange: (data: TeamSettings) => void
+interface TeamStepProps extends StepComponentProps<TeamSettings> {
   showSuccess: (message: string) => void
   showError: (message: string, details?: Record<string, string>) => void
 }
@@ -58,20 +58,16 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           <div className="space-y-4">
             <div className="flex gap-3 items-end">
               <div className="flex-1">
-                <label htmlFor="inviteEmail" className="auth-label">
-                  Email Address
-                </label>
-                <div className="input-container">
-                  <Mail className="input-icon-left auth-icon-primary w-3 h-3" />
-                  <input
-                    id="inviteEmail"
-                    type="email"
-                    value={inviteEmail}
-                    onChange={event => handleInviteEmailChange(event.target.value)}
-                    placeholder="colleague@example.com"
-                    className="auth-input input-with-icon-left text-xs w-full"
-                  />
-                </div>
+                <Input
+                  id="inviteEmail"
+                  type="email"
+                  label="Email Address"
+                  value={inviteEmail}
+                  onChange={event => handleInviteEmailChange(event.target.value)}
+                  placeholder="colleague@example.com"
+                  leftIcon={Mail}
+                  size="sm"
+                />
               </div>
               <div className="w-40">
                 <label htmlFor="inviteRole" className="auth-label">
