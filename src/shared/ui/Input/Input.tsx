@@ -1,7 +1,9 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AlertCircle } from 'lucide-react'
-import React from 'react'
+import { AlertCircle, Copy, Check } from 'lucide-react'
+import React, { useState } from 'react'
+
+import { PlainButton } from '../Button'
 
 import { cn } from '@/shared/utils/cn'
 
@@ -61,6 +63,12 @@ export interface InputProps
   required?: boolean
   /** Additional container class name */
   containerClassName?: string
+  /** Show character count (requires maxLength prop) */
+  showCharacterCount?: boolean
+  /** Show copy button for read-only inputs */
+  showCopyButton?: boolean
+  /** Callback when copy is successful */
+  onCopy?: () => void
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -76,7 +84,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       rightIcon: RightIcon,
       required,
       containerClassName,
+      showCharacterCount,
+      showCopyButton,
+      onCopy,
       id,
+      value,
+      maxLength,
+      readOnly,
       ...props
     },
     ref
@@ -84,6 +98,23 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`
     const hasError = Boolean(error)
     const effectiveVariant = hasError ? 'error' : variant
+    const [copied, setCopied] = useState(false)
+
+    const currentLength = typeof value === 'string' ? value.length : String(value || '').length
+    const shouldShowCharacterCount = showCharacterCount && maxLength
+    const shouldShowCopyButton = showCopyButton && readOnly && value
+
+    const handleCopy = async () => {
+      if (!value) return
+      try {
+        await navigator.clipboard.writeText(String(value))
+        setCopied(true)
+        onCopy?.()
+        setTimeout(() => setCopied(false), 2000)
+      } catch (err) {
+        console.error('Failed to copy:', err)
+      }
+    }
 
     return (
       <div className={containerClassName}>
@@ -107,13 +138,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
+            value={value}
+            maxLength={maxLength}
+            readOnly={readOnly}
             className={cn(
               inputVariants({
                 size,
                 variant: effectiveVariant,
               }),
               LeftIcon && 'pl-9',
-              RightIcon && 'pr-9',
+              (RightIcon || shouldShowCopyButton) && 'pr-9',
               className
             )}
             aria-invalid={hasError}
@@ -127,7 +161,23 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
 
-          {RightIcon && (
+          {shouldShowCopyButton && (
+            <PlainButton
+              type="button"
+              onClick={handleCopy}
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 hover:text-white/90 text-auth-icon"
+              aria-label="Copy to clipboard"
+              unstyled
+            >
+              {copied ? (
+                <Check className="w-4 h-4 text-[#38D39F]" />
+              ) : (
+                <Copy className="w-4 h-4" />
+              )}
+            </PlainButton>
+          )}
+
+          {RightIcon && !shouldShowCopyButton && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 hover:text-white/90">
               <RightIcon className="w-4 h-4 text-auth-icon" />
             </div>
@@ -160,6 +210,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             </p>
           )}
         </AnimatePresence>
+
+        {shouldShowCharacterCount && (
+          <p className="mt-1 text-xs text-white/40 text-right">
+            {currentLength} / {maxLength}
+          </p>
+        )}
       </div>
     )
   }

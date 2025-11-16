@@ -137,6 +137,56 @@ export const AllSizes: Story = {
   ),
 }
 
+// New features
+export const WithCharacterCount: Story = {
+  render: () => {
+    const [value, setValue] = useState('')
+
+    return (
+      <div className="p-6 bg-[#0a0a0a]">
+        <Input
+          label="Bio"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          maxLength={100}
+          showCharacterCount
+          placeholder="Tell us about yourself..."
+          helperText="Maximum 100 characters"
+        />
+      </div>
+    )
+  },
+}
+
+export const WithCopyButton: Story = {
+  args: {
+    label: 'API Key',
+    value: 'sk_live_1234567890abcdef',
+    readOnly: true,
+    showCopyButton: true,
+    helperText: 'Click the copy icon to copy to clipboard',
+  },
+}
+
+export const CopyButtonInteractive: Story = {
+  render: () => {
+    const [copied, setCopied] = useState(false)
+
+    return (
+      <div className="p-6 bg-[#0a0a0a]">
+        <Input
+          label="API Token"
+          value="tok_1234567890abcdef_ghijklmn"
+          readOnly
+          showCopyButton
+          onCopy={() => setCopied(true)}
+          helperText={copied ? '✅ Copied to clipboard!' : 'Click copy icon'}
+        />
+      </div>
+    )
+  },
+}
+
 // Common patterns
 export const CommonPatterns: Story = {
   render: () => (
@@ -145,6 +195,18 @@ export const CommonPatterns: Story = {
       <Input label="Email" leftIcon={Mail} type="email" placeholder="john@example.com" />
       <Input label="Password" leftIcon={Lock} type="password" placeholder="••••••••" />
       <Input label="Amount" leftIcon={DollarSign} type="number" placeholder="1000" />
+      <Input
+        label="Limited text"
+        maxLength={50}
+        showCharacterCount
+        placeholder="Max 50 characters"
+      />
+      <Input
+        label="Read-only with copy"
+        value="Copy me!"
+        readOnly
+        showCopyButton
+      />
     </div>
   ),
 }

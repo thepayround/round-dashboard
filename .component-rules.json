@@ -35,6 +35,8 @@
         "src/shared/ui/NumberInput/",
         "src/shared/ui/DateInput/",
         "src/shared/ui/TimeInput/",
+        "src/shared/ui/MaskedInput/",
+        "src/shared/ui/Autocomplete/",
         "src/shared/ui/Checkbox/",
         "src/shared/ui/Toggle/",
         "src/shared/ui/RadioGroup/",

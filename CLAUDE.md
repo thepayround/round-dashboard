@@ -247,7 +247,7 @@ describe('ComponentName', () => {
 ## 📦 Available Components (`@/shared/ui`)
 
 ### Inputs
-`Input`, `FormInput`, `AuthInput`, `SearchInput`, `PhoneInput`, `FileInput`, `NumberInput` ✨, `DateInput` ✨, `TimeInput` ✨
+`Input`, `FormInput`, `AuthInput`, `SearchInput`, `PhoneInput`, `FileInput`, `NumberInput` ✨, `DateInput` ✨, `TimeInput` ✨, `MaskedInput` ✨, `Autocomplete` ✨
 
 ### Forms  
 `Checkbox`, `Toggle`, `RadioGroup`, `Textarea`
