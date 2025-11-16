@@ -258,7 +258,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         </div>
 
         {error && (
-          <p id={errorId} className="text-sm text-auth-error font-medium flex items-center space-x-2" role="alert" aria-live="polite">
+          <p id={errorId} className="text-sm text-auth-error font-medium flex items-center space-x-2" role="alert" aria-live="polite" aria-atomic="true">
             <AlertCircle className="w-3.5 h-3.5" />
             <span>{error}</span>
           </p>

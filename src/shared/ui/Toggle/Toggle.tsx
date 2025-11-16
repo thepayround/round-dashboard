@@ -86,7 +86,7 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
           <label
             htmlFor={toggleId}
             className={cn(
-              'flex items-center space-x-3 cursor-pointer',
+              'flex items-center space-x-3 cursor-pointer min-h-[44px] lg:min-h-0',
               disabled && 'opacity-50 cursor-not-allowed',
               labelClassName
             )}
@@ -95,7 +95,7 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
               <span className="text-sm text-white/85">{label}</span>
               {description && <span className="text-xs text-white/60">{description}</span>}
             </div>
-            <div className="relative inline-flex items-center">
+            <div className="relative inline-flex items-center min-w-[44px] min-h-[44px] justify-center lg:min-w-0 lg:min-h-0">
               <input
                 ref={ref}
                 id={toggleId}
@@ -114,7 +114,7 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
           </label>
         )}
         {!label && (
-          <div className="relative inline-flex items-center">
+          <div className="relative inline-flex items-center min-w-[44px] min-h-[44px] justify-center lg:min-w-0 lg:min-h-0">
             <input
               ref={ref}
               id={toggleId}

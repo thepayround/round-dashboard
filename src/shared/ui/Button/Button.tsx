@@ -29,10 +29,10 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'px-3 py-1.5 text-xs h-9',
-  md: 'px-4 py-1.5 text-sm h-9',
-  lg: 'px-4 py-1.5 text-sm h-9',
-  xl: 'px-5 py-2 text-base h-9'
+  sm: 'px-3 py-2 text-xs h-10 lg:h-9',
+  md: 'px-4 py-2 text-sm h-11 lg:h-10',
+  lg: 'px-4 py-2.5 text-sm h-11 lg:h-10',
+  xl: 'px-5 py-2.5 text-base h-12 lg:h-11'
 }
 
 const iconSizes = {
@@ -69,7 +69,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           inline-flex items-center justify-center gap-2
           rounded-lg font-normal tracking-tight
           transition-all duration-200
-          outline-none
+          outline-none focus-visible:ring-2 focus-visible:ring-[#14bdea] focus-visible:ring-offset-2 focus-visible:ring-offset-black
           disabled:opacity-50 disabled:cursor-not-allowed
           ${variants[variant]}
           ${sizes[size]}
@@ -77,19 +77,22 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           ${className}
         `}
         disabled={isDisabled}
+        aria-busy={loading}
         {...props}
       >
-        {loading ? (
-          <>
-            <Loader2 className={`${iconSizes[size]} animate-spin`} />
-            <span>Loading...</span>
-          </>
-        ) : (
-          <>
-            {Icon && iconPosition === 'left' && <Icon className={iconSizes[size]} />}
-            <span>{children}</span>
-            {Icon && iconPosition === 'right' && <Icon className={iconSizes[size]} />}
-          </>
+        {loading && <span className="sr-only" aria-live="polite">Loading...</span>}
+        {loading && Icon && iconPosition === 'left' && (
+          <Loader2 className={`${iconSizes[size]} animate-spin`} />
+        )}
+        {!loading && Icon && iconPosition === 'left' && (
+          <Icon className={iconSizes[size]} />
+        )}
+        {children}
+        {loading && Icon && iconPosition === 'right' && (
+          <Loader2 className={`${iconSizes[size]} animate-spin`} />
+        )}
+        {!loading && Icon && iconPosition === 'right' && (
+          <Icon className={iconSizes[size]} />
         )}
       </button>
     )

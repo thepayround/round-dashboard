@@ -4,12 +4,14 @@ A modern, AI-powered enterprise billing and customer intelligence platform built
 
 ## 🚀 Features
 
-- **Glassmorphism Design** - Modern glass-effect UI with beautiful gradients
-- **Mobile-First Responsive Design** - Fully responsive interface optimized for all screen sizes
-- **Dark/Light Mode** - Full theme support with accessibility
-- **TypeScript** - Type-safe development experience
-- **Feature-Based Architecture** - Scalable and maintainable code structure
-- **Performance Optimized** - Code splitting, lazy loading, and memoization
+- **Polar.sh-Inspired Design** - Clean, solid backgrounds with instant interactions
+- **100% Component-Based** - Zero raw HTML elements, all reusable components
+- **WCAG AA/AAA Compliant** - Enterprise-grade accessibility
+- **Mobile-First Responsive** - 44px touch targets, optimized for all devices
+- **Interactive Component Library** - Storybook with 114+ stories
+- **TypeScript Strict** - Full type safety across the codebase
+- **Feature-Based Architecture** - Scalable and maintainable
+- **Pre-commit Validation** - Automated quality enforcement
 
 ## 🛠 Tech Stack
 
@@ -44,7 +46,12 @@ npm run dev          # Start development server
 npm run build        # Build for production
 npm run preview      # Preview production build
 
+# Component Library
+npm run storybook        # Start Storybook (http://localhost:6006)
+npm run build-storybook  # Build static Storybook site
+
 # Quality
+npm run validate:components  # Validate component usage
 npm run lint         # Run ESLint
 npm run lint:fix     # Fix ESLint issues
 npm run format       # Run Prettier
@@ -58,13 +65,16 @@ npm run test:coverage # Run tests with coverage
 
 ## 🎨 Design System
 
-The project uses a comprehensive design system with:
+**Polar.sh-Inspired Minimalist Design:**
 
-- **Brand Colors**: Primary (#D417C8), Secondary (#14BDEA), Accent (#7767DA)
-- **Status Gradients**: Success, Warning, Error, Info with glass morphism variants
-- **Glass Morphism**: Semi-transparent surfaces with backdrop blur effects
-- **Typography**: Inter font family with 8 size variants
-- **Animations**: Smooth micro-interactions with Framer Motion
+- **Colors**: Primary Pink (#D417C8), Cyan (#14BDEA), Purple (#7767DA)
+- **Backgrounds**: Solid dark (`#171719` cards, `#0a0a0a` page)
+- **Typography**: Inter font, lighter weights (300 baseline)
+- **Zero Animations**: Instant interactions on interactive components
+- **Touch Targets**: 44px minimum on mobile (WCAG AAA)
+- **Focus Indicators**: Cyan ring on keyboard focus
+
+**See:** Run `npm run storybook` for interactive component library
 
 ## 📱 Mobile-First Responsive Design
 
@@ -108,6 +118,21 @@ VITE_API_BASE_URL=http://localhost:5000/api
 4. Start development server: `npm run dev`
 5. Open [http://localhost:5173](http://localhost:5173)
 
+### Explore Component Library
+
+```bash
+npm run storybook
+```
+
+Opens interactive component documentation at `http://localhost:6006` with:
+- 13 component types
+- 114+ interactive stories
+- Accessibility testing
+- Responsive viewport testing
+- Copy-paste code snippets
+
+See `/docs/README.md` for comprehensive documentation index.
+
 ## 📝 Contributing
 
 ### Development Workflow
@@ -150,19 +175,36 @@ touch src/components/NewComponent/index.ts
 
 The `.husky/pre-commit` hook automatically runs:
 
-1. Prettier formatting
-2. ESLint auto-fix
-3. TypeScript validation
-4. Test coverage check (fails if <80%)
+1. **Component Validation** - Blocks raw HTML elements
+2. Prettier formatting
+3. ESLint auto-fix
+4. TypeScript validation
 5. Stages formatted files
 
-### Design System Compliance
+**Configuration:** `.component-rules.json`
 
-- Use established brand colors and gradients
-- Follow glass morphism patterns
-- Implement responsive design (mobile-first)
-- Ensure accessibility compliance (WCAG standards)
-- Use Tailwind CSS utility classes consistently
+### Component Standards
+
+**MANDATORY:** Use reusable components from `@/shared/ui`:
+- ✅ `Button`, `IconButton`, `ActionButton` (not `<button>`)
+- ✅ `Input`, `FormInput`, `AuthInput` (not `<input>`)
+- ✅ `Checkbox`, `Toggle`, `RadioGroup` (not `<input type="checkbox">`)
+- ✅ `Textarea` (not `<textarea>`)
+- ✅ `UiDropdown`, `ApiDropdown` (not `<select>`)
+- ✅ `FileInput` (not `<input type="file">`)
+
+**Pre-commit validation will block raw HTML elements.**
+
+### Accessibility Compliance
+
+- ✅ WCAG 2.1 Level AA (all features)
+- ✅ WCAG 2.1 Level AAA (touch targets)
+- ✅ 131+ ARIA attributes
+- ✅ Focus trap in modals
+- ✅ 44px touch targets on mobile
+- ✅ Screen reader support
+
+**See:** `/docs/COMPONENT_VALIDATION.md` for details
 
 ## 📄 License
 

@@ -601,10 +601,10 @@
       border-radius: 8px;
     }
 
-    /* Larger tap targets on mobile */
+    /* Larger tap targets on mobile - WCAG 2.1 Level AAA (44px minimum) */
     button, .btn, [role="button"] {
-      min-height: 36px;
-      min-width: 36px;
+      min-height: 44px;
+      min-width: 44px;
     }
 
     /* Improve mobile form inputs */
@@ -615,7 +615,7 @@
     textarea, 
     select {
       font-size: 16px !important; /* Prevent zoom on iOS */
-      min-height: 36px;
+      min-height: 44px;
     }
   }
 

@@ -1,5 +1,5 @@
 import { Search, X, Loader2 } from 'lucide-react'
-import React, { useId } from 'react'
+import React, { useId, useRef, useCallback } from 'react'
 
 import { Input } from '@/shared/ui'
 import { IconButton } from '@/shared/ui/Button'
@@ -8,10 +8,16 @@ interface SearchInputProps {
   value: string
   onChange: (value: string) => void
   onClear?: () => void
+  /** Debounced search callback (optional) - called after user stops typing */
+  onSearch?: (value: string) => void
+  /** Debounce delay in ms (default: 300) */
+  debounceMs?: number
   placeholder?: string
   isSearching?: boolean
   className?: string
   disabled?: boolean
+  /** Auto-focus input after clearing (default: true) */
+  autoFocusOnClear?: boolean
   id?: string
   name?: string
 }
@@ -27,28 +33,52 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   value,
   onChange,
   onClear,
+  onSearch,
+  debounceMs = 300,
   placeholder = 'Search...',
   isSearching = false,
   className = '',
   disabled = false,
+  autoFocusOnClear = true,
   id,
   name,
 }) => {
   const generatedId = useId()
   const inputId = id ?? generatedId
   const inputName = name ?? inputId
+  const inputRef = useRef<HTMLInputElement>(null)
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value)
+    const newValue = e.target.value
+    onChange(newValue)
+
+    // Debounced search callback
+    if (onSearch) {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+      debounceTimerRef.current = setTimeout(() => {
+        onSearch(newValue)
+      }, debounceMs)
+    }
   }
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     onClear?.()
-  }
+    
+    // Auto-focus input after clearing
+    if (autoFocusOnClear && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 0)
+    }
+  }, [onClear, autoFocusOnClear])
 
   return (
     <div className={`relative ${className}`}>
       <Input
+        ref={inputRef}
         id={inputId}
         name={inputName}
         type="text"

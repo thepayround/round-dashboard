@@ -199,7 +199,7 @@ export const UiDropdown = ({
         }}
         onKeyDown={disabled ? undefined : handleTriggerKeyDown}
         className={`
-          relative w-full h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
+          relative w-full h-11 lg:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
           bg-[#171719] border-[#333333] text-white flex items-center justify-between
           font-light text-xs outline-none
           ${error ? 'border-[#ef4444]' : ''}

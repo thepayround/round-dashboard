@@ -1,5 +1,5 @@
 ﻿import { X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 import { useResponsive } from '@/shared/hooks/useResponsive'
 import { IconButton, PlainButton } from '@/shared/ui/Button'
@@ -35,6 +35,8 @@ export const Modal = ({
   icon: Icon
 }: ModalProps) => {
   const { isMobile, isTablet } = useResponsive()
+  const modalRef = useRef<HTMLDivElement>(null)
+  const previousActiveElement = useRef<HTMLElement | null>(null)
 
   // Track sidebar state reactively
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => localStorage.getItem('sidebar-collapsed') === 'true')
@@ -76,7 +78,7 @@ export const Modal = ({
     }
   }
 
-  // Handle escape key and body scroll lock
+  // Handle escape key, body scroll lock, focus trap, and focus return
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -84,14 +86,57 @@ export const Modal = ({
       }
     }
 
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (!isOpen || e.key !== 'Tab' || !modalRef.current) return
+
+      const focusableElements = modalRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
+      const firstElement = focusableElements[0] as HTMLElement
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+
+      if (!firstElement) return
+
+      // Shift+Tab on first element: focus last
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault()
+        lastElement?.focus()
+      }
+      // Tab on last element: focus first
+      else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault()
+        firstElement?.focus()
+      }
+    }
+
     if (isOpen) {
+      // Store currently focused element
+      previousActiveElement.current = document.activeElement as HTMLElement
+
+      // Set up event listeners
       document.addEventListener('keydown', handleEscape)
+      document.addEventListener('keydown', handleTabKey)
       document.body.style.overflow = 'hidden'
+
+      // Focus first focusable element in modal
+      setTimeout(() => {
+        const firstFocusable = modalRef.current?.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        firstFocusable?.focus()
+      }, 100)
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape)
+      document.removeEventListener('keydown', handleTabKey)
       document.body.style.overflow = 'unset'
+
+      // Return focus to previous element when modal closes
+      if (!isOpen && previousActiveElement.current) {
+        previousActiveElement.current.focus()
+        previousActiveElement.current = null
+      }
     }
   }, [isOpen, onClose])
 
@@ -115,6 +160,7 @@ export const Modal = ({
         unstyled
       />
           <div
+            ref={modalRef}
             role="document"
             className={`
               relative w-full ${sizeClasses[size]} max-h-[90vh] mx-auto

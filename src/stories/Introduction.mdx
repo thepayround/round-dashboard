@@ -1,0 +1,173 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Introduction" />
+
+# Round Dashboard Component Library
+
+Welcome to the **Round Dashboard Component Library**! This interactive documentation showcases all reusable UI components used throughout the application.
+
+---
+
+## 🎯 What You'll Find Here
+
+### 📦 13 Component Categories
+- **Buttons** - Button, IconButton, ActionButton
+- **Form Inputs** - Input, FormInput, AuthInput, SearchInput, PhoneInput, FileInput
+- **Form Controls** - Checkbox, Toggle, RadioGroup
+- **Text** - Textarea
+- **Dropdowns** - UiDropdown, ApiDropdown, Select
+- **Layout** - Card, Table, Modal
+- **Feedback** - Toast, Pagination
+- **Other** - SectionHeader, ViewModeToggle, PhoneDisplay
+
+### ✨ Features
+- 🎮 **Interactive Controls** - Adjust props in real-time
+- 📱 **Responsive Testing** - Test on mobile, tablet, desktop
+- ♿ **Accessibility Testing** - Built-in WCAG compliance checks
+- 📋 **Copy-Paste Code** - Ready-to-use code snippets
+- 🎨 **All Variants** - See every state and variant
+- 🔍 **Search** - Find components quickly
+
+---
+
+## 🎨 Design System
+
+### Dark Theme
+This component library follows a **Polar.sh-inspired design system**:
+- **Solid backgrounds** - No glassmorphism (`#171719`)
+- **Instant interactions** - Zero animations on interactive components
+- **Lighter typography** - Inter font, weight 300 baseline
+- **Cyan accents** - Focus indicators (`#14bdea`)
+
+### WCAG Compliance
+- ✅ **Level AA** - All core features
+- ✅ **Level AAA** - Touch targets (44px minimum on mobile)
+- ✅ **131+ ARIA attributes** across components
+- ✅ **Focus management** in modals
+- ✅ **Keyboard navigation** throughout
+
+---
+
+## 🚀 How to Use This Library
+
+### 1. Browse Components
+Use the sidebar to navigate through component categories.
+
+### 2. Interact with Controls
+Each component has an interactive **Controls** panel where you can:
+- Change props in real-time
+- See component update instantly
+- Test different states and variants
+
+### 3. Test Accessibility
+Click the **Accessibility** tab to:
+- Check ARIA attributes
+- Verify contrast ratios
+- Find WCAG violations
+
+### 4. Test Responsiveness
+Use the **viewport toolbar** to test on:
+- 📱 Mobile (375px, 414px)
+- 📱 Tablet (768px, 1024px)
+- 💻 Desktop (1920px)
+
+### 5. Copy Code
+Click **Show code** to see the implementation and copy it to your clipboard.
+
+---
+
+## 📚 Additional Documentation
+
+All detailed documentation is in the `/docs` folder:
+
+- [UI Architecture Improvements](/docs/UI_ARCHITECTURE_IMPROVEMENTS.md) - Component roadmap
+- [Component Validation](/docs/COMPONENT_VALIDATION.md) - Pre-commit rules
+- [Reusable Components](/docs/REUSABLE_COMPONENTS.md) - Usage guide
+- [Development Guide](/docs/DEVELOPMENT_GUIDE.md) - Code standards
+
+---
+
+## 🎓 Getting Started
+
+### Install Dependencies
+```bash
+npm install
+```
+
+### Run Storybook
+```bash
+npm run storybook
+```
+
+### Build Storybook
+```bash
+npm run build-storybook
+```
+
+---
+
+## ✅ Component Quality Standards
+
+All components in this library:
+- ✅ **TypeScript** - Full type safety
+- ✅ **Accessible** - WCAG AA/AAA compliant
+- ✅ **Responsive** - Mobile-first, 44px touch targets
+- ✅ **Tested** - 80%+ coverage
+- ✅ **Documented** - Props, examples, usage notes
+- ✅ **Dark themed** - Optimized for `#0a0a0a` background
+
+---
+
+## 🎯 Component Philosophy
+
+### Principles
+1. **Reusable** - DRY (Don't Repeat Yourself)
+2. **Composable** - Build complex UIs from simple components
+3. **Accessible** - Everyone can use our app
+4. **Consistent** - Same patterns everywhere
+5. **Performant** - Optimized for speed
+
+### Usage Rules
+**DO:**
+- ✅ Use components from `@/shared/ui`
+- ✅ Add proper ARIA labels
+- ✅ Test keyboard navigation
+- ✅ Follow prop conventions
+
+**DON'T:**
+- ❌ Create raw `<button>`, `<input>`, `<select>`, `<textarea>` elements
+- ❌ Skip accessibility features
+- ❌ Ignore TypeScript types
+- ❌ Add animations to interactive components
+
+---
+
+## 🤝 Contributing
+
+When adding new components:
+
+1. Create component in `src/shared/ui/ComponentName/`
+2. Export from `src/shared/ui/index.ts`
+3. Add ARIA attributes & accessibility
+4. Add 44px touch targets (mobile)
+5. Create `.stories.tsx` file
+6. Add to `.component-rules.json` exclusions
+7. Write tests (80%+ coverage)
+8. Update documentation
+
+---
+
+## 💡 Tips
+
+- Use the **search** (Cmd/Ctrl + K) to find components quickly
+- Click **Canvas** tab to see component in isolation
+- Click **Docs** tab for auto-generated documentation
+- Click **Accessibility** tab to check compliance
+- Use **viewport** toolbar to test responsive behavior
+
+---
+
+**Enjoy exploring the component library!** 🎉
+
+*For questions or issues, check `/docs` folder or run `npm run validate:components`*
+

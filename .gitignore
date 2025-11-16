@@ -197,3 +197,4 @@ storybook-static
 
 # Husky
 .husky/_
+*storybook.log

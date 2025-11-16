@@ -29,33 +29,35 @@ export const Checkbox = React.forwardRef<
   return (
     <div className={containerClassName}>
       <div className="flex items-center">
-        <CheckboxPrimitive.Root
-          ref={ref}
-          id={checkboxId}
-          checked={checked}
-          onCheckedChange={onCheckedChange}
-          className={cn(
-            'flex h-5 w-5 items-center justify-center rounded border transition-all',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black',
-            'disabled:cursor-not-allowed disabled:opacity-50',
-            checked
-              ? 'bg-primary border-primary'
-              : 'bg-transparent border-white/20 hover:border-white/40',
-            error ? 'border-red-500' : '',
-            className
-          )}
-          {...props}
-        >
-          <CheckboxPrimitive.Indicator className="text-white">
-            {checked === 'indeterminate' && <Minus className="h-3 w-3" />}
-            {checked === true && <Check className="h-3 w-3" />}
-          </CheckboxPrimitive.Indicator>
-        </CheckboxPrimitive.Root>
+        <div className="flex items-center justify-center min-w-[44px] min-h-[44px] lg:min-w-0 lg:min-h-0">
+          <CheckboxPrimitive.Root
+            ref={ref}
+            id={checkboxId}
+            checked={checked}
+            onCheckedChange={onCheckedChange}
+            className={cn(
+              'flex h-5 w-5 items-center justify-center rounded border transition-all',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+              'disabled:cursor-not-allowed disabled:opacity-50',
+              checked
+                ? 'bg-primary border-primary'
+                : 'bg-transparent border-white/20 hover:border-white/40',
+              error ? 'border-red-500' : '',
+              className
+            )}
+            {...props}
+          >
+            <CheckboxPrimitive.Indicator className="text-white">
+              {checked === 'indeterminate' && <Minus className="h-3 w-3" />}
+              {checked === true && <Check className="h-3 w-3" />}
+            </CheckboxPrimitive.Indicator>
+          </CheckboxPrimitive.Root>
+        </div>
 
         {label && (
           <label
             htmlFor={checkboxId}
-            className="ml-3 text-sm font-normal text-white cursor-pointer select-none"
+            className="ml-3 text-sm font-normal text-white cursor-pointer select-none min-h-[44px] lg:min-h-0 flex items-center"
           >
             {label}
           </label>

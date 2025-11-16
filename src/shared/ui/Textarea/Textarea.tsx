@@ -109,6 +109,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm"
               role="alert"
               aria-live="polite"
+              aria-atomic="true"
             >
               <AlertCircle className="h-4 w-4 flex-shrink-0" />
               <span>{error}</span>

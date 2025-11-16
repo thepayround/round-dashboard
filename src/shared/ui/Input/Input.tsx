@@ -7,8 +7,8 @@ import { cn } from '@/shared/utils/cn'
 
 const inputVariants = cva(
   [
-    // Base styles
-    'w-full h-9 px-3 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed',
+    // Base styles - Mobile-first with 44px touch target, desktop optimized
+    'w-full h-11 lg:h-9 px-3 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed',
     // Autofill styles - prevent white background on autofill
     '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
     '[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
@@ -27,9 +27,9 @@ const inputVariants = cva(
   {
     variants: {
       size: {
-        sm: 'h-9 px-3 text-xs',
-        md: 'h-9 px-3 text-xs',
-        lg: 'h-9 px-4 text-sm',
+        sm: 'h-11 lg:h-9 px-3 text-xs',
+        md: 'h-11 lg:h-9 px-3 text-xs',
+        lg: 'h-11 lg:h-10 px-4 text-sm',
       },
       variant: {
         default: '',
@@ -144,6 +144,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
               role="alert"
               aria-live="polite"
+              aria-atomic="true"
             >
               <AlertCircle className="h-4 w-4 flex-shrink-0" />
               <span>{error}</span>
