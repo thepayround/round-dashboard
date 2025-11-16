@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion'
 import { Eye, EyeOff, CheckCircle, AlertCircle, Lock, RotateCcw, Shield } from 'lucide-react'
 
 import { useChangePasswordController } from '../hooks/useChangePasswordController'
 
+import { Input } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
-import { IconButton } from '@/shared/ui/Button'
+import { PlainButton } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { getFieldError, hasFieldError } from '@/shared/utils/validation'
 
@@ -80,44 +80,31 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
               <Lock className="w-4 h-4 text-gray-400" />
               Current Password
             </h3>
-            <div>
-              <label htmlFor="currentPassword" className="auth-label">
-                Enter Current Password
-              </label>
-              <div className="input-container">
-                <Lock className="input-icon-left auth-icon-primary" />
-                <input
-                  id="currentPassword"
-                  type={visibility.currentPassword ? 'text' : 'password'}
-                  name="currentPassword"
-                  value={formData.currentPassword}
-                  onChange={handleInputChange('currentPassword')}
-                  onBlur={handleInputBlur('currentPassword')}
-                  placeholder="Enter your current password"
-                  className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(errors, 'currentPassword') ? 'auth-input-error' : ''}`}
-                  required
-                  disabled={isLoading}
-                />
-                <IconButton
-                  type="button"
-                  onClick={() => toggleVisibility('currentPassword')}
-                  icon={visibility.currentPassword ? EyeOff : Eye}
-                  variant="ghost"
-                  size="md"
-                  aria-label={visibility.currentPassword ? 'Hide current password' : 'Show current password'}
-                  className="input-icon-right"
-                />
-              </div>
-              {hasFieldError(errors, 'currentPassword') && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  <span>{getFieldError(errors, 'currentPassword')?.message}</span>
-                </motion.div>
-              )}
+            <div className="relative">
+              <Input
+                id="currentPassword"
+                type={visibility.currentPassword ? 'text' : 'password'}
+                name="currentPassword"
+                value={formData.currentPassword}
+                onChange={handleInputChange('currentPassword')}
+                onBlur={handleInputBlur('currentPassword')}
+                placeholder="Enter your current password"
+                label="Enter Current Password"
+                leftIcon={Lock}
+                error={hasFieldError(errors, 'currentPassword') ? getFieldError(errors, 'currentPassword')?.message : undefined}
+                required
+                disabled={isLoading}
+                className="pr-9"
+              />
+              <PlainButton
+                type="button"
+                onClick={() => toggleVisibility('currentPassword')}
+                className="absolute right-3 top-[38px] z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
+                aria-label={visibility.currentPassword ? 'Hide current password' : 'Show current password'}
+                unstyled
+              >
+                {visibility.currentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </PlainButton>
             </div>
           </div>
 
@@ -127,91 +114,64 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
               New Password
             </h3>
             <div className="space-y-4">
-              <div>
-                <label htmlFor="newPassword" className="auth-label">
-                  New Password
-                </label>
-                <div className="input-container">
-                  <Lock className="input-icon-left auth-icon-primary" />
-                  <input
-                    id="newPassword"
-                    type={visibility.newPassword ? 'text' : 'password'}
-                    name="newPassword"
-                    value={formData.newPassword}
-                    onChange={handleInputChange('newPassword')}
-                    onBlur={handleInputBlur('newPassword')}
-                    placeholder="Enter new password"
-                    className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(errors, 'newPassword') ? 'auth-input-error' : ''}`}
-                    required
-                    disabled={isLoading}
-                  />
-                  <IconButton
-                    type="button"
-                    onClick={() => toggleVisibility('newPassword')}
-                    icon={visibility.newPassword ? EyeOff : Eye}
-                    variant="ghost"
-                    size="md"
-                    aria-label={visibility.newPassword ? 'Hide new password' : 'Show new password'}
-                    className="input-icon-right"
-                  />
-                </div>
+              <div className="relative">
+                <Input
+                  id="newPassword"
+                  type={visibility.newPassword ? 'text' : 'password'}
+                  name="newPassword"
+                  value={formData.newPassword}
+                  onChange={handleInputChange('newPassword')}
+                  onBlur={handleInputBlur('newPassword')}
+                  placeholder="Enter new password"
+                  label="New Password"
+                  leftIcon={Lock}
+                  error={hasFieldError(errors, 'newPassword') ? getFieldError(errors, 'newPassword')?.message : undefined}
+                  required
+                  disabled={isLoading}
+                  className="pr-9"
+                />
+                <PlainButton
+                  type="button"
+                  onClick={() => toggleVisibility('newPassword')}
+                  className="absolute right-3 top-[38px] z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
+                  aria-label={visibility.newPassword ? 'Hide new password' : 'Show new password'}
+                  unstyled
+                >
+                  {visibility.newPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </PlainButton>
 
                 {formData.newPassword && (
                   <div className="mt-3">
                     <PasswordStrengthIndicator password={formData.newPassword} showStrengthBar />
                   </div>
                 )}
-
-                {hasFieldError(errors, 'newPassword') && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
-                  >
-                    <AlertCircle className="w-4 h-4" />
-                    <span>{getFieldError(errors, 'newPassword')?.message}</span>
-                  </motion.div>
-                )}
               </div>
 
-              <div>
-                <label htmlFor="confirmPassword" className="auth-label">
-                  Confirm New Password
-                </label>
-                <div className="input-container">
-                  <Lock className="input-icon-left auth-icon-primary" />
-                  <input
-                    id="confirmPassword"
-                    type={visibility.confirmPassword ? 'text' : 'password'}
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange('confirmPassword')}
-                    onBlur={handleInputBlur('confirmPassword')}
-                    placeholder="Confirm new password"
-                    className={`auth-input input-with-icon-left input-with-icon-right ${hasFieldError(errors, 'confirmPassword') ? 'auth-input-error' : ''}`}
-                    required
-                    disabled={isLoading}
-                  />
-                  <IconButton
-                    type="button"
-                    onClick={() => toggleVisibility('confirmPassword')}
-                    icon={visibility.confirmPassword ? EyeOff : Eye}
-                    variant="ghost"
-                    size="md"
-                    aria-label={visibility.confirmPassword ? 'Hide confirm password' : 'Show confirm password'}
-                    className="input-icon-right"
-                  />
-                </div>
-                {hasFieldError(errors, 'confirmPassword') && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
-                  >
-                    <AlertCircle className="w-4 h-4" />
-                    <span>{getFieldError(errors, 'confirmPassword')?.message}</span>
-                  </motion.div>
-                )}
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  type={visibility.confirmPassword ? 'text' : 'password'}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange('confirmPassword')}
+                  onBlur={handleInputBlur('confirmPassword')}
+                  placeholder="Confirm new password"
+                  label="Confirm New Password"
+                  leftIcon={Lock}
+                  error={hasFieldError(errors, 'confirmPassword') ? getFieldError(errors, 'confirmPassword')?.message : undefined}
+                  required
+                  disabled={isLoading}
+                  className="pr-9"
+                />
+                <PlainButton
+                  type="button"
+                  onClick={() => toggleVisibility('confirmPassword')}
+                  className="absolute right-3 top-[38px] z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
+                  aria-label={visibility.confirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                  unstyled
+                >
+                  {visibility.confirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </PlainButton>
               </div>
             </div>
           </div>

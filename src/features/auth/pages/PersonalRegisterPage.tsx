@@ -1,5 +1,5 @@
 ﻿import { motion } from 'framer-motion'
-import { User, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
+import { User, Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
@@ -7,10 +7,10 @@ import { usePersonalRegisterController } from '../hooks/usePersonalRegisterContr
 
 import { FacebookIcon } from '@/features/auth/components/icons/SocialIcons'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { Input } from '@/shared/ui'
+import { FormInput } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
-import { IconButton, Button } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
 
@@ -20,8 +20,6 @@ export const PersonalRegisterPage = () => {
   const {
     form,
     phone,
-    showPassword,
-    togglePasswordVisibility,
     isSubmitting,
     handleSubmit,
     isFormReady,
@@ -72,109 +70,50 @@ export const PersonalRegisterPage = () => {
         <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
           {/* Name Fields Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* First Name */}
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                First Name
-              </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                <Input
-                  id="firstName"
-                  type="text"
-                  name="firstName"
-                  value={values.firstName}
-                  onChange={handleChange('firstName')}
-                  onBlur={handleBlur('firstName')}
-                  placeholder="John"
-                  className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.firstName ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                  required
-                  aria-required="true"
-                  aria-invalid={!!errors.firstName}
-                  aria-describedby={errors.firstName ? 'firstName-error' : undefined}
-                />
-              </div>
-              {errors.firstName && (
-                <motion.div
-                  id="firstName-error"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                  role="alert"
-                  aria-live="polite"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  <span>{errors.firstName}</span>
-                </motion.div>
-              )}
-            </div>
+            <FormInput
+              id="firstName"
+              name="firstName"
+              label="First Name"
+              leftIcon={User}
+              value={values.firstName}
+              onChange={handleChange('firstName')}
+              onBlur={handleBlur('firstName')}
+              placeholder="John"
+              error={errors.firstName}
+              required
+              size="sm"
+            />
 
-            {/* Last Name */}
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                Last Name
-              </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                <Input
-                  id="lastName"
-                  type="text"
-                  name="lastName"
-                  value={values.lastName}
-                  onChange={handleChange('lastName')}
-                  onBlur={handleBlur('lastName')}
-                  placeholder="Doe"
-                  className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.lastName ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                  required
-                />
-              </div>
-              {errors.lastName && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                  role="alert"
-                  aria-live="polite"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  <span>{errors.lastName}</span>
-                </motion.div>
-              )}
-            </div>
+            <FormInput
+              id="lastName"
+              name="lastName"
+              label="Last Name"
+              leftIcon={User}
+              value={values.lastName}
+              onChange={handleChange('lastName')}
+              onBlur={handleBlur('lastName')}
+              placeholder="Doe"
+              error={errors.lastName}
+              required
+              size="sm"
+            />
           </div>
 
           {/* Email Address */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-              Email Address
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-              <Input
-                id="email"
-                type="email"
-                name="email"
-                value={values.email}
-                onChange={handleChange('email')}
-                onBlur={handleBlur('email')}
-                placeholder="example@gmail.com"
-                className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.email ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                required
-              />
-            </div>
-            {errors.email && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                role="alert"
-                aria-live="polite"
-              >
-                <AlertCircle className="w-4 h-4" />
-                <span>{errors.email}</span>
-              </motion.div>
-            )}
-          </div>
+          <FormInput
+            id="email"
+            type="email"
+            name="email"
+            label="Email Address"
+            leftIcon={Mail}
+            value={values.email}
+            onChange={handleChange('email')}
+            onBlur={handleBlur('email')}
+            placeholder="example@gmail.com"
+            error={errors.email}
+            required
+            size="sm"
+          />
 
           {/* Phone Number */}
           <div>
@@ -206,33 +145,22 @@ export const PersonalRegisterPage = () => {
           </div>
 
           {/* Password */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                Password
-              </label>
-              <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-              <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                value={values.password}
-                onChange={handleChange('password')}
-                onBlur={handleBlur('password')}
-                placeholder="Create a strong password"
-                className={`w-full h-9 px-3 pl-9 pr-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.password ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                required
-              />
-              <IconButton
-                type="button"
-                onClick={togglePasswordVisibility}
-                icon={showPassword ? EyeOff : Eye}
-                variant="ghost"
-                size="sm"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
-              />
-            </div>
+          <div>
+            <FormInput
+              id="password"
+              type="password"
+              name="password"
+              label="Password"
+              leftIcon={Lock}
+              value={values.password}
+              onChange={handleChange('password')}
+              onBlur={handleBlur('password')}
+              placeholder="Create a strong password"
+              error={errors.password}
+              required
+              size="sm"
+              passwordToggle
+            />
 
             {/* Password Strength Indicator */}
             {values.password && (
@@ -242,19 +170,6 @@ export const PersonalRegisterPage = () => {
                   showStrengthBar
                 />
               </div>
-            )}
-
-            {errors.password && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                role="alert"
-                aria-live="polite"
-              >
-                <AlertCircle className="w-4 h-4" />
-                <span>{errors.password}</span>
-              </motion.div>
             )}
           </div>
 

@@ -6,18 +6,18 @@ import React from 'react'
 import { cn } from '@/shared/utils/cn'
 
 const textareaVariants = cva(
-  'w-full rounded-lg border bg-white/5 text-white placeholder-white/50 transition-all duration-200 focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed resize-none',
+  'w-full rounded-lg border bg-auth-bg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed resize-none',
   {
     variants: {
       size: {
-        sm: 'min-h-[80px] px-3 py-2 text-sm',
-        md: 'min-h-[100px] px-4 py-3 text-base',
-        lg: 'min-h-[120px] px-5 py-4 text-lg',
+        sm: 'min-h-[80px] px-3 py-2',
+        md: 'min-h-[100px] px-3 py-2',
+        lg: 'min-h-[120px] px-3 py-2',
       },
       variant: {
-        default: 'border-white/20 focus:border-primary focus:ring-primary/50',
-        error: 'border-red-500 focus:border-red-500 focus:ring-red-500/50',
-        success: 'border-green-500 focus:border-green-500 focus:ring-green-500/50',
+        default: 'border-auth-border',
+        error: 'border-auth-error bg-auth-error-bg focus:border-auth-error',
+        success: 'border-green-500 bg-green-500/5 focus:border-green-500',
       },
     },
     defaultVariants: {
@@ -70,7 +70,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label
             htmlFor={textareaId}
-            className="block text-sm font-normal text-white/80 mb-2"
+            className="block text-sm font-normal text-white/90 mb-2 tracking-tight"
           >
             {label}
             {required && <span className="text-[#D417C8] ml-1">*</span>}

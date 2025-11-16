@@ -144,100 +144,59 @@ export const ResetPasswordPage = () => {
               {/* Reset Password Form */}
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 {/* New Password */}
-                <div>
-                  <label htmlFor="newPassword" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                    New Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                    <Input
-                      id="newPassword"
-                      type={showPassword ? 'text' : 'password'}
-                      name="newPassword"
-                      value={values.newPassword}
-                      onChange={handlePasswordChange}
-                      onBlur={handleBlur('newPassword')}
-                      placeholder="Enter your new password"
-                      className="pl-9 pr-9"
-                      variant={errors.newPassword ? 'error' : 'default'}
-                      required
-                      autoComplete="new-password"
-                      aria-required="true"
-                      aria-invalid={!!errors.newPassword}
-                      aria-describedby={errors.newPassword ? 'newPassword-error' : undefined}
-                    />
-                    <IconButton
-                      type="button"
-                      onClick={toggleShowPassword}
-                      icon={showPassword ? EyeOff : Eye}
-                      variant="ghost"
-                      size="md"
-                      aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
-                    />
-                  </div>
-
-                  {errors.newPassword && (
-                    <motion.div
-                      id="newPassword-error"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                      role="alert"
-                      aria-live="polite"
-                    >
-                      <AlertCircle className="w-4 h-4" />
-                      <span>{errors.newPassword}</span>
-                    </motion.div>
-                  )}
+                <div className="relative">
+                  <Input
+                    id="newPassword"
+                    label="New Password"
+                    leftIcon={Lock}
+                    type={showPassword ? 'text' : 'password'}
+                    name="newPassword"
+                    value={values.newPassword}
+                    onChange={handlePasswordChange}
+                    onBlur={handleBlur('newPassword')}
+                    placeholder="Enter your new password"
+                    error={errors.newPassword}
+                    className="pr-9"
+                    required
+                    autoComplete="new-password"
+                  />
+                  <IconButton
+                    type="button"
+                    onClick={toggleShowPassword}
+                    icon={showPassword ? EyeOff : Eye}
+                    variant="ghost"
+                    size="md"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    className="absolute right-3 top-[42px] -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
+                  />
                 </div>
 
                 {/* Confirm Password */}
-                <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                    Confirm New Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                    <Input
-                      id="confirmPassword"
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      name="confirmPassword"
-                      value={values.confirmPassword}
-                      onChange={handleConfirmPasswordChange}
-                      onBlur={handleBlur('confirmPassword')}
-                      placeholder="Confirm your new password"
-                      className="pl-9 pr-9"
-                      variant={errors.confirmPassword ? 'error' : 'default'}
-                      required
-                      autoComplete="new-password"
-                      aria-required="true"
-                      aria-invalid={!!errors.confirmPassword}
-                      aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-                    />
-                    <IconButton
-                      type="button"
-                      onClick={toggleShowConfirmPassword}
-                      icon={showConfirmPassword ? EyeOff : Eye}
-                      variant="ghost"
-                      size="md"
-                      aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
-                    />
-                  </div>
-                  {errors.confirmPassword && (
-                    <motion.div
-                      id="confirmPassword-error"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                      role="alert"
-                      aria-live="polite"
-                    >
-                      <AlertCircle className="w-4 h-4" />
-                      <span>{errors.confirmPassword}</span>
-                    </motion.div>
-                  )}
+                <div className="relative">
+                  <Input
+                    id="confirmPassword"
+                    label="Confirm New Password"
+                    leftIcon={Lock}
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    name="confirmPassword"
+                    value={values.confirmPassword}
+                    onChange={handleConfirmPasswordChange}
+                    onBlur={handleBlur('confirmPassword')}
+                    placeholder="Confirm your new password"
+                    error={errors.confirmPassword}
+                    className="pr-9"
+                    required
+                    autoComplete="new-password"
+                  />
+                  <IconButton
+                    type="button"
+                    onClick={toggleShowConfirmPassword}
+                    icon={showConfirmPassword ? EyeOff : Eye}
+                    variant="ghost"
+                    size="md"
+                    aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                    className="absolute right-3 top-[42px] -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
+                  />
                 </div>
 
                 {/* Submit Button */}

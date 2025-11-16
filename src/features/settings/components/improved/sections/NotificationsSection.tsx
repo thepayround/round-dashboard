@@ -1,9 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Bell, 
-  Mail, 
-  Monitor, 
-  Smartphone, 
+import {
+  Bell,
+  Mail,
+  Monitor,
+  Smartphone,
   MessageCircle,
   CreditCard,
   Shield
@@ -12,6 +12,7 @@ import React from 'react'
 
 import { useAdvancedNotificationsController } from '../../../hooks/useAdvancedNotificationsController'
 
+import { Toggle } from '@/shared/ui'
 import { Card } from '@/shared/ui/Card'
 
 
@@ -124,18 +125,14 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
                             <channel.icon className="w-3 h-3 text-gray-300" />
                             <span className="text-xs font-normal tracking-tight text-white">{channel.label}</span>
                           </div>
-                          <motion.label 
-                            className="relative inline-flex items-center cursor-pointer"
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <input
-                              type="checkbox"
-                              className="sr-only peer"
-                              checked={getNotificationSetting(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms')}
-                              onChange={(e) => handleToggleChange(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms', e.target.checked)}
-                                          />
-                            <div className="w-8 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#D417C8]/20 rounded-full peer peer-checked:after:translate-x-3 peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary" />
-                          </motion.label>
+                          <Toggle
+                            label=""
+                            checked={getNotificationSetting(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms')}
+                            onChange={(e) => handleToggleChange(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms', e.target.checked)}
+                            size="sm"
+                            color="primary"
+                            aria-label={`Enable ${channel.label} notifications for ${type.label}`}
+                          />
                         </div>
                         <p className="text-xs text-gray-400">{channel.description}</p>
                       </div>

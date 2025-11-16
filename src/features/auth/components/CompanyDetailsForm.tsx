@@ -66,98 +66,47 @@ export const CompanyDetailsForm = ({
       </div>
 
       {/* Company Name */}
-      <div>
-        <label htmlFor="companyName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-          Company Name *
-        </label>
-        <div className="relative">
-          <Building className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-          <Input
-            id="companyName"
-            type="text"
-            value={companyInfo.companyName}
-            onChange={e => handleInputChange('companyName', e.target.value)}
-            onBlur={e => handleInputBlur('companyName', e.target.value)}
-            placeholder="Acme Corporation"
-            className="pl-9"
-            variant={hasCompanyError('companyName') ? 'error' : 'default'}
-            required
-          />
-        </div>
-        {hasCompanyError('companyName') && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-          >
-            <AlertCircle className="w-4 h-4" />
-            <span>{getCompanyError('companyName')}</span>
-          </motion.div>
-        )}
-      </div>
+      <Input
+        id="companyName"
+        label="Company Name *"
+        leftIcon={Building}
+        type="text"
+        value={companyInfo.companyName}
+        onChange={e => handleInputChange('companyName', e.target.value)}
+        onBlur={e => handleInputBlur('companyName', e.target.value)}
+        placeholder="Acme Corporation"
+        error={hasCompanyError('companyName') ? getCompanyError('companyName') : undefined}
+        required
+      />
 
       {/* Registration Number & Tax ID Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Registration Number */}
-        <div>
-          <label htmlFor="registrationNumber" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-            Registration Number *
-          </label>
-          <div className="relative">
-            <Hash className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-            <Input
-              id="registrationNumber"
-              type="text"
-              value={companyInfo.registrationNumber}
-              onChange={e => handleInputChange('registrationNumber', e.target.value)}
-              onBlur={e => handleInputBlur('registrationNumber', e.target.value)}
-              placeholder="12345678"
-              className="pl-9"
-              variant={hasCompanyError('registrationNumber') ? 'error' : 'default'}
-              required
-            />
-          </div>
-          {hasCompanyError('registrationNumber') && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-            >
-              <AlertCircle className="w-4 h-4" />
-              <span>{getCompanyError('registrationNumber')}</span>
-            </motion.div>
-          )}
-        </div>
+        <Input
+          id="registrationNumber"
+          label="Registration Number *"
+          leftIcon={Hash}
+          type="text"
+          value={companyInfo.registrationNumber}
+          onChange={e => handleInputChange('registrationNumber', e.target.value)}
+          onBlur={e => handleInputBlur('registrationNumber', e.target.value)}
+          placeholder="12345678"
+          error={hasCompanyError('registrationNumber') ? getCompanyError('registrationNumber') : undefined}
+          required
+        />
 
         {/* Tax ID */}
-        <div>
-          <label htmlFor="taxId" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-            Tax ID
-          </label>
-          <div className="relative">
-            <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-            <Input
-              id="taxId"
-              type="text"
-              value={companyInfo.taxId}
-              onChange={e => handleInputChange('taxId', e.target.value)}
-              onBlur={e => handleInputBlur('taxId', e.target.value)}
-              placeholder="XX-XXXXXXX"
-              className="pl-9"
-              variant={hasCompanyError('taxId') ? 'error' : 'default'}
-            />
-          </div>
-          {hasCompanyError('taxId') && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-            >
-              <AlertCircle className="w-4 h-4" />
-              <span>{getCompanyError('taxId')}</span>
-            </motion.div>
-          )}
-        </div>
+        <Input
+          id="taxId"
+          label="Tax ID"
+          leftIcon={CreditCard}
+          type="text"
+          value={companyInfo.taxId}
+          onChange={e => handleInputChange('taxId', e.target.value)}
+          onBlur={e => handleInputBlur('taxId', e.target.value)}
+          placeholder="XX-XXXXXXX"
+          error={hasCompanyError('taxId') ? getCompanyError('taxId') : undefined}
+        />
       </div>
 
       {/* Currency */}

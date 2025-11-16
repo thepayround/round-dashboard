@@ -4,6 +4,8 @@ import { User, Mail, Phone } from 'lucide-react'
 import { useUserInfoStepController } from '../../hooks/useUserInfoStepController'
 import type { UserInfo } from '../../types/onboarding'
 
+import { Input } from '@/shared/ui'
+
 interface UserInfoStepProps {
   data: UserInfo
   onChange: (data: UserInfo) => void
@@ -65,78 +67,58 @@ export const UserInfoStep = ({
         {/* Name Fields Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="firstName" className="auth-label">
-              First Name
-            </label>
-            <div className="input-container">
-              <User className="input-icon-left auth-icon-primary" />
-              <input
-                id="firstName"
-                type="text"
-                value={data.firstName}
-                onChange={handleInputChange('firstName')}
-                placeholder="John"
-                className={`auth-input input-with-icon-left ${errors.firstName ? 'auth-input-error' : ''}`}
-              />
-            </div>
-            {errors.firstName && <p className="mt-1 text-sm text-[#D417C8]">{errors.firstName}</p>}
+            <Input
+              id="firstName"
+              type="text"
+              value={data.firstName}
+              onChange={handleInputChange('firstName')}
+              placeholder="John"
+              label="First Name"
+              leftIcon={User}
+              error={errors.firstName}
+            />
           </div>
 
           <div>
-            <label htmlFor="lastName" className="auth-label">
-              Last Name
-            </label>
-            <div className="input-container">
-              <User className="input-icon-left auth-icon-primary" />
-              <input
-                id="lastName"
-                type="text"
-                value={data.lastName}
-                onChange={handleInputChange('lastName')}
-                placeholder="Doe"
-                className={`auth-input input-with-icon-left ${errors.lastName ? 'auth-input-error' : ''}`}
-              />
-            </div>
-            {errors.lastName && <p className="mt-1 text-sm text-[#D417C8]">{errors.lastName}</p>}
+            <Input
+              id="lastName"
+              type="text"
+              value={data.lastName}
+              onChange={handleInputChange('lastName')}
+              placeholder="Doe"
+              label="Last Name"
+              leftIcon={User}
+              error={errors.lastName}
+            />
           </div>
         </div>
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="auth-label">
-            Email Address
-          </label>
-          <div className="input-container">
-            <Mail className="input-icon-left auth-icon-primary" />
-            <input
-              id="email"
-              type="email"
-              value={data.email}
-              onChange={handleInputChange('email')}
-              placeholder="john@example.com"
-              className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
-            />
-          </div>
-          {errors.email && <p className="mt-1 text-sm text-[#D417C8]">{errors.email}</p>}
+          <Input
+            id="email"
+            type="email"
+            value={data.email}
+            onChange={handleInputChange('email')}
+            placeholder="john@example.com"
+            label="Email Address"
+            leftIcon={Mail}
+            error={errors.email}
+          />
         </div>
 
         {/* Phone */}
         <div>
-          <label htmlFor="phone" className="auth-label">
-            Phone Number
-          </label>
-          <div className="input-container">
-            <Phone className="input-icon-left auth-icon-primary" />
-            <input
-              id="phone"
-              type="tel"
-              value={data.phone}
-              onChange={handleInputChange('phone')}
-              placeholder="+1 (555) 123-4567"
-              className={`auth-input input-with-icon-left ${errors.phone ? 'auth-input-error' : ''}`}
-            />
-          </div>
-          {errors.phone && <p className="mt-1 text-sm text-[#D417C8]">{errors.phone}</p>}
+          <Input
+            id="phone"
+            type="tel"
+            value={data.phone}
+            onChange={handleInputChange('phone')}
+            placeholder="+1 (555) 123-4567"
+            label="Phone Number"
+            leftIcon={Phone}
+            error={errors.phone}
+          />
         </div>
       </div>
     </motion.div>

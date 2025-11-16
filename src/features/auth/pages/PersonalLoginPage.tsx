@@ -1,5 +1,5 @@
 ﻿import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
@@ -129,52 +129,35 @@ export const PersonalLoginPage = () => {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
             {/* Email Address */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                <Input
-                  id="email"
-                  type="email"
-                  name="email"
-                  value={values.email}
-                  onChange={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  placeholder="example@gmail.com"
-                  className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.email ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                  required
-                />
-              </div>
-              {errors.email && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  <span>{errors.email}</span>
-                </motion.div>
-              )}
-            </div>
+            <Input
+              id="email"
+              label="Email Address"
+              leftIcon={Mail}
+              type="email"
+              name="email"
+              value={values.email}
+              onChange={handleChange('email')}
+              onBlur={handleBlur('email')}
+              placeholder="example@gmail.com"
+              error={errors.email}
+              required
+            />
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                Password
-              </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
                 <Input
                   id="password"
+                  label="Password"
+                  leftIcon={Lock}
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={values.password}
                   onChange={handleChange('password')}
                   onBlur={handleBlur('password')}
                   placeholder="Enter your password"
-                  className={`w-full h-9 px-3 pl-9 pr-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.password ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
+                  error={errors.password}
+                  className="pr-9"
                   required
                 />
                 <IconButton
@@ -184,20 +167,10 @@ export const PersonalLoginPage = () => {
                   variant="ghost"
                   size="md"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
+                  className="absolute right-3 top-[42px] -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
                 />
               </div>
-              {errors.password && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  <span>{errors.password}</span>
-                </motion.div>
-              )}
-              
+
               <div className="text-right mt-2">
                 <Link to="/auth/forgot-password" className="text-auth-primary/90 text-sm font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
                   Forgot your password?

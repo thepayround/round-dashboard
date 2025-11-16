@@ -112,42 +112,20 @@ export const ForgotPasswordPage = () => {
               {/* Forgot Password Form */}
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 {/* Email Address */}
-                <div>
-                  <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                    <Input
-                      id="email"
-                      type="email"
-                      name="email"
-                      value={values.email}
-                      onChange={handleChange('email')}
-                      onBlur={handleBlur('email')}
-                      placeholder="example@email.com"
-                      className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.email ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                      required
-                      autoComplete="email"
-                      aria-required="true"
-                      aria-invalid={!!errors.email}
-                      aria-describedby={errors.email ? 'email-error' : undefined}
-                    />
-                  </div>
-                  {errors.email && (
-                    <motion.div
-                      id="email-error"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                      role="alert"
-                      aria-live="polite"
-                    >
-                      <AlertCircle className="w-4 h-4" />
-                      <span>{errors.email}</span>
-                    </motion.div>
-                  )}
-                </div>
+                <Input
+                  id="email"
+                  label="Email Address"
+                  leftIcon={Mail}
+                  type="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  placeholder="example@email.com"
+                  error={errors.email}
+                  required
+                  autoComplete="email"
+                />
 
                 {/* Submit Button */}
                 <ActionButton

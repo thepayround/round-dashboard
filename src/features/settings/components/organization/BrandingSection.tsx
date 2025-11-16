@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
-import { Palette, Upload, Eye, Download, Trash2, Image } from 'lucide-react'
+import { Palette, Image } from 'lucide-react'
 import React from 'react'
 
 import { useBrandingController } from '../../hooks/useBrandingController'
 
+import { FileInput } from '@/shared/ui'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 
@@ -48,103 +49,37 @@ export const BrandingSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div>
-              <h4 className="text-xs font-normal tracking-tight text-white mb-2">Company Logo</h4>
-              <p className="text-xs text-gray-400">Recommended: 200x60px, PNG format</p>
-            </div>
+          <FileInput
+            id="logo-upload"
+            label="Company Logo"
+            helperText="Recommended: 200x60px, PNG format"
+            accept="image/*"
+            value={logoPreview}
+            onChange={(file) => handleFileUpload(file, 'logo')}
+            onRemove={() => handleRemoveAsset('logo')}
+            showPreview
+            showActions
+          />
 
-            <div className="border border-dashed border-white/20 rounded-lg p-6 text-center">
-              {logoPreview ? (
-                <div className="space-y-3">
-                  <img src={logoPreview} alt="Logo preview" className="max-h-16 mx-auto" />
-                  <div className="flex gap-2 justify-center">
-                    <Button variant="ghost" icon={Eye} iconPosition="left" size="sm">
-                      Preview
-                    </Button>
-                    <Button variant="ghost" icon={Download} iconPosition="left" size="sm">
-                      Download
-                    </Button>
-                    <Button
-                      variant="danger"
-                      icon={Trash2}
-                      iconPosition="left"
-                      size="sm"
-                      onClick={() => handleRemoveAsset('logo')}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto" />
-                  <div>
-                    <label htmlFor="logo-upload" className="cursor-pointer">
-                      <span className="text-xs text-[#D417C8] hover:text-[#BD2CD0]">Click to upload</span>
-                      <span className="text-xs text-gray-400"> or drag and drop</span>
-                    </label>
-                    <input
-                      id="logo-upload"
-                      type="file"
-                      accept="image/*"
-                      onChange={(event) => handleFileUpload(event, 'logo')}
-                      className="hidden"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <h4 className="text-xs font-normal tracking-tight text-white mb-2">Favicon</h4>
-              <p className="text-xs text-gray-400">Recommended: 32x32px, ICO or PNG format</p>
-            </div>
-
-            <div className="border border-dashed border-white/20 rounded-lg p-6 text-center">
-              {faviconPreview ? (
-                <div className="space-y-3">
-                  <img src={faviconPreview} alt="Favicon preview" className="w-8 h-8 mx-auto" />
-                  <div className="flex gap-2 justify-center">
-                    <Button variant="ghost" icon={Eye} iconPosition="left" size="sm">
-                      Preview
-                    </Button>
-                    <Button variant="ghost" icon={Download} iconPosition="left" size="sm">
-                      Download
-                    </Button>
-                    <Button
-                      variant="danger"
-                      icon={Trash2}
-                      iconPosition="left"
-                      size="sm"
-                      onClick={() => handleRemoveAsset('favicon')}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto" />
-                  <div>
-                    <label htmlFor="favicon-upload" className="cursor-pointer">
-                      <span className="text-xs text-[#D417C8] hover:text-[#BD2CD0]">Click to upload</span>
-                      <span className="text-xs text-gray-400"> or drag and drop</span>
-                    </label>
-                    <input
-                      id="favicon-upload"
-                      type="file"
-                      accept="image/*"
-                      onChange={(event) => handleFileUpload(event, 'favicon')}
-                      className="hidden"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          <FileInput
+            id="favicon-upload"
+            label="Favicon"
+            helperText="Recommended: 32x32px, ICO or PNG format"
+            accept="image/*"
+            value={faviconPreview}
+            onChange={(file) => handleFileUpload(file, 'favicon')}
+            onRemove={() => handleRemoveAsset('favicon')}
+            showPreview
+            showActions
+            renderPreview={(file) => (
+              <img
+                src={typeof file === 'string' ? file : URL.createObjectURL(file)}
+                alt="Favicon preview"
+                className="w-8 h-8 mx-auto"
+              />
+            )}
+            previewClassName="!mb-0"
+          />
         </div>
 
         {error && <p className="text-sm text-red-400 mt-4">{error}</p>}

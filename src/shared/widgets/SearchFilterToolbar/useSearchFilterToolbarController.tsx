@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 
+import { Input } from '../../ui'
 import { UiDropdown, type UiDropdownOption } from '../../ui/UiDropdown'
 import type { ActiveFilter } from '../FilterChipsBar'
 
@@ -50,34 +51,26 @@ export const useSearchFilterToolbarController = ({
         )
       case 'input':
         return (
-          <div key={field.id}>
-            <label htmlFor={field.id} className="block text-sm font-normal text-white/80 tracking-tight mb-2">
-              {field.label}
-            </label>
-            <input
-              id={field.id}
-              type="text"
-              value={field.value}
-              onChange={event => field.onChange(event.target.value)}
-              placeholder={field.placeholder}
-              className="w-full bg-[#171719] border border-[#333333] rounded-lg px-3 py-2 text-white placeholder-[#737373] focus:outline-none focus:border-[#14bdea] transition-all"
-            />
-          </div>
+          <Input
+            key={field.id}
+            id={field.id}
+            type="text"
+            label={field.label}
+            value={field.value}
+            onChange={event => field.onChange(event.target.value)}
+            placeholder={field.placeholder}
+          />
         )
       case 'date':
         return (
-          <div key={field.id}>
-            <label htmlFor={field.id} className="block text-sm font-normal text-white/80 tracking-tight mb-2">
-              {field.label}
-            </label>
-            <input
-              id={field.id}
-              type="date"
-              value={field.value}
-              onChange={event => field.onChange(event.target.value)}
-              className="w-full bg-[#171719] border border-[#333333] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#14bdea] transition-all"
-            />
-          </div>
+          <Input
+            key={field.id}
+            id={field.id}
+            type="date"
+            label={field.label}
+            value={field.value}
+            onChange={event => field.onChange(event.target.value)}
+          />
         )
       case 'custom':
         return (

@@ -5,11 +5,12 @@
     {
       "name": "No raw button elements",
       "pattern": "<button",
-      "message": "Use <Button> or <IconButton> component from @/shared/ui/Button instead of raw <button> elements",
-      "suggestion": "import { Button, IconButton } from '@/shared/ui/Button'",
+      "message": "Use <Button> or <IconButton> component from @/shared/ui instead of raw <button> elements",
+      "suggestion": "import { Button, IconButton } from '@/shared/ui'",
       "severity": "error",
       "excludePaths": [
         "src/shared/ui/Button/",
+        "src/shared/ui/Modal/",
         "*.test.tsx",
         "*.test.ts",
         "*.spec.tsx",
@@ -18,42 +19,71 @@
     },
     {
       "name": "No raw input elements",
-      "pattern": "<input",
-      "message": "Use <Input> component from @/shared/ui/Input instead of raw <input> elements (except hidden/file/checkbox/radio inputs)",
-      "suggestion": "import { Input } from '@/shared/ui/Input'",
+      "pattern": "<input\\s",
+      "message": "Use reusable input components instead of raw <input> elements. Available components: Input, FormInput, AuthInput, SearchInput, PhoneInput, FileInput, Checkbox, Toggle",
+      "suggestion": "import { Input, FormInput, AuthInput, SearchInput, PhoneInput, FileInput, Checkbox, Toggle } from '@/shared/ui'",
       "severity": "error",
       "excludePaths": [
         "src/shared/ui/Input/",
         "src/shared/ui/PhoneInput/",
         "src/shared/ui/AuthInput/",
         "src/shared/ui/FormInput.tsx",
+        "src/shared/ui/SearchInput/",
+        "src/shared/ui/FileInput/",
+        "src/shared/ui/Checkbox/",
+        "src/shared/ui/Toggle/",
+        "src/shared/ui/RadioGroup/",
+        "src/shared/ui/ApiDropdown/",
+        "src/shared/ui/UiDropdown/",
         "*.test.tsx",
-        "*.test.ts"
-      ]
-    },
-    {
-      "name": "No raw select elements",
-      "pattern": "<select",
-      "message": "Use <Dropdown> component from @/shared/ui/Dropdown instead of raw <select> elements",
-      "suggestion": "import { Dropdown } from '@/shared/ui/Dropdown'",
-      "severity": "warning",
-      "excludePaths": [
-        "src/shared/ui/Dropdown/",
-        "*.test.tsx",
-        "*.test.ts"
+        "*.test.ts",
+        "*.spec.tsx",
+        "*.spec.ts"
       ]
     },
     {
       "name": "No raw textarea elements",
-      "pattern": "<textarea",
-      "message": "Use <Textarea> component from @/shared/ui/Textarea instead of raw <textarea> elements",
-      "suggestion": "import { Textarea } from '@/shared/ui/Textarea'",
-      "severity": "warning",
+      "pattern": "<textarea\\s",
+      "message": "Use <Textarea> or <AuthInput inputType='textarea'> component from @/shared/ui instead of raw <textarea> elements",
+      "suggestion": "import { Textarea, AuthInput } from '@/shared/ui'",
+      "severity": "error",
       "excludePaths": [
         "src/shared/ui/Textarea/",
         "src/shared/ui/AuthInput/",
         "*.test.tsx",
-        "*.test.ts"
+        "*.test.ts",
+        "*.spec.tsx",
+        "*.spec.ts"
+      ]
+    },
+    {
+      "name": "No raw select elements",
+      "pattern": "<select\\s",
+      "message": "Use <Select>, <ApiDropdown>, or <UiDropdown> component from @/shared/ui instead of raw <select> elements",
+      "suggestion": "import { Select, ApiDropdown, UiDropdown } from '@/shared/ui'",
+      "severity": "error",
+      "excludePaths": [
+        "src/shared/ui/Select/",
+        "src/shared/ui/ApiDropdown/",
+        "src/shared/ui/UiDropdown/",
+        "*.test.tsx",
+        "*.test.ts",
+        "*.spec.tsx",
+        "*.spec.ts"
+      ]
+    },
+    {
+      "name": "Prefer Input component over FormInput",
+      "pattern": "type\\s*=\\s*[\"'](?:text|email|password|number|tel|url)[\"']",
+      "message": "When using input components, prefer using Input, FormInput, or AuthInput components for consistency",
+      "suggestion": "Available input components: Input (basic), FormInput (full-featured), AuthInput (auth pages), SearchInput (search), PhoneInput (phone numbers)",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/",
+        "*.test.tsx",
+        "*.test.ts",
+        "*.spec.tsx",
+        "*.spec.ts"
       ]
     }
   ]

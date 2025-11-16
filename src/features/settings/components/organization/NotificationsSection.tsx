@@ -3,6 +3,7 @@ import { Bell, Mail, MessageSquare, Smartphone, Settings } from 'lucide-react'
 
 import { useOrganizationNotificationsController } from '../../hooks/useOrganizationNotificationsController'
 
+import { Checkbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 
@@ -47,14 +48,13 @@ export const NotificationsSection: React.FC = () => {
               <Mail className="w-4 h-4 text-blue-400" />
               <span className="text-xs font-normal tracking-tight text-white">Email Notifications</span>
             </div>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
-              />
-              <span className="text-xs text-gray-300">Enable for organization</span>
-            </label>
+            <Checkbox
+              checked={true}
+              onCheckedChange={() => {}}
+              label="Enable for organization"
+              className="h-4 w-4"
+              containerClassName="[&_label]:text-xs [&_label]:text-gray-300 [&_label]:ml-2"
+            />
           </div>
 
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
@@ -62,14 +62,13 @@ export const NotificationsSection: React.FC = () => {
               <MessageSquare className="w-4 h-4 text-green-400" />
               <span className="text-xs font-normal tracking-tight text-white">Push Notifications</span>
             </div>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
-              />
-              <span className="text-xs text-gray-300">Enable for organization</span>
-            </label>
+            <Checkbox
+              checked={true}
+              onCheckedChange={() => {}}
+              label="Enable for organization"
+              className="h-4 w-4"
+              containerClassName="[&_label]:text-xs [&_label]:text-gray-300 [&_label]:ml-2"
+            />
           </div>
 
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
@@ -77,13 +76,13 @@ export const NotificationsSection: React.FC = () => {
               <Smartphone className="w-4 h-4 text-purple-400" />
               <span className="text-xs font-normal tracking-tight text-white">SMS Notifications</span>
             </div>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
-              />
-              <span className="text-xs text-gray-300">Enable for organization</span>
-            </label>
+            <Checkbox
+              checked={false}
+              onCheckedChange={() => {}}
+              label="Enable for organization"
+              className="h-4 w-4"
+              containerClassName="[&_label]:text-xs [&_label]:text-gray-300 [&_label]:ml-2"
+            />
           </div>
         </div>
       </Card>
@@ -114,32 +113,29 @@ export const NotificationsSection: React.FC = () => {
                 <h4 className="text-xs font-normal tracking-tight text-white">{pref.title}</h4>
                 <p className="text-xs text-gray-400 mt-1">{pref.description}</p>
               </div>
-              <div className="text-center">
-                <input
-                  type="checkbox"
+              <div className="flex justify-center">
+                <Checkbox
                   checked={pref.email}
-                  onChange={(e) => updatePreference(pref.id, 'email', e.target.checked)}
-                  className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
+                  onCheckedChange={(checked) => updatePreference(pref.id, 'email', checked)}
+                  className="h-4 w-4"
                   aria-label={`Enable email notifications for ${pref.title}`}
-                  />
+                />
               </div>
-              <div className="text-center">
-                <input
-                  type="checkbox"
+              <div className="flex justify-center">
+                <Checkbox
                   checked={pref.push}
-                  onChange={(e) => updatePreference(pref.id, 'push', e.target.checked)}
-                  className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
+                  onCheckedChange={(checked) => updatePreference(pref.id, 'push', checked)}
+                  className="h-4 w-4"
                   aria-label={`Enable push notifications for ${pref.title}`}
-                  />
+                />
               </div>
-              <div className="text-center">
-                <input
-                  type="checkbox"
+              <div className="flex justify-center">
+                <Checkbox
                   checked={pref.sms}
-                  onChange={(e) => updatePreference(pref.id, 'sms', e.target.checked)}
-                  className="w-4 h-4 text-[#D417C8] bg-white/10 border-white/20 rounded focus:ring-[#D417C8] focus:ring-2"
+                  onCheckedChange={(checked) => updatePreference(pref.id, 'sms', checked)}
+                  className="h-4 w-4"
                   aria-label={`Enable SMS notifications for ${pref.title}`}
-                  />
+                />
               </div>
             </div>
           ))}

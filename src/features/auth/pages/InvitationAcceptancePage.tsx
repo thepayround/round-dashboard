@@ -183,78 +183,34 @@ export const InvitationAcceptancePage = () => {
             {/* Name Fields Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* First Name */}
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                  First Name
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                  <Input
-                    id="firstName"
-                    type="text"
-                    name="firstName"
-                    value={values.firstName}
-                    onChange={handleChange('firstName')}
-                    onBlur={handleBlur('firstName')}
-                    placeholder="John"
-                    className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.firstName ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                    required
-                    aria-required="true"
-                    aria-invalid={!!errors.firstName}
-                    aria-describedby={errors.firstName ? 'firstName-error' : undefined}
-                  />
-                </div>
-                {errors.firstName && (
-                  <motion.div
-                    id="firstName-error"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    <AlertCircle className="w-4 h-4" />
-                    <span>{errors.firstName}</span>
-                  </motion.div>
-                )}
-              </div>
+              <Input
+                id="firstName"
+                type="text"
+                name="firstName"
+                value={values.firstName}
+                onChange={handleChange('firstName')}
+                onBlur={handleBlur('firstName')}
+                placeholder="John"
+                label="First Name"
+                leftIcon={User}
+                error={errors.firstName}
+                required
+              />
 
               {/* Last Name */}
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                  Last Name
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                  <Input
-                    id="lastName"
-                    type="text"
-                    name="lastName"
-                    value={values.lastName}
-                    onChange={handleChange('lastName')}
-                    onBlur={handleBlur('lastName')}
-                    placeholder="Doe"
-                    className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.lastName ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                    required
-                    aria-required="true"
-                    aria-invalid={!!errors.lastName}
-                    aria-describedby={errors.lastName ? 'lastName-error' : undefined}
-                  />
-                </div>
-                {errors.lastName && (
-                  <motion.div
-                    id="lastName-error"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    <AlertCircle className="w-4 h-4" />
-                    <span>{errors.lastName}</span>
-                  </motion.div>
-                )}
-              </div>
+              <Input
+                id="lastName"
+                type="text"
+                name="lastName"
+                value={values.lastName}
+                onChange={handleChange('lastName')}
+                onBlur={handleBlur('lastName')}
+                placeholder="Doe"
+                label="Last Name"
+                leftIcon={User}
+                error={errors.lastName}
+                required
+              />
             </div>
 
             {/* Phone Number */}
@@ -290,58 +246,39 @@ export const InvitationAcceptancePage = () => {
             </div>
 
             {/* Password */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                Create Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={values.password}
-                  onChange={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  placeholder="Create a secure password"
-                  className={`w-full h-9 px-3 pl-9 pr-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.password ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                  required
-                  aria-required="true"
-                  aria-invalid={!!errors.password}
-                  aria-describedby={errors.password ? 'password-error' : undefined}
-                />
-                <PlainButton
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
-                  unstyled
-                >
-                  {showPassword ? <EyeOff /> : <Eye />}
-                </PlainButton>
-              </div>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={values.password}
+                onChange={handleChange('password')}
+                onBlur={handleBlur('password')}
+                placeholder="Create a secure password"
+                label="Create Password"
+                leftIcon={Lock}
+                error={errors.password}
+                required
+                className="pr-9"
+              />
+              <PlainButton
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-[38px] z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                unstyled
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </PlainButton>
 
               {/* Password Strength Indicator */}
               {values.password && (
                 <div className="mt-3">
-                  <PasswordStrengthIndicator 
+                  <PasswordStrengthIndicator
                     password={values.password}
                     showStrengthBar
                   />
                 </div>
-              )}
-
-              {errors.password && (
-                <motion.div
-                  id="password-error"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                  role="alert"
-                  aria-live="polite"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  <span>{errors.password}</span>
-                </motion.div>
               )}
             </div>
 

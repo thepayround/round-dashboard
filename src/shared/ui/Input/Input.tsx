@@ -6,18 +6,35 @@ import React from 'react'
 import { cn } from '@/shared/utils/cn'
 
 const inputVariants = cva(
-  'w-full rounded-lg border bg-white/5 text-white placeholder-white/50 transition-all duration-200 focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed',
+  [
+    // Base styles
+    'w-full h-9 px-3 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed',
+    // Autofill styles - prevent white background on autofill
+    '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+    '[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
+    '[&:-webkit-autofill]:[background-color:#171719!important]',
+    '[&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s!important]',
+    // Autofill hover state
+    '[&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+    '[&:-webkit-autofill:hover]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
+    // Autofill focus state
+    '[&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+    '[&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,1)!important]',
+    // Internal autofill selected
+    '[&:-internal-autofill-selected]:[background-color:#171719!important]',
+    '[&:-internal-autofill-selected]:[color:rgba(255,255,255,0.95)!important]',
+  ].join(' '),
   {
     variants: {
       size: {
-        sm: 'h-9 px-3 text-sm',
-        md: 'h-9 px-4 text-base',
-        lg: 'h-9 px-5 text-lg',
+        sm: 'h-9 px-3 text-xs',
+        md: 'h-9 px-3 text-xs',
+        lg: 'h-9 px-4 text-sm',
       },
       variant: {
-        default: 'border-white/20 focus:border-primary focus:ring-primary/50',
-        error: 'border-red-500 focus:border-red-500 focus:ring-red-500/50',
-        success: 'border-green-500 focus:border-green-500 focus:ring-green-500/50',
+        default: '',
+        error: 'border-auth-error bg-auth-error-bg focus:border-auth-error',
+        success: 'border-green-500 bg-green-500/5 focus:border-green-500',
       },
     },
     defaultVariants: {
@@ -73,7 +90,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-normal text-white/80 mb-2"
+            className="block text-sm font-normal text-white/90 mb-2 tracking-tight"
           >
             {label}
             {required && <span className="text-[#D417C8] ml-1">*</span>}
@@ -82,8 +99,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         <div className="relative">
           {LeftIcon && (
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none">
-              <LeftIcon className="h-5 w-5" />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center">
+              <LeftIcon className="w-4 h-4 text-auth-icon-primary" />
             </div>
           )}
 
@@ -95,8 +112,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 size,
                 variant: effectiveVariant,
               }),
-              LeftIcon && 'pl-12',
-              RightIcon && 'pr-12',
+              LeftIcon && 'pl-9',
+              RightIcon && 'pr-9',
               className
             )}
             aria-invalid={hasError}
@@ -111,8 +128,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
 
           {RightIcon && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none">
-              <RightIcon className="h-5 w-5" />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 hover:text-white/90">
+              <RightIcon className="w-4 h-4 text-auth-icon" />
             </div>
           )}
         </div>
@@ -124,7 +141,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="mt-2 flex items-center space-x-2 text-[#D417C8] text-sm"
+              className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
               role="alert"
               aria-live="polite"
             >

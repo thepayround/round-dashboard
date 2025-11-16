@@ -7,9 +7,8 @@ export const useBrandingController = () => {
   const [hasChanges, setHasChanges] = useState(false)
   const [error, setError] = useState('')
 
-  const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'favicon') => {
-    const file = event.target.files?.[0]
-    if (!file) return
+  const handleFileUpload = useCallback((file: File | File[] | null, type: 'logo' | 'favicon') => {
+    if (!file || Array.isArray(file)) return
 
     const reader = new FileReader()
     reader.onloadend = () => {

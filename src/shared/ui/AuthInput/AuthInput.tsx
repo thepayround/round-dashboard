@@ -79,6 +79,13 @@ export const AuthInput = forwardRef<
     focus:outline-none focus:border-[#14bdea]
     transition-all duration-150 ease-out
     disabled:opacity-50 disabled:cursor-not-allowed
+    [-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]
+    [-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
+    [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]
+    [&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]
+    [&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]
+    [&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]
+    [&:-internal-autofill-selected]:[background-color:#171719!important]
   `
 
   const textareaClasses = `

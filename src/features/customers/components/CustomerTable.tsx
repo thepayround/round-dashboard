@@ -17,7 +17,8 @@ import {
   TableRow,
   TableHead, 
   TableCell,
-  SortableTableHead 
+  SortableTableHead,
+  Checkbox
 } from '@/shared/ui'
 import { Button, IconButton } from '@/shared/ui/Button'
 
@@ -97,44 +98,24 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               {selectable && (
                 <TableHead className="w-12">
                   <div className="flex items-center">
-                    <label htmlFor="select-all" className="flex items-center cursor-pointer group">
-                      <span className="sr-only">Select all customers</span>
-                      <div
-                        className={`
-                          flex items-center justify-center
-                          w-9 h-9 rounded-lg
-                          transition-all duration-200
-                          ${isAllSelected || isIndeterminate
-                            ? 'bg-[#D417C8]/10 border border-[#D417C8]'
-                            : 'border border-white/10 group-hover:bg-white/5 group-hover:border-white/20'
-                          }
-                        `}
-                      >
-                        <div className={`flex items-center justify-center w-4 h-4 rounded border transition-all ${
-                          isAllSelected || isIndeterminate
-                            ? 'bg-[#D417C8] border-[#D417C8]'
-                            : 'bg-transparent border-[#2c2d31]'
-                        }`}>
-                          {isAllSelected && (
-                            <svg className="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                          {isIndeterminate && !isAllSelected && (
-                            <svg className="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14" />
-                            </svg>
-                          )}
-                        </div>
-                        <input
-                          id="select-all"
-                          type="checkbox"
-                          checked={isAllSelected}
-                          onChange={(e) => handleSelectAll(e.target.checked)}
-                          className="sr-only"
-                        />
-                      </div>
-                    </label>
+                    <div
+                      className={`
+                        flex items-center justify-center
+                        w-9 h-9 rounded-lg
+                        transition-all duration-200
+                        ${isAllSelected || isIndeterminate
+                          ? 'bg-[#D417C8]/10 border border-[#D417C8]'
+                          : 'border border-white/10 hover:bg-white/5 hover:border-white/20'
+                        }
+                      `}
+                    >
+                      <Checkbox
+                        checked={isIndeterminate && !isAllSelected ? 'indeterminate' : isAllSelected}
+                        onCheckedChange={(checked) => handleSelectAll(!!checked)}
+                        aria-label="Select all customers"
+                        className="w-4 h-4"
+                      />
+                    </div>
                   </div>
                 </TableHead>
               )}
@@ -173,39 +154,24 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               >
                   {selectable && (
                     <TableCell>
-                      <label htmlFor={`select-${customer.id}`} className="flex items-center cursor-pointer group">
-                        <span className="sr-only">Select customer {customer.displayName}</span>
-                        <div
-                          className={`
-                            flex items-center justify-center
-                            w-9 h-9 rounded-lg
-                            transition-all duration-200
-                            ${selectedIds.includes(customer.id)
-                              ? 'bg-[#D417C8]/10 border border-[#D417C8]'
-                              : 'border border-white/10 group-hover:bg-white/5 group-hover:border-white/20'
-                            }
-                          `}
-                        >
-                          <div className={`flex items-center justify-center w-4 h-4 rounded border transition-all ${
-                            selectedIds.includes(customer.id)
-                              ? 'bg-[#D417C8] border-[#D417C8]'
-                              : 'bg-transparent border-[#2c2d31]'
-                          }`}>
-                            {selectedIds.includes(customer.id) && (
-                              <svg className="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                            )}
-                          </div>
-                          <input
-                            id={`select-${customer.id}`}
-                            type="checkbox"
-                            checked={selectedIds.includes(customer.id)}
-                            onChange={(e) => handleSelectRow(customer.id, e.target.checked)}
-                            className="sr-only"
-                          />
-                        </div>
-                      </label>
+                      <div
+                        className={`
+                          flex items-center justify-center
+                          w-9 h-9 rounded-lg
+                          transition-all duration-200
+                          ${selectedIds.includes(customer.id)
+                            ? 'bg-[#D417C8]/10 border border-[#D417C8]'
+                            : 'border border-white/10 hover:bg-white/5 hover:border-white/20'
+                          }
+                        `}
+                      >
+                        <Checkbox
+                          checked={selectedIds.includes(customer.id)}
+                          onCheckedChange={(checked) => handleSelectRow(customer.id, !!checked)}
+                          aria-label={`Select customer ${customer.displayName}`}
+                          className="w-4 h-4"
+                        />
+                      </div>
                     </TableCell>
                   )}
                   <TableCell>

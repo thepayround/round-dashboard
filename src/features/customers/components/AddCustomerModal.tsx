@@ -4,6 +4,7 @@ import React from 'react'
 import { useAddCustomerModalController } from '../hooks/useAddCustomerModalController'
 
 import { CustomerType } from '@/shared/types/customer.types'
+import { Input, Toggle } from '@/shared/ui'
 import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
 import { IconButton, Button } from '@/shared/ui/Button'
@@ -57,7 +58,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           
           {/* Customer Type Selection */}
           <div className="space-y-3">
-            <span className="auth-label block">Customer Type</span>
+            <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Customer Type</span>
             <div className="grid grid-cols-2 gap-3">
               <Button
                 type="button"
@@ -103,57 +104,42 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           {/* Name and Email Row - Symmetric 3-column */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label htmlFor="firstName" className="auth-label">
-                First Name <span className="text-[#D417C8]">*</span>
-              </label>
-              <div className="input-container">
-                <User className="input-icon-left auth-icon-primary" />
-                <input
-                  id="firstName"
-                  type="text"
-                  value={formData.firstName}
-                  onChange={(e) => handleInputChange('firstName', e.target.value)}
-                  placeholder="John"
-                  className="auth-input input-with-icon-left"
-                  required
-                />
-              </div>
+              <Input
+                id="firstName"
+                type="text"
+                value={formData.firstName}
+                onChange={(e) => handleInputChange('firstName', e.target.value)}
+                placeholder="John"
+                label="First Name"
+                leftIcon={User}
+                required
+              />
             </div>
             
             <div>
-              <label htmlFor="lastName" className="auth-label">
-                Last Name <span className="text-[#D417C8]">*</span>
-              </label>
-              <div className="input-container">
-                <User className="input-icon-left auth-icon-primary" />
-                <input
-                  id="lastName"
-                  type="text"
-                  value={formData.lastName}
-                  onChange={(e) => handleInputChange('lastName', e.target.value)}
-                  placeholder="Doe"
-                  className="auth-input input-with-icon-left"
-                  required
-                />
-              </div>
+              <Input
+                id="lastName"
+                type="text"
+                value={formData.lastName}
+                onChange={(e) => handleInputChange('lastName', e.target.value)}
+                placeholder="Doe"
+                label="Last Name"
+                leftIcon={User}
+                required
+              />
             </div>
             
             <div>
-              <label htmlFor="email" className="auth-label">
-                Email Address <span className="text-[#D417C8]">*</span>
-              </label>
-              <div className="input-container">
-                <Mail className="input-icon-left auth-icon-primary" />
-                <input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  placeholder="john@example.com"
-                  className="auth-input input-with-icon-left"
-                  required
-                />
-              </div>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                placeholder="john@example.com"
+                label="Email Address"
+                leftIcon={Mail}
+                required
+              />
             </div>
           </div>
           
@@ -174,7 +160,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                 error={hasFieldError('phoneNumber') ? getFieldError('phoneNumber') : undefined}
               />
               {hasFieldError('phoneNumber') && (
-                <div className="mt-2 flex items-center space-x-2 auth-validation-error text-sm">
+                <div className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm">
                   <AlertCircle className="w-4 h-4" />
                   <span>{getFieldError('phoneNumber')}</span>
                 </div>
@@ -184,41 +170,31 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
             {/* Company field - only for business customers */}
             {formData.type === CustomerType.Business && (
               <div>
-                <label htmlFor="company" className="auth-label">
-                  Company <span className="text-[#D417C8]">*</span>
-                </label>
-                <div className="input-container">
-                  <Building2 className="input-icon-left auth-icon-primary" />
-                  <input
-                    id="company"
-                    type="text"
-                    value={formData.company}
-                    onChange={(e) => handleInputChange('company', e.target.value)}
-                    placeholder="Acme Corporation"
-                    className="auth-input input-with-icon-left"
-                    required={formData.type === CustomerType.Business}
-                  />
-                </div>
+                <Input
+                  id="company"
+                  type="text"
+                  value={formData.company}
+                  onChange={(e) => handleInputChange('company', e.target.value)}
+                  placeholder="Acme Corporation"
+                  label="Company"
+                  leftIcon={Building2}
+                  required={formData.type === CustomerType.Business}
+                />
               </div>
             )}
             
             {/* Tax Number field - only for business customers */}
             {formData.type === CustomerType.Business && (
               <div>
-                <label htmlFor="taxNumber" className="auth-label">
-                  Tax Number
-                </label>
-                <div className="input-container">
-                  <Hash className="input-icon-left auth-icon-primary" />
-                  <input
-                    id="taxNumber"
-                    type="text"
-                    value={formData.taxNumber}
-                    onChange={(e) => handleInputChange('taxNumber', e.target.value)}
-                    placeholder="Enter tax number"
-                    className="auth-input input-with-icon-left"
-                  />
-                </div>
+                <Input
+                  id="taxNumber"
+                  type="text"
+                  value={formData.taxNumber}
+                  onChange={(e) => handleInputChange('taxNumber', e.target.value)}
+                  placeholder="Enter tax number"
+                  label="Tax Number"
+                  leftIcon={Hash}
+                />
               </div>
             )}
           </div>
@@ -235,7 +211,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <div className="space-y-2">
-                <span className="auth-label">Currency</span>
+                <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Currency</span>
                 <ApiDropdown
                   config={currencyDropdownConfig}
                   value={formData.currency}
@@ -247,7 +223,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
             
             <div>
               <div className="space-y-2">
-                <span className="auth-label flex items-center space-x-2">
+                <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight flex items-center space-x-2">
                   <Languages className="w-4 h-4" />
                   <span>Language</span>
                 </span>
@@ -262,7 +238,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
             
             <div>
               <div className="space-y-2">
-                <span className="auth-label">Timezone</span>
+                <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Timezone</span>
                 <ApiDropdown
                   config={timezoneDropdownConfig}
                   value={formData.timezone}
@@ -302,13 +278,13 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           </div>
           
           <div className="flex space-x-2">
-                    <input
-                      type="text"
-                      value={currentTag}
-                      onChange={(e) => handleTagInputChange(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-              className="flex-1 px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#7767DA]/50 focus:border-[#7767DA]/50 transition-all duration-200"
+            <Input
+              type="text"
+              value={currentTag}
+              onChange={(e) => handleTagInputChange(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
               placeholder="Add a tag..."
+              className="flex-1"
             />
             <Button
               type="button"
@@ -385,7 +361,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
               
               <div>
                 <div className="space-y-2">
-                  <span className="auth-label">Country</span>
+                  <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Country</span>
                   <ApiDropdown
                     config={countryDropdownConfig}
                     value={formData.billingAddress?.country ?? ''}
@@ -407,19 +383,14 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
               <span>Shipping Address</span>
             </h3>
             
-            <label className="flex items-center space-x-3 cursor-pointer">
-              <span className="text-sm text-white/70">Same as billing</span>
-              <div className="relative inline-flex items-center">
-                <input
-                  type="checkbox"
-                  checked={sameAsBilling}
-                  onChange={(e) => handleSameAsBillingChange(e.target.checked)}
-                  className="sr-only peer"
-                  aria-label="Use Billing as Shipping Address"
-                />
-                <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#00BCD4]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00BCD4]" />
-              </div>
-            </label>
+            <Toggle
+              label="Same as billing"
+              checked={sameAsBilling}
+              onChange={(e) => handleSameAsBillingChange(e.target.checked)}
+              size="lg"
+              color="cyan"
+              aria-label="Use Billing as Shipping Address"
+            />
           </div>
           
           {/* Address Fields or Same as Billing Message */}
@@ -492,7 +463,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                 
                 <div>
                   <div className="space-y-2">
-                    <span className="auth-label">Country</span>
+                    <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Country</span>
                     <ApiDropdown
                       config={countryDropdownConfig}
                       value={formData.shippingAddress?.country ?? ''}
@@ -516,7 +487,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           <div className="grid grid-cols-1 gap-4">
             {/* Portal Access Setting */}
             <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
-              <label htmlFor="portalAccess" className="flex items-center space-x-3 cursor-pointer flex-1">
+              <div className="flex items-center space-x-3 flex-1">
                 <div className="w-10 h-10 rounded-lg bg-[#42E695]/20 flex items-center justify-center">
                   <User className="w-5 h-5 text-[#42E695]" />
                 </div>
@@ -524,23 +495,20 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                   <h4 className="text-white font-medium">Customer Portal Access</h4>
                   <p className="text-white/60 text-sm" id="portal-access-description">Allow customer to access their portal dashboard</p>
                 </div>
-              </label>
-              <div className="relative inline-flex items-center">
-                <input
-                  id="portalAccess"
-                  type="checkbox"
-                  checked={formData.portalAccess}
-                  onChange={(e) => handleInputChange('portalAccess', e.target.checked)}
-                  className="sr-only peer"
-                  aria-describedby="portal-access-description"
-                />
-                <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#42E695]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#42E695]" />
               </div>
+              <Toggle
+                label=""
+                checked={formData.portalAccess}
+                onChange={(e) => handleInputChange('portalAccess', e.target.checked)}
+                size="lg"
+                color="green"
+                aria-label="Customer Portal Access"
+              />
             </div>
 
             {/* Auto Collection Setting */}
             <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
-              <label htmlFor="autoCollection" className="flex items-center space-x-3 cursor-pointer flex-1">
+              <div className="flex items-center space-x-3 flex-1">
                 <div className="w-10 h-10 rounded-lg bg-[#14BDEA]/20 flex items-center justify-center">
                   <Settings className="w-5 h-5 text-[#14BDEA]" />
                 </div>
@@ -548,18 +516,15 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                   <h4 className="text-white font-medium">Automatic Payment Collection</h4>
                   <p className="text-white/60 text-sm" id="auto-collection-description">Automatically collect payments when invoices are due</p>
                 </div>
-              </label>
-              <div className="relative inline-flex items-center">
-                <input
-                  id="autoCollection"
-                  type="checkbox"
-                  checked={formData.autoCollection}
-                  onChange={(e) => handleInputChange('autoCollection', e.target.checked)}
-                  className="sr-only peer"
-                  aria-describedby="auto-collection-description"
-                />
-                <div className="relative w-11 h-6 bg-white/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#14BDEA]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#14BDEA]" />
               </div>
+              <Toggle
+                label=""
+                checked={formData.autoCollection}
+                onChange={(e) => handleInputChange('autoCollection', e.target.checked)}
+                size="lg"
+                color="blue"
+                aria-label="Automatic Payment Collection"
+              />
             </div>
           </div>
         </div>

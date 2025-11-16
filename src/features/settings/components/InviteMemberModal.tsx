@@ -49,25 +49,17 @@ export const InviteMemberModal = ({
         }}
         className="p-6 space-y-6"
       >
-        <div>
-          <label htmlFor="invite-email" className="modal-label">
-            Email Address
-          </label>
-          <div className="relative">
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center pointer-events-none">
-              <Mail className="w-4 h-4 text-white/60" />
-            </div>
-            <Input
-              id="invite-email"
-              type="email"
-              value={email}
-              onChange={event => handleEmailChange(event.target.value)}
-              placeholder="colleague@company.com"
-              className="modal-input pl-10"
-              required
-            />
-          </div>
-        </div>
+        <Input
+          id="invite-email"
+          label="Email Address"
+          leftIcon={Mail}
+          type="email"
+          value={email}
+          onChange={event => handleEmailChange(event.target.value)}
+          placeholder="colleague@company.com"
+          containerClassName="modal-label"
+          required
+        />
 
         <div>
           <label htmlFor="invite-role" className="modal-label">

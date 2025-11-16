@@ -6,8 +6,6 @@ import {
   User,
   Mail,
   Lock,
-  Eye,
-  EyeOff,
   AlertCircle,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -16,10 +14,10 @@ import { BillingAddressForm } from '../components/BillingAddressForm'
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { useBusinessRegisterController } from '../hooks/useBusinessRegisterController'
 
-import { Input } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
-import { Button, IconButton } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/Button'
+import { FormInput } from '@/shared/ui/FormInput'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
 
@@ -30,8 +28,6 @@ export const BusinessRegisterPage = () => {
     companyForm,
     billingForm,
     multiStepForm,
-    showPassword,
-    togglePasswordVisibility,
     detailedProgress,
     apiError,
     isSubmitting,
@@ -106,115 +102,50 @@ export const BusinessRegisterPage = () => {
             <div className="space-y-6">
               {/* Name Fields Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="firstName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                    First Name
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                    <Input
-                      id="firstName"
-                      type="text"
-                      name="firstName"
-                      value={personalValues.firstName}
-                      onChange={handlePersonalChange('firstName')}
-                      onBlur={handlePersonalBlur('firstName')}
-                      placeholder="John"
-                      className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${personalErrors.firstName ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                      required
-                      aria-required="true"
-                      aria-invalid={!!personalErrors.firstName}
-                      aria-describedby={personalErrors.firstName ? 'firstName-error' : undefined}
-                    />
-                  </div>
-                  {personalErrors.firstName && (
-                    <motion.div
-                      id="firstName-error"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                      role="alert"
-                      aria-live="polite"
-                    >
-                      <AlertCircle className="w-4 h-4" />
-                      <span>{personalErrors.firstName}</span>
-                    </motion.div>
-                  )}
-                </div>
+                <FormInput
+                  id="firstName"
+                  name="firstName"
+                  label="First Name"
+                  leftIcon={User}
+                  value={personalValues.firstName}
+                  onChange={handlePersonalChange('firstName')}
+                  onBlur={handlePersonalBlur('firstName')}
+                  placeholder="John"
+                  error={personalErrors.firstName}
+                  required
+                  size="sm"
+                />
 
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                    Last Name
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                    <Input
-                      id="lastName"
-                      type="text"
-                      name="lastName"
-                      value={personalValues.lastName}
-                      onChange={handlePersonalChange('lastName')}
-                      onBlur={handlePersonalBlur('lastName')}
-                      placeholder="Doe"
-                      className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${personalErrors.lastName ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                      required
-                      aria-required="true"
-                      aria-invalid={!!personalErrors.lastName}
-                      aria-describedby={personalErrors.lastName ? 'lastName-error' : undefined}
-                    />
-                  </div>
-                  {personalErrors.lastName && (
-                    <motion.div
-                      id="lastName-error"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                      role="alert"
-                      aria-live="polite"
-                    >
-                      <AlertCircle className="w-4 h-4" />
-                      <span>{personalErrors.lastName}</span>
-                    </motion.div>
-                  )}
-                </div>
+                <FormInput
+                  id="lastName"
+                  name="lastName"
+                  label="Last Name"
+                  leftIcon={User}
+                  value={personalValues.lastName}
+                  onChange={handlePersonalChange('lastName')}
+                  onBlur={handlePersonalBlur('lastName')}
+                  placeholder="Doe"
+                  error={personalErrors.lastName}
+                  required
+                  size="sm"
+                />
               </div>
 
               {/* Email */}
-              <div>
-                <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                  <Input
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={personalValues.email}
-                    onChange={handlePersonalChange('email')}
-                    onBlur={handlePersonalBlur('email')}
-                    placeholder="john@company.com"
-                    className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${personalErrors.email ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                    required
-                    aria-required="true"
-                    aria-invalid={!!personalErrors.email}
-                    aria-describedby={personalErrors.email ? 'email-error' : undefined}
-                  />
-                </div>
-                {personalErrors.email && (
-                  <motion.div
-                    id="email-error"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    <AlertCircle className="w-4 h-4" />
-                    <span>{personalErrors.email}</span>
-                  </motion.div>
-                )}
-              </div>
+              <FormInput
+                id="email"
+                type="email"
+                name="email"
+                label="Email Address"
+                leftIcon={Mail}
+                value={personalValues.email}
+                onChange={handlePersonalChange('email')}
+                onBlur={handlePersonalBlur('email')}
+                placeholder="john@company.com"
+                error={personalErrors.email}
+                required
+                size="sm"
+              />
 
               {/* Phone */}
               <div>
@@ -247,35 +178,21 @@ export const BusinessRegisterPage = () => {
 
               {/* Password */}
               <div>
-                <label htmlFor="password" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={personalValues.password}
-                    onChange={handlePersonalChange('password')}
-                    onBlur={handlePersonalBlur('password')}
-                    placeholder="Create a strong password"
-                    className={`w-full h-9 px-3 pl-9 pr-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${personalErrors.password ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
-                    required
-                    aria-required="true"
-                    aria-invalid={!!personalErrors.password}
-                    aria-describedby={personalErrors.password ? 'password-error' : undefined}
-                  />
-                  <IconButton
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    icon={showPassword ? EyeOff : Eye}
-                    variant="ghost"
-                    size="md"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
-                  />
-                </div>
+                <FormInput
+                  id="password"
+                  type="password"
+                  name="password"
+                  label="Password"
+                  leftIcon={Lock}
+                  value={personalValues.password}
+                  onChange={handlePersonalChange('password')}
+                  onBlur={handlePersonalBlur('password')}
+                  placeholder="Create a strong password"
+                  error={personalErrors.password}
+                  required
+                  size="sm"
+                  passwordToggle
+                />
 
                 {/* Password Strength Indicator */}
                 {personalValues.password && (
@@ -285,20 +202,6 @@ export const BusinessRegisterPage = () => {
                       showStrengthBar
                     />
                   </div>
-                )}
-
-                {personalErrors.password && (
-                  <motion.div
-                    id="password-error"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    <AlertCircle className="w-4 h-4" />
-                    <span>{personalErrors.password}</span>
-                  </motion.div>
                 )}
               </div>
             </div>

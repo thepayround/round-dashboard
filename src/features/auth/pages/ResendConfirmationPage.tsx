@@ -120,42 +120,19 @@ export const ResendConfirmationPage = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-              Email Address
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
-              <Input
-                id="email"
-                type="email"
-                name="email"
-                value={values.email}
-                onChange={handleChange('email')}
-                onBlur={handleBlur('email')}
-                placeholder="Enter your email"
-                className="pl-9 h-9 text-xs font-light"
-                variant={errors.email ? 'error' : 'default'}
-                required
-                aria-required="true"
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? 'email-error' : undefined}
-              />
-            </div>
-            {errors.email && (
-              <motion.div
-                id="email-error"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                role="alert"
-                aria-live="polite"
-              >
-                <AlertCircle className="w-4 h-4" />
-                <span>{errors.email}</span>
-              </motion.div>
-            )}
-          </div>
+          <Input
+            id="email"
+            label="Email Address"
+            leftIcon={Mail}
+            type="email"
+            name="email"
+            value={values.email}
+            onChange={handleChange('email')}
+            onBlur={handleBlur('email')}
+            placeholder="Enter your email"
+            error={errors.email}
+            required
+          />
 
           <ActionButton
             type="submit"

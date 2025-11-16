@@ -1,8 +1,9 @@
 ﻿import { motion } from 'framer-motion'
-import { Building, ExternalLink, AlignLeft } from 'lucide-react'
+import { Building, ExternalLink } from 'lucide-react'
 import { useCallback } from 'react'
 
 import { useCurrency } from '@/shared/hooks/useCurrency'
+import { Input, Textarea, UiDropdown } from '@/shared/ui'
 import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig } from '@/shared/ui/ApiDropdown'
 
 export interface OrganizationFormData {
@@ -110,60 +111,41 @@ export const OrganizationForm = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Company Name */}
-            <div>
-              <label htmlFor="companyName" className="auth-label">
-                Company Name <span className="text-red-400">*</span>
-              </label>
-              <div className="input-container">
-                <Building className="input-icon-left auth-icon-primary" />
-                <input
-                  id="companyName"
-                  type="text"
-                  value={data.companyName}
-                  onChange={handleInputChange('companyName')}
-                  placeholder="Acme Corporation"
-                  className={`auth-input input-with-icon-left ${errors.companyName ? 'auth-input-error' : ''}`}
-                />
-              </div>
-              {errors.companyName && <p className="mt-1 text-sm text-red-400">{errors.companyName}</p>}
-            </div>
+            <Input
+              id="companyName"
+              type="text"
+              label="Company Name"
+              leftIcon={Building}
+              value={data.companyName}
+              onChange={handleInputChange('companyName')}
+              placeholder="Acme Corporation"
+              error={errors.companyName}
+              required
+            />
 
             {/* Website */}
-            <div>
-              <label htmlFor="website" className="auth-label">
-                Website
-              </label>
-              <div className="input-container">
-                <ExternalLink className="input-icon-left auth-icon-primary" />
-                <input
-                  id="website"
-                  type="url"
-                  value={data.website}
-                  onChange={handleInputChange('website')}
-                  placeholder="https://www.example.com"
-                  className={`auth-input input-with-icon-left ${errors.website ? 'auth-input-error' : ''}`}
-                />
-              </div>
-              {errors.website && <p className="mt-1 text-sm text-red-400">{errors.website}</p>}
-            </div>
+            <Input
+              id="website"
+              type="url"
+              label="Website"
+              leftIcon={ExternalLink}
+              value={data.website}
+              onChange={handleInputChange('website')}
+              placeholder="https://www.example.com"
+              error={errors.website}
+            />
 
             {/* Description - Full Width */}
             <div className="md:col-span-2">
-              <label htmlFor="description" className="auth-label">
-                Description
-              </label>
-              <div className="input-container">
-                <AlignLeft className="input-icon-left textarea-icon auth-icon-primary" />
-                <textarea
-                  id="description"
-                  value={data.description}
-                  onChange={handleInputChange('description')}
-                  placeholder="Brief description of your company..."
-                  rows={3}
-                  className={`auth-input textarea input-with-icon-left resize-none ${errors.description ? 'auth-input-error' : ''}`}
-                />
-              </div>
-              {errors.description && <p className="mt-1 text-sm text-red-400">{errors.description}</p>}
+              <Textarea
+                id="description"
+                label="Description"
+                value={data.description}
+                onChange={handleInputChange('description')}
+                placeholder="Brief description of your company..."
+                rows={3}
+                error={errors.description}
+              />
             </div>
           </div>
         </motion.div>
@@ -276,25 +258,26 @@ export const OrganizationForm = ({
                 <label htmlFor="currency" className="auth-label">
                   Currency <span className="text-red-400">*</span>
                 </label>
-                <div className="input-container">
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
-                    <span className="text-sm font-semibold text-[#14BDEA]">{currencySymbol}</span>
-                  </div>
-                  <select
-                    id="currency"
-                    value={data.currency}
-                    onChange={e => handleSelectChange('currency', e.target.value)}
-                    className="auth-input input-with-icon-left"
-                    style={{ paddingLeft: '3rem' }}
-                  >
-                    <option value="USD">USD - US Dollar</option>
-                    <option value="EUR">EUR - Euro</option>
-                    <option value="GBP">GBP - British Pound</option>
-                    <option value="CAD">CAD - Canadian Dollar</option>
-                    <option value="AUD">AUD - Australian Dollar</option>
-                    <option value="JPY">JPY - Japanese Yen</option>
-                  </select>
-                </div>
+                <UiDropdown
+                  id="currency"
+                  value={data.currency}
+                  onSelect={(value: string) => handleSelectChange('currency', value)}
+                  options={[
+                    { value: 'USD', label: 'USD - US Dollar' },
+                    { value: 'EUR', label: 'EUR - Euro' },
+                    { value: 'GBP', label: 'GBP - British Pound' },
+                    { value: 'CAD', label: 'CAD - Canadian Dollar' },
+                    { value: 'AUD', label: 'AUD - Australian Dollar' },
+                    { value: 'JPY', label: 'JPY - Japanese Yen' },
+                  ]}
+                  icon={
+                    currencyLoading ? (
+                      <div className="w-3 h-3 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+                    ) : (
+                      <span className="text-sm font-semibold text-[#14BDEA]">{currencySymbol}</span>
+                    )
+                  }
+                />
               </div>
 
               {/* Revenue */}
@@ -303,8 +286,8 @@ export const OrganizationForm = ({
                   Annual Revenue
                   <span className="text-gray-500 ml-2">({data.currency})</span>
                 </label>
-                <div className="input-container">
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center">
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10">
                     {currencyLoading ? (
                       <div className="w-3 h-3 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
                     ) : (
@@ -313,17 +296,16 @@ export const OrganizationForm = ({
                       </span>
                     )}
                   </div>
-                  <input
+                  <Input
                     id="revenue"
                     type="number"
                     value={data.revenue}
                     onChange={handleInputChange('revenue')}
                     placeholder="1000000"
-                    className={`auth-input input-with-icon-left ${errors.revenue ? 'auth-input-error' : ''}`}
-                    style={{ paddingLeft: '3rem' }}
+                    error={errors.revenue}
+                    className="pl-12"
                   />
                 </div>
-                {errors.revenue && <p className="mt-1 text-sm text-red-400">{errors.revenue}</p>}
               </div>
             </div>
           </motion.div>
@@ -349,52 +331,44 @@ export const OrganizationForm = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Time Zone */}
-              <div>
-                <label htmlFor="timeZone" className="auth-label">
-                  Time Zone
-                </label>
-                <select
-                  id="timeZone"
-                  value={data.timeZone}
-                  onChange={e => handleSelectChange('timeZone', e.target.value)}
-                  className="auth-input"
-                >
-                  <option value="UTC">UTC - Coordinated Universal Time</option>
-                  <option value="America/New_York">EST - Eastern Standard Time</option>
-                  <option value="America/Chicago">CST - Central Standard Time</option>
-                  <option value="America/Denver">MST - Mountain Standard Time</option>
-                  <option value="America/Los_Angeles">PST - Pacific Standard Time</option>
-                  <option value="Europe/London">GMT - Greenwich Mean Time</option>
-                  <option value="Europe/Paris">CET - Central European Time</option>
-                  <option value="Asia/Tokyo">JST - Japan Standard Time</option>
-                </select>
-              </div>
+              <UiDropdown
+                id="timeZone"
+                label="Time Zone"
+                value={data.timeZone}
+                onSelect={(value: string) => handleSelectChange('timeZone', value)}
+                options={[
+                  { value: 'UTC', label: 'UTC - Coordinated Universal Time' },
+                  { value: 'America/New_York', label: 'EST - Eastern Standard Time' },
+                  { value: 'America/Chicago', label: 'CST - Central Standard Time' },
+                  { value: 'America/Denver', label: 'MST - Mountain Standard Time' },
+                  { value: 'America/Los_Angeles', label: 'PST - Pacific Standard Time' },
+                  { value: 'Europe/London', label: 'GMT - Greenwich Mean Time' },
+                  { value: 'Europe/Paris', label: 'CET - Central European Time' },
+                  { value: 'Asia/Tokyo', label: 'JST - Japan Standard Time' },
+                ]}
+              />
 
               {/* Fiscal Year Start */}
-              <div>
-                <label htmlFor="fiscalYearStart" className="auth-label">
-                  Fiscal Year Start
-                </label>
-                <select
-                  id="fiscalYearStart"
-                  value={data.fiscalYearStart}
-                  onChange={e => handleSelectChange('fiscalYearStart', e.target.value)}
-                  className="auth-input"
-                >
-                  <option value="January">January</option>
-                  <option value="February">February</option>
-                  <option value="March">March</option>
-                  <option value="April">April</option>
-                  <option value="May">May</option>
-                  <option value="June">June</option>
-                  <option value="July">July</option>
-                  <option value="August">August</option>
-                  <option value="September">September</option>
-                  <option value="October">October</option>
-                  <option value="November">November</option>
-                  <option value="December">December</option>
-                </select>
-              </div>
+              <UiDropdown
+                id="fiscalYearStart"
+                label="Fiscal Year Start"
+                value={data.fiscalYearStart}
+                onSelect={(value: string) => handleSelectChange('fiscalYearStart', value)}
+                options={[
+                  { value: 'January', label: 'January' },
+                  { value: 'February', label: 'February' },
+                  { value: 'March', label: 'March' },
+                  { value: 'April', label: 'April' },
+                  { value: 'May', label: 'May' },
+                  { value: 'June', label: 'June' },
+                  { value: 'July', label: 'July' },
+                  { value: 'August', label: 'August' },
+                  { value: 'September', label: 'September' },
+                  { value: 'October', label: 'October' },
+                  { value: 'November', label: 'November' },
+                  { value: 'December', label: 'December' },
+                ]}
+              />
             </div>
           </motion.div>
         )}

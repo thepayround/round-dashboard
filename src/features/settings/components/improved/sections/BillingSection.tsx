@@ -1,14 +1,15 @@
 ﻿import { motion } from 'framer-motion'
-import { 
-  CreditCard, 
-  Download, 
-  Edit3, 
+import {
+  CreditCard,
+  Download,
+  Edit3,
   Plus,
   CheckCircle,
   Building
 } from 'lucide-react'
 import React from 'react'
 
+import { Toggle } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { PlainButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
@@ -163,11 +164,14 @@ export const BillingSection: React.FC = () => (
                   <p className="text-sm text-white/90">Receive invoices via email</p>
                 </div>
               </div>
-              <label htmlFor="email-invoices-toggle" className="relative inline-flex items-center cursor-pointer">
-                <span className="sr-only">Enable email invoices</span>
-                <input id="email-invoices-toggle" type="checkbox" className="sr-only peer" defaultChecked />
-                <div className="w-8 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#D417C8]/20 rounded-full peer peer-checked:after:translate-x-3 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary" />
-              </label>
+              <Toggle
+                label=""
+                checked={true}
+                onChange={() => {}}
+                size="sm"
+                color="primary"
+                aria-label="Enable email invoices"
+              />
             </div>
 
             <div className="flex gap-3">

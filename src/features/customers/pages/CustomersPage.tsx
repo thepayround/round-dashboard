@@ -23,6 +23,7 @@ import { useCustomersController } from '../hooks/useCustomersController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
+import { Checkbox } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { IconButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
@@ -290,24 +291,20 @@ const CustomersPage: React.FC = () => {
                   <div className={`absolute top-4 right-4 transition-all duration-200 ${
                     selectedCustomers.includes(customer.id) ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100'
                   }`}>
-                    <label htmlFor={`customer-card-${customer.id}`} className="flex items-center cursor-pointer">
-                      <span className="sr-only">Select customer {customer.displayName}</span>
-                      <div className={`relative ${selectedCustomers.includes(customer.id) ? 'bg-[#D417C8]/20 p-1 rounded-lg border border-[#D417C8]/50' : ''}`}>
-                        <input
-                          id={`customer-card-${customer.id}`}
-                          type="checkbox"
-                          checked={selectedCustomers.includes(customer.id)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedCustomers([...selectedCustomers, customer.id])
-                            } else {
-                              setSelectedCustomers(selectedCustomers.filter(id => id !== customer.id))
-                            }
-                          }}
-                          className="w-5 h-5 text-[#D417C8] bg-[#1a1a1a] border-[#333333] rounded focus:ring-[#D417C8] focus:ring-2 cursor-pointer"
-                        />
-                      </div>
-                    </label>
+                    <div className={`relative ${selectedCustomers.includes(customer.id) ? 'bg-[#D417C8]/20 p-1 rounded-lg border border-[#D417C8]/50' : ''}`}>
+                      <Checkbox
+                        checked={selectedCustomers.includes(customer.id)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedCustomers([...selectedCustomers, customer.id])
+                          } else {
+                            setSelectedCustomers(selectedCustomers.filter(id => id !== customer.id))
+                          }
+                        }}
+                        aria-label={`Select customer ${customer.displayName}`}
+                        className="w-5 h-5"
+                      />
+                    </div>
                   </div>
                 )}
 
