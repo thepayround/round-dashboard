@@ -4,6 +4,7 @@ import { MapPin, Building, AlertCircle, Truck } from 'lucide-react'
 import { useBillingAddressFormController } from '../hooks/useBillingAddressFormController'
 
 import type { BillingAddress } from '@/shared/types/business'
+import { Input } from '@/shared/ui'
 import { ApiDropdown, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
 import type { ValidationError } from '@/shared/utils/validation'
 
@@ -110,7 +111,7 @@ export const AddressForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-2xl font-normal tracking-tight auth-text mb-2"
+            className="text-2xl font-normal tracking-tight text-white mb-2"
           >
             Billing Address
           </motion.h2>
@@ -118,7 +119,7 @@ export const AddressForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="auth-text-muted"
+            className="text-white/85"
           >
             {isOptional
               ? 'You can add this information later in your account settings'
@@ -130,29 +131,29 @@ export const AddressForm = ({
         <div className="space-y-6">
           {/* Street Address */}
           <div>
-            <label htmlFor="billing-street" className="auth-label">
+            <label htmlFor="billing-street" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
               Street Address {!isOptional && '*'}
             </label>
-            <div className="input-container">
-              <MapPin className="input-icon-left auth-icon-primary" />
-              <input
-                id="billing-street"
-                type="text"
-                value={currentBillingAddress.street}
-                onChange={e => handleAddressChange('billing', 'street', e.target.value)}
-                onBlur={e => handleInputBlur('street', e.target.value)}
-                placeholder="123 Main Street"
-                className={`auth-input input-with-icon-left ${
-                  hasBillingErrors('street') ? 'auth-input-error' : ''
-                }`}
-                required={!isOptional}
-              />
-            </div>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+                <Input
+                  id="billing-street"
+                  type="text"
+                  value={currentBillingAddress.street}
+                  onChange={e => handleAddressChange('billing', 'street', e.target.value)}
+                  onBlur={e => handleInputBlur('street', e.target.value)}
+                  placeholder="123 Main Street"
+                  className="pl-9"
+                  variant={hasBillingErrors('street') ? 'error' : 'default'}
+                  required={!isOptional}
+                  aria-describedby={hasBillingErrors('street') ? 'billing-street-error' : undefined}
+                />
+              </div>
             {hasBillingErrors('street') && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
               >
                 <AlertCircle className="w-4 h-4" />
                 <span>{getBillingError('street')}</span>
@@ -162,48 +163,48 @@ export const AddressForm = ({
 
           {/* Street Address 2 */}
           <div>
-            <label htmlFor="billing-street2" className="auth-label">
+            <label htmlFor="billing-street2" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
               Street Address 2
             </label>
-            <div className="input-container">
-              <Building className="input-icon-left auth-icon-primary" />
-              <input
-                id="billing-street2"
-                type="text"
-                value={currentBillingAddress.street2 ?? ''}
-                onChange={e => handleAddressChange('billing', 'street2', e.target.value)}
-                placeholder="Apartment, suite, etc."
-                className="auth-input input-with-icon-left"
-              />
-            </div>
+             <div className="relative">
+               <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+               <Input
+                 id="billing-street2"
+                 type="text"
+                 value={currentBillingAddress.street2 ?? ''}
+                 onChange={e => handleAddressChange('billing', 'street2', e.target.value)}
+                 placeholder="Apartment, suite, etc."
+                 className="pl-9"
+               />
+             </div>
           </div>
 
           {/* City & State Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="billing-city" className="auth-label">
+              <label htmlFor="billing-city" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                 City {!isOptional && '*'}
               </label>
-              <div className="input-container">
-                <Building className="input-icon-left auth-icon-primary" />
-                <input
-                  id="billing-city"
-                  type="text"
-                  value={currentBillingAddress.city}
-                  onChange={e => handleAddressChange('billing', 'city', e.target.value)}
-                  onBlur={e => handleInputBlur('city', e.target.value)}
-                  placeholder="New York"
-                  className={`auth-input input-with-icon-left ${
-                    hasBillingErrors('city') ? 'auth-input-error' : ''
-                  }`}
-                  required={!isOptional}
-                />
-              </div>
+                <div className="relative">
+                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+                  <Input
+                    id="billing-city"
+                    type="text"
+                    value={currentBillingAddress.city}
+                    onChange={e => handleAddressChange('billing', 'city', e.target.value)}
+                    onBlur={e => handleInputBlur('city', e.target.value)}
+                    placeholder="New York"
+                    className="pl-9"
+                    variant={hasBillingErrors('city') ? 'error' : 'default'}
+                    required={!isOptional}
+                    aria-describedby={hasBillingErrors('city') ? 'billing-city-error' : undefined}
+                  />
+                </div>
               {hasBillingErrors('city') && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
                   <span>{getBillingError('city')}</span>
@@ -212,29 +213,29 @@ export const AddressForm = ({
             </div>
 
             <div>
-              <label htmlFor="billing-state" className="auth-label">
+              <label htmlFor="billing-state" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                 State/Province {!isOptional && '*'}
               </label>
-              <div className="input-container">
-                <MapPin className="input-icon-left auth-icon-primary" />
-                <input
-                  id="billing-state"
-                  type="text"
-                  value={currentBillingAddress.state}
-                  onChange={e => handleAddressChange('billing', 'state', e.target.value)}
-                  onBlur={e => handleInputBlur('state', e.target.value)}
-                  placeholder="NY"
-                  className={`auth-input input-with-icon-left ${
-                    hasBillingErrors('state') ? 'auth-input-error' : ''
-                  }`}
-                  required={!isOptional}
-                />
-              </div>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+                  <Input
+                    id="billing-state"
+                    type="text"
+                    value={currentBillingAddress.state}
+                    onChange={e => handleAddressChange('billing', 'state', e.target.value)}
+                    onBlur={e => handleInputBlur('state', e.target.value)}
+                    placeholder="NY"
+                    className="pl-9"
+                    variant={hasBillingErrors('state') ? 'error' : 'default'}
+                    required={!isOptional}
+                    aria-describedby={hasBillingErrors('state') ? 'billing-state-error' : undefined}
+                  />
+                </div>
               {hasBillingErrors('state') && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
                   <span>{getBillingError('state')}</span>
@@ -246,29 +247,29 @@ export const AddressForm = ({
           {/* ZIP Code & Country Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="billing-zipCode" className="auth-label">
+              <label htmlFor="billing-zipCode" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                 ZIP/Postal Code {!isOptional && '*'}
               </label>
-              <div className="input-container">
-                <MapPin className="input-icon-left auth-icon-primary" />
-                <input
-                  id="billing-zipCode"
-                  type="text"
-                  value={currentBillingAddress.zipCode}
-                  onChange={e => handleAddressChange('billing', 'zipCode', e.target.value)}
-                  onBlur={e => handleInputBlur('zipCode', e.target.value)}
-                  placeholder="10001"
-                  className={`auth-input input-with-icon-left ${
-                    hasBillingErrors('zipCode') ? 'auth-input-error' : ''
-                  }`}
-                  required={!isOptional}
-                />
-              </div>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+                  <Input
+                    id="billing-zipCode"
+                    type="text"
+                    value={currentBillingAddress.zipCode}
+                    onChange={e => handleAddressChange('billing', 'zipCode', e.target.value)}
+                    onBlur={e => handleInputBlur('zipCode', e.target.value)}
+                    placeholder="10001"
+                    className="pl-9"
+                    variant={hasBillingErrors('zipCode') ? 'error' : 'default'}
+                    required={!isOptional}
+                    aria-describedby={hasBillingErrors('zipCode') ? 'billing-zip-error' : undefined}
+                  />
+                </div>
               {hasBillingErrors('zipCode') && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
                   <span>{getBillingError('zipCode')}</span>
@@ -277,7 +278,7 @@ export const AddressForm = ({
             </div>
 
             <div>
-              <span className="auth-label block">
+              <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                 Country {!isOptional && '*'}
               </span>
               <ApiDropdown
@@ -292,7 +293,7 @@ export const AddressForm = ({
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
                   <span>{getBillingError('country')}</span>
@@ -308,13 +309,13 @@ export const AddressForm = ({
         <div className="space-y-6">
           {/* Header with Toggle */}
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-normal tracking-tight auth-text flex items-center space-x-2">
+            <h3 className="text-xl font-normal tracking-tight text-white flex items-center space-x-2">
               <Truck className="w-5 h-5 text-[#00BCD4]" />
               <span>Shipping Address</span>
             </h3>
 
             <label className="flex items-center space-x-3 cursor-pointer">
-              <span className="text-sm auth-text-muted">Same as billing</span>
+              <span className="text-sm text-white/85">Same as billing</span>
               <div className="relative inline-flex items-center">
                 <input
                   type="checkbox"
@@ -336,8 +337,8 @@ export const AddressForm = ({
                   <Truck className="w-4 h-4 text-[#00BCD4]" />
                 </div>
                 <div>
-                  <p className="auth-text text-sm font-normal">Shipping address will be same as billing address</p>
-                  <p className="auth-text-muted text-xs">Turn off the toggle above to enter a different shipping address</p>
+                  <p className="text-white text-sm font-normal">Shipping address will be same as billing address</p>
+                  <p className="text-white/85 text-xs">Turn off the toggle above to enter a different shipping address</p>
                 </div>
               </div>
             </div>
@@ -345,18 +346,18 @@ export const AddressForm = ({
             <div className="space-y-6">
               {/* Shipping Street Address */}
               <div>
-                <label htmlFor="shipping-street" className="auth-label">
+                <label htmlFor="shipping-street" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                   Street Address {!isOptional && '*'}
                 </label>
-                <div className="input-container">
-                  <MapPin className="input-icon-left auth-icon-primary" />
-                  <input
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+                  <Input
                     id="shipping-street"
                     type="text"
                     value={currentShippingAddress.street}
                     onChange={e => handleAddressChange('shipping', 'street', e.target.value)}
                     placeholder="123 Main Street"
-                    className="auth-input input-with-icon-left"
+                    className="pl-9"
                     required={!isOptional}
                   />
                 </div>
@@ -364,18 +365,18 @@ export const AddressForm = ({
 
               {/* Shipping Street Address 2 */}
               <div>
-                <label htmlFor="shipping-street2" className="auth-label">
+                <label htmlFor="shipping-street2" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                   Street Address 2
                 </label>
-                <div className="input-container">
-                  <Building className="input-icon-left auth-icon-primary" />
-                  <input
+                <div className="relative">
+                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+                  <Input
                     id="shipping-street2"
                     type="text"
                     value={currentShippingAddress.street2 ?? ''}
                     onChange={e => handleAddressChange('shipping', 'street2', e.target.value)}
                     placeholder="Apartment, suite, etc."
-                    className="auth-input input-with-icon-left"
+                    className="pl-9"
                   />
                 </div>
               </div>
@@ -383,36 +384,36 @@ export const AddressForm = ({
               {/* Shipping City & State Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="shipping-city" className="auth-label">
+                  <label htmlFor="shipping-city" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                     City {!isOptional && '*'}
                   </label>
-                  <div className="input-container">
-                    <Building className="input-icon-left auth-icon-primary" />
-                    <input
+                  <div className="relative">
+                    <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+                    <Input
                       id="shipping-city"
                       type="text"
                       value={currentShippingAddress.city}
                       onChange={e => handleAddressChange('shipping', 'city', e.target.value)}
                       placeholder="New York"
-                      className="auth-input input-with-icon-left"
+                      className="pl-9"
                       required={!isOptional}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="shipping-state" className="auth-label">
+                  <label htmlFor="shipping-state" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                     State/Province {!isOptional && '*'}
                   </label>
-                  <div className="input-container">
-                    <MapPin className="input-icon-left auth-icon-primary" />
-                    <input
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+                    <Input
                       id="shipping-state"
                       type="text"
                       value={currentShippingAddress.state}
                       onChange={e => handleAddressChange('shipping', 'state', e.target.value)}
                       placeholder="NY"
-                      className="auth-input input-with-icon-left"
+                      className="pl-9"
                       required={!isOptional}
                     />
                   </div>
@@ -422,25 +423,25 @@ export const AddressForm = ({
               {/* Shipping ZIP Code & Country Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="shipping-zipCode" className="auth-label">
+                  <label htmlFor="shipping-zipCode" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                     ZIP/Postal Code {!isOptional && '*'}
                   </label>
-                  <div className="input-container">
-                    <MapPin className="input-icon-left auth-icon-primary" />
-                    <input
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
+                    <Input
                       id="shipping-zipCode"
                       type="text"
                       value={currentShippingAddress.zipCode}
                       onChange={e => handleAddressChange('shipping', 'zipCode', e.target.value)}
                       placeholder="10001"
-                      className="auth-input input-with-icon-left"
+                      className="pl-9"
                       required={!isOptional}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <span className="auth-label block">
+                  <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                     Country {!isOptional && '*'}
                   </span>
                   <ApiDropdown
@@ -479,9 +480,6 @@ export const BillingAddressForm = ({
       showShipping={false}
     />
   )
-
-
-
 
 
 

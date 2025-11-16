@@ -65,7 +65,7 @@ export default {
           DEFAULT: 'hsl(var(--fg))',        // Almost white
           muted: 'hsl(var(--fg-muted))',    // Gray
         },
-        
+
         // Your Brand Colors
         primary: {
           DEFAULT: 'hsl(var(--primary))',        // #D417C8 pink
@@ -79,22 +79,52 @@ export default {
           DEFAULT: 'hsl(var(--accent))',         // #7767DA purple
           contrast: 'hsl(var(--accent-contrast))',
         },
-        
+
         // Semantic colors
         destructive: 'hsl(var(--destructive))',
         warning: 'hsl(var(--warning))',
         success: 'hsl(var(--success))',
-        
+
         // UI elements
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         card: 'hsl(var(--card))',
-        
+
         // Elevation system
         elev: {
           1: 'hsl(var(--elev-1))',
           2: 'hsl(var(--elev-2))',
+        },
+
+        // Auth system colors (for migration from auth-* CSS classes)
+        auth: {
+          // Backgrounds
+          bg: '#171719',          // Input/card background
+          'bg-hover': '#1F1F21',  // Hover state background
+
+          // Borders
+          border: '#333333',        // Default border
+          'border-hover': '#404040', // Hover border
+
+          // Text & Icons
+          text: 'rgba(255, 255, 255, 1)',
+          'text-muted': 'rgba(255, 255, 255, 0.85)',
+          placeholder: '#737373',
+          icon: 'rgba(255, 255, 255, 0.6)',
+          'icon-primary': '#C084FC', // Purple accent for icons
+
+          // Brand colors
+          primary: '#14BDEA',       // Cyan - links, focus
+          'primary-hover': '#17D1FF',
+          magenta: '#D417C8',       // Magenta - primary actions
+          'magenta-hover': '#E02DD8',
+
+          // Validation
+          error: '#EF4444',
+          'error-bg': 'rgba(239, 68, 68, 0.12)',
+          success: '#10B981',
+          warning: '#F59E0B',
         },
       },
       // Minimal - removed gradients per design system

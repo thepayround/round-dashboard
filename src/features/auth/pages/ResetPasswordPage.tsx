@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { useResetPasswordController } from '../hooks/useResetPasswordController'
 
+import { Input } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { IconButton } from '@/shared/ui/Button'
@@ -31,8 +32,8 @@ export const ResetPasswordPage = () => {
   } = useResetPasswordController()
   if (tokenError) {
     return (
-      <div className="auth-container">
-        <div className="auth-background">
+      <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
+        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
           <div className="floating-orb" />
           <div className="floating-orb" />
           <div className="floating-orb" />
@@ -44,18 +45,18 @@ export const ResetPasswordPage = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="w-full max-w-[360px] mx-auto relative z-10"
         >
-          <div className="auth-card">
+          <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-destructive flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/15 flex items-center justify-center">
                 <AlertCircle className="w-8 h-8 text-white" />
               </div>
-              <h1 className="text-2xl font-medium tracking-tight auth-text mb-4">Invalid Reset Link</h1>
-              <p className="auth-text-muted mb-6">
+              <h1 className="text-2xl font-medium tracking-tight text-white mb-4">Invalid Reset Link</h1>
+              <p className="text-white/85 mb-6">
                 {tokenError}
               </p>
               <Link
                 to="/auth/forgot-password"
-                className="btn-primary inline-flex items-center space-x-2"
+                className="bg-auth-magenta text-white font-medium h-9 px-4 rounded-lg border-0 inline-flex items-center justify-center text-sm whitespace-nowrap transition-colors duration-200 hover:bg-auth-magenta-hover disabled:bg-[#525252] disabled:opacity-50 disabled:cursor-not-allowed space-x-2"
               >
                 <span>Request New Reset Link</span>
                 <ArrowRight className="w-4 h-4" />
@@ -68,9 +69,9 @@ export const ResetPasswordPage = () => {
   }
 
   return (
-    <div className="auth-container">
+    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="auth-background">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="floating-orb" />
         <div className="floating-orb" />
         <div className="floating-orb" />
@@ -89,7 +90,7 @@ export const ResetPasswordPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo />
 
-        <div className="auth-card">
+        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="gradient-header" />
@@ -101,10 +102,10 @@ export const ResetPasswordPage = () => {
             >
               {!isSuccess ? (
                 <>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">
                     Reset Password
                   </h1>
-                  <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
+                  <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">
                     Enter your new password for <strong className="text-white">{tokenEmail}</strong>
                   </p>
                 </>
@@ -113,10 +114,10 @@ export const ResetPasswordPage = () => {
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary flex items-center justify-center">
                     <CheckCircle className="w-8 h-8 text-white" />
                   </div>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">
                     Password Reset Successful
                   </h1>
-                  <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
+                  <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">
                     Your password has been successfully reset. You will be logged in automatically...
                   </p>
                 </>
@@ -144,12 +145,12 @@ export const ResetPasswordPage = () => {
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 {/* New Password */}
                 <div>
-                  <label htmlFor="newPassword" className="auth-label">
+                  <label htmlFor="newPassword" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                     New Password
                   </label>
-                  <div className="input-container">
-                    <Lock className="input-icon-left auth-icon-primary" />
-                    <input
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+                    <Input
                       id="newPassword"
                       type={showPassword ? 'text' : 'password'}
                       name="newPassword"
@@ -157,7 +158,8 @@ export const ResetPasswordPage = () => {
                       onChange={handlePasswordChange}
                       onBlur={handleBlur('newPassword')}
                       placeholder="Enter your new password"
-                      className={`auth-input input-with-icon-left input-with-icon-right ${errors.newPassword ? 'auth-input-error' : ''}`}
+                      className="pl-9 pr-9"
+                      variant={errors.newPassword ? 'error' : 'default'}
                       required
                       autoComplete="new-password"
                       aria-required="true"
@@ -171,7 +173,7 @@ export const ResetPasswordPage = () => {
                       variant="ghost"
                       size="md"
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      className="input-icon-right"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
                     />
                   </div>
 
@@ -180,7 +182,7 @@ export const ResetPasswordPage = () => {
                       id="newPassword-error"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                       role="alert"
                       aria-live="polite"
                     >
@@ -192,12 +194,12 @@ export const ResetPasswordPage = () => {
 
                 {/* Confirm Password */}
                 <div>
-                  <label htmlFor="confirmPassword" className="auth-label">
+                  <label htmlFor="confirmPassword" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                     Confirm New Password
                   </label>
-                  <div className="input-container">
-                    <Lock className="input-icon-left auth-icon-primary" />
-                    <input
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+                    <Input
                       id="confirmPassword"
                       type={showConfirmPassword ? 'text' : 'password'}
                       name="confirmPassword"
@@ -205,7 +207,8 @@ export const ResetPasswordPage = () => {
                       onChange={handleConfirmPasswordChange}
                       onBlur={handleBlur('confirmPassword')}
                       placeholder="Confirm your new password"
-                      className={`auth-input input-with-icon-left input-with-icon-right ${errors.confirmPassword ? 'auth-input-error' : ''}`}
+                      className="pl-9 pr-9"
+                      variant={errors.confirmPassword ? 'error' : 'default'}
                       required
                       autoComplete="new-password"
                       aria-required="true"
@@ -219,7 +222,7 @@ export const ResetPasswordPage = () => {
                       variant="ghost"
                       size="md"
                       aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
-                      className="input-icon-right"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
                     />
                   </div>
                   {errors.confirmPassword && (
@@ -227,7 +230,7 @@ export const ResetPasswordPage = () => {
                       id="confirmPassword-error"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                       role="alert"
                       aria-live="polite"
                     >

@@ -27,7 +27,7 @@ export const GoogleLoginButton = ({ onSuccess, onError, accountType }: GoogleLog
       disabled={!isGoogleLoaded || isLoading}
       onClick={handleGoogleLogin}
       icon={isLoading ? undefined : GoogleIcon}
-      className="w-full h-9 btn-social"
+      className="w-full h-9 bg-auth-bg border border-auth-border text-white rounded-lg transition-colors duration-200 hover:bg-auth-bg/80"
     >
       {isLoading ? (
         <span className="inline-flex items-center gap-2">

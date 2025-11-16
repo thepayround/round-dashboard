@@ -8,9 +8,9 @@ export const WelcomePage = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="auth-container">
+    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="auth-background">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="floating-orb" />
         <div className="floating-orb" />
         <div className="floating-orb" />
@@ -29,7 +29,7 @@ export const WelcomePage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo />
 
-        <div className="auth-card">
+        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="gradient-header" />

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { useForgotPasswordController } from '../hooks/useForgotPasswordController'
 
+import { Input } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { Button } from '@/shared/ui/Button'
@@ -24,9 +25,9 @@ export const ForgotPasswordPage = () => {
   } = useForgotPasswordController()
 
   return (
-    <div className="auth-container">
+    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="auth-background">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="floating-orb" />
         <div className="floating-orb" />
         <div className="floating-orb" />
@@ -45,7 +46,7 @@ export const ForgotPasswordPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo />
 
-        <div className="auth-card">
+        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="gradient-header" />
@@ -57,10 +58,10 @@ export const ForgotPasswordPage = () => {
             >
               {!isSuccess ? (
                 <>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">
                     Forgot Password?
                   </h1>
-                  <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
+                  <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">
                     Enter your email address and we&apos;ll send you a link to reset your password
                   </p>
                 </>
@@ -81,10 +82,10 @@ export const ForgotPasswordPage = () => {
                       />
                     </svg>
                   </div>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">
                     Check Your Email
                   </h1>
-                  <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
+                  <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">
                     We&apos;ve sent a password reset link to <strong className="text-white">{values.email}</strong>
                   </p>
                 </>
@@ -112,12 +113,12 @@ export const ForgotPasswordPage = () => {
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 {/* Email Address */}
                 <div>
-                  <label htmlFor="email" className="auth-label">
+                  <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                     Email Address
                   </label>
-                  <div className="input-container">
-                    <Mail className="input-icon-left auth-icon-primary" />
-                    <input
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+                    <Input
                       id="email"
                       type="email"
                       name="email"
@@ -125,7 +126,7 @@ export const ForgotPasswordPage = () => {
                       onChange={handleChange('email')}
                       onBlur={handleBlur('email')}
                       placeholder="example@email.com"
-                      className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
+                      className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.email ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
                       required
                       autoComplete="email"
                       aria-required="true"
@@ -138,7 +139,7 @@ export const ForgotPasswordPage = () => {
                       id="email-error"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                       role="alert"
                       aria-live="polite"
                     >
@@ -165,7 +166,7 @@ export const ForgotPasswordPage = () => {
                 <div className="text-center">
                   <Link
                     to="/login"
-                    className="auth-link text-sm brand-primary inline-flex items-center space-x-2"
+                    className="text-auth-primary/90 text-sm font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px inline-flex items-center space-x-2"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back to Sign In</span>
@@ -209,7 +210,7 @@ export const ForgotPasswordPage = () => {
 
                 {/* Help Text */}
                 <div className="text-center">
-                  <p className="auth-text-muted text-sm">
+                  <p className="text-white/85 text-sm">
                     Didn&apos;t receive the email?{' '}
                     <Button
                       type="button"

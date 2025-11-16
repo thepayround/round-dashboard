@@ -193,8 +193,8 @@ export const EmailConfirmationPage = () => {
                 className="w-16 h-16 border border-[#D417C8] border-t-transparent rounded-full"
               />
             </div>
-            <h2 className="text-2xl font-medium tracking-tight auth-text mb-4">Confirming Your Email</h2>
-            <p className="auth-text-muted">Please wait while we confirm your email address...</p>
+            <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Confirming Your Email</h2>
+            <p className="text-white/85">Please wait while we confirm your email address...</p>
           </motion.div>
         )
 
@@ -214,8 +214,8 @@ export const EmailConfirmationPage = () => {
             >
               <CheckCircle className="w-16 h-16 text-green-500" />
             </motion.div>
-            <h2 className="text-2xl font-medium tracking-tight auth-text mb-4">Email Confirmed!</h2>
-            <p className="auth-text-muted mb-6">{message}</p>
+            <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Email Confirmed!</h2>
+            <p className="text-white/85 mb-6">{message}</p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -229,7 +229,10 @@ export const EmailConfirmationPage = () => {
               </p>
             </motion.div>
 
-            <Link to="/get-started" className="btn-primary inline-flex items-center space-x-2">
+            <Link
+              to="/get-started"
+              className="bg-auth-magenta text-white font-medium h-9 px-4 rounded-lg border-0 inline-flex items-center justify-center text-sm whitespace-nowrap transition-colors duration-200 hover:bg-auth-magenta-hover disabled:bg-[#525252] disabled:opacity-50 disabled:cursor-not-allowed space-x-2"
+            >
               <span>Get Started</span>
               <motion.span
                 animate={{ x: [0, 4, 0] }}
@@ -257,8 +260,8 @@ export const EmailConfirmationPage = () => {
             >
               <XCircle className="w-16 h-16 text-red-500" />
             </motion.div>
-            <h2 className="text-2xl font-medium tracking-tight auth-text mb-4">Confirmation Failed</h2>
-            <p className="auth-text-muted mb-6">{message}</p>
+            <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Confirmation Failed</h2>
+            <p className="text-white/85 mb-6">{message}</p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -302,7 +305,7 @@ export const EmailConfirmationPage = () => {
 
               <Link
                 to="/login"
-                className="btn-primary inline-flex items-center justify-center"
+                className="bg-auth-magenta text-white font-medium h-9 px-4 rounded-lg border-0 inline-flex items-center justify-center text-sm whitespace-nowrap transition-colors duration-200 hover:bg-auth-magenta-hover disabled:bg-[#525252] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Back to Login
               </Link>
@@ -316,9 +319,9 @@ export const EmailConfirmationPage = () => {
   }
 
   return (
-    <div className="auth-container">
+    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="auth-background">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="floating-orb" />
         <div className="floating-orb" />
         <div className="floating-orb" />
@@ -332,7 +335,7 @@ export const EmailConfirmationPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="auth-card"
+        className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150"
       >
         {/* Header */}
         <div className="text-center mb-10">
@@ -343,8 +346,8 @@ export const EmailConfirmationPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-4xl font-medium tracking-tight auth-text mb-4 relative">Email Confirmation</h1>
-            <p className="auth-text-muted text-lg font-medium">Verifying your email address</p>
+            <h1 className="text-4xl font-medium tracking-tight text-white mb-4 relative">Email Confirmation</h1>
+            <p className="text-white/85 text-lg font-medium">Verifying your email address</p>
           </motion.div>
         </div>
 

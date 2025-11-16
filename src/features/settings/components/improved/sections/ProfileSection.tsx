@@ -92,7 +92,6 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             placeholder="John"
             disabled
             leftIcon={UserIcon}
-            variant="auth"
             className="opacity-60 cursor-not-allowed h-7 md:h-9 text-xs"
           />
           <FormInput
@@ -103,7 +102,6 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             placeholder="Doe"
             disabled
             leftIcon={UserIcon}
-            variant="auth"
             className="opacity-60 cursor-not-allowed h-7 md:h-9 text-xs"
           />
           <FormInput
@@ -114,7 +112,6 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             placeholder="john.doe@example.com"
             disabled
             leftIcon={Mail}
-            variant="auth"
             className="opacity-60 cursor-not-allowed h-7 md:h-9 text-xs"
           />
           <div className="relative">
@@ -126,7 +123,6 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
               placeholder="No phone number provided"
               disabled
               leftIcon={Phone}
-              variant="auth"
               className="opacity-60 cursor-not-allowed h-7 md:h-9 text-xs"
             />
             {(user?.phoneNumberFormatted ?? user?.phone) && (

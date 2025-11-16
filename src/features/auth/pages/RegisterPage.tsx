@@ -17,9 +17,9 @@ export const RegisterPage = () => {
   }
 
   return (
-    <div className="auth-container">
+    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Background Layer */}
-      <div className="auth-background">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         {/* Sophisticated floating elements */}
         <div className="absolute top-20 left-20 w-48 h-48 bg-primary/15 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-32 right-32 w-36 h-36 bg-primary/15 rounded-full blur-3xl animate-pulse delay-1000" />
@@ -41,7 +41,7 @@ export const RegisterPage = () => {
             <span className="text-white/85 text-base font-medium">Already have an account?</span>
             <Link
               to="/login"
-              className="inline-flex items-center px-6 py-2 text-white font-normal tracking-tight rounded-lg bg-white/10 border border-white/20 transition-all duration-300 hover:bg-white/15 hover:border-white/30 hover:shadow-lg hover:shadow-[#14BDEA]/10 brand-primary"
+              className="inline-flex items-center px-6 py-2 text-white font-normal tracking-tight rounded-lg bg-white/10 border border-white/20 transition-all duration-300 hover:bg-white/15 hover:border-white/30 hover:shadow-lg hover:shadow-[#14BDEA]/10"
               aria-label="Sign in to your existing account"
             >
               Sign in

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
+import { Input } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { validators, handleApiError } from '@/shared/utils'
 
@@ -55,9 +56,9 @@ export const ResendConfirmationPage = () => {
   const isFormValid = values.email.trim() !== '' && !errors.email
 
   return (
-    <div className="auth-container">
+    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="auth-background">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="floating-orb" />
         <div className="floating-orb" />
         <div className="floating-orb" />
@@ -71,7 +72,7 @@ export const ResendConfirmationPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="auth-card"
+        className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150"
       >
         {/* Header */}
         <div className="text-center mb-10">
@@ -82,8 +83,8 @@ export const ResendConfirmationPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-4xl font-medium tracking-tight auth-text mb-4 relative">Resend Confirmation</h1>
-            <p className="auth-text-muted text-lg font-medium">
+            <h1 className="text-4xl font-medium tracking-tight text-white mb-4 relative">Resend Confirmation</h1>
+            <p className="text-white/85 text-lg font-medium">
               Enter your email to receive a new confirmation link
             </p>
           </motion.div>
@@ -120,12 +121,12 @@ export const ResendConfirmationPage = () => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="auth-label">
+            <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
               Email Address
             </label>
-            <div className="input-container">
-              <Mail className="input-icon-left auth-icon-primary" />
-              <input
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+              <Input
                 id="email"
                 type="email"
                 name="email"
@@ -133,7 +134,8 @@ export const ResendConfirmationPage = () => {
                 onChange={handleChange('email')}
                 onBlur={handleBlur('email')}
                 placeholder="Enter your email"
-                className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
+                className="pl-9 h-9 text-xs font-light"
+                variant={errors.email ? 'error' : 'default'}
                 required
                 aria-required="true"
                 aria-invalid={!!errors.email}
@@ -145,7 +147,7 @@ export const ResendConfirmationPage = () => {
                 id="email-error"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                 role="alert"
                 aria-live="polite"
               >
@@ -172,7 +174,7 @@ export const ResendConfirmationPage = () => {
         <div className="text-center mt-8">
           <Link
             to="/login"
-            className="auth-link brand-primary inline-flex items-center space-x-2"
+            className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px inline-flex items-center space-x-2"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Login</span>

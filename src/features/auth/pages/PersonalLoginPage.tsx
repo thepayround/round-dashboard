@@ -10,6 +10,7 @@ import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { apiClient } from '@/shared/services/apiClient'
+import { Input } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { Button, IconButton } from '@/shared/ui/Button'
@@ -84,9 +85,9 @@ export const PersonalLoginPage = () => {
   const isFormValid = values.email.trim() !== '' && values.password.trim() !== '' && !errors.email && !errors.password
 
   return (
-    <div className="auth-container">
+    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="auth-background">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="floating-orb" />
         <div className="floating-orb" />
         <div className="floating-orb" />
@@ -106,7 +107,7 @@ export const PersonalLoginPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo />
 
-        <div className="auth-card">
+        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-5 md:mb-6 lg:mb-5">
             <div className="gradient-header" />
@@ -116,10 +117,10 @@ export const PersonalLoginPage = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="relative"
             >
-              <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
+              <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">
                 Personal Sign In
               </h1>
-              <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
+              <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">
                 Access your personal Round account
               </p>
             </motion.div>
@@ -129,12 +130,12 @@ export const PersonalLoginPage = () => {
           <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
             {/* Email Address */}
             <div>
-              <label htmlFor="email" className="auth-label">
+              <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                 Email Address
               </label>
-              <div className="input-container">
-                <Mail className="input-icon-left auth-icon-primary" />
-                <input
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+                <Input
                   id="email"
                   type="email"
                   name="email"
@@ -142,7 +143,7 @@ export const PersonalLoginPage = () => {
                   onChange={handleChange('email')}
                   onBlur={handleBlur('email')}
                   placeholder="example@gmail.com"
-                  className={`auth-input input-with-icon-left ${errors.email ? 'auth-input-error' : ''}`}
+                  className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.email ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
                   required
                 />
               </div>
@@ -150,7 +151,7 @@ export const PersonalLoginPage = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
                   <span>{errors.email}</span>
@@ -160,12 +161,12 @@ export const PersonalLoginPage = () => {
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="auth-label">
+              <label htmlFor="password" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                 Password
               </label>
-              <div className="input-container">
-                <Lock className="input-icon-left auth-icon-primary" />
-                <input
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+                <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   name="password"
@@ -173,7 +174,7 @@ export const PersonalLoginPage = () => {
                   onChange={handleChange('password')}
                   onBlur={handleBlur('password')}
                   placeholder="Enter your password"
-                  className={`auth-input input-with-icon-left input-with-icon-right ${errors.password ? 'auth-input-error' : ''}`}
+                  className={`w-full h-9 px-3 pl-9 pr-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${errors.password ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
                   required
                 />
                 <IconButton
@@ -183,14 +184,14 @@ export const PersonalLoginPage = () => {
                   variant="ghost"
                   size="md"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="input-icon-right"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
                 />
               </div>
               {errors.password && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                 >
                   <AlertCircle className="w-4 h-4" />
                   <span>{errors.password}</span>
@@ -198,7 +199,7 @@ export const PersonalLoginPage = () => {
               )}
               
               <div className="text-right mt-2">
-                <Link to="/auth/forgot-password" className="auth-link text-sm brand-primary">
+                <Link to="/auth/forgot-password" className="text-auth-primary/90 text-sm font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
                   Forgot your password?
                 </Link>
               </div>
@@ -218,7 +219,7 @@ export const PersonalLoginPage = () => {
             />
 
             {/* Divider */}
-            <div className="auth-divider">
+            <div className="relative flex items-center justify-center my-6 before:content-[''] before:flex-1 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/15 before:to-transparent before:mr-4 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-transparent after:via-white/15 after:to-transparent after:ml-4">
               <span>or</span>
             </div>
 
@@ -234,7 +235,7 @@ export const PersonalLoginPage = () => {
                 type="button"
                 variant="ghost"
                 size="md"
-                className="w-full h-9 btn-social"
+                className="w-full h-9 bg-auth-bg border border-auth-border text-white rounded-lg transition-colors duration-200 hover:bg-auth-bg/80"
                 icon={FacebookIcon}
               >
                 Facebook
@@ -243,9 +244,9 @@ export const PersonalLoginPage = () => {
 
             {/* Links */}
             <div className="text-center space-y-4">
-              <p className="auth-text-muted">
+              <p className="text-white/85">
                 Don&apos;t have an account?{' '}
-                <Link to="/signup" className="auth-link brand-primary">
+                <Link to="/signup" className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
                   Create personal account
                 </Link>
               </p>

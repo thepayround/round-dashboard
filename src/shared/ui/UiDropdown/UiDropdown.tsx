@@ -10,6 +10,7 @@ import { createPortal } from 'react-dom'
 import { IconButton } from '../Button'
 import { dropdownStyles, getOptionClasses } from '../dropdown-styles.config'
 
+import { Input } from '@/shared/ui'
 import { useDropdownController } from '@/shared/ui/hooks/useDropdownController'
 
 export interface UiDropdownOption {
@@ -37,7 +38,10 @@ interface UiDropdownProps {
   loading?: boolean
   label?: string
   id?: string
+  name?: string
 }
+
+const DROPDOWN_PORTAL_Z_INDEX = 90
 
 export const UiDropdown = ({
   options,
@@ -56,6 +60,7 @@ export const UiDropdown = ({
   loading = false,
   label,
   id,
+  name,
 }: UiDropdownProps) => {
   const {
     isOpen,
@@ -88,7 +93,9 @@ export const UiDropdown = ({
     id,
   })
 
-  const triggerId = id ?? 'ui-dropdown-trigger'
+  const dropdownBaseId = id ?? listboxId.replace(/-listbox$/, '')
+  const triggerId = dropdownBaseId
+  const searchInputId = `${dropdownBaseId}-search`
 
   const dropdownPortal = isOpen
     ? createPortal(
@@ -100,25 +107,25 @@ export const UiDropdown = ({
             top: dropdownPosition.top,
             left: dropdownPosition.left,
             width: dropdownPosition.width,
-            zIndex: 60,
+            zIndex: DROPDOWN_PORTAL_Z_INDEX,
           }}
         >
           <div className="bg-[#0F1017] border border-white/10 rounded-xl shadow-2xl max-h-80 overflow-hidden flex flex-col">
             {allowSearch && (
               <div className="p-3 border-b border-white/5">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    value={searchTerm}
-                    onChange={(event) => setSearchTerm(event.target.value)}
-                    placeholder={searchPlaceholder}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-[#14BDEA]"
-                    aria-label={searchPlaceholder}
-                    disabled={disabled}
-                  />
-                </div>
+                <Input
+                  ref={searchInputRef}
+                  id={searchInputId}
+                  name={name ?? searchInputId}
+                  type="text"
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  placeholder={searchPlaceholder}
+                  leftIcon={Search}
+                  className="bg-white/5 border-white/10 text-sm text-white placeholder:text-white/40 h-9"
+                  aria-label={searchPlaceholder}
+                  disabled={disabled}
+                />
               </div>
             )}
 
@@ -252,4 +259,3 @@ export const UiDropdown = ({
     </div>
   )
 }
-

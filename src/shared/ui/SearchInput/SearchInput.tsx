@@ -1,6 +1,7 @@
-﻿import { Search, X, Loader2 } from 'lucide-react'
-import React from 'react'
+import { Search, X, Loader2 } from 'lucide-react'
+import React, { useId } from 'react'
 
+import { Input } from '@/shared/ui'
 import { IconButton } from '@/shared/ui/Button'
 
 interface SearchInputProps {
@@ -11,6 +12,8 @@ interface SearchInputProps {
   isSearching?: boolean
   className?: string
   disabled?: boolean
+  id?: string
+  name?: string
 }
 
 /**
@@ -27,8 +30,14 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   placeholder = 'Search...',
   isSearching = false,
   className = '',
-  disabled = false
+  disabled = false,
+  id,
+  name,
 }) => {
+  const generatedId = useId()
+  const inputId = id ?? generatedId
+  const inputName = name ?? inputId
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value)
   }
@@ -39,22 +48,16 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 
   return (
     <div className={`relative ${className}`}>
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#737373]" />
-      
-      <input
+      <Input
+        id={inputId}
+        name={inputName}
         type="text"
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
         disabled={disabled}
-        className={`
-          w-full h-9 pl-10 pr-16 md:pr-20 px-3 py-1.5
-          bg-[#171719] border border-[#333333] rounded-lg
-          text-white placeholder-[#737373] text-xs font-light
-          focus:outline-none focus:border-[#14bdea]
-          transition-all duration-200
-          ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-        `}
+        leftIcon={Search}
+        className="pl-10 pr-16 md:pr-20 h-9 text-xs font-light"
         autoComplete="off"
         spellCheck="false"
         data-testid="search-input"
@@ -84,4 +87,3 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     </div>
   )
 }
-

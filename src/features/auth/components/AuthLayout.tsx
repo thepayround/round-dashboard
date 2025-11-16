@@ -6,9 +6,9 @@ interface AuthLayoutProps {
 }
 
 export const AuthLayout = ({ children }: AuthLayoutProps = {}) => (
-  <div className="auth-container">
+  <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
     {/* Animated Background */}
-    <div className="auth-background">
+    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
       <div className="floating-orb" />
       <div className="floating-orb" />
       <div className="floating-orb" />

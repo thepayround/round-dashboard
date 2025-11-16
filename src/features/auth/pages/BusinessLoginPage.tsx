@@ -28,9 +28,9 @@ export const BusinessLoginPage = () => {
   } = useBusinessLoginController()
 
   return (
-    <div className="auth-container">
+    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="auth-background">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="floating-orb" />
         <div className="floating-orb" />
         <div className="floating-orb" />
@@ -50,7 +50,7 @@ export const BusinessLoginPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo />
 
-        <div className="auth-card">
+        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-5 md:mb-6 lg:mb-5">
             <div className="gradient-header" />
@@ -60,10 +60,10 @@ export const BusinessLoginPage = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="relative"
             >
-              <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">
+              <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">
                 Business Sign In
               </h1>
-              <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">
+              <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">
                 Access your business Round account
               </p>
             </motion.div>
@@ -104,7 +104,7 @@ export const BusinessLoginPage = () => {
               />
 
               <div className="text-right">
-                <Link to="/auth/forgot-password" className="auth-link text-sm brand-primary">
+                <Link to="/auth/forgot-password" className="text-auth-primary/90 text-sm font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
                   Forgot your password?
                 </Link>
               </div>
@@ -124,7 +124,7 @@ export const BusinessLoginPage = () => {
             />
 
             {/* Divider */}
-            <div className="auth-divider">
+            <div className="relative flex items-center justify-center my-6 before:content-[''] before:flex-1 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/15 before:to-transparent before:mr-4 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-transparent after:via-white/15 after:to-transparent after:ml-4">
               <span>or</span>
             </div>
 
@@ -140,7 +140,7 @@ export const BusinessLoginPage = () => {
                 type="button"
                 variant="ghost"
                 size="md"
-                className="w-full h-9 btn-social"
+                className="w-full h-9 bg-auth-bg border border-auth-border text-white rounded-lg transition-colors duration-200 hover:bg-auth-bg/80"
                 icon={FacebookIcon}
               >
                 Facebook
@@ -149,9 +149,9 @@ export const BusinessLoginPage = () => {
 
             {/* Links */}
             <div className="text-center space-y-4">
-              <p className="auth-text-muted">
+              <p className="text-white/85">
                 Don&apos;t have an account?{' '}
-                <Link to="/signup/business" className="auth-link brand-primary">
+                <Link to="/signup/business" className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
                   Create business account
                 </Link>
               </p>

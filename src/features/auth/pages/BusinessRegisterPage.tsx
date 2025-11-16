@@ -16,6 +16,7 @@ import { BillingAddressForm } from '../components/BillingAddressForm'
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { useBusinessRegisterController } from '../hooks/useBusinessRegisterController'
 
+import { Input } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { Button, IconButton } from '@/shared/ui/Button'
@@ -88,7 +89,7 @@ export const BusinessRegisterPage = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-2xl font-medium tracking-tight auth-text mb-2"
+                className="text-2xl font-medium tracking-tight text-white mb-2"
               >
                 Personal Information
               </motion.h2>
@@ -96,7 +97,7 @@ export const BusinessRegisterPage = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="auth-text-muted"
+                className="text-white/85"
               >
                 Tell us about yourself
               </motion.p>
@@ -106,12 +107,12 @@ export const BusinessRegisterPage = () => {
               {/* Name Fields Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="auth-label">
+                  <label htmlFor="firstName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                     First Name
                   </label>
-                  <div className="input-container">
-                    <User className="input-icon-left auth-icon-primary" />
-                    <input
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+                    <Input
                       id="firstName"
                       type="text"
                       name="firstName"
@@ -119,7 +120,7 @@ export const BusinessRegisterPage = () => {
                       onChange={handlePersonalChange('firstName')}
                       onBlur={handlePersonalBlur('firstName')}
                       placeholder="John"
-                      className={`auth-input input-with-icon-left ${personalErrors.firstName ? 'auth-input-error' : ''}`}
+                      className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${personalErrors.firstName ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
                       required
                       aria-required="true"
                       aria-invalid={!!personalErrors.firstName}
@@ -131,7 +132,7 @@ export const BusinessRegisterPage = () => {
                       id="firstName-error"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                       role="alert"
                       aria-live="polite"
                     >
@@ -142,12 +143,12 @@ export const BusinessRegisterPage = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="lastName" className="auth-label">
+                  <label htmlFor="lastName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                     Last Name
                   </label>
-                  <div className="input-container">
-                    <User className="input-icon-left auth-icon-primary" />
-                    <input
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+                    <Input
                       id="lastName"
                       type="text"
                       name="lastName"
@@ -155,7 +156,7 @@ export const BusinessRegisterPage = () => {
                       onChange={handlePersonalChange('lastName')}
                       onBlur={handlePersonalBlur('lastName')}
                       placeholder="Doe"
-                      className={`auth-input input-with-icon-left ${personalErrors.lastName ? 'auth-input-error' : ''}`}
+                      className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${personalErrors.lastName ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
                       required
                       aria-required="true"
                       aria-invalid={!!personalErrors.lastName}
@@ -167,7 +168,7 @@ export const BusinessRegisterPage = () => {
                       id="lastName-error"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                       role="alert"
                       aria-live="polite"
                     >
@@ -180,12 +181,12 @@ export const BusinessRegisterPage = () => {
 
               {/* Email */}
               <div>
-                <label htmlFor="email" className="auth-label">
+                <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                   Email Address
                 </label>
-                <div className="input-container">
-                  <Mail className="input-icon-left auth-icon-primary" />
-                  <input
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+                  <Input
                     id="email"
                     type="email"
                     name="email"
@@ -193,7 +194,7 @@ export const BusinessRegisterPage = () => {
                     onChange={handlePersonalChange('email')}
                     onBlur={handlePersonalBlur('email')}
                     placeholder="john@company.com"
-                    className={`auth-input input-with-icon-left ${personalErrors.email ? 'auth-input-error' : ''}`}
+                    className={`w-full h-9 px-3 pl-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${personalErrors.email ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
                     required
                     aria-required="true"
                     aria-invalid={!!personalErrors.email}
@@ -205,7 +206,7 @@ export const BusinessRegisterPage = () => {
                     id="email-error"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                    className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                     role="alert"
                     aria-live="polite"
                   >
@@ -234,7 +235,7 @@ export const BusinessRegisterPage = () => {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                    className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                     role="alert"
                     aria-live="polite"
                   >
@@ -246,12 +247,12 @@ export const BusinessRegisterPage = () => {
 
               {/* Password */}
               <div>
-                <label htmlFor="password" className="auth-label">
+                <label htmlFor="password" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
                   Password
                 </label>
-                <div className="input-container">
-                  <Lock className="input-icon-left auth-icon-primary" />
-                  <input
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+                  <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     name="password"
@@ -259,7 +260,7 @@ export const BusinessRegisterPage = () => {
                     onChange={handlePersonalChange('password')}
                     onBlur={handlePersonalBlur('password')}
                     placeholder="Create a strong password"
-                    className={`auth-input input-with-icon-left input-with-icon-right ${personalErrors.password ? 'auth-input-error' : ''}`}
+                    className={`w-full h-9 px-3 pl-9 pr-9 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none ${personalErrors.password ? 'border-auth-error bg-auth-error-bg focus:border-auth-error' : ''}`}
                     required
                     aria-required="true"
                     aria-invalid={!!personalErrors.password}
@@ -272,7 +273,7 @@ export const BusinessRegisterPage = () => {
                     variant="ghost"
                     size="md"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    className="input-icon-right"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
                   />
                 </div>
 
@@ -291,7 +292,7 @@ export const BusinessRegisterPage = () => {
                     id="password-error"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+                    className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
                     role="alert"
                     aria-live="polite"
                   >
@@ -347,9 +348,9 @@ export const BusinessRegisterPage = () => {
   }
 
   return (
-    <div className="auth-container">
+    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="auth-background">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="floating-orb" />
         <div className="floating-orb" />
         <div className="floating-orb" />
@@ -368,7 +369,7 @@ export const BusinessRegisterPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo className="sm:mb-10" />
 
-        <div className="auth-card">
+        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8 lg:mb-10">
           <div className="gradient-header" />
@@ -378,8 +379,8 @@ export const BusinessRegisterPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight auth-text mb-2 md:mb-3 lg:mb-2 relative">Create Business Account</h1>
-            <p className="auth-text-muted text-sm md:text-base lg:text-sm font-medium">Join Round for business</p>
+            <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">Create Business Account</h1>
+            <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">Join Round for business</p>
           </motion.div>
         </div>
 
@@ -391,10 +392,10 @@ export const BusinessRegisterPage = () => {
             className="mb-6 sm:mb-8"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm auth-text-muted">
+              <span className="text-sm text-white/85">
                 Step {multiStepForm.currentStep + 1} of {multiStepForm.getTotalSteps()}
               </span>
-              <span className="text-sm auth-text-muted">
+              <span className="text-sm text-white/85">
                 {detailedProgress}% Complete
               </span>
             </div>
@@ -494,9 +495,9 @@ export const BusinessRegisterPage = () => {
 
           {/* Login Link */}
           <div className="text-center mt-6 sm:mt-8">
-            <p className="auth-text-muted text-sm sm:text-base">
+            <p className="text-white/85 text-sm sm:text-base">
               Already have an account?{' '}
-              <Link to="/login/business" className="auth-link brand-primary">
+              <Link to="/login/business" className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
                 Sign in
               </Link>
             </p>

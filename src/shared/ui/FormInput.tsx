@@ -1,12 +1,11 @@
 /**
  * FormInput Component
- * 
- * A comprehensive form input component with two variants:
- * - `auth`: Uses global CSS classes for auth pages (default)
- * - `default`: Uses Tailwind utilities for general forms
- * 
+ *
+ * A comprehensive form input component using Tailwind CSS for consistent styling.
+ * Replaces the legacy variant system with a single Tailwind-based implementation.
+ *
  * @example
- * // Auth variant (auth pages, onboarding)
+ * // Basic usage
  * <FormInput
  *   label="Email Address"
  *   leftIcon={Mail}
@@ -16,11 +15,10 @@
  *   error={errors.email}
  *   required
  * />
- * 
+ *
  * @example
- * // Default variant (settings, modals)
+ * // With help text
  * <FormInput
- *   variant="default"
  *   label="First Name"
  *   leftIcon={User}
  *   value={firstName}
@@ -28,7 +26,7 @@
  *   helpText="Enter your legal first name"
  *   size="lg"
  * />
- * 
+ *
  * @example
  * // With loading state
  * <FormInput
@@ -39,7 +37,7 @@
  *   loading={isFetching}
  *   loadingText="Loading..."
  * />
- * 
+ *
  * @accessibility
  * - Automatically links errors/help text with `aria-describedby`
  * - Sets `aria-invalid` when error is present
@@ -63,7 +61,6 @@ interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'si
   rightIcon?: LucideIcon
   onRightIconClick?: () => void
   helpText?: string
-  variant?: 'default' | 'auth'
   size?: 'sm' | 'md' | 'lg'
   containerClassName?: string
   loading?: boolean
@@ -80,7 +77,6 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       rightIcon: RightIcon,
       onRightIconClick,
       helpText,
-      variant = 'auth', // Changed default to 'auth' for better consistency
       size = 'md',
       className,
       containerClassName = '',
@@ -112,7 +108,6 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       errorId,
       helpTextId,
       hasError,
-      isFocused,
       resolvedType,
       shouldShowPasswordToggle,
       rightIconAriaLabel,
@@ -134,99 +129,86 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 
     const sizeClasses = {
       sm: 'h-9 px-3 text-xs',
-      md: 'h-9 px-3 text-xs', 
-      lg: 'h-9 px-3 text-xs'
+      md: 'h-9 px-3 text-xs',
+      lg: 'h-9 px-3 text-xs',
     }
 
-    const getInputClasses = () => {
-      if (variant === 'auth') {
-        return cn(
-          'auth-input',
-          LeftIcon && 'input-with-icon-left',
-          RightIcon && 'input-with-icon-right',
-          hasError && 'auth-input-error',
-          className
-        )
-      }
+    // Autofill style fixes for browser compatibility
+    const autofillClasses = [
+      // Base autofill state - using auth-bg color (#171719)
+      '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+      '[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
+      '[&:-webkit-autofill]:[background-color:#171719!important]',
+      '[&:-webkit-autofill]:[background-image:none!important]',
+      '[&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s!important]',
+      // Hover state
+      '[&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+      '[&:-webkit-autofill:hover]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
+      '[&:-webkit-autofill:hover]:[background-color:#171719!important]',
+      '[&:-webkit-autofill:hover]:[background-image:none!important]',
+      '[&:-webkit-autofill:hover]:[transition:background-color_5000s_ease-in-out_0s!important]',
+      // Focus state
+      '[&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+      '[&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,1)!important]',
+      '[&:-webkit-autofill:focus]:[background-color:#171719!important]',
+      '[&:-webkit-autofill:focus]:[transition:background-color_5000s_ease-in-out_0s!important]',
+      // Active state
+      '[&:-webkit-autofill:active]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+      '[&:-webkit-autofill:active]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
+      '[&:-webkit-autofill:active]:[background-color:#171719!important]',
+      '[&:-webkit-autofill:active]:[background-image:none!important]',
+      '[&:-webkit-autofill:active]:[transition:background-color_5000s_ease-in-out_0s!important]',
+      // Internal autofill selected
+      '[&:-internal-autofill-selected]:[background-color:#171719!important]',
+      '[&:-internal-autofill-selected]:[background-image:none!important]',
+      '[&:-internal-autofill-selected]:[color:rgba(255,255,255,0.95)!important]',
+      '[&:-internal-autofill-selected]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
+      '[&:-internal-autofill-selected]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+    ]
 
-      // For default variant, use working autofill fixes from auth-input CSS
-      const autofillClasses = [
-        // Base autofill state
-        '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
-        '[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
-        '[&:-webkit-autofill]:[background-color:transparent!important]',
-        '[&:-webkit-autofill]:[background-image:none!important]',
-        '[&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s!important]',
-        // Hover state
-        '[&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
-        '[&:-webkit-autofill:hover]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
-        '[&:-webkit-autofill:hover]:[background-color:transparent!important]',
-        '[&:-webkit-autofill:hover]:[background-image:none!important]',
-        '[&:-webkit-autofill:hover]:[transition:background-color_5000s_ease-in-out_0s!important]',
-        // Focus state
-        '[&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.18)_inset!important]',
-        '[&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,1)!important]',
-        '[&:-webkit-autofill:focus]:[background-color:transparent!important]',
-        '[&:-webkit-autofill:focus]:[transition:background-color_5000s_ease-in-out_0s!important]',
-        // Active state
-        '[&:-webkit-autofill:active]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
-        '[&:-webkit-autofill:active]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
-        '[&:-webkit-autofill:active]:[background-color:transparent!important]',
-        '[&:-webkit-autofill:active]:[background-image:none!important]',
-        '[&:-webkit-autofill:active]:[transition:background-color_5000s_ease-in-out_0s!important]',
-        // Internal autofill selected
-        '[&:-internal-autofill-selected]:[background-color:rgba(255,255,255,0.12)!important]',
-        '[&:-internal-autofill-selected]:[background-image:none!important]',
-        '[&:-internal-autofill-selected]:[color:rgba(255,255,255,0.95)!important]',
-        '[&:-internal-autofill-selected]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
-        '[&:-internal-autofill-selected]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
-      ]
-
-      return cn(
-        'w-full rounded-lg sm:rounded-lg border transition-all duration-200',
-        'bg-[#171719] border-[#333333] text-white placeholder-[#737373]',
-        'focus:border-[#14bdea] focus:outline-none',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]',
-        // Mobile-specific improvements
-        'text-base sm:text-sm md:text-base', // Prevent iOS zoom on focus
-        'leading-normal sm:leading-relaxed',
-        ...autofillClasses,
-        sizeClasses[size],
-        LeftIcon && 'pl-10',
-        RightIcon && 'pr-10',
-        hasError && 'border-red-400 focus:border-red-400',
-        isDisabled && 'opacity-50 cursor-not-allowed',
-        isFocused && 'ring-1 ring-[#14bdea]/40',
-        className
-      )
-    }
+    const inputClasses = cn(
+      // Base styles
+      'w-full rounded-lg border transition-all duration-200',
+      'bg-auth-bg border-auth-border text-white placeholder:text-auth-placeholder',
+      'font-light tracking-tight appearance-none outline-none',
+      // Focus & hover states
+      'hover:border-auth-border-hover',
+      'focus:border-auth-primary focus:bg-auth-bg',
+      // Mobile-specific improvements
+      'text-xs leading-normal',
+      // Autofill fixes
+      ...autofillClasses,
+      // Size variants
+      sizeClasses[size],
+      // Icon padding
+      LeftIcon && 'pl-9',
+      RightIcon && 'pr-9',
+      // Error state
+      hasError && 'border-auth-error focus:border-auth-error bg-auth-error-bg',
+      // Disabled state
+      isDisabled && 'opacity-50 cursor-not-allowed',
+      // Custom className
+      className
+    )
 
     return (
       <div className={cn('space-y-2', containerClassName)}>
         {label && (
-          <label 
-            htmlFor={inputId} 
-            className={variant === 'auth' ? 'auth-label' : 'block text-sm font-normal text-white/90 tracking-tight'}
-          >
+          <label htmlFor={inputId} className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
             {label}
-            {required && <span className="text-[#D417C8] ml-1">*</span>}
+            {required && <span className="text-auth-magenta ml-1">*</span>}
           </label>
         )}
-        
+
         <div className="relative">
-          {loading && variant === 'default' && (
-            <Loader2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-primary animate-spin z-10" />
+          {loading && (
+            <Loader2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary animate-spin z-10" />
           )}
-          
+
           {!loading && LeftIcon && (
-            <LeftIcon 
-              className={variant === 'auth' 
-                ? 'input-icon-left auth-icon-primary' 
-                : 'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400'
-              } 
-            />
+            <LeftIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
           )}
-          
+
           <input
             ref={ref}
             id={inputId}
@@ -242,29 +224,22 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             required={required}
             name={name}
             autoComplete={autoComplete}
-            className={getInputClasses()}
+            className={inputClasses}
             aria-invalid={hasError}
-            aria-describedby={cn(
-              errorId,
-              helpTextId
-            )}
+            aria-describedby={cn(errorId, helpTextId)}
             aria-busy={loading}
             {...restProps}
           />
-          
-          {loading && variant === 'auth' && (
-            <Loader2 className="input-icon-right auth-icon animate-spin" />
-          )}
-          
+
+          {loading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon animate-spin z-10" />}
+
           {!loading && RightIcon && (
-            <RightIcon 
-              className={variant === 'auth' 
-                ? 'input-icon-right auth-icon' 
-                : cn(
-                    'absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400',
-                    onRightIconClick && 'cursor-pointer'
-                  )
-              }
+            <RightIcon
+              className={cn(
+                'absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon z-10',
+                'transition-colors duration-200',
+                onRightIconClick && 'cursor-pointer hover:text-white/90'
+              )}
               onClick={handleRightIconClick}
               {...(onRightIconClick && { role: 'button', tabIndex: 0 })}
             />
@@ -274,36 +249,23 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             <PlainButton
               type="button"
               onClick={handleRightIconClick}
-              className={variant === 'auth'
-                ? 'input-icon-right auth-icon'
-                : 'absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-white transition-colors'}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-auth-icon hover:text-white/90 transition-colors z-10"
               aria-label={rightIconAriaLabel}
             >
               {resolvedType === 'password' ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
             </PlainButton>
           )}
         </div>
-        
+
         {error && (
-          <p 
-            id={errorId}
-            className={variant === 'auth' 
-              ? 'text-sm auth-validation-error flex items-center space-x-2' 
-              : 'text-sm text-[#D417C8] flex items-center space-x-1'
-            }
-            role="alert"
-            aria-live="polite"
-          >
-            {variant !== 'auth' && <AlertCircle className="w-3.5 h-3.5" />}
+          <p id={errorId} className="text-sm text-auth-error font-medium flex items-center space-x-2" role="alert" aria-live="polite">
+            <AlertCircle className="w-3.5 h-3.5" />
             <span>{error}</span>
           </p>
         )}
-        
+
         {helpText && !error && (
-          <p 
-            id={helpTextId}
-            className="text-xs text-gray-500 dark:text-polar-500 leading-snug"
-          >
+          <p id={helpTextId} className="text-xs text-gray-500 leading-snug">
             {helpText}
           </p>
         )}

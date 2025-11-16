@@ -4,6 +4,7 @@ import { Building, Hash, CreditCard, AlertCircle } from 'lucide-react'
 import { useCompanyDetailsFormController } from '../hooks/useCompanyDetailsFormController'
 
 import type { CompanyInfo, Currency } from '@/shared/types/business'
+import { Input } from '@/shared/ui'
 import { ApiDropdown, currencyDropdownConfig } from '@/shared/ui/ApiDropdown'
 import type { ValidationError } from '@/shared/utils/validation'
 
@@ -50,7 +51,7 @@ export const CompanyDetailsForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-2xl font-normal tracking-tight auth-text mb-2"
+          className="text-2xl font-normal tracking-tight text-white mb-2"
         >
           Company Information
         </motion.h2>
@@ -58,7 +59,7 @@ export const CompanyDetailsForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="auth-text-muted"
+          className="text-white/85"
         >
           Tell us about your company for billing and compliance
         </motion.p>
@@ -66,21 +67,20 @@ export const CompanyDetailsForm = ({
 
       {/* Company Name */}
       <div>
-        <label htmlFor="companyName" className="auth-label">
+        <label htmlFor="companyName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
           Company Name *
         </label>
-        <div className="input-container">
-          <Building className="input-icon-left auth-icon-primary" />
-          <input
+        <div className="relative">
+          <Building className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+          <Input
             id="companyName"
             type="text"
             value={companyInfo.companyName}
             onChange={e => handleInputChange('companyName', e.target.value)}
             onBlur={e => handleInputBlur('companyName', e.target.value)}
             placeholder="Acme Corporation"
-            className={`auth-input input-with-icon-left ${
-              hasCompanyError('companyName') ? 'auth-input-error' : ''
-            }`}
+            className="pl-9"
+            variant={hasCompanyError('companyName') ? 'error' : 'default'}
             required
           />
         </div>
@@ -88,7 +88,7 @@ export const CompanyDetailsForm = ({
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+            className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
           >
             <AlertCircle className="w-4 h-4" />
             <span>{getCompanyError('companyName')}</span>
@@ -100,21 +100,20 @@ export const CompanyDetailsForm = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Registration Number */}
         <div>
-          <label htmlFor="registrationNumber" className="auth-label">
+          <label htmlFor="registrationNumber" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
             Registration Number *
           </label>
-          <div className="input-container">
-            <Hash className="input-icon-left auth-icon-primary" />
-            <input
+          <div className="relative">
+            <Hash className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+            <Input
               id="registrationNumber"
               type="text"
               value={companyInfo.registrationNumber}
               onChange={e => handleInputChange('registrationNumber', e.target.value)}
               onBlur={e => handleInputBlur('registrationNumber', e.target.value)}
               placeholder="12345678"
-              className={`auth-input input-with-icon-left ${
-                hasCompanyError('registrationNumber') ? 'auth-input-error' : ''
-              }`}
+              className="pl-9"
+              variant={hasCompanyError('registrationNumber') ? 'error' : 'default'}
               required
             />
           </div>
@@ -122,7 +121,7 @@ export const CompanyDetailsForm = ({
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+              className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
             >
               <AlertCircle className="w-4 h-4" />
               <span>{getCompanyError('registrationNumber')}</span>
@@ -132,28 +131,27 @@ export const CompanyDetailsForm = ({
 
         {/* Tax ID */}
         <div>
-          <label htmlFor="taxId" className="auth-label">
+          <label htmlFor="taxId" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
             Tax ID
           </label>
-          <div className="input-container">
-            <CreditCard className="input-icon-left auth-icon-primary" />
-            <input
+          <div className="relative">
+            <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon-primary w-4 h-4" />
+            <Input
               id="taxId"
               type="text"
               value={companyInfo.taxId}
               onChange={e => handleInputChange('taxId', e.target.value)}
               onBlur={e => handleInputBlur('taxId', e.target.value)}
               placeholder="XX-XXXXXXX"
-              className={`auth-input input-with-icon-left ${
-                hasCompanyError('taxId') ? 'auth-input-error' : ''
-              }`}
+              className="pl-9"
+              variant={hasCompanyError('taxId') ? 'error' : 'default'}
             />
           </div>
           {hasCompanyError('taxId') && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+              className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
             >
               <AlertCircle className="w-4 h-4" />
               <span>{getCompanyError('taxId')}</span>
@@ -164,7 +162,7 @@ export const CompanyDetailsForm = ({
 
       {/* Currency */}
       <div>
-        <label htmlFor="currency" className="auth-label">
+        <label htmlFor="currency" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
           Currency *
         </label>
         <ApiDropdown
@@ -185,7 +183,7 @@ export const CompanyDetailsForm = ({
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+            className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
           >
             <AlertCircle className="w-4 h-4" />
             <span>{getCompanyError('currency')}</span>

@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-r
 import React from 'react'
 
 import { Button, IconButton } from './Button'
+import { Select } from './Select'
 
 interface PaginationProps {
   currentPage: number
@@ -92,18 +93,19 @@ const Pagination: React.FC<PaginationProps> = ({
         {showItemsPerPage && (
           <div className="flex items-center space-x-2">
             <label htmlFor="items-per-page" className="text-sm text-white/70 whitespace-nowrap">Items per page:</label>
-            <select 
+            <Select
               id="items-per-page"
               value={itemsPerPage}
               onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-              className="border border-white/10 rounded-lg px-3 py-1 text-sm text-white focus:outline-none focus:border-[#14bdea]"
+              size="sm"
+              className="w-20"
             >
               {pageSizeOptions.map(size => (
                 <option key={size} value={size} className="bg-[#0a0a0a]">
                   {size}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         )}
       </div>

@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useS
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 import { useViewPreferences } from '@/shared/hooks/useViewPreferences'
-import { customerService } from '@/shared/services/api/customer.service'
+import { customerService, CustomerType as ApiCustomerType } from '@/shared/services/api/customer.service'
 import type { CustomerResponse, CustomerSearchParams } from '@/shared/services/api/customer.service'
 import type { ViewMode, ViewModeOption } from '@/shared/ui/ViewModeToggle'
 import type { FilterField } from '@/shared/widgets/SearchFilterToolbar'
@@ -62,6 +62,19 @@ const mapSortFieldToApi = (field: SortField) => {
   if (field === 'signupDate') return 'CreatedDate'
   return field.charAt(0).toUpperCase() + field.slice(1)
 }
+
+const STATUS_LABELS: Record<string, string> = {
+  '1': 'Active',
+  '2': 'Inactive',
+  '3': 'Suspended',
+  '4': 'Cancelled',
+  Active: 'Active',
+  Inactive: 'Inactive',
+  Suspended: 'Suspended',
+  Cancelled: 'Cancelled',
+}
+
+const normalizeStatus = (value: string) => STATUS_LABELS[value] ?? value
 
 export const useCustomersController = (): UseCustomersControllerResult => {
   const { showError, showSuccess } = useGlobalToast()
@@ -139,21 +152,53 @@ export const useCustomersController = (): UseCustomersControllerResult => {
         setSkeletonLoading(true)
       }
 
+      const statusFilter = selectedStatus || undefined
+      const statusLabelFilter = statusFilter ? normalizeStatus(statusFilter) : undefined
+      const typeFilter = selectedCustomerType || undefined
+      const portalAccessFilter = selectedPortalAccess || undefined
+      const currencyFilter = selectedCurrency || undefined
+
       const searchParams: CustomerSearchParams = {
         pageNumber: currentPage,
         pageSize: itemsPerPageState,
         searchQuery: searchQuery.trim() || undefined,
         orderBy: mapSortFieldToApi(sortConfig.field),
         isAscending: sortConfig.direction === 'asc',
-        Status: selectedStatus || undefined,
-        Type: selectedCustomerType || undefined,
-        Currency: selectedCurrency || undefined,
-        PortalAccess: selectedPortalAccess || undefined,
+        Status: statusFilter,
+        Type: typeFilter,
+        Currency: currencyFilter,
+        PortalAccess: portalAccessFilter,
       }
 
       const response = await customerService.getAll(searchParams)
-      setCustomers(response.items)
-      setTotalCount(response.totalCount)
+
+      const filteredItems = response.items.filter((customer) => {
+        if (typeFilter && customer.type !== typeFilter) return false
+
+        if (statusLabelFilter) {
+          const customerStatus = normalizeStatus(String(customer.status))
+          if (customerStatus !== statusLabelFilter && String(customer.status) !== statusFilter) return false
+        }
+
+        if (currencyFilter && customer.currency !== currencyFilter) return false
+
+        if (portalAccessFilter) {
+          const wantsPortalAccess = portalAccessFilter === 'true'
+          if (customer.portalAccess !== wantsPortalAccess) return false
+        }
+
+        return true
+      })
+
+      const hasFiltersApplied =
+        Boolean(typeFilter) ||
+        Boolean(statusFilter) ||
+        Boolean(currencyFilter) ||
+        Boolean(portalAccessFilter) ||
+        Boolean(searchQuery.trim())
+
+      setCustomers(filteredItems)
+      setTotalCount(hasFiltersApplied ? filteredItems.length : response.totalCount)
     } catch (error: unknown) {
       let errorMessage = 'Failed to load customers'
       const hasResponse = (
@@ -279,8 +324,8 @@ export const useCustomersController = (): UseCustomersControllerResult => {
         onClear: () => withPageReset(setSelectedCustomerType)(''),
         options: [
           { id: '', name: 'All Types' },
-          { id: 'Individual', name: 'Individual' },
-          { id: 'Business', name: 'Business' },
+          { id: ApiCustomerType.Individual, name: 'Individual' },
+          { id: ApiCustomerType.Business, name: 'Business' },
         ],
       },
       {
@@ -292,10 +337,10 @@ export const useCustomersController = (): UseCustomersControllerResult => {
         onClear: () => withPageReset(setSelectedStatus)(''),
         options: [
           { id: '', name: 'All Status' },
-          { id: 'Active', name: 'Active' },
-          { id: 'Inactive', name: 'Inactive' },
-          { id: 'Suspended', name: 'Suspended' },
-          { id: 'Cancelled', name: 'Cancelled' },
+          { id: '1', name: normalizeStatus('1') },
+          { id: '2', name: normalizeStatus('2') },
+          { id: '3', name: normalizeStatus('3') },
+          { id: '4', name: normalizeStatus('4') },
         ],
       },
       {
