@@ -105,7 +105,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
             <div
               key={option.value}
               className={cn(
-                'flex items-center p-4 rounded-lg border transition-all duration-200 cursor-pointer',
+                'flex items-center p-4 min-h-[44px] rounded-lg border transition-all duration-200 cursor-pointer',
                 isSelected
                   ? 'border-[#14BDEA] bg-[#14BDEA]/10'
                   : 'border-white/10 hover:border-white/20',

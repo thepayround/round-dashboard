@@ -23,9 +23,9 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'p-2 w-11 h-11 lg:w-10 lg:h-10',
-  md: 'p-2.5 w-11 h-11 lg:w-10 lg:h-10',
-  lg: 'p-2.5 w-12 h-12 lg:w-11 lg:h-11'
+  sm: 'p-2 w-11 h-11 lg:w-9 lg:h-9',
+  md: 'p-2.5 w-11 h-11 lg:w-9 lg:h-9',
+  lg: 'p-2.5 w-12 h-12 lg:w-9 lg:h-9'
 }
 
 const iconSizes = {

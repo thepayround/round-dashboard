@@ -7,19 +7,20 @@
  * - PhoneInput (country selector) ✅ (Refactored)
  * 
  * ## Usage:
- * 
+ *
  * ```tsx
  * import { dropdownStyles, getOptionClasses } from '../dropdown-styles.config'
- * 
+ * import { Input } from '@/shared/ui'
+ *
  * // Container
  * <div className={`${dropdownStyles.container.base} ${dropdownStyles.container.maxHeight}`}>
- * 
- * // Search input
- * <input className={dropdownStyles.search.input} />
- * 
+ *
+ * // Search input (using Input component)
+ * <Input className={dropdownStyles.search.input} />
+ *
  * // Option with state
  * <div className={getOptionClasses(isHighlighted, isSelected)}>
- * 
+ *
  * // Option content
  * <div className={dropdownStyles.option.label}>{label}</div>
  * <div className={dropdownStyles.option.description}>{description}</div>
@@ -77,14 +78,14 @@ export const dropdownStyles = {
 
   // Individual option item
   option: {
-    base: 'px-2.5 py-2 rounded-lg cursor-pointer flex items-center justify-between',
+    base: 'px-2.5 py-3 lg:py-2 min-h-[44px] lg:min-h-0 rounded-lg cursor-pointer flex items-center justify-between',
     spacing: 'space-x-2.5',
-    
+
     // States
     highlighted: 'bg-[#14BDEA]/20 border border-[#14BDEA]/30',
     selected: 'bg-[#14BDEA]/20 border-[#14BDEA]/30',
     default: 'hover:bg-white/10 border border-transparent',
-    
+
     // Content
     label: 'text-white/95 font-light truncate text-xs',
     description: 'text-white/60 text-xs truncate',
