@@ -1,175 +1,222 @@
 /**
  * NumberInput Component
  *
- * An enhanced number input with increment/decrement buttons, min/max constraints,
- * and keyboard support (Arrow Up/Down).
+ * A specialized input component for numeric values with formatting,
+ * validation, and optional increment/decrement controls.
  *
  * @example
  * ```tsx
  * <NumberInput
- *   label="Quantity"
- *   value={quantity}
- *   onChange={setQuantity}
- *   min={1}
- *   max={100}
- *   step={1}
+ *   label="Price"
+ *   value={price}
+ *   onChange={setPrice}
+ *   min={0}
+ *   precision={2}
+ *   formatThousands
+ *   showControls
  * />
  * ```
  */
-import { Plus, Minus } from 'lucide-react'
-import React, { useCallback } from 'react'
+import { Minus, Plus } from 'lucide-react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { IconButton } from '../Button'
-import { Input } from '../Input'
+import { Input, type InputProps } from '../Input'
 
-import { cn } from '@/shared/utils/cn'
-
-export interface NumberInputProps {
-  /** Current value */
-  value?: number | string
-  /** Change handler */
-  onChange?: (value: number) => void
-  /** Label text */
-  label?: string
-  /** Minimum value */
+export interface NumberInputProps extends Omit<InputProps, 'value' | 'onChange' | 'type'> {
+  /** Current numeric value */
+  value?: number
+  /** Callback when value changes */
+  onChange?: (value: number | undefined) => void
+  /** Minimum allowed value */
   min?: number
-  /** Maximum value */
+  /** Maximum allowed value */
   max?: number
-  /** Step increment */
+  /** Increment/decrement step (default: 1) */
   step?: number
-  /** Placeholder text */
-  placeholder?: string
-  /** Error message */
-  error?: string
-  /** Helper text */
-  helperText?: string
-  /** Required field */
-  required?: boolean
-  /** Disabled state */
-  disabled?: boolean
-  /** Container class name */
-  containerClassName?: string
-  /** Show increment/decrement buttons */
-  showButtons?: boolean
-  /** Input ID */
-  id?: string
+  /** Number of decimal places (default: 0) */
+  precision?: number
+  /** Show increment/decrement buttons (default: false) */
+  showControls?: boolean
+  /** Allow negative numbers (default: true) */
+  allowNegative?: boolean
+  /** Format with thousands separators (default: false) */
+  formatThousands?: boolean
+  /** Show clear button when input has value (default: false) */
+  showClearButton?: boolean
 }
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
   (
     {
-      value = '',
+      value,
       onChange,
-      label,
       min,
       max,
       step = 1,
-      placeholder,
-      error,
-      helperText,
-      required,
+      precision = 0,
+      showControls = false,
+      allowNegative = true,
+      formatThousands = false,
+      showClearButton = false,
       disabled,
-      containerClassName,
-      showButtons = true,
-      id,
+      className,
+      ...inputProps
     },
     ref
   ) => {
-    const numericValue = typeof value === 'string' ? parseFloat(value) || 0 : value
+    const [displayValue, setDisplayValue] = useState('')
 
-    const handleIncrement = useCallback(() => {
-      if (disabled) return
-      let newValue = numericValue + step
-      if (max !== undefined) newValue = Math.min(newValue, max)
-      if (min !== undefined) newValue = Math.max(newValue, min)
-      onChange?.(newValue)
-    }, [numericValue, step, max, min, onChange, disabled])
+    // Format number for display
+    const formatNumber = useCallback((num: number): string => {
+      const formatted = num.toFixed(precision)
+      if (formatThousands) {
+        const [int, dec] = formatted.split('.')
+        // eslint-disable-next-line security/detect-unsafe-regex
+        const withCommas = int.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        return dec !== undefined ? `${withCommas}.${dec}` : withCommas
+      }
+      return formatted
+    }, [precision, formatThousands])
 
-    const handleDecrement = useCallback(() => {
-      if (disabled) return
-      let newValue = numericValue - step
-      if (min !== undefined) newValue = Math.max(newValue, min)
-      if (max !== undefined) newValue = Math.min(newValue, max)
-      onChange?.(newValue)
-    }, [numericValue, step, min, max, onChange, disabled])
+    // Parse display value to number
+    const parseNumber = (str: string): number | undefined => {
+      if (str === '' || str === '-') return undefined
+      const cleaned = str.replace(/,/g, '')
+      const parsed = parseFloat(cleaned)
+      return isNaN(parsed) ? undefined : parsed
+    }
+
+    // Clamp value to min/max bounds
+    const clampValue = (num: number): number => {
+      let clamped = num
+      if (min !== undefined) clamped = Math.max(min, clamped)
+      if (max !== undefined) clamped = Math.min(max, clamped)
+      if (!allowNegative && clamped < 0) clamped = 0
+      // Round to precision
+      const multiplier = Math.pow(10, precision)
+      return Math.round(clamped * multiplier) / multiplier
+    }
+
+    // Update display when value changes
+    useEffect(() => {
+      if (value !== undefined) {
+        setDisplayValue(formatNumber(value))
+      } else {
+        setDisplayValue('')
+      }
+    }, [value, formatNumber])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const inputValue = e.target.value
-      if (inputValue === '') {
-        onChange?.(0)
+      const newValue = e.target.value
+
+      // Allow typing negative sign
+      if (newValue === '-' && allowNegative) {
+        setDisplayValue('-')
         return
       }
 
-      let newValue = parseFloat(inputValue)
-      if (isNaN(newValue)) return
+      // Allow empty string
+      if (newValue === '') {
+        setDisplayValue('')
+        onChange?.(undefined)
+        return
+      }
 
-      if (min !== undefined) newValue = Math.max(newValue, min)
-      if (max !== undefined) newValue = Math.min(newValue, max)
+      // Only allow valid number characters
+      const validChars = /^-?[\d,]*\.?\d*$/
+      if (!validChars.test(newValue)) {
+        return
+      }
 
-      onChange?.(newValue)
-    }
+      setDisplayValue(newValue)
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        handleIncrement()
-      } else if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        handleDecrement()
+      const parsed = parseNumber(newValue)
+      if (parsed !== undefined) {
+        const clamped = clampValue(parsed)
+        onChange?.(clamped)
       }
     }
 
+    const handleBlur = () => {
+      // Format on blur
+      if (value !== undefined) {
+        setDisplayValue(formatNumber(value))
+      }
+    }
+
+    const increment = () => {
+      const current = value ?? 0
+      const newValue = clampValue(current + step)
+      onChange?.(newValue)
+    }
+
+    const decrement = () => {
+      const current = value ?? 0
+      const newValue = clampValue(current - step)
+      onChange?.(newValue)
+    }
+
+    const handleClear = () => {
+      onChange?.(undefined)
+    }
+
+    const canIncrement = max === undefined || (value ?? 0) < max
+    const canDecrement = min === undefined || (value ?? 0) > min
+
     return (
-      <div className={cn(containerClassName)}>
-        {label && (
-          <label
-            htmlFor={id}
-            className="block text-sm font-normal text-white/90 mb-2 tracking-tight"
-          >
-            {label}
-            {required && <span className="text-[#D417C8] ml-1">*</span>}
-          </label>
-        )}
+      <div className="relative">
+        <Input
+          {...inputProps}
+          ref={ref}
+          type="text"
+          inputMode="decimal"
+          value={displayValue}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          disabled={disabled}
+          className={className}
+        />
 
-        <div className="relative">
-          <Input
-            ref={ref}
-            id={id}
-            type="number"
-            value={value}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            placeholder={placeholder}
-            error={error}
-            helperText={helperText}
-            disabled={disabled}
-            min={min}
-            max={max}
-            step={step}
-            className={cn(showButtons && 'pr-20')}
-          />
+        {/* Controls Container */}
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          {/* Clear Button */}
+          {showClearButton && value !== undefined && !disabled && (
+            <IconButton
+              icon={Minus}
+              size="sm"
+              variant="ghost"
+              onClick={handleClear}
+              aria-label="Clear value"
+              className="w-6 h-6 lg:w-5 lg:h-5 p-0"
+              tabIndex={-1}
+            />
+          )}
 
-          {showButtons && (
-            <div className="absolute right-1 top-1/2 -translate-y-1/2 flex gap-1">
+          {/* Increment/Decrement Controls */}
+          {showControls && (
+            <>
               <IconButton
                 icon={Minus}
-                onClick={handleDecrement}
-                disabled={disabled || (min !== undefined && numericValue <= min)}
-                aria-label="Decrease value"
                 size="sm"
                 variant="ghost"
-                className="h-9 w-9 border border-white/10 hover:border-white/20"
+                onClick={decrement}
+                disabled={disabled || !canDecrement}
+                aria-label="Decrease value"
+                className="w-6 h-6 lg:w-5 lg:h-5 p-0"
+                tabIndex={-1}
               />
               <IconButton
                 icon={Plus}
-                onClick={handleIncrement}
-                disabled={disabled || (max !== undefined && numericValue >= max)}
-                aria-label="Increase value"
                 size="sm"
                 variant="ghost"
-                className="h-9 w-9 border border-white/10 hover:border-white/20"
+                onClick={increment}
+                disabled={disabled || !canIncrement}
+                aria-label="Increase value"
+                className="w-6 h-6 lg:w-5 lg:h-5 p-0"
+                tabIndex={-1}
               />
-            </div>
+            </>
           )}
         </div>
       </div>
@@ -178,4 +225,3 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 )
 
 NumberInput.displayName = 'NumberInput'
-

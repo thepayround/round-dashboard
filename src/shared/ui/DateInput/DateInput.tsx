@@ -1,8 +1,8 @@
 /**
  * DateInput Component
  *
- * A date input component with calendar icon and proper formatting.
- * Supports min/max dates and validation.
+ * A specialized input component for date selection with calendar icon
+ * and proper validation. Uses native date picker for MVP.
  *
  * @example
  * ```tsx
@@ -10,43 +10,26 @@
  *   label="Start Date"
  *   value={startDate}
  *   onChange={setStartDate}
- *   min="2024-01-01"
- *   max="2025-12-31"
+ *   min={new Date()}
  * />
  * ```
  */
 import { Calendar } from 'lucide-react'
 import React from 'react'
 
-import { Input } from '../Input'
+import { Input, type InputProps } from '../Input'
 
-import { cn } from '@/shared/utils/cn'
-
-export interface DateInputProps {
-  /** Current value (YYYY-MM-DD format) */
-  value?: string
-  /** Change handler */
-  onChange?: (value: string) => void
-  /** Label text */
-  label?: string
-  /** Minimum date (YYYY-MM-DD) */
-  min?: string
-  /** Maximum date (YYYY-MM-DD) */
-  max?: string
-  /** Placeholder text */
-  placeholder?: string
-  /** Error message */
-  error?: string
-  /** Helper text */
-  helperText?: string
-  /** Required field */
-  required?: boolean
-  /** Disabled state */
-  disabled?: boolean
-  /** Container class name */
-  containerClassName?: string
-  /** Input ID */
-  id?: string
+export interface DateInputProps extends Omit<InputProps, 'value' | 'onChange' | 'type' | 'min' | 'max'> {
+  /** Current date value (Date object or ISO string) */
+  value?: Date | string | null
+  /** Callback when date changes */
+  onChange?: (date: Date | undefined) => void
+  /** Minimum allowed date */
+  min?: Date | string
+  /** Maximum allowed date */
+  max?: Date | string
+  /** Show calendar icon (default: true) */
+  showCalendarIcon?: boolean
 }
 
 export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
@@ -54,45 +37,48 @@ export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
     {
       value,
       onChange,
-      label,
       min,
       max,
-      placeholder = 'MM/DD/YYYY',
-      error,
-      helperText,
-      required,
-      disabled,
-      containerClassName,
-      id,
+      showCalendarIcon = true,
+      placeholder = 'Select date',
+      ...inputProps
     },
     ref
   ) => {
+    // Convert Date to YYYY-MM-DD format
+    const toDateString = (date: Date | string | null | undefined): string => {
+      if (!date) return ''
+      const d = date instanceof Date ? date : new Date(date)
+      if (isNaN(d.getTime())) return ''
+      return d.toISOString().split('T')[0]
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange?.(e.target.value)
+      const dateValue = e.target.value
+      if (dateValue === '') {
+        onChange?.(undefined)
+      } else {
+        const date = new Date(dateValue + 'T00:00:00')
+        if (!isNaN(date.getTime())) {
+          onChange?.(date)
+        }
+      }
     }
 
     return (
-      <div className={cn(containerClassName)}>
-        <Input
-          ref={ref}
-          id={id}
-          type="date"
-          value={value}
-          onChange={handleChange}
-          label={label}
-          placeholder={placeholder}
-          error={error}
-          helperText={helperText}
-          required={required}
-          disabled={disabled}
-          min={min}
-          max={max}
-          leftIcon={Calendar}
-        />
-      </div>
+      <Input
+        {...inputProps}
+        ref={ref}
+        type="date"
+        value={toDateString(value)}
+        onChange={handleChange}
+        min={toDateString(min)}
+        max={toDateString(max)}
+        leftIcon={showCalendarIcon ? Calendar : undefined}
+        placeholder={placeholder}
+      />
     )
   }
 )
 
 DateInput.displayName = 'DateInput'
-

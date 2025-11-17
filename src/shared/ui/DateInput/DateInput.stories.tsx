@@ -84,7 +84,7 @@ export const Disabled: Story = {
 // Interactive example
 export const Interactive: Story = {
   render: () => {
-    const [date, setDate] = useState('')
+    const [date, setDate] = useState<Date | undefined>()
 
     return (
       <div className="p-6 bg-[#0a0a0a] space-y-4">
@@ -98,7 +98,7 @@ export const Interactive: Story = {
           <div className="p-4 bg-[#171719] border border-[#333333] rounded-lg">
             <p className="text-xs text-white/60">Selected date:</p>
             <p className="text-sm text-white">
-              {new Date(date).toLocaleDateString('en-US', {
+              {date.toLocaleDateString('en-US', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
@@ -115,8 +115,8 @@ export const Interactive: Story = {
 // Date range example
 export const DateRange: Story = {
   render: () => {
-    const [startDate, setStartDate] = useState('')
-    const [endDate, setEndDate] = useState('')
+    const [startDate, setStartDate] = useState<Date | undefined>()
+    const [endDate, setEndDate] = useState<Date | undefined>()
 
     return (
       <div className="p-6 bg-[#0a0a0a]">
@@ -127,17 +127,17 @@ export const DateRange: Story = {
             onChange={(value) => {
               setStartDate(value)
               // Clear end date if it's before new start date
-              if (endDate && value > endDate) {
-                setEndDate('')
+              if (endDate && value && value > endDate) {
+                setEndDate(undefined)
               }
             }}
-            max={endDate || undefined}
+            max={endDate}
           />
           <DateInput
             label="End Date"
             value={endDate}
             onChange={setEndDate}
-            min={startDate || undefined}
+            min={startDate}
             disabled={!startDate}
             helperText={!startDate ? 'Select start date first' : undefined}
           />

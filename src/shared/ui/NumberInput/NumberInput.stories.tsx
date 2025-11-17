@@ -24,7 +24,7 @@ const meta: Meta<typeof NumberInput> = {
       control: 'number',
       description: 'Increment/decrement step',
     },
-    showButtons: {
+    showControls: {
       control: 'boolean',
       description: 'Show increment/decrement buttons',
     },
@@ -58,7 +58,7 @@ export const WithButtons: Story = {
     min: 0,
     max: 100,
     step: 5,
-    showButtons: true,
+    showControls: true,
   },
 }
 
@@ -111,7 +111,7 @@ export const WithoutButtons: Story = {
   args: {
     label: 'Manual Entry Only',
     value: 25,
-    showButtons: false,
+    showControls: false,
     helperText: 'Use keyboard arrows or type the number',
   },
 }
@@ -119,7 +119,7 @@ export const WithoutButtons: Story = {
 // Interactive example
 export const Interactive: Story = {
   render: () => {
-    const [value, setValue] = useState(10)
+    const [value, setValue] = useState<number | undefined>(10)
 
     return (
       <div className="p-6 bg-[#0a0a0a] space-y-4">
@@ -134,7 +134,7 @@ export const Interactive: Story = {
         />
         <div className="p-4 bg-[#171719] border border-[#333333] rounded-lg">
           <p className="text-xs text-white/60">Current value:</p>
-          <p className="text-lg text-white font-normal">{value}</p>
+          <p className="text-lg text-white font-normal">{value ?? 'undefined'}</p>
         </div>
       </div>
     )
@@ -144,7 +144,7 @@ export const Interactive: Story = {
 // Keyboard demo
 export const KeyboardControl: Story = {
   render: () => {
-    const [value, setValue] = useState(5)
+    const [value, setValue] = useState<number | undefined>(5)
 
     return (
       <div className="p-6 bg-[#0a0a0a]">
@@ -172,7 +172,7 @@ export const AllStates: Story = {
       <NumberInput label="With error" value={-1} error="Must be positive" onChange={() => {}} />
       <NumberInput label="With helper" value={5} helperText="Enter a number between 1-10" onChange={() => {}} />
       <NumberInput label="Disabled" value={42} disabled onChange={() => {}} />
-      <NumberInput label="Without buttons" value={25} showButtons={false} onChange={() => {}} />
+      <NumberInput label="Without buttons" value={25} showControls={false} onChange={() => {}} />
     </div>
   ),
 }
