@@ -2,7 +2,9 @@
 import { User, Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 
+
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
+import { SocialLoginButton } from '../components/SocialLoginButton'
 import { usePersonalRegisterController } from '../hooks/usePersonalRegisterController'
 
 import { FacebookIcon } from '@/features/auth/components/icons/SocialIcons'
@@ -10,7 +12,6 @@ import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { FormInput } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
-import { Button } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
 
@@ -213,16 +214,10 @@ export const PersonalRegisterPage = () => {
               onError={(error) => showError(error)}
             />
 
-            <Button
-              type="button"
-              variant="secondary"
-              size="md"
-              fullWidth
-              className="h-9"
+            <SocialLoginButton
+              label="Facebook"
               icon={FacebookIcon}
-            >
-              Facebook
-            </Button>
+            />
           </div>
 
           {/* Login Link */}
@@ -240,4 +235,3 @@ export const PersonalRegisterPage = () => {
     </div>
   )
 }
-

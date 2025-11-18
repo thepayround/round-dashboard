@@ -2,7 +2,9 @@
 import { Mail, Lock, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
+
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
+import { SocialLoginButton } from '../components/SocialLoginButton'
 import { useBusinessLoginController } from '../hooks/useBusinessLoginController'
 
 import { FacebookIcon } from '@/features/auth/components/icons/SocialIcons'
@@ -10,7 +12,6 @@ import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthInput } from '@/shared/ui/AuthInput'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
-import { Button } from '@/shared/ui/Button'
 
 export const BusinessLoginPage = () => {
   const { showSuccess, showError } = useGlobalToast()
@@ -136,15 +137,10 @@ export const BusinessLoginPage = () => {
                 onError={(error) => showError(error)}
               />
 
-              <Button
-                type="button"
-                variant="ghost"
-                size="md"
-                className="w-full h-9 bg-auth-bg border border-auth-border text-white rounded-lg transition-colors duration-200 hover:bg-auth-bg/80"
+              <SocialLoginButton
+                label="Facebook"
                 icon={FacebookIcon}
-              >
-                Facebook
-              </Button>
+              />
             </div>
 
             {/* Links */}

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 import { GoogleLoginButton } from '../components/GoogleLoginButton'
+import { SocialLoginButton } from '../components/SocialLoginButton'
 
 import { FacebookIcon } from '@/features/auth/components/icons/SocialIcons'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
@@ -13,7 +14,7 @@ import { apiClient } from '@/shared/services/apiClient'
 import { Input } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
-import { Button, IconButton } from '@/shared/ui/Button'
+import { IconButton } from '@/shared/ui/Button'
 import { validators, handleApiError } from '@/shared/utils'
 
 export const PersonalLoginPage = () => {
@@ -204,15 +205,10 @@ export const PersonalLoginPage = () => {
                 onError={(error) => showError(error)}
               />
 
-              <Button
-                type="button"
-                variant="ghost"
-                size="md"
-                className="w-full h-9 bg-auth-bg border border-auth-border text-white rounded-lg transition-colors duration-200 hover:bg-auth-bg/80"
+              <SocialLoginButton
+                label="Facebook"
                 icon={FacebookIcon}
-              >
-                Facebook
-              </Button>
+              />
             </div>
 
             {/* Links */}

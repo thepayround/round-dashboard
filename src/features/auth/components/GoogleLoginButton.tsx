@@ -1,9 +1,8 @@
-import { Loader2 } from 'lucide-react'
-
 import { useGoogleLoginButton } from '../hooks/useGoogleLoginButton'
 
+import { SocialLoginButton } from './SocialLoginButton'
+
 import { GoogleIcon } from '@/features/auth/components/icons/SocialIcons'
-import { Button } from '@/shared/ui/Button'
 
 
 interface GoogleLoginButtonProps {
@@ -20,23 +19,13 @@ export const GoogleLoginButton = ({ onSuccess, onError, accountType }: GoogleLog
   })
 
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      size="md"
-      disabled={!isGoogleLoaded || isLoading}
+    <SocialLoginButton
+      label="Google"
+      icon={GoogleIcon}
+      loading={isLoading}
+      loadingLabel="Signing in..."
+      disabled={!isGoogleLoaded}
       onClick={handleGoogleLogin}
-      icon={isLoading ? undefined : GoogleIcon}
-      className="w-full h-9 bg-auth-bg border border-auth-border text-white rounded-lg transition-colors duration-200 hover:bg-auth-bg/80"
-    >
-      {isLoading ? (
-        <span className="inline-flex items-center gap-2">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          Signing in...
-        </span>
-      ) : (
-        'Google'
-      )}
-    </Button>
+    />
   )
 }
