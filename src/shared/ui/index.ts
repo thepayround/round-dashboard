@@ -6,6 +6,7 @@
 export { Button, IconButton, PlainButton, RoundButton, UserButton } from './Button'
 export { ActionButton } from './ActionButton'
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from './Badge'
+export { Avatar, type AvatarProps, type AvatarSize, type AvatarShape } from './Avatar'
 export { AuthInput } from './AuthInput'
 export { AuthLogo } from './AuthLogo'
 export { WhiteLogo } from './WhiteLogo'

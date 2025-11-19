@@ -4,6 +4,7 @@ import { memo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ANIMATION_VARIANTS } from '@/shared/layout/DashboardLayout/constants'
+import { Avatar } from '@/shared/ui'
 import { PlainButton } from '@/shared/ui/Button'
 import { cn } from '@/shared/utils/cn'
 
@@ -42,19 +43,6 @@ export interface SidebarFooterProps {
   handleTooltipLeave: () => void
   profileDropdownRef: React.RefObject<HTMLDivElement>
   transitionConfigs: TransitionConfig
-}
-
-/**
- * Helper function to get user initials
- */
-const getInitials = (firstName?: string, lastName?: string): string => {
-  const first = firstName && firstName !== 'undefined' ? firstName.trim() : ''
-  const last = lastName && lastName !== 'undefined' ? lastName.trim() : ''
-  
-  if (first && last) return `${first[0]}${last[0]}`.toUpperCase()
-  if (first) return first.slice(0, 2).toUpperCase()
-  if (last) return last.slice(0, 2).toUpperCase()
-  return 'U'
 }
 
 /**
@@ -190,9 +178,11 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
             {/* User Avatar */}
             <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
               {user ? (
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-normal tracking-tight">
-                  {getInitials(user.firstName, user.lastName)}
-                </div>
+                <Avatar
+                  name={user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.firstName || user.lastName || 'User'}
+                  size="sm"
+                  shape="circle"
+                />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
                   <User className="w-4 h-4 text-white/60" />

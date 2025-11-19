@@ -18,7 +18,6 @@ interface StatusMeta {
 interface UseCustomerTableControllerReturn {
   getStatusMeta: (status: number | string) => StatusMeta
   formatDate: (value: string) => string
-  getInitials: (displayName: string) => string
   handleSelectAll: (checked: boolean) => void
   handleSelectRow: (customerId: string, checked: boolean) => void
   isAllSelected: boolean
@@ -104,21 +103,9 @@ export const useCustomerTableController = ({
     []
   )
 
-  const getInitials = useCallback((displayName: string) => {
-    if (!displayName) return ''
-    return displayName
-      .split(' ')
-      .filter(Boolean)
-      .map(name => name[0])
-      .join('')
-      .substring(0, 2)
-      .toUpperCase()
-  }, [])
-
   return {
     getStatusMeta,
     formatDate,
-    getInitials,
     handleSelectAll,
     handleSelectRow,
     isAllSelected,

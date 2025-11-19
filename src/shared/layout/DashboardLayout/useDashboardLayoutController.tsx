@@ -13,6 +13,7 @@ import { LAYOUT_CONSTANTS } from '@/shared/layout/DashboardLayout/constants'
 import type { NavItem, TooltipState } from '@/shared/layout/DashboardLayout/types'
 import { apiClient } from '@/shared/services/apiClient'
 import type { User as AuthUser } from '@/shared/types/auth'
+import { Avatar } from '@/shared/ui'
 
 interface UseDashboardLayoutControllerParams {
   navigationItems: NavItem[]
@@ -157,16 +158,6 @@ export const useDashboardLayoutController = ({
     [isActive]
   )
 
-  const getInitials = useCallback((firstName?: string, lastName?: string) => {
-    const first = firstName && firstName !== 'undefined' ? firstName.trim() : ''
-    const last = lastName && lastName !== 'undefined' ? lastName.trim() : ''
-
-    if (first && last) return `${first[0]}${last[0]}`.toUpperCase()
-    if (first) return first.slice(0, 2).toUpperCase()
-    if (last) return last.slice(0, 2).toUpperCase()
-    return 'U'
-  }, [])
-
   const getUserDisplayName = useCallback((user?: AuthUser | null) => {
     if (!user) return 'User'
     const firstName = user.firstName && user.firstName !== 'undefined' ? user.firstName.trim() : ''
@@ -212,10 +203,16 @@ export const useDashboardLayoutController = ({
 
   const userAvatar = useMemo(() => {
     if (state.user) {
+      const firstName = state.user.firstName && state.user.firstName !== 'undefined' ? state.user.firstName.trim() : ''
+      const lastName = state.user.lastName && state.user.lastName !== 'undefined' ? state.user.lastName.trim() : ''
+      const name = firstName && lastName ? `${firstName} ${lastName}` : firstName || lastName || 'User'
+
       return (
-        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-normal tracking-tight">
-          {getInitials(state.user.firstName, state.user.lastName)}
-        </div>
+        <Avatar
+          name={name}
+          size="sm"
+          shape="circle"
+        />
       )
     }
 
@@ -233,7 +230,7 @@ export const useDashboardLayoutController = ({
         </svg>
       </div>
     )
-  }, [getInitials, state.user])
+  }, [state.user])
 
   const handleTooltipEnter = useCallback(
     (itemId: string, label: string, badge: string | undefined, event: ReactMouseEvent) => {

@@ -16,6 +16,7 @@ import {
   TableCell,
   SortableTableHead,
   Badge,
+  Avatar,
   type BadgeVariant
 } from '@/shared/ui'
 import { IconButton } from '@/shared/ui/Button'
@@ -59,9 +60,6 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
     day: 'numeric'
   }).format(new Date(dateString))
 
-  const getInitials = (firstName: string, lastName: string) =>
-    `${firstName[0]}${lastName[0]}`.toUpperCase()
-
   return (
     <div className="border border-white/10 rounded-lg overflow-hidden relative">
       <div className="overflow-x-auto">
@@ -93,9 +91,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                 >
                   <TableCell>
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-medium text-xs tracking-tight">
-                        {getInitials(member.firstName, member.lastName)}
-                      </div>
+                      <Avatar name={member.fullName || `${member.firstName} ${member.lastName}`} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center space-x-2">
                           <div className="font-normal text-white tracking-tight truncate">
