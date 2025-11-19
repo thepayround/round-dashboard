@@ -33,6 +33,7 @@ import { EmailComposeModal } from '../components/EmailComposeModal'
 import { useCustomerDetailController, type CustomerDetailTab } from '../hooks/useCustomerDetailController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
+import { EmptyState } from '@/shared/ui'
 import { Button, IconButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 import { cn } from '@/shared/utils/cn'
@@ -336,11 +337,12 @@ const CustomerDetailPage: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="text-center py-12 border border-dashed border-white/20 rounded-xl">
-                <MapPin className="w-12 h-12 text-white/40 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-white/70 mb-2">No addresses on file</h3>
-                <p className="text-sm text-white/50">Customer addresses will appear here once added</p>
-              </div>
+              <EmptyState
+                icon={MapPin}
+                title="No addresses on file"
+                description="Customer addresses will appear here once added"
+                className="border border-dashed border-white/20 rounded-xl"
+              />
             )}
           </Card>
 

@@ -23,7 +23,7 @@ import { useCustomersController } from '../hooks/useCustomersController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
-import { Checkbox, Badge, type BadgeVariant } from '@/shared/ui'
+import { Checkbox, Badge, EmptyState, type BadgeVariant } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { IconButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
@@ -478,25 +478,20 @@ const CustomersPage: React.FC = () => {
 
         {/* Empty State */}
         {!loading && displayedCustomers.length === 0 && (
-          <div className="text-center py-12">
-            <div className="w-24 h-24 mx-auto mb-4 rounded-lg bg-[#141414] border border-[#262626] flex items-center justify-center">
-              <Users className="w-12 h-12 text-[#737373]" />
-            </div>
-            <h3 className="text-xl font-medium tracking-tight text-white mb-2">No customers found</h3>
-            <p className="text-[#a3a3a3] mb-6">
-              {hasSearchOrFilters
+          <EmptyState
+            icon={Users}
+            title="No customers found"
+            description={
+              hasSearchOrFilters
                 ? 'No customers match your current filters. Try adjusting your search criteria or clearing some filters.'
-                : 'Get started by adding your first customer'}
-            </p>
-            {!hasSearchOrFilters && (
-              <ActionButton
-                label="Add Customer"
-                variant="primary"
-                size="md"
-                onClick={openAddModal}
-              />
-            )}
-          </div>
+                : 'Get started by adding your first customer'
+            }
+            action={!hasSearchOrFilters ? {
+              label: 'Add Customer',
+              onClick: openAddModal,
+              variant: 'primary'
+            } : undefined}
+          />
         )}
 
         {/* Add Customer Modal */}

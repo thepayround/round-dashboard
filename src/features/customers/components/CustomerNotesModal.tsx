@@ -12,6 +12,7 @@ import {
 import { useCustomerNotesModalController } from '../hooks/useCustomerNotesModalController'
 
 import type { CustomerNoteResponse } from '@/shared/services/api/customer.service'
+import { EmptyState } from '@/shared/ui'
 import { Button, IconButton } from '@/shared/ui/Button'
 import { Modal } from '@/shared/ui/Modal'
 import { Textarea } from '@/shared/ui/Textarea'
@@ -143,13 +144,11 @@ export const CustomerNotesModal = ({
 
           <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
             {notes.length === 0 ? (
-              <div className="text-center py-12">
-                <MessageSquare className="w-12 h-12 text-white/30 mx-auto mb-4" />
-                <h3 className="text-base font-medium text-white mb-2">No notes yet</h3>
-                <p className="text-sm text-white/60">
-                  Start documenting important updates and interactions about {customerName}.
-                </p>
-              </div>
+              <EmptyState
+                icon={MessageSquare}
+                title="No notes yet"
+                description={`Start documenting important updates and interactions about ${customerName}.`}
+              />
             ) : (
               notes.map(note => (
                 <div key={note.id} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
