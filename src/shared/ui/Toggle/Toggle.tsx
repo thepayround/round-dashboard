@@ -4,7 +4,7 @@ import React from 'react'
 import { cn } from '@/shared/utils/cn'
 
 const toggleContainerVariants = cva(
-  'relative inline-flex items-center rounded-full transition-all peer-focus:outline-none peer-focus:ring-4 peer peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
+  'inline-flex items-center rounded-full transition-all peer-focus:outline-none peer-focus:ring-4 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
   {
     variants: {
       size: {
@@ -26,7 +26,7 @@ const toggleContainerVariants = cva(
 )
 
 const toggleButtonVariants = cva(
-  "content-[''] absolute top-[2px] left-[2px] bg-white rounded-full transition-all peer-checked:border-white",
+  "absolute top-[2px] left-[2px] bg-white rounded-full transition-all peer-checked:border-white",
   {
     variants: {
       size: {
@@ -79,41 +79,27 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
     ref
   ) => {
     const toggleId = id || `toggle-${Math.random().toString(36).substr(2, 9)}`
+    const hasTextContent = Boolean(label && label.trim().length > 0) || Boolean(description)
 
     return (
       <div className={cn('flex items-center', containerClassName)}>
-        {label && (
-          <label
-            htmlFor={toggleId}
-            className={cn(
-              'flex items-center space-x-3 cursor-pointer min-h-[44px] lg:min-h-0',
-              disabled && 'opacity-50 cursor-not-allowed',
-              labelClassName
-            )}
-          >
+        <label
+          htmlFor={toggleId}
+          className={cn(
+            'flex items-center cursor-pointer min-h-[44px] lg:min-h-0',
+            hasTextContent && 'space-x-3',
+            disabled && 'opacity-50 cursor-not-allowed',
+            labelClassName
+          )}
+        >
+          {hasTextContent && (
             <div className="flex flex-col">
-              <span className="text-sm text-white/85">{label}</span>
+              {label && label.trim().length > 0 && (
+                <span className="text-sm text-white/85">{label}</span>
+              )}
               {description && <span className="text-xs text-white/60">{description}</span>}
             </div>
-            <div className="relative inline-flex items-center min-w-[44px] min-h-[44px] justify-center lg:min-w-0 lg:min-h-0">
-              <input
-                ref={ref}
-                id={toggleId}
-                type="checkbox"
-                checked={checked}
-                onChange={onChange}
-                disabled={disabled}
-                className={cn('sr-only peer', className)}
-                aria-label={ariaLabel || label}
-                {...props}
-              />
-              <div className={toggleContainerVariants({ size, color })}>
-                <div className={toggleButtonVariants({ size })} />
-              </div>
-            </div>
-          </label>
-        )}
-        {!label && (
+          )}
           <div className="relative inline-flex items-center min-w-[44px] min-h-[44px] justify-center lg:min-w-0 lg:min-h-0">
             <input
               ref={ref}
@@ -123,14 +109,25 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
               onChange={onChange}
               disabled={disabled}
               className={cn('sr-only peer', className)}
-              aria-label={ariaLabel}
+              aria-label={ariaLabel ?? (label && label.trim().length > 0 ? label : description)}
               {...props}
             />
-            <div className={toggleContainerVariants({ size, color })}>
-              <div className={toggleButtonVariants({ size })} />
-            </div>
+            <div
+              aria-hidden="true"
+              className={cn(
+                'pointer-events-none',
+                toggleContainerVariants({ size, color })
+              )}
+            />
+            <div
+              aria-hidden="true"
+              className={cn(
+                'pointer-events-none z-10',
+                toggleButtonVariants({ size })
+              )}
+            />
           </div>
-        )}
+        </label>
       </div>
     )
   }
