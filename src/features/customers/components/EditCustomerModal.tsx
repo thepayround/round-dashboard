@@ -5,7 +5,7 @@ import { useEditCustomerModalController } from '../hooks/useEditCustomerModalCon
 
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
 import { CustomerType } from '@/shared/types/customer.types'
-import { Input, Toggle, Badge, AddressFormGroup, IconBox, type Address } from '@/shared/ui'
+import { Input, Toggle, Badge, AddressFormGroup, IconBox, SectionHeader, type Address } from '@/shared/ui'
 import { ApiDropdown, currencyDropdownConfig, timezoneDropdownConfig, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
 import { Button, IconButton } from '@/shared/ui/Button'
@@ -56,11 +56,8 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
       <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
                 {/* Basic Information */}
                 <div className="space-y-6">
-                  <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-                    <User className="w-5 h-5 text-[#14BDEA]" />
-                    <span>Basic Information</span>
-                  </h3>
-                  
+                  <SectionHeader icon={User} title="Basic Information" iconColor="text-[#14BDEA]" />
+
 
                   
                   {/* Customer Information - Type Specific */}
@@ -200,11 +197,8 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
 
                 {/* Preferences & Settings */}
                 <div className="space-y-6">
-                  <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-                    <Globe className="w-5 h-5 text-[#D417C8]" />
-                    <span>Preferences & Settings</span>
-                  </h3>
-                  
+                  <SectionHeader icon={Globe} title="Preferences & Settings" iconColor="text-[#D417C8]" />
+
                   {/* Locale, Currency, Timezone Row */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
@@ -291,11 +285,8 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
 
                 {/* Addresses */}
                 <div className="space-y-6">
-                  <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-                    <MapPin className="w-5 h-5 text-[#42E695]" />
-                    <span>Addresses</span>
-                  </h3>
-                  
+                  <SectionHeader icon={MapPin} title="Addresses" iconColor="text-[#42E695]" />
+
                   {/* Billing Address */}
                   <div className="space-y-4">
                     <h4 className="text-md font-medium text-white flex items-center space-x-2">
@@ -352,11 +343,8 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
 
                 {/* Tags */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-                    <MapPin className="w-5 h-5 text-[#D417C8]" />
-                    <span>Tags</span>
-                  </h3>
-                  
+                  <SectionHeader icon={MapPin} title="Tags" iconColor="text-[#D417C8]" />
+
                   <div className="flex flex-wrap gap-2">
                     {formData.tags?.map((tag, index) => (
                       <Badge

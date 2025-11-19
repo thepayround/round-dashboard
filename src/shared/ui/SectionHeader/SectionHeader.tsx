@@ -1,69 +1,31 @@
-import { motion } from 'framer-motion'
+import type { LucideIcon } from 'lucide-react'
 
-interface SectionHeaderProps {
+import { cn } from '@/shared/utils/cn'
+
+export interface SectionHeaderProps {
+  icon?: LucideIcon
   title: string
   subtitle?: string
-  accent?: 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger'
-  actions?: React.ReactNode
+  iconColor?: string
   className?: string
-  animated?: boolean
-  size?: 'main' | 'section'
-}
-
-const accentColors = {
-  primary: 'accent',
-  secondary: 'accent',
-  accent: 'accent',
-  success: 'accent',
-  warning: 'warning',
-  danger: 'destructive'
 }
 
 export const SectionHeader = ({
+  icon: Icon,
   title,
   subtitle,
-  accent = 'primary',
-  actions,
-  className = '',
-  animated = true,
-  size = 'section'
+  iconColor = 'text-primary',
+  className,
 }: SectionHeaderProps) => {
-  const _accentGradient = accentColors[accent]
-
-  const HeaderContent = () => (
-    <div className={className}>
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <h2 className={`${size === 'main' ? 'text-2xl' : 'text-xl'} font-normal tracking-tight text-white ${size === 'main' ? 'mb-1.5' : 'mb-0'}`}>
-            {title}
-          </h2>
-          {subtitle && (
-            <p className={`${size === 'main' ? 'text-base' : ''} text-gray-500 dark:text-polar-500 leading-snug mt-1.5`}>
-              {subtitle}
-            </p>
-          )}
-        </div>
-        
-        {actions && (
-          <div className="flex items-center space-x-2.5">
-            {actions}
-          </div>
-        )}
-      </div>
+  return (
+    <div className={cn('space-y-1', className)}>
+      <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
+        {Icon && <Icon className={cn('w-5 h-5', iconColor)} />}
+        <span>{title}</span>
+      </h3>
+      {subtitle && (
+        <p className="text-sm text-white/60">{subtitle}</p>
+      )}
     </div>
   )
-
-  if (animated) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <HeaderContent />
-      </motion.div>
-    )
-  }
-
-  return <HeaderContent />
 }

@@ -4,7 +4,7 @@ import React from 'react'
 import { useAddCustomerModalController } from '../hooks/useAddCustomerModalController'
 
 import { CustomerType } from '@/shared/types/customer.types'
-import { Input, Toggle, Badge, AddressFormGroup, IconBox, type Address } from '@/shared/ui'
+import { Input, Toggle, Badge, AddressFormGroup, IconBox, SectionHeader, type Address } from '@/shared/ui'
 import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
 import { Button } from '@/shared/ui/Button'
@@ -49,10 +49,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
       <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
         {/* Basic Information */}
         <div className="space-y-6">
-          <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-            <User className="w-5 h-5 text-[#D417C8]" />
-            <span>Basic Information</span>
-          </h3>
+          <SectionHeader icon={User} title="Basic Information" iconColor="text-[#D417C8]" />
           
           {/* Customer Type Selection */}
           <div className="space-y-3">
@@ -196,10 +193,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Preferences */}
         <div className="space-y-6">
-          <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-            <Globe className="w-5 h-5 text-[#14BDEA]" />
-            <span>Preferences</span>
-          </h3>
+          <SectionHeader icon={Globe} title="Preferences" iconColor="text-[#14BDEA]" />
           
           {/* Symmetric 3-column layout */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -246,10 +240,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Tags */}
         <div className="space-y-4">
-          <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-            <Tag className="w-5 h-5 text-[#7767DA]" />
-            <span>Tags</span>
-          </h3>
+          <SectionHeader icon={Tag} title="Tags" iconColor="text-[#7767DA]" />
           
           <div className="flex flex-wrap gap-2 mb-3">
             {(formData.tags ?? []).map((tag, index) => (
@@ -287,10 +278,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Billing Address */}
         <div className="space-y-6">
-          <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-            <MapPin className="w-5 h-5 text-[#42E695]" />
-            <span>Billing Address</span>
-          </h3>
+          <SectionHeader icon={MapPin} title="Billing Address" iconColor="text-[#42E695]" />
 
           <AddressFormGroup
             value={formData.billingAddress ?? {
@@ -313,10 +301,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         <div className="space-y-4">
           {/* Header with Toggle */}
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-              <Truck className="w-5 h-5 text-[#00BCD4]" />
-              <span>Shipping Address</span>
-            </h3>
+            <SectionHeader icon={Truck} title="Shipping Address" iconColor="text-[#00BCD4]" />
             
             <Toggle
               label="Same as billing"
@@ -362,10 +347,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Customer Settings */}
         <div className="space-y-6">
-          <h3 className="text-lg font-medium tracking-tight text-white flex items-center space-x-2">
-            <Settings className="w-5 h-5 text-[#FFC107]" />
-            <span>Customer Settings</span>
-          </h3>
+          <SectionHeader icon={Settings} title="Customer Settings" iconColor="text-[#FFC107]" />
           
           <div className="grid grid-cols-1 gap-4">
             {/* Portal Access Setting */}

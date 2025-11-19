@@ -1,1 +1,1 @@
-export { SectionHeader } from './SectionHeader'
+export { SectionHeader, type SectionHeaderProps } from './SectionHeader'
