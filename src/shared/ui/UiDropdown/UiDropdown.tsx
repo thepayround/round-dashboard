@@ -10,8 +10,8 @@ import { createPortal } from 'react-dom'
 import { IconButton } from '../Button'
 import { dropdownStyles, getOptionClasses } from '../dropdown-styles.config'
 
-import { Input } from '@/shared/ui'
 import { useDropdownController } from '@/shared/ui/hooks/useDropdownController'
+import { cn } from '@/shared/utils/cn'
 
 export interface UiDropdownOption {
   value: string
@@ -41,7 +41,7 @@ interface UiDropdownProps {
   name?: string
 }
 
-const DROPDOWN_PORTAL_Z_INDEX = 90
+const DROPDOWN_PORTAL_Z_INDEX = 9999
 
 export const UiDropdown = ({
   options,
@@ -76,6 +76,7 @@ export const UiDropdown = ({
     listboxId,
     activeDescendantId,
     toggleDropdown,
+    closeDropdown,
     handleOptionSelect,
     handleClearSelection,
     handleTriggerKeyDown,
@@ -99,90 +100,115 @@ export const UiDropdown = ({
 
   const dropdownPortal = isOpen
     ? createPortal(
-        <div
-          ref={dropdownRef}
-          className="dropdown-portal"
-          style={{
-            position: 'absolute',
-            top: dropdownPosition.top,
-            left: dropdownPosition.left,
-            width: dropdownPosition.width,
-            zIndex: DROPDOWN_PORTAL_Z_INDEX,
-          }}
-        >
-          <div className="bg-[#0F1017] border border-white/10 rounded-xl shadow-2xl max-h-80 overflow-hidden flex flex-col">
-            {allowSearch && (
-              <div className="p-3 border-b border-white/5">
-                <Input
-                  ref={searchInputRef}
-                  id={searchInputId}
-                  name={name ?? searchInputId}
-                  type="text"
-                  value={searchTerm}
-                  onChange={(event) => setSearchTerm(event.target.value)}
-                  placeholder={searchPlaceholder}
-                  leftIcon={Search}
-                  className="bg-white/5 border-white/10 text-sm text-white placeholder:text-white/40 h-9"
-                  aria-label={searchPlaceholder}
-                  disabled={disabled}
-                />
-              </div>
-            )}
-
-            <div
-              className="max-h-64 overflow-y-auto"
-              role="listbox"
-              id={listboxId}
-              aria-activedescendant={activeDescendantId}
-              tabIndex={-1}
-              onKeyDown={handleListKeyDown}
-            >
-              {loading ? (
-                <div className="p-6 flex flex-col items-center text-center space-y-3">
-                  <div className="w-6 h-6 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
-                  <p className="text-white/60 text-sm">Loading options...</p>
-                </div>
-              ) : filteredOptions.length === 0 ? (
-                <div className="p-4 text-center text-white/60 text-sm">{noResultsText}</div>
-              ) : (
-                filteredOptions.map((option, index) => (
-                  <div
-                    key={option.value}
-                    id={`${listboxId}-option-${index}`}
-                    role="option"
-                    aria-selected={option.value === value}
-                    tabIndex={0}
-                    className={getOptionClasses(index === highlightedIndex, option.value === value)}
-                    onMouseEnter={() => setHighlightedIndex(index)}
-                    onClick={() => handleOptionSelect(option)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        handleOptionSelect(option)
-                      }
-                    }}
-                  >
-                    <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
-                      {option.icon && (
-                        <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
-                          {option.icon}
-                        </span>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <div className={dropdownStyles.option.label}>{option.label}</div>
-                        {option.description && (
-                          <div className={dropdownStyles.option.description}>{option.description}</div>
-                        )}
-                      </div>
-                    </div>
-
-                    {option.value === value && <Check className={dropdownStyles.option.checkIcon} />}
+        <>
+          <div
+            className={`${dropdownStyles.backdrop.base} ${dropdownStyles.backdrop.zIndex}`}
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) {
+                event.stopPropagation()
+                closeDropdown()
+              }
+            }}
+            role="presentation"
+          />
+          <div
+            ref={dropdownRef}
+            className={dropdownStyles.container.positioning}
+            style={{
+              top: `${dropdownPosition.top}px`,
+              left: `${dropdownPosition.left}px`,
+              width: `${dropdownPosition.width}px`,
+              zIndex: DROPDOWN_PORTAL_Z_INDEX,
+            }}
+          >
+            <div className={`${dropdownStyles.container.base} ${dropdownStyles.container.maxHeight}`}>
+              {allowSearch && (
+                <div className={dropdownStyles.search.container}>
+                  <div className="relative">
+                    <Search className={dropdownStyles.search.icon} />
+                    <input
+                      ref={searchInputRef}
+                      id={searchInputId}
+                      name={name ?? searchInputId}
+                      type="text"
+                      value={searchTerm}
+                      onChange={(event) => setSearchTerm(event.target.value)}
+                      placeholder={searchPlaceholder}
+                      className={dropdownStyles.search.input}
+                      aria-label={searchPlaceholder}
+                      disabled={disabled}
+                    />
+                    {searchTerm && (
+                      <IconButton
+                        onClick={() => setSearchTerm('')}
+                        variant="ghost"
+                        size="sm"
+                        icon={X}
+                        aria-label="Clear search"
+                        className={dropdownStyles.search.clearButton}
+                      />
+                    )}
                   </div>
-                ))
+                </div>
               )}
+
+              <div
+                className={dropdownStyles.list.container}
+                role="listbox"
+                id={listboxId}
+                aria-activedescendant={activeDescendantId}
+                tabIndex={-1}
+                onKeyDown={handleListKeyDown}
+              >
+                {loading ? (
+                  <div className="p-6 flex flex-col items-center text-center space-y-3 text-xs">
+                    <div className="w-6 h-6 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+                    <p className="text-white/60">Loading options...</p>
+                  </div>
+                ) : filteredOptions.length === 0 ? (
+                  <div className={dropdownStyles.list.empty}>{noResultsText}</div>
+                ) : (
+                  <div className={`${dropdownStyles.list.padding} ${dropdownStyles.list.spacing}`}>
+                    {filteredOptions.map((option, index) => (
+                      <div
+                        key={option.value}
+                        id={`${listboxId}-option-${index}`}
+                        role="option"
+                        aria-selected={option.value === value}
+                        tabIndex={0}
+                        className={getOptionClasses(index === highlightedIndex, option.value === value)}
+                        onMouseEnter={() => setHighlightedIndex(index)}
+                        onClick={() => handleOptionSelect(option)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            handleOptionSelect(option)
+                          }
+                        }}
+                      >
+                        <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
+                          {option.icon && (
+                            <span className="flex-shrink-0 text-white/70 flex items-center justify-center">
+                              {option.icon}
+                            </span>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <div className={dropdownStyles.option.label}>{option.label}</div>
+                            {option.description && (
+                              <div className={dropdownStyles.option.description}>{option.description}</div>
+                            )}
+                          </div>
+                        </div>
+
+                        {option.value === value && <Check className={dropdownStyles.option.checkIcon} />}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>,
+        </>,
         document.body
       )
     : null
@@ -200,15 +226,14 @@ export const UiDropdown = ({
           }
         }}
         onKeyDown={disabled ? undefined : handleTriggerKeyDown}
-        className={`
-          relative w-full h-11 lg:h-9 ${hasLeadingIcon ? 'pl-9 pr-3' : 'px-3'} rounded-lg border transition-all duration-300
-          bg-[#171719] border-[#333333] text-white flex items-center justify-between
-          font-light text-xs outline-none
-          ${error ? 'border-[#ef4444]' : ''}
-          ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}
-          ${isOpen && !error ? 'border-[#14bdea] shadow-[0_0_0_3px_rgba(20,189,234,0.15)] transform -translate-y-px' : ''}
-          ${isOpen && error ? 'shadow-[0_0_0_3px_rgba(239,68,68,0.25)] transform -translate-y-px' : ''}
-        `}
+        className={cn(
+          'relative w-full h-11 lg:h-9 rounded-lg border bg-auth-bg border-auth-border text-white flex items-center justify-between font-light text-xs outline-none transition-[border-color,background-color] duration-150 ease-out hover:border-auth-border-hover focus:border-auth-primary focus-visible:ring-2 focus-visible:ring-[#14bdea]/25 focus-visible:ring-offset-0',
+          hasLeadingIcon ? 'pl-9 pr-3' : 'px-3',
+          error && 'border-[#ef4444]',
+          disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer',
+          isOpen && !error && 'border-[#14bdea]',
+          isOpen && error && 'border-[#ef4444]'
+        )}
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
@@ -222,7 +247,7 @@ export const UiDropdown = ({
       >
         <div className="flex-1 text-left truncate flex items-center gap-2 min-w-0">
           {hasLeadingIcon && (
-            <span className="flex-shrink-0 w-4 h-4 text-white/60 flex items-center justify-center">
+            <span className="flex-shrink-0 text-white/70 flex items-center justify-center">
               {selectedOption?.icon ?? icon}
             </span>
           )}

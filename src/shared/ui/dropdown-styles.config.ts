@@ -82,9 +82,9 @@ export const dropdownStyles = {
     spacing: 'space-x-2.5',
 
     // States
-    highlighted: 'bg-[#14BDEA]/20 border border-[#14BDEA]/30',
-    selected: 'bg-[#14BDEA]/20 border-[#14BDEA]/30',
-    default: 'hover:bg-white/10 border border-transparent',
+    highlighted: 'bg-white/10 border border-white/20 transition-colors duration-150 ease-out',
+    selected: 'bg-[#14BDEA]/15 border border-[#14BDEA]/30 transition-colors duration-150 ease-out',
+    default: 'border border-transparent hover:border-white/15 hover:bg-white/5 transition-colors duration-150 ease-out',
 
     // Content
     label: 'text-white/95 font-light truncate text-xs',
