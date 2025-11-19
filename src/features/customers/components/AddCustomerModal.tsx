@@ -4,7 +4,7 @@ import React from 'react'
 import { useAddCustomerModalController } from '../hooks/useAddCustomerModalController'
 
 import { CustomerType } from '@/shared/types/customer.types'
-import { Input, Toggle, Badge, AddressFormGroup, type Address } from '@/shared/ui'
+import { Input, Toggle, Badge, AddressFormGroup, IconBox, type Address } from '@/shared/ui'
 import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
 import { Button } from '@/shared/ui/Button'
@@ -371,9 +371,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
             {/* Portal Access Setting */}
             <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
               <div className="flex items-center space-x-3 flex-1">
-                <div className="w-10 h-10 rounded-lg bg-[#42E695]/20 flex items-center justify-center">
-                  <User className="w-5 h-5 text-[#42E695]" />
-                </div>
+                <IconBox icon={User} color="success" />
                 <div>
                   <h4 className="text-white font-medium">Customer Portal Access</h4>
                   <p className="text-white/60 text-sm" id="portal-access-description">Allow customer to access their portal dashboard</p>
@@ -392,9 +390,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
             {/* Auto Collection Setting */}
             <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
               <div className="flex items-center space-x-3 flex-1">
-                <div className="w-10 h-10 rounded-lg bg-[#14BDEA]/20 flex items-center justify-center">
-                  <Settings className="w-5 h-5 text-[#14BDEA]" />
-                </div>
+                <IconBox icon={Settings} color="info" />
                 <div>
                   <h4 className="text-white font-medium">Automatic Payment Collection</h4>
                   <p className="text-white/60 text-sm" id="auto-collection-description">Automatically collect payments when invoices are due</p>

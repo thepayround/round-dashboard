@@ -12,7 +12,7 @@ import {
 import { useCustomerNotesModalController } from '../hooks/useCustomerNotesModalController'
 
 import type { CustomerNoteResponse } from '@/shared/services/api/customer.service'
-import { EmptyState } from '@/shared/ui'
+import { EmptyState, IconBox } from '@/shared/ui'
 import { Button, IconButton } from '@/shared/ui/Button'
 import { Modal } from '@/shared/ui/Modal'
 import { Textarea } from '@/shared/ui/Textarea'
@@ -74,9 +74,7 @@ export const CustomerNotesModal = ({
         <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
           <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4">
             <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-[#D417C8]/10 border border-[#D417C8]/30 flex items-center justify-center">
-                <MessageSquare className="w-5 h-5 text-[#D417C8]" />
-              </div>
+              <IconBox icon={MessageSquare} color="primary" className="border border-[#D417C8]/30 rounded-xl bg-[#D417C8]/10" />
               <div>
                 <h3 className="text-sm font-normal tracking-tight text-white mb-1">
                   Add a new internal note
@@ -154,9 +152,7 @@ export const CustomerNotesModal = ({
                 <div key={note.id} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-lg bg-[#14BDEA]/10 border border-[#14BDEA]/30 flex items-center justify-center">
-                        <User className="w-5 h-5 text-[#14BDEA]" />
-                      </div>
+                      <IconBox icon={User} color="info" className="border border-[#14BDEA]/30" />
                       <div>
                         <div className="flex items-center space-x-2">
                           <p className="text-sm font-medium text-white">{note.author || 'Team member'}</p>

@@ -11,6 +11,7 @@ export { LoadingSpinner, LoadingOverlay, type LoadingSpinnerProps, type LoadingO
 export { EmptyState, type EmptyStateProps } from './EmptyState'
 export { Alert, type AlertProps, type AlertVariant } from './Alert'
 export { AddressFormGroup, type AddressFormGroupProps, type Address } from './AddressFormGroup'
+export { IconBox, type IconBoxProps, type IconBoxSize, type IconBoxColor } from './IconBox'
 export { AuthInput } from './AuthInput'
 export { AuthLogo } from './AuthLogo'
 export { WhiteLogo } from './WhiteLogo'
