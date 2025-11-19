@@ -7,6 +7,7 @@ import { getStepConfig } from '../config/stepsConfig'
 import { useGetStartedController } from '../hooks/useGetStartedController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
+import { LoadingSpinner } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { Button } from '@/shared/ui/Button'
 
@@ -51,8 +52,7 @@ export const GetStartedPage = () => {
       if (shouldShowLoading) {
         return (
           <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
-            <span className="ml-3 text-white/60">Loading {stepConfig.title.toLowerCase()} data...</span>
+            <LoadingSpinner size="lg" color="secondary" label={`Loading ${stepConfig.title.toLowerCase()} data...`} className="text-white/60" />
           </div>
         )
       }

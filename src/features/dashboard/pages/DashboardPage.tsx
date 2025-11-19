@@ -18,6 +18,7 @@ import { useDashboardPageController } from '../hooks/useDashboardPageController'
 import type { DateRangePreset } from '../hooks/useDashboardPageController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
+import { LoadingSpinner, UiDropdown } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
@@ -62,8 +63,7 @@ export const DashboardPage = () => {
         <div className="p-8">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3">
-              <div className="w-6 h-6 border border-[#D417C8] border-t-transparent rounded-full animate-spin" />
-              <p className="auth-text-muted">Loading your account...</p>
+              <LoadingSpinner size="md" label="Loading your account..." />
             </div>
           </div>
         </div>
@@ -128,34 +128,22 @@ export const DashboardPage = () => {
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <div>
-                <label htmlFor="date-range-select" className="text-xs uppercase tracking-wide text-white/60">Date range</label>
-                <select
-                  id="date-range-select"
-                  className="mt-1 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#D417C8] focus:outline-none"
+                <UiDropdown
+                  label="Date range"
+                  options={dateRangeOptions.map(opt => ({ value: opt.id, label: opt.label }))}
                   value={filters.dateRange.preset}
-                  onChange={(event) => handleDateRangeChange(event.target.value as DateRangePreset)}
-                >
-                  {dateRangeOptions.map(option => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                  onSelect={(value: string) => handleDateRangeChange(value as DateRangePreset)}
+                  allowSearch={false}
+                />
               </div>
               <div>
-                <label htmlFor="segment-select" className="text-xs uppercase tracking-wide text-white/60">Segment</label>
-                <select
-                  id="segment-select"
-                  className="mt-1 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#D417C8] focus:outline-none"
+                <UiDropdown
+                  label="Segment"
+                  options={segmentOptions.map(opt => ({ value: opt.id, label: opt.label }))}
                   value={filters.segmentId}
-                  onChange={(event) => handleSegmentChange(event.target.value)}
-                >
-                  {segmentOptions.map(option => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                  onSelect={handleSegmentChange}
+                  allowSearch={false}
+                />
               </div>
               <Button
                 type="button"
@@ -170,10 +158,7 @@ export const DashboardPage = () => {
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-white/60">
             {isMetricsLoading && (
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full border border-[#D417C8] border-t-transparent animate-spin" />
-                <span>Refreshing metrics…</span>
-              </div>
+              <LoadingSpinner size="xs" label="Refreshing metrics…" className="text-white/60" />
             )}
             {lastUpdated && (
               <span>Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>

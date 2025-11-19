@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useInvitationAcceptanceController } from '../hooks/useInvitationAcceptanceController'
 
-import { Input } from '@/shared/ui'
+import { Input, LoadingSpinner } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { PlainButton } from '@/shared/ui/Button'
@@ -41,8 +41,7 @@ export const InvitationAcceptancePage = () => {
 
         <div className="w-full max-w-[360px] mx-auto relative z-10">
           <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#14BDEA] mx-auto mb-4" />
-            <p className="text-white/85">Validating invitation...</p>
+            <LoadingSpinner size="xl" color="secondary" label="Validating invitation..." />
           </div>
         </div>
       </div>

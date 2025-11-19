@@ -4,7 +4,6 @@ import {
   UserPlus,
   Mail,
   Shield,
-  Loader2,
   AlertCircle,
   Clock,
   CheckCircle,
@@ -19,6 +18,7 @@ import TeamMembersTable from '../components/TeamMembersTable'
 import { useTeamManagementController } from '../hooks/useTeamManagementController'
 import type { TeamInvitation, UserRole } from '../types/team.types'
 
+import { LoadingSpinner } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { Badge } from '@/shared/ui/Badge'
 import { Button } from '@/shared/ui/Button'
@@ -136,8 +136,7 @@ export const TeamManagementPage: React.FC = () => {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-pink-500 mx-auto mb-4" />
-          <p className="text-gray-400">Loading team data...</p>
+          <LoadingSpinner size="xl" color="primary" label="Loading team data..." />
         </div>
       </div>
     )

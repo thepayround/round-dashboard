@@ -7,6 +7,7 @@ export { Button, IconButton, PlainButton, RoundButton, UserButton } from './Butt
 export { ActionButton } from './ActionButton'
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from './Badge'
 export { Avatar, type AvatarProps, type AvatarSize, type AvatarShape } from './Avatar'
+export { LoadingSpinner, LoadingOverlay, type LoadingSpinnerProps, type LoadingOverlayProps, type SpinnerSize, type SpinnerColor } from './LoadingSpinner'
 export { AuthInput } from './AuthInput'
 export { AuthLogo } from './AuthLogo'
 export { WhiteLogo } from './WhiteLogo'
