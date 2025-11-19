@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Eye, Edit, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
+import { Badge } from '../Badge'
 import { IconButton } from '../Button'
 
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, SortableTableHead } from './Table'
@@ -136,15 +137,12 @@ export const WithStatus: Story = {
               <TableCell>{customer.name}</TableCell>
               <TableCell className="text-white/60">{customer.email}</TableCell>
               <TableCell>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs ${
-                    customer.status === 'Active'
-                      ? 'bg-[#38D39F]/10 text-[#38D39F] border border-[#38D39F]/40'
-                      : 'bg-[#262626] text-white/60 border border-white/10'
-                  }`}
+                <Badge
+                  variant={customer.status === 'Active' ? 'success' : 'neutral'}
+                  size="md"
                 >
                   {customer.status}
-                </span>
+                </Badge>
               </TableCell>
             </TableRow>
           ))}

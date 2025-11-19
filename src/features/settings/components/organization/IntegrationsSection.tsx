@@ -4,6 +4,7 @@ import React from 'react'
 
 import { useIntegrationsController } from '../../hooks/useIntegrationsController'
 
+import { Badge, type BadgeVariant } from '@/shared/ui/Badge'
 import { Button, IconButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 
@@ -21,16 +22,16 @@ const statusIcon = (status: 'connected' | 'available' | 'configured') => {
   }
 }
 
-const statusColor = (status: 'connected' | 'available' | 'configured') => {
+const statusVariant = (status: 'connected' | 'available' | 'configured'): BadgeVariant => {
   switch (status) {
     case 'connected':
-      return 'text-green-400 bg-green-400/10 border-green-400/20'
+      return 'success'
     case 'configured':
-      return 'text-blue-400 bg-blue-400/10 border-blue-400/20'
+      return 'info'
     case 'available':
-      return 'text-gray-400 bg-gray-400/10 border-gray-400/20'
+      return 'neutral'
     default:
-      return ''
+      return 'neutral'
   }
 }
 
@@ -109,9 +110,9 @@ export const IntegrationsSection: React.FC = () => {
                   <p className="text-xs text-gray-400">{integration.description}</p>
                 </div>
               </div>
-              <span className={`text-xs px-2 py-1 rounded-full border ${statusColor(integration.status)}`}>
+              <Badge variant={statusVariant(integration.status)} size="sm">
                 {integration.status}
-              </span>
+              </Badge>
             </div>
 
             <div className="flex items-center justify-between">

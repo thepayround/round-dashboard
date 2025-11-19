@@ -3,40 +3,24 @@ import type { ReactNode } from 'react'
 
 import type { ActionMenuItem } from '../../widgets/ActionMenu/ActionMenu'
 import { ActionMenu } from '../../widgets/ActionMenu/ActionMenu'
+import { Badge, type BadgeVariant } from '../Badge'
 
 interface CardHeaderProps {
   icon?: LucideIcon
   title?: string
   status?: {
     label: string
-    variant: 'active' | 'inactive' | 'archived' | 'success' | 'warning' | 'danger'
+    variant: BadgeVariant
   }
   badges?: Array<{
     label: string
-    variant: 'primary' | 'secondary' | 'success' | 'warning' | 'info'
+    variant: BadgeVariant
   }>
   actions?: ActionMenuItem[]
   children?: ReactNode
   className?: string
   iconColor?: string
   iconBg?: string
-}
-
-const statusVariants = {
-  active: 'text-green-400 bg-green-500/10 border-green-500/20',
-  inactive: 'text-orange-400 bg-orange-500/10 border-orange-500/20',
-  archived: 'text-gray-400 bg-gray-500/10 border-gray-500/20',
-  success: 'text-green-400 bg-green-500/10 border-green-500/20',
-  warning: 'text-orange-400 bg-orange-500/10 border-orange-500/20',
-  danger: 'text-[#D417C8] bg-red-500/10 border-red-500/20'
-}
-
-const badgeVariants = {
-  primary: 'text-[#D417C8] bg-[#D417C8]/10 border-[#D417C8]/20',
-  secondary: 'text-[#14BDEA] bg-[#14BDEA]/10 border-[#14BDEA]/20',
-  success: 'text-green-400 bg-green-500/10 border-green-500/20',
-  warning: 'text-orange-400 bg-orange-500/10 border-orange-500/20',
-  info: 'text-[#7767DA] bg-[#7767DA]/10 border-[#7767DA]/20'
 }
 
 export const CardHeader = ({
@@ -62,20 +46,17 @@ export const CardHeader = ({
           {title && (
             <h3 className="text-xl font-normal tracking-tight text-white">{title}</h3>
           )}
-          
+
           {status && (
-            <span className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight border ${statusVariants[status.variant]}`}>
+            <Badge variant={status.variant} size="md">
               {status.label}
-            </span>
+            </Badge>
           )}
-          
+
           {badges.map((badge, index) => (
-            <span
-              key={index}
-              className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight border ${badgeVariants[badge.variant]}`}
-            >
+            <Badge key={index} variant={badge.variant} size="md">
               {badge.label}
-            </span>
+            </Badge>
           ))}
         </div>
       </div>

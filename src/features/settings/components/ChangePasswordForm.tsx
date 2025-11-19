@@ -2,7 +2,7 @@ import { Eye, EyeOff, CheckCircle, AlertCircle, Lock, RotateCcw, Shield } from '
 
 import { useChangePasswordController } from '../hooks/useChangePasswordController'
 
-import { Input } from '@/shared/ui'
+import { Input, Badge } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { PlainButton } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
@@ -36,10 +36,10 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
           <Lock className="w-6 h-6 text-[#D417C8]" />
         </div>
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 bg-white/[0.03] px-3 py-1 rounded-full border border-white/[0.08] text-white/70 text-sm">
+          <Badge variant="info" size="lg" className="inline-flex items-center gap-2">
             <Shield className="w-4 h-4" />
             Enhanced security enabled
-          </div>
+          </Badge>
           <div>
             <h2 className="text-2xl font-normal tracking-tight text-white">Secure Password Update</h2>
             <p className="text-gray-400 text-sm mt-2 max-w-lg mx-auto">

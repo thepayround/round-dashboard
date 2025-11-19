@@ -23,7 +23,7 @@ import { useCustomersController } from '../hooks/useCustomersController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
-import { Checkbox } from '@/shared/ui'
+import { Checkbox, Badge, type BadgeVariant } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { IconButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
@@ -56,20 +56,20 @@ const getStatusText = (status: number | string): string => {
   }
 }
 
-const getStatusClass = (status: number | string): string => {
+const getStatusVariant = (status: number | string): BadgeVariant => {
   const statusValue = typeof status === 'string' ? parseInt(status) : status
-  
+
   switch (statusValue) {
     case CustomerStatus.Active:
-      return 'bg-[#38D39F]/10 text-[#38D39F] border border-[#38D39F]/40'
+      return 'success'
     case CustomerStatus.Inactive:
-      return 'bg-[#262626] text-white/60 border border-white/10'
+      return 'neutral'
     case CustomerStatus.Suspended:
-      return 'bg-[#FF9F0A]/10 text-[#FF9F0A] border border-[#FF9F0A]/40'
+      return 'warning'
     case CustomerStatus.Cancelled:
-      return 'bg-[#FF3B30]/10 text-[#FF3B30] border border-[#FF3B30]/40'
+      return 'error'
     default:
-      return 'bg-[#262626] text-white/60 border border-white/10'
+      return 'neutral'
   }
 }
 
@@ -392,9 +392,9 @@ const CustomersPage: React.FC = () => {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight ${getStatusClass(customer.status)}`}>
+                    <Badge variant={getStatusVariant(customer.status)} size="md">
                       {getStatusText(customer.status)}
-                    </span>
+                    </Badge>
                   </div>
                   
                   <div className="flex items-center space-x-2">

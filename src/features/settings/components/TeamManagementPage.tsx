@@ -20,6 +20,7 @@ import { useTeamManagementController } from '../hooks/useTeamManagementControlle
 import type { TeamInvitation, UserRole } from '../types/team.types'
 
 import { ActionButton } from '@/shared/ui/ActionButton'
+import { Badge } from '@/shared/ui/Badge'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
@@ -206,11 +207,9 @@ export const TeamManagementPage: React.FC = () => {
                 >
                   <IconComponent className="w-4 h-4" />
                   <span className="font-medium">{tab.label}</span>
-                  <span className={`px-2 py-1 rounded-full text-xs ${
-                    isActive ? 'bg-white/20' : 'bg-white/10'
-                  }`}>
+                  <Badge variant="neutral" size="sm">
                     {tab.count}
-                  </span>
+                  </Badge>
                 </Button>
               )
             })}

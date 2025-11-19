@@ -4,7 +4,7 @@ import { User, Mail, Phone } from 'lucide-react'
 import { useUserInfoStepController } from '../../hooks/useUserInfoStepController'
 import type { UserInfo } from '../../types/onboarding'
 
-import { Input } from '@/shared/ui'
+import { Input, Badge } from '@/shared/ui'
 
 interface UserInfoStepProps {
   data: UserInfo
@@ -52,11 +52,11 @@ export const UserInfoStep = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="mt-3 inline-flex items-center px-3 py-1 rounded-full bg-primary/20 border border-accent/30"
+              className="mt-3"
             >
-              <span className="text-[#42E695] text-sm font-medium">
+              <Badge variant="success" size="lg">
                 ✓ Auto-completed from your account
-              </span>
+              </Badge>
             </motion.div>
           )}
         </div>

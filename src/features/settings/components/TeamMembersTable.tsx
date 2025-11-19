@@ -7,14 +7,16 @@ import React from 'react'
 
 import type { TeamMember, UserRole } from '../types/team.types'
 
-import { 
-  Table, 
-  TableHeader, 
+import {
+  Table,
+  TableHeader,
   TableBody,
   TableRow,
-  TableHead, 
+  TableHead,
   TableCell,
-  SortableTableHead 
+  SortableTableHead,
+  Badge,
+  type BadgeVariant
 } from '@/shared/ui'
 import { IconButton } from '@/shared/ui/Button'
 
@@ -40,15 +42,15 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
   onRemoveMember,
   loading = false
 }) => {
-  const roleLabels: Record<UserRole, { label: string; color: string }> = {
-    SuperAdmin: { label: 'Super Admin', color: 'text-green-400' },
-    Admin: { label: 'Admin', color: 'text-orange-400' },
-    TeamManager: { label: 'Team Manager', color: 'text-blue-400' },
-    TeamMember: { label: 'Team Member', color: 'text-green-400' },
-    Sales: { label: 'Sales', color: 'text-cyan-400' },
-    Finance: { label: 'Finance', color: 'text-yellow-400' },
-    Support: { label: 'Support', color: 'text-indigo-400' },
-    Viewer: { label: 'Viewer', color: 'text-gray-400' }
+  const roleLabels: Record<UserRole, { label: string; variant: BadgeVariant }> = {
+    SuperAdmin: { label: 'Super Admin', variant: 'success' },
+    Admin: { label: 'Admin', variant: 'warning' },
+    TeamManager: { label: 'Team Manager', variant: 'info' },
+    TeamMember: { label: 'Team Member', variant: 'success' },
+    Sales: { label: 'Sales', variant: 'info' },
+    Finance: { label: 'Finance', variant: 'warning' },
+    Support: { label: 'Support', variant: 'primary' },
+    Viewer: { label: 'Viewer', variant: 'neutral' }
   }
 
   const formatDate = (dateString: string) => new Intl.DateTimeFormat('en-US', {
@@ -110,9 +112,9 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                     <div className="text-sm text-white/80 truncate">{member.email}</div>
                   </TableCell>
                   <TableCell>
-                    <span className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight bg-${roleConfig.color.split('-')[1]}-500/20 ${roleConfig.color} border border-${roleConfig.color.split('-')[1]}-500/30`}>
+                    <Badge variant={roleConfig.variant} size="md">
                       {member.roleName || roleConfig.label}
-                    </span>
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="text-sm text-white/80">{formatDate(member.joinedAt)}</div>

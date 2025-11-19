@@ -10,15 +10,16 @@ import { Link } from 'react-router-dom'
 import { useCustomerTableController } from '../hooks/useCustomerTableController'
 
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
+import {
+  Table,
+  TableHeader,
+  TableBody,
   TableRow,
-  TableHead, 
+  TableHead,
   TableCell,
   SortableTableHead,
-  Checkbox
+  Checkbox,
+  Badge
 } from '@/shared/ui'
 import { Button, IconButton } from '@/shared/ui/Button'
 
@@ -211,9 +212,9 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-normal tracking-tight ${statusMeta.className}`}>
+                      <Badge variant={statusMeta.variant} size="md">
                         {statusMeta.label}
-                      </span>
+                      </Badge>
                       {customer.portalAccess && (
                         <div className="w-2 h-2 bg-white/50 rounded-full" title="Portal Access Enabled" />
                       )}

@@ -1,13 +1,13 @@
-import { X, User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Hash, Truck, Languages, AlertCircle } from 'lucide-react'
+import { User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Hash, Truck, Languages, AlertCircle } from 'lucide-react'
 import React from 'react'
 
 import { useAddCustomerModalController } from '../hooks/useAddCustomerModalController'
 
 import { CustomerType } from '@/shared/types/customer.types'
-import { Input, Toggle } from '@/shared/ui'
+import { Input, Toggle, Badge } from '@/shared/ui'
 import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
-import { IconButton, Button } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/Button'
 import { FormInput } from '@/shared/ui/FormInput'
 import { Modal } from '@/shared/ui/Modal'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
@@ -259,21 +259,15 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           
           <div className="flex flex-wrap gap-2 mb-3">
             {(formData.tags ?? []).map((tag, index) => (
-              <span
+              <Badge
                 key={index}
-                className="px-3 py-1 bg-[#7767DA]/20 text-[#7767DA] border border-[#7767DA]/30 rounded-full text-sm flex items-center space-x-2"
+                variant="primary"
+                size="lg"
+                removable
+                onRemove={() => handleRemoveTag(tag)}
               >
-                <span>{tag}</span>
-                <IconButton
-                  type="button"
-                  onClick={() => handleRemoveTag(tag)}
-                  icon={X}
-                  variant="ghost"
-                  size="sm"
-                  className="text-[#7767DA]/70 hover:text-[#7767DA] w-4 h-4 p-0"
-                  aria-label="Remove tag"
-                />
-              </span>
+                {tag}
+              </Badge>
             ))}
           </div>
           

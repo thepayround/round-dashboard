@@ -1,11 +1,11 @@
-import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck, Hash, X } from 'lucide-react'
+import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck, Hash } from 'lucide-react'
 import React from 'react'
 
 import { useEditCustomerModalController } from '../hooks/useEditCustomerModalController'
 
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
 import { CustomerType } from '@/shared/types/customer.types'
-import { Input, Toggle } from '@/shared/ui'
+import { Input, Toggle, Badge } from '@/shared/ui'
 import { ApiDropdown, currencyDropdownConfig, timezoneDropdownConfig, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
 import { Button, IconButton } from '@/shared/ui/Button'
@@ -471,21 +471,15 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   
                   <div className="flex flex-wrap gap-2">
                     {formData.tags?.map((tag, index) => (
-                      <span
+                      <Badge
                         key={index}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-[#14BDEA]/10 text-[#14BDEA] border border-[#14BDEA]/20"
+                        variant="info"
+                        size="lg"
+                        removable
+                        onRemove={() => handleRemoveTag(tag)}
                       >
                         {tag}
-                        <IconButton
-                          type="button"
-                          onClick={() => handleRemoveTag(tag)}
-                          icon={X}
-                          variant="ghost"
-                          size="sm"
-                          aria-label={`Remove ${tag} tag`}
-                          className="ml-1 text-[#14BDEA]/70 hover:text-[#14BDEA] w-4 h-4 p-0"
-                        />
-                      </span>
+                      </Badge>
                     ))}
                   </div>
                   
