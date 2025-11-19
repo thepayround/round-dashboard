@@ -41,13 +41,18 @@ class ApiClient {
       },
     })
 
-    // Request interceptor to add auth token
+    // Request interceptor to add auth token and correlation ID
     this.client.interceptors.request.use(
       config => {
         const token = tokenManager.getToken()
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }
+        
+        // Add correlation ID for distributed tracing
+        const correlationId = crypto.randomUUID()
+        config.headers['X-Correlation-ID'] = correlationId
+        
         return config
       },
       error => Promise.reject(error)
