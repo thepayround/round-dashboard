@@ -9,6 +9,7 @@ export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from './Bad
 export { Avatar, type AvatarProps, type AvatarSize, type AvatarShape } from './Avatar'
 export { LoadingSpinner, LoadingOverlay, type LoadingSpinnerProps, type LoadingOverlayProps, type SpinnerSize, type SpinnerColor } from './LoadingSpinner'
 export { EmptyState, type EmptyStateProps } from './EmptyState'
+export { Alert, type AlertProps, type AlertVariant } from './Alert'
 export { AuthInput } from './AuthInput'
 export { AuthLogo } from './AuthLogo'
 export { WhiteLogo } from './WhiteLogo'

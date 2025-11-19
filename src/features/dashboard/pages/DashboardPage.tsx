@@ -18,7 +18,7 @@ import { useDashboardPageController } from '../hooks/useDashboardPageController'
 import type { DateRangePreset } from '../hooks/useDashboardPageController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
-import { LoadingSpinner, UiDropdown } from '@/shared/ui'
+import { Alert, LoadingSpinner, UiDropdown } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
@@ -166,9 +166,10 @@ export const DashboardPage = () => {
           </div>
         </div>
         {metricsError && (
-          <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            {metricsError}
-          </div>
+          <Alert
+            variant="error"
+            description={metricsError}
+          />
         )}
 
         {kpis.length > 0 && (

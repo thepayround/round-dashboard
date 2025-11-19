@@ -2,6 +2,7 @@ import { Trash2, UserX, AlertTriangle } from 'lucide-react'
 
 import { useDangerousActionsModalController } from '../hooks/useDangerousActionsModalController'
 
+import { Alert } from '@/shared/ui'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
 import { Modal } from '@/shared/ui/Modal/Modal'
@@ -60,15 +61,11 @@ export const DangerousActionsModal = ({
       <div className="p-6 space-y-6">
         {!actionType ? (
           <div className="space-y-6">
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
-              <h3 className="text-sm font-normal tracking-tight text-[#D417C8] mb-2 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" />
-                Warning
-              </h3>
-              <p className="text-sm text-white/80">
-                These actions are permanent and cannot be undone. Please proceed with caution.
-              </p>
-            </div>
+            <Alert
+              variant="danger"
+              title="Warning"
+              description="These actions are permanent and cannot be undone. Please proceed with caution."
+            />
 
             <div className="space-y-4">
               {currentStatus === 'active' && (
@@ -125,15 +122,12 @@ export const DangerousActionsModal = ({
           </div>
         ) : actionType === 'deactivate' ? (
           <div className="space-y-6">
-            <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-4">
-              <h3 className="text-sm font-normal tracking-tight text-orange-300 mb-2 flex items-center gap-2">
-                <UserX className="w-4 h-4" />
-                Confirm Deactivation
-              </h3>
-              <p className="text-sm text-white/80">
-                {customerName} will be unable to access services until reactivated.
-              </p>
-            </div>
+            <Alert
+              variant="warning"
+              title="Confirm Deactivation"
+              description={`${customerName} will be unable to access services until reactivated.`}
+              icon={UserX}
+            />
 
             <div className="flex items-center space-x-3">
               <Button onClick={reset} variant="ghost">
@@ -154,15 +148,12 @@ export const DangerousActionsModal = ({
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
-              <h3 className="text-sm font-normal tracking-tight text-red-300 mb-2 flex items-center gap-2">
-                <Trash2 className="w-4 h-4" />
-                Confirm Deletion
-              </h3>
-              <p className="text-sm text-white/80">
-                Type <span className="font-semibold text-[#D417C8]">{customerName}</span> to confirm permanent deletion.
-              </p>
-            </div>
+            <Alert
+              variant="error"
+              title="Confirm Deletion"
+              description={`Type ${customerName} to confirm permanent deletion.`}
+              icon={Trash2}
+            />
 
             <Input
               type="text"
