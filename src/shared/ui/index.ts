@@ -10,6 +10,7 @@ export { Avatar, type AvatarProps, type AvatarSize, type AvatarShape } from './A
 export { LoadingSpinner, LoadingOverlay, type LoadingSpinnerProps, type LoadingOverlayProps, type SpinnerSize, type SpinnerColor } from './LoadingSpinner'
 export { EmptyState, type EmptyStateProps } from './EmptyState'
 export { Alert, type AlertProps, type AlertVariant } from './Alert'
+export { AddressFormGroup, type AddressFormGroupProps, type Address } from './AddressFormGroup'
 export { AuthInput } from './AuthInput'
 export { AuthLogo } from './AuthLogo'
 export { WhiteLogo } from './WhiteLogo'

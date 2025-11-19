@@ -1,11 +1,11 @@
-import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck, Hash } from 'lucide-react'
+import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck } from 'lucide-react'
 import React from 'react'
 
 import { useEditCustomerModalController } from '../hooks/useEditCustomerModalController'
 
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
 import { CustomerType } from '@/shared/types/customer.types'
-import { Input, Toggle, Badge } from '@/shared/ui'
+import { Input, Toggle, Badge, AddressFormGroup, type Address } from '@/shared/ui'
 import { ApiDropdown, currencyDropdownConfig, timezoneDropdownConfig, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
 import { Button, IconButton } from '@/shared/ui/Button'
@@ -306,71 +306,17 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       <MapPin className="w-4 h-4 text-[#42E695]" />
                       <span>Billing Address</span>
                     </h4>
-                    
-                    <div>
-                      <div className="p-4 bg-white/5 border border-white/10 rounded-lg space-y-4">
-                        {/* Address Lines */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <FormInput
-                              label="Address Line 1"
-                              value={billingAddress.line1}
-                              onChange={(e) => handleAddressChange('billing', 'line1', e.target.value)}
-                              placeholder="123 Main Street"
-                              leftIcon={MapPin}
-                            />
-                          </div>
-                          <div>
-                            <FormInput
-                              label="Address Line 2"
-                              value={billingAddress.line2}
-                              onChange={(e) => handleAddressChange('billing', 'line2', e.target.value)}
-                              placeholder="Apartment, floor, etc. (optional)"
-                              leftIcon={MapPin}
-                            />
-                          </div>
-                        </div>
-                        
-                        {/* City, State, ZIP, Country - 4-column layout */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                          <div>
-                            <FormInput
-                              label="City"
-                              value={billingAddress.city}
-                              onChange={(e) => handleAddressChange('billing', 'city', e.target.value)}
-                              placeholder="San Francisco"
-                            />
-                          </div>
-                          <div>
-                            <FormInput
-                              label="State / Province"
-                              value={billingAddress.state}
-                              onChange={(e) => handleAddressChange('billing', 'state', e.target.value)}
-                              placeholder="CA"
-                            />
-                          </div>
-                          <div>
-                            <FormInput
-                              label="ZIP / Postal"
-                              value={billingAddress.zipCode}
-                              onChange={(e) => handleAddressChange('billing', 'zipCode', e.target.value)}
-                              placeholder="94102"
-                              leftIcon={Hash}
-                            />
-                          </div>
-                          <div>
-                            <div className="space-y-2">
-                              <span className="auth-label">Country</span>
-                              <ApiDropdown
-                                config={countryDropdownConfig}
-                                value={billingAddress.country}
-                                onSelect={(value) => handleAddressChange('billing', 'country', value)}
-                                allowClear
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+
+                    <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
+                      <AddressFormGroup
+                        value={billingAddress}
+                        onChange={(address: Address) => {
+                          Object.entries(address).forEach(([field, value]) => {
+                            handleAddressChange('billing', field as keyof Address, value)
+                          })
+                        }}
+                        countryDropdownConfig={countryDropdownConfig}
+                      />
                     </div>
                   </div>
                   
@@ -393,71 +339,17 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                         Copy from Billing
                       </Button>
                     </div>
-                    
-                    <div>
-                      <div className="p-4 bg-white/5 border border-white/10 rounded-lg space-y-4">
-                        {/* Address Lines */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <FormInput
-                              label="Address Line 1"
-                              value={shippingAddress.line1}
-                              onChange={(e) => handleAddressChange('shipping', 'line1', e.target.value)}
-                              placeholder="123 Main Street"
-                              leftIcon={MapPin}
-                            />
-                          </div>
-                          <div>
-                            <FormInput
-                              label="Address Line 2"
-                              value={shippingAddress.line2}
-                              onChange={(e) => handleAddressChange('shipping', 'line2', e.target.value)}
-                              placeholder="Apartment, floor, etc. (optional)"
-                              leftIcon={MapPin}
-                            />
-                          </div>
-                        </div>
-                        
-                        {/* City, State, ZIP, Country - 4-column layout */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                          <div>
-                            <FormInput
-                              label="City"
-                              value={shippingAddress.city}
-                              onChange={(e) => handleAddressChange('shipping', 'city', e.target.value)}
-                              placeholder="San Francisco"
-                            />
-                          </div>
-                          <div>
-                            <FormInput
-                              label="State / Province"
-                              value={shippingAddress.state}
-                              onChange={(e) => handleAddressChange('shipping', 'state', e.target.value)}
-                              placeholder="CA"
-                            />
-                          </div>
-                          <div>
-                            <FormInput
-                              label="ZIP / Postal"
-                              value={shippingAddress.zipCode}
-                              onChange={(e) => handleAddressChange('shipping', 'zipCode', e.target.value)}
-                              placeholder="94105"
-                              leftIcon={Hash}
-                            />
-                          </div>
-                          <div>
-                            <div className="space-y-2">
-                              <span className="auth-label">Country</span>
-                              <ApiDropdown
-                                config={countryDropdownConfig}
-                                value={shippingAddress.country}
-                                onSelect={(value) => handleAddressChange('shipping', 'country', value)}
-                                allowClear
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+
+                    <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
+                      <AddressFormGroup
+                        value={shippingAddress}
+                        onChange={(address: Address) => {
+                          Object.entries(address).forEach(([field, value]) => {
+                            handleAddressChange('shipping', field as keyof Address, value)
+                          })
+                        }}
+                        countryDropdownConfig={countryDropdownConfig}
+                      />
                     </div>
                   </div>
                 </div>

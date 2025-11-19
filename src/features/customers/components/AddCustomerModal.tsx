@@ -4,11 +4,10 @@ import React from 'react'
 import { useAddCustomerModalController } from '../hooks/useAddCustomerModalController'
 
 import { CustomerType } from '@/shared/types/customer.types'
-import { Input, Toggle, Badge } from '@/shared/ui'
+import { Input, Toggle, Badge, AddressFormGroup, type Address } from '@/shared/ui'
 import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/ui/ApiDropdown'
 import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
 import { Button } from '@/shared/ui/Button'
-import { FormInput } from '@/shared/ui/FormInput'
 import { Modal } from '@/shared/ui/Modal'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
 
@@ -28,7 +27,6 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
     getFieldError,
     handleCustomerTypeChange,
     handleInputChange,
-    handleAddressChange,
     handleAddTag,
     handleRemoveTag,
     handleTagInputChange,
@@ -293,74 +291,22 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
             <MapPin className="w-5 h-5 text-[#42E695]" />
             <span>Billing Address</span>
           </h3>
-          
-          <div className="space-y-4">
-            {/* Address Lines - Symmetric 2-column */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <FormInput
-                  label="Address Line 1"
-                  value={formData.billingAddress?.line1 ?? ''}
-                  onChange={(e) => handleAddressChange('billingAddress', 'line1', e.target.value)}
-                  placeholder="123 Main Street, Suite 100"
-                  leftIcon={MapPin}
-                />
-              </div>
-              
-              <div>
-                <FormInput
-                  label="Address Line 2"
-                  value={formData.billingAddress?.line2 ?? ''}
-                  onChange={(e) => handleAddressChange('billingAddress', 'line2', e.target.value)}
-                  placeholder="Apartment, floor, etc. (optional)"
-                  leftIcon={MapPin}
-                />
-              </div>
-            </div>
-            
-            {/* City, State, ZIP, Country - Symmetric 4-column */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <FormInput
-                  label="City"
-                  value={formData.billingAddress?.city ?? ''}
-                  onChange={(e) => handleAddressChange('billingAddress', 'city', e.target.value)}
-                  placeholder="San Francisco"
-                />
-              </div>
-              
-              <div>
-                <FormInput
-                  label="State / Province"
-                  value={formData.billingAddress?.state ?? ''}
-                  onChange={(e) => handleAddressChange('billingAddress', 'state', e.target.value)}
-                  placeholder="CA"
-                />
-              </div>
-              
-              <div>
-                <FormInput
-                  label="ZIP / Postal"
-                  value={formData.billingAddress?.zipCode ?? ''}
-                  onChange={(e) => handleAddressChange('billingAddress', 'zipCode', e.target.value)}
-                  placeholder="94102"
-                  leftIcon={Hash}
-                />
-              </div>
-              
-              <div>
-                <div className="space-y-2">
-                  <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Country</span>
-                  <ApiDropdown
-                    config={countryDropdownConfig}
-                    value={formData.billingAddress?.country ?? ''}
-                    onSelect={(value) => handleAddressChange('billingAddress', 'country', value)}
-                    allowClear
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+
+          <AddressFormGroup
+            value={formData.billingAddress ?? {
+              line1: '',
+              line2: '',
+              city: '',
+              state: '',
+              zipCode: '',
+              country: '',
+            }}
+            onChange={(address: Address) => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              handleInputChange('billingAddress', address as any)
+            }}
+            countryDropdownConfig={countryDropdownConfig}
+          />
         </div>
 
         {/* Shipping Address Section */}
@@ -396,73 +342,21 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
               </div>
             </div>
           ) : (
-            
-            <div className="space-y-4">
-              {/* Address Lines - Symmetric 2-column */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <FormInput
-                    label="Address Line 1"
-                    value={formData.shippingAddress?.line1 ?? ''}
-                    onChange={(e) => handleAddressChange('shippingAddress', 'line1', e.target.value)}
-                    placeholder="123 Main Street, Suite 100"
-                    leftIcon={MapPin}
-                  />
-                </div>
-                
-                <div>
-                  <FormInput
-                    label="Address Line 2"
-                    value={formData.shippingAddress?.line2 ?? ''}
-                    onChange={(e) => handleAddressChange('shippingAddress', 'line2', e.target.value)}
-                    placeholder="Apartment, floor, etc. (optional)"
-                    leftIcon={MapPin}
-                  />
-                </div>
-              </div>
-              
-              {/* City, State, ZIP, Country - Symmetric 4-column */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                  <FormInput
-                    label="City"
-                    value={formData.shippingAddress?.city ?? ''}
-                    onChange={(e) => handleAddressChange('shippingAddress', 'city', e.target.value)}
-                    placeholder="San Francisco"
-                  />
-                </div>
-                
-                <div>
-                  <FormInput
-                    label="State/Province"
-                    value={formData.shippingAddress?.state ?? ''}
-                    onChange={(e) => handleAddressChange('shippingAddress', 'state', e.target.value)}
-                    placeholder="CA"
-                  />
-                </div>
-                
-                <div>
-                  <FormInput
-                    label="ZIP/Postal"
-                    value={formData.shippingAddress?.zipCode ?? ''}
-                    onChange={(e) => handleAddressChange('shippingAddress', 'zipCode', e.target.value)}
-                    placeholder="94105"
-                  />
-                </div>
-                
-                <div>
-                  <div className="space-y-2">
-                    <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Country</span>
-                    <ApiDropdown
-                      config={countryDropdownConfig}
-                      value={formData.shippingAddress?.country ?? ''}
-                      onSelect={(value) => handleAddressChange('shippingAddress', 'country', value)}
-                      allowClear
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <AddressFormGroup
+              value={formData.shippingAddress ?? {
+                line1: '',
+                line2: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                country: '',
+              }}
+              onChange={(address: Address) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                handleInputChange('shippingAddress', address as any)
+              }}
+              countryDropdownConfig={countryDropdownConfig}
+            />
           )}
         </div>
 
