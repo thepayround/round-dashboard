@@ -87,10 +87,10 @@
     },
     {
       "name": "Prefer Input component over FormInput",
-      "pattern": "type\\s*=\\s*[\"'](?:text|email|password|number|tel|url)[\"']",
-      "message": "When using input components, prefer using Input, FormInput, or AuthInput components for consistency",
+      "pattern": "<input\\s+[^>]*type\\s*=\\s*[\"'](?:text|email|password|number|tel|url)[\"']",
+      "message": "Use Input, FormInput, or AuthInput components instead of raw <input> elements with type attributes",
       "suggestion": "Available input components: Input (basic), FormInput (full-featured), AuthInput (auth pages), SearchInput (search), PhoneInput (phone numbers)",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": [
         "src/shared/ui/",
         "*.test.tsx",

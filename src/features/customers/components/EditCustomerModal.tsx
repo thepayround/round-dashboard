@@ -485,7 +485,6 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   
                   <div className="flex gap-2">
                     <Input
-                      type="text"
                       value={newTag}
                       onChange={(e) => handleTagInputChange(e.target.value)}
                       placeholder="Add tag"

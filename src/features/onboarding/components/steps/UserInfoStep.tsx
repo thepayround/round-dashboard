@@ -69,7 +69,6 @@ export const UserInfoStep = ({
           <div>
             <Input
               id="firstName"
-              type="text"
               value={data.firstName}
               onChange={handleInputChange('firstName')}
               placeholder="John"
@@ -82,7 +81,6 @@ export const UserInfoStep = ({
           <div>
             <Input
               id="lastName"
-              type="text"
               value={data.lastName}
               onChange={handleInputChange('lastName')}
               placeholder="Doe"

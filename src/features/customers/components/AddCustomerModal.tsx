@@ -106,7 +106,6 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
             <div>
               <Input
                 id="firstName"
-                type="text"
                 value={formData.firstName}
                 onChange={(e) => handleInputChange('firstName', e.target.value)}
                 placeholder="John"
@@ -115,11 +114,10 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                 required
               />
             </div>
-            
+
             <div>
               <Input
                 id="lastName"
-                type="text"
                 value={formData.lastName}
                 onChange={(e) => handleInputChange('lastName', e.target.value)}
                 placeholder="Doe"
@@ -128,7 +126,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                 required
               />
             </div>
-            
+
             <div>
               <Input
                 id="email"
@@ -172,7 +170,6 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
               <div>
                 <Input
                   id="company"
-                  type="text"
                   value={formData.company}
                   onChange={(e) => handleInputChange('company', e.target.value)}
                   placeholder="Acme Corporation"
@@ -182,13 +179,12 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                 />
               </div>
             )}
-            
+
             {/* Tax Number field - only for business customers */}
             {formData.type === CustomerType.Business && (
               <div>
                 <Input
                   id="taxNumber"
-                  type="text"
                   value={formData.taxNumber}
                   onChange={(e) => handleInputChange('taxNumber', e.target.value)}
                   placeholder="Enter tax number"
@@ -273,7 +269,6 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           
           <div className="flex space-x-2">
             <Input
-              type="text"
               value={currentTag}
               onChange={(e) => handleTagInputChange(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
