@@ -187,6 +187,8 @@ export const UiDropdown = ({
       )
     : null
 
+  const hasLeadingIcon = Boolean(selectedOption?.icon || icon)
+
   return (
     <div className={`relative ${className}`}>
       <div
@@ -199,7 +201,7 @@ export const UiDropdown = ({
         }}
         onKeyDown={disabled ? undefined : handleTriggerKeyDown}
         className={`
-          relative w-full h-11 lg:h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
+          relative w-full h-11 lg:h-9 ${hasLeadingIcon ? 'pl-9 pr-3' : 'px-3'} rounded-lg border transition-all duration-300
           bg-[#171719] border-[#333333] text-white flex items-center justify-between
           font-light text-xs outline-none
           ${error ? 'border-[#ef4444]' : ''}
@@ -218,19 +220,32 @@ export const UiDropdown = ({
         aria-busy={loading}
         tabIndex={disabled ? -1 : 0}
       >
-        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 flex items-center justify-center">
-          {selectedOption?.icon ?? icon ?? <ChevronDown className="w-4 h-4" />}
-        </div>
-
-        <div className="flex-1 text-left truncate flex items-center">
+        <div className="flex-1 text-left truncate flex items-center gap-2 min-w-0">
+          {hasLeadingIcon && (
+            <span className="flex-shrink-0 w-4 h-4 text-white/60 flex items-center justify-center">
+              {selectedOption?.icon ?? icon}
+            </span>
+          )}
           {(() => {
             if (loading && value && !selectedOption) {
-              return <span className="text-white/60 font-normal leading-none">Loading {value}...</span>
+              return (
+                <span className="text-white/60 font-normal leading-none truncate">
+                  Loading {value}...
+                </span>
+              )
             }
             if (selectedOption) {
-              return <span className="text-white/95 font-medium leading-none">{selectedOption.label}</span>
+              return (
+                <span className="text-white/95 font-medium leading-none truncate">
+                  {selectedOption.label}
+                </span>
+              )
             }
-            return <span className="text-white/60 font-normal leading-none">{placeholder}</span>
+            return (
+              <span className="text-white/60 font-normal leading-none truncate">
+                {placeholder}
+              </span>
+            )
           })()}
         </div>
 
