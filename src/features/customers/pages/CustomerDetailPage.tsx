@@ -5,7 +5,6 @@ import {
   AlertCircle,
   ArrowLeft,
   Building2,
-  Calendar,
   CheckCircle,
   CreditCard,
   Edit,
@@ -586,13 +585,13 @@ const CustomerDetailPage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="border-b border-white/10 pb-6"
+          className="flex items-center justify-between"
         >
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-6">
             <IconButton
               icon={ArrowLeft}
               onClick={() => navigate('/customers')}
@@ -601,66 +600,60 @@ const CustomerDetailPage: React.FC = () => {
               className="text-white/60 hover:text-white"
               aria-label="Back to customers"
             />
+
             <div className="flex items-center gap-4">
               <h1 className="text-xl font-medium text-white">{customer.effectiveDisplayName ?? customer.displayName}</h1>
               {getStatusBadge(customer.status)}
             </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6 text-sm text-white/60">
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                <span>{customer.email}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span>Joined {formatDate(customer.signupDate)}</span>
-              </div>
+            <div className="flex items-center gap-4 text-sm text-white/60 border-l border-white/10 pl-6">
+              <span>{customer.email}</span>
+              <span>·</span>
+              <span>Joined {formatDate(customer.signupDate)}</span>
               {customer.isBusinessCustomer && (
-                <div className="flex items-center gap-2">
-                  <Building2 className="w-4 h-4" />
+                <>
+                  <span>·</span>
                   <span>Business</span>
-                </div>
+                </>
               )}
             </div>
+          </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                onClick={openEmailModal}
-                variant="ghost"
-                size="md"
-                icon={Mail}
-                iconPosition="left"
-              >
-                Send Email
-              </Button>
-              <Button
-                type="button"
-                onClick={openEditModal}
-                variant="primary"
-                size="md"
-                icon={Edit}
-                iconPosition="left"
-              >
-                Edit
-              </Button>
-              <IconButton
-                type="button"
-                onClick={openDangerousActionsModal}
-                icon={MoreHorizontal}
-                variant="ghost"
-                size="md"
-                className="text-white/60 hover:text-white"
-                title="More actions"
-                aria-label="More actions"
-              />
-            </div>
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              onClick={openEmailModal}
+              variant="ghost"
+              size="md"
+              icon={Mail}
+              iconPosition="left"
+            >
+              Send Email
+            </Button>
+            <Button
+              type="button"
+              onClick={openEditModal}
+              variant="primary"
+              size="md"
+              icon={Edit}
+              iconPosition="left"
+            >
+              Edit
+            </Button>
+            <IconButton
+              type="button"
+              onClick={openDangerousActionsModal}
+              icon={MoreHorizontal}
+              variant="ghost"
+              size="md"
+              className="text-white/60 hover:text-white"
+              title="More actions"
+              aria-label="More actions"
+            />
           </div>
         </motion.div>
 
-        <div className="flex gap-6 border-b border-white/10">
+        <div className="flex gap-6">
           {DETAIL_TABS.map(tab => (
             <PlainButton
               key={tab.id}
