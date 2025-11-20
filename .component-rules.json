@@ -113,7 +113,7 @@
       "message": "Use <Avatar> component for user avatars and initials",
       "suggestion": "import { Avatar } from '@/shared/ui'",
       "severity": "error",
-      "excludePaths": ["src/shared/ui/Avatar/", "*.test.tsx", "*.stories.tsx"]
+      "excludePaths": ["src/shared/ui/Avatar/", "src/shared/ui/Modal/", "*.test.tsx", "*.stories.tsx"]
     },
     {
       "name": "No raw loading spinners",

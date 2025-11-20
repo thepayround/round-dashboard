@@ -86,11 +86,11 @@ export const ConfirmDialog = ({
       title={title}
       size="md"
     >
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Icon and Message */}
-        <div className="flex items-start space-x-4">
-          <div className={`flex-shrink-0 w-12 h-12 rounded-full ${styles.bgColor} ${styles.borderColor} border flex items-center justify-center`}>
-            <Icon className={`w-6 h-6 ${styles.iconColor}`} />
+        <div className="flex items-start space-x-2">
+          <div className={`flex-shrink-0 w-10 h-10 rounded-md ${styles.bgColor} ${styles.borderColor} border flex items-center justify-center`}>
+            <Icon className={`w-5 h-5 ${styles.iconColor}`} />
           </div>
           <div className="flex-1">
             <p className="text-white/70 leading-relaxed font-normal tracking-tight">
@@ -100,7 +100,7 @@ export const ConfirmDialog = ({
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end space-x-3 pt-4">
+        <div className="flex justify-end space-x-2 pt-2">
           <ActionButton
             label={cancelLabel}
             onClick={onClose}

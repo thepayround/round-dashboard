@@ -167,27 +167,27 @@ export const Modal = ({
             className={`
               relative w-full ${sizeClasses[size]} max-h-[90vh] mx-auto
               bg-[#101011] border border-[#333333]
-              rounded-lg shadow-2xl overflow-hidden
+              rounded-md shadow-2xl overflow-hidden
               ${className}
             `}
           >
               {/* Header */}
               {showHeader && (
                 <div className="flex items-center justify-between px-6 py-4 border-b border-[#333333]">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
                     {Icon && (
-                      <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                        <Icon className="w-5 h-5 text-white" />
+                      <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
+                        <Icon className="w-4 h-4 text-white" />
                       </div>
                     )}
                     <div>
                       {title && (
-                        <h2 id="modal-title" className="text-xl font-medium tracking-tight text-white">
+                        <h2 id="modal-title" className="text-lg font-medium tracking-tight text-white">
                           {title}
                         </h2>
                       )}
                       {subtitle && (
-                        <p id="modal-description" className="text-sm text-white/70">
+                        <p id="modal-description" className="text-xs text-white/70">
                           {subtitle}
                         </p>
                       )}
@@ -205,7 +205,7 @@ export const Modal = ({
               )}
 
               {/* Content */}
-              <div className="px-6 py-6 max-h-[calc(90vh-88px)] overflow-y-auto">
+              <div className="px-6 py-4 max-h-[calc(90vh-88px)] overflow-y-auto">
                 {children}
               </div>
             </div>
