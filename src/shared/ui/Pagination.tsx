@@ -147,7 +147,7 @@ const Pagination: React.FC<PaginationProps> = ({
             {pageNumbers.map((page, index) => (
               <div key={index}>
                 {page === '...' ? (
-                  <span className="px-2 py-2 text-white/60">...</span>
+                  <span className="px-2 py-2 text-white/60" aria-label="More pages">...</span>
                 ) : (
                   <Button
                     onClick={() => onPageChange(page as number)}
