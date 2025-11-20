@@ -26,15 +26,17 @@ const LogoText = memo(({ className = "text-xl" }: { className?: string }) => (
 LogoText.displayName = 'LogoText'
 
 // Mobile Header Component (kept here as it uses LogoText and is specific to mobile layout)
-const MobileHeader = memo(({ 
+const MobileHeader = memo(({
   onMenuClick,
-  isMenuOpen 
-}: { 
+  isMenuOpen
+}: {
   onMenuClick: () => void
   isMenuOpen: boolean
 }) => (
-  <div 
+  <header
     className="fixed top-0 left-0 right-0 h-16 bg-[#070708] border-b border-white/10 z-[50] flex items-center justify-between px-4"
+    role="banner"
+    aria-label="Mobile header"
     style={{
       paddingTop: 'max(1rem, var(--safe-area-inset-top))',
       paddingLeft: 'max(1rem, var(--safe-area-inset-left))',
@@ -58,7 +60,7 @@ const MobileHeader = memo(({
 
     {/* Empty div for spacing to center the logo */}
     <div className="w-10 h-10"></div>
-  </div>
+  </header>
 ))
 MobileHeader.displayName = 'MobileHeader'
 
@@ -168,12 +170,13 @@ export const DashboardLayout = memo(({
       {/* Sidebar */}
       <motion.aside
         initial={false}
-        animate={{ 
+        animate={{
           width: isMobileView ? SIDEBAR.WIDTH_EXPANDED : (isCollapsed ? SIDEBAR.WIDTH_COLLAPSED : SIDEBAR.WIDTH_EXPANDED),
           x: isMobileView && isCollapsed ? -SIDEBAR.WIDTH_EXPANDED : (isSwiping ? swipeOffset : 0)
         }}
         transition={isSwiping ? { duration: 0 } : transitionConfigs.sidebar}
         className={`fixed left-0 top-0 h-full bg-[#070708] ${isMobileView ? 'z-[70] shadow-2xl' : 'z-auto'}`}
+        aria-label="Sidebar navigation"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
