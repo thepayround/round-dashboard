@@ -104,7 +104,7 @@
       "pattern": "px-[0-9] py-[0-9].*rounded-full.*text-xs",
       "message": "Use <Badge> component for status badges and tags",
       "suggestion": "import { Badge } from '@/shared/ui'",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["src/shared/ui/Badge/", "*.test.tsx", "*.stories.tsx"]
     },
     {
@@ -112,7 +112,7 @@
       "pattern": "w-[0-9]+ h-[0-9]+.*rounded.*bg-primary.*justify-center",
       "message": "Use <Avatar> component for user avatars and initials",
       "suggestion": "import { Avatar } from '@/shared/ui'",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["src/shared/ui/Avatar/", "*.test.tsx", "*.stories.tsx"]
     },
     {
@@ -120,7 +120,7 @@
       "pattern": "animate-spin",
       "message": "Use <LoadingSpinner> or <LoadingOverlay> component",
       "suggestion": "import { LoadingSpinner, LoadingOverlay } from '@/shared/ui'",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["src/shared/ui/LoadingSpinner/", "*.test.tsx", "*.stories.tsx"]
     },
     {
@@ -128,7 +128,7 @@
       "pattern": "bg-(red|blue|green|orange)-500/10.*border-(red|blue|green|orange)-500/30",
       "message": "Use <Alert> component for info/warning/error messages",
       "suggestion": "import { Alert } from '@/shared/ui'",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["src/shared/ui/Alert/", "*.test.tsx", "*.stories.tsx"]
     },
     {
@@ -136,7 +136,7 @@
       "pattern": "label\\s*=\\s*[\"'](Address Line 1|City|State|ZIP)",
       "message": "Use <AddressFormGroup> component instead of individual address fields",
       "suggestion": "import { AddressFormGroup } from '@/shared/ui'",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["src/shared/ui/AddressFormGroup/", "*.test.tsx", "*.stories.tsx"]
     },
     {
@@ -184,7 +184,7 @@
       "pattern": "gap-3\\b",
       "message": "Prefer gap-4 for layouts or gap-2 for tight spacing",
       "suggestion": "Use: gap-4 (layouts), gap-2 (tight), gap-6 (sections)",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["*.test.tsx", "*.stories.tsx"]
     },
     {
@@ -192,7 +192,7 @@
       "pattern": "text-white/(40|30|20)",
       "message": "Low contrast text may fail WCAG AA. Use text-white/60 minimum.",
       "suggestion": "Use: text-white/60 (secondary), text-white/70 (readable)",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["*.test.tsx", "*.stories.tsx"]
     },
     {
@@ -200,7 +200,7 @@
       "pattern": "loading=\\{",
       "message": "Use isLoading prop instead of loading for consistency",
       "suggestion": "Replace 'loading={...}' with 'isLoading={...}'",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["src/shared/ui/", "*.test.tsx", "*.stories.tsx"]
     }
   ]
