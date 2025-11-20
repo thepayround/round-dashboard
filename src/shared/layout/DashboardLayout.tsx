@@ -34,14 +34,14 @@ const MobileHeader = memo(({
   isMenuOpen: boolean
 }) => (
   <header
-    className="fixed top-0 left-0 right-0 h-16 bg-[#070708] border-b border-white/10 z-[50] flex items-center justify-between px-4"
+    className="fixed top-0 left-0 right-0 h-14 bg-[#070708] border-b border-white/10 z-[50] flex items-center justify-between px-4"
     role="banner"
     aria-label="Mobile header"
     style={{
       paddingTop: 'max(1rem, var(--safe-area-inset-top))',
       paddingLeft: 'max(1rem, var(--safe-area-inset-left))',
       paddingRight: 'max(1rem, var(--safe-area-inset-right))',
-      height: 'calc(4rem + var(--safe-area-inset-top))'
+      height: 'calc(3.5rem + var(--safe-area-inset-top))'
     }}
   >
     <IconButton
@@ -118,7 +118,7 @@ export const DashboardLayout = memo(({
     <div
       className="min-h-screen relative bg-[#070708]"
       style={{
-        '--sidebar-width': isCollapsed ? '80px' : '280px'
+        '--sidebar-width': isCollapsed ? '80px' : '220px'
       } as React.CSSProperties}
     >
       {/* Skip to main content link for accessibility */}
@@ -126,7 +126,7 @@ export const DashboardLayout = memo(({
         type="button"
         onClick={handleSkipToMainContent}
         variant="primary"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#070708]"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:shadow-lg focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#070708]"
       >
         Skip to main content
       </Button>
@@ -194,7 +194,7 @@ export const DashboardLayout = memo(({
             <div className="flex-shrink-0">
               {!isCollapsed ? (
                 // Expanded: Logo on left, button on right (same row)
-                <div className="flex items-center justify-between pl-8 pr-6 py-5">
+                <div className="flex items-center justify-between pl-8 pr-6 py-4">
                   <Link
                     to="/dashboard"
                     className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
@@ -216,7 +216,7 @@ export const DashboardLayout = memo(({
                 </div>
               ) : (
                 // Collapsed: Logo on top, button below
-                <div className="flex flex-col items-center py-5 space-y-4">
+                <div className="flex flex-col items-center py-4 space-y-4">
                   <Link
                     to="/dashboard"
                     className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
@@ -247,7 +247,7 @@ export const DashboardLayout = memo(({
         {isMobileView && !isCollapsed && (
           <>
             <div className="flex-shrink-0">
-              <div className="flex items-center justify-between pl-8 pr-6 py-5">
+              <div className="flex items-center justify-between pl-8 pr-6 py-4">
                 <Link
                   to="/dashboard"
                   className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
@@ -277,9 +277,9 @@ export const DashboardLayout = memo(({
         {/* Main Content Area - Flex container for navigation and bottom sections */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Navigation */}
-          <nav 
+          <nav
             ref={navigationRef}
-            className={`hide-scrollbar flex-1 py-4 md:py-5 lg:py-4 space-y-1.5 md:space-y-2 lg:space-y-1.5 overflow-y-auto overflow-x-hidden ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}`}
+            className={`hide-scrollbar flex-1 py-4 space-y-1.5 overflow-y-auto overflow-x-hidden ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4')}`}
             style={{ paddingBottom: showProfileDropdown ? '16rem' : '8rem' }}
             role="navigation"
             aria-label="Main navigation"
@@ -310,21 +310,21 @@ export const DashboardLayout = memo(({
               onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, undefined, e)}
               onMouseLeave={handleTooltipLeave}
               className={cn(
-                'group relative flex items-center rounded-lg transition-all duration-200 h-9',
+                'group relative flex items-center rounded-md transition-all duration-200 h-9',
                 isActive(item.href)
                   ? 'bg-primary/10 text-white border border-primary/20'
                   : 'text-white/60 hover:text-white',
                 isCollapsed ? 'justify-center px-0' : 'px-6',
-                isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-2 ring-ring'
+                isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
               )}
               aria-label={item.label}
               tabIndex={isKeyboardNavigating ? -1 : 0}
             >
-              <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
+              <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-2'} flex-shrink-0`} />
 
               {!isCollapsed && (
                 <div className="overflow-hidden">
-                  <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
+                  <span className="font-normal whitespace-nowrap text-xs">{item.label}</span>
                 </div>
               )}
 
@@ -341,7 +341,7 @@ export const DashboardLayout = memo(({
                 <motion.div
                   {...ANIMATION_VARIANTS.expandCollapse}
                   transition={transitionConfigs.normal}
-                  className={`overflow-hidden bg-[#070708] border-t border-[#262626] mx-2 space-y-1.5 md:space-y-2 lg:space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 md:px-6 lg:px-4 py-3 md:py-4 lg:py-3'}`}
+                  className={`overflow-hidden bg-[#070708] border-t border-[#262626] mx-2 space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 py-2'}`}
                 >
                 <Link
                   to="/user-settings"
@@ -349,7 +349,7 @@ export const DashboardLayout = memo(({
                   onMouseEnter={(e) => handleTooltipEnter('user-settings', 'User Settings', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
                   className={cn(
-                    'group relative flex items-center rounded-lg transition-all duration-200 h-9',
+                    'group relative flex items-center rounded-md transition-all duration-200 h-9',
                     isActive('/user-settings')
                       ? 'bg-primary/10 text-white border border-primary/20'
                       : 'text-white/60 hover:text-white',
@@ -357,10 +357,10 @@ export const DashboardLayout = memo(({
                   )}
                   aria-label="User Settings"
                 >
-                  <User className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
+                  <User className={`w-4 h-4 ${isCollapsed ? '' : 'mr-2'} flex-shrink-0`} />
                   {!isCollapsed && (
                     <div className="overflow-hidden">
-                      <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">
+                      <span className="font-normal whitespace-nowrap text-xs">
                         User Settings
                       </span>
                     </div>
@@ -379,7 +379,7 @@ export const DashboardLayout = memo(({
                   onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
                   onMouseLeave={handleTooltipLeave}
                   className={cn(
-                    'group relative rounded-lg transition-all duration-200 h-9',
+                    'group relative rounded-md transition-all duration-200 h-9',
                     isCollapsed ? 'justify-center px-0' : 'px-6'
                   )}
                   aria-label="Logout"
@@ -394,7 +394,7 @@ export const DashboardLayout = memo(({
           <div className="border-t border-white/10 mx-2 bg-[#070708]" />
           
           {/* User Profile */}
-          <div className={cn('py-2 bg-[#070708]', isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}>
+          <div className={cn('py-2 bg-[#070708]', isCollapsed ? 'px-2' : 'px-4')}>
             <div className="relative" ref={profileDropdownRef}>
               <UserButton
                 onClick={() => setShowProfileDropdown(!showProfileDropdown)}
@@ -421,8 +421,8 @@ export const DashboardLayout = memo(({
           <motion.div
             {...ANIMATION_VARIANTS.tooltip}
             transition={transitionConfigs.fast}
-            className={`fixed bg-[#171719] border border-white/10 text-white rounded-lg pointer-events-none z-tooltip shadow-xl ${
-              hoveredTooltip.isUser ? 'px-4 py-3 text-xs max-w-[250px]' : 'px-3 py-2 text-sm whitespace-nowrap'
+            className={`fixed bg-[#171719] border border-white/10 text-white rounded-md pointer-events-none z-tooltip shadow-xl ${
+              hoveredTooltip.isUser ? 'px-4 py-2 text-xs max-w-[250px]' : 'px-4 py-2 text-sm whitespace-nowrap'
             }`}
             style={{
               top: hoveredTooltip.position.top,
@@ -461,7 +461,7 @@ export const DashboardLayout = memo(({
             <motion.div
               {...ANIMATION_VARIANTS.modal}
               transition={transitionConfigs.normal}
-              className="bg-[#171719] border border-white/10 rounded-lg p-6 max-w-md mx-4"
+              className="bg-[#171719] border border-white/10 rounded-md p-6 max-w-md mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
@@ -530,7 +530,7 @@ export const DashboardLayout = memo(({
           marginLeft: isMobileView ? 0 : (isCollapsed ? SIDEBAR.WIDTH_COLLAPSED : SIDEBAR.WIDTH_EXPANDED)
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className={`relative z-10 ${isMobileView ? 'mt-16 p-0' : 'p-2'}`}
+        className={`relative z-10 ${isMobileView ? 'mt-14 p-0' : 'p-2'}`}
         style={isMobileView ? {
           paddingBottom: 'max(1rem, var(--safe-area-inset-bottom))'
         } : undefined}

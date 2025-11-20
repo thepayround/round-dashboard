@@ -74,13 +74,13 @@ export const NavigationItem = memo<NavigationItemProps>(({
         onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={cn(
-          'group relative flex items-center rounded-lg transition-all duration-200 h-9 w-full',
-          'outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
+          'group relative flex items-center rounded-md transition-all duration-200 h-9 w-full',
+          'outline-none focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
           isParentActive(item)
             ? 'bg-primary/10 text-white border border-primary/20'
             : 'text-white/60 hover:text-white',
           isCollapsed ? 'justify-center px-0' : 'px-6',
-          isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-2 ring-ring'
+          isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
         )}
         aria-expanded={expandedItems.includes(item.id)}
         aria-haspopup="menu"
@@ -88,11 +88,11 @@ export const NavigationItem = memo<NavigationItemProps>(({
         tabIndex={isKeyboardNavigating ? -1 : 0}
         unstyled
       >
-        <item.icon className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
-        
+        <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-2'} flex-shrink-0`} />
+
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
+            <span className="font-normal whitespace-nowrap text-xs">{item.label}</span>
             <ChevronDown 
               className={`w-4 h-4 transition-transform duration-200 ${
                 expandedItems.includes(item.id) ? 'transform rotate-180' : ''
@@ -113,25 +113,25 @@ export const NavigationItem = memo<NavigationItemProps>(({
         onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={cn(
-          'group relative flex items-center rounded-lg transition-all duration-200 h-9',
-          'outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
+          'group relative flex items-center rounded-md transition-all duration-200 h-9',
+          'outline-none focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
           isParentActive(item)
             ? 'bg-primary/10 text-white border border-primary/20'
             : 'text-white/60 hover:text-white',
           isCollapsed ? 'justify-center px-0' : 'px-6',
-          isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-2 ring-ring'
+          isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
         )}
         aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
         tabIndex={isKeyboardNavigating ? -1 : 0}
       >
         <item.icon className={cn(
-          'w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 flex-shrink-0',
-          !isCollapsed && 'mr-2.5 md:mr-3 lg:mr-2.5'
+          'w-4 h-4 flex-shrink-0',
+          !isCollapsed && 'mr-2'
         )} />
 
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">{item.label}</span>
+            <span className="font-normal whitespace-nowrap text-xs">{item.label}</span>
             {item.badge && (
               <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-primary text-white rounded-full">
                 {item.badge}
@@ -165,8 +165,8 @@ export const NavigationItem = memo<NavigationItemProps>(({
               onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
               onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
               className={cn(
-                'group relative flex items-center rounded-lg transition-all duration-200',
-                'outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
+                'group relative flex items-center rounded-md transition-all duration-200',
+                'outline-none focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
                 isActive(subItem.href)
                   ? 'bg-primary/10 text-white border border-primary/20'
                   : 'text-white/60 hover:text-white',
@@ -178,7 +178,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
               <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${
                 isCollapsed
                   ? 'w-3.5 h-3.5'
-                  : 'w-3.5 h-3.5 md:w-4 md:h-4 lg:w-3.5 lg:h-3.5 mr-2 md:mr-3 lg:mr-2'
+                  : 'w-3.5 h-3.5 mr-2'
               }`} />
 
               {!isCollapsed && (
