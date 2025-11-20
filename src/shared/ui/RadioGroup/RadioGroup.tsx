@@ -107,7 +107,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
               className={cn(
                 'flex items-center p-4 min-h-[44px] rounded-lg border transition-all duration-200 cursor-pointer',
                 isSelected
-                  ? 'border-[#14BDEA] bg-[#14BDEA]/10'
+                  ? 'border-secondary bg-secondary/10'
                   : 'border-white/10 hover:border-white/20',
                 option.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
               )}
@@ -119,10 +119,10 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
                 id={option.value}
                 disabled={option.disabled}
                 aria-describedby={optionDescId}
-                className="flex-shrink-0 h-5 w-5 rounded-full border border-white/40 bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14BDEA] focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-all"
+                className="flex-shrink-0 h-5 w-5 rounded-full border border-white/40 bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-all"
               >
                 <RadioGroupPrimitive.Indicator className="flex items-center justify-center w-full h-full">
-                  <span className="block w-3 h-3 rounded-full bg-[#14BDEA]" />
+                  <span className="block w-3 h-3 rounded-full bg-secondary" />
                 </RadioGroupPrimitive.Indicator>
               </RadioGroupPrimitive.Item>
 
@@ -133,7 +133,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
                 <div className="flex items-center space-x-3">
                   {option.icon && (
                     <option.icon 
-                      className="h-5 w-5 text-[#14BDEA]" 
+                      className="h-5 w-5 text-secondary" 
                       aria-hidden="true"
                     />
                   )}

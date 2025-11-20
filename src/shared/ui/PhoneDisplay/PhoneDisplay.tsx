@@ -183,7 +183,7 @@ export const PhoneDisplay: React.FC<PhoneDisplayProps> = ({
               ? 'p-1'
               : 'ml-2 p-1',
             isCopied
-              ? 'text-[#14BDEA]'
+              ? 'text-secondary'
               : 'text-white/60 hover:text-white/90'
           )}
           title={isCopied ? 'Copied!' : 'Copy phone number'}

@@ -118,7 +118,7 @@ export const EmailComposeModal = ({
                 size="sm"
                 icon={Type}
                 iconPosition="left"
-                className={formData.isHtml ? 'bg-[#14BDEA]/20 text-[#14BDEA] border-[#14BDEA]/30' : ''}
+                className={formData.isHtml ? 'bg-secondary/20 text-secondary border-secondary/30' : ''}
               >
                 HTML
               </Button>

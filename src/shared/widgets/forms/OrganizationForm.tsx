@@ -158,8 +158,8 @@ export const OrganizationForm = ({
           className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#14BDEA]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-              <Building className="w-4 h-4 text-[#14BDEA]" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <Building className="w-4 h-4 text-secondary" />
             </div>
             <div>
               <h3 className="text-sm font-medium text-white">Business Details</h3>
@@ -272,9 +272,9 @@ export const OrganizationForm = ({
                   ]}
                   icon={
                     currencyLoading ? (
-                      <div className="w-3 h-3 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+                      <div className="w-3 h-3 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
                     ) : (
-                      <span className="text-sm font-semibold text-[#14BDEA]">{currencySymbol}</span>
+                      <span className="text-sm font-semibold text-secondary">{currencySymbol}</span>
                     )
                   }
                 />
@@ -289,9 +289,9 @@ export const OrganizationForm = ({
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10">
                     {currencyLoading ? (
-                      <div className="w-3 h-3 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+                      <div className="w-3 h-3 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
                     ) : (
-                      <span className="text-sm font-semibold text-[#14BDEA]">
+                      <span className="text-sm font-semibold text-secondary">
                         {currencySymbol}
                       </span>
                     )}

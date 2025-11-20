@@ -202,7 +202,7 @@ const CustomerDetailPage: React.FC = () => {
               <div className="space-y-4">
                 <Card variant="nested" padding="md">
                   <div className="flex items-center gap-3">
-                    <Mail className="w-4 h-4 text-[#14BDEA]" />
+                    <Mail className="w-4 h-4 text-secondary" />
                     <div>
                       <div className="text-sm font-normal tracking-tight text-white">{customer.email}</div>
                       <div className="text-xs text-white/60">Primary email address</div>
@@ -264,7 +264,7 @@ const CustomerDetailPage: React.FC = () => {
                 {customer.locale && (
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-3">
-                      <Globe className="w-4 h-4 text-[#14BDEA]" />
+                      <Globe className="w-4 h-4 text-secondary" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{customer.locale}</div>
                         <div className="text-xs text-white/60">Language & locale</div>
@@ -291,8 +291,8 @@ const CustomerDetailPage: React.FC = () => {
 
           <Card padding="lg">
             <div className="flex items-start gap-4 mb-6">
-              <div className="p-3 bg-primary/20 rounded-xl border border-[#14BDEA]/30">
-                <MapPin className="w-5 h-5 text-[#14BDEA]" />
+              <div className="p-3 bg-primary/20 rounded-xl border border-secondary/30">
+                <MapPin className="w-5 h-5 text-secondary" />
               </div>
               <div className="flex-1">
                 <h2 className="text-lg font-medium text-white mb-2">Addresses</h2>
@@ -610,7 +610,7 @@ const CustomerDetailPage: React.FC = () => {
                     <div className="flex items-center gap-3 mb-1">
                       <h1 className="text-lg font-medium text-white">{customer.effectiveDisplayName ?? customer.displayName}</h1>
                       {customer.isBusinessCustomer && (
-                        <span className="px-3 py-1 bg-[#14BDEA]/20 text-[#14BDEA] border border-[#14BDEA]/30 rounded-lg text-sm font-medium">
+                        <span className="px-3 py-1 bg-secondary/20 text-secondary border border-secondary/30 rounded-lg text-sm font-medium">
                           Business
                         </span>
                       )}
@@ -638,7 +638,7 @@ const CustomerDetailPage: React.FC = () => {
                   size="md"
                   icon={Mail}
                   iconPosition="left"
-                  className="bg-[#14BDEA]/20 border-[#14BDEA]/30 text-[#14BDEA]"
+                  className="bg-secondary/20 border-secondary/30 text-secondary"
                 >
                   Send Email
                 </Button>

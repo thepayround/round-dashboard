@@ -119,15 +119,15 @@ export const InvitationAcceptancePage = () => {
               {/* Invitation Details Card */}
               <div className="bg-white/5 rounded-lg border border-white/10 p-6 mb-6">
                 <div className="flex items-center justify-center mb-4">
-                  <div className="w-12 h-12 bg-[#14BDEA]/20 rounded-full flex items-center justify-center">
-                    <Building className="w-6 h-6 text-[#14BDEA]" />
+                  <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center">
+                    <Building className="w-6 h-6 text-secondary" />
                   </div>
                 </div>
                 
                 <h2 className="text-xl font-medium tracking-tight text-white mb-2">{invitation.organizationName}</h2>
                 <p className="text-white/85 text-sm mb-4">
                   {invitation.inviterName} has invited you to join as a{' '}
-                  <span className="font-medium text-[#14BDEA] tracking-tight">{invitation.roleName}</span>
+                  <span className="font-medium text-secondary tracking-tight">{invitation.roleName}</span>
                 </p>
                 
                 <div className="flex items-center justify-center space-x-4 text-xs text-white/85">

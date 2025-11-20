@@ -24,7 +24,7 @@ const colorStyles = {
   success: 'bg-[#42E695]/20 text-[#42E695]',
   warning: 'bg-orange-500/20 text-orange-400',
   error: 'bg-red-500/20 text-red-400',
-  info: 'bg-[#14BDEA]/20 text-[#14BDEA]',
+  info: 'bg-secondary/20 text-secondary',
   cyan: 'bg-[#00BCD4]/20 text-[#00BCD4]',
 }
 

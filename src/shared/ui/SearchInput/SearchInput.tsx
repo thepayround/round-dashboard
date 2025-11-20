@@ -97,7 +97,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       <div className="absolute right-2 md:right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
         {isSearching && (
           <div className="flex items-center justify-center w-7 h-7 md:w-6 md:h-6">
-            <Loader2 className="w-4 h-4 text-[#14BDEA] animate-spin" />
+            <Loader2 className="w-4 h-4 text-secondary animate-spin" />
           </div>
         )}
         
@@ -110,7 +110,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
             type="button"
             disabled={disabled}
             aria-label="Clear search"
-            className="w-9 h-9 border border-white/10 hover:border-white/20 focus:ring-2 focus:ring-[#14BDEA]"
+            className="w-9 h-9 border border-white/10 hover:border-white/20 focus:ring-2 focus:ring-secondary"
           />
         )}
       </div>

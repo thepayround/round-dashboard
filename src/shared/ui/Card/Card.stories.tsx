@@ -118,7 +118,7 @@ export const NestedCards: Story = {
           </Card>
           <Card variant="nested" padding="md">
             <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-[#14BDEA]" />
+              <DollarSign className="w-4 h-4 text-secondary" />
               <span className="text-sm text-white/80">$24,500 this month</span>
             </div>
           </Card>

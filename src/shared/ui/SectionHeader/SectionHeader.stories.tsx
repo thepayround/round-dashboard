@@ -41,7 +41,7 @@ export const CustomIconColor: Story = {
     icon: Mail,
     title: 'Contact Information',
     subtitle: 'Manage your email and phone',
-    iconColor: 'text-[#14BDEA]',
+    iconColor: 'text-secondary',
   },
 }
 
@@ -74,7 +74,7 @@ export const AllVariants: Story = {
       <SectionHeader
         icon={Mail}
         title="Contact Information"
-        iconColor="text-[#14BDEA]"
+        iconColor="text-secondary"
       />
       <SectionHeader
         icon={Tag}

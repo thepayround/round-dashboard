@@ -162,7 +162,7 @@ export const UiDropdown = ({
               >
                 {loading ? (
                   <div className="p-6 flex flex-col items-center text-center space-y-3 text-xs">
-                    <div className="w-6 h-6 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+                    <div className="w-6 h-6 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
                     <p className="text-white/60">Loading options...</p>
                   </div>
                 ) : filteredOptions.length === 0 ? (
@@ -275,7 +275,7 @@ export const UiDropdown = ({
         </div>
 
         <div className="flex items-center space-x-1.5">
-          {loading && <div className="w-4 h-4 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />}
+          {loading && <div className="w-4 h-4 border border-secondary/30 border-t-secondary rounded-full animate-spin" />}
 
           {allowClear && selectedOption && !loading && (
             <IconButton

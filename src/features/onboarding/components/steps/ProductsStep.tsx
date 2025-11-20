@@ -27,7 +27,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
           className="w-16 h-16 mx-auto rounded-lg bg-secondary/20 border border-white/20 flex items-center justify-center"
         >
-          <Package className="w-8 h-8 text-[#14BDEA]" />
+          <Package className="w-8 h-8 text-secondary" />
         </motion.div>
 
         <div>
@@ -42,7 +42,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
           <div className="p-8">
             <div className="space-y-4">
               <div className="w-12 h-12 mx-auto rounded-lg bg-secondary/20 border border-white/20 flex items-center justify-center">
-                <Package className="w-6 h-6 text-[#14BDEA]" />
+                <Package className="w-6 h-6 text-secondary" />
               </div>
 
               <div>

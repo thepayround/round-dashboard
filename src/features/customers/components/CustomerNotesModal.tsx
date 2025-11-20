@@ -152,7 +152,7 @@ export const CustomerNotesModal = ({
                 <div key={note.id} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <IconBox icon={User} color="info" className="border border-[#14BDEA]/30" />
+                      <IconBox icon={User} color="info" className="border border-secondary/30" />
                       <div>
                         <div className="flex items-center space-x-2">
                           <p className="text-sm font-medium text-white">{note.author || 'Team member'}</p>

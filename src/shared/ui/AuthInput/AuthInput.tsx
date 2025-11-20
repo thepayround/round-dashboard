@@ -150,7 +150,7 @@ export const AuthInput = forwardRef<
       <div className="relative">
         {LeftIcon && (
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10">
-            <LeftIcon className="w-4 h-4 text-[#14BDEA]" />
+            <LeftIcon className="w-4 h-4 text-secondary" />
           </div>
         )}
 

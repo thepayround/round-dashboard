@@ -11,7 +11,7 @@ export const FullScreenLoader = () => (
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 0.9, ease: 'linear' }}
-        className="w-12 h-12 mx-auto border-[3px] border-white/10 border-t-[#14BDEA] rounded-full"
+        className="w-12 h-12 mx-auto border-[3px] border-white/10 border-t-secondary rounded-full"
       />
       <div className="space-y-1">
         <p className="text-sm font-normal text-white/70 tracking-tight">Loading interface</p>

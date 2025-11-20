@@ -149,7 +149,7 @@ export const ApiDropdown = <T = unknown>({
                   value={searchTerm}
                   onChange={(event) => setSearchTerm(event.target.value)}
                   placeholder={config.searchPlaceholder}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-[#14BDEA]"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-secondary"
                   aria-label={config.searchPlaceholder}
                   disabled={disabled}
                 />
@@ -173,7 +173,7 @@ export const ApiDropdown = <T = unknown>({
                 </div>
               ) : isLoading ? (
                 <div className="p-6 flex flex-col items-center text-center space-y-3">
-                  <div className="w-6 h-6 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+                  <div className="w-6 h-6 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
                   <p className="text-white/60 text-sm">Loading options...</p>
                 </div>
               ) : filteredOptions.length === 0 ? (
@@ -269,7 +269,7 @@ export const ApiDropdown = <T = unknown>({
         </div>
 
         <div className="flex items-center space-x-1.5">
-          {isLoading && <div className="w-4 h-4 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />}
+          {isLoading && <div className="w-4 h-4 border border-secondary/30 border-t-secondary rounded-full animate-spin" />}
 
           {allowClear && selectedOption && !isLoading && (
             <IconButton

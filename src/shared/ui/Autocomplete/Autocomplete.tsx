@@ -227,7 +227,7 @@ export const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps
                 className={cn(
                   'px-4 py-3 cursor-pointer transition-colors',
                   index === highlightedIndex
-                    ? 'bg-[#14BDEA]/10 border-l-2 border-[#14BDEA]'
+                    ? 'bg-secondary/10 border-l-2 border-secondary'
                     : 'hover:bg-white/5'
                 )}
               >
@@ -239,7 +239,7 @@ export const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps
                     )}
                   </div>
                   {value === suggestion.value && (
-                    <Check className="w-4 h-4 text-[#14BDEA]" />
+                    <Check className="w-4 h-4 text-secondary" />
                   )}
                 </div>
               </div>

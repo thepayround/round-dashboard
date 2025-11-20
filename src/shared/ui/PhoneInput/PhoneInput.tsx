@@ -311,7 +311,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         >
           {(() => {
             if (isLoading) {
-              return <div className="w-4 h-4 border border-[#14BDEA]/30 border-t-[#14BDEA] rounded-full animate-spin" />
+              return <div className="w-4 h-4 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
             }
             if (selectedCountry) {
               return (

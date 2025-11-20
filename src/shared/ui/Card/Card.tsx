@@ -64,10 +64,10 @@ const colorVariants = {
     hoverColor: 'group-hover:text-primary'
   },
   secondary: {
-    iconBg: 'bg-[#14BDEA]/10',
-    border: 'border-[#14BDEA]/20',
-    iconColor: 'text-[#14BDEA]',
-    hoverColor: 'group-hover:text-[#14BDEA]'
+    iconBg: 'bg-secondary/10',
+    border: 'border-secondary/20',
+    iconColor: 'text-secondary',
+    hoverColor: 'group-hover:text-secondary'
   },
   accent: {
     iconBg: 'bg-[#7767DA]/10',

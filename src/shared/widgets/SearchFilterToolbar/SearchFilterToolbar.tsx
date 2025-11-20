@@ -143,7 +143,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             {shouldShowSearchSummary && (
               <div className="flex items-center gap-3 text-sm -mt-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[#14BDEA]" />
+                  <div className="w-2 h-2 rounded-full bg-secondary" />
                   <span className="text-white/70">
                     {searchSummaryLabel}
                   </span>
@@ -152,7 +152,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
                   <div className="flex items-center gap-2">
                     <span className="text-white/50">•</span>
                     <span className="text-white/50">for</span>
-                    <span className="text-[#14BDEA] font-medium bg-[#14BDEA]/20 px-3 py-1 rounded-lg border border-[#14BDEA]/30">
+                    <span className="text-secondary font-medium bg-secondary/20 px-3 py-1 rounded-lg border border-secondary/30">
                       &quot;{searchQuery}&quot;
                     </span>
                   </div>

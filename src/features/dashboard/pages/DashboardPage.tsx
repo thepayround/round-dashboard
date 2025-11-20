@@ -296,8 +296,8 @@ export const DashboardPage = () => {
                     {new Date(roundAccount.createdDate).toLocaleDateString()}
                   </div>
                 </div>
-                <div className="p-3 bg-primary/20 rounded-lg border border-[#14BDEA]/30">
-                  <Clock className="w-4 h-4 text-[#14BDEA]" />
+                <div className="p-3 bg-primary/20 rounded-lg border border-secondary/30">
+                  <Clock className="w-4 h-4 text-secondary" />
                 </div>
               </div>
             </Card>
@@ -342,7 +342,7 @@ export const DashboardPage = () => {
                 <div className="space-y-3">
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-3">
-                      <Building2 className="w-4 h-4 text-[#14BDEA]" />
+                      <Building2 className="w-4 h-4 text-secondary" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{roundAccount.accountName}</div>
                         <div className="text-xs text-white/60">Account name</div>
@@ -362,7 +362,7 @@ export const DashboardPage = () => {
 
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-3">
-                      <Building className="w-4 h-4 text-[#14BDEA]" />
+                      <Building className="w-4 h-4 text-secondary" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{roundAccount.accountType}</div>
                         <div className="text-xs text-white/60">Account type</div>
@@ -466,7 +466,7 @@ export const DashboardPage = () => {
 
                     <Card variant="nested" padding="md">
                       <div className="flex items-center gap-3">
-                        <Building className="w-4 h-4 text-[#14BDEA]" />
+                        <Building className="w-4 h-4 text-secondary" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.type}</div>
                           <div className="text-xs text-white/60">Organization type</div>
@@ -529,7 +529,7 @@ export const DashboardPage = () => {
                     {roundAccount.organization.size && (
                       <Card variant="nested" padding="md">
                         <div className="flex items-center gap-3">
-                          <Users className="w-4 h-4 text-[#14BDEA]" />
+                          <Users className="w-4 h-4 text-secondary" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.size}</div>
                             <div className="text-xs text-white/60">Organization size</div>
@@ -547,7 +547,7 @@ export const DashboardPage = () => {
                               href={roundAccount.organization.website}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-sm font-normal tracking-tight text-[#14BDEA] hover:text-[#32A1E4] transition-colors"
+                              className="text-sm font-normal tracking-tight text-secondary hover:text-[#32A1E4] transition-colors"
                             >
                               {roundAccount.organization.website}
                             </a>

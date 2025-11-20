@@ -21,7 +21,7 @@ export const AuthLogo = ({ className = '' }: AuthLogoProps) => (
           <span className="text-[#BD2CD0] font-extralight text-4xl sm:text-5xl tracking-wider drop-shadow-[0_0_15px_rgba(189,44,208,0.7)] transition-all duration-300">O</span>
           <span className="text-[#7767DA] font-extralight text-4xl sm:text-5xl tracking-wider drop-shadow-[0_0_15px_rgba(119,103,218,0.7)] transition-all duration-300">U</span>
           <span className="text-[#32A1E4] font-extralight text-4xl sm:text-5xl tracking-wider drop-shadow-[0_0_15px_rgba(50,161,228,0.7)] transition-all duration-300">N</span>
-          <span className="text-[#14BDEA] font-extralight text-4xl sm:text-5xl tracking-wider drop-shadow-[0_0_15px_rgba(20,189,234,0.7)] transition-all duration-300">D</span>
+          <span className="text-secondary font-extralight text-4xl sm:text-5xl tracking-wider drop-shadow-[0_0_15px_rgba(20,189,234,0.7)] transition-all duration-300">D</span>
         </div>
       </a>
     </motion.div>

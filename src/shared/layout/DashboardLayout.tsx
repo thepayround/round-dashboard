@@ -20,7 +20,7 @@ const LogoText = memo(({ className = "text-xl" }: { className?: string }) => (
     <span className={`text-[#BD2CD0] font-light ${className} tracking-wider transition-all duration-300`}>O</span>
     <span className={`text-[#7767DA] font-light ${className} tracking-wider transition-all duration-300`}>U</span>
     <span className={`text-[#32A1E4] font-light ${className} tracking-wider transition-all duration-300`}>N</span>
-    <span className={`text-[#14BDEA] font-light ${className} tracking-wider transition-all duration-300`}>D</span>
+    <span className={`text-secondary font-light ${className} tracking-wider transition-all duration-300`}>D</span>
   </div>
 ))
 LogoText.displayName = 'LogoText'

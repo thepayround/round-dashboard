@@ -143,7 +143,7 @@ export const ConfirmationPendingPage = () => {
                 </p>
               </div>
               <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-[#14BDEA] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <span className="text-white text-sm font-medium tracking-tight">2</span>
                 </div>
                 <p className="text-white/85 text-sm">

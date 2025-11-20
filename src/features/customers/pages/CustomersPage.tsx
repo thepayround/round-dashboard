@@ -323,7 +323,7 @@ const CustomersPage: React.FC = () => {
                         {customer.effectiveDisplayName || customer.displayName}
                       </h3>
                       {customer.isBusinessCustomer && (
-                        <span className="px-2 py-1 bg-[#14BDEA]/10 text-[#14BDEA] border border-[#14BDEA]/20 rounded text-xs font-medium">
+                        <span className="px-2 py-1 bg-secondary/10 text-secondary border border-secondary/20 rounded text-xs font-medium">
                           Business
                         </span>
                       )}
@@ -345,7 +345,7 @@ const CustomersPage: React.FC = () => {
                 <div className="space-y-3 mb-4">
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 text-[#14BDEA]" />
+                      <Mail className="w-4 h-4 text-secondary" />
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-normal tracking-tight text-white truncate">{customer.email}</div>
                         <div className="text-xs text-white/60">Primary email</div>
@@ -400,7 +400,7 @@ const CustomersPage: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <Link
                       to={`/customers/${customer.id}`}
-                      className="p-2 text-white/50 hover:text-[#14BDEA] hover:bg-[#14BDEA]/10 rounded-lg transition-all duration-200"
+                      className="p-2 text-white/50 hover:text-secondary hover:bg-secondary/10 rounded-lg transition-all duration-200"
                     >
                       <Eye className="w-4 h-4" />
                     </Link>

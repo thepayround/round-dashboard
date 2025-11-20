@@ -84,7 +84,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                 fullWidth
                 className={`justify-start p-4 h-auto ${
                   formData.type === CustomerType.Business
-                    ? 'border-[#14BDEA] bg-[#14BDEA]/10'
+                    ? 'border-secondary bg-secondary/10'
                     : ''
                 }`}
               >
@@ -193,7 +193,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Preferences */}
         <div className="space-y-6">
-          <SectionHeader icon={Globe} title="Preferences" iconColor="text-[#14BDEA]" />
+          <SectionHeader icon={Globe} title="Preferences" iconColor="text-secondary" />
           
           {/* Symmetric 3-column layout */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -56,7 +56,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
       <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
                 {/* Basic Information */}
                 <div className="space-y-6">
-                  <SectionHeader icon={User} title="Basic Information" iconColor="text-[#14BDEA]" />
+                  <SectionHeader icon={User} title="Basic Information" iconColor="text-secondary" />
 
 
                   
@@ -126,7 +126,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                     // Business Customer - Only Business Fields
                     <div className="space-y-6">
                       <div className="flex items-center space-x-2 text-sm text-white/70 pb-2 border-b border-white/10">
-                        <Building2 className="w-4 h-4 text-[#14BDEA]" />
+                        <Building2 className="w-4 h-4 text-secondary" />
                         <span>Business Customer</span>
                       </div>
                       
@@ -374,7 +374,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                       variant="ghost"
                       size="md"
                       aria-label="Add tag"
-                      className="bg-[#14BDEA]/10 text-[#14BDEA] hover:bg-[#14BDEA]/20"
+                      className="bg-secondary/10 text-secondary hover:bg-secondary/20"
                     />
                   </div>
                 </div>
