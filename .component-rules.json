@@ -202,6 +202,158 @@
       "suggestion": "Replace 'loading={...}' with 'isLoading={...}'",
       "severity": "error",
       "excludePaths": ["src/shared/ui/", "*.test.tsx", "*.stories.tsx"]
+    },
+    {
+      "name": "No mb-3 spacing",
+      "pattern": "\\bmb-3\\b",
+      "message": "Use standardized margin-bottom values: mb-2, mb-4, mb-6",
+      "suggestion": "Replace mb-3 with: mb-2 (tight), mb-4 (standard), mb-6 (sections)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No mb-5 spacing",
+      "pattern": "\\bmb-5\\b",
+      "message": "Use standardized margin-bottom values: mb-4, mb-6, mb-8",
+      "suggestion": "Replace mb-5 with: mb-4 (standard), mb-6 (sections), mb-8 (large)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No p-3 padding",
+      "pattern": "\\bp-3\\b",
+      "message": "Use standardized padding values: p-2, p-4, p-6",
+      "suggestion": "Replace p-3 with: p-2 (tight), p-4 (standard), p-6 (cards)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No p-5 padding",
+      "pattern": "\\bp-5\\b",
+      "message": "Use standardized padding values: p-4, p-6",
+      "suggestion": "Replace p-5 with: p-4 (standard), p-6 (cards)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No p-7 padding",
+      "pattern": "\\bp-7\\b",
+      "message": "Use standardized padding values: p-6, p-8",
+      "suggestion": "Replace p-7 with: p-6 (cards), p-8 (large sections)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No px-3 padding",
+      "pattern": "\\bpx-3\\b",
+      "message": "Use standardized horizontal padding: px-2, px-4, px-6",
+      "suggestion": "Replace px-3 with: px-2 (tight), px-4 (standard), px-6 (cards)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No px-5 padding",
+      "pattern": "\\bpx-5\\b",
+      "message": "Use standardized horizontal padding: px-4, px-6",
+      "suggestion": "Replace px-5 with: px-4 (standard), px-6 (cards)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No py-3 padding",
+      "pattern": "\\bpy-3\\b",
+      "message": "Use standardized vertical padding: py-2, py-4, py-6",
+      "suggestion": "Replace py-3 with: py-2 (tight), py-4 (standard), py-6 (cards)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No py-5 padding",
+      "pattern": "\\bpy-5\\b",
+      "message": "Use standardized vertical padding: py-4, py-6",
+      "suggestion": "Replace py-5 with: py-4 (standard), py-6 (cards)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No space-y-3 spacing",
+      "pattern": "\\bspace-y-3\\b",
+      "message": "Use standardized vertical spacing: space-y-2, space-y-4, space-y-6",
+      "suggestion": "Replace space-y-3 with: space-y-2 (tight), space-y-4 (standard), space-y-6 (sections)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No space-y-5 spacing",
+      "pattern": "\\bspace-y-5\\b",
+      "message": "Use standardized vertical spacing: space-y-4, space-y-6, space-y-8",
+      "suggestion": "Replace space-y-5 with: space-y-4 (standard), space-y-6 (sections), space-y-8 (large)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No space-x-3 spacing",
+      "pattern": "\\bspace-x-3\\b",
+      "message": "Use standardized horizontal spacing: space-x-2, space-x-4, space-x-6",
+      "suggestion": "Replace space-x-3 with: space-x-2 (tight), space-x-4 (standard), space-x-6 (sections)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No space-x-5 spacing",
+      "pattern": "\\bspace-x-5\\b",
+      "message": "Use standardized horizontal spacing: space-x-4, space-x-6",
+      "suggestion": "Replace space-x-5 with: space-x-4 (standard), space-x-6 (sections)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No responsive padding patterns",
+      "pattern": "p-\\d+\\s+(?:sm|md|lg):p-\\d+",
+      "message": "Avoid responsive padding patterns. Use single padding value.",
+      "suggestion": "Use single padding value (p-4, p-6) instead of p-5 md:p-6 lg:p-7",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No sm: breakpoint in grid",
+      "pattern": "sm:grid-cols-",
+      "message": "Use md: breakpoint for grid layouts instead of sm:",
+      "suggestion": "Replace sm:grid-cols-* with md:grid-cols-* for standard responsive grids",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "Gap placement after grid-cols",
+      "pattern": "gap-\\d+\\s+grid-cols-",
+      "message": "Place gap classes after grid-cols for consistency",
+      "suggestion": "Use: grid-cols-1 md:grid-cols-2 gap-4 (not: gap-4 grid-cols-1)",
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+    },
+    {
+      "name": "No undocumented blue color",
+      "pattern": "#32A1E4",
+      "message": "Color #32A1E4 is not in design system. Use secondary or accent instead.",
+      "suggestion": "Replace with: text-secondary (#14BDEA) or text-accent (#7767DA)",
+      "severity": "error",
+      "excludePaths": ["*.md", "*.test.tsx", "*.svg"]
+    },
+    {
+      "name": "No custom padding in modal children",
+      "pattern": "<Modal[^>]*>[\\s\\S]*?<(?:div|form)[^>]*\\bp-6\\b",
+      "message": "Modal component provides padding. Remove custom p-6 from direct children.",
+      "suggestion": "Remove p-6 from modal content - Modal provides px-6 py-6 automatically",
+      "severity": "warning",
+      "excludePaths": ["src/shared/ui/Modal/", "*.test.tsx", "*.stories.tsx"]
+    },
+    {
+      "name": "No custom overflow in modal children",
+      "pattern": "<Modal[^>]*>[\\s\\S]*?(?:max-h-\\[|overflow-y-)",
+      "message": "Modal component handles overflow. Remove custom overflow/max-height.",
+      "suggestion": "Remove overflow and max-h classes - Modal handles scrolling automatically",
+      "severity": "warning",
+      "excludePaths": ["src/shared/ui/Modal/", "*.test.tsx", "*.stories.tsx"]
     }
   ]
 }

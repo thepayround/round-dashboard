@@ -152,11 +152,48 @@ This checklist ensures the Round Dashboard meets WCAG 2.1 Level AA accessibility
 ## 10. Pre-Commit Validation
 
 ### Automated Checks (via .component-rules.json)
+All 31 completed UI consistency tasks are now enforced via pre-commit validation. See [VALIDATION_RULES.md](VALIDATION_RULES.md) for complete documentation.
+
+**Component Usage (9 rules):**
 - [x] **No Raw Buttons**: Must use Button or IconButton components
 - [x] **No Raw Inputs**: Must use reusable input components
-- [x] **Color Tokens**: No hardcoded colors, use design tokens
+- [x] **No Raw Textareas**: Must use Textarea component
+- [x] **No Raw Selects**: Must use UiDropdown or ApiDropdown
+- [x] **Badge Component**: Required for status badges
+- [x] **Avatar Component**: Required for user avatars
+- [x] **LoadingSpinner**: Required for loading states
+- [x] **Alert Component**: Required for messages
+- [x] **AddressFormGroup**: Required for address fields
+
+**Color Tokens (6 rules):**
+- [x] **No Hardcoded Colors**: Must use design tokens (primary, secondary, accent, success)
+- [x] **Forbidden Colors**: #00BCD4, #32A1E4 not allowed
+
+**Spacing Standardization (14 rules):**
+- [x] **No mb-3/mb-5**: Use mb-2, mb-4, mb-6
+- [x] **No p-3/p-5/p-7**: Use p-2, p-4, p-6
+- [x] **No px-3/px-5, py-3/py-5**: Standardized padding
+- [x] **No space-y-3/space-y-5**: Standardized spacing
+- [x] **No space-x-3/space-x-5**: Standardized spacing
+- [x] **No gap-3**: Use gap-2, gap-4, gap-6
+- [x] **No Responsive Padding**: Single values only
+
+**Grid Patterns (2 rules):**
+- [x] **No sm: Breakpoint**: Use md: for grids
+- [x] **Gap After grid-cols**: Consistent ordering
+
+**Modal Patterns (2 rules - warnings):**
+- [x] **No Custom Modal Padding**: Modal provides padding
+- [x] **No Custom Modal Overflow**: Modal handles overflow
+
+**Accessibility (2 rules):**
 - [x] **Low Contrast**: Prevents `text-white/40`, `/30`, `/20`
+- [x] **IconButton aria-label**: TypeScript enforces required prop
+
+**Prop Naming (1 rule):**
 - [x] **isLoading Prop**: Enforces consistent prop naming
+
+**Total: 38 validation rules preventing regression**
 
 ## Quick Reference: Keyboard Shortcuts
 
