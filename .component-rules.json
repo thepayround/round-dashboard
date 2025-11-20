@@ -98,6 +98,110 @@
         "*.spec.tsx",
         "*.spec.ts"
       ]
+    },
+    {
+      "name": "No raw badge/tag spans",
+      "pattern": "px-[0-9] py-[0-9].*rounded-full.*text-xs",
+      "message": "Use <Badge> component for status badges and tags",
+      "suggestion": "import { Badge } from '@/shared/ui'",
+      "severity": "warning",
+      "excludePaths": ["src/shared/ui/Badge/", "*.test.tsx", "*.stories.tsx"]
+    },
+    {
+      "name": "Use Avatar component for user initials",
+      "pattern": "w-[0-9]+ h-[0-9]+.*rounded.*bg-primary.*justify-center",
+      "message": "Use <Avatar> component for user avatars and initials",
+      "suggestion": "import { Avatar } from '@/shared/ui'",
+      "severity": "warning",
+      "excludePaths": ["src/shared/ui/Avatar/", "*.test.tsx", "*.stories.tsx"]
+    },
+    {
+      "name": "No raw loading spinners",
+      "pattern": "animate-spin",
+      "message": "Use <LoadingSpinner> or <LoadingOverlay> component",
+      "suggestion": "import { LoadingSpinner, LoadingOverlay } from '@/shared/ui'",
+      "severity": "warning",
+      "excludePaths": ["src/shared/ui/LoadingSpinner/", "*.test.tsx", "*.stories.tsx"]
+    },
+    {
+      "name": "Use Alert component for info/warning/error boxes",
+      "pattern": "bg-(red|blue|green|orange)-500/10.*border-(red|blue|green|orange)-500/30",
+      "message": "Use <Alert> component for info/warning/error messages",
+      "suggestion": "import { Alert } from '@/shared/ui'",
+      "severity": "warning",
+      "excludePaths": ["src/shared/ui/Alert/", "*.test.tsx", "*.stories.tsx"]
+    },
+    {
+      "name": "Use AddressFormGroup for address fields",
+      "pattern": "label\\s*=\\s*[\"'](Address Line 1|City|State|ZIP)",
+      "message": "Use <AddressFormGroup> component instead of individual address fields",
+      "suggestion": "import { AddressFormGroup } from '@/shared/ui'",
+      "severity": "warning",
+      "excludePaths": ["src/shared/ui/AddressFormGroup/", "*.test.tsx", "*.stories.tsx"]
+    },
+    {
+      "name": "No hardcoded primary color",
+      "pattern": "#D417C8",
+      "message": "Use 'primary' design token instead of hardcoded #D417C8",
+      "suggestion": "Replace with: text-primary, bg-primary, border-primary",
+      "severity": "error",
+      "excludePaths": ["tailwind.config.ts", "*.md", "*.test.tsx"]
+    },
+    {
+      "name": "No hardcoded secondary color",
+      "pattern": "#14BDEA",
+      "message": "Use 'secondary' design token instead of hardcoded #14BDEA",
+      "suggestion": "Replace with: text-secondary, bg-secondary, border-secondary",
+      "severity": "error",
+      "excludePaths": ["tailwind.config.ts", "*.md", "*.test.tsx"]
+    },
+    {
+      "name": "No hardcoded accent color",
+      "pattern": "#7767DA",
+      "message": "Use 'accent' design token instead of hardcoded #7767DA",
+      "suggestion": "Replace with: text-accent, bg-accent, border-accent",
+      "severity": "error",
+      "excludePaths": ["tailwind.config.ts", "*.md", "*.test.tsx"]
+    },
+    {
+      "name": "No hardcoded success colors",
+      "pattern": "#(42E695|38D39F)",
+      "message": "Use 'success' design token for success/active states",
+      "suggestion": "Replace with: text-success, bg-success, border-success",
+      "severity": "error",
+      "excludePaths": ["tailwind.config.ts", "*.md", "*.test.tsx"]
+    },
+    {
+      "name": "No undocumented teal color",
+      "pattern": "#00BCD4",
+      "message": "Color #00BCD4 is not in design system. Use secondary instead.",
+      "suggestion": "Replace with: text-secondary, bg-secondary/10, etc.",
+      "severity": "error",
+      "excludePaths": ["*.md", "*.test.tsx"]
+    },
+    {
+      "name": "Discourage gap-3 usage",
+      "pattern": "gap-3\\b",
+      "message": "Prefer gap-4 for layouts or gap-2 for tight spacing",
+      "suggestion": "Use: gap-4 (layouts), gap-2 (tight), gap-6 (sections)",
+      "severity": "warning",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx"]
+    },
+    {
+      "name": "Avoid low-contrast text",
+      "pattern": "text-white/(40|30|20)",
+      "message": "Low contrast text may fail WCAG AA. Use text-white/60 minimum.",
+      "suggestion": "Use: text-white/60 (secondary), text-white/70 (readable)",
+      "severity": "warning",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx"]
+    },
+    {
+      "name": "Use isLoading instead of loading prop",
+      "pattern": "loading=\\{",
+      "message": "Use isLoading prop instead of loading for consistency",
+      "suggestion": "Replace 'loading={...}' with 'isLoading={...}'",
+      "severity": "warning",
+      "excludePaths": ["src/shared/ui/", "*.test.tsx", "*.stories.tsx"]
     }
   ]
 }
