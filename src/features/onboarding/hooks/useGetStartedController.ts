@@ -145,7 +145,7 @@ export const useGetStartedController = () => {
     [onboardingData]
   )
 
-  const getFirstIncompleteStep = useCallback((): OnboardingStep => {
+  const _getFirstIncompleteStep = useCallback((): OnboardingStep => {
     for (const step of allSteps) {
       if (!isStepValid(step)) {
         return step
@@ -416,13 +416,8 @@ export const useGetStartedController = () => {
         }
       }
       setCompletedSteps(newCompletedSteps)
-
-      const firstIncompleteStep = getFirstIncompleteStep()
-      if (currentStep === 'organization' && isStepValid('organization') && firstIncompleteStep !== 'organization') {
-        setCurrentStep(firstIncompleteStep)
-      }
     }
-  }, [isLoadingData, onboardingData, getFirstIncompleteStep, isStepValid, currentStep])
+  }, [isLoadingData, onboardingData, isStepValid])
 
   const handleNext = useCallback(async () => {
     try {

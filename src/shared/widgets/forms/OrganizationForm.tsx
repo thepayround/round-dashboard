@@ -306,7 +306,7 @@ export const OrganizationForm = ({
                       { value: 'AUD', label: 'AUD - Australian Dollar' },
                       { value: 'JPY', label: 'JPY - Japanese Yen' },
                     ]}
-                    className="pl-12"
+                    className="[&>div]:pl-12"
                   />
                 </div>
               </div>
