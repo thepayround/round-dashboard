@@ -59,7 +59,7 @@ export const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('bg-[#171719] border-b border-white/10', className)}
+    className={cn('bg-[#171719] border-b border-white/8', className)}
     {...props}
   />
 ))
@@ -71,7 +71,7 @@ export const TableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn('divide-y divide-[#16171a]', className)}
+    className={cn('divide-y divide-white/8', className)}
     {...props}
   />
 ))
@@ -84,7 +84,7 @@ export const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b border-[#16171a]',
+      'border-b border-white/8',
       // Only apply background and hover styles in tbody, not in thead
       '[tbody_&]:bg-[#101011] [tbody_&]:hover:bg-[#171719] [tbody_&]:transition-colors',
       className
@@ -101,7 +101,7 @@ export const TableHead = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <th
     ref={ref}
-    className={cn('px-6 py-4 text-left text-sm font-normal text-white/80 tracking-tight', className)}
+    className={cn('px-4 py-2 text-left text-xs font-normal text-white/80 tracking-tight', className)}
     role="columnheader"
     {...props}
   />
@@ -114,7 +114,7 @@ export const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('px-6 py-4 text-sm text-white/80', className)}
+    className={cn('px-4 py-2 text-sm text-white/80', className)}
     {...props}
   />
 ))

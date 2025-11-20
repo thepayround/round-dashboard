@@ -61,7 +61,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
   }).format(new Date(dateString))
 
   return (
-    <div className="border border-white/10 rounded-lg overflow-hidden relative">
+    <div className="border border-white/8 rounded-lg overflow-hidden relative">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -90,7 +90,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                   className="transition-colors duration-150"
                 >
                   <TableCell>
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2">
                       <Avatar name={member.fullName || `${member.firstName} ${member.lastName}`} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center space-x-2">

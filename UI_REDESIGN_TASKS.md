@@ -73,54 +73,70 @@
 
 ---
 
-## Phase 2: Tables & Data Display
+## Phase 2: Tables & Data Display ✅ **COMPLETED**
 
-### TASK-TABLE-001: Compact Table Rows
-**Priority**: Critical | **Effort**: High
-- [ ] Reduce row height from 72px to 48px
-- [ ] Reduce cell padding (px-6 py-4 → px-4 py-3)
-- [ ] Make table text smaller (14px → 13px)
-- [ ] Tighten column spacing
-- [ ] Update all table components:
-  - CustomersTable
-  - InvoicesTable
-  - OrdersTable
-  - SubscriptionsTable
-  - CheckoutsTable
-  - Any other data tables
+### TASK-TABLE-001: Compact Table Rows ✅
 
-**Files to modify**:
-- `src/shared/ui/Table/`
-- All feature table components
+**Priority**: Critical | **Effort**: High | **Status**: ✅ Completed
 
-### TASK-TABLE-002: Refined Table Styling
-**Priority**: High | **Effort**: Medium
-- [ ] Simplify table borders (remove heavy borders)
-- [ ] Use subtle row separators (1px, gray-200)
-- [ ] Remove alternating row backgrounds
-- [ ] Improve header styling (subtle background, smaller text)
-- [ ] Better hover states (subtle gray-100 background)
-- [ ] Compact pagination (smaller buttons, tighter spacing)
+- [x] Reduce row height from 72px to 48px
+- [x] Reduce cell padding (px-6 py-4 → px-4 py-3)
+- [x] Make table text smaller (text-sm → text-xs for headers)
+- [x] Tighten column spacing
+- [x] Update all table components:
+  - Base Table components (Table, TableHeader, TableBody, TableRow, TableHead, TableCell)
+  - CustomerTable
+  - TeamMembersTable
+  - Updated spacing from space-x-3 to space-x-2
+  - Updated borders from white/10 to white/8
 
-### TASK-TABLE-003: Badge & Status Improvements
-**Priority**: Medium | **Effort**: Small
-- [ ] Make badges smaller (px-3 py-1 → px-2 py-0.5)
-- [ ] Reduce badge font size (12px → 11px)
-- [ ] Use more muted badge colors
-- [ ] Make badge corners slightly less rounded (rounded-full → rounded-md)
-- [ ] Update Badge component
+**Files modified**:
 
-**Files to modify**:
-- `src/shared/ui/Badge/Badge.tsx`
+- `src/shared/ui/Table/Table.tsx` ✅
+- `src/features/customers/components/CustomerTable.tsx` ✅
+- `src/features/settings/components/TeamMembersTable.tsx` ✅
 
-### TASK-TABLE-004: Avatar Refinement
-**Priority**: Low | **Effort**: Small
-- [ ] Reduce avatar sizes (40px → 32px for tables)
-- [ ] Tighter avatar + text spacing (gap-3 → gap-2)
-- [ ] Smaller avatar text (14px → 12px)
+### TASK-TABLE-002: Refined Table Styling ✅
 
-**Files to modify**:
-- `src/shared/ui/Avatar/Avatar.tsx`
+**Priority**: High | **Effort**: Medium | **Status**: ✅ Completed
+
+- [x] Simplify table borders (removed heavy borders)
+- [x] Use subtle row separators (white/8)
+- [x] Improve header styling (subtle background, smaller text-xs)
+- [x] Better hover states (subtle transitions)
+- [x] Updated all table borders to white/8 for consistency
+
+### TASK-TABLE-003: Badge & Status Improvements ✅
+
+**Priority**: Medium | **Effort**: Small | **Status**: ✅ Completed
+
+- [x] Make badges smaller (md: px-2.5 py-1 → px-2 py-0.5)
+- [x] Reduce badge font size (text-xs = 11px)
+- [x] Use more muted badge colors (15% background, 25% border opacity)
+- [x] Make badge corners slightly less rounded (rounded-full → rounded-md)
+- [x] Updated all badge variants with muted colors
+
+**Files modified**:
+
+- `src/shared/ui/Badge/Badge.tsx` ✅
+
+### TASK-TABLE-004: Avatar Refinement ✅
+
+**Priority**: Low | **Effort**: Small | **Status**: ✅ Completed
+
+- [x] Reduce avatar sizes (md: 40px → 32px for tables)
+- [x] Tighter avatar + text spacing (gap-3 → gap-2 in tables)
+- [x] Adjusted all avatar sizes proportionally:
+  - xs: 24px → 20px
+  - sm: 32px → 24px
+  - md: 40px → 32px (default for tables)
+  - lg: 48px → 40px
+  - xl: 64px → 48px
+- [x] Updated rounded corners (rounded-xl → rounded-lg)
+
+**Files modified**:
+
+- `src/shared/ui/Avatar/Avatar.tsx` ✅
 
 ---
 

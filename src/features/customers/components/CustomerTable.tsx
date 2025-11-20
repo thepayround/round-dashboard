@@ -66,11 +66,11 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   })
 
   return (
-    <div className="border border-white/10 rounded-lg overflow-hidden">
+    <div className="border border-white/8 rounded-lg overflow-hidden">
       {/* Bulk actions bar - appears above table when items are selected */}
       {hasSelection && (
         <div className="bg-primary/10 border-b border-primary/30 backdrop-blur-sm">
-          <div className="px-6 py-3">
+          <div className="px-6 py-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium text-white">
@@ -102,11 +102,11 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                     <div
                       className={`
                         flex items-center justify-center
-                        w-9 h-9 rounded-lg
+                        w-8 h-8 rounded-md
                         transition-all duration-200
                         ${isAllSelected || isIndeterminate
                           ? 'bg-primary/10 border border-primary'
-                          : 'border border-white/10 hover:bg-white/5 hover:border-white/20'
+                          : 'border border-white/8 hover:bg-white/5 hover:border-white/20'
                         }
                       `}
                     >
@@ -158,11 +158,11 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                       <div
                         className={`
                           flex items-center justify-center
-                          w-9 h-9 rounded-lg
+                          w-8 h-8 rounded-md
                           transition-all duration-200
                           ${selectedIds.includes(customer.id)
                             ? 'bg-primary/10 border border-primary'
-                            : 'border border-white/10 hover:bg-white/5 hover:border-white/20'
+                            : 'border border-white/8 hover:bg-white/5 hover:border-white/20'
                           }
                         `}
                       >
@@ -176,7 +176,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                     </TableCell>
                   )}
                   <TableCell>
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2">
                       <Avatar name={customer.displayName} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center space-x-2">
@@ -256,7 +256,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
 
       {/* Selection Info Bar */}
       {hasSelection && (
-        <div className="border-t border-white/10 px-6 py-3 bg-[#171719]">
+        <div className="border-t border-white/8 px-6 py-2 bg-[#171719]">
           <div className="flex items-center justify-between">
             <div className="text-sm text-[#a3a3a3]">
               {selectionSummaryLabel}
