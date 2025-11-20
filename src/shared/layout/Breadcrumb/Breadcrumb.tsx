@@ -82,7 +82,10 @@ const BreadcrumbItem: React.FC<{ item: BreadcrumbItem; index: number }> = ({ ite
 
   // Make ALL items clickable, including current page
   return (
-    <Link to={href ?? '#'} className="block">
+    <Link
+      to={href ?? '#'}
+      className="block rounded outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#101011]"
+    >
       {content}
     </Link>
   )

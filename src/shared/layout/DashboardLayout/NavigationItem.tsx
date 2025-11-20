@@ -75,6 +75,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
         onMouseLeave={handleTooltipLeave}
         className={cn(
           'group relative flex items-center rounded-lg transition-all duration-200 h-9 w-full',
+          'outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
           isParentActive(item)
             ? 'bg-primary/10 text-white border border-primary/20'
             : 'text-white/60 hover:text-white',
@@ -113,6 +114,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
         onMouseLeave={handleTooltipLeave}
         className={cn(
           'group relative flex items-center rounded-lg transition-all duration-200 h-9',
+          'outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
           isParentActive(item)
             ? 'bg-primary/10 text-white border border-primary/20'
             : 'text-white/60 hover:text-white',
@@ -162,19 +164,16 @@ export const NavigationItem = memo<NavigationItemProps>(({
               to={subItem.href}
               onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
               onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
-              className={`
-                group relative flex items-center rounded-lg transition-all duration-200
-                ${
-                  isActive(subItem.href)
-                    ? 'bg-primary/10 text-white border border-primary/20'
-                    : 'text-white/60 hover:text-white'
-                }
-                ${
-                  isCollapsed
-                    ? 'justify-center w-8 h-8 px-0'
-                    : 'h-8 px-4 mx-2'
-                }
-              `}
+              className={cn(
+                'group relative flex items-center rounded-lg transition-all duration-200',
+                'outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
+                isActive(subItem.href)
+                  ? 'bg-primary/10 text-white border border-primary/20'
+                  : 'text-white/60 hover:text-white',
+                isCollapsed
+                  ? 'justify-center w-8 h-8 px-0'
+                  : 'h-8 px-4 mx-2'
+              )}
             >
               <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${
                 isCollapsed
