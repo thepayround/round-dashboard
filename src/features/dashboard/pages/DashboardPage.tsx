@@ -63,7 +63,7 @@ export const DashboardPage = () => {
       <DashboardLayout>
         <div className="p-8">
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-3">
+            <div className="flex items-center justify-center space-x-2">
               <LoadingSpinner size="md" label="Loading your account..." />
             </div>
           </div>
@@ -181,11 +181,11 @@ export const DashboardPage = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
           >
             {kpis.map(kpi => (
-              <Card key={kpi.id} padding="lg">
+              <Card key={kpi.id} padding="md">
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-wide text-white/60">{kpi.label}</p>
-                    <p className="mt-2 text-2xl font-normal tracking-tight text-white">{kpi.formattedValue}</p>
+                    <p className="mt-2 text-xl font-normal tracking-tight text-white">{kpi.formattedValue}</p>
                   </div>
                   <span
                     className={`text-xs font-medium ${
@@ -211,10 +211,10 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18 }}
           >
-            <Card padding="lg">
+            <Card padding="md">
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h3 className="text-lg font-medium text-white">Revenue trend</h3>
+                  <h3 className="text-base font-medium text-white">Revenue trend</h3>
                   <p className="text-sm text-white/60">{filterSummary.dateRangeLabel}</p>
                 </div>
                 <div className="text-xs text-white/60">
@@ -263,33 +263,33 @@ export const DashboardPage = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
           >
             {/* Account Type */}
-            <Card padding="lg">
+            <Card padding="md">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account type</div>
                   <div className="text-white text-sm font-normal tracking-tight">{roundAccount.accountType}</div>
                 </div>
-                <div className="p-3 bg-primary/20 rounded-lg border border-primary/30">
+                <div className="p-2 bg-primary/20 rounded-md border border-primary/30">
                   <Building className="w-4 h-4 text-primary" />
                 </div>
               </div>
             </Card>
 
             {/* Account Status */}
-            <Card padding="lg">
+            <Card padding="md">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account status</div>
                   <div className="text-white text-sm font-normal tracking-tight">{roundAccount.status}</div>
                 </div>
-                <div className="p-3 bg-primary/20 rounded-lg border border-success/30">
+                <div className="p-2 bg-primary/20 rounded-md border border-success/30">
                   <CheckCircle className="w-4 h-4 text-success" />
                 </div>
               </div>
             </Card>
 
             {/* Created Date */}
-            <Card padding="lg">
+            <Card padding="md">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Created date</div>
@@ -297,7 +297,7 @@ export const DashboardPage = () => {
                     {new Date(roundAccount.createdDate).toLocaleDateString()}
                   </div>
                 </div>
-                <div className="p-3 bg-primary/20 rounded-lg border border-secondary/30">
+                <div className="p-2 bg-primary/20 rounded-md border border-secondary/30">
                   <Clock className="w-4 h-4 text-secondary" />
                 </div>
               </div>
@@ -305,13 +305,13 @@ export const DashboardPage = () => {
 
             {/* Currency */}
             {roundAccount.organization?.currency && (
-              <Card padding="lg">
+              <Card padding="md">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Currency</div>
                     <div className="text-white text-sm font-normal tracking-tight">{roundAccount.organization.currency}</div>
                   </div>
-                  <div className="p-3 bg-primary/20 rounded-lg border border-accent/30">
+                  <div className="p-2 bg-primary/20 rounded-md border border-accent/30">
                     <DollarSign className="w-4 h-4 text-accent" />
                   </div>
                 </div>
@@ -322,25 +322,25 @@ export const DashboardPage = () => {
 
         {/* Main Content Grid */}
         {roundAccount && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Account Details */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Card padding="lg">
-                <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-primary/20 rounded-xl border border-secondary/30">
-                    <Building className="w-5 h-5 text-secondary" />
+              <Card padding="md">
+                <div className="flex items-start gap-2 mb-4">
+                  <div className="p-2 bg-primary/20 rounded-md border border-secondary/30">
+                    <Building className="w-4 h-4 text-secondary" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-xl font-normal tracking-tight text-white mb-2">Account details</h2>
+                    <h2 className="text-lg font-normal tracking-tight text-white mb-1">Account details</h2>
                     <p className="text-gray-500 dark:text-polar-500 leading-snug">Core account information and settings</p>
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-2">
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-4">
                       <Building2 className="w-4 h-4 text-secondary" />
@@ -378,8 +378,8 @@ export const DashboardPage = () => {
                       }`} />
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <span className={`px-2 py-1 text-xs rounded-lg font-normal tracking-tight border ${
-                            roundAccount.status.toLowerCase() === 'active' 
+                          <span className={`px-2 py-1 text-xs rounded-md font-normal tracking-tight border ${
+                            roundAccount.status.toLowerCase() === 'active'
                               ? 'bg-success/20 text-success border-success/30'
                               : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
                           }`}>
@@ -433,18 +433,18 @@ export const DashboardPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <Card padding="lg">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="p-3 bg-primary/20 rounded-xl border border-accent/30">
-                      <Building className="w-5 h-5 text-accent" />
+                <Card padding="md">
+                  <div className="flex items-start gap-2 mb-4">
+                    <div className="p-2 bg-primary/20 rounded-md border border-accent/30">
+                      <Building className="w-4 h-4 text-accent" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-xl font-normal tracking-tight text-white mb-2">Organization details</h2>
+                      <h2 className="text-lg font-normal tracking-tight text-white mb-1">Organization details</h2>
                       <p className="text-gray-500 dark:text-polar-500 leading-snug">Company information and settings</p>
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     <Card variant="nested" padding="md">
                       <div className="flex items-center gap-4">
                         <Building2 className="w-4 h-4 text-primary" />
@@ -621,13 +621,13 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <Card padding="lg">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 bg-primary/20 rounded-xl border border-accent/30">
-                  <MapPin className="w-5 h-5 text-accent" />
+            <Card padding="md">
+              <div className="flex items-start gap-2 mb-4">
+                <div className="p-2 bg-primary/20 rounded-md border border-accent/30">
+                  <MapPin className="w-4 h-4 text-accent" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-lg font-medium text-white mb-2">Account Addresses</h2>
+                  <h2 className="text-lg font-medium text-white mb-1">Account Addresses</h2>
                   <p className="text-gray-500 dark:text-polar-500 leading-snug">Billing and shipping addresses</p>
                 </div>
               </div>
@@ -637,17 +637,17 @@ export const DashboardPage = () => {
                   <Card
                     key={address.addressId}
                     variant="nested"
-                    padding="lg"
+                    padding="md"
                   >
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start justify-between mb-2">
                       <div>
                         <h3 className="font-medium text-white text-sm mb-2">{address.name}</h3>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs px-2 py-1 rounded-lg bg-accent/20 text-accent border border-accent/30 font-medium">
+                          <span className="text-xs px-2 py-1 rounded-md bg-accent/20 text-accent border border-accent/30 font-medium">
                             {address.addressType}
                           </span>
                           {address.isPrimary && (
-                            <span className="text-xs px-2 py-1 rounded-lg bg-success/20 text-success border border-success/30 font-medium">
+                            <span className="text-xs px-2 py-1 rounded-md bg-success/20 text-success border border-success/30 font-medium">
                               Primary
                             </span>
                           )}
@@ -674,13 +674,13 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <Card padding="lg">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 bg-primary/20 rounded-xl border border-secondary/30">
-                  <Users className="w-5 h-5 text-secondary" />
+            <Card padding="md">
+              <div className="flex items-start gap-2 mb-4">
+                <div className="p-2 bg-primary/20 rounded-md border border-secondary/30">
+                  <Users className="w-4 h-4 text-secondary" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-lg font-medium text-white mb-2">Account Users</h2>
+                  <h2 className="text-lg font-medium text-white mb-1">Account Users</h2>
                   <p className="text-gray-500 dark:text-polar-500 leading-snug">Team members with access to this account</p>
                 </div>
               </div>
@@ -690,17 +690,17 @@ export const DashboardPage = () => {
                   <Card
                     key={`${accountUser.roundAccountId}-${accountUser.userId}`}
                     variant="nested"
-                    padding="lg"
+                    padding="md"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
-                        <User className="w-5 h-5 text-white" />
+                      <div className="w-8 h-8 rounded-md bg-accent flex items-center justify-center flex-shrink-0">
+                        <User className="w-4 h-4 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-white text-sm mb-1">User ID</p>
                         <p className="text-xs text-gray-400 font-mono break-all">{accountUser.userId}</p>
                         {accountUser.role && (
-                          <span className="inline-block mt-2 text-xs px-2 py-1 rounded-lg bg-secondary/20 text-secondary border border-secondary/30 font-medium">
+                          <span className="inline-block mt-2 text-xs px-2 py-1 rounded-md bg-secondary/20 text-secondary border border-secondary/30 font-medium">
                             {accountUser.role}
                           </span>
                         )}

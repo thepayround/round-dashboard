@@ -284,26 +284,31 @@ export const OrganizationForm = ({
                 <label htmlFor="currency" className="auth-label">
                   Currency <span className="text-red-400">*</span>
                 </label>
-                <UiDropdown
-                  id="currency"
-                  value={data.currency}
-                  onSelect={(value: string) => handleSelectChange('currency', value)}
-                  options={[
-                    { value: 'USD', label: 'USD - US Dollar' },
-                    { value: 'EUR', label: 'EUR - Euro' },
-                    { value: 'GBP', label: 'GBP - British Pound' },
-                    { value: 'CAD', label: 'CAD - Canadian Dollar' },
-                    { value: 'AUD', label: 'AUD - Australian Dollar' },
-                    { value: 'JPY', label: 'JPY - Japanese Yen' },
-                  ]}
-                  icon={
-                    currencyLoading ? (
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10 pointer-events-none">
+                    {currencyLoading ? (
                       <div className="w-3 h-3 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
                     ) : (
-                      <span className="text-sm font-semibold text-secondary">{currencySymbol}</span>
-                    )
-                  }
-                />
+                      <span className="text-sm font-semibold text-secondary">
+                        {currencySymbol}
+                      </span>
+                    )}
+                  </div>
+                  <UiDropdown
+                    id="currency"
+                    value={data.currency}
+                    onSelect={(value: string) => handleSelectChange('currency', value)}
+                    options={[
+                      { value: 'USD', label: 'USD - US Dollar' },
+                      { value: 'EUR', label: 'EUR - Euro' },
+                      { value: 'GBP', label: 'GBP - British Pound' },
+                      { value: 'CAD', label: 'CAD - Canadian Dollar' },
+                      { value: 'AUD', label: 'AUD - Australian Dollar' },
+                      { value: 'JPY', label: 'JPY - Japanese Yen' },
+                    ]}
+                    className="pl-12"
+                  />
+                </div>
               </div>
 
               {/* Revenue */}
