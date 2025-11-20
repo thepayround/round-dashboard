@@ -272,7 +272,7 @@ export const BusinessRegisterPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo className="sm:mb-10" />
 
-        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
+        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8 lg:mb-10">
           <div className="gradient-header" />

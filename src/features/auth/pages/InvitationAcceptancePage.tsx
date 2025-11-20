@@ -40,7 +40,7 @@ export const InvitationAcceptancePage = () => {
         </div>
 
         <div className="w-full max-w-[360px] mx-auto relative z-10">
-          <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150 text-center">
+          <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150 text-center">
             <LoadingSpinner size="xl" color="secondary" label="Validating invitation..." />
           </div>
         </div>
@@ -59,7 +59,7 @@ export const InvitationAcceptancePage = () => {
         </div>
         
         <div className="w-full max-w-[360px] mx-auto relative z-10">
-          <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150 text-center">
+          <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150 text-center">
             <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertCircle className="w-8 h-8 text-primary" />
             </div>
@@ -103,7 +103,7 @@ export const InvitationAcceptancePage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo />
 
-        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
+        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="gradient-header" />

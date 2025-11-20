@@ -345,7 +345,7 @@ export const classPatterns = {
    */
   authCard: `
     bg-white/[0.02] border border-white/10 rounded-lg
-    p-5 md:p-6 lg:p-7
+    p-6
     relative overflow-hidden z-10
     transition-all duration-150
   `,

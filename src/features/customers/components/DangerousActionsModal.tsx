@@ -69,7 +69,7 @@ export const DangerousActionsModal = ({
 
             <div className="space-y-4">
               {currentStatus === 'active' && (
-                <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-all duration-200">
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-200">
                   <div className="flex items-start gap-4 mb-4">
                     <div className="p-2 bg-orange-500/20 rounded-lg border border-orange-500/30">
                       <UserX className="w-5 h-5 text-orange-400" />
@@ -95,7 +95,7 @@ export const DangerousActionsModal = ({
                 </div>
               )}
 
-              <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-all duration-200">
+              <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-200">
                 <div className="flex items-start gap-4 mb-4">
                   <div className="p-2 bg-red-500/20 rounded-lg border border-red-500/30">
                     <Trash2 className="w-5 h-5 text-red-400" />

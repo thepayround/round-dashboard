@@ -45,7 +45,7 @@ export const ResetPasswordPage = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="w-full max-w-[360px] mx-auto relative z-10"
         >
-          <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
+          <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
             <div className="text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/15 flex items-center justify-center">
                 <AlertCircle className="w-8 h-8 text-white" />
@@ -90,7 +90,7 @@ export const ResetPasswordPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo />
 
-        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-5 md:p-6 lg:p-7 relative overflow-hidden z-10 transition-all duration-150">
+        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="gradient-header" />
