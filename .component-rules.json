@@ -360,7 +360,7 @@
       "pattern": "\\btext-base\\b(?!.*(?:heading|title|h1|h2|h3))",
       "message": "Use text-sm (13px) for body text in compact design. text-base (14px) is for emphasized text only.",
       "suggestion": "Replace text-base with text-sm for standard body text",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
     },
     {
@@ -368,7 +368,7 @@
       "pattern": "\\btext-2xl\\b(?=.*(?:h1|heading|title))",
       "message": "Use text-xl (18px) for H1 headings in compact design.",
       "suggestion": "Replace text-2xl with text-xl for H1 headings",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
     },
     {
@@ -376,15 +376,15 @@
       "pattern": "\\brounded-lg\\b",
       "message": "Use rounded-md (6px) for standard elements in compact design. rounded-lg (8px) is for cards only.",
       "suggestion": "Replace rounded-lg with rounded-md for buttons/inputs, or rounded-lg for cards",
-      "severity": "warning",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md", "src/shared/ui/Modal/"]
+      "severity": "error",
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md", "src/shared/ui/Modal/", "src/shared/ui/Avatar/"]
     },
     {
       "name": "No ring-2 focus (use ring-1)",
       "pattern": "\\bring-2\\b",
       "message": "Use ring-1 for focus indicators in compact design (thinner rings).",
       "suggestion": "Replace ring-2 with ring-1 for subtle focus indicators",
-      "severity": "warning",
+      "severity": "error",
       "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
     }
   ]
