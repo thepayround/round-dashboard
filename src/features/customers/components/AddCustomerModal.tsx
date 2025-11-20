@@ -301,7 +301,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         <div className="space-y-4">
           {/* Header with Toggle */}
           <div className="flex items-center justify-between">
-            <SectionHeader icon={Truck} title="Shipping Address" iconColor="text-[#00BCD4]" />
+            <SectionHeader icon={Truck} title="Shipping Address" iconColor="text-secondary" />
             
             <Toggle
               label="Same as billing"
@@ -315,10 +315,10 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           
           {/* Address Fields or Same as Billing Message */}
           {sameAsBilling ? (
-            <div className="p-4 bg-[#00BCD4]/10 border border-[#00BCD4]/30 rounded-lg">
+            <div className="p-4 bg-secondary/10 border border-secondary/30 rounded-lg">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 rounded-full bg-[#00BCD4]/20 flex items-center justify-center">
-                  <Truck className="w-4 h-4 text-[#00BCD4]" />
+                <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
+                  <Truck className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
                   <p className="text-white text-sm font-medium">Shipping address will be same as billing address</p>

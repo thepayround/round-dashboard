@@ -12,7 +12,7 @@ const toggleContainerVariants = cva(
         lg: 'w-11 h-6',
       },
       color: {
-        cyan: 'bg-white/20 peer-focus:ring-[#00BCD4]/30 peer-checked:bg-[#00BCD4]',
+        cyan: 'bg-white/20 peer-focus:ring-secondary/30 peer-checked:bg-secondary',
         green: 'bg-white/20 peer-focus:ring-success/30 peer-checked:bg-success',
         blue: 'bg-white/20 peer-focus:ring-secondary/30 peer-checked:bg-secondary',
         primary: 'bg-gray-600 peer-focus:ring-primary/20 peer-checked:bg-primary',
