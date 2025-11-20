@@ -193,7 +193,7 @@ export const DashboardLayout = memo(({
           <div className="flex-shrink-0">
             {!isCollapsed ? (
               // Expanded: Logo on left, button on right (same row)
-              <div className="flex flex-row items-center justify-between pl-4 pr-3 pt-4 pb-2">
+              <div className="flex flex-row items-center justify-between pl-4 pr-2 pt-4 pb-2">
                 <Link
                   to="/dashboard"
                   className="flex items-center gap-2 transition-colors duration-200 cursor-pointer min-w-0"
@@ -207,8 +207,8 @@ export const DashboardLayout = memo(({
                   onClick={toggleSidebar}
                   icon={PanelLeftClose}
                   variant="ghost"
-                  size="md"
-                  className="text-gray-400 hover:text-white flex-shrink-0 !w-9 !h-9 [&>svg]:!w-[18px] [&>svg]:!h-[18px]"
+                  size="sm"
+                  className="text-gray-400 hover:text-white flex-shrink-0"
                   aria-label="Collapse sidebar"
                   title="Collapse sidebar (Ctrl+Shift+B)"
                 />
@@ -228,8 +228,8 @@ export const DashboardLayout = memo(({
                   onClick={toggleSidebar}
                   icon={PanelLeft}
                   variant="ghost"
-                  size="md"
-                  className="text-gray-400 hover:text-white !w-9 !h-9 [&>svg]:!w-[18px] [&>svg]:!h-[18px]"
+                  size="sm"
+                  className="text-gray-400 hover:text-white"
                   aria-label="Expand sidebar"
                   title="Expand sidebar (Ctrl+Shift+B)"
                 />
@@ -255,8 +255,8 @@ export const DashboardLayout = memo(({
                 onClick={toggleSidebar}
                 icon={PanelLeftClose}
                 variant="ghost"
-                size="md"
-                className="text-gray-400 hover:text-white flex-shrink-0 !w-9 !h-9 [&>svg]:!w-[18px] [&>svg]:!h-[18px]"
+                size="sm"
+                className="text-gray-400 hover:text-white flex-shrink-0"
                 aria-label="Close sidebar"
                 title="Close sidebar"
               />
