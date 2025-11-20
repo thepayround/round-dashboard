@@ -91,10 +91,10 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="space-y-3"
+      className="space-y-4"
     >
       {/* Notification Types */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <AnimatePresence>
           {notificationTypes.map((type, index) => (
             <motion.div

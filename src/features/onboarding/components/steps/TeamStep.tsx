@@ -99,7 +99,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-3"
+            className="space-y-4"
           >
             <h4 className="text-xs font-normal tracking-tight text-white">Pending invitations</h4>
             <div className="space-y-2">

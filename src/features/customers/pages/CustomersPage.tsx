@@ -146,7 +146,7 @@ const CustomersPage: React.FC = () => {
                   <div className="w-8 h-8 bg-[#262626] rounded-lg" />
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div className="w-full h-3 bg-[#262626] rounded" />
                   <div className="w-3/4 h-3 bg-[#262626] rounded" />
                   <div className="w-1/2 h-3 bg-[#262626] rounded" />
@@ -263,7 +263,7 @@ const CustomersPage: React.FC = () => {
                         <div className="h-4 bg-white/5 rounded w-1/2" />
                       </div>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div className="h-4 bg-white/5 rounded" />
                       <div className="h-4 bg-white/5 rounded w-5/6" />
                     </div>
@@ -342,7 +342,7 @@ const CustomersPage: React.FC = () => {
                 </div>
 
                 {/* Information Cards */}
-                <div className="space-y-3 mb-4">
+                <div className="space-y-4 mb-4">
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-4">
                       <Mail className="w-4 h-4 text-secondary" />

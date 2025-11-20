@@ -177,7 +177,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <div className="flex-1 p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
               {isLoading ? (
                 // Loading skeleton
-                <div className="space-y-5 animate-pulse">
+                <div className="space-y-6 animate-pulse">
                   {[1, 2, 3].map((i) => (
                     <div key={i}>
                       <div className="h-4 bg-white/10 rounded w-24 mb-2" />
@@ -186,7 +186,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                   ))}
                 </div>
               ) : (
-                <div className="space-y-5">
+                <div className="space-y-6">
                   {children}
                 </div>
               )}

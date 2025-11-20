@@ -161,7 +161,7 @@ export const UiDropdown = ({
                 onKeyDown={handleListKeyDown}
               >
                 { isLoading ? (
-                  <div className="p-6 flex flex-col items-center text-center space-y-3 text-xs">
+                  <div className="p-6 flex flex-col items-center text-center space-y-4 text-xs">
                     <div className="w-6 h-6 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
                     <p className="text-white/60">Loading options...</p>
                   </div>

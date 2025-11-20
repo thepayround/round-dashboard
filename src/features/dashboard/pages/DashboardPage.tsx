@@ -340,7 +340,7 @@ export const DashboardPage = () => {
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-4">
                       <Building2 className="w-4 h-4 text-secondary" />
@@ -444,7 +444,7 @@ export const DashboardPage = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <Card variant="nested" padding="md">
                       <div className="flex items-center gap-4">
                         <Building2 className="w-4 h-4 text-primary" />

@@ -71,7 +71,7 @@ export const BusinessLoginPage = () => {
           </div>
 
           {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 lg:space-y-4">
             {/* Email Address */}
             <AuthInput
               id="email"

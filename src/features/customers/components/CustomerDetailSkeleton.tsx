@@ -17,7 +17,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
               <div className="h-3 bg-gray-700/50 rounded w-2/3 mb-4 animate-pulse" />
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-gray-600 rounded animate-pulse" />
@@ -25,7 +25,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
                     </div>
                   ))}
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-gray-600 rounded animate-pulse" />
@@ -115,7 +115,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
             </div>
           </div>
           
-          <div className="space-y-3">
+          <div className="space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="h-9 bg-gray-700/50 rounded-lg animate-pulse" />
             ))}
@@ -134,7 +134,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
             </div>
           </div>
           
-          <div className="space-y-3">
+          <div className="space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex justify-between items-center">
                 <div className="h-3 bg-gray-700/50 rounded w-20 animate-pulse" />

@@ -52,7 +52,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           <SectionHeader icon={User} title="Basic Information" iconColor="text-primary" />
           
           {/* Customer Type Selection */}
-          <div className="space-y-3">
+          <div className="space-y-4">
             <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Customer Type</span>
             <div className="grid grid-cols-2 gap-4">
               <Button

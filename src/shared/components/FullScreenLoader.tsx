@@ -6,7 +6,7 @@ export const FullScreenLoader = () => (
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.2 }}
-      className="text-center space-y-3"
+      className="text-center space-y-4"
     >
       <motion.div
         animate={{ rotate: 360 }}

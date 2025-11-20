@@ -133,7 +133,7 @@ export const ConfirmationPendingPage = () => {
             className="p-6 rounded-lg bg-primary/10 border border-white/10 mb-8"
           >
             <h3 className="text-lg font-medium tracking-tight text-white mb-4">What to do next:</h3>
-            <div className="space-y-3 text-left">
+            <div className="space-y-4 text-left">
               <div className="flex items-start space-x-3">
                 <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <span className="text-white text-sm font-medium tracking-tight">1</span>

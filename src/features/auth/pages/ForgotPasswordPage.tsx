@@ -164,7 +164,7 @@ export const ForgotPasswordPage = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <ActionButton
                     label="Back to Sign In"
                     onClick={handleBackToLogin}

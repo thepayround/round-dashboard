@@ -165,14 +165,14 @@ export const ApiDropdown = <T = unknown>({
               onKeyDown={handleListKeyDown}
             >
               {isError ? (
-                <div className="p-4 flex flex-col items-center text-center space-y-3">
+                <div className="p-4 flex flex-col items-center text-center space-y-4">
                   <p className="text-white/70 text-sm">{config.errorText}</p>
                   <Button size="sm" variant="secondary" onClick={() => refetch()}>
                     Retry
                   </Button>
                 </div>
               ) : isLoading ? (
-                <div className="p-6 flex flex-col items-center text-center space-y-3">
+                <div className="p-6 flex flex-col items-center text-center space-y-4">
                   <div className="w-6 h-6 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
                   <p className="text-white/60 text-sm">Loading options...</p>
                 </div>

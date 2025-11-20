@@ -75,7 +75,7 @@ export const PasswordStrengthIndicator = ({
   )
 
   return (
-    <div className={`space-y-3 ${className}`}>
+    <div className={`space-y-4 ${className}`}>
       {/* Strength Bar */}
       {showStrengthBar && password && (
         <div className="space-y-1">

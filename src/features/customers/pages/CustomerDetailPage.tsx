@@ -402,7 +402,7 @@ const CustomerDetailPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               <QuickActionButton label="Send Email" icon={Mail} onClick={openEmailModal} />
               <QuickActionButton label="View Notes" icon={FileText} onClick={openNotesModal} />
               <QuickActionButton label="Edit Details" icon={Edit} onClick={openEditModal} variant="secondary" />

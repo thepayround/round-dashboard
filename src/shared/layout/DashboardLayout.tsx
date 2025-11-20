@@ -213,7 +213,7 @@ export const DashboardLayout = memo(({
                 </div>
               ) : (
                 // Collapsed: Logo on top, button below
-                <div className="flex flex-col items-center py-5 space-y-3">
+                <div className="flex flex-col items-center py-5 space-y-4">
                   <Link
                     to="/dashboard"
                     className="flex items-center justify-center transition-colors duration-200 cursor-pointer"

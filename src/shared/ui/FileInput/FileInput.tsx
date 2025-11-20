@@ -261,7 +261,7 @@ export const FileInput: React.FC<FileInputProps> = ({
         )}
       >
         {!hasValue ? (
-          <div className="text-center space-y-3">
+          <div className="text-center space-y-4">
             <Upload className={cn(
               'w-8 h-8 mx-auto transition-colors',
               isDragging ? 'text-primary' : 'text-gray-400'

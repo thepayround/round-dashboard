@@ -35,7 +35,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/15 mb-5 border border-primary/30">
           <Lock className="w-6 h-6 text-primary" />
         </div>
-        <div className="space-y-3">
+        <div className="space-y-4">
           <Badge variant="info" size="lg" className="inline-flex items-center gap-2">
             <Shield className="w-4 h-4" />
             Enhanced security enabled

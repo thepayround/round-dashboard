@@ -68,7 +68,7 @@ export const PersonalRegisterPage = () => {
 
 
         {/* Registration Form */}
-        <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5 lg:space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 lg:space-y-4">
           {/* Name Fields Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormInput

@@ -93,7 +93,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
         aria-invalid={!!error}
         aria-describedby={errorId}
         className={cn(
-          orientation === 'horizontal' ? 'flex space-x-3' : 'space-y-3'
+          orientation === 'horizontal' ? 'flex space-x-3' : 'space-y-4'
         )}
         role="radiogroup"
       >

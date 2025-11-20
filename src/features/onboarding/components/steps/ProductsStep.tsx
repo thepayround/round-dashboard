@@ -71,7 +71,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
             className="space-y-4"
           >
             <h4 className="text-lg font-medium text-white">Your Products</h4>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {products.map(product => (
                 <div
                   key={product.id}

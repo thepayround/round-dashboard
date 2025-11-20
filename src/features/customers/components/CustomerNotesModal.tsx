@@ -149,7 +149,7 @@ export const CustomerNotesModal = ({
               />
             ) : (
               notes.map(note => (
-                <div key={note.id} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+                <div key={note.id} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <IconBox icon={User} color="info" className="border border-secondary/30" />
@@ -187,7 +187,7 @@ export const CustomerNotesModal = ({
                   </div>
 
                   {editingNoteId === note.id ? (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <Textarea
                         value={editContent}
                         onChange={event => handleEditContentChange(event.target.value)}

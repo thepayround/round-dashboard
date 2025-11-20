@@ -73,7 +73,7 @@ export const BillingSection: React.FC = () => (
         </div>
 
         {/* Payment Method Card */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -153,7 +153,7 @@ export const BillingSection: React.FC = () => (
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-lg">
               <div className="flex items-center gap-4">
                 <div className="p-1.5 bg-blue-500/20 rounded-lg">
