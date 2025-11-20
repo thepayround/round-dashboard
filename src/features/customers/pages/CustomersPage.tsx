@@ -344,7 +344,7 @@ const CustomersPage: React.FC = () => {
                 {/* Information Cards */}
                 <div className="space-y-3 mb-4">
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Mail className="w-4 h-4 text-secondary" />
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-normal tracking-tight text-white truncate">{customer.email}</div>
@@ -355,7 +355,7 @@ const CustomersPage: React.FC = () => {
                   
                   {customer.phoneNumber && (
                     <Card variant="nested" padding="md">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <Phone className="w-4 h-4 text-success" />
                         <div className="flex-1">
                           <div className="text-sm font-normal tracking-tight text-white">{customer.phoneNumber}</div>
@@ -367,7 +367,7 @@ const CustomersPage: React.FC = () => {
                   
                   {customer.billingAddress && (
                     <Card variant="nested" padding="md">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <MapPin className="w-4 h-4 text-amber-400" />
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-normal tracking-tight text-white truncate">
@@ -380,7 +380,7 @@ const CustomersPage: React.FC = () => {
                   )}
                   
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Calendar className="w-4 h-4 text-accent" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{formatDate(customer.signupDate)}</div>

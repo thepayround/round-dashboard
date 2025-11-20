@@ -57,7 +57,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
     >
       {/* Personal Information Section */}
       <Card animate={false} padding="md" className="space-y-4">
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-4">
           <div className="p-2 bg-primary/15 rounded-lg border border-primary/20">
             <UserIcon className="w-3.5 h-3.5 text-primary" />
           </div>
@@ -142,7 +142,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
 
       {/* Display Preferences Section */}
       <Card animate={false} padding="md">
-        <div className="flex items-start gap-3 mb-4">
+        <div className="flex items-start gap-4 mb-4">
           <div className="p-2 bg-primary/15 rounded-lg border border-accent/20">
             <Globe className="w-3.5 h-3.5 text-accent" />
           </div>

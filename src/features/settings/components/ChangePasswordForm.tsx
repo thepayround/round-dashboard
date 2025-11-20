@@ -51,7 +51,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
 
       {isSuccess && (
         <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 text-emerald-50 text-sm mb-6">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-4">
             <CheckCircle className="w-5 h-5 text-emerald-400" />
             <div>
               <h4 className="text-white font-medium mb-1">Password changed successfully</h4>
@@ -63,7 +63,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
 
       {apiError && (
         <div className="bg-primary/10 border border-primary/30 rounded-2xl p-4 text-[#fda4af] text-sm mb-6">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-4">
             <AlertCircle className="w-4 h-4 text-primary" />
             <div>
               <h4 className="text-white font-medium mb-1">Failed to change password</h4>
@@ -176,7 +176,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
             </div>
           </div>
 
-          <div className="flex justify-center gap-3 pt-2">
+          <div className="flex justify-center gap-4 pt-2">
             <ActionButton
               label="Reset"
               onClick={handleReset}

@@ -126,7 +126,7 @@ export const DashboardPage = () => {
                 {filterSummary.segmentLabel} • {filterSummary.dateRangeLabel}
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-4">
               <div>
                 <UiDropdown
                   label="Date range"
@@ -341,7 +341,7 @@ export const DashboardPage = () => {
 
                 <div className="space-y-3">
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Building2 className="w-4 h-4 text-secondary" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{roundAccount.accountName}</div>
@@ -351,7 +351,7 @@ export const DashboardPage = () => {
                   </Card>
 
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Building className="w-4 h-4 text-primary" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white font-mono">{roundAccount.roundAccountId}</div>
@@ -361,7 +361,7 @@ export const DashboardPage = () => {
                   </Card>
 
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Building className="w-4 h-4 text-secondary" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{roundAccount.accountType}</div>
@@ -371,7 +371,7 @@ export const DashboardPage = () => {
                   </Card>
 
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <CheckCircle className={`w-4 h-4 ${
                         roundAccount.status.toLowerCase() === 'active' ? 'text-success' : 'text-gray-400'
                       }`} />
@@ -391,7 +391,7 @@ export const DashboardPage = () => {
                   </Card>
 
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Calendar className="w-4 h-4 text-accent" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">
@@ -407,7 +407,7 @@ export const DashboardPage = () => {
                   </Card>
 
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Clock className="w-4 h-4 text-[#32A1E4]" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">
@@ -445,7 +445,7 @@ export const DashboardPage = () => {
 
                   <div className="space-y-3">
                     <Card variant="nested" padding="md">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <Building2 className="w-4 h-4 text-primary" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.name}</div>
@@ -455,7 +455,7 @@ export const DashboardPage = () => {
                     </Card>
 
                     <Card variant="nested" padding="md">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <DollarSign className="w-4 h-4 text-success" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white font-mono">{roundAccount.organization.organizationId}</div>
@@ -465,7 +465,7 @@ export const DashboardPage = () => {
                     </Card>
 
                     <Card variant="nested" padding="md">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <Building className="w-4 h-4 text-secondary" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.type}</div>
@@ -475,7 +475,7 @@ export const DashboardPage = () => {
                     </Card>
 
                     <Card variant="nested" padding="md">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <Building2 className="w-4 h-4 text-accent" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.category}</div>
@@ -486,7 +486,7 @@ export const DashboardPage = () => {
 
                     {roundAccount.organization.industry && (
                       <Card variant="nested" padding="md">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
                           <Building2 className="w-4 h-4 text-[#32A1E4]" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.industry}</div>
@@ -497,7 +497,7 @@ export const DashboardPage = () => {
                     )}
 
                     <Card variant="nested" padding="md">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <DollarSign className="w-4 h-4 text-success" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.currency}</div>
@@ -507,7 +507,7 @@ export const DashboardPage = () => {
                     </Card>
 
                     <Card variant="nested" padding="md">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <Clock className="w-4 h-4 text-accent" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.timeZone}</div>
@@ -517,7 +517,7 @@ export const DashboardPage = () => {
                     </Card>
 
                     <Card variant="nested" padding="md">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <MapPin className="w-4 h-4 text-[#32A1E4]" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.country}</div>
@@ -528,7 +528,7 @@ export const DashboardPage = () => {
 
                     {roundAccount.organization.size && (
                       <Card variant="nested" padding="md">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
                           <Users className="w-4 h-4 text-secondary" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.size}</div>
@@ -540,7 +540,7 @@ export const DashboardPage = () => {
 
                     {roundAccount.organization.website && (
                       <Card variant="nested" padding="md">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
                           <ArrowUpRight className="w-4 h-4 text-[#32A1E4]" />
                           <div>
                             <a
@@ -559,7 +559,7 @@ export const DashboardPage = () => {
 
                     {roundAccount.organization.registrationNumber && (
                       <Card variant="nested" padding="md">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
                           <Building2 className="w-4 h-4 text-amber-400" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.registrationNumber}</div>
@@ -571,7 +571,7 @@ export const DashboardPage = () => {
 
                     {(roundAccount.organization.taxId && roundAccount.organization.taxId.trim() !== '') && (
                       <Card variant="nested" padding="md">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
                           <DollarSign className="w-4 h-4 text-amber-500" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.taxId}</div>
@@ -583,7 +583,7 @@ export const DashboardPage = () => {
 
                     {(typeof roundAccount.organization.revenue === 'number' && roundAccount.organization.revenue > 0) && (
                       <Card variant="nested" padding="md">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
                           <DollarSign className="w-4 h-4 text-success" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">
@@ -597,7 +597,7 @@ export const DashboardPage = () => {
 
                     {roundAccount.organization.description && (
                       <Card variant="nested" padding="md">
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-start gap-4">
                           <Building className="w-4 h-4 text-accent mt-0.5" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.description}</div>
@@ -691,7 +691,7 @@ export const DashboardPage = () => {
                     variant="nested"
                     padding="lg"
                   >
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-start gap-4">
                       <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
                         <User className="w-5 h-5 text-white" />
                       </div>

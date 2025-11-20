@@ -133,7 +133,7 @@ export const PhoneDisplay: React.FC<PhoneDisplayProps> = ({
       case 'standard':
       default:
         return (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {showCountryFlag && (
               <div className="flex items-center gap-1">
                 {countryInfo?.flag ? (

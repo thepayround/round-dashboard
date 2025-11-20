@@ -201,7 +201,7 @@ const CustomerDetailPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <Card variant="nested" padding="md">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-4">
                     <Mail className="w-4 h-4 text-secondary" />
                     <div>
                       <div className="text-sm font-normal tracking-tight text-white">{customer.email}</div>
@@ -211,7 +211,7 @@ const CustomerDetailPage: React.FC = () => {
                 </Card>
                 {customer.phoneNumber && (
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Phone className="w-4 h-4 text-success" />
                       <div className="flex-1">
                         <div className="text-sm font-normal tracking-tight text-white">{customer.phoneNumber}</div>
@@ -227,7 +227,7 @@ const CustomerDetailPage: React.FC = () => {
                 )}
                 {customer.company && (
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Building2 className="w-4 h-4 text-accent" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{customer.company}</div>
@@ -238,7 +238,7 @@ const CustomerDetailPage: React.FC = () => {
                 )}
                 {customer.taxNumber && (
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <FileText className="w-4 h-4 text-amber-400" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{customer.taxNumber}</div>
@@ -252,7 +252,7 @@ const CustomerDetailPage: React.FC = () => {
               <div className="space-y-4">
                 {customer.timezone && (
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Clock className="w-4 h-4 text-[#FF6B6B]" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{customer.timezone}</div>
@@ -263,7 +263,7 @@ const CustomerDetailPage: React.FC = () => {
                 )}
                 {customer.locale && (
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Globe className="w-4 h-4 text-secondary" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{customer.locale}</div>
@@ -274,7 +274,7 @@ const CustomerDetailPage: React.FC = () => {
                 )}
                 {customer.currency && (
                   <Card variant="nested" padding="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <span className="w-4 h-4 flex items-center justify-center text-success font-medium text-xs tracking-tight">
                         $
                       </span>
@@ -304,7 +304,7 @@ const CustomerDetailPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {customer.billingAddress && (
                   <Card variant="nested" padding="lg">
-                    <div className="flex items-center gap-3 mb-3">
+                    <div className="flex items-center gap-4 mb-3">
                       <CreditCard className="w-5 h-5 text-success" />
                       <h3 className="text-sm font-normal tracking-tight text-white">Billing Address</h3>
                     </div>
@@ -321,7 +321,7 @@ const CustomerDetailPage: React.FC = () => {
 
                 {customer.shippingAddress && (
                   <Card variant="nested" padding="lg">
-                    <div className="flex items-center gap-3 mb-3">
+                    <div className="flex items-center gap-4 mb-3">
                       <Truck className="w-5 h-5 text-accent" />
                       <h3 className="text-sm font-normal tracking-tight text-white">Shipping Address</h3>
                     </div>
@@ -607,7 +607,7 @@ const CustomerDetailPage: React.FC = () => {
                     {customer.isBusinessCustomer ? <Building2 className="w-6 h-6 text-white" /> : <User className="w-6 h-6 text-white" />}
                   </div>
                   <div>
-                    <div className="flex items-center gap-3 mb-1">
+                    <div className="flex items-center gap-4 mb-1">
                       <h1 className="text-lg font-medium text-white">{customer.effectiveDisplayName ?? customer.displayName}</h1>
                       {customer.isBusinessCustomer && (
                         <span className="px-3 py-1 bg-secondary/20 text-secondary border border-secondary/30 rounded-lg text-sm font-medium">
@@ -630,7 +630,7 @@ const CustomerDetailPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <Button
                   type="button"
                   onClick={openEmailModal}

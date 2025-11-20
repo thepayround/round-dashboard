@@ -147,7 +147,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-4">
+        <div className="flex items-center justify-end gap-4 pt-4">
           <Button variant="ghost" onClick={handleClose} disabled={isLoading}>
             Cancel
           </Button>

@@ -60,7 +60,7 @@ export const StepIndicator = ({
   })()
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-4">
       {/* Circular Indicator Button */}
       <RoundButton
         onClick={onClick}

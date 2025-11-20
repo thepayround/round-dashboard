@@ -42,7 +42,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <Button
             onClick={handleReset}
             disabled={isSaving || !isDirty}

@@ -24,7 +24,7 @@ export const BillingSection: React.FC = () => (
     >
       {/* Billing Overview */}
       <Card animate={false} padding="md">
-        <div className="flex items-start gap-3 mb-4">
+        <div className="flex items-start gap-4 mb-4">
           <div className="p-2 bg-primary/15 rounded-lg border border-success/20">
             <CreditCard className="w-4 h-4 text-success" />
           </div>
@@ -76,7 +76,7 @@ export const BillingSection: React.FC = () => (
         <div className="space-y-3">
           <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <div className="p-1.5 bg-blue-500/20 rounded-lg">
                   <CreditCard className="w-4 h-4 text-blue-400" />
                 </div>
@@ -94,7 +94,7 @@ export const BillingSection: React.FC = () => (
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <PlainButton className="text-primary hover:text-[#BD2CD0] text-sm font-normal transition-colors duration-200" unstyled>
                   Edit
                 </PlainButton>
@@ -112,7 +112,7 @@ export const BillingSection: React.FC = () => (
         {/* Billing Address */}
         <Card animate={false} padding="md">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className="p-2 bg-purple-500/20 rounded-lg">
                 <Building className="w-4 h-4 text-purple-400" />
               </div>
@@ -143,7 +143,7 @@ export const BillingSection: React.FC = () => (
 
         {/* Invoice Preferences */}
         <Card animate={false} padding="md">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-4 mb-4">
             <div className="p-2 bg-orange-500/20 rounded-lg">
               <Download className="w-4 h-4 text-orange-400" />
             </div>
@@ -155,7 +155,7 @@ export const BillingSection: React.FC = () => (
 
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-lg">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <div className="p-1.5 bg-blue-500/20 rounded-lg">
                   <Download className="w-4 h-4 text-blue-400" />
                 </div>
@@ -174,7 +174,7 @@ export const BillingSection: React.FC = () => (
               />
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <ActionButton
                 label="Download Latest Invoice"
                 icon={Download}

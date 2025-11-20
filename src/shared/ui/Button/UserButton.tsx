@@ -35,7 +35,7 @@ export const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
         ref={ref}
         className={cn(
           'flex items-center rounded-lg transition-colors duration-200 w-full h-11 text-white/60 hover:text-white',
-          collapsed ? 'justify-center px-0' : 'justify-start gap-3',
+          collapsed ? 'justify-center px-0' : 'justify-start gap-4',
           className
         )}
         {...props}

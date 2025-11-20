@@ -89,7 +89,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       <div className={className}>
         {/* All-in-one toolbar - everything in a single row */}
         <div>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             {/* Main toolbar - single row with all tools */}
             <div className="flex items-center justify-between gap-2">
               {/* Left Section - View Mode, Search, Filters */}
@@ -141,7 +141,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
 
             {/* Search Results Info - Enhanced styling */}
             {shouldShowSearchSummary && (
-              <div className="flex items-center gap-3 text-sm -mt-2">
+              <div className="flex items-center gap-4 text-sm -mt-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-secondary" />
                   <span className="text-white/70">

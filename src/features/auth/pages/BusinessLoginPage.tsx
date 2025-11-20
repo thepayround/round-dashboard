@@ -130,7 +130,7 @@ export const BusinessLoginPage = () => {
             </div>
 
             {/* Social Login Buttons */}
-            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
               <GoogleLoginButton 
                 accountType="business"
                 onSuccess={() => showSuccess('Successfully signed in with Google!')}

@@ -8,7 +8,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
       <div className="lg:col-span-2 space-y-6">
         {/* Header Card */}
         <Card padding="md" className="space-y-4">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-4">
             <div className="p-2 bg-gray-700/50 rounded-lg animate-pulse">
               <div className="w-3.5 h-3.5 bg-gray-600 rounded" />
             </div>
@@ -40,7 +40,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
 
         {/* Addresses Card */}
         <Card padding="md" className="space-y-4">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-4">
             <div className="p-2 bg-gray-700/50 rounded-lg animate-pulse">
               <div className="w-3.5 h-3.5 bg-gray-600 rounded" />
             </div>
@@ -66,7 +66,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
 
         {/* Metadata Card */}
         <Card padding="md" className="space-y-4">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-4">
             <div className="p-2 bg-gray-700/50 rounded-lg animate-pulse">
               <div className="w-3.5 h-3.5 bg-gray-600 rounded" />
             </div>
@@ -105,7 +105,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
       <div className="space-y-6">
         {/* Quick Actions */}
         <Card padding="md">
-          <div className="flex items-start gap-3 mb-4">
+          <div className="flex items-start gap-4 mb-4">
             <div className="p-2 bg-gray-700/50 rounded-lg animate-pulse">
               <div className="w-3.5 h-3.5 bg-gray-600 rounded" />
             </div>
@@ -124,7 +124,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
 
         {/* Status Information */}
         <Card padding="md">
-          <div className="flex items-start gap-3 mb-4">
+          <div className="flex items-start gap-4 mb-4">
             <div className="p-2 bg-gray-700/50 rounded-lg animate-pulse">
               <div className="w-3.5 h-3.5 bg-gray-600 rounded" />
             </div>

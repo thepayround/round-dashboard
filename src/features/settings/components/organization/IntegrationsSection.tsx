@@ -64,7 +64,7 @@ export const IntegrationsSection: React.FC = () => {
 
       <Card animate={false} padding="lg">
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="p-2 bg-primary/20 rounded-lg">
               <Key className="w-5 h-5 text-primary" />
             </div>
@@ -78,7 +78,7 @@ export const IntegrationsSection: React.FC = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
           {categories.map(category => (
             <Button
               key={category.id}
@@ -103,7 +103,7 @@ export const IntegrationsSection: React.FC = () => {
         {filteredIntegrations.map(integration => (
           <Card key={integration.id} animate={false} padding="lg">
             <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <span className="text-2xl">{integration.icon}</span>
                 <div>
                   <h3 className="text-sm font-normal tracking-tight text-white">{integration.name}</h3>

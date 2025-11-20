@@ -21,7 +21,7 @@ export const SecuritySection: React.FC<SecuritySectionProps> = () => (
       className="space-y-4"
     >
       <Card animate={false} padding="md">
-        <div className="flex items-start gap-3 mb-4">
+        <div className="flex items-start gap-4 mb-4">
           <div className="p-2 bg-primary/15 rounded-lg border border-purple-500/20">
             <Lock className="w-3.5 h-3.5 text-purple-400" />
           </div>

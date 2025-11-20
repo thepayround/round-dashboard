@@ -106,7 +106,7 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
               <Card animate={false} padding="md" className="bg-white/5 border border-white/10">
                 <div className="space-y-4">
                   {/* Type Header */}
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-4">
                     <div className={`p-2 bg- ${type.bgColor} rounded-lg border ${type.borderColor}`}>
                       <type.icon className={`w-3.5 h-3.5 ${type.iconColor}`} />
                     </div>
@@ -117,7 +117,7 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
                   </div>
 
                   {/* Channel Controls */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {channels.map((channel) => (
                       <div key={`${type.id}-${channel.id}`} className="p-3 bg-white/5 border border-white/10 rounded-lg">
                         <div className="flex items-center justify-between mb-2">

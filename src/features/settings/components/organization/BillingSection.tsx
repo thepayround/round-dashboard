@@ -28,7 +28,7 @@ export const BillingSection: React.FC = () => (
       {/* Current Plan */}
       <Card animate={false} padding="lg">
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="p-2 bg-primary/20 rounded-lg">
               <TrendingUp className="w-5 h-5 text-primary" />
             </div>
@@ -77,7 +77,7 @@ export const BillingSection: React.FC = () => (
 
       {/* Billing History */}
       <Card animate={false} padding="lg">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-4 mb-6">
           <div className="p-2 bg-primary/20 rounded-lg">
             <FileText className="w-5 h-5 text-[#32A1E4]" />
           </div>

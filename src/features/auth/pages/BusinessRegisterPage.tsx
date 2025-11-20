@@ -354,7 +354,7 @@ export const BusinessRegisterPage = () => {
             </Button>
 
             {/* Right side buttons container */}
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-4">
               {/* Skip button - only show on billing step when form is NOT complete */}
               {multiStepForm.currentStep === 1 && !isBillingComplete && (
                 <Button

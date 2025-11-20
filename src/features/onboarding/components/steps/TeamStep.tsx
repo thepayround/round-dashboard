@@ -56,7 +56,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
       <div className="space-y-6">
         <div className="p-4">
           <div className="space-y-4">
-            <div className="flex gap-3 items-end">
+            <div className="flex gap-4 items-end">
               <div className="flex-1">
                 <Input
                   id="inviteEmail"

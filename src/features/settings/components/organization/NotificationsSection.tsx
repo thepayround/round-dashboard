@@ -32,7 +32,7 @@ export const NotificationsSection: React.FC = () => {
 
       {/* Global Settings */}
       <Card animate={false} padding="lg">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-4 mb-6">
           <div className="p-2 bg-primary/20 rounded-lg">
             <Settings className="w-5 h-5 text-primary" />
           </div>
@@ -89,7 +89,7 @@ export const NotificationsSection: React.FC = () => {
 
       {/* Notification Preferences */}
       <Card animate={false} padding="lg">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-4 mb-6">
           <div className="p-2 bg-primary/20 rounded-lg">
             <Bell className="w-5 h-5 text-[#32A1E4]" />
           </div>
