@@ -36,7 +36,7 @@ const pillSizes: Record<RoundButtonSize, string> = {
 const variantClasses: Record<RoundButtonVariant, string> = {
   primary: 'bg-gradient-to-br from-primary to-accent border-transparent text-white shadow-lg shadow-primary/20',
   secondary: 'bg-[#1e1f22] border-white/20 text-white/80 hover:border-white/40',
-  success: 'bg-[#42E695] border-[#42E695] text-black font-medium',
+  success: 'bg-success border-success text-black font-medium',
   ghost: 'bg-[#1a1b1f] border-white/10 text-white/70 hover:border-white/30 hover:text-white',
   outline: 'bg-transparent border-white/30 text-white/70 hover:border-white/60 hover:text-white',
   danger: 'bg-[#2a0d16] border-[#f87171]/40 text-[#f87171] hover:border-[#f87171]/70'

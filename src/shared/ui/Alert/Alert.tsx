@@ -20,8 +20,8 @@ const variantConfig = {
     icon: Info,
   },
   success: {
-    container: 'bg-green-500/10 border-green-500/30',
-    title: 'text-green-400',
+    container: 'bg-success/10 border-success/30',
+    title: 'text-success',
     icon: CheckCircle,
   },
   warning: {

@@ -170,11 +170,11 @@ export const ConfirmationPendingPage = () => {
               animate={{ opacity: 1, y: 0 }}
               className={`p-4 rounded-lg border mb-6 ${
                 resendSuccess
-                  ? 'bg-green-500/10 border-green-500/20'
+                  ? 'bg-success/10 border-success/20'
                   : 'bg-red-500/10 border-red-500/20'
               }`}
             >
-              <p className={`text-sm ${resendSuccess ? 'text-green-400' : 'text-primary'}`}>
+              <p className={`text-sm ${resendSuccess ? 'text-success' : 'text-primary'}`}>
                 {resendMessage}
               </p>
             </motion.div>

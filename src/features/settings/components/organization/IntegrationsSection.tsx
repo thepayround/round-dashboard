@@ -12,7 +12,7 @@ import { Card } from '@/shared/ui/Card'
 const statusIcon = (status: 'connected' | 'available' | 'configured') => {
   switch (status) {
     case 'connected':
-      return <Check className="w-4 h-4 text-green-400" />
+      return <Check className="w-4 h-4 text-success" />
     case 'configured':
       return <Settings className="w-4 h-4 text-blue-400" />
     case 'available':

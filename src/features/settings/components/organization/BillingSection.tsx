@@ -48,7 +48,7 @@ export const BillingSection: React.FC = () => (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card variant="nested" padding="lg">
             <div className="flex items-center gap-2 mb-2">
-              <DollarSign className="w-4 h-4 text-green-400" />
+              <DollarSign className="w-4 h-4 text-success" />
               <span className="text-xs font-normal tracking-tight text-gray-300">Monthly Cost</span>
             </div>
             <p className="text-lg font-medium text-white">$49.99</p>

@@ -76,10 +76,10 @@ const colorVariants = {
     hoverColor: 'group-hover:text-accent'
   },
   success: {
-    iconBg: 'bg-[#42E695]/10',
-    border: 'border-[#42E695]/20',
-    iconColor: 'text-[#42E695]',
-    hoverColor: 'group-hover:text-[#42E695]'
+    iconBg: 'bg-success/10',
+    border: 'border-success/20',
+    iconColor: 'text-success',
+    hoverColor: 'group-hover:text-success'
   },
   warning: {
     iconBg: 'bg-[#FFC107]/10',
@@ -134,7 +134,7 @@ const CardComponent = ({
   
   const getTrendColor = (direction: 'up' | 'down' | 'neutral') => {
     switch (direction) {
-      case 'up': return 'text-[#42E695]'
+      case 'up': return 'text-success'
       case 'down': return 'text-[#FFC107]'
       default: return 'text-gray-400'
     }

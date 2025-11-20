@@ -95,9 +95,9 @@ export const ResendConfirmationPage = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 mb-6"
+            className="p-4 rounded-lg bg-success/10 border border-success/20 mb-6"
           >
-            <div className="flex items-center space-x-2 text-green-400">
+            <div className="flex items-center space-x-2 text-success">
               <Mail className="w-5 h-5" />
               <span className="text-sm font-medium">{successMessage}</span>
             </div>

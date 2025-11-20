@@ -48,9 +48,9 @@ const colorVariants = {
   success: {
     gradient: '',
     iconBg: 'bg-accent/20',
-    iconColor: 'text-green-500',
-    border: 'border-green-500/20',
-    hoverColor: 'group-hover:text-green-400'
+    iconColor: 'text-success',
+    border: 'border-success/20',
+    hoverColor: 'group-hover:text-success'
   },
   warning: {
     gradient: 'from-yellow-500/20 via-transparent to-transparent',

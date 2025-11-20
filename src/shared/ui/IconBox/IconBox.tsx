@@ -21,7 +21,7 @@ const sizeStyles = {
 const colorStyles = {
   primary: 'bg-primary/20 text-primary',
   secondary: 'bg-secondary/20 text-secondary',
-  success: 'bg-[#42E695]/20 text-[#42E695]',
+  success: 'bg-success/20 text-success',
   warning: 'bg-orange-500/20 text-orange-400',
   error: 'bg-red-500/20 text-red-400',
   info: 'bg-secondary/20 text-secondary',

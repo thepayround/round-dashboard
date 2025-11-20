@@ -62,11 +62,11 @@ export const SecuritySection: React.FC = () => (
           <Card variant="nested" padding="lg">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-green-400" />
+                <Users className="w-4 h-4 text-success" />
                 <span className="text-xs font-normal tracking-tight text-white">SSO Integration</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full" />
+                <div className="w-2 h-2 bg-success rounded-full" />
                 <span className="text-xs text-gray-400">Active</span>
               </div>
             </div>

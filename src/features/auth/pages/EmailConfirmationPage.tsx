@@ -212,7 +212,7 @@ export const EmailConfirmationPage = () => {
               transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}
               className="flex justify-center mb-6"
             >
-              <CheckCircle className="w-16 h-16 text-green-500" />
+              <CheckCircle className="w-16 h-16 text-success" />
             </motion.div>
             <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Email Confirmed!</h2>
             <p className="text-white/85 mb-6">{message}</p>
@@ -221,9 +221,9 @@ export const EmailConfirmationPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 mb-6"
+              className="p-4 rounded-lg bg-success/10 border border-success/20 mb-6"
             >
-              <p className="text-green-400 text-sm">
+              <p className="text-success text-sm">
                 π‰ Welcome to Round! You&apos;re now logged in and will be redirected to get started
                 in a few seconds...
               </p>

@@ -59,7 +59,7 @@ export const AllVariants: Story = {
       <SectionHeader
         icon={MapPin}
         title="Billing Address"
-        iconColor="text-[#42E695]"
+        iconColor="text-success"
       />
       <SectionHeader
         icon={Settings}
@@ -101,7 +101,7 @@ export const WithSubtitles: Story = {
         icon={MapPin}
         title="Addresses"
         subtitle="Billing and shipping addresses"
-        iconColor="text-[#42E695]"
+        iconColor="text-success"
       />
       <SectionHeader
         icon={Settings}

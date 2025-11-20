@@ -59,7 +59,7 @@ export const NotificationsSection: React.FC = () => {
 
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
             <div className="flex items-center gap-2 mb-3">
-              <MessageSquare className="w-4 h-4 text-green-400" />
+              <MessageSquare className="w-4 h-4 text-success" />
               <span className="text-xs font-normal tracking-tight text-white">Push Notifications</span>
             </div>
             <Checkbox

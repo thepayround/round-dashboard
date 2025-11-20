@@ -101,7 +101,7 @@ export const TeamManagementPage: React.FC = () => {
     SuperAdmin: { label: 'Super Admin', color: 'text-primary', icon: Crown },
     Admin: { label: 'Admin', color: 'text-orange-400', icon: Shield },
     TeamManager: { label: 'Team Manager', color: 'text-blue-400', icon: Shield },
-    TeamMember: { label: 'Team Member', color: 'text-green-400', icon: Users },
+    TeamMember: { label: 'Team Member', color: 'text-success', icon: Users },
     Sales: { label: 'Sales', color: 'text-cyan-400', icon: Shield },
     Finance: { label: 'Finance', color: 'text-yellow-400', icon: Shield },
     Support: { label: 'Support', color: 'text-indigo-400', icon: Shield },
@@ -122,7 +122,7 @@ export const TeamManagementPage: React.FC = () => {
     
     switch (invitation.status) {
       case 'Accepted':
-        return { label: 'Accepted', icon: CheckCircle, color: 'text-green-400' }
+        return { label: 'Accepted', icon: CheckCircle, color: 'text-success' }
       case 'Cancelled':
         return { label: 'Cancelled', icon: XCircle, color: 'text-primary' }
       case 'Expired':

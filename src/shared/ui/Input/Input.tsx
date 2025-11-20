@@ -36,7 +36,7 @@ const inputVariants = cva(
       variant: {
         default: '',
         error: 'border-auth-error bg-auth-error-bg focus:border-auth-error',
-        success: 'border-green-500 bg-green-500/5 focus:border-green-500',
+        success: 'border-success bg-success/5 focus:border-success',
       },
     },
     defaultVariants: {
@@ -170,7 +170,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               unstyled
             >
               {copied ? (
-                <Check className="w-4 h-4 text-[#38D39F]" />
+                <Check className="w-4 h-4 text-success" />
               ) : (
                 <Copy className="w-4 h-4" />
               )}

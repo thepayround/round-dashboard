@@ -61,19 +61,19 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                 {/* Features */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-[#42E695]" />
+                    <CheckCircle className="w-5 h-5 text-success" />
                     <span className="text-sm text-gray-300">Accept credit & debit cards</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-[#42E695]" />
+                    <CheckCircle className="w-5 h-5 text-success" />
                     <span className="text-sm text-gray-300">Automated recurring billing</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-[#42E695]" />
+                    <CheckCircle className="w-5 h-5 text-success" />
                     <span className="text-sm text-gray-300">Global payment methods</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-[#42E695]" />
+                    <CheckCircle className="w-5 h-5 text-success" />
                     <span className="text-sm text-gray-300">Advanced fraud protection</span>
                   </div>
                 </div>
@@ -99,8 +99,8 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
           >
             <div className="p-8 rounded-lg bg-primary/10 border border-accent/20">
               <div className="space-y-4">
-                <div className="w-12 h-12 mx-auto rounded-lg bg-[#42E695]/20 flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-[#42E695]" />
+                <div className="w-12 h-12 mx-auto rounded-lg bg-success/20 flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-success" />
                 </div>
 
                 <div>
@@ -113,7 +113,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center space-x-2 text-[#42E695]">
+                <div className="flex items-center justify-center space-x-2 text-success">
                   <CheckCircle className="w-5 h-5" />
                   <span className="text-sm font-medium">Stripe Connected</span>
                 </div>

@@ -18,10 +18,10 @@ interface ToastProps {
 
 const toastStyles = {
   success: {
-    background: 'bg-green-500/10',
-    border: 'border-green-500/20',
+    background: 'bg-success/10',
+    border: 'border-success/20',
     icon: CheckCircle,
-    iconColor: 'text-green-400',
+    iconColor: 'text-success',
     textColor: 'text-white'
   },
   error: {

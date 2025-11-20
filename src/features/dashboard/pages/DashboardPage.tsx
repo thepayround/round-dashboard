@@ -108,10 +108,10 @@ export const DashboardPage = () => {
               }`}
             >
               <CheckCircle className={`w-5 h-5 ${
-                roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
+                roundAccount.status.toLowerCase() === 'active' ? 'text-success' : 'text-gray-400'
               }`} />
               <span className={`font-normal tracking-tight text-sm ${
-                roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
+                roundAccount.status.toLowerCase() === 'active' ? 'text-success' : 'text-gray-400'
               }`}>
                 {roundAccount.status}
               </span>
@@ -189,7 +189,7 @@ export const DashboardPage = () => {
                   <span
                     className={`text-xs font-medium ${
                       kpi.trend === 'up'
-                        ? 'text-[#42E695]'
+                        ? 'text-success'
                         : kpi.trend === 'down'
                           ? 'text-[#FF6B6B]'
                           : 'text-white/50'
@@ -281,8 +281,8 @@ export const DashboardPage = () => {
                   <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account status</div>
                   <div className="text-white text-sm font-normal tracking-tight">{roundAccount.status}</div>
                 </div>
-                <div className="p-3 bg-primary/20 rounded-lg border border-[#42E695]/30">
-                  <CheckCircle className="w-4 h-4 text-[#42E695]" />
+                <div className="p-3 bg-primary/20 rounded-lg border border-success/30">
+                  <CheckCircle className="w-4 h-4 text-success" />
                 </div>
               </div>
             </Card>
@@ -373,13 +373,13 @@ export const DashboardPage = () => {
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-3">
                       <CheckCircle className={`w-4 h-4 ${
-                        roundAccount.status.toLowerCase() === 'active' ? 'text-[#42E695]' : 'text-gray-400'
+                        roundAccount.status.toLowerCase() === 'active' ? 'text-success' : 'text-gray-400'
                       }`} />
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <span className={`px-2 py-1 text-xs rounded-lg font-normal tracking-tight border ${
                             roundAccount.status.toLowerCase() === 'active' 
-                              ? 'bg-[#42E695]/20 text-[#42E695] border-[#42E695]/30'
+                              ? 'bg-success/20 text-success border-success/30'
                               : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
                           }`}>
                             {roundAccount.status}
@@ -456,7 +456,7 @@ export const DashboardPage = () => {
 
                     <Card variant="nested" padding="md">
                       <div className="flex items-center gap-3">
-                        <DollarSign className="w-4 h-4 text-[#42E695]" />
+                        <DollarSign className="w-4 h-4 text-success" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white font-mono">{roundAccount.organization.organizationId}</div>
                           <div className="text-xs text-white/60">Organization ID</div>
@@ -498,7 +498,7 @@ export const DashboardPage = () => {
 
                     <Card variant="nested" padding="md">
                       <div className="flex items-center gap-3">
-                        <DollarSign className="w-4 h-4 text-[#42E695]" />
+                        <DollarSign className="w-4 h-4 text-success" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.currency}</div>
                           <div className="text-xs text-white/60">Currency</div>
@@ -584,7 +584,7 @@ export const DashboardPage = () => {
                     {(typeof roundAccount.organization.revenue === 'number' && roundAccount.organization.revenue > 0) && (
                       <Card variant="nested" padding="md">
                         <div className="flex items-center gap-3">
-                          <DollarSign className="w-4 h-4 text-[#42E695]" />
+                          <DollarSign className="w-4 h-4 text-success" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">
                               {formatCurrency(roundAccount.organization.revenue, roundAccount.organization.currency)}
@@ -646,7 +646,7 @@ export const DashboardPage = () => {
                             {address.addressType}
                           </span>
                           {address.isPrimary && (
-                            <span className="text-xs px-2 py-1 rounded-lg bg-[#42E695]/20 text-[#42E695] border border-[#42E695]/30 font-medium">
+                            <span className="text-xs px-2 py-1 rounded-lg bg-success/20 text-success border border-success/30 font-medium">
                               Primary
                             </span>
                           )}

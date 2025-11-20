@@ -18,7 +18,7 @@ interface CardContentProps {
 
 const getTrendColor = (direction: 'up' | 'down' | 'neutral') => {
   switch (direction) {
-    case 'up': return 'text-[#42E695]'
+    case 'up': return 'text-success'
     case 'down': return 'text-[#FFC107]'
     default: return 'text-gray-400'
   }

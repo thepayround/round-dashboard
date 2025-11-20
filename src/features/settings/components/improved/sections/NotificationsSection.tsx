@@ -46,9 +46,9 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
       label: 'Billing & Payments', 
       description: 'Payment confirmations, invoice reminders, and billing updates',
       icon: CreditCard,
-      iconColor: 'text-green-400',
+      iconColor: 'text-success',
       bgColor: 'from-green-500/15 to-emerald-500/15',
-      borderColor: 'border-green-500/20'
+      borderColor: 'border-success/20'
     },
     { 
       id: 'security', 

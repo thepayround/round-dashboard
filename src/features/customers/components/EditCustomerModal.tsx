@@ -285,12 +285,12 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
 
                 {/* Addresses */}
                 <div className="space-y-6">
-                  <SectionHeader icon={MapPin} title="Addresses" iconColor="text-[#42E695]" />
+                  <SectionHeader icon={MapPin} title="Addresses" iconColor="text-success" />
 
                   {/* Billing Address */}
                   <div className="space-y-4">
                     <h4 className="text-md font-medium text-white flex items-center space-x-2">
-                      <MapPin className="w-4 h-4 text-[#42E695]" />
+                      <MapPin className="w-4 h-4 text-success" />
                       <span>Billing Address</span>
                     </h4>
 

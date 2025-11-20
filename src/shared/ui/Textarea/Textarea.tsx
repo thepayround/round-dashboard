@@ -17,7 +17,7 @@ const textareaVariants = cva(
       variant: {
         default: 'border-auth-border',
         error: 'border-auth-error bg-auth-error-bg focus:border-auth-error',
-        success: 'border-green-500 bg-green-500/5 focus:border-green-500',
+        success: 'border-success bg-success/5 focus:border-success',
       },
     },
     defaultVariants: {

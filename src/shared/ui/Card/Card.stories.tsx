@@ -93,7 +93,7 @@ export const StatsCard: Story = {
           <div>
             <p className="text-xs text-white/60 mb-1">Total Customers</p>
             <p className="text-2xl font-normal text-white">1,284</p>
-            <p className="text-xs text-[#38D39F] mt-2">+12% from last month</p>
+            <p className="text-xs text-success mt-2">+12% from last month</p>
           </div>
           <div className="p-2 bg-primary/10 rounded-lg">
             <Users className="w-5 h-5 text-primary" />
@@ -112,7 +112,7 @@ export const NestedCards: Story = {
         <div className="space-y-3">
           <Card variant="nested" padding="md">
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#42E695]" />
+              <TrendingUp className="w-4 h-4 text-success" />
               <span className="text-sm text-white/80">Revenue trending up</span>
             </div>
           </Card>

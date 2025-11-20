@@ -25,8 +25,8 @@ export const BillingSection: React.FC = () => (
       {/* Billing Overview */}
       <Card animate={false} padding="md">
         <div className="flex items-start gap-3 mb-4">
-          <div className="p-2 bg-primary/15 rounded-lg border border-green-500/20">
-            <CreditCard className="w-4 h-4 text-green-400" />
+          <div className="p-2 bg-primary/15 rounded-lg border border-success/20">
+            <CreditCard className="w-4 h-4 text-success" />
           </div>
           <div className="flex-1">
             <h2 className="text-xs font-normal tracking-tight text-white mb-1">Billing & Payments</h2>
@@ -48,7 +48,7 @@ export const BillingSection: React.FC = () => (
               <div className="text-xs text-white/90">per month</div>
             </div>
           </div>
-          <div className="flex items-center gap-1 text-green-400">
+          <div className="flex items-center gap-1 text-success">
             <CheckCircle className="w-2.5 h-2.5" />
             <span className="text-sm font-normal">Active subscription</span>
           </div>
@@ -83,8 +83,8 @@ export const BillingSection: React.FC = () => (
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">
                     <span className="text-white font-medium text-xs">β€Άβ€Άβ€Άβ€Ά β€Άβ€Άβ€Άβ€Ά β€Άβ€Άβ€Άβ€Ά 4242</span>
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-green-500/15 border border-green-400/20 rounded-full text-green-400 text-xs">
-                      <div className="w-1 h-1 bg-green-400 rounded-full" />
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-success/15 border border-success/20 rounded-full text-success text-xs">
+                      <div className="w-1 h-1 bg-success rounded-full" />
                       Primary
                     </span>
                   </div>

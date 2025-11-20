@@ -54,7 +54,7 @@ export const designTokens = {
     validation: {
       error: '#EF4444', // red-500
       errorBg: 'rgba(239, 68, 68, 0.12)', // Error background
-      success: '#10B981', // green-500
+      success: '#42E695', // Success green - matches CSS variable
       warning: '#F59E0B', // amber-500
     },
 

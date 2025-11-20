@@ -160,7 +160,7 @@ describe('InvitationAcceptancePage', () => {
         const emailField = screen.getByDisplayValue('john@example.com') as HTMLInputElement
         expect(emailField).toBeInTheDocument()
         expect(emailField.disabled).toBe(true)
-        expect(emailField).toHaveClass('bg-green-500/5', 'border-green-500/20')
+        expect(emailField).toHaveClass('bg-success/5', 'border-success/20')
       })
     })
 

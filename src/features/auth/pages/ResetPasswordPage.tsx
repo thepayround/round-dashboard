@@ -225,8 +225,8 @@ export const ResetPasswordPage = () => {
             <>
               {/* Success State */}
               <div className="space-y-6">
-                <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
-                  <div className="text-green-400 text-sm font-medium">
+                <div className="p-4 rounded-lg bg-success/10 border border-success/20">
+                  <div className="text-success text-sm font-medium">
                     <p>Your password has been successfully reset and all existing sessions have been invalidated for security.</p>
                   </div>
                 </div>

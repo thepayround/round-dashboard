@@ -166,17 +166,17 @@ export const InvitationAcceptancePage = () => {
             <div>
               <label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-green-400 w-4 h-4" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-success w-4 h-4" />
                 <Input
                   id="email"
                   type="email"
                   value={invitation.email}
                   disabled
-                  className="w-full h-9 px-3 pl-9 pr-9 bg-green-500/5 border border-green-500/20 rounded-lg text-white/70 placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-green-500/40 focus:border-green-500 focus:bg-green-500/10 outline-none appearance-none"
+                  className="w-full h-9 px-3 pl-9 pr-9 bg-success/5 border border-success/20 rounded-lg text-white/70 placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-success/40 focus:border-success focus:bg-success/10 outline-none appearance-none"
                 />
-                <Check className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-green-400 w-4 h-4" />
+                <Check className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-success w-4 h-4" />
               </div>
-              <p className="mt-1 text-xs text-green-400">Verified from invitation</p>
+              <p className="mt-1 text-xs text-success">Verified from invitation</p>
             </div>
 
             {/* Name Fields Row */}

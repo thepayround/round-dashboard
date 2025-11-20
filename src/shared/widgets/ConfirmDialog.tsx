@@ -60,8 +60,8 @@ export const ConfirmDialog = ({
         return {
           icon: CheckCircle,
           iconColor: 'text-white/90',
-          bgColor: 'bg-green-500/10',
-          borderColor: 'border-green-500/20',
+          bgColor: 'bg-success/10',
+          borderColor: 'border-success/20',
           buttonVariant: 'success' as const
         }
       case 'neutral':

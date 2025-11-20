@@ -156,8 +156,8 @@ export const ForgotPasswordPage = () => {
             <>
               {/* Success State */}
               <div className="space-y-6">
-                <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
-                  <div className="text-green-400 text-sm font-medium">
+                <div className="p-4 rounded-lg bg-success/10 border border-success/20">
+                  <div className="text-success text-sm font-medium">
                     <p>We&apos;ve sent you a secure password reset link that will expire in <strong>1 hour</strong>.</p>
                     <p className="mt-2">Check your spam folder if you don&apos;t see the email in your inbox.</p>
                   </div>

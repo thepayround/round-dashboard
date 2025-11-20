@@ -278,7 +278,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Billing Address */}
         <div className="space-y-6">
-          <SectionHeader icon={MapPin} title="Billing Address" iconColor="text-[#42E695]" />
+          <SectionHeader icon={MapPin} title="Billing Address" iconColor="text-success" />
 
           <AddressFormGroup
             value={formData.billingAddress ?? {
