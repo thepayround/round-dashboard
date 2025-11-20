@@ -26,12 +26,25 @@ export const designTokens = {
       tertiary: '#1F1F21', // Hover states
     },
 
-    // Border colors
+    // Border colors (more subtle like polar.sh)
     border: {
       DEFAULT: '#333333', // Default borders
-      hover: '#404040', // Hover state borders
+      subtle: 'rgba(255, 255, 255, 0.08)', // Very subtle borders (8%)
       light: 'rgba(255, 255, 255, 0.1)', // Light borders (10%)
-      lighter: 'rgba(255, 255, 255, 0.2)', // Lighter borders (20%)
+      lighter: 'rgba(255, 255, 255, 0.15)', // Lighter borders (15%)
+      hover: '#404040', // Hover state borders
+    },
+
+    // Subtle gray scale (polar.sh inspired)
+    gray: {
+      50: '#FAFAFA', // Very light background (light mode)
+      100: '#F5F5F5', // Card backgrounds, hover states (light mode)
+      200: '#E5E5E5', // Borders (light mode)
+      300: '#D4D4D4', // Muted borders (light mode)
+      600: '#737373', // Secondary text
+      700: '#525252', // Body text (dark mode)
+      800: '#404040', // Muted elements (dark mode)
+      900: '#262626', // Deep dark (dark mode)
     },
 
     // Text colors
@@ -50,12 +63,16 @@ export const designTokens = {
       hover: 'rgba(255, 255, 255, 0.9)', // Hover state
     },
 
-    // Validation colors
+    // Validation colors (more muted like polar.sh)
     validation: {
-      error: '#EF4444', // red-500
-      errorBg: 'rgba(239, 68, 68, 0.12)', // Error background
-      success: '#42E695', // Success green - matches CSS variable
-      warning: '#F59E0B', // amber-500
+      error: '#DC2626', // red-600 - More muted red
+      errorBg: 'rgba(220, 38, 38, 0.1)', // Error background
+      success: '#059669', // emerald-600 - More muted green
+      successBg: 'rgba(5, 150, 105, 0.1)', // Success background
+      warning: '#D97706', // amber-600 - More muted yellow
+      warningBg: 'rgba(217, 119, 6, 0.1)', // Warning background
+      info: '#2563EB', // blue-600 - Information
+      infoBg: 'rgba(37, 99, 235, 0.1)', // Info background
     },
 
     // Button colors
@@ -71,49 +88,68 @@ export const designTokens = {
   },
 
   /**
-   * Typography
+   * Typography - Compact Polar.sh Inspired
    */
   typography: {
     fontSize: {
-      xs: '0.75rem', // 12px
-      sm: '0.875rem', // 14px
-      base: '1rem', // 16px
-      lg: '1.125rem', // 18px
+      tiny: '0.625rem', // 10px - Very small labels
+      xs: '0.6875rem', // 11px - Small text, badges
+      sm: '0.8125rem', // 13px - Body text, inputs
+      base: '0.875rem', // 14px - Standard text
+      md: '0.9375rem', // 15px - Emphasized text
+      lg: '1rem', // 16px - Headings (h3)
+      xl: '1.125rem', // 18px - Headings (h2)
+      '2xl': '1.25rem', // 20px - Headings (h1)
     },
     fontWeight: {
       light: 300,
       normal: 400,
       medium: 500,
       semibold: 600,
+      bold: 700,
     },
     lineHeight: {
       tight: 1.2,
+      snug: 1.4, // Polar.sh style tight line height
       normal: 1.5,
       relaxed: 1.75,
     },
     letterSpacing: {
+      tighter: '-0.02em',
       tight: '-0.01em',
       normal: '0em',
-      wide: '0.05em',
+      wide: '0.01em',
+      wider: '0.05em',
     },
   },
 
   /**
-   * Spacing
+   * Spacing - Compact Polar.sh Inspired
    */
   spacing: {
-    // Input heights
-    inputHeight: {
-      sm: '2rem', // 32px
-      md: '2.25rem', // 36px (default)
-      lg: '2.5rem', // 40px
+    // Base spacing scale (tighter than default)
+    scale: {
+      xs: '0.125rem', // 2px - Minimal spacing
+      sm: '0.25rem', // 4px - Tight spacing
+      md: '0.5rem', // 8px - Standard spacing
+      lg: '0.75rem', // 12px - Comfortable spacing
+      xl: '1rem', // 16px - Section spacing
+      '2xl': '1.5rem', // 24px - Large section spacing
     },
 
-    // Padding
+    // Input heights (reduced from current)
+    inputHeight: {
+      sm: '1.75rem', // 28px - Compact inputs
+      md: '2.25rem', // 36px - Standard inputs (reduced from 40px)
+      lg: '2.5rem', // 40px - Large inputs
+    },
+
+    // Padding (reduced for compact design)
     inputPadding: {
       x: '0.75rem', // 12px horizontal
-      withIconLeft: '2.25rem', // 36px when icon on left
-      withIconRight: '2.25rem', // 36px when icon on right
+      y: '0.5rem', // 8px vertical (compact)
+      withIconLeft: '2rem', // 32px when icon on left
+      withIconRight: '2rem', // 32px when icon on right
     },
 
     // Icon positioning
@@ -122,30 +158,45 @@ export const designTokens = {
       right: '0.75rem', // 12px from right
     },
 
-    // Card padding (responsive)
+    // Card padding (single value, not responsive)
     cardPadding: {
-      mobile: {
-        y: '1.25rem', // 20px
-        x: '1rem', // 16px
-      },
-      tablet: {
-        y: '1.5rem', // 24px
-        x: '1.25rem', // 20px
-      },
-      desktop: {
-        y: '1.75rem', // 28px
-        x: '1.5rem', // 24px
-      },
+      compact: '0.75rem', // 12px - Very compact cards
+      default: '1rem', // 16px - Standard cards (reduced from 24px)
+      comfortable: '1.5rem', // 24px - Spacious cards
+    },
+
+    // Table spacing (new for compact tables)
+    table: {
+      cellPaddingX: '1rem', // 16px (reduced from 24px)
+      cellPaddingY: '0.75rem', // 12px (reduced from 16px)
+      rowHeight: '3rem', // 48px (reduced from 72px)
+      headerHeight: '2.5rem', // 40px - Compact header
+    },
+
+    // Button padding (compact)
+    button: {
+      paddingX: '1rem', // 16px (reduced from 24px)
+      paddingY: '0.5rem', // 8px (reduced from 12px)
+      height: '2.25rem', // 36px (reduced from 44px)
+    },
+
+    // Modal spacing (compact)
+    modal: {
+      paddingX: '1.25rem', // 20px (reduced from 24px)
+      paddingY: '1rem', // 16px (reduced from 24px)
+      headerPaddingY: '0.75rem', // 12px (reduced from 16px)
+      footerPaddingY: '0.75rem', // 12px (reduced from 16px)
     },
   },
 
   /**
-   * Border Radius
+   * Border Radius - Simplified and Refined
    */
   borderRadius: {
-    sm: '4px',
-    md: '0.5rem', // 8px - consistent across all components
-    lg: '8px', // Same as md for consistency
+    sm: '0.25rem', // 4px - Small elements
+    md: '0.375rem', // 6px - Standard elements (buttons, inputs)
+    lg: '0.5rem', // 8px - Cards, modals
+    xl: '0.75rem', // 12px - Large containers
   },
 
   /**
@@ -166,29 +217,24 @@ export const designTokens = {
   },
 
   /**
-   * Shadows
+   * Shadows - Minimal and Subtle (Polar.sh Style)
    */
   shadows: {
-    card: `
-      0 4px 24px rgba(0, 0, 0, 0.15),
-      0 2px 12px rgba(0, 0, 0, 0.1),
-      0 1px 4px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.02)
-    `,
-    text: '0 1px 3px rgba(0, 0, 0, 0.3)',
-    textStrong: '0 1px 3px rgba(0, 0, 0, 0.6)',
-    focus: '0 0 0 3px rgba(20, 189, 234, 0.5)', // Primary focus ring
-    focusError: '0 0 0 3px rgba(239, 68, 68, 0.25)', // Error focus ring
-    glow: {
-      primary: '0 0 8px rgba(20, 189, 234, 0.3)',
-      accent: `
-        0 0 8px rgba(212, 23, 200, 0.6),
-        0 0 16px rgba(212, 23, 200, 0.4),
-        0 0 24px rgba(212, 23, 200, 0.2),
-        0 2px 4px rgba(0, 0, 0, 0.3)
-      `,
-    },
+    // Minimal shadows for clean look
+    subtle: '0 1px 2px rgba(0, 0, 0, 0.05)',
+    card: '0 2px 8px rgba(0, 0, 0, 0.08)',
+    cardHover: '0 4px 12px rgba(0, 0, 0, 0.12)',
+    modal: '0 8px 24px rgba(0, 0, 0, 0.15)',
+
+    // Refined focus rings (thinner, 1px instead of 3px)
+    focus: '0 0 0 1px rgba(20, 189, 234, 0.4)', // Primary focus ring (thinner)
+    focusError: '0 0 0 1px rgba(220, 38, 38, 0.4)', // Error focus ring (thinner)
+    focusSuccess: '0 0 0 1px rgba(5, 150, 105, 0.4)', // Success focus ring
+
+    // Text shadows (minimal)
+    text: '0 1px 2px rgba(0, 0, 0, 0.2)',
+
+    // No heavy glow effects in polar.sh style
   },
 
   /**
@@ -213,10 +259,11 @@ export const designTokens = {
 export const classPatterns = {
   /**
    * Auth input base classes (Tailwind equivalent of .auth-input)
+   * Updated for compact design system
    */
   authInput: `
-    w-full h-9 px-3
-    bg-[#171719] border border-[#333333] rounded-lg
+    w-full h-9 px-4
+    bg-[#171719] border border-[#333333] rounded-md
     text-white placeholder:text-[#737373]
     font-light text-xs tracking-tight
     transition-all duration-200
@@ -246,21 +293,23 @@ export const classPatterns = {
 
   /**
    * Auth link (Tailwind equivalent of .auth-link)
+   * Updated for compact design system
    */
   authLink: `
     text-[#14BDEA]/90 font-semibold no-underline
     transition-all duration-300
     hover:text-[#14BDEA] hover:-translate-y-px
     focus-visible:outline-2 focus-visible:outline-[#14BDEA]/50
-    focus-visible:outline-offset-2 focus-visible:rounded-lg
+    focus-visible:outline-offset-2 focus-visible:rounded-md
   `,
 
   /**
    * Primary button (Tailwind equivalent of .btn-primary)
+   * Updated for compact design system
    */
   btnPrimary: `
     bg-[#D417C8] text-white font-medium
-    h-9 px-4 rounded-lg border-0
+    h-9 px-4 rounded-md border-0
     inline-flex items-center justify-center
     text-sm whitespace-nowrap
     transition-colors duration-200
@@ -270,10 +319,11 @@ export const classPatterns = {
 
   /**
    * Secondary button (Tailwind equivalent of .btn-secondary)
+   * Updated for compact design system
    */
   btnSecondary: `
     bg-transparent text-white font-medium
-    h-9 px-4 border border-[#333333] rounded-lg
+    h-9 px-4 border border-[#333333] rounded-md
     inline-flex items-center justify-center
     text-sm whitespace-nowrap
     transition-colors duration-200
@@ -283,10 +333,11 @@ export const classPatterns = {
 
   /**
    * Ghost button (Tailwind equivalent of .btn-ghost)
+   * Updated for compact design system
    */
   btnGhost: `
     bg-transparent text-[#A3A3A3] font-medium
-    h-9 px-4 border-0 rounded-lg
+    h-9 px-4 border-0 rounded-md
     inline-flex items-center justify-center
     text-sm whitespace-nowrap
     transition-colors duration-200
@@ -334,10 +385,11 @@ export const classPatterns = {
 
   /**
    * Input error state
+   * Updated for compact design system
    */
   inputError: `
-    border-[#EF4444] bg-[#EF4444]/10
-    focus:border-[#EF4444] focus:ring-2 focus:ring-[#EF4444]/25
+    border-[#DC2626] bg-[#DC2626]/10
+    focus:border-[#DC2626] focus:ring-1 focus:ring-[#DC2626]/25
   `,
 
   /**

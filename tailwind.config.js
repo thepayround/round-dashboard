@@ -126,6 +126,18 @@ export default {
           success: '#10B981',
           warning: '#F59E0B',
         },
+
+        // Subtle gray scale (Polar.sh inspired)
+        'gray-subtle': {
+          50: '#FAFAFA',  // Very light background
+          100: '#F5F5F5', // Card backgrounds, hover
+          200: '#E5E5E5', // Borders
+          300: '#D4D4D4', // Muted borders
+          600: '#737373', // Secondary text
+          700: '#525252', // Body text (dark)
+          800: '#404040', // Muted elements (dark)
+          900: '#262626', // Deep dark
+        },
       },
       // Minimal - removed gradients per design system
       // Custom font family
@@ -153,20 +165,44 @@ export default {
         wider: '0.02em',
         widest: '0.03em',
       },
-      // Dev-SaaS Minimal elevation system (no glass morphism)
+      // Minimal shadow system (Polar.sh inspired)
       boxShadow: {
-        card: '0 6px 18px rgba(0,0,0,.12)',
-        hover: '0 8px 24px rgba(0,0,0,.18)',
-        focus: '0 0 0 3px hsla(var(--ring) / .35)',
+        subtle: '0 1px 2px rgba(0, 0, 0, 0.05)',
+        card: '0 2px 8px rgba(0, 0, 0, 0.08)',
+        hover: '0 4px 12px rgba(0, 0, 0, 0.12)',
+        modal: '0 8px 24px rgba(0, 0, 0, 0.15)',
+        // Thinner focus rings (1px instead of 3px)
+        focus: '0 0 0 1px rgba(20, 189, 234, 0.4)',
+        'focus-error': '0 0 0 1px rgba(220, 38, 38, 0.4)',
+        'focus-success': '0 0 0 1px rgba(5, 150, 105, 0.4)',
       },
+      // Compact border radius (Polar.sh inspired)
       borderRadius: {
-        lg: '0.5rem',   // 8px - Polar.sh inspired, consistent everywhere
-        xl: '0.75rem',  // 12px - larger elements like cards
-        '2xl': '1rem',  // 16px - modals and overlays
+        sm: '0.25rem',  // 4px - Small elements
+        DEFAULT: '0.375rem', // 6px - Standard (buttons, inputs)
+        md: '0.375rem', // 6px - Standard
+        lg: '0.5rem',   // 8px - Cards, modals
+        xl: '0.75rem',  // 12px - Large containers
+        '2xl': '1rem',  // 16px - Extra large
       },
+      // Compact spacing scale
       spacing: {
         13: '3.25rem',
         15: '3.75rem',
+        18: '4.5rem', // 72px - Large spacing
+      },
+      // Compact font sizes (Polar.sh inspired)
+      fontSize: {
+        'tiny': ['0.625rem', { lineHeight: '1.2' }],  // 10px
+        'xs': ['0.6875rem', { lineHeight: '1.4' }],   // 11px
+        'sm': ['0.8125rem', { lineHeight: '1.4' }],   // 13px
+        'base': ['0.875rem', { lineHeight: '1.5' }],  // 14px
+        'md': ['0.9375rem', { lineHeight: '1.5' }],   // 15px
+        'lg': ['1rem', { lineHeight: '1.5' }],        // 16px
+        'xl': ['1.125rem', { lineHeight: '1.4' }],    // 18px
+        '2xl': ['1.25rem', { lineHeight: '1.4' }],    // 20px
+        '3xl': ['1.5rem', { lineHeight: '1.3' }],     // 24px
+        '4xl': ['2rem', { lineHeight: '1.2' }],       // 32px
       },
       transitionDuration: {
         fast: '150ms',
