@@ -433,10 +433,10 @@ These 38 rules enforce all **31 completed UI consistency tasks**:
 - ✅ Component validation rules system
 
 ### Compact Design Tasks (TASK-DS-001 to 004) ✅
-- ✅ Compact text sizes (warning-level guidance)
-- ✅ Compact heading sizes (warning-level guidance)
-- ✅ Compact border radius (warning-level guidance)
-- ✅ Thinner focus rings (warning-level guidance)
+- ✅ Compact text sizes (error-level enforcement)
+- ✅ Compact heading sizes (error-level enforcement)
+- ✅ Compact border radius (error-level enforcement)
+- ✅ Thinner focus rings (error-level enforcement)
 
 ## Bypassing Validation (Emergency Only)
 
@@ -492,4 +492,5 @@ SKIP_PRE_COMMIT=1 git commit -m "Emergency fix"
 
 **Last Updated**: 2025-01-20
 **Total Rules**: 42
-**Coverage**: All 31 UI consistency tasks + 4 compact design guidance rules
+**Coverage**: All 31 UI consistency tasks + 4 compact design enforcement rules
+**Enforcement**: All compact design rules are error-level (strict enforcement)
