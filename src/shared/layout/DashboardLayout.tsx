@@ -304,13 +304,13 @@ export const DashboardLayout = memo(({
                 isActive(item.href)
                   ? 'bg-primary/10 text-white border border-primary/20'
                   : 'text-white/60 hover:text-white',
-                isCollapsed ? 'justify-center px-0' : 'px-6',
+                isCollapsed ? 'justify-center px-0' : 'px-3',
                 isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
               )}
               aria-label={item.label}
               tabIndex={isKeyboardNavigating ? -1 : 0}
             >
-              <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-2'} flex-shrink-0`} />
+              <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-4'} flex-shrink-0`} />
 
               {!isCollapsed && (
                 <div className="overflow-hidden">
@@ -343,11 +343,11 @@ export const DashboardLayout = memo(({
                     isActive('/user-settings')
                       ? 'bg-primary/10 text-white border border-primary/20'
                       : 'text-white/60 hover:text-white',
-                    isCollapsed ? 'justify-center px-0' : 'px-6'
+                    isCollapsed ? 'justify-center px-0' : 'px-3'
                   )}
                   aria-label="User Settings"
                 >
-                  <User className={`w-4 h-4 ${isCollapsed ? '' : 'mr-2'} flex-shrink-0`} />
+                  <User className={`w-4 h-4 ${isCollapsed ? '' : 'mr-4'} flex-shrink-0`} />
                   {!isCollapsed && (
                     <div className="overflow-hidden">
                       <span className="font-geist font-medium whitespace-nowrap text-base leading-5">

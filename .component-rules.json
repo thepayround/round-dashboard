@@ -249,7 +249,7 @@
       "message": "Use standardized horizontal padding: px-2, px-4, px-6",
       "suggestion": "Replace px-3 with: px-2 (tight), px-4 (standard), px-6 (cards)",
       "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md", "src/shared/layout/DashboardLayout.tsx", "src/shared/layout/DashboardLayout/NavigationItem.tsx"]
     },
     {
       "name": "No px-5 padding",

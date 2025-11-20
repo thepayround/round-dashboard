@@ -79,7 +79,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
           isParentActive(item)
             ? 'bg-primary/10 text-white border border-primary/20'
             : 'text-white/60 hover:text-white',
-          isCollapsed ? 'justify-center px-0' : 'px-6',
+          isCollapsed ? 'justify-center px-0' : 'px-3',
           isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
         )}
         aria-expanded={expandedItems.includes(item.id)}
@@ -88,7 +88,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
         tabIndex={isKeyboardNavigating ? -1 : 0}
         unstyled
       >
-        <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-2'} flex-shrink-0`} />
+        <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-4'} flex-shrink-0`} />
 
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
@@ -118,7 +118,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
           isParentActive(item)
             ? 'bg-primary/10 text-white border border-primary/20'
             : 'text-white/60 hover:text-white',
-          isCollapsed ? 'justify-center px-0' : 'px-6',
+          isCollapsed ? 'justify-center px-0' : 'px-3',
           isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
         )}
         aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
@@ -126,7 +126,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
       >
         <item.icon className={cn(
           'w-4 h-4 flex-shrink-0',
-          !isCollapsed && 'mr-2'
+          !isCollapsed && 'mr-4'
         )} />
 
         {!isCollapsed && (
@@ -178,7 +178,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
               <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${
                 isCollapsed
                   ? 'w-3.5 h-3.5'
-                  : 'w-3.5 h-3.5 mr-2'
+                  : 'w-3.5 h-3.5 mr-4'
               }`} />
 
               {!isCollapsed && (
