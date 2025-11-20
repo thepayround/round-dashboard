@@ -117,7 +117,7 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
                   </div>
 
                   {/* Channel Controls */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {channels.map((channel) => (
                       <div key={`${type.id}-${channel.id}`} className="p-3 bg-white/5 border border-white/10 rounded-lg">
                         <div className="flex items-center justify-between mb-2">
