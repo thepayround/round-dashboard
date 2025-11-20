@@ -129,10 +129,10 @@ export const ApiDropdown = <T = unknown>({
             zIndex: 60,
           }}
         >
-          <div className="bg-[#0F1017] border border-white/10 rounded-xl shadow-2xl max-h-80 overflow-hidden flex flex-col">
-            <div className="p-3 border-b border-white/5">
+          <div className="bg-[#0F1017] border border-white/10 rounded-md shadow-2xl max-h-80 overflow-hidden flex flex-col">
+            <div className="p-4 border-b border-white/5">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-md bg-white/5 flex items-center justify-center">
                   {config.icon}
                 </div>
                 <div>
@@ -149,7 +149,7 @@ export const ApiDropdown = <T = unknown>({
                   value={searchTerm}
                   onChange={(event) => setSearchTerm(event.target.value)}
                   placeholder={config.searchPlaceholder}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-1 focus:ring-secondary"
+                  className="w-full bg-white/5 border border-white/10 rounded-md pl-9 pr-4 py-2 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-1 focus:ring-secondary"
                   aria-label={config.searchPlaceholder}
                   disabled={disabled}
                 />
@@ -233,13 +233,13 @@ export const ApiDropdown = <T = unknown>({
         }}
         onKeyDown={disabled ? undefined : handleTriggerKeyDown}
         className={`
-          relative w-full h-9 pl-9 pr-3 rounded-lg border transition-all duration-300
+          relative w-full h-9 pl-9 pr-4 rounded-md border transition-all duration-300
           bg-[#171719] border-[#333333] text-white flex items-center justify-between
           font-light text-xs outline-none
           ${error ? 'border-[#ef4444]' : ''}
           ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}
-          ${isOpen && !error ? 'border-[#14bdea] shadow-[0_0_0_3px_rgba(20,189,234,0.15)] transform -translate-y-px' : ''}
-          ${isOpen && error ? 'shadow-[0_0_0_3px_rgba(239,68,68,0.25)] transform -translate-y-px' : ''}
+          ${isOpen && !error ? 'border-[#14bdea] ring-1 ring-[#14bdea]/25' : ''}
+          ${isOpen && error ? 'border-[#ef4444] ring-1 ring-[#ef4444]/25' : ''}
         `}
         role="combobox"
         aria-expanded={isOpen}

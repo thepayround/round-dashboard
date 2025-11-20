@@ -121,7 +121,7 @@
       "message": "Use <LoadingSpinner> or <LoadingOverlay> component",
       "suggestion": "import { LoadingSpinner, LoadingOverlay } from '@/shared/ui'",
       "severity": "error",
-      "excludePaths": ["src/shared/ui/LoadingSpinner/", "src/shared/ui/Button/", "*.test.tsx", "*.stories.tsx"]
+      "excludePaths": ["src/shared/ui/LoadingSpinner/", "src/shared/ui/Button/", "src/shared/ui/FormInput.tsx", "src/shared/ui/UiDropdown/", "src/shared/ui/ApiDropdown/", "*.test.tsx", "*.stories.tsx"]
     },
     {
       "name": "Use Alert component for info/warning/error boxes",

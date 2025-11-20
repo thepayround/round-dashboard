@@ -227,8 +227,8 @@ export const UiDropdown = ({
         }}
         onKeyDown={disabled ? undefined : handleTriggerKeyDown}
         className={cn(
-          'relative w-full h-11 lg:h-9 rounded-lg border bg-auth-bg border-auth-border text-white flex items-center justify-between font-light text-xs outline-none transition-[border-color,background-color] duration-150 ease-out hover:border-auth-border-hover focus:border-auth-primary focus-visible:ring-2 focus-visible:ring-[#14bdea]/25 focus-visible:ring-offset-0',
-          hasLeadingIcon ? 'pl-9 pr-3' : 'px-3',
+          'relative w-full h-9 rounded-md border bg-auth-bg border-auth-border text-white flex items-center justify-between font-light text-xs outline-none transition-[border-color,background-color] duration-150 ease-out hover:border-auth-border-hover focus:border-auth-primary focus-visible:ring-1 focus-visible:ring-[#14bdea]/25 focus-visible:ring-offset-0',
+          hasLeadingIcon ? 'pl-9 pr-4' : 'px-4',
           error && 'border-[#ef4444]',
           disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer',
           isOpen && !error && 'border-[#14bdea]',

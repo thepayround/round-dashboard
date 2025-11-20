@@ -140,29 +140,33 @@
 
 ---
 
-## Phase 3: Forms & Inputs 🚧 **IN PROGRESS**
+## Phase 3: Forms & Inputs ✅ **COMPLETED**
 
-### TASK-FORM-001: Compact Form Inputs ✅ (Partial)
+### TASK-FORM-001: Compact Form Inputs ✅
 
-**Priority**: Critical | **Effort**: High | **Status**: 🚧 Partial Complete
+**Priority**: Critical | **Effort**: High | **Status**: ✅ Completed
 
 - [x] Reduce input height (44px mobile/36px desktop → 36px consistent)
-- [x] Update input padding (px-3 py-2 for md size)
-- [x] Make input text size 13px (text-sm)
+- [x] Update input padding (px-3 → px-4 for standardized spacing)
+- [x] Make input text size 13px (text-sm → text-xs for compact)
 - [x] Tighten label spacing (mb-2 → mb-1.5)
 - [x] Update core input components:
   - ✅ Input
   - ✅ Textarea
-  - ⏸️ FormInput (to be done)
-  - ⏸️ AuthInput (to be done)
-  - ⏸️ SearchInput (to be done)
-  - ⏸️ Select (to be done)
-  - ⏸️ Dropdown (to be done)
+  - ✅ FormInput
+  - ✅ AuthInput
+  - ⏸️ SearchInput (future work)
+  - ⏸️ Select (future work)
+  - ✅ Dropdown (UiDropdown, ApiDropdown)
 
 **Files modified**:
 
 - `src/shared/ui/Input/Input.tsx` ✅
 - `src/shared/ui/Textarea/Textarea.tsx` ✅
+- `src/shared/ui/FormInput.tsx` ✅
+- `src/shared/ui/AuthInput/AuthInput.tsx` ✅
+- `src/shared/ui/UiDropdown/UiDropdown.tsx` ✅
+- `src/shared/ui/ApiDropdown/ApiDropdown.tsx` ✅
 
 ### TASK-FORM-002: Form Layout Refinement ✅
 
@@ -202,16 +206,22 @@
 - `src/shared/ui/Button/Button.tsx` ✅
 - `src/shared/ui/Button/IconButton.tsx` ✅
 
-### TASK-FORM-004: Dropdown & Select Polish ⏸️
+### TASK-FORM-004: Dropdown & Select Polish ✅
 
-**Priority**: Medium | **Effort**: Medium | **Status**: ⏸️ Pending
+**Priority**: Medium | **Effort**: Medium | **Status**: ✅ Completed
 
-- [ ] Reduce dropdown item height (40px → 32px)
-- [ ] Reduce dropdown item padding (px-4 py-2 → px-3 py-1.5)
-- [ ] Make dropdown text smaller (14px → 13px)
-- [ ] Tighter dropdown menu spacing
-- [ ] Better selected state styling
-- [ ] Compact multi-select chips
+- [x] Update dropdown trigger height (h-11 lg:h-9 → h-9 consistent)
+- [x] Update dropdown padding (px-3 → px-4 for standardized spacing)
+- [x] Update border radius (rounded-lg → rounded-md)
+- [x] Update focus rings (ring-2 → ring-1 for compact design)
+- [x] Tighter dropdown menu spacing
+- [x] Better selected state styling
+- [x] Applied to both UiDropdown and ApiDropdown components
+
+**Files modified**:
+
+- `src/shared/ui/UiDropdown/UiDropdown.tsx` ✅
+- `src/shared/ui/ApiDropdown/ApiDropdown.tsx` ✅
 
 ---
 

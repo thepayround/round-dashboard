@@ -128,9 +128,9 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     })
 
     const sizeClasses = {
-      sm: 'h-9 px-3 text-xs',
-      md: 'h-9 px-3 text-xs',
-      lg: 'h-9 px-3 text-xs',
+      sm: 'h-9 px-4 text-xs',
+      md: 'h-9 px-4 text-xs',
+      lg: 'h-9 px-4 text-xs',
     }
 
     // Autofill style fixes for browser compatibility
@@ -168,7 +168,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 
     const inputClasses = cn(
       // Base styles
-      'w-full rounded-lg border transition-all duration-200',
+      'w-full rounded-md border transition-all duration-200',
       'bg-auth-bg border-auth-border text-white placeholder:text-auth-placeholder',
       'font-light tracking-tight appearance-none outline-none',
       // Focus & hover states
@@ -192,9 +192,9 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     )
 
     return (
-      <div className={cn('space-y-2', containerClassName)}>
+      <div className={cn('space-y-1.5', containerClassName)}>
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
+          <label htmlFor={inputId} className="block text-sm font-normal text-white/90 mb-1.5 tracking-tight">
             {label}
             {required && <span className="text-auth-magenta ml-1">*</span>}
           </label>
@@ -258,14 +258,14 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         </div>
 
         {error && (
-          <p id={errorId} className="text-sm text-auth-error font-medium flex items-center space-x-2" role="alert" aria-live="polite" aria-atomic="true">
+          <p id={errorId} className="text-xs text-auth-error font-medium flex items-center space-x-1.5 mt-1.5" role="alert" aria-live="polite" aria-atomic="true">
             <AlertCircle className="w-3.5 h-3.5" />
             <span>{error}</span>
           </p>
         )}
 
         {helpText && !error && (
-          <p id={helpTextId} className="text-xs text-gray-500 leading-snug">
+          <p id={helpTextId} className="text-xs text-white/60 mt-1.5">
             {helpText}
           </p>
         )}

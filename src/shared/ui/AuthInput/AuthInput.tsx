@@ -73,8 +73,8 @@ export const AuthInput = forwardRef<
   })
 
   const baseInputClasses = `
-    w-full h-9 px-3 py-1.5
-    bg-[#171719] border border-[#333333] rounded-lg
+    w-full h-9 px-4 py-1.5
+    bg-[#171719] border border-[#333333] rounded-md
     text-white placeholder-[#737373] text-xs font-light
     focus:outline-none focus:border-[#14bdea]
     transition-all duration-150 ease-out
@@ -89,8 +89,8 @@ export const AuthInput = forwardRef<
   `
 
   const textareaClasses = `
-    w-full min-h-14 px-3 py-2 resize-none
-    bg-[#171719] border border-[#333333] rounded-lg
+    w-full min-h-14 px-4 py-2 resize-none
+    bg-[#171719] border border-[#333333] rounded-md
     text-white placeholder-[#737373] text-xs font-normal
     focus:outline-none focus:border-[#14bdea]
     transition-all duration-150 ease-out
@@ -98,8 +98,8 @@ export const AuthInput = forwardRef<
   `
 
   const iconInputClasses = `
-    ${LeftIcon ? 'pl-10' : 'pl-3'}
-    ${(RightIcon || shouldShowPasswordToggle) ? 'pr-10' : 'pr-3'}
+    ${LeftIcon ? 'pl-9' : 'pl-4'}
+    ${(RightIcon || shouldShowPasswordToggle) ? 'pr-9' : 'pr-4'}
   `
 
   const errorClasses = error ? 'border-red-400/50 focus:border-red-400/70' : ''
@@ -139,9 +139,9 @@ export const AuthInput = forwardRef<
   }
 
   return (
-    <div className={`space-y-2 ${containerClassName}`}>
+    <div className={`space-y-1.5 ${containerClassName}`}>
       {label && (
-        <label htmlFor={inputId} className="block text-sm font-normal text-white/90 tracking-tight">
+        <label htmlFor={inputId} className="block text-sm font-normal text-white/90 mb-1.5 tracking-tight">
           {label}
           {restInputProps.required && <span className="text-primary ml-1">*</span>}
         </label>
@@ -192,16 +192,16 @@ export const AuthInput = forwardRef<
         <motion.div
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center space-x-2 text-sm text-primary"
+          className="flex items-center space-x-1.5 text-xs text-primary mt-1.5"
           id={errorId}
         >
-          <AlertCircle className="w-4 h-4" />
+          <AlertCircle className="w-3.5 h-3.5" />
           <span>{error}</span>
         </motion.div>
       )}
 
       {hint && !error && (
-        <p className="text-sm text-white/60" id={helpTextId}>
+        <p className="text-xs text-white/60 mt-1.5" id={helpTextId}>
           {hint}
         </p>
       )}
