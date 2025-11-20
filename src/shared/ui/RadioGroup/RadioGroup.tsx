@@ -80,7 +80,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
           className="block text-sm font-normal tracking-tight text-white/80 mb-3"
         >
           {label}
-          {required && <span className="text-[#D417C8] ml-1" aria-label="required">*</span>}
+          {required && <span className="text-primary ml-1" aria-label="required">*</span>}
         </label>
       )}
 
@@ -158,7 +158,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
       {error && (
         <p 
           id={errorId}
-          className="mt-2 text-sm text-[#D417C8]"
+          className="mt-2 text-sm text-primary"
           role="alert"
           aria-live="polite"
         >

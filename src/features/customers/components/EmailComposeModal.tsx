@@ -71,7 +71,7 @@ export const EmailComposeModal = ({
           <FormInput
             label={
               <span>
-                Subject <span className="text-[#D417C8]">*</span>
+                Subject <span className="text-primary">*</span>
               </span>
             }
             leftIcon={FileText}
@@ -100,7 +100,7 @@ export const EmailComposeModal = ({
                 id="message-textarea"
                 label={
                   <span>
-                    Message <span className="text-[#D417C8]">*</span>
+                    Message <span className="text-primary">*</span>
                   </span>
                 }
                 value={formData.message}

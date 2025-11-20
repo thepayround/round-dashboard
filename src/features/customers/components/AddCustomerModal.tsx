@@ -49,7 +49,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
       <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
         {/* Basic Information */}
         <div className="space-y-6">
-          <SectionHeader icon={User} title="Basic Information" iconColor="text-[#D417C8]" />
+          <SectionHeader icon={User} title="Basic Information" iconColor="text-primary" />
           
           {/* Customer Type Selection */}
           <div className="space-y-3">
@@ -65,7 +65,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                 fullWidth
                 className={`justify-start p-4 h-auto ${
                   formData.type === CustomerType.Individual
-                    ? 'border-[#D417C8] bg-[#D417C8]/10'
+                    ? 'border-primary bg-primary/10'
                     : ''
                 }`}
               >

@@ -54,7 +54,7 @@ export const AllVariants: Story = {
       <SectionHeader
         icon={User}
         title="Basic Information"
-        iconColor="text-[#D417C8]"
+        iconColor="text-primary"
       />
       <SectionHeader
         icon={MapPin}
@@ -79,7 +79,7 @@ export const AllVariants: Story = {
       <SectionHeader
         icon={Tag}
         title="Tags"
-        iconColor="text-[#D417C8]"
+        iconColor="text-primary"
       />
     </div>
   ),
@@ -95,7 +95,7 @@ export const WithSubtitles: Story = {
         icon={User}
         title="Basic Information"
         subtitle="Personal details and account information"
-        iconColor="text-[#D417C8]"
+        iconColor="text-primary"
       />
       <SectionHeader
         icon={MapPin}

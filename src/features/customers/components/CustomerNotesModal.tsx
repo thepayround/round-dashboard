@@ -74,7 +74,7 @@ export const CustomerNotesModal = ({
         <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
           <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4">
             <div className="flex items-start space-x-3">
-              <IconBox icon={MessageSquare} color="primary" className="border border-[#D417C8]/30 rounded-xl bg-[#D417C8]/10" />
+              <IconBox icon={MessageSquare} color="primary" className="border border-primary/30 rounded-xl bg-primary/10" />
               <div>
                 <h3 className="text-sm font-normal tracking-tight text-white mb-1">
                   Add a new internal note

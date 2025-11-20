@@ -53,8 +53,8 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
         )}
 
         {apiError && (
-          <div className="bg-[#D417C8]/10 border border-[#D417C8]/30 rounded-xl px-4 py-3 text-[#fda4af] text-sm flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-[#D417C8] mt-0.5" />
+          <div className="bg-primary/10 border border-primary/30 rounded-xl px-4 py-3 text-[#fda4af] text-sm flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-primary mt-0.5" />
             <span>{apiError}</span>
           </div>
         )}

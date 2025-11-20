@@ -124,7 +124,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className="block text-sm font-normal text-white/90 mb-2 tracking-tight"
           >
             {label}
-            {required && <span className="text-[#D417C8] ml-1">*</span>}
+            {required && <span className="text-primary ml-1">*</span>}
           </label>
         )}
 

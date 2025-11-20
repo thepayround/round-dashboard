@@ -24,10 +24,10 @@ export const FilterChip = React.forwardRef<HTMLDivElement, FilterChipProps>(
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.15 }}
         className="inline-flex items-center gap-2 px-3 py-1.5
-                 bg-[#D417C8]/10
-                 border border-[#D417C8]/20
+                 bg-primary/10
+                 border border-primary/20
                  rounded-lg text-sm text-white/90
-                 hover:bg-[#D417C8]/15 hover:border-[#D417C8]/30 transition-all group"
+                 hover:bg-primary/15 hover:border-primary/30 transition-all group"
       >
         <span className="font-medium text-white/70">{label}:</span>
         <span className="text-white">{value}</span>

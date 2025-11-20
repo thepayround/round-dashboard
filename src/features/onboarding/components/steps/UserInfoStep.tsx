@@ -37,7 +37,7 @@ export const UserInfoStep = ({
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
           className="w-16 h-16 mx-auto rounded-lg bg-primary/20 border border-white/20 flex items-center justify-center"
         >
-          <User className="w-8 h-8 text-[#D417C8]" />
+          <User className="w-8 h-8 text-primary" />
         </motion.div>
 
         <div>

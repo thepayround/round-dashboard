@@ -66,7 +66,7 @@ export const IntegrationsSection: React.FC = () => {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary/20 rounded-lg">
-              <Key className="w-5 h-5 text-[#D417C8]" />
+              <Key className="w-5 h-5 text-primary" />
             </div>
             <div>
               <h3 className="text-sm font-normal tracking-tight text-white">API Keys</h3>

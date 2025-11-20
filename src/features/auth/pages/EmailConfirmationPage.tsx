@@ -190,7 +190,7 @@ export const EmailConfirmationPage = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                className="w-16 h-16 border border-[#D417C8] border-t-transparent rounded-full"
+                className="w-16 h-16 border border-primary border-t-transparent rounded-full"
               />
             </div>
             <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Confirming Your Email</h2>
@@ -269,7 +269,7 @@ export const EmailConfirmationPage = () => {
               transition={{ delay: 0.5 }}
               className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
             >
-              <div className="flex items-center space-x-2 text-[#D417C8]">
+              <div className="flex items-center space-x-2 text-primary">
                 <AlertCircle className="w-5 h-5" />
                 <span className="text-sm">
                   The confirmation link may have expired or is invalid.

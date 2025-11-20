@@ -107,7 +107,7 @@ export const ConfirmationPendingPage = () => {
           >
             <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Registration Successful!</h2>
             <p className="text-white/85 mb-4">We&apos;ve sent a confirmation email to:</p>
-            <p className="text-lg font-medium text-[#D417C8] mb-6">
+            <p className="text-lg font-medium text-primary mb-6">
               {email || 'your email address'}
             </p>
             <p className="text-white/85 text-sm">
@@ -135,7 +135,7 @@ export const ConfirmationPendingPage = () => {
             <h3 className="text-lg font-medium tracking-tight text-white mb-4">What to do next:</h3>
             <div className="space-y-3 text-left">
               <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-[#D417C8] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <span className="text-white text-sm font-medium tracking-tight">1</span>
                 </div>
                 <p className="text-white/85 text-sm">
@@ -174,7 +174,7 @@ export const ConfirmationPendingPage = () => {
                   : 'bg-red-500/10 border-red-500/20'
               }`}
             >
-              <p className={`text-sm ${resendSuccess ? 'text-green-400' : 'text-[#D417C8]'}`}>
+              <p className={`text-sm ${resendSuccess ? 'text-green-400' : 'text-primary'}`}>
                 {resendMessage}
               </p>
             </motion.div>

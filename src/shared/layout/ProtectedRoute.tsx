@@ -29,7 +29,7 @@ export const ProtectedRoute = ({ children, requireOnboarding = false }: Protecte
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-              className="w-12 h-12 border-[3px] border-white/10 border-t-[#D417C8] rounded-full"
+              className="w-12 h-12 border-[3px] border-white/10 border-t-primary rounded-full"
             />
           </div>
 

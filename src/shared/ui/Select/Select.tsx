@@ -62,7 +62,7 @@ export const Select = ({
       {label && (
         <label className="block text-sm font-normal text-white/80 mb-2">
           {label}
-          {required && <span className="text-[#D417C8] ml-1">*</span>}
+          {required && <span className="text-primary ml-1">*</span>}
         </label>
       )}
 

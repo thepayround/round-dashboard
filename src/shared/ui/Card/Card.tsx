@@ -58,10 +58,10 @@ const paddingVariants = {
 
 const colorVariants = {
   primary: {
-    iconBg: 'bg-[#D417C8]/10',
-    border: 'border-[#D417C8]/20',
-    iconColor: 'text-[#D417C8]',
-    hoverColor: 'group-hover:text-[#D417C8]'
+    iconBg: 'bg-primary/10',
+    border: 'border-primary/20',
+    iconColor: 'text-primary',
+    hoverColor: 'group-hover:text-primary'
   },
   secondary: {
     iconBg: 'bg-[#14BDEA]/10',
@@ -91,7 +91,7 @@ const colorVariants = {
     iconBg: 'bg-red-500/10',
     border: 'border-red-500/20',
     iconColor: 'text-red-500',
-    hoverColor: 'group-hover:text-[#D417C8]'
+    hoverColor: 'group-hover:text-primary'
   },
   neutral: {
     iconBg: 'bg-transparent',
@@ -200,7 +200,7 @@ const CardComponent = ({
                 </div>
               )}
             </div>
-            <h3 className={`text-base font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-2 tracking-tight`}>
+            <h3 className={`text-base font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-primary mb-2 tracking-tight`}>
               {title}
             </h3>
             <p className="text-[#a3a3a3] text-sm leading-relaxed">
@@ -215,7 +215,7 @@ const CardComponent = ({
               </div>
             )}
             <div className="flex-1">
-              <h3 className={`text-base font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-[#D417C8] mb-1 tracking-tight`}>
+              <h3 className={`text-base font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-primary mb-1 tracking-tight`}>
                 {title}
               </h3>
               <p className="text-[#a3a3a3] text-sm">

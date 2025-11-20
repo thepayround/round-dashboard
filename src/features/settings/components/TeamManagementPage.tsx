@@ -98,7 +98,7 @@ export const TeamManagementPage: React.FC = () => {
   ]
 
   const roleLabels: Record<UserRole, { label: string; color: string; icon: React.ElementType }> = {
-    SuperAdmin: { label: 'Super Admin', color: 'text-[#D417C8]', icon: Crown },
+    SuperAdmin: { label: 'Super Admin', color: 'text-primary', icon: Crown },
     Admin: { label: 'Admin', color: 'text-orange-400', icon: Shield },
     TeamManager: { label: 'Team Manager', color: 'text-blue-400', icon: Shield },
     TeamMember: { label: 'Team Member', color: 'text-green-400', icon: Users },
@@ -117,16 +117,16 @@ export const TeamManagementPage: React.FC = () => {
     const expiryDate = new Date(invitation.expiresAt)
     
     if (expiryDate < now) {
-      return { label: 'Expired', icon: XCircle, color: 'text-[#D417C8]' }
+      return { label: 'Expired', icon: XCircle, color: 'text-primary' }
     }
     
     switch (invitation.status) {
       case 'Accepted':
         return { label: 'Accepted', icon: CheckCircle, color: 'text-green-400' }
       case 'Cancelled':
-        return { label: 'Cancelled', icon: XCircle, color: 'text-[#D417C8]' }
+        return { label: 'Cancelled', icon: XCircle, color: 'text-primary' }
       case 'Expired':
-        return { label: 'Expired', icon: XCircle, color: 'text-[#D417C8]' }
+        return { label: 'Expired', icon: XCircle, color: 'text-primary' }
       default:
         return { label: 'Pending', icon: Clock, color: 'text-yellow-400' }
     }

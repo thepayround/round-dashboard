@@ -57,7 +57,7 @@ const getRoleBadgeColor = (role: string): string => {
   const roleLower = role.toLowerCase()
 
   if (roleLower.includes('admin')) {
-    return 'bg-[#D417C8]/20 text-[#D417C8] border-[#D417C8]/30'
+    return 'bg-primary/20 text-primary border-primary/30'
   }
   if (roleLower.includes('manager') || roleLower.includes('owner')) {
     return 'bg-[#7767DA]/20 text-[#7767DA] border-[#7767DA]/30'

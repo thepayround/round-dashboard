@@ -45,7 +45,7 @@ export const ActionMenu = ({
 
   const variantClasses = {
     default: 'text-white hover:bg-white/10',
-    danger: 'text-[#D417C8] hover:bg-red-500/10',
+    danger: 'text-primary hover:bg-red-500/10',
     warning: 'text-orange-400 hover:bg-orange-500/10'
   }
 

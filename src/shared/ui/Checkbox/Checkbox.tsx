@@ -69,7 +69,7 @@ export const Checkbox = React.forwardRef<
       )}
 
       {error && (
-        <p className="mt-2 text-sm text-[#D417C8]">{error}</p>
+        <p className="mt-2 text-sm text-primary">{error}</p>
       )}
     </div>
   )

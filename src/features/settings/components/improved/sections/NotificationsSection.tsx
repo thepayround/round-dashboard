@@ -55,7 +55,7 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
       label: 'Security Alerts', 
       description: 'Login attempts, password changes, and account security',
       icon: Shield,
-      iconColor: 'text-[#D417C8]',
+      iconColor: 'text-primary',
       bgColor: 'from-red-500/15 to-pink-500/15',
       borderColor: 'border-red-500/20'
     },

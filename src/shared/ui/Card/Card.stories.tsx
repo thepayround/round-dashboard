@@ -95,8 +95,8 @@ export const StatsCard: Story = {
             <p className="text-2xl font-normal text-white">1,284</p>
             <p className="text-xs text-[#38D39F] mt-2">+12% from last month</p>
           </div>
-          <div className="p-2 bg-[#D417C8]/10 rounded-lg">
-            <Users className="w-5 h-5 text-[#D417C8]" />
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <Users className="w-5 h-5 text-primary" />
           </div>
         </div>
       </Card>

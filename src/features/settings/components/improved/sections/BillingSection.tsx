@@ -95,7 +95,7 @@ export const BillingSection: React.FC = () => (
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <PlainButton className="text-[#D417C8] hover:text-[#BD2CD0] text-sm font-normal transition-colors duration-200" unstyled>
+                <PlainButton className="text-primary hover:text-[#BD2CD0] text-sm font-normal transition-colors duration-200" unstyled>
                   Edit
                 </PlainButton>
                 <PlainButton className="text-white/90 hover:text-white text-sm font-normal transition-colors duration-200" unstyled>

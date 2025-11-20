@@ -89,7 +89,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
           className="flex items-center justify-center py-12"
         >
           <Card animate={false} padding="lg" className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-[#D417C8] mx-auto mb-4" />
+            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
             <h3 className="text-sm font-normal tracking-tight text-white mb-2">
               {isLoadingOptions ? 'Loading Settings...' : 'Initializing...'}
             </h3>
@@ -111,7 +111,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
         >
           <Card animate={false} padding="xl" className="text-center max-w-md">
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-full w-fit mx-auto mb-6">
-              <AlertCircle className="w-8 h-8 text-[#D417C8]" />
+              <AlertCircle className="w-8 h-8 text-primary" />
             </div>
             <h3 className="text-lg font-medium text-white mb-2">Settings Unavailable</h3>
             <p className="text-gray-400 mb-6">{error}</p>

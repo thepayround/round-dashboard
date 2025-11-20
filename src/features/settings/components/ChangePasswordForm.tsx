@@ -32,8 +32,8 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
   return (
     <div className={`bg-[#0F1115] border border-white/5 rounded-2xl p-6 md:p-8 lg:p-10 shadow-2xl shadow-primary/5 ${className}`}>
       <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#D417C8]/15 mb-5 border border-[#D417C8]/30">
-          <Lock className="w-6 h-6 text-[#D417C8]" />
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/15 mb-5 border border-primary/30">
+          <Lock className="w-6 h-6 text-primary" />
         </div>
         <div className="space-y-3">
           <Badge variant="info" size="lg" className="inline-flex items-center gap-2">
@@ -62,9 +62,9 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
       )}
 
       {apiError && (
-        <div className="bg-[#D417C8]/10 border border-[#D417C8]/30 rounded-2xl p-4 text-[#fda4af] text-sm mb-6">
+        <div className="bg-primary/10 border border-primary/30 rounded-2xl p-4 text-[#fda4af] text-sm mb-6">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-4 h-4 text-[#D417C8]" />
+            <AlertCircle className="w-4 h-4 text-primary" />
             <div>
               <h4 className="text-white font-medium mb-1">Failed to change password</h4>
               <p className="text-[#fda4af]/80 text-sm">{apiError}</p>

@@ -155,7 +155,7 @@ const CustomerDetailPage: React.FC = () => {
         label: 'Suspended',
       },
       4: {
-        variant: 'bg-red-500/20 text-[#D417C8] border-red-500/30',
+        variant: 'bg-red-500/20 text-primary border-red-500/30',
         icon: '●',
         label: 'Cancelled',
       },
@@ -181,11 +181,11 @@ const CustomerDetailPage: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           <Card padding="lg">
             <div className="flex items-start gap-4 mb-6">
-              <div className="p-3 bg-primary/20 rounded-xl border border-[#D417C8]/30">
+              <div className="p-3 bg-primary/20 rounded-xl border border-primary/30">
                 {customer.isBusinessCustomer ? (
-                  <Building2 className="w-5 h-5 text-[#D417C8]" />
+                  <Building2 className="w-5 h-5 text-primary" />
                 ) : (
-                  <User className="w-5 h-5 text-[#D417C8]" />
+                  <User className="w-5 h-5 text-primary" />
                 )}
               </div>
               <div className="flex-1">
@@ -430,7 +430,7 @@ const CustomerDetailPage: React.FC = () => {
                   className={`text-sm px-3 py-1 rounded-lg font-normal tracking-tight ${
                     customer.portalAccess
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : 'bg-red-500/20 text-[#D417C8] border border-red-500/30'
+                      : 'bg-red-500/20 text-primary border border-red-500/30'
                   }`}
                 >
                   {customer.portalAccess ? 'Enabled' : 'Disabled'}
@@ -445,7 +445,7 @@ const CustomerDetailPage: React.FC = () => {
                   className={`text-sm px-3 py-1 rounded-lg font-normal tracking-tight ${
                     customer.autoCollection
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : 'bg-red-500/20 text-[#D417C8] border border-red-500/30'
+                      : 'bg-red-500/20 text-primary border border-red-500/30'
                   }`}
                 >
                   {customer.autoCollection ? 'Enabled' : 'Disabled'}
@@ -555,7 +555,7 @@ const CustomerDetailPage: React.FC = () => {
     return (
       <DashboardLayout>
         <div className="flex flex-col items-center justify-center py-24">
-          <AlertCircle className="w-16 h-16 text-[#D417C8] mb-4" />
+          <AlertCircle className="w-16 h-16 text-primary mb-4" />
           <h3 className="text-lg font-medium tracking-tight text-white mb-2">
             {hasError ? 'Error Loading Customer' : 'Customer Not Found'}
           </h3>

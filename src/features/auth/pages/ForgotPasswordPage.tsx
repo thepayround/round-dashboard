@@ -102,7 +102,7 @@ export const ForgotPasswordPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
                 >
-                  <div className="flex items-center space-x-2 text-[#D417C8]">
+                  <div className="flex items-center space-x-2 text-primary">
                     <AlertCircle className="w-5 h-5" />
                     <span className="text-sm font-medium">{apiError}</span>
                   </div>
@@ -195,7 +195,7 @@ export const ForgotPasswordPage = () => {
                       onClick={handleTryAgain}
                       variant="ghost"
                       size="sm"
-                      className="inline-flex h-auto px-0 py-0 text-[#D417C8] hover:text-[#E02DD8]"
+                      className="inline-flex h-auto px-0 py-0 text-primary hover:text-[#E02DD8]"
                     >
                       Try again
                     </Button>

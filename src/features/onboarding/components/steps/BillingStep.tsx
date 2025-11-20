@@ -84,7 +84,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                   size="lg"
                   icon={ExternalLink}
                   iconPosition="right"
-                  className="hover:shadow-lg hover:shadow-[#D417C8]/30 transform hover:scale-105"
+                  className="hover:shadow-lg hover:shadow-primary/30 transform hover:scale-105"
                 >
                   Connect Stripe
                 </Button>

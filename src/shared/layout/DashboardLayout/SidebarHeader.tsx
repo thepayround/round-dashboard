@@ -11,7 +11,7 @@ import { cn } from '@/shared/utils/cn'
  */
 const LogoText = memo(({ className = "text-xl" }: { className?: string }) => (
   <div className="flex items-center space-x-0.5">
-    <span className={cn("text-[#D417C8] font-light tracking-wider transition-all duration-300", className)}>R</span>
+    <span className={cn("text-primary font-light tracking-wider transition-all duration-300", className)}>R</span>
     <span className={cn("text-[#BD2CD0] font-light tracking-wider transition-all duration-300", className)}>O</span>
     <span className={cn("text-[#7767DA] font-light tracking-wider transition-all duration-300", className)}>U</span>
     <span className={cn("text-[#32A1E4] font-light tracking-wider transition-all duration-300", className)}>N</span>

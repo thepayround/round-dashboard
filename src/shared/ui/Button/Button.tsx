@@ -21,7 +21,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
 }
 
 const variants = {
-  primary: 'bg-[#D417C8] text-white border border-[#D417C8] hover:bg-[#E02DD8]',
+  primary: 'bg-primary text-white border border-primary hover:bg-[#E02DD8]',
   secondary: 'bg-transparent text-white border border-white/20 hover:bg-white/5',
   ghost: 'bg-transparent text-white/80 border border-transparent hover:bg-white/5',
   danger: 'bg-transparent text-white border border-red-500/30 hover:bg-red-500/10',

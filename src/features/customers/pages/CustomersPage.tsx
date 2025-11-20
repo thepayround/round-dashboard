@@ -285,13 +285,13 @@ const CustomersPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="group relative h-full"
               >
-              <Card padding="lg" className="h-full hover:shadow-lg hover:shadow-[#D417C8]/10 transition-all duration-300">
+              <Card padding="lg" className="h-full hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
                 {/* Card selection checkbox - only show in selection mode */}
                 {selectionMode && (
                   <div className={`absolute top-4 right-4 transition-all duration-200 ${
                     selectedCustomers.includes(customer.id) ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100'
                   }`}>
-                    <div className={`relative ${selectedCustomers.includes(customer.id) ? 'bg-[#D417C8]/20 p-1 rounded-lg border border-[#D417C8]/50' : ''}`}>
+                    <div className={`relative ${selectedCustomers.includes(customer.id) ? 'bg-primary/20 p-1 rounded-lg border border-primary/50' : ''}`}>
                       <Checkbox
                         checked={selectedCustomers.includes(customer.id)}
                         onCheckedChange={(checked) => {
@@ -310,16 +310,16 @@ const CustomersPage: React.FC = () => {
 
                 {/* Header Section */}
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-[#D417C8]/10 rounded-xl border border-[#D417C8]/20">
+                  <div className="p-3 bg-primary/10 rounded-xl border border-primary/20">
                     {customer.isBusinessCustomer ? (
-                      <Building2 className="w-5 h-5 text-[#D417C8]" />
+                      <Building2 className="w-5 h-5 text-primary" />
                     ) : (
-                      <User className="w-5 h-5 text-[#D417C8]" />
+                      <User className="w-5 h-5 text-primary" />
                     )}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-medium text-white group-hover:text-[#D417C8] transition-colors tracking-tight">
+                      <h3 className="font-medium text-white group-hover:text-primary transition-colors tracking-tight">
                         {customer.effectiveDisplayName || customer.displayName}
                       </h3>
                       {customer.isBusinessCustomer && (
@@ -406,7 +406,7 @@ const CustomersPage: React.FC = () => {
                     </Link>
                     <Link
                       to={`/customers/${customer.id}?mode=edit`}
-                      className="p-2 text-white/50 hover:text-[#D417C8] hover:bg-[#D417C8]/10 rounded-lg transition-all duration-200"
+                      className="p-2 text-white/50 hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-200"
                     >
                       <Edit className="w-4 h-4" />
                     </Link>

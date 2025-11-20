@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 
 import type { ApiDropdownConfig } from './ApiDropdown'
 
+import { designTokens } from '@/shared/constants/designTokens'
 import { useAddressTypes } from '@/shared/hooks/api/useAddressType'
 import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
 import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
@@ -116,7 +117,7 @@ export const currencyDropdownConfig: ApiDropdownConfig<CurrencyResponse> = {
             currency.countries.length === 1 ? 'country' : 'countries'
           }`,
           icon: (
-            <div className="w-5 h-5 rounded-full bg-accent/[#D417C8]/20 border border-white/20 flex items-center justify-center">
+            <div className="w-5 h-5 rounded-full bg-primary/20 border border-white/20 flex items-center justify-center">
               <span className="text-xs font-normal tracking-tight text-white/80">
                 {symbol}
               </span>
@@ -212,7 +213,7 @@ export const fiscalYearDropdownConfig: ApiDropdownConfig<Month> = {
       label: month.label,
       searchText: month.label,
       icon: (
-        <div className="w-5 h-5 rounded-full bg-accent/[#D417C8]/20 border border-white/20 flex items-center justify-center">
+        <div className="w-5 h-5 rounded-full bg-primary/20 border border-white/20 flex items-center justify-center">
           <Calendar className="w-3 h-3 text-white/80" />
         </div>
       ),
@@ -234,7 +235,7 @@ export const teamRoleDropdownConfig: ApiDropdownConfig<{ value: string; label: s
           case 'SuperAdmin':
             return { bg: '#ef4444', text: '#ef4444' } // red
           case 'Admin':
-            return { bg: '#D417C8', text: '#D417C8' } // pink
+            return { bg: designTokens.colors.accent.DEFAULT, text: designTokens.colors.accent.DEFAULT } // pink
           case 'TeamManager':
             return { bg: '#7767DA', text: '#7767DA' } // purple
           case 'Sales':

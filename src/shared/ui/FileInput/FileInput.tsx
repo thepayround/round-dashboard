@@ -240,7 +240,7 @@ export const FileInput: React.FC<FileInputProps> = ({
       {label && (
         <label htmlFor={inputId} className="block text-xs font-normal tracking-tight text-white">
           {label}
-          {required && <span className="text-[#D417C8] ml-1">*</span>}
+          {required && <span className="text-primary ml-1">*</span>}
         </label>
       )}
 
@@ -252,7 +252,7 @@ export const FileInput: React.FC<FileInputProps> = ({
         className={cn(
           'border border-dashed rounded-lg transition-all duration-200',
           isDragging && !disabled
-            ? 'border-[#D417C8] bg-[#D417C8]/5'
+            ? 'border-primary bg-primary/5'
             : hasError
             ? 'border-red-500/50 bg-red-500/5'
             : 'border-white/20 hover:border-white/40',
@@ -264,11 +264,11 @@ export const FileInput: React.FC<FileInputProps> = ({
           <div className="text-center space-y-3">
             <Upload className={cn(
               'w-8 h-8 mx-auto transition-colors',
-              isDragging ? 'text-[#D417C8]' : 'text-gray-400'
+              isDragging ? 'text-primary' : 'text-gray-400'
             )} />
             <div>
               <label htmlFor={inputId} className="cursor-pointer">
-                <span className="text-xs text-[#D417C8] hover:text-[#BD2CD0] transition-colors">
+                <span className="text-xs text-primary hover:text-[#BD2CD0] transition-colors">
                   Click to upload
                 </span>
                 <span className="text-xs text-gray-400"> or drag and drop</span>

@@ -243,7 +243,7 @@ export const OrganizationForm = ({
             className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
           >
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-[#D417C8]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-primary/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                 <span className="text-sm font-semibold text-[#7767DA]">{currencySymbol}</span>
               </div>
               <div>
@@ -320,8 +320,8 @@ export const OrganizationForm = ({
             className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
           >
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D417C8]/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                <span className="text-sm font-semibold text-[#D417C8]">π</span>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                <span className="text-sm font-semibold text-primary">π</span>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-white">Regional Settings</h3>

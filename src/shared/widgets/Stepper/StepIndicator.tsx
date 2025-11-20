@@ -65,7 +65,7 @@ export const StepIndicator = ({
       <RoundButton
         onClick={onClick}
         disabled={!isClickable}
-        className={`transition-all duration-300 ease-out focus-visible:ring-[#D417C8]/60 focus-visible:ring-offset-[#000000] ${circleConfig.className}`}
+        className={`transition-all duration-300 ease-out focus-visible:ring-primary/60 focus-visible:ring-offset-[#000000] ${circleConfig.className}`}
         variant={circleConfig.variant}
         glow={circleConfig.glow}
         size="md"

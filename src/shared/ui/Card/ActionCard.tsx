@@ -64,7 +64,7 @@ const colorVariants = {
     iconBg: 'from-red-500/30 to-red-500/10',
     iconColor: 'text-red-500',
     border: 'border-red-500/20',
-    hoverColor: 'group-hover:text-[#D417C8]'
+    hoverColor: 'group-hover:text-primary'
   },
   neutral: {
     gradient: 'from-gray-500/20 via-transparent to-transparent',

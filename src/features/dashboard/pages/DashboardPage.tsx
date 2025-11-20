@@ -237,7 +237,7 @@ export const DashboardPage = () => {
                           style={{ width: `${goalWidth}%` }}
                         />
                         <div
-                          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#D417C8] to-[#7767DA]"
+                          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-[#7767DA]"
                           style={{ width: `${primaryWidth}%` }}
                         />
                       </div>
@@ -268,8 +268,8 @@ export const DashboardPage = () => {
                   <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Account type</div>
                   <div className="text-white text-sm font-normal tracking-tight">{roundAccount.accountType}</div>
                 </div>
-                <div className="p-3 bg-primary/20 rounded-lg border border-[#D417C8]/30">
-                  <Building className="w-4 h-4 text-[#D417C8]" />
+                <div className="p-3 bg-primary/20 rounded-lg border border-primary/30">
+                  <Building className="w-4 h-4 text-primary" />
                 </div>
               </div>
             </Card>
@@ -352,7 +352,7 @@ export const DashboardPage = () => {
 
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-3">
-                      <Building className="w-4 h-4 text-[#D417C8]" />
+                      <Building className="w-4 h-4 text-primary" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white font-mono">{roundAccount.roundAccountId}</div>
                         <div className="text-xs text-white/60">Account ID</div>
@@ -446,7 +446,7 @@ export const DashboardPage = () => {
                   <div className="space-y-3">
                     <Card variant="nested" padding="md">
                       <div className="flex items-center gap-3">
-                        <Building2 className="w-4 h-4 text-[#D417C8]" />
+                        <Building2 className="w-4 h-4 text-primary" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.name}</div>
                           <div className="text-xs text-white/60">Organization name</div>

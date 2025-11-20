@@ -58,8 +58,8 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
       {/* Personal Information Section */}
       <Card animate={false} padding="md" className="space-y-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-primary/15 rounded-lg border border-[#D417C8]/20">
-            <UserIcon className="w-3.5 h-3.5 text-[#D417C8]" />
+          <div className="p-2 bg-primary/15 rounded-lg border border-primary/20">
+            <UserIcon className="w-3.5 h-3.5 text-primary" />
           </div>
           <div className="flex-1">
             <h2 className="text-sm font-normal tracking-tight text-white mb-1">User Information</h2>

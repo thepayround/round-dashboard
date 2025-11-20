@@ -49,7 +49,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
                 onClick={() => onSectionChange(section.id)}
                 className={`w-full flex items-center justify-between p-3 rounded-lg transition-all duration-200 group text-left mb-1 ${
                   isActive
-                    ? 'bg-primary/10 text-white border border-[#D417C8]/20 shadow-glass-sm'
+                    ? 'bg-primary/10 text-white border border-primary/20 shadow-glass-sm'
                     : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
                 }`}
                 unstyled
@@ -62,7 +62,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
                   }`}>
                     <IconComponent className={`w-3 h-3 transition-all duration-200 ${
                       isActive 
-                        ? 'text-[#D417C8]' 
+                        ? 'text-primary' 
                         : 'group-hover:text-white'
                     }`} />
                   </div>

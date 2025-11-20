@@ -16,7 +16,7 @@ import { cn } from '@/shared/utils/cn'
 // Logo text component (reusable, kept here as it's small and only used in mobile header)
 const LogoText = memo(({ className = "text-xl" }: { className?: string }) => (
   <div className="flex items-center space-x-0.5">
-    <span className={`text-[#D417C8] font-light ${className} tracking-wider transition-all duration-300`}>R</span>
+    <span className={`text-primary font-light ${className} tracking-wider transition-all duration-300`}>R</span>
     <span className={`text-[#BD2CD0] font-light ${className} tracking-wider transition-all duration-300`}>O</span>
     <span className={`text-[#7767DA] font-light ${className} tracking-wider transition-all duration-300`}>U</span>
     <span className={`text-[#32A1E4] font-light ${className} tracking-wider transition-all duration-300`}>N</span>
@@ -439,7 +439,7 @@ export const DashboardLayout = memo(({
             ) : (
               <>
                 {hoveredTooltip.label}
-                {hoveredTooltip.badge && <span className="ml-1 text-[#D417C8]">({hoveredTooltip.badge})</span>}
+                {hoveredTooltip.badge && <span className="ml-1 text-primary">({hoveredTooltip.badge})</span>}
               </>
             )}
           </motion.div>

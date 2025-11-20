@@ -143,7 +143,7 @@ export const AuthInput = forwardRef<
       {label && (
         <label htmlFor={inputId} className="block text-sm font-normal text-white/90 tracking-tight">
           {label}
-          {restInputProps.required && <span className="text-[#D417C8] ml-1">*</span>}
+          {restInputProps.required && <span className="text-primary ml-1">*</span>}
         </label>
       )}
 
@@ -183,7 +183,7 @@ export const AuthInput = forwardRef<
 
         {error && !RightIcon && !shouldShowPasswordToggle && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10">
-            <AlertCircle className="w-4 h-4 text-[#D417C8]" />
+            <AlertCircle className="w-4 h-4 text-primary" />
           </div>
         )}
       </div>
@@ -192,7 +192,7 @@ export const AuthInput = forwardRef<
         <motion.div
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center space-x-2 text-sm text-[#D417C8]"
+          className="flex items-center space-x-2 text-sm text-primary"
           id={errorId}
         >
           <AlertCircle className="w-4 h-4" />

@@ -15,7 +15,7 @@ const toggleContainerVariants = cva(
         cyan: 'bg-white/20 peer-focus:ring-[#00BCD4]/30 peer-checked:bg-[#00BCD4]',
         green: 'bg-white/20 peer-focus:ring-[#42E695]/30 peer-checked:bg-[#42E695]',
         blue: 'bg-white/20 peer-focus:ring-[#14BDEA]/30 peer-checked:bg-[#14BDEA]',
-        primary: 'bg-gray-600 peer-focus:ring-[#D417C8]/20 peer-checked:bg-primary',
+        primary: 'bg-gray-600 peer-focus:ring-primary/20 peer-checked:bg-primary',
       },
     },
     defaultVariants: {

@@ -39,7 +39,7 @@ export const Stepper = ({
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="h-full bg-[#D417C8] shadow-sm shadow-[#D417C8]/50"
+            className="h-full bg-primary shadow-sm shadow-primary/50"
           />
         </div>
 

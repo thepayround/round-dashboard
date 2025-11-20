@@ -69,7 +69,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
     <div className="border border-white/10 rounded-lg overflow-hidden">
       {/* Bulk actions bar - appears above table when items are selected */}
       {hasSelection && (
-        <div className="bg-[#D417C8]/10 border-b border-[#D417C8]/30 backdrop-blur-sm">
+        <div className="bg-primary/10 border-b border-primary/30 backdrop-blur-sm">
           <div className="px-6 py-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -105,7 +105,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                         w-9 h-9 rounded-lg
                         transition-all duration-200
                         ${isAllSelected || isIndeterminate
-                          ? 'bg-[#D417C8]/10 border border-[#D417C8]'
+                          ? 'bg-primary/10 border border-primary'
                           : 'border border-white/10 hover:bg-white/5 hover:border-white/20'
                         }
                       `}
@@ -149,7 +149,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               <TableRow
                 key={customer.id}
                 className={`transition-colors duration-150 ${(() => {
-                  if (selectedIds.includes(customer.id)) return 'bg-[#D417C8]/5'
+                  if (selectedIds.includes(customer.id)) return 'bg-primary/5'
                   return ''
                 })()}`}
               >
@@ -161,7 +161,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
                           w-9 h-9 rounded-lg
                           transition-all duration-200
                           ${selectedIds.includes(customer.id)
-                            ? 'bg-[#D417C8]/10 border border-[#D417C8]'
+                            ? 'bg-primary/10 border border-primary'
                             : 'border border-white/10 hover:bg-white/5 hover:border-white/20'
                           }
                         `}

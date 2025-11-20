@@ -138,7 +138,7 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
               onMouseLeave={handleTooltipLeave}
               className={cn(
                 'group relative flex items-center rounded-lg transition-all duration-200 h-9 w-full',
-                'text-white/60 hover:text-[#D417C8]',
+                'text-white/60 hover:text-primary',
                 isCollapsed ? 'justify-center px-0' : 'px-6'
               )}
               aria-label="Logout"

@@ -76,7 +76,7 @@ export const InviteMemberModal = ({
         </div>
 
         {error && (
-          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-[#D417C8] text-sm">
+          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-primary text-sm">
             {error}
           </div>
         )}

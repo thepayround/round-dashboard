@@ -84,7 +84,7 @@ export const AddressFormGroup = ({
         />
         <div>
           <div className="space-y-2">
-            <span className="auth-label">Country{required && <span className="text-[#D417C8]"> *</span>}</span>
+            <span className="auth-label">Country{required && <span className="text-primary"> *</span>}</span>
             <ApiDropdown
               config={countryDropdownConfig}
               value={value.country}
