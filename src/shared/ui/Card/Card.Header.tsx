@@ -34,17 +34,17 @@ export const CardHeader = ({
   iconColor = 'text-blue-400',
   iconBg = 'from-blue-500/20 to-cyan-500/20'
 }: CardHeaderProps) => (
-    <div className={`flex items-start justify-between mb-4 ${className}`}>
-      <div className="flex items-center space-x-3 flex-1">
+    <div className={`flex items-start justify-between mb-2 ${className}`}>
+      <div className="flex items-center space-x-2 flex-1">
         {Icon && (
-          <div className={`p-3 rounded-lg bg--to-br ${iconBg} group-hover:opacity-80 transition-all`}>
-            <Icon className={`w-6 h-6 ${iconColor}`} />
+          <div className={`p-2 rounded-md bg--to-br ${iconBg} group-hover:opacity-80 transition-all`}>
+            <Icon className={`w-5 h-5 ${iconColor}`} />
           </div>
         )}
-        
-        <div className="flex items-center space-x-2 flex-wrap">
+
+        <div className="flex items-center space-x-1.5 flex-wrap">
           {title && (
-            <h3 className="text-xl font-normal tracking-tight text-white">{title}</h3>
+            <h3 className="text-lg font-normal tracking-tight text-white">{title}</h3>
           )}
 
           {status && (

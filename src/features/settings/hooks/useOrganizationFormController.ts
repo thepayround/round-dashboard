@@ -18,6 +18,8 @@ const defaultFormData: OrganizationFormData = {
   currency: 'USD',
   timeZone: 'UTC',
   fiscalYearStart: 'January',
+  registrationNumber: '',
+  taxId: '',
 }
 
 const mapOrganizationToForm = (org: OrganizationResponse | null): OrganizationFormData => ({
@@ -32,6 +34,8 @@ const mapOrganizationToForm = (org: OrganizationResponse | null): OrganizationFo
   currency: org?.currency ?? 'USD',
   timeZone: org?.timeZone ?? 'UTC',
   fiscalYearStart: org?.fiscalYearStart ?? 'January',
+  registrationNumber: org?.registrationNumber ?? '',
+  taxId: org?.taxId ?? '',
 })
 
 const mapFormToRequest = (

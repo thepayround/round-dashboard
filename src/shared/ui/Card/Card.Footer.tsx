@@ -22,7 +22,7 @@ export const CardFooter = ({
 }: CardFooterProps) => {
   if (children) {
     return (
-      <div className={`pt-4 border-t border-white/5 ${className}`}>
+      <div className={`pt-3 border-t border-white/5 ${className}`}>
         {children}
       </div>
     )
@@ -30,9 +30,9 @@ export const CardFooter = ({
 
   if (layout === 'centered') {
     return (
-      <div className={`pt-4 border-t border-white/5 text-center ${className}`}>
+      <div className={`pt-3 border-t border-white/5 text-center ${className}`}>
         {metadata.length > 0 && (
-          <div className="flex items-center justify-center space-x-4 text-xs text-gray-400">
+          <div className="flex items-center justify-center space-x-2 text-xs text-gray-400">
             {metadata.map((item, index) => {
               const Icon = item.icon
               return (
@@ -45,7 +45,7 @@ export const CardFooter = ({
           </div>
         )}
         {actions && (
-          <div className="mt-3">{actions}</div>
+          <div className="mt-2">{actions}</div>
         )}
       </div>
     )
@@ -53,9 +53,9 @@ export const CardFooter = ({
 
   if (layout === 'split') {
     return (
-      <div className={`pt-4 border-t border-white/5 flex items-center justify-between ${className}`}>
+      <div className={`pt-3 border-t border-white/5 flex items-center justify-between ${className}`}>
         {metadata.length > 0 && (
-          <div className="flex items-center space-x-4 text-xs text-gray-400">
+          <div className="flex items-center space-x-2 text-xs text-gray-400">
             {metadata.map((item, index) => {
               const Icon = item.icon
               return (
@@ -73,9 +73,9 @@ export const CardFooter = ({
   }
 
   return (
-    <div className={`pt-4 border-t border-white/5 ${className}`}>
+    <div className={`pt-3 border-t border-white/5 ${className}`}>
       {metadata.length > 0 && (
-        <div className="flex items-center space-x-4 text-xs text-gray-400 mb-4">
+        <div className="flex items-center space-x-2 text-xs text-gray-400 mb-2">
           {metadata.map((item, index) => {
             const Icon = item.icon
             return (

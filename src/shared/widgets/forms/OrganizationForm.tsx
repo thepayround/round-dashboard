@@ -18,6 +18,8 @@ export interface OrganizationFormData {
   currency: string
   timeZone: string
   fiscalYearStart: string
+  registrationNumber: string
+  taxId: string
 }
 
 interface OrganizationFormProps {
@@ -231,6 +233,30 @@ export const OrganizationForm = ({
               />
               {errors.organizationType && <p className="mt-1 text-sm text-red-400">{errors.organizationType}</p>}
             </div>
+
+            {/* Registration Number */}
+            <Input
+              id="registrationNumber"
+              type="text"
+              label="Registration Number"
+              value={data.registrationNumber}
+              onChange={handleInputChange('registrationNumber')}
+              placeholder="12345678"
+              error={errors.registrationNumber}
+              required
+            />
+
+            {/* Tax ID */}
+            <Input
+              id="taxId"
+              type="text"
+              label="Tax ID"
+              value={data.taxId}
+              onChange={handleInputChange('taxId')}
+              placeholder="XX-XXXXXXX"
+              error={errors.taxId}
+              required
+            />
           </div>
         </motion.div>
 

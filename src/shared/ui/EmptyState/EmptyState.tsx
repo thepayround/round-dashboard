@@ -25,11 +25,11 @@ export const EmptyState = ({
   className,
 }: EmptyStateProps) => {
   return (
-    <div className={cn('text-center py-12', className)}>
-      {Icon && <Icon className="w-12 h-12 text-white/30 mx-auto mb-4" />}
-      <h3 className="text-base font-medium text-white mb-2">{title}</h3>
+    <div className={cn('text-center py-8', className)}>
+      {Icon && <Icon className="w-10 h-10 text-white/60 mx-auto mb-2" />}
+      <h3 className="text-sm font-medium text-white mb-1.5">{title}</h3>
       {description && (
-        <p className="text-sm text-white/60 max-w-md mx-auto mb-6">
+        <p className="text-xs text-white/60 max-w-md mx-auto mb-4">
           {description}
         </p>
       )}
@@ -37,6 +37,7 @@ export const EmptyState = ({
         <Button
           onClick={action.onClick}
           variant={action.variant || 'primary'}
+          size="md"
         >
           {action.label}
         </Button>

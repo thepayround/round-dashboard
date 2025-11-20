@@ -50,10 +50,10 @@ export interface CardProps {
 
 const paddingVariants = {
   none: '',
-  sm: 'p-2 md:p-2.5 lg:p-2',           // Compact: 8px → 10px → 8px
-  md: 'p-3 md:p-3.5 lg:p-3',           // Standard: 12px → 14px → 12px  
-  lg: 'p-4 md:p-4.5 lg:p-4',           // Spacious: 16px → 18px → 16px
-  xl: 'p-5 md:p-5.5 lg:p-5'            // Extra: 20px → 22px → 20px
+  sm: 'p-2',           // Compact: 8px
+  md: 'p-4',           // Standard: 16px (consistent with polar.sh)
+  lg: 'p-6',           // Spacious: 24px
+  xl: 'p-8'            // Extra: 32px
 }
 
 const colorVariants = {
@@ -153,7 +153,7 @@ const CardComponent = ({
         className
       )
     : cn(
-        'bg-[#171719] border border-[#1e1f22] rounded-lg relative overflow-hidden group',
+        'bg-[#171719] border border-[#1e1f22] rounded-md relative overflow-hidden group',
         'transition-all duration-200',
         paddingClass,
         isInteractive && 'cursor-pointer hover:border-[#25262a]',
@@ -167,25 +167,25 @@ const CardComponent = ({
       {/* Content based on variant */}
       {variant === 'stats' && title && (
         <>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-2">
             {Icon && (
-              <div className={`w-12 h-12 rounded-xl ${colorConfig.iconBg} flex items-center justify-center`}>
-                <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
+              <div className={`w-10 h-10 rounded-md ${colorConfig.iconBg} flex items-center justify-center`}>
+                <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
               </div>
             )}
             {trend && (
-              <div className={`flex items-center gap-1 ${getTrendColor(trend.direction)} text-sm font-normal tracking-tight`}>
-                <TrendIcon className="w-4 h-4" />
+              <div className={`flex items-center gap-1 ${getTrendColor(trend.direction)} text-xs font-normal tracking-tight`}>
+                <TrendIcon className="w-3.5 h-3.5" />
                 {trend.value}
               </div>
             )}
           </div>
-          <h3 className="text-2xl font-normal text-white mb-1 tracking-tight">
+          <h3 className="text-xl font-normal text-white mb-1 tracking-tight">
             {typeof value === 'number' ? value.toLocaleString() : value}
           </h3>
-          <p className="text-sm text-[#a3a3a3]">{title}</p>
+          <p className="text-xs text-[#a3a3a3]">{title}</p>
           {trend?.label && (
-            <p className="text-xs text-[#737373] mt-2">{trend.label}</p>
+            <p className="text-xs text-[#737373] mt-1.5">{trend.label}</p>
           )}
         </>
       )}
@@ -193,32 +193,32 @@ const CardComponent = ({
       {variant === 'navigation' && title && description && (
         navigationVariant === 'default' ? (
           <>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
               {Icon && (
-                <div className={`w-10 h-10 rounded-xl ${colorConfig.iconBg} flex items-center justify-center`}>
-                  <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
+                <div className={`w-8 h-8 rounded-md ${colorConfig.iconBg} flex items-center justify-center`}>
+                  <Icon className={`w-4 h-4 ${colorConfig.iconColor}`} />
                 </div>
               )}
             </div>
-            <h3 className={`text-base font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-primary mb-2 tracking-tight`}>
+            <h3 className={`text-sm font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-primary mb-1.5 tracking-tight`}>
               {title}
             </h3>
-            <p className="text-[#a3a3a3] text-sm leading-relaxed">
+            <p className="text-[#a3a3a3] text-xs leading-relaxed">
               {description}
             </p>
           </>
         ) : (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             {Icon && (
-              <div className={`w-10 h-10 rounded-xl ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
-                <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
+              <div className={`w-8 h-8 rounded-md ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0`}>
+                <Icon className={`w-4 h-4 ${colorConfig.iconColor}`} />
               </div>
             )}
             <div className="flex-1">
-              <h3 className={`text-base font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-primary mb-1 tracking-tight`}>
+              <h3 className={`text-sm font-normal tracking-tight text-white transition-colors duration-200 group-hover:text-primary mb-1 tracking-tight`}>
                 {title}
               </h3>
-              <p className="text-[#a3a3a3] text-sm">
+              <p className="text-[#a3a3a3] text-xs">
                 {description}
               </p>
             </div>
@@ -229,14 +229,14 @@ const CardComponent = ({
       {variant === 'compact' && title && (
         <div className="flex items-center justify-between">
           {Icon && (
-            <div className={`w-10 h-10 rounded-xl ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0 mr-3`}>
-              <Icon className={`w-5 h-5 ${colorConfig.iconColor}`} />
+            <div className={`w-8 h-8 rounded-md ${colorConfig.iconBg} flex items-center justify-center flex-shrink-0 mr-2`}>
+              <Icon className={`w-4 h-4 ${colorConfig.iconColor}`} />
             </div>
           )}
           <div className="min-w-0 flex-1">
             <p className="text-[#a3a3a3] text-xs mb-1">{title}</p>
             {value && (
-              <p className="text-lg font-normal text-white tracking-tight">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+              <p className="text-sm font-normal text-white tracking-tight">{typeof value === 'number' ? value.toLocaleString() : value}</p>
             )}
             {trend && (
               <p className={`text-xs font-normal ${getTrendColor(trend.direction)} mt-1 tracking-tight`}>
@@ -250,13 +250,13 @@ const CardComponent = ({
       {variant === 'feature' && title && (
         <div className="text-center">
           {Icon && (
-            <div className={`w-16 h-16 mx-auto mb-4 ${colorConfig.iconBg} rounded-xl flex items-center justify-center`}>
-              <Icon className={`w-8 h-8 ${colorConfig.iconColor}`} />
+            <div className={`w-12 h-12 mx-auto mb-2 ${colorConfig.iconBg} rounded-md flex items-center justify-center`}>
+              <Icon className={`w-6 h-6 ${colorConfig.iconColor}`} />
             </div>
           )}
-          <h3 className="text-base font-normal tracking-tight text-white mb-2 tracking-tight">{title}</h3>
+          <h3 className="text-sm font-normal tracking-tight text-white mb-1.5 tracking-tight">{title}</h3>
           {description && (
-            <p className="text-[#a3a3a3] text-sm">{description}</p>
+            <p className="text-[#a3a3a3] text-xs">{description}</p>
           )}
         </div>
       )}

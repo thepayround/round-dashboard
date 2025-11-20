@@ -35,6 +35,8 @@ export const useOrganizationStepController = ({
       currency: data.currency ?? 'USD',
       timeZone: businessSettings?.timezone ?? data.timeZone ?? 'UTC',
       fiscalYearStart: businessSettings?.fiscalYearStart ?? 'January',
+      registrationNumber: data.registrationNumber ?? '',
+      taxId: data.taxId ?? '',
     }),
     [businessSettings?.fiscalYearStart, businessSettings?.timezone, data]
   )
@@ -53,6 +55,8 @@ export const useOrganizationStepController = ({
         country: updatedForm.country,
         currency: updatedForm.currency,
         timeZone: updatedForm.timeZone,
+        registrationNumber: updatedForm.registrationNumber,
+        taxId: updatedForm.taxId,
       })
 
       onBusinessSettingsChange?.({
