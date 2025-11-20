@@ -71,7 +71,7 @@ export const WelcomePage = () => {
                   <h3 className="text-lg font-medium tracking-tight text-white mb-1">Personal</h3>
                   <p className="text-sm text-white/60">Individual account for personal use</p>
                 </div>
-                <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-white/60 transition-colors" />
+                <ArrowRight className="w-5 h-5 text-white/60 group-hover:text-white/60 transition-colors" />
               </div>
             </motion.button>
 
@@ -96,7 +96,7 @@ export const WelcomePage = () => {
                   <h3 className="text-lg font-medium tracking-tight text-white mb-1">Business</h3>
                   <p className="text-sm text-white/60">Company account for business use</p>
                 </div>
-                <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-white/60 transition-colors" />
+                <ArrowRight className="w-5 h-5 text-white/60 group-hover:text-white/60 transition-colors" />
               </div>
             </motion.button>
           </div>

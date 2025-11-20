@@ -221,7 +221,7 @@ Each color theme provides:
   </div>
   <h3 className="text-2xl font-bold text-white mb-1">$24,500</h3>
   <p className="text-sm text-white/60">Monthly Revenue</p>
-  <p className="text-xs text-white/40 mt-2">from last month</p>
+  <p className="text-xs text-white/60 mt-2">from last month</p>
 </div>
 ```
 

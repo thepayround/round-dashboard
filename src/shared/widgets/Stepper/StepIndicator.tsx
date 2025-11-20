@@ -45,7 +45,7 @@ export const StepIndicator = ({
     return {
       variant: 'outline' as const,
       glow: false,
-      className: '!text-white/40 cursor-default',
+      className: '!text-white/60 cursor-default',
     }
   })()
 
@@ -56,7 +56,7 @@ export const StepIndicator = ({
     if (isClickable) {
       return '!text-white/70 hover:!text-white'
     }
-    return '!text-white/40 cursor-default'
+    return '!text-white/60 cursor-default'
   })()
 
   return (

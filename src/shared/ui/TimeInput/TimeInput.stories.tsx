@@ -97,7 +97,7 @@ export const Interactive: Story = {
           <div className="p-4 bg-[#171719] border border-[#333333] rounded-lg">
             <p className="text-xs text-white/60">Selected time:</p>
             <p className="text-sm text-white">{time}</p>
-            <p className="text-xs text-white/40 mt-1">
+            <p className="text-xs text-white/60 mt-1">
               12-hour: {new Date(`2000-01-01T${time}`).toLocaleTimeString('en-US', {
                 hour: 'numeric',
                 minute: '2-digit',

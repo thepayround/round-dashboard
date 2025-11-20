@@ -212,7 +212,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </AnimatePresence>
 
         {shouldShowCharacterCount && (
-          <p className="mt-1 text-xs text-white/40 text-right">
+          <p className="mt-1 text-xs text-white/60 text-right">
             {currentLength} / {maxLength}
           </p>
         )}

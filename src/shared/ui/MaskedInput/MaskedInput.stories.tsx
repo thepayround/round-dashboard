@@ -115,7 +115,7 @@ export const PhoneInteractive: Story = {
         <div className="p-4 bg-[#171719] border border-[#333333] rounded-lg">
           <p className="text-xs text-white/60">Raw value (unmasked):</p>
           <p className="text-sm text-white">{phone || '(empty)'}</p>
-          <p className="text-xs text-white/40 mt-1">Digits: {phone.length}</p>
+          <p className="text-xs text-white/60 mt-1">Digits: {phone.length}</p>
         </div>
       </div>
     )

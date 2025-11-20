@@ -108,7 +108,7 @@ export const Interactive: Story = {
           <div className="mt-4 p-4 bg-[#171719] border border-[#333333] rounded-lg">
             <p className="text-xs text-white/60">File selected:</p>
             <p className="text-sm text-white">{file.name}</p>
-            <p className="text-xs text-white/40">
+            <p className="text-xs text-white/60">
               {(file.size / 1024 / 1024).toFixed(2)} MB
             </p>
           </div>

@@ -112,7 +112,7 @@ export const PasswordStrengthIndicator = ({
               <li
                 key={index}
                 className={`flex items-center gap-2 text-xs transition-colors ${
-                  isMet ? 'text-emerald-400' : 'text-white/40'
+                  isMet ? 'text-emerald-400' : 'text-white/60'
                 }`}
               >
                 {isMet ? (

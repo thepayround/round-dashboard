@@ -32,7 +32,7 @@ export const AddressManagementSection: React.FC = () => {
 
   const renderEmptyState = () => (
     <div className="text-center py-12">
-      <MapPin className="w-16 h-16 text-white/40 mx-auto mb-4" />
+      <MapPin className="w-16 h-16 text-white/60 mx-auto mb-4" />
       <h3 className="text-lg font-medium text-white/80 mb-2">No billing address found</h3>
       <p className="text-white/60 mb-6">Add your billing address for invoicing and tax purposes</p>
       <ActionButton
