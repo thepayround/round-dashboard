@@ -193,7 +193,7 @@ export const DashboardLayout = memo(({
           <div className="flex-shrink-0">
             {!isCollapsed ? (
               // Expanded: Logo on left, button on right (same row)
-              <div className="flex flex-row items-center justify-between gap-2 p-2 pt-3.5">
+              <div className="flex flex-row items-center justify-between gap-2 pl-4 pr-6 pt-4 pb-2">
                 <Link
                   to="/dashboard"
                   className="flex items-center gap-2 transition-colors duration-200 cursor-pointer min-w-0"
@@ -208,14 +208,14 @@ export const DashboardLayout = memo(({
                   icon={PanelLeftClose}
                   variant="ghost"
                   size="md"
-                  className="text-gray-400 hover:text-white flex-shrink-0"
+                  className="text-gray-400 hover:text-white flex-shrink-0 !w-10 !h-10 [&>svg]:!w-6 [&>svg]:!h-6"
                   aria-label="Collapse sidebar"
                   title="Collapse sidebar (Ctrl+Shift+B)"
                 />
               </div>
             ) : (
               // Collapsed: Logo on top, button below
-              <div className="flex flex-col items-center gap-2 p-2 pt-3.5">
+              <div className="flex flex-col items-center gap-2 pt-4 pb-2">
                 <Link
                   to="/dashboard"
                   className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
@@ -229,7 +229,7 @@ export const DashboardLayout = memo(({
                   icon={PanelLeft}
                   variant="ghost"
                   size="md"
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white !w-10 !h-10 [&>svg]:!w-6 [&>svg]:!h-6"
                   aria-label="Expand sidebar"
                   title="Expand sidebar (Ctrl+Shift+B)"
                 />
@@ -256,7 +256,7 @@ export const DashboardLayout = memo(({
                 icon={PanelLeftClose}
                 variant="ghost"
                 size="md"
-                className="text-gray-400 hover:text-white flex-shrink-0"
+                className="text-gray-400 hover:text-white flex-shrink-0 !w-10 !h-10 [&>svg]:!w-6 [&>svg]:!h-6"
                 aria-label="Close sidebar"
                 title="Close sidebar"
               />

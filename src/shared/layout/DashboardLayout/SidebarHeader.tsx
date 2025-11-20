@@ -52,7 +52,7 @@ export const SidebarHeader = memo<SidebarHeaderProps>(({
         <div className="flex-shrink-0">
           {!isCollapsed ? (
             // Expanded: Logo on left, button on right (same row)
-            <div className="flex items-center justify-between pl-8 pr-6 py-5">
+            <div className="flex items-center justify-between pl-4 pr-6 pt-4 pb-2">
               <Link
                 to="/dashboard"
                 className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
@@ -74,7 +74,7 @@ export const SidebarHeader = memo<SidebarHeaderProps>(({
             </div>
           ) : (
             // Collapsed: Logo on top, button below
-            <div className="flex flex-col items-center py-5 space-y-4">
+            <div className="flex flex-col items-center pt-4 pb-2 space-y-4">
               <Link
                 to="/dashboard"
                 className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
@@ -104,7 +104,7 @@ export const SidebarHeader = memo<SidebarHeaderProps>(({
     {isMobileView && !isCollapsed && (
       <>
         <div className="flex-shrink-0">
-          <div className="flex items-center justify-between pl-8 pr-6 py-5">
+          <div className="flex items-center justify-between pl-4 pr-6 pt-4 pb-2">
             <Link
               to="/dashboard"
               className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
