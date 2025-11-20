@@ -92,11 +92,11 @@ export const NavigationItem = memo<NavigationItemProps>(({
 
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-normal whitespace-nowrap text-xs">{item.label}</span>
-            <ChevronDown 
+            <span className="font-geist font-medium whitespace-nowrap text-base leading-5">{item.label}</span>
+            <ChevronDown
               className={`w-4 h-4 transition-transform duration-200 ${
                 expandedItems.includes(item.id) ? 'transform rotate-180' : ''
-              }`} 
+              }`}
             />
           </div>
         )}
@@ -131,7 +131,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
 
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-normal whitespace-nowrap text-xs">{item.label}</span>
+            <span className="font-geist font-medium whitespace-nowrap text-base leading-5">{item.label}</span>
             {item.badge && (
               <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-primary text-white rounded-full">
                 {item.badge}
@@ -182,7 +182,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
               }`} />
 
               {!isCollapsed && (
-                <span className="font-normal text-xs text-white/60 group-hover:text-white transition-colors duration-200 whitespace-nowrap">{subItem.label}</span>
+                <span className="font-geist font-medium text-base leading-5 text-white/60 group-hover:text-white transition-colors duration-200 whitespace-nowrap">{subItem.label}</span>
               )}
 
               {/* Connection indicator for collapsed mode */}

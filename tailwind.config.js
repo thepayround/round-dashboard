@@ -143,6 +143,7 @@ export default {
       // Custom font family
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'], // Primary font stack
+        geist: ['GeistSans', 'GeistSans Fallback', 'sans-serif'], // Geist font for navigation
         // Add custom fonts:
         // mono: ['Fira Code', 'monospace'],
         // serif: ['Georgia', 'serif'],

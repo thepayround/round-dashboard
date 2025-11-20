@@ -190,64 +190,10 @@ export const DashboardLayout = memo(({
       >
         {/* Logo Section with Collapse Button - Desktop Only */}
         {!isMobileView && (
-          <>
-            <div className="flex-shrink-0">
-              {!isCollapsed ? (
-                // Expanded: Logo on left, button on right (same row)
-                <div className="flex items-center justify-between pl-8 pr-6 py-4">
-                  <Link
-                    to="/dashboard"
-                    className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
-                  >
-                    <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
-                    <LogoText />
-                  </Link>
-                  
-                  {/* Collapse button at same height as logo */}
-                  <IconButton
-                    onClick={toggleSidebar}
-                    icon={PanelLeftClose}
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-400 hover:text-white flex-shrink-0"
-                    aria-label="Collapse sidebar"
-                    title="Collapse sidebar (Ctrl+Shift+B)"
-                  />
-                </div>
-              ) : (
-                // Collapsed: Logo on top, button below
-                <div className="flex flex-col items-center py-4 space-y-4">
-                  <Link
-                    to="/dashboard"
-                    className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
-                  >
-                    <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
-                  </Link>
-                  
-                  {/* Expand button below logo */}
-                  <IconButton
-                    onClick={toggleSidebar}
-                    icon={PanelLeft}
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-400 hover:text-white"
-                    aria-label="Expand sidebar"
-                    title="Expand sidebar (Ctrl+Shift+B)"
-                  />
-                </div>
-              )}
-            </div>
-
-            {/* Divider below logo */}
-            <div className="border-t border-white/10 mx-2"></div>
-          </>
-        )}
-
-        {/* Mobile Header inside sidebar - Same as desktop */}
-        {isMobileView && !isCollapsed && (
-          <>
-            <div className="flex-shrink-0">
-              <div className="flex items-center justify-between pl-8 pr-6 py-4">
+          <div className="flex-shrink-0">
+            {!isCollapsed ? (
+              // Expanded: Logo on left, button on right (same row)
+              <div className="flex items-center justify-between pl-8 pr-6 py-6">
                 <Link
                   to="/dashboard"
                   className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
@@ -255,23 +201,67 @@ export const DashboardLayout = memo(({
                   <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
                   <LogoText />
                 </Link>
-                
-                {/* Close button - same as desktop collapse button */}
+
+                {/* Collapse button at same height as logo */}
                 <IconButton
                   onClick={toggleSidebar}
                   icon={PanelLeftClose}
                   variant="ghost"
                   size="sm"
                   className="text-gray-400 hover:text-white flex-shrink-0"
-                  aria-label="Close sidebar"
-                  title="Close sidebar"
+                  aria-label="Collapse sidebar"
+                  title="Collapse sidebar (Ctrl+Shift+B)"
                 />
               </div>
-            </div>
+            ) : (
+              // Collapsed: Logo on top, button below
+              <div className="flex flex-col items-center py-6 space-y-4">
+                <Link
+                  to="/dashboard"
+                  className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
+                >
+                  <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
+                </Link>
 
-            {/* Divider below logo */}
-            <div className="border-t border-white/10 mx-2"></div>
-          </>
+                {/* Expand button below logo */}
+                <IconButton
+                  onClick={toggleSidebar}
+                  icon={PanelLeft}
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-400 hover:text-white"
+                  aria-label="Expand sidebar"
+                  title="Expand sidebar (Ctrl+Shift+B)"
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Mobile Header inside sidebar - Same as desktop */}
+        {isMobileView && !isCollapsed && (
+          <div className="flex-shrink-0">
+            <div className="flex items-center justify-between pl-8 pr-6 py-6">
+              <Link
+                to="/dashboard"
+                className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
+              >
+                <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
+                <LogoText />
+              </Link>
+
+              {/* Close button - same as desktop collapse button */}
+              <IconButton
+                onClick={toggleSidebar}
+                icon={PanelLeftClose}
+                variant="ghost"
+                size="sm"
+                className="text-gray-400 hover:text-white flex-shrink-0"
+                aria-label="Close sidebar"
+                title="Close sidebar"
+              />
+            </div>
+          </div>
         )}
 
         {/* Main Content Area - Flex container for navigation and bottom sections */}
@@ -324,7 +314,7 @@ export const DashboardLayout = memo(({
 
               {!isCollapsed && (
                 <div className="overflow-hidden">
-                  <span className="font-normal whitespace-nowrap text-xs">{item.label}</span>
+                  <span className="font-geist font-medium whitespace-nowrap text-base leading-5">{item.label}</span>
                 </div>
               )}
 
@@ -360,7 +350,7 @@ export const DashboardLayout = memo(({
                   <User className={`w-4 h-4 ${isCollapsed ? '' : 'mr-2'} flex-shrink-0`} />
                   {!isCollapsed && (
                     <div className="overflow-hidden">
-                      <span className="font-normal whitespace-nowrap text-xs">
+                      <span className="font-geist font-medium whitespace-nowrap text-base leading-5">
                         User Settings
                       </span>
                     </div>
