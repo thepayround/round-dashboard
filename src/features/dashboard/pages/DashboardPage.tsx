@@ -22,6 +22,7 @@ import { Alert, LoadingSpinner, UiDropdown } from '@/shared/ui'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
+import { sanitizeUrl } from '@/shared/utils/urlSanitization'
 
 export const DashboardPage = () => {
   const navigate = useNavigate()
@@ -544,7 +545,7 @@ export const DashboardPage = () => {
                           <ArrowUpRight className="w-4 h-4 text-secondary" />
                           <div>
                             <a
-                              href={roundAccount.organization.website}
+                              href={sanitizeUrl(roundAccount.organization.website)}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-sm font-normal tracking-tight text-secondary hover:text-secondary transition-colors"

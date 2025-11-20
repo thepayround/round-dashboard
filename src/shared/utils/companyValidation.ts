@@ -114,6 +114,21 @@ export const validateWebsite = (website: string): ValidationResult => {
 
   // Website is optional, so only validate if provided
   if (website.trim()) {
+    const normalized = website.trim().toLowerCase()
+
+    // Block dangerous protocols (XSS prevention)
+    const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'about:']
+    for (const protocol of dangerousProtocols) {
+      if (normalized.startsWith(protocol)) {
+        errors.push({
+          field: 'website',
+          message: 'Invalid URL protocol. Please use http:// or https://',
+          code: 'INVALID_PROTOCOL',
+        })
+        return { isValid: false, errors }
+      }
+    }
+
     // eslint-disable-next-line security/detect-unsafe-regex
     const websiteRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/
 
