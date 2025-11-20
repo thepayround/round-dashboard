@@ -1,7 +1,7 @@
-import { Loader2 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { ButtonHTMLAttributes } from 'react'
 
+import { LoadingSpinner } from '@/shared/ui'
 import { Button } from '@/shared/ui/Button'
 
 interface SocialLoginButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -30,12 +30,12 @@ export const SocialLoginButton = ({
       size="md"
       icon={ isLoading ? undefined : Icon}
       disabled={disabled || isLoading}
-      className={`w-full h-9 bg-auth-bg text-white rounded-lg border border-auth-bg-hover hover:border-auth-bg-hover transition-colors duration-200 hover:bg-auth-bg/80 ${className}`}
+      className={`w-full h-9 bg-auth-bg text-white rounded-md border border-white/10 hover:border-white/20 transition-colors duration-200 hover:bg-auth-bg/80 ${className}`}
       {...props}
     >
       { isLoading ? (
         <span className="inline-flex items-center gap-2">
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <LoadingSpinner size="sm" />
           { isLoadingLabel ?? label}
         </span>
       ) : (
