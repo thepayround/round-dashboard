@@ -12,10 +12,10 @@ import {
   Globe,
   Mail,
   MapPin,
-  MoreHorizontal,
   Phone,
   Shield,
   Tag,
+  Trash2,
   Truck,
   User,
   Zap,
@@ -402,9 +402,9 @@ const CustomerDetailPage: React.FC = () => {
             </div>
 
             <div className="space-y-4">
+              <QuickActionButton label="Edit Details" icon={Edit} onClick={openEditModal} variant="secondary" />
               <QuickActionButton label="Send Email" icon={Mail} onClick={openEmailModal} />
               <QuickActionButton label="View Notes" icon={FileText} onClick={openNotesModal} />
-              <QuickActionButton label="Edit Details" icon={Edit} onClick={openEditModal} variant="secondary" />
             </div>
           </Card>
 
@@ -619,38 +619,17 @@ const CustomerDetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button
-              type="button"
-              onClick={openEmailModal}
-              variant="ghost"
-              size="md"
-              icon={Mail}
-              iconPosition="left"
-            >
-              Send Email
-            </Button>
-            <Button
-              type="button"
-              onClick={openEditModal}
-              variant="primary"
-              size="md"
-              icon={Edit}
-              iconPosition="left"
-            >
-              Edit
-            </Button>
-            <IconButton
-              type="button"
-              onClick={openDangerousActionsModal}
-              icon={MoreHorizontal}
-              variant="ghost"
-              size="md"
-              className="text-white/60 hover:text-white"
-              title="More actions"
-              aria-label="More actions"
-            />
-          </div>
+          <Button
+            type="button"
+            onClick={openDangerousActionsModal}
+            variant="ghost"
+            size="md"
+            icon={Trash2}
+            iconPosition="left"
+            className="text-red-400 hover:text-red-300"
+          >
+            Delete
+          </Button>
         </motion.div>
 
         <div className="flex gap-6">
