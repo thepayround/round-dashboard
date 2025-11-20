@@ -193,10 +193,10 @@ export const DashboardLayout = memo(({
           <div className="flex-shrink-0">
             {!isCollapsed ? (
               // Expanded: Logo on left, button on right (same row)
-              <div className="flex items-center justify-between pl-8 pr-6 py-6">
+              <div className="flex flex-row items-center justify-between gap-2 p-2 pt-3.5">
                 <Link
                   to="/dashboard"
-                  className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
+                  className="flex items-center gap-2 transition-colors duration-200 cursor-pointer min-w-0"
                 >
                   <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
                   <LogoText />
@@ -215,7 +215,7 @@ export const DashboardLayout = memo(({
               </div>
             ) : (
               // Collapsed: Logo on top, button below
-              <div className="flex flex-col items-center py-6 space-y-4">
+              <div className="flex flex-col items-center gap-2 p-2 pt-3.5">
                 <Link
                   to="/dashboard"
                   className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
@@ -241,10 +241,10 @@ export const DashboardLayout = memo(({
         {/* Mobile Header inside sidebar - Same as desktop */}
         {isMobileView && !isCollapsed && (
           <div className="flex-shrink-0">
-            <div className="flex items-center justify-between pl-8 pr-6 py-6">
+            <div className="flex flex-row items-center justify-between gap-2 p-2 pt-3.5">
               <Link
                 to="/dashboard"
-                className="flex items-center space-x-2.5 transition-colors duration-200 cursor-pointer min-w-0"
+                className="flex items-center gap-2 transition-colors duration-200 cursor-pointer min-w-0"
               >
                 <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
                 <LogoText />

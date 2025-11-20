@@ -93,11 +93,13 @@ export const NavigationItem = memo<NavigationItemProps>(({
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
             <span className="font-geist font-medium whitespace-nowrap text-base leading-5">{item.label}</span>
-            <ChevronDown
-              className={`w-4 h-4 transition-transform duration-200 ${
-                expandedItems.includes(item.id) ? 'transform rotate-180' : ''
-              }`}
-            />
+            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors duration-200">
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  expandedItems.includes(item.id) ? 'transform rotate-180' : ''
+                }`}
+              />
+            </div>
           </div>
         )}
         
