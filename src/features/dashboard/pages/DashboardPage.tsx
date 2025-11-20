@@ -191,7 +191,7 @@ export const DashboardPage = () => {
                       kpi.trend === 'up'
                         ? 'text-success'
                         : kpi.trend === 'down'
-                          ? 'text-[#FF6B6B]'
+                          ? 'text-red-400'
                           : 'text-white/50'
                     }`}
                   >

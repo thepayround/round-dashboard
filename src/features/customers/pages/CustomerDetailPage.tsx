@@ -253,7 +253,7 @@ const CustomerDetailPage: React.FC = () => {
                 {customer.timezone && (
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-4">
-                      <Clock className="w-4 h-4 text-[#FF6B6B]" />
+                      <Clock className="w-4 h-4 text-red-400" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{customer.timezone}</div>
                         <div className="text-xs text-white/60">Timezone</div>
