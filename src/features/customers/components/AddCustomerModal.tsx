@@ -240,7 +240,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Tags */}
         <div className="space-y-4">
-          <SectionHeader icon={Tag} title="Tags" iconColor="text-[#7767DA]" />
+          <SectionHeader icon={Tag} title="Tags" iconColor="text-accent" />
           
           <div className="flex flex-wrap gap-2 mb-3">
             {(formData.tags ?? []).map((tag, index) => (
@@ -269,7 +269,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
               onClick={handleAddTag}
               variant="secondary"
               size="md"
-              className="bg-[#7767DA]/20 text-[#7767DA] border-[#7767DA]/30 hover:bg-[#7767DA]/30"
+              className="bg-accent/20 text-accent border-accent/30 hover:bg-accent/30"
             >
               Add
             </Button>

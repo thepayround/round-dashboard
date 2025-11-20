@@ -228,7 +228,7 @@ const CustomerDetailPage: React.FC = () => {
                 {customer.company && (
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-3">
-                      <Building2 className="w-4 h-4 text-[#7767DA]" />
+                      <Building2 className="w-4 h-4 text-accent" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{customer.company}</div>
                         <div className="text-xs text-white/60">Company name</div>
@@ -322,7 +322,7 @@ const CustomerDetailPage: React.FC = () => {
                 {customer.shippingAddress && (
                   <Card variant="nested" padding="lg">
                     <div className="flex items-center gap-3 mb-3">
-                      <Truck className="w-5 h-5 text-[#7767DA]" />
+                      <Truck className="w-5 h-5 text-accent" />
                       <h3 className="text-sm font-normal tracking-tight text-white">Shipping Address</h3>
                     </div>
                     <div className="text-sm text-white/80 leading-relaxed space-y-1">
@@ -349,8 +349,8 @@ const CustomerDetailPage: React.FC = () => {
           {(customer.tags.length > 0 || Object.keys(customer.customFields).length > 0) && (
             <Card padding="lg">
               <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 bg-primary/20 rounded-xl border border-[#7767DA]/30">
-                  <Tag className="w-5 h-5 text-[#7767DA]" />
+                <div className="p-3 bg-primary/20 rounded-xl border border-accent/30">
+                  <Tag className="w-5 h-5 text-accent" />
                 </div>
                 <div className="flex-1">
                   <h2 className="text-lg font-medium text-white mb-2">Metadata</h2>

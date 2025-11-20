@@ -143,8 +143,8 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
       {/* Display Preferences Section */}
       <Card animate={false} padding="md">
         <div className="flex items-start gap-3 mb-4">
-          <div className="p-2 bg-primary/15 rounded-lg border border-[#7767DA]/20">
-            <Globe className="w-3.5 h-3.5 text-[#7767DA]" />
+          <div className="p-2 bg-primary/15 rounded-lg border border-accent/20">
+            <Globe className="w-3.5 h-3.5 text-accent" />
           </div>
           <div className="flex-1">
             <h2 className="text-sm font-normal tracking-tight text-white mb-1">Display & Localization</h2>

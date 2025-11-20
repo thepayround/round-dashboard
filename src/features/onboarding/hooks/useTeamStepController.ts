@@ -60,7 +60,7 @@ const getRoleBadgeColor = (role: string): string => {
     return 'bg-primary/20 text-primary border-primary/30'
   }
   if (roleLower.includes('manager') || roleLower.includes('owner')) {
-    return 'bg-[#7767DA]/20 text-[#7767DA] border-[#7767DA]/30'
+    return 'bg-accent/20 text-accent border-accent/30'
   }
   if (roleLower.includes('member') || roleLower.includes('developer') || roleLower.includes('designer')) {
     return 'bg-secondary/20 text-secondary border-secondary/30'

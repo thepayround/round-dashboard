@@ -237,7 +237,7 @@ export const DashboardPage = () => {
                           style={{ width: `${goalWidth}%` }}
                         />
                         <div
-                          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-[#7767DA]"
+                          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-accent"
                           style={{ width: `${primaryWidth}%` }}
                         />
                       </div>
@@ -310,8 +310,8 @@ export const DashboardPage = () => {
                     <div className="text-white/60 text-xs font-normal tracking-tight mb-1">Currency</div>
                     <div className="text-white text-sm font-normal tracking-tight">{roundAccount.organization.currency}</div>
                   </div>
-                  <div className="p-3 bg-primary/20 rounded-lg border border-[#7767DA]/30">
-                    <DollarSign className="w-4 h-4 text-[#7767DA]" />
+                  <div className="p-3 bg-primary/20 rounded-lg border border-accent/30">
+                    <DollarSign className="w-4 h-4 text-accent" />
                   </div>
                 </div>
               </Card>
@@ -392,7 +392,7 @@ export const DashboardPage = () => {
 
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-3">
-                      <Calendar className="w-4 h-4 text-[#7767DA]" />
+                      <Calendar className="w-4 h-4 text-accent" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">
                           {new Date(roundAccount.createdDate).toLocaleDateString('en-US', {
@@ -434,8 +434,8 @@ export const DashboardPage = () => {
               >
                 <Card padding="lg">
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="p-3 bg-primary/20 rounded-xl border border-[#7767DA]/30">
-                      <Building className="w-5 h-5 text-[#7767DA]" />
+                    <div className="p-3 bg-primary/20 rounded-xl border border-accent/30">
+                      <Building className="w-5 h-5 text-accent" />
                     </div>
                     <div className="flex-1">
                       <h2 className="text-xl font-normal tracking-tight text-white mb-2">Organization details</h2>
@@ -476,7 +476,7 @@ export const DashboardPage = () => {
 
                     <Card variant="nested" padding="md">
                       <div className="flex items-center gap-3">
-                        <Building2 className="w-4 h-4 text-[#7767DA]" />
+                        <Building2 className="w-4 h-4 text-accent" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.category}</div>
                           <div className="text-xs text-white/60">Industry category</div>
@@ -508,7 +508,7 @@ export const DashboardPage = () => {
 
                     <Card variant="nested" padding="md">
                       <div className="flex items-center gap-3">
-                        <Clock className="w-4 h-4 text-[#7767DA]" />
+                        <Clock className="w-4 h-4 text-accent" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.timeZone}</div>
                           <div className="text-xs text-white/60">Timezone</div>
@@ -598,7 +598,7 @@ export const DashboardPage = () => {
                     {roundAccount.organization.description && (
                       <Card variant="nested" padding="md">
                         <div className="flex items-start gap-3">
-                          <Building className="w-4 h-4 text-[#7767DA] mt-0.5" />
+                          <Building className="w-4 h-4 text-accent mt-0.5" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.description}</div>
                             <div className="text-xs text-white/60">Description</div>
@@ -622,8 +622,8 @@ export const DashboardPage = () => {
           >
             <Card padding="lg">
               <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 bg-primary/20 rounded-xl border border-[#7767DA]/30">
-                  <MapPin className="w-5 h-5 text-[#7767DA]" />
+                <div className="p-3 bg-primary/20 rounded-xl border border-accent/30">
+                  <MapPin className="w-5 h-5 text-accent" />
                 </div>
                 <div className="flex-1">
                   <h2 className="text-lg font-medium text-white mb-2">Account Addresses</h2>
@@ -642,7 +642,7 @@ export const DashboardPage = () => {
                       <div>
                         <h3 className="font-medium text-white text-sm mb-2">{address.name}</h3>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs px-2 py-1 rounded-lg bg-[#7767DA]/20 text-[#7767DA] border border-[#7767DA]/30 font-medium">
+                          <span className="text-xs px-2 py-1 rounded-lg bg-accent/20 text-accent border border-accent/30 font-medium">
                             {address.addressType}
                           </span>
                           {address.isPrimary && (

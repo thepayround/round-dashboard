@@ -77,7 +77,7 @@ export const OrganizationForm = ({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
           >
             <Building className="w-8 h-8 text-[#32A1E4]" />
           </motion.div>
@@ -100,7 +100,7 @@ export const OrganizationForm = ({
           className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
               <Building className="w-4 h-4 text-[#32A1E4]" />
             </div>
             <div>
@@ -158,7 +158,7 @@ export const OrganizationForm = ({
           className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
         >
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary/20 to-[#7767DA]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
               <Building className="w-4 h-4 text-secondary" />
             </div>
             <div>
@@ -243,8 +243,8 @@ export const OrganizationForm = ({
             className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
           >
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7767DA]/20 to-primary/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                <span className="text-sm font-semibold text-[#7767DA]">{currencySymbol}</span>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent/20 to-primary/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                <span className="text-sm font-semibold text-accent">{currencySymbol}</span>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-white">Financial Information</h3>

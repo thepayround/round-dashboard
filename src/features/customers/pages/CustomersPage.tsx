@@ -381,7 +381,7 @@ const CustomersPage: React.FC = () => {
                   
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-3">
-                      <Calendar className="w-4 h-4 text-[#7767DA]" />
+                      <Calendar className="w-4 h-4 text-accent" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">{formatDate(customer.signupDate)}</div>
                         <div className="text-xs text-white/60">Customer since</div>
@@ -420,7 +420,7 @@ const CustomersPage: React.FC = () => {
                       {customer.tags.slice(0, 3).map((tag: string, index: number) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-[#7767DA]/20 text-[#7767DA] border border-[#7767DA]/30 rounded text-xs"
+                          className="px-2 py-1 bg-accent/20 text-accent border border-accent/30 rounded text-xs"
                         >
                           {tag}
                         </span>

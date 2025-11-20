@@ -311,7 +311,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h4 className="text-md font-medium text-white flex items-center space-x-2">
-                        <Truck className="w-4 h-4 text-[#7767DA]" />
+                        <Truck className="w-4 h-4 text-accent" />
                         <span>Shipping Address</span>
                       </h4>
                       <Button

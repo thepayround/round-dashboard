@@ -70,10 +70,10 @@ const colorVariants = {
     hoverColor: 'group-hover:text-secondary'
   },
   accent: {
-    iconBg: 'bg-[#7767DA]/10',
-    border: 'border-[#7767DA]/20',
-    iconColor: 'text-[#7767DA]',
-    hoverColor: 'group-hover:text-[#7767DA]'
+    iconBg: 'bg-accent/10',
+    border: 'border-accent/20',
+    iconColor: 'text-accent',
+    hoverColor: 'group-hover:text-accent'
   },
   success: {
     iconBg: 'bg-[#42E695]/10',

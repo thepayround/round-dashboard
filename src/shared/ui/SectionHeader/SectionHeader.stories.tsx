@@ -69,7 +69,7 @@ export const AllVariants: Story = {
       <SectionHeader
         icon={Globe}
         title="Preferences & Settings"
-        iconColor="text-[#7767DA]"
+        iconColor="text-accent"
       />
       <SectionHeader
         icon={Mail}
@@ -107,7 +107,7 @@ export const WithSubtitles: Story = {
         icon={Settings}
         title="Preferences"
         subtitle="Customize your experience"
-        iconColor="text-[#7767DA]"
+        iconColor="text-accent"
       />
     </div>
   ),

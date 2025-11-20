@@ -39,7 +39,7 @@ export const BusinessSettingsStep = ({
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
           className="w-16 h-16 mx-auto rounded-lg bg-accent/20 border border-white/20 flex items-center justify-center"
         >
-          <Settings className="w-8 h-8 text-[#7767DA]" />
+          <Settings className="w-8 h-8 text-accent" />
         </motion.div>
 
         <div>
