@@ -29,10 +29,10 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'px-3 py-2 text-xs h-10 lg:h-9',
-  md: 'px-4 py-2 text-sm h-11 lg:h-9',
-  lg: 'px-4 py-2.5 text-sm h-11 lg:h-9',
-  xl: 'px-5 py-2.5 text-base h-12 lg:h-9'
+  sm: 'px-2 py-1 text-xs h-7',
+  md: 'px-4 py-2 text-sm h-9',
+  lg: 'px-4 py-2 text-sm h-10',
+  xl: 'px-6 py-2 text-base h-11'
 }
 
 const iconSizes = {
@@ -66,10 +66,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         className={`
-          inline-flex items-center justify-center gap-2
-          rounded-lg font-normal tracking-tight
+          inline-flex items-center justify-center gap-1.5
+          rounded-md font-normal tracking-tight
           transition-all duration-200
-          outline-none focus-visible:ring-2 focus-visible:ring-[#14bdea] focus-visible:ring-offset-2 focus-visible:ring-offset-black
+          outline-none focus-visible:ring-1 focus-visible:ring-[#14bdea] focus-visible:ring-offset-1 focus-visible:ring-offset-black
           disabled:opacity-50 disabled:cursor-not-allowed
           ${variants[variant]}
           ${sizes[size]}

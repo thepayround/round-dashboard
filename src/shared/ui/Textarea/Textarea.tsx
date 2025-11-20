@@ -6,13 +6,13 @@ import React from 'react'
 import { cn } from '@/shared/utils/cn'
 
 const textareaVariants = cva(
-  'w-full rounded-lg border bg-auth-bg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed resize-none',
+  'w-full rounded-md border bg-auth-bg text-white placeholder:text-auth-placeholder font-light text-sm tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed resize-none',
   {
     variants: {
       size: {
-        sm: 'min-h-[80px] px-3 py-2',
-        md: 'min-h-[100px] px-3 py-2',
-        lg: 'min-h-[120px] px-3 py-2',
+        sm: 'min-h-[60px] px-4 py-2',
+        md: 'min-h-[80px] px-4 py-2',
+        lg: 'min-h-[100px] px-4 py-2',
       },
       variant: {
         default: 'border-auth-border',
@@ -70,7 +70,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label
             htmlFor={textareaId}
-            className="block text-sm font-normal text-white/90 mb-2 tracking-tight"
+            className="block text-sm font-normal text-white/90 mb-1.5 tracking-tight"
           >
             {label}
             {required && <span className="text-primary ml-1">*</span>}
@@ -106,12 +106,12 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="mt-2 flex items-center space-x-2 text-primary text-sm"
+              className="mt-1.5 flex items-center space-x-1.5 text-auth-error font-medium text-xs"
               role="alert"
               aria-live="polite"
               aria-atomic="true"
             >
-              <AlertCircle className="h-4 w-4 flex-shrink-0" />
+              <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
               <span>{error}</span>
             </motion.div>
           )}
@@ -119,7 +119,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           {!error && helperText && (
             <p
               id={`${textareaId}-helper`}
-              className="mt-2 text-sm text-white/60"
+              className="mt-1.5 text-xs text-white/60"
             >
               {helperText}
             </p>

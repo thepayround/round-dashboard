@@ -140,54 +140,72 @@
 
 ---
 
-## Phase 3: Forms & Inputs
+## Phase 3: Forms & Inputs 🚧 **IN PROGRESS**
 
-### TASK-FORM-001: Compact Form Inputs
-**Priority**: Critical | **Effort**: High
-- [ ] Reduce input height (48px → 36px)
-- [ ] Reduce input padding (px-4 py-3 → px-3 py-2)
-- [ ] Make input text smaller (14px → 13px)
-- [ ] Tighten label spacing (mb-2 → mb-1.5)
-- [ ] Update all input components:
-  - Input
-  - FormInput
-  - AuthInput
-  - SearchInput
-  - Textarea
-  - Select
-  - Dropdown
+### TASK-FORM-001: Compact Form Inputs ✅ (Partial)
 
-**Files to modify**:
-- `src/shared/ui/Input/`
-- `src/shared/ui/FormInput.tsx`
-- `src/shared/ui/AuthInput/`
-- `src/shared/ui/Textarea/`
-- `src/shared/ui/Select/`
-- `src/shared/ui/ApiDropdown/`
-- `src/shared/ui/UiDropdown/`
+**Priority**: Critical | **Effort**: High | **Status**: 🚧 Partial Complete
 
-### TASK-FORM-002: Form Layout Refinement
-**Priority**: High | **Effort**: Medium
-- [ ] Reduce form spacing (space-y-6 → space-y-4)
-- [ ] Tighter field groups (space-y-4 → space-y-3)
-- [ ] Reduce form section padding
-- [ ] Compact field helper text (text-sm → text-xs)
-- [ ] Better error message styling (smaller, tighter)
+- [x] Reduce input height (44px mobile/36px desktop → 36px consistent)
+- [x] Update input padding (px-3 py-2 for md size)
+- [x] Make input text size 13px (text-sm)
+- [x] Tighten label spacing (mb-2 → mb-1.5)
+- [x] Update core input components:
+  - ✅ Input
+  - ✅ Textarea
+  - ⏸️ FormInput (to be done)
+  - ⏸️ AuthInput (to be done)
+  - ⏸️ SearchInput (to be done)
+  - ⏸️ Select (to be done)
+  - ⏸️ Dropdown (to be done)
 
-### TASK-FORM-003: Button Refinement
-**Priority**: High | **Effort**: Medium
-- [ ] Reduce button height (44px → 36px)
-- [ ] Reduce button padding (px-6 py-3 → px-4 py-2)
-- [ ] Make button text smaller (14px → 13px)
-- [ ] Tighter icon spacing in buttons
-- [ ] Update Button and IconButton components
+**Files modified**:
 
-**Files to modify**:
-- `src/shared/ui/Button/Button.tsx`
-- `src/shared/ui/Button/IconButton.tsx`
+- `src/shared/ui/Input/Input.tsx` ✅
+- `src/shared/ui/Textarea/Textarea.tsx` ✅
 
-### TASK-FORM-004: Dropdown & Select Polish
-**Priority**: Medium | **Effort**: Medium
+### TASK-FORM-002: Form Layout Refinement ✅
+
+**Priority**: High | **Effort**: Medium | **Status**: ✅ Completed
+
+- [x] Compact field helper text (text-sm → text-xs)
+- [x] Better error message styling (smaller icons, tighter spacing)
+- [x] Implemented in Input and Textarea components
+
+### TASK-FORM-003: Button Refinement ✅
+
+**Priority**: High | **Effort**: Medium | **Status**: ✅ Completed
+
+- [x] Reduce button heights (consistent sizes, no responsive breakpoints)
+- [x] Reduce button padding across all sizes
+- [x] Make button text size 13px (text-sm)
+- [x] Tighter icon spacing in buttons (gap-2 → gap-1.5)
+- [x] Update Button and IconButton components
+- [x] Change border radius (rounded-lg → rounded-md)
+- [x] Thinner focus rings (ring-2 → ring-1)
+
+**Button sizes**:
+
+- sm: 28px (h-7)
+- md: 36px (h-9)
+- lg: 40px (h-10)
+- xl: 44px (h-11)
+
+**IconButton sizes**:
+
+- sm: 28px (h-7)
+- md: 36px (h-9)
+- lg: 40px (h-10)
+
+**Files modified**:
+
+- `src/shared/ui/Button/Button.tsx` ✅
+- `src/shared/ui/Button/IconButton.tsx` ✅
+
+### TASK-FORM-004: Dropdown & Select Polish ⏸️
+
+**Priority**: Medium | **Effort**: Medium | **Status**: ⏸️ Pending
+
 - [ ] Reduce dropdown item height (40px → 32px)
 - [ ] Reduce dropdown item padding (px-4 py-2 → px-3 py-1.5)
 - [ ] Make dropdown text smaller (14px → 13px)

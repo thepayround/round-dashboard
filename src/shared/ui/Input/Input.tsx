@@ -9,8 +9,8 @@ import { cn } from '@/shared/utils/cn'
 
 const inputVariants = cva(
   [
-    // Base styles - Mobile-first with 44px touch target, desktop optimized
-    'w-full h-11 lg:h-9 px-3 bg-auth-bg border border-auth-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed',
+    // Base styles - Compact design for better information density
+    'w-full h-9 px-4 bg-auth-bg border border-auth-border rounded-md text-white placeholder:text-auth-placeholder font-light text-sm tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed',
     // Autofill styles - prevent white background on autofill
     '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
     '[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
@@ -29,9 +29,9 @@ const inputVariants = cva(
   {
     variants: {
       size: {
-        sm: 'h-11 lg:h-9 px-3 text-xs',
-        md: 'h-11 lg:h-9 px-3 text-xs',
-        lg: 'h-11 lg:h-10 px-4 text-sm',
+        sm: 'h-8 px-2 text-xs',
+        md: 'h-9 px-4 text-sm',
+        lg: 'h-10 px-4 text-sm',
       },
       variant: {
         default: '',
@@ -121,7 +121,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-normal text-white/90 mb-2 tracking-tight"
+            className="block text-sm font-normal text-white/90 mb-1.5 tracking-tight"
           >
             {label}
             {required && <span className="text-primary ml-1">*</span>}
@@ -191,12 +191,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
+              className="mt-1.5 flex items-center space-x-1.5 text-auth-error font-medium text-xs"
               role="alert"
               aria-live="polite"
               aria-atomic="true"
             >
-              <AlertCircle className="h-4 w-4 flex-shrink-0" />
+              <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
               <span>{error}</span>
             </motion.div>
           )}
@@ -204,7 +204,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {!error && helperText && (
             <p
               id={`${inputId}-helper`}
-              className="mt-2 text-sm text-white/60"
+              className="mt-1.5 text-xs text-white/60"
             >
               {helperText}
             </p>

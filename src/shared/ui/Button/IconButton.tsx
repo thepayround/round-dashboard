@@ -23,9 +23,9 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'p-2 w-11 h-11 lg:w-9 lg:h-9',
-  md: 'p-2.5 w-11 h-11 lg:w-9 lg:h-9',
-  lg: 'p-2.5 w-12 h-12 lg:w-9 lg:h-9'
+  sm: 'p-1 w-7 h-7',
+  md: 'p-2 w-9 h-9',
+  lg: 'p-2 w-10 h-10'
 }
 
 const iconSizes = {
@@ -56,16 +56,16 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         type={type}
         className={`
           inline-flex items-center justify-center
-          rounded-lg
+          rounded-md
           transition-all duration-200
-          outline-none focus-visible:ring-2 focus-visible:ring-[#14bdea] focus-visible:ring-offset-2 focus-visible:ring-offset-black
+          outline-none focus-visible:ring-1 focus-visible:ring-[#14bdea] focus-visible:ring-offset-1 focus-visible:ring-offset-black
           disabled:opacity-50 disabled:cursor-not-allowed
           ${variants[variant]}
           ${sizes[size]}
           ${className}
         `}
         disabled={isDisabled}
-        aria-busy={ isLoading}
+        aria-busy={isLoading}
         {...props}
       >
         { isLoading && <span className="sr-only" aria-live="polite">Loading...</span>}
