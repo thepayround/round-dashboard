@@ -145,7 +145,7 @@
       "message": "Use 'primary' design token instead of hardcoded #D417C8",
       "suggestion": "Replace with: text-primary, bg-primary, border-primary",
       "severity": "error",
-      "excludePaths": ["tailwind.config.ts", "*.md", "*.test.tsx"]
+      "excludePaths": ["tailwind.config.ts", "tailwind.config.js", "src/shared/config/constants.ts", "src/shared/constants/designTokens.ts", "src/index.css", "*.md", "*.test.tsx", "*.svg"]
     },
     {
       "name": "No hardcoded secondary color",
@@ -153,7 +153,7 @@
       "message": "Use 'secondary' design token instead of hardcoded #14BDEA",
       "suggestion": "Replace with: text-secondary, bg-secondary, border-secondary",
       "severity": "error",
-      "excludePaths": ["tailwind.config.ts", "*.md", "*.test.tsx"]
+      "excludePaths": ["tailwind.config.ts", "tailwind.config.js", "src/shared/config/constants.ts", "src/shared/constants/designTokens.ts", "src/index.css", "*.md", "*.test.tsx", "*.svg"]
     },
     {
       "name": "No hardcoded accent color",
@@ -161,7 +161,7 @@
       "message": "Use 'accent' design token instead of hardcoded #7767DA",
       "suggestion": "Replace with: text-accent, bg-accent, border-accent",
       "severity": "error",
-      "excludePaths": ["tailwind.config.ts", "*.md", "*.test.tsx"]
+      "excludePaths": ["tailwind.config.ts", "tailwind.config.js", "src/shared/config/constants.ts", "src/shared/constants/designTokens.ts", "src/index.css", "*.md", "*.test.tsx", "*.svg"]
     },
     {
       "name": "No hardcoded success colors",
@@ -169,7 +169,7 @@
       "message": "Use 'success' design token for success/active states",
       "suggestion": "Replace with: text-success, bg-success, border-success",
       "severity": "error",
-      "excludePaths": ["tailwind.config.ts", "*.md", "*.test.tsx"]
+      "excludePaths": ["tailwind.config.ts", "tailwind.config.js", "src/shared/config/constants.ts", "src/shared/constants/designTokens.ts", "src/index.css", "*.md", "*.test.tsx", "*.svg"]
     },
     {
       "name": "No undocumented teal color",

@@ -26,15 +26,15 @@ export const CONSTANTS = {
     SLOW: 300,
   },
 
-  // Colors (Tailwind color values)
+  // Colors (Tailwind color values - matches CSS variables)
   COLORS: {
-    PRIMARY: '#D417C8',
-    SECONDARY: '#14BDEA',
-    ACCENT: '#7767DA',
-    SUCCESS: '#10B981',
-    WARNING: '#F59E0B',
-    DANGER: '#EF4444',
-    INFO: '#3B82F6',
+    PRIMARY: '#D417C8',    // Magenta/Pink - primary actions
+    SECONDARY: '#14BDEA',  // Cyan - secondary elements
+    ACCENT: '#7767DA',     // Purple - accent elements
+    SUCCESS: '#42E695',    // Green - success states (matches design tokens)
+    WARNING: '#F59E0B',    // Amber - warning states
+    DANGER: '#EF4444',     // Red - error/danger states
+    INFO: '#3B82F6',       // Blue - informational states
   },
 
   // Pagination

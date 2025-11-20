@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 
 import type { ApiDropdownConfig } from './ApiDropdown'
 
+import { COLORS } from '@/shared/config/constants'
 import { designTokens } from '@/shared/constants/designTokens'
 import { useAddressTypes } from '@/shared/hooks/api/useAddressType'
 import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
@@ -237,7 +238,7 @@ export const teamRoleDropdownConfig: ApiDropdownConfig<{ value: string; label: s
           case 'Admin':
             return { bg: designTokens.colors.accent.DEFAULT, text: designTokens.colors.accent.DEFAULT } // pink
           case 'TeamManager':
-            return { bg: '#7767DA', text: '#7767DA' } // purple
+            return { bg: COLORS.ACCENT, text: COLORS.ACCENT } // purple
           case 'Sales':
             return { bg: '#10b981', text: '#10b981' } // green
           case 'Finance':
