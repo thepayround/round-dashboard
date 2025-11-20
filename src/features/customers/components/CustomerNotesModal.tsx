@@ -71,7 +71,7 @@ export const CustomerNotesModal = ({
         icon={MessageSquare}
         size="lg"
       >
-        <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+        <div className="space-y-6">
           <div className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
             <div className="flex items-start space-x-3">
               <IconBox icon={MessageSquare} color="primary" className="border border-primary/30 rounded-xl bg-primary/10" />

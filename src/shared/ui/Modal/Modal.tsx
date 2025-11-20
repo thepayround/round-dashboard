@@ -173,7 +173,7 @@ export const Modal = ({
           >
               {/* Header */}
               {showHeader && (
-                <div className="flex items-center justify-between p-6 border-b border-[#333333]">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-[#333333]">
                   <div className="flex items-center space-x-3">
                     {Icon && (
                       <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
@@ -205,7 +205,7 @@ export const Modal = ({
               )}
 
               {/* Content */}
-              <div className="max-h-[calc(90vh-88px)]">
+              <div className="px-6 py-6 max-h-[calc(90vh-88px)] overflow-y-auto">
                 {children}
               </div>
             </div>

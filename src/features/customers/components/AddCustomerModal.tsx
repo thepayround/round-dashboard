@@ -46,7 +46,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
       size="xl"
     >
       {/* Form */}
-      <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
+      <form onSubmit={handleSubmit} className="space-y-8">
         {/* Basic Information */}
         <div className="space-y-6">
           <SectionHeader icon={User} title="Basic Information" iconColor="text-primary" />
@@ -392,7 +392,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
       </form>
 
       {/* Footer */}
-      <div className="flex items-center justify-end space-x-3 p-6 border-t border-white/10">
+      <div className="flex items-center justify-end space-x-3 px-6 py-4 border-t border-white/10">
         <Button
           type="button"
           onClick={onClose}

@@ -57,7 +57,7 @@ export const EmailComposeModal = ({
       icon={Mail}
       size="lg"
     >
-      <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
+      <div className="space-y-6">
         <div className="space-y-4">
           <FormInput
             label="To"
@@ -140,7 +140,7 @@ export const EmailComposeModal = ({
         </div>
       </div>
 
-      <div className="border-t border-white/10 p-6">
+      <div className="border-t border-white/10 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-xs text-white/60">
             This email will be logged in the customer&apos;s activity history

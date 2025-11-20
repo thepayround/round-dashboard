@@ -44,7 +44,7 @@ export const EditMemberModal = ({
           event.preventDefault()
           handleSubmit()
         }}
-        className="p-6 space-y-6"
+        className="space-y-6"
       >
         <div className="bg-white/[0.06] border border-white/15 rounded-lg p-4">
           <div className="flex items-center space-x-3">

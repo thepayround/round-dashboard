@@ -47,7 +47,7 @@ export const InviteMemberModal = ({
           event.preventDefault()
           handleSubmit()
         }}
-        className="p-6 space-y-6"
+        className="space-y-6"
       >
         <Input
           id="invite-email"
