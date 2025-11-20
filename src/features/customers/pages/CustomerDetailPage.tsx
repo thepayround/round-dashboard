@@ -34,7 +34,7 @@ import { useCustomerDetailController, type CustomerDetailTab } from '../hooks/us
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import { EmptyState } from '@/shared/ui'
-import { Button, IconButton } from '@/shared/ui/Button'
+import { Button, IconButton, PlainButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 import { cn } from '@/shared/utils/cn'
 
@@ -165,7 +165,7 @@ const CustomerDetailPage: React.FC = () => {
 
     return (
       <span
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-normal tracking-tight rounded-lg border ${config.variant}`}
+        className={`inline-flex items-center gap-2 px-2 py-1 text-xs font-normal tracking-tight rounded-md border ${config.variant}`}
       >
         <span className="text-xs">{config.icon}</span>
         {config.label}
@@ -181,7 +181,7 @@ const CustomerDetailPage: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           <Card padding="lg">
             <div className="flex items-start gap-4 mb-6">
-              <div className="p-3 bg-primary/20 rounded-xl border border-primary/30">
+              <div className="p-4 bg-primary/20 rounded-xl border border-primary/30">
                 {customer.isBusinessCustomer ? (
                   <Building2 className="w-5 h-5 text-primary" />
                 ) : (
@@ -291,7 +291,7 @@ const CustomerDetailPage: React.FC = () => {
 
           <Card padding="lg">
             <div className="flex items-start gap-4 mb-6">
-              <div className="p-3 bg-primary/20 rounded-xl border border-secondary/30">
+              <div className="p-4 bg-primary/20 rounded-xl border border-secondary/30">
                 <MapPin className="w-5 h-5 text-secondary" />
               </div>
               <div className="flex-1">
@@ -349,7 +349,7 @@ const CustomerDetailPage: React.FC = () => {
           {(customer.tags.length > 0 || Object.keys(customer.customFields).length > 0) && (
             <Card padding="lg">
               <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 bg-primary/20 rounded-xl border border-accent/30">
+                <div className="p-4 bg-primary/20 rounded-xl border border-accent/30">
                   <Tag className="w-5 h-5 text-accent" />
                 </div>
                 <div className="flex-1">
@@ -393,7 +393,7 @@ const CustomerDetailPage: React.FC = () => {
         <div className="space-y-6">
           <Card padding="lg">
             <div className="flex items-start gap-4 mb-6">
-              <div className="p-3 bg-primary/20 rounded-xl border border-emerald-500/30">
+              <div className="p-4 bg-primary/20 rounded-xl border border-emerald-500/30">
                 <Zap className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
@@ -411,7 +411,7 @@ const CustomerDetailPage: React.FC = () => {
 
           <Card padding="lg">
             <div className="flex items-start gap-4 mb-6">
-              <div className="p-3 bg-warning/20 rounded-xl border border-amber-500/30">
+              <div className="p-4 bg-warning/20 rounded-xl border border-amber-500/30">
                 <Activity className="w-5 h-5 text-amber-400" />
               </div>
               <div>
@@ -421,13 +421,13 @@ const CustomerDetailPage: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 border border-white/10 rounded-xl">
+              <div className="flex justify-between items-center p-4 border border-white/10 rounded-xl">
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-white/70" />
                   <span className="text-sm text-white">Portal Access</span>
                 </div>
                 <span
-                  className={`text-sm px-3 py-1 rounded-lg font-normal tracking-tight ${
+                  className={`text-sm px-2 py-1 rounded-md font-normal tracking-tight ${
                     customer.portalAccess
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                       : 'bg-red-500/20 text-primary border border-red-500/30'
@@ -436,13 +436,13 @@ const CustomerDetailPage: React.FC = () => {
                   {customer.portalAccess ? 'Enabled' : 'Disabled'}
                 </span>
               </div>
-              <div className="flex justify-between items-center p-3 border border-white/10 rounded-xl">
+              <div className="flex justify-between items-center p-4 border border-white/10 rounded-xl">
                 <div className="flex items-center gap-2">
                   <CreditCard className="w-4 h-4 text-white/70" />
                   <span className="text-sm text-white">Auto Collection</span>
                 </div>
                 <span
-                  className={`text-sm px-3 py-1 rounded-lg font-normal tracking-tight ${
+                  className={`text-sm px-2 py-1 rounded-md font-normal tracking-tight ${
                     customer.autoCollection
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                       : 'bg-red-500/20 text-primary border border-red-500/30'
@@ -452,7 +452,7 @@ const CustomerDetailPage: React.FC = () => {
                 </span>
               </div>
               {customer.lastActivityDate && (
-                <div className="flex justify-between items-center p-3 border border-white/10 rounded-xl">
+                <div className="flex justify-between items-center p-4 border border-white/10 rounded-xl">
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-white/70" />
                     <span className="text-sm text-white">Last Activity</span>
@@ -497,7 +497,7 @@ const CustomerDetailPage: React.FC = () => {
             </div>
           ) : (
             <div className="text-center py-10 border border-dashed border-white/10 rounded-xl">
-              <FileText className="w-10 h-10 text-white/30 mx-auto mb-4" />
+              <FileText className="w-10 h-10 text-white/60 mx-auto mb-4" />
               <p className="text-sm text-white/60">No notes yet. Click &quot;Manage Notes&quot; to add one.</p>
             </div>
           )}
@@ -509,7 +509,7 @@ const CustomerDetailPage: React.FC = () => {
   const renderInvoicesContent = () => (
     <Card padding="lg">
       <div className="flex items-start gap-4 mb-4">
-        <div className="p-3 bg-primary/20 rounded-xl border border-white/10">
+        <div className="p-4 bg-primary/20 rounded-xl border border-white/10">
           <CreditCard className="w-5 h-5 text-white" />
         </div>
         <div>
@@ -518,11 +518,11 @@ const CustomerDetailPage: React.FC = () => {
         </div>
       </div>
       <div className="text-center py-10 border border-dashed border-white/10 rounded-xl">
-        <CreditCard className="w-10 h-10 text-white/30 mx-auto mb-4" />
+        <CreditCard className="w-10 h-10 text-white/60 mx-auto mb-4" />
         <p className="text-sm text-white/60 mb-4">Invoices will appear here once billing is connected.</p>
         <Link
           to="/billing"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-lg text-sm text-white"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-md text-sm text-white"
         >
           Go to Billing
         </Link>
@@ -535,7 +535,7 @@ const CustomerDetailPage: React.FC = () => {
       <DashboardLayout>
         <div className="max-w-7xl mx-auto p-6">
           <div className="flex items-center gap-4 mb-6">
-            <Link to="/customers" className="p-2 text-gray-400 rounded-lg">
+            <Link to="/customers" className="p-2 text-gray-400 rounded-md">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
@@ -590,93 +590,98 @@ const CustomerDetailPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          className="border-b border-white/10 pb-6"
         >
-          <Card padding="lg" clickable={false}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6">
-                <IconButton
-                  icon={ArrowLeft}
-                  onClick={() => navigate('/customers')}
-                  variant="ghost"
-                  size="lg"
-                  className="p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl border border-white/10"
-                  aria-label="Back to customers"
-                />
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
-                    {customer.isBusinessCustomer ? <Building2 className="w-6 h-6 text-white" /> : <User className="w-6 h-6 text-white" />}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-4 mb-1">
-                      <h1 className="text-lg font-medium text-white">{customer.effectiveDisplayName ?? customer.displayName}</h1>
-                      {customer.isBusinessCustomer && (
-                        <span className="px-3 py-1 bg-secondary/20 text-secondary border border-secondary/30 rounded-lg text-sm font-medium">
-                          Business
-                        </span>
-                      )}
-                      {getStatusBadge(customer.status)}
-                    </div>
-                    <div className="flex items-center gap-4 text-white/70">
-                      <div className="flex items-center gap-2">
-                        <Mail className="w-4 h-4" />
-                        <span className="text-sm">{customer.email}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span className="text-sm">Member since {formatDate(customer.signupDate)}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <Button
-                  type="button"
-                  onClick={openEmailModal}
-                  variant="secondary"
-                  size="md"
-                  icon={Mail}
-                  iconPosition="left"
-                  className="bg-secondary/20 border-secondary/30 text-secondary"
-                >
-                  Send Email
-                </Button>
-                <Button type="button" onClick={openEditModal} variant="primary" size="md" icon={Edit} iconPosition="left">
-                  Edit Details
-                </Button>
-                <IconButton
-                  type="button"
-                  onClick={openDangerousActionsModal}
-                  icon={MoreHorizontal}
-                  variant="ghost"
-                  size="md"
-                  className="text-white/70 border border-white/10"
-                  title="Dangerous Actions"
-                  aria-label="Dangerous Actions"
-                />
-              </div>
+          <div className="flex items-center gap-4 mb-4">
+            <IconButton
+              icon={ArrowLeft}
+              onClick={() => navigate('/customers')}
+              variant="ghost"
+              size="sm"
+              className="text-white/60 hover:text-white"
+              aria-label="Back to customers"
+            />
+            <div className="flex items-center gap-4">
+              <h1 className="text-xl font-medium text-white">{customer.effectiveDisplayName ?? customer.displayName}</h1>
+              {getStatusBadge(customer.status)}
             </div>
-          </Card>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6 text-sm text-white/60">
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4" />
+                <span>{customer.email}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
+                <span>Joined {formatDate(customer.signupDate)}</span>
+              </div>
+              {customer.isBusinessCustomer && (
+                <div className="flex items-center gap-2">
+                  <Building2 className="w-4 h-4" />
+                  <span>Business</span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                onClick={openEmailModal}
+                variant="ghost"
+                size="md"
+                icon={Mail}
+                iconPosition="left"
+              >
+                Send Email
+              </Button>
+              <Button
+                type="button"
+                onClick={openEditModal}
+                variant="primary"
+                size="md"
+                icon={Edit}
+                iconPosition="left"
+              >
+                Edit
+              </Button>
+              <IconButton
+                type="button"
+                onClick={openDangerousActionsModal}
+                icon={MoreHorizontal}
+                variant="ghost"
+                size="md"
+                className="text-white/60 hover:text-white"
+                title="More actions"
+                aria-label="More actions"
+              />
+            </div>
+          </div>
         </motion.div>
 
-        <div className="flex gap-2 border-b border-white/10 pb-2 overflow-x-auto">
+        <div className="flex gap-6 border-b border-white/10">
           {DETAIL_TABS.map(tab => (
-            <Button
+            <PlainButton
               key={tab.id}
-              type="button"
               onClick={() => setCurrentTab(tab.id)}
-              size="sm"
-              variant={currentTab === tab.id ? 'primary' : 'ghost'}
               className={cn(
-                'rounded-lg px-4',
+                'pb-2 text-sm font-medium transition-colors relative',
                 currentTab === tab.id
-                  ? 'bg-white/15 text-white border border-white/20'
-                  : 'text-white/60 border border-transparent hover:text-white'
+                  ? 'text-white'
+                  : 'text-white/60 hover:text-white'
               )}
+              unstyled
             >
               {tab.label}
-            </Button>
+              {currentTab === tab.id && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                  transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+            </PlainButton>
           ))}
         </div>
 

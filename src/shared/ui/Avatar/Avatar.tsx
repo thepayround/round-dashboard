@@ -40,7 +40,7 @@ export const Avatar = ({
   name,
   src,
   size = 'md',
-  shape = 'rounded',
+  shape = 'circle',
   className,
 }: AvatarProps) => {
   if (src) {
