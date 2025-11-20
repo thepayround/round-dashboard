@@ -304,7 +304,7 @@ const CustomerDetailPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {customer.billingAddress && (
                   <Card variant="nested" padding="lg">
-                    <div className="flex items-center gap-4 mb-3">
+                    <div className="flex items-center gap-4 mb-4">
                       <CreditCard className="w-5 h-5 text-success" />
                       <h3 className="text-sm font-normal tracking-tight text-white">Billing Address</h3>
                     </div>
@@ -321,7 +321,7 @@ const CustomerDetailPage: React.FC = () => {
 
                 {customer.shippingAddress && (
                   <Card variant="nested" padding="lg">
-                    <div className="flex items-center gap-4 mb-3">
+                    <div className="flex items-center gap-4 mb-4">
                       <Truck className="w-5 h-5 text-accent" />
                       <h3 className="text-sm font-normal tracking-tight text-white">Shipping Address</h3>
                     </div>
@@ -497,7 +497,7 @@ const CustomerDetailPage: React.FC = () => {
             </div>
           ) : (
             <div className="text-center py-10 border border-dashed border-white/10 rounded-xl">
-              <FileText className="w-10 h-10 text-white/30 mx-auto mb-3" />
+              <FileText className="w-10 h-10 text-white/30 mx-auto mb-4" />
               <p className="text-sm text-white/60">No notes yet. Click &quot;Manage Notes&quot; to add one.</p>
             </div>
           )}
@@ -518,7 +518,7 @@ const CustomerDetailPage: React.FC = () => {
         </div>
       </div>
       <div className="text-center py-10 border border-dashed border-white/10 rounded-xl">
-        <CreditCard className="w-10 h-10 text-white/30 mx-auto mb-3" />
+        <CreditCard className="w-10 h-10 text-white/30 mx-auto mb-4" />
         <p className="text-sm text-white/60 mb-4">Invoices will appear here once billing is connected.</p>
         <Link
           to="/billing"

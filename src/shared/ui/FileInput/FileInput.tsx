@@ -296,7 +296,7 @@ export const FileInput: React.FC<FileInputProps> = ({
         ) : (
           <div className="p-4">
             {showPreview && preview && (
-              <div className={cn('mb-3 flex justify-center', previewClassName)}>
+              <div className={cn('mb-4 flex justify-center', previewClassName)}>
                 {renderPreview ? (
                   renderPreview(value as File | string)
                 ) : (
@@ -310,7 +310,7 @@ export const FileInput: React.FC<FileInputProps> = ({
             )}
 
             {!showPreview && (
-              <div className="flex items-center justify-center mb-3">
+              <div className="flex items-center justify-center mb-4">
                 <File className="w-8 h-8 text-gray-400" />
               </div>
             )}

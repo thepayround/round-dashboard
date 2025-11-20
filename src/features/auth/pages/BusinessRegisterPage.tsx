@@ -282,7 +282,7 @@ export const BusinessRegisterPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">Create Business Account</h1>
+            <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 relative">Create Business Account</h1>
             <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">Join Round for business</p>
           </motion.div>
         </div>

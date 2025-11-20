@@ -639,7 +639,7 @@ export const DashboardPage = () => {
                     variant="nested"
                     padding="lg"
                   >
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start justify-between mb-4">
                       <div>
                         <h3 className="font-medium text-white text-sm mb-2">{address.name}</h3>
                         <div className="flex items-center gap-2">

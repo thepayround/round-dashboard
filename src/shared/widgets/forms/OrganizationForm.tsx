@@ -99,7 +99,7 @@ export const OrganizationForm = ({
           transition={{ delay: showHeader ? 0.3 : 0.1 }}
           className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
         >
-          <div className="flex items-center gap-4 mb-5">
+          <div className="flex items-center gap-4 mb-6">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
               <Building className="w-4 h-4 text-secondary" />
             </div>
@@ -157,7 +157,7 @@ export const OrganizationForm = ({
           transition={{ delay: showHeader ? 0.4 : 0.2 }}
           className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
         >
-          <div className="flex items-center gap-4 mb-5">
+          <div className="flex items-center gap-4 mb-6">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
               <Building className="w-4 h-4 text-secondary" />
             </div>
@@ -242,7 +242,7 @@ export const OrganizationForm = ({
             transition={{ delay: showHeader ? 0.5 : 0.3 }}
             className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
           >
-            <div className="flex items-center gap-4 mb-5">
+            <div className="flex items-center gap-4 mb-6">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent/20 to-primary/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                 <span className="text-sm font-semibold text-accent">{currencySymbol}</span>
               </div>
@@ -319,7 +319,7 @@ export const OrganizationForm = ({
             transition={{ delay: showHeader ? 0.6 : 0.4 }}
             className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
           >
-            <div className="flex items-center gap-4 mb-5">
+            <div className="flex items-center gap-4 mb-6">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                 <span className="text-sm font-semibold text-primary">π</span>
               </div>

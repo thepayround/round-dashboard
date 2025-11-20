@@ -102,7 +102,7 @@ export const ResetPasswordPage = () => {
             >
               {!isSuccess ? (
                 <>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 relative">
                     Reset Password
                   </h1>
                   <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">
@@ -114,7 +114,7 @@ export const ResetPasswordPage = () => {
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary flex items-center justify-center">
                     <CheckCircle className="w-8 h-8 text-white" />
                   </div>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 relative">
                     Password Reset Successful
                   </h1>
                   <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">

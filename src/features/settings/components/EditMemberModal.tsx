@@ -72,7 +72,7 @@ export const EditMemberModal = ({
 
         <div>
           <div className="block text-sm font-normal tracking-tight text-gray-300 mb-2">Select New Role</div>
-          <div className="mb-3">
+          <div className="mb-4">
             <span className="text-xs text-gray-400 bg-white/[0.08] px-2 py-1 rounded-lg border border-white/15">
               Current: <span className="text-gray-300 font-medium">{member.roleName}</span>
             </span>

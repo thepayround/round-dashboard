@@ -20,7 +20,7 @@ export const SecuritySection: React.FC = () => (
             Settings
           </span>
         </h1>
-        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
           Manage security policies, authentication, and audit logs
         </p>
       </div>
@@ -39,7 +39,7 @@ export const SecuritySection: React.FC = () => (
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card variant="nested" padding="lg">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Key className="w-4 h-4 text-blue-400" />
                 <span className="text-xs font-normal tracking-tight text-white">Two-Factor Authentication</span>
@@ -49,7 +49,7 @@ export const SecuritySection: React.FC = () => (
                 <span className="text-xs text-gray-400">Disabled</span>
               </div>
             </div>
-            <p className="text-xs text-gray-400 mb-3">Require 2FA for all organization members</p>
+            <p className="text-xs text-gray-400 mb-4">Require 2FA for all organization members</p>
             <Button
               variant="primary"
               size="sm"
@@ -60,7 +60,7 @@ export const SecuritySection: React.FC = () => (
           </Card>
 
           <Card variant="nested" padding="lg">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-success" />
                 <span className="text-xs font-normal tracking-tight text-white">SSO Integration</span>
@@ -70,7 +70,7 @@ export const SecuritySection: React.FC = () => (
                 <span className="text-xs text-gray-400">Active</span>
               </div>
             </div>
-            <p className="text-xs text-gray-400 mb-3">Single Sign-On with Google Workspace</p>
+            <p className="text-xs text-gray-400 mb-4">Single Sign-On with Google Workspace</p>
             <Button
               variant="ghost"
               size="sm"

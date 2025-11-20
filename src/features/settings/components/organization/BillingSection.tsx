@@ -20,7 +20,7 @@ export const BillingSection: React.FC = () => (
             & Subscription
           </span>
         </h1>
-        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
           Manage your subscription, billing information, and usage
         </p>
       </div>

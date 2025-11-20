@@ -25,7 +25,7 @@ export const NotificationsSection: React.FC = () => {
             Settings
           </span>
         </h1>
-        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
           Configure organization-wide notification preferences
         </p>
       </div>
@@ -44,7 +44,7 @@ export const NotificationsSection: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-4">
               <Mail className="w-4 h-4 text-blue-400" />
               <span className="text-xs font-normal tracking-tight text-white">Email Notifications</span>
             </div>
@@ -58,7 +58,7 @@ export const NotificationsSection: React.FC = () => {
           </div>
 
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-4">
               <MessageSquare className="w-4 h-4 text-success" />
               <span className="text-xs font-normal tracking-tight text-white">Push Notifications</span>
             </div>
@@ -72,7 +72,7 @@ export const NotificationsSection: React.FC = () => {
           </div>
 
           <div className="p-4 bg-white/4 rounded-lg border border-white/8">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-4">
               <Smartphone className="w-4 h-4 text-purple-400" />
               <span className="text-xs font-normal tracking-tight text-white">SMS Notifications</span>
             </div>

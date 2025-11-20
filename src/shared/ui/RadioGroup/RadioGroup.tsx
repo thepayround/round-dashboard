@@ -77,7 +77,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
       {label && (
         <label 
           id={labelId}
-          className="block text-sm font-normal tracking-tight text-white/80 mb-3"
+          className="block text-sm font-normal tracking-tight text-white/80 mb-4"
         >
           {label}
           {required && <span className="text-primary ml-1" aria-label="required">*</span>}

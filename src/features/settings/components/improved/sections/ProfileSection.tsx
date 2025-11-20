@@ -63,7 +63,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
           </div>
           <div className="flex-1">
             <h2 className="text-sm font-normal tracking-tight text-white mb-1">User Information</h2>
-            <p className="text-xs text-gray-400 mb-3">
+            <p className="text-xs text-gray-400 mb-4">
               Your user details and contact information
             </p>
             

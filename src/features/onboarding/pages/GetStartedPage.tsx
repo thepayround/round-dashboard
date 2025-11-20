@@ -106,7 +106,7 @@ export const GetStartedPage = () => {
             <h1 className="text-lg font-medium text-white mb-4">
               Welcome to <span className="text-primary">Round</span>
             </h1>
-            <p className="text-gray-500 leading-snug mb-3">Let&apos;s set up your account in just a few steps</p>
+            <p className="text-gray-500 leading-snug mb-4">Let&apos;s set up your account in just a few steps</p>
           </motion.div>
 
           <div className="mb-12">

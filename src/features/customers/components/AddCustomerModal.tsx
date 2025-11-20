@@ -242,7 +242,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         <div className="space-y-4">
           <SectionHeader icon={Tag} title="Tags" iconColor="text-accent" />
           
-          <div className="flex flex-wrap gap-2 mb-3">
+          <div className="flex flex-wrap gap-2 mb-4">
             {(formData.tags ?? []).map((tag, index) => (
               <Badge
                 key={index}

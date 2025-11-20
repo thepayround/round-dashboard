@@ -39,7 +39,7 @@ export const WelcomePage = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="relative"
             >
-              <h1 className="text-lg font-medium text-white mb-3 relative">
+              <h1 className="text-lg font-medium text-white mb-4 relative">
                 Welcome to Round
               </h1>
               <p className="text-white/70 text-xs font-normal">

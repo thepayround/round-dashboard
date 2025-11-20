@@ -110,7 +110,7 @@ export const PersonalLoginPage = () => {
 
         <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
-          <div className="text-center mb-5 md:mb-6 lg:mb-5">
+          <div className="text-center mb-6">
             <div className="gradient-header" />
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -118,7 +118,7 @@ export const PersonalLoginPage = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="relative"
             >
-              <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 md:mb-3 lg:mb-2 relative">
+              <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 relative">
                 Personal Sign In
               </h1>
               <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">

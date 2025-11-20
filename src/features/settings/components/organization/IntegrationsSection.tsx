@@ -57,7 +57,7 @@ export const IntegrationsSection: React.FC = () => {
         <h1 className="text-lg font-medium text-white mb-4">
           Integrations <span className="text-primary">& API</span>
         </h1>
-        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
           Connect with third-party services and manage API access
         </p>
       </div>
@@ -102,7 +102,7 @@ export const IntegrationsSection: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredIntegrations.map(integration => (
           <Card key={integration.id} animate={false} padding="lg">
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
                 <span className="text-2xl">{integration.icon}</span>
                 <div>

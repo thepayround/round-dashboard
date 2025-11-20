@@ -75,7 +75,7 @@ export const CardFooter = ({
   return (
     <div className={`pt-4 border-t border-white/5 ${className}`}>
       {metadata.length > 0 && (
-        <div className="flex items-center space-x-4 text-xs text-gray-400 mb-3">
+        <div className="flex items-center space-x-4 text-xs text-gray-400 mb-4">
           {metadata.map((item, index) => {
             const Icon = item.icon
             return (

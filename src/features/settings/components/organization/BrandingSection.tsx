@@ -32,7 +32,7 @@ export const BrandingSection: React.FC = () => {
         <h1 className="text-lg font-medium text-white mb-4">
           Branding <span className="text-primary">& Appearance</span>
         </h1>
-        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
           Customize your organization&apos;s visual identity and theme
         </p>
       </div>

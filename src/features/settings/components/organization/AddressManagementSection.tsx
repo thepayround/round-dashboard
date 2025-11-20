@@ -77,7 +77,7 @@ export const AddressManagementSection: React.FC = () => {
         <h1 className="text-lg font-medium text-white mb-4">
           Billing <span className="text-primary">Address</span>
         </h1>
-        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-3">
+        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
           Manage your organization&apos;s billing address for invoicing and tax purposes
         </p>
       </div>
