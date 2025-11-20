@@ -193,7 +193,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ classNam
               disabled={disableSubmit}
               size="sm"
               actionType="general"
-              loading={isLoading}
+              isLoading={isLoading}
               className="px-6"
             />
           </div>

@@ -270,7 +270,7 @@ export const TeamManagementPage: React.FC = () => {
                   onSort={handleSort}
                   onEditMember={openEditModal}
                   onRemoveMember={openDeleteConfirm}
-                  loading={isLoading}
+                  isLoading={isLoading}
                 />
               )}
             </div>

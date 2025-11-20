@@ -226,7 +226,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
               variant="primary"
               size="sm"
               disabled={isSaving || !hasChanges}
-              loading={isSaving}
+              isLoading={isSaving}
               actionType="general"
               className="h-8 md:h-9 px-4 text-xs"
             />

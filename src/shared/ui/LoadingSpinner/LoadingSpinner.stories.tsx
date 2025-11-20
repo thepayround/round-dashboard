@@ -135,7 +135,7 @@ export const OverlayExample: Story = {
     size: 'md',
   },
   render: () => (
-    <LoadingOverlay loading={true} label="Loading content...">
+    <LoadingOverlay isLoading={true} label="Loading content...">
       <div className="w-96 h-64 bg-gray-800 rounded-lg p-6">
         <h3 className="text-white text-xl mb-4">Content Area</h3>
         <p className="text-white/60">
@@ -161,7 +161,7 @@ export const OverlayInteractive: Story = {
         >
           {loading ? 'Hide' : 'Show'} Loading Overlay
         </button>
-        <LoadingOverlay loading={loading} label="Loading...">
+        <LoadingOverlay isLoading={loading} label="Loading...">
           <div className="w-96 h-64 bg-gray-800 rounded-lg p-6">
             <h3 className="text-white text-xl mb-4">Interactive Example</h3>
             <p className="text-white/60">

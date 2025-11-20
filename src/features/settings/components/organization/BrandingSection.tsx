@@ -88,7 +88,7 @@ export const BrandingSection: React.FC = () => {
           <Button
             onClick={handleSaveBranding}
             disabled={disableSave}
-            loading={isSaving}
+            isLoading={isSaving}
             icon={Palette}
             iconPosition="left"
             variant="primary"

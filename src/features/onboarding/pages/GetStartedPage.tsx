@@ -162,7 +162,7 @@ export const GetStartedPage = () => {
               disabled={!isStepValid(currentStep) || isCompleting}
               variant={isLastStep() ? 'success' : 'primary'}
               icon={isLastStep() ? CheckCircle : ArrowRight}
-              loading={isCompleting}
+              isLoading={isCompleting}
               animated={false}
               actionType="navigation"
               size="sm"

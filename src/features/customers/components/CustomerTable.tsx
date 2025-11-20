@@ -33,7 +33,7 @@ interface CustomerTableProps {
   customers: CustomerResponse[]
   sortConfig: SortConfig
   onSort: (field: string) => void
-  loading?: boolean
+  isLoading?: boolean
   selectable?: boolean
   onSelectionChange?: (selectedIds: string[]) => void
   selectedIds?: string[]
@@ -43,7 +43,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   customers,
   sortConfig,
   onSort,
-  loading = false,
+  isLoading = false,
   selectable = false,
   onSelectionChange,
   selectedIds = []
@@ -288,7 +288,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
         </div>
       )}
       {/* Loading overlay */}
-      {loading && (
+      { isLoading && (
         <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
           <div className="text-white/60">Loading...</div>
         </div>

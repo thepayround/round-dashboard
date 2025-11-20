@@ -55,7 +55,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
           <Button
             onClick={handleSave}
             disabled={!isDirty || isSaving}
-            loading={isSaving}
+            isLoading={isSaving}
             icon={Save}
             iconPosition="left"
             variant="primary"

@@ -205,7 +205,7 @@ export const ResetPasswordPage = () => {
                   label={isSubmitting ? 'Resetting Password...' : 'Reset Password'}
                   disabled={disableSubmit}
                   icon={ArrowRight}
-                  loading={isSubmitting}
+                  isLoading={isSubmitting}
                   size="md"
                   animated={false}
                   actionType="auth"

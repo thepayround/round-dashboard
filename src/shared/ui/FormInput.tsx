@@ -28,14 +28,14 @@
  * />
  *
  * @example
- * // With loading state
+ * // With isLoading state
  * <FormInput
  *   label="Company Name"
  *   leftIcon={Building}
  *   value={company}
  *   onChange={(e) => setCompany(e.target.value)}
- *   loading={isFetching}
- *   loadingText="Loading..."
+ *   isLoading={isFetching}
+ *   isLoadingText="Loading..."
  * />
  *
  * @accessibility
@@ -63,8 +63,8 @@ interface FormInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'si
   helpText?: string
   size?: 'sm' | 'md' | 'lg'
   containerClassName?: string
-  loading?: boolean
-  loadingText?: string
+  isLoading?: boolean
+  isLoadingText?: string
   passwordToggle?: boolean
 }
 
@@ -91,14 +91,14 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       required,
       name,
       autoComplete,
-      loading = false,
-      loadingText,
+      isLoading = false,
+      isLoadingText,
       passwordToggle,
       ...restProps
     },
     ref
   ) => {
-    const isDisabled = disabled || loading
+    const isDisabled = disabled || isLoading
     const normalizedOnFocus = onFocus as FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
     const normalizedOnBlur = onBlur as FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined
     const shouldEnablePasswordToggle = (passwordToggle ?? type === 'password') && !RightIcon
@@ -201,11 +201,11 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         )}
 
         <div className="relative">
-          {loading && (
+          { isLoading && (
             <Loader2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary animate-spin z-10" />
           )}
 
-          {!loading && LeftIcon && (
+          {!isLoading && LeftIcon && (
             <LeftIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary z-10" />
           )}
 
@@ -213,7 +213,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             ref={ref}
             id={inputId}
             type={resolvedType}
-            placeholder={loading && loadingText ? loadingText : placeholder}
+            placeholder={ isLoading && isLoadingText ? isLoadingText : placeholder}
             value={value}
             onChange={onChange}
             onBlur={handleBlur}
@@ -227,13 +227,13 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             className={inputClasses}
             aria-invalid={hasError}
             aria-describedby={cn(errorId, helpTextId)}
-            aria-busy={loading}
+            aria-busy={isLoading}
             {...restProps}
           />
 
-          {loading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon animate-spin z-10" />}
+          { isLoading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon animate-spin z-10" />}
 
-          {!loading && RightIcon && (
+          {!isLoading && RightIcon && (
             <RightIcon
               className={cn(
                 'absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon z-10',
@@ -245,7 +245,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             />
           )}
 
-          {!loading && shouldShowPasswordToggle && (
+          {!isLoading && shouldShowPasswordToggle && (
             <PlainButton
               type="button"
               onClick={handleRightIconClick}

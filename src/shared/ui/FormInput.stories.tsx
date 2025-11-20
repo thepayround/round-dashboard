@@ -26,7 +26,7 @@ const meta: Meta<typeof FormInput> = {
       control: 'text',
       description: 'Help text below input',
     },
-    loading: {
+    isLoading: {
       control: 'boolean',
       description: 'Loading state',
     },
@@ -108,8 +108,8 @@ export const Loading: Story = {
     label: 'Email',
     leftIcon: Mail,
     type: 'email',
-    loading: true,
-    loadingText: 'Checking availability...',
+    isLoading: true,
+    isLoadingText: 'Checking availability...',
   },
 }
 

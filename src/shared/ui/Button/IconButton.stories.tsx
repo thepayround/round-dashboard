@@ -22,9 +22,9 @@ const meta: Meta<typeof IconButton> = {
       options: ['sm', 'md', 'lg'],
       description: 'Button size',
     },
-    loading: {
+    isLoading: {
       control: 'boolean',
-      description: 'Shows loading spinner',
+      description: 'Shows isLoading spinner',
     },
     disabled: {
       control: 'boolean',
@@ -95,7 +95,7 @@ export const Loading: Story = {
   args: {
     icon: Settings,
     'aria-label': 'Settings',
-    loading: true,
+    isLoading: true,
   },
 }
 
@@ -160,7 +160,7 @@ export const AllVariants: Story = {
         <h3 className="text-sm font-normal text-white mb-2">States</h3>
         <div className="flex gap-2">
           <IconButton icon={Settings} aria-label="Settings" />
-          <IconButton icon={Settings} aria-label="Loading" loading />
+          <IconButton icon={Settings} aria-label="Loading" isLoading />
           <IconButton icon={Settings} aria-label="Disabled" disabled />
         </div>
       </div>

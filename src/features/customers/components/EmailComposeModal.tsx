@@ -155,7 +155,7 @@ export const EmailComposeModal = ({
               variant="primary"
               icon={Send}
               iconPosition="left"
-              loading={isSending}
+              isLoading={isSending}
             >
               Send Email
             </Button>

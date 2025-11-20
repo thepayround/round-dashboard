@@ -397,7 +397,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   size="md"
                   icon={Save}
                   iconPosition="left"
-                  loading={isSaving}
+                  isLoading={isSaving}
                 >
                   {isSaving ? 'Saving...' : 'Save Changes'}
                 </Button>

@@ -298,7 +298,7 @@ export const EmailConfirmationPage = () => {
                 size="md"
                 icon={isResending ? RefreshCw : Mail}
                 iconPosition="left"
-                loading={isResending}
+                isLoading={isResending}
               >
                 {isResending ? 'Sending...' : 'Get Help'}
               </Button>

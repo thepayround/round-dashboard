@@ -35,7 +35,7 @@ interface UiDropdownProps {
   allowSearch?: boolean
   className?: string
   icon?: React.ReactNode
-  loading?: boolean
+  isLoading?: boolean
   label?: string
   id?: string
   name?: string
@@ -57,7 +57,7 @@ export const UiDropdown = ({
   allowSearch = true,
   className = '',
   icon,
-  loading = false,
+  isLoading = false,
   label,
   id,
   name,
@@ -89,7 +89,7 @@ export const UiDropdown = ({
     onClear,
     allowClear,
     disabled,
-    loading,
+    isLoading,
     allowSearch,
     id,
   })
@@ -160,7 +160,7 @@ export const UiDropdown = ({
                 tabIndex={-1}
                 onKeyDown={handleListKeyDown}
               >
-                {loading ? (
+                { isLoading ? (
                   <div className="p-6 flex flex-col items-center text-center space-y-3 text-xs">
                     <div className="w-6 h-6 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
                     <p className="text-white/60">Loading options...</p>
@@ -242,7 +242,7 @@ export const UiDropdown = ({
         aria-label={label || placeholder}
         aria-disabled={disabled}
         aria-invalid={error}
-        aria-busy={loading}
+        aria-busy={isLoading}
         tabIndex={disabled ? -1 : 0}
       >
         <div className="flex-1 text-left truncate flex items-center gap-2 min-w-0">
@@ -252,7 +252,7 @@ export const UiDropdown = ({
             </span>
           )}
           {(() => {
-            if (loading && value && !selectedOption) {
+            if (isLoading && value && !selectedOption) {
               return (
                 <span className="text-white/60 font-normal leading-none truncate">
                   Loading {value}...
@@ -275,9 +275,9 @@ export const UiDropdown = ({
         </div>
 
         <div className="flex items-center space-x-1.5">
-          {loading && <div className="w-4 h-4 border border-secondary/30 border-t-secondary rounded-full animate-spin" />}
+          { isLoading && <div className="w-4 h-4 border border-secondary/30 border-t-secondary rounded-full animate-spin" />}
 
-          {allowClear && selectedOption && !loading && (
+          {allowClear && selectedOption && !isLoading && (
             <IconButton
               onClick={(event) => {
                 event.stopPropagation()

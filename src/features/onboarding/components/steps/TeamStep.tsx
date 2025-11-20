@@ -86,7 +86,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                 size="md"
                 icon={isLoading ? Loader2 : UserPlus}
                 iconPosition="left"
-                loading={isLoading}
+                isLoading={isLoading}
                 className="shrink-0"
               >
                 {isLoading ? 'Sending...' : 'Invite'}

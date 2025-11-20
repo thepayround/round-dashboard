@@ -117,7 +117,7 @@ export const BusinessLoginPage = () => {
               label={isLoading ? 'Signing In...' : 'Sign In'}
               disabled={!isFormValid || isLoading}
               icon={ArrowRight}
-              loading={isLoading}
+              isLoading={isLoading}
               size="md"
               animated={false}
               actionType="auth"

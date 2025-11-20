@@ -114,7 +114,7 @@ export const EditMemberModal = ({
           <ActionButton
             label="Update Role"
             onClick={handleSubmit}
-            loading={isLoading}
+            isLoading={isLoading}
             disabled={isLoading || !canSubmit}
             icon={Edit}
             actionType="general"

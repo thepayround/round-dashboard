@@ -139,7 +139,7 @@ export const ResendConfirmationPage = () => {
             label={isSubmitting ? 'Sending...' : 'Send Confirmation Email'}
             disabled={!isFormValid || isSubmitting}
             icon={ArrowRight}
-            loading={isSubmitting}
+            isLoading={isSubmitting}
             size="md"
             animated={false}
             actionType="auth"

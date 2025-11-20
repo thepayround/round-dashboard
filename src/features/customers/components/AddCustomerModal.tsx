@@ -409,7 +409,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           size="md"
           icon={Save}
           iconPosition="left"
-          loading={loading}
+          isLoading={loading}
         >
           {loading ? 'Creating...' : 'Create Customer'}
         </Button>

@@ -18,9 +18,9 @@ const meta: Meta<typeof Button> = {
       options: ['sm', 'md', 'lg', 'xl'],
       description: 'Button size',
     },
-    loading: {
+    isLoading: {
       control: 'boolean',
-      description: 'Shows loading spinner and disables button',
+      description: 'Shows isLoading spinner and disables button',
     },
     disabled: {
       control: 'boolean',
@@ -100,7 +100,7 @@ export const WithIconRight: Story = {
 export const Loading: Story = {
   args: {
     variant: 'primary',
-    loading: true,
+    isLoading: true,
     children: 'Loading...',
   },
 }
@@ -109,7 +109,7 @@ export const LoadingWithIcon: Story = {
   args: {
     variant: 'primary',
     icon: Save,
-    loading: true,
+    isLoading: true,
     children: 'Saving...',
   },
 }
@@ -198,7 +198,7 @@ export const AllVariants: Story = {
       <div className="space-y-2">
         <h3 className="text-sm font-normal text-white mb-2">States</h3>
         <div className="flex flex-wrap gap-2">
-          <Button variant="primary" loading>
+          <Button variant="primary" isLoading>
             Loading
           </Button>
           <Button variant="primary" disabled>

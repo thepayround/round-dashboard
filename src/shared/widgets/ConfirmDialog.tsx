@@ -112,7 +112,7 @@ export const ConfirmDialog = ({
             label={confirmLabel}
             onClick={onConfirm}
             variant={styles.buttonVariant}
-            loading={isLoading}
+            isLoading={isLoading}
             disabled={isLoading}
             actionType="general"
           />

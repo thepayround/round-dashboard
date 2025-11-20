@@ -7,15 +7,15 @@ import { Button } from '@/shared/ui/Button'
 interface SocialLoginButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string
   icon: LucideIcon
-  loading?: boolean
-  loadingLabel?: string
+  isLoading?: boolean
+  isLoadingLabel?: string
 }
 
 export const SocialLoginButton = ({
   label,
   icon,
-  loading = false,
-  loadingLabel,
+  isLoading = false,
+  isLoadingLabel,
   disabled,
   className = '',
   type = 'button',
@@ -28,15 +28,15 @@ export const SocialLoginButton = ({
       type={type}
       variant="ghost"
       size="md"
-      icon={loading ? undefined : Icon}
-      disabled={disabled || loading}
+      icon={ isLoading ? undefined : Icon}
+      disabled={disabled || isLoading}
       className={`w-full h-9 bg-auth-bg text-white rounded-lg border border-auth-bg-hover hover:border-auth-bg-hover transition-colors duration-200 hover:bg-auth-bg/80 ${className}`}
       {...props}
     >
-      {loading ? (
+      { isLoading ? (
         <span className="inline-flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          {loadingLabel ?? label}
+          { isLoadingLabel ?? label}
         </span>
       ) : (
         label

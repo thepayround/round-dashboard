@@ -190,7 +190,7 @@ export const PersonalRegisterPage = () => {
             label={isSubmitting ? 'Creating Account...' : 'Create Personal Account'}
             disabled={!isFormReady}
             icon={ArrowRight}
-            loading={isSubmitting}
+            isLoading={isSubmitting}
             size="md"
             animated={false}
             actionType="auth"

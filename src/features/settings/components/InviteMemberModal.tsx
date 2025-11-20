@@ -92,7 +92,7 @@ export const InviteMemberModal = ({
           <ActionButton
             label="Send Invitation"
             onClick={handleSubmit}
-            loading={isLoading}
+            isLoading={isLoading}
             disabled={isLoading || isSubmitDisabled}
             icon={UserPlus}
             actionType="general"

@@ -450,7 +450,7 @@ const CustomersPage: React.FC = () => {
                   customers={displayedCustomers}
                   sortConfig={sortConfig}
                   onSort={handleSortChange}
-                  loading={loading || skeletonLoading}
+                  isLoading={loading || skeletonLoading}
                   selectable={selectionMode}
                   selectedIds={selectedCustomers}
                   onSelectionChange={setSelectedCustomers}

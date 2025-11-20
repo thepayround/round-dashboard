@@ -97,7 +97,7 @@ export const ApiDropdown = <T = unknown>({
     onClear,
     allowClear,
     disabled,
-    loading: isLoading,
+    isLoading: isLoading,
     allowSearch: true,
     id,
   })

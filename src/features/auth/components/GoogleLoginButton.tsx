@@ -22,8 +22,8 @@ export const GoogleLoginButton = ({ onSuccess, onError, accountType }: GoogleLog
     <SocialLoginButton
       label="Google"
       icon={GoogleIcon}
-      loading={isLoading}
-      loadingLabel="Signing in..."
+      isLoading={isLoading}
+      isLoadingLabel="Signing in..."
       disabled={!isGoogleLoaded}
       onClick={handleGoogleLogin}
     />

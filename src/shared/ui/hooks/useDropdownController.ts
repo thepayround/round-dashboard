@@ -16,7 +16,7 @@ interface UseDropdownControllerProps<Option extends DropdownOption> {
   onMultiSelectChange?: (values: string[]) => void
   allowClear?: boolean
   disabled?: boolean
-  loading?: boolean
+  isLoading?: boolean
   allowSearch?: boolean
   multiSelect?: boolean
   id?: string
@@ -59,7 +59,7 @@ export const useDropdownController = <Option extends DropdownOption>({
   onMultiSelectChange,
   allowClear = false,
   disabled = false,
-  loading: _loading = false,
+  isLoading: _isLoading = false,
   allowSearch = true,
   multiSelect = false,
   id,

@@ -385,7 +385,7 @@ export const BusinessRegisterPage = () => {
                     (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
                   }
                   icon={multiStepForm.isLastStep ? CheckCircle : ArrowRight}
-                  loading={isSubmitting}
+                  isLoading={isSubmitting}
                   size="md"
                   animated={false}
                   actionType={multiStepForm.isLastStep ? "auth" : "navigation"}

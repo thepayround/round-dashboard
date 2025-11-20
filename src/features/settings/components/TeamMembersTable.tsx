@@ -32,7 +32,7 @@ interface TeamMembersTableProps {
   onSort: (field: string) => void
   onEditMember: (member: TeamMember) => void
   onRemoveMember: (member: TeamMember) => void
-  loading?: boolean
+  isLoading?: boolean
 }
 
 const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
@@ -41,7 +41,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
   onSort,
   onEditMember,
   onRemoveMember,
-  loading = false
+  isLoading = false
 }) => {
   const roleLabels: Record<UserRole, { label: string; variant: BadgeVariant }> = {
     SuperAdmin: { label: 'Super Admin', variant: 'success' },
@@ -142,7 +142,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
       </div>
 
       {/* Loading overlay */}
-      {loading && (
+      { isLoading && (
         <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
           <div className="text-white/60">Loading...</div>
         </div>

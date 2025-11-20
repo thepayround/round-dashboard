@@ -4,7 +4,7 @@ import { cn } from '@/shared/utils/cn'
 
 
 export interface LoadingOverlayProps {
-  loading: boolean
+  isLoading: boolean
   children: React.ReactNode
   spinnerSize?: SpinnerSize
   label?: string
@@ -12,7 +12,7 @@ export interface LoadingOverlayProps {
 }
 
 export const LoadingOverlay = ({
-  loading,
+  isLoading,
   children,
   spinnerSize = 'md',
   label = 'Loading...',
@@ -21,7 +21,7 @@ export const LoadingOverlay = ({
   return (
     <div className={cn('relative', className)}>
       {children}
-      {loading && (
+      {isLoading && (
         <div className="absolute inset-0 bg-black/20 flex items-center justify-center backdrop-blur-sm z-10">
           <LoadingSpinner size={spinnerSize} color="white" label={label} />
         </div>

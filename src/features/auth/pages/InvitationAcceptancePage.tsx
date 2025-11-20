@@ -287,7 +287,7 @@ export const InvitationAcceptancePage = () => {
               label={isSubmitting ? 'Joining Organization...' : `Join ${invitation.organizationName}`}
               disabled={!isFormReady}
               icon={ArrowRight}
-              loading={isSubmitting}
+              isLoading={isSubmitting}
               size="md"
               animated={false}
               actionType="auth"

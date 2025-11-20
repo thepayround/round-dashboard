@@ -11,7 +11,7 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   /** Button size */
   size?: 'sm' | 'md' | 'lg'
   /** Loading state - shows spinner and disables button */
-  loading?: boolean
+  isLoading?: boolean
   /** Accessible label for screen readers */
   'aria-label': string
 }
@@ -40,7 +40,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       icon: Icon,
       variant = 'default',
       size = 'md',
-      loading = false,
+      isLoading = false,
       className = '',
       disabled,
       type = 'button',
@@ -48,7 +48,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     },
     ref
   ) => {
-    const isDisabled = disabled ?? loading
+    const isDisabled = disabled ?? isLoading
 
     return (
       <button
@@ -65,11 +65,11 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
           ${className}
         `}
         disabled={isDisabled}
-        aria-busy={loading}
+        aria-busy={ isLoading}
         {...props}
       >
-        {loading && <span className="sr-only" aria-live="polite">Loading...</span>}
-        {loading ? (
+        { isLoading && <span className="sr-only" aria-live="polite">Loading...</span>}
+        { isLoading ? (
           <Loader2 className={`${iconSizes[size]} animate-spin`} />
         ) : (
           <Icon className={iconSizes[size]} />

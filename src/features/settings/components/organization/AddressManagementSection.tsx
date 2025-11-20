@@ -142,7 +142,7 @@ export const AddressManagementSection: React.FC = () => {
             disabled={!isFormValid || isSaving}
             variant="primary"
             icon={CheckCircle}
-            loading={isSaving}
+            isLoading={isSaving}
             actionType="navigation"
             size="sm"
           />

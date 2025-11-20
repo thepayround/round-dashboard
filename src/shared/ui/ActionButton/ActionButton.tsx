@@ -23,7 +23,7 @@ interface ActionButtonProps {
   /** Whether to show motion animations */
   animated?: boolean
   /** Loading state */
-  loading?: boolean
+  isLoading?: boolean
   /** HTML button type attribute */
   type?: 'button' | 'submit' | 'reset'
 }
@@ -38,7 +38,7 @@ const ActionButton = ({
   disabled = false,
   className = '',
   animated: _animated = true,
-  loading = false,
+  isLoading = false,
   type = 'button'
 }: ActionButtonProps) => {
   // Set default icon based on action type if no icon provided
@@ -64,7 +64,7 @@ const ActionButton = ({
       iconPosition="right"
       size={size}
       variant={mappedVariant as 'primary' | 'secondary' | 'ghost'}
-      loading={loading}
+      isLoading={isLoading}
       disabled={disabled}
       className={className}
       type={type}

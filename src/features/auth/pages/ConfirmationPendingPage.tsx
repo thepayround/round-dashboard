@@ -196,7 +196,7 @@ export const ConfirmationPendingPage = () => {
                 size="md"
                 icon={isResending ? RefreshCw : Mail}
                 iconPosition="left"
-                loading={isResending}
+                isLoading={isResending}
                 className="mx-auto"
               >
                 {isResending ? 'Sending...' : 'Resend Email'}

@@ -150,7 +150,7 @@ export const DashboardPage = () => {
                 variant="secondary"
                 size="sm"
                 onClick={refreshMetrics}
-                loading={isRefreshing}
+                isLoading={isRefreshing}
               >
                 Refresh
               </Button>

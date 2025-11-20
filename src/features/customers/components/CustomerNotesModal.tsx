@@ -131,7 +131,7 @@ export const CustomerNotesModal = ({
                     variant="primary"
                     icon={Plus}
                     iconPosition="left"
-                    loading={isAdding}
+                    isLoading={isAdding}
                   >
                     {isAdding ? 'Adding...' : 'Add Note'}
                   </Button>
@@ -202,7 +202,7 @@ export const CustomerNotesModal = ({
                           variant="primary"
                           size="sm"
                           icon={Save}
-                          loading={isLoading}
+                          isLoading={isLoading}
                           disabled={isLoading}
                           onClick={() => handleSaveEdit(note.id)}
                         >

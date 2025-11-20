@@ -26,7 +26,7 @@ const meta: Meta<typeof UiDropdown> = {
       control: 'boolean',
       description: 'Error state',
     },
-    loading: {
+    isLoading: {
       control: 'boolean',
       description: 'Loading state',
     },
@@ -110,7 +110,7 @@ export const Loading: Story = {
   args: {
     options: [],
     placeholder: 'Loading...',
-    loading: true,
+    isLoading: true,
     onSelect: action('onSelect'),
   },
 }
@@ -191,7 +191,7 @@ export const AllStates: Story = {
       <UiDropdown
         label="Loading"
         options={[]}
-        loading
+        isLoading
         placeholder="Loading..."
         onSelect={() => {}}
       />

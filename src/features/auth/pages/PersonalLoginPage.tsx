@@ -185,7 +185,7 @@ export const PersonalLoginPage = () => {
               label={isSubmitting ? 'Signing In...' : 'Sign In'}
               disabled={!isFormValid || isSubmitting}
               icon={ArrowRight}
-              loading={isSubmitting}
+              isLoading={isSubmitting}
               size="md"
               animated={false}
               actionType="auth"

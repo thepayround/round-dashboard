@@ -155,7 +155,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
             label={isLoading ? 'Updating...' : 'Update Password'}
             onClick={() => handleSubmit()}
             disabled={disableSubmit}
-            loading={isLoading}
+            isLoading={isLoading}
             actionType="general"
           />
         </div>

@@ -13,7 +13,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   /** Icon position relative to text */
   iconPosition?: 'left' | 'right'
   /** Loading state - shows spinner and disables button */
-  loading?: boolean
+  isLoading?: boolean
   /** Makes button full width */
   fullWidth?: boolean
   /** Button content */
@@ -49,7 +49,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = 'md',
       icon: Icon,
       iconPosition = 'left',
-      loading = false,
+      isLoading = false,
       fullWidth = false,
       children,
       className = '',
@@ -59,7 +59,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const isDisabled = disabled ?? loading
+    const isDisabled = disabled ?? isLoading
 
     return (
       <button
@@ -77,21 +77,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           ${className}
         `}
         disabled={isDisabled}
-        aria-busy={loading}
+        aria-busy={isLoading}
         {...props}
       >
-        {loading && <span className="sr-only" aria-live="polite">Loading...</span>}
-        {loading && Icon && iconPosition === 'left' && (
+        {isLoading && <span className="sr-only" aria-live="polite">Loading...</span>}
+        {isLoading && Icon && iconPosition === 'left' && (
           <Loader2 className={`${iconSizes[size]} animate-spin`} />
         )}
-        {!loading && Icon && iconPosition === 'left' && (
+        {!isLoading && Icon && iconPosition === 'left' && (
           <Icon className={iconSizes[size]} />
         )}
         {children}
-        {loading && Icon && iconPosition === 'right' && (
+        {isLoading && Icon && iconPosition === 'right' && (
           <Loader2 className={`${iconSizes[size]} animate-spin`} />
         )}
-        {!loading && Icon && iconPosition === 'right' && (
+        {!isLoading && Icon && iconPosition === 'right' && (
           <Icon className={iconSizes[size]} />
         )}
       </button>

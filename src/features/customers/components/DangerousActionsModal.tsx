@@ -136,7 +136,7 @@ export const DangerousActionsModal = ({
               <Button
                 onClick={handleDeactivate}
                 variant="secondary"
-                loading={isDeactivating}
+                isLoading={isDeactivating}
                 disabled={isDeactivating}
                 icon={UserX}
                 iconPosition="left"
@@ -170,7 +170,7 @@ export const DangerousActionsModal = ({
               <Button
                 onClick={handleDelete}
                 variant="danger"
-                loading={isDeleting}
+                isLoading={isDeleting}
                 disabled={isDeleting || !canDelete}
                 icon={Trash2}
                 iconPosition="left"
