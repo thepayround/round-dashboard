@@ -44,7 +44,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
           className="w-16 h-16 mx-auto rounded-lg bg-secondary/20 border border-white/20 flex items-center justify-center"
         >
-          <Users className="w-8 h-8 text-[#32A1E4]" />
+          <Users className="w-8 h-8 text-secondary" />
         </motion.div>
 
         <div>
@@ -113,7 +113,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div className="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center">
-                        <Mail className="w-3 h-3 text-[#32A1E4]" />
+                        <Mail className="w-3 h-3 text-secondary" />
                       </div>
                       <div>
                         <p className="text-xs font-normal tracking-tight text-white">{invitation.email}</p>

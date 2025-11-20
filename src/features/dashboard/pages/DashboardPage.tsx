@@ -330,8 +330,8 @@ export const DashboardPage = () => {
             >
               <Card padding="lg">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-primary/20 rounded-xl border border-[#32A1E4]/30">
-                    <Building className="w-5 h-5 text-[#32A1E4]" />
+                  <div className="p-3 bg-primary/20 rounded-xl border border-secondary/30">
+                    <Building className="w-5 h-5 text-secondary" />
                   </div>
                   <div className="flex-1">
                     <h2 className="text-xl font-normal tracking-tight text-white mb-2">Account details</h2>
@@ -408,7 +408,7 @@ export const DashboardPage = () => {
 
                   <Card variant="nested" padding="md">
                     <div className="flex items-center gap-4">
-                      <Clock className="w-4 h-4 text-[#32A1E4]" />
+                      <Clock className="w-4 h-4 text-secondary" />
                       <div>
                         <div className="text-sm font-normal tracking-tight text-white">
                           {new Date(roundAccount.modifiedDate).toLocaleDateString('en-US', {
@@ -487,7 +487,7 @@ export const DashboardPage = () => {
                     {roundAccount.organization.industry && (
                       <Card variant="nested" padding="md">
                         <div className="flex items-center gap-4">
-                          <Building2 className="w-4 h-4 text-[#32A1E4]" />
+                          <Building2 className="w-4 h-4 text-secondary" />
                           <div>
                             <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.industry}</div>
                             <div className="text-xs text-white/60">Industry</div>
@@ -518,7 +518,7 @@ export const DashboardPage = () => {
 
                     <Card variant="nested" padding="md">
                       <div className="flex items-center gap-4">
-                        <MapPin className="w-4 h-4 text-[#32A1E4]" />
+                        <MapPin className="w-4 h-4 text-secondary" />
                         <div>
                           <div className="text-sm font-normal tracking-tight text-white">{roundAccount.organization.country}</div>
                           <div className="text-xs text-white/60">Country</div>
@@ -541,13 +541,13 @@ export const DashboardPage = () => {
                     {roundAccount.organization.website && (
                       <Card variant="nested" padding="md">
                         <div className="flex items-center gap-4">
-                          <ArrowUpRight className="w-4 h-4 text-[#32A1E4]" />
+                          <ArrowUpRight className="w-4 h-4 text-secondary" />
                           <div>
                             <a
                               href={roundAccount.organization.website}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-sm font-normal tracking-tight text-secondary hover:text-[#32A1E4] transition-colors"
+                              className="text-sm font-normal tracking-tight text-secondary hover:text-secondary transition-colors"
                             >
                               {roundAccount.organization.website}
                             </a>
@@ -675,8 +675,8 @@ export const DashboardPage = () => {
           >
             <Card padding="lg">
               <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 bg-primary/20 rounded-xl border border-[#32A1E4]/30">
-                  <Users className="w-5 h-5 text-[#32A1E4]" />
+                <div className="p-3 bg-primary/20 rounded-xl border border-secondary/30">
+                  <Users className="w-5 h-5 text-secondary" />
                 </div>
                 <div className="flex-1">
                   <h2 className="text-lg font-medium text-white mb-2">Account Users</h2>
@@ -699,7 +699,7 @@ export const DashboardPage = () => {
                         <p className="font-medium text-white text-sm mb-1">User ID</p>
                         <p className="text-xs text-gray-400 font-mono break-all">{accountUser.userId}</p>
                         {accountUser.role && (
-                          <span className="inline-block mt-2 text-xs px-2 py-1 rounded-lg bg-[#32A1E4]/20 text-[#32A1E4] border border-[#32A1E4]/30 font-medium">
+                          <span className="inline-block mt-2 text-xs px-2 py-1 rounded-lg bg-secondary/20 text-secondary border border-secondary/30 font-medium">
                             {accountUser.role}
                           </span>
                         )}

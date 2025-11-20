@@ -69,7 +69,7 @@ const getRoleBadgeColor = (role: string): string => {
     return 'bg-gray-400/20 text-gray-400 border-gray-400/30'
   }
 
-  return 'bg-[#32A1E4]/20 text-[#32A1E4] border-[#32A1E4]/30'
+  return 'bg-secondary/20 text-secondary border-secondary/30'
 }
 
 export const useTeamStepController = ({

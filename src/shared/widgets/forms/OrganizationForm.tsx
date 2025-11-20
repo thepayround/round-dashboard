@@ -77,9 +77,9 @@ export const OrganizationForm = ({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
           >
-            <Building className="w-8 h-8 text-[#32A1E4]" />
+            <Building className="w-8 h-8 text-secondary" />
           </motion.div>
 
           <div>
@@ -100,8 +100,8 @@ export const OrganizationForm = ({
           className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
         >
           <div className="flex items-center gap-4 mb-5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#32A1E4]/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-              <Building className="w-4 h-4 text-[#32A1E4]" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <Building className="w-4 h-4 text-secondary" />
             </div>
             <div>
               <h3 className="text-sm font-medium text-white">Company Identity</h3>
@@ -320,7 +320,7 @@ export const OrganizationForm = ({
             className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
           >
             <div className="flex items-center gap-4 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-[#32A1E4]/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                 <span className="text-sm font-semibold text-primary">π</span>
               </div>
               <div>

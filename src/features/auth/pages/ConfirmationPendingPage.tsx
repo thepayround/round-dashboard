@@ -117,7 +117,7 @@ export const ConfirmationPendingPage = () => {
             </p>
             {hasBusinessData && (
               <div className="mt-4 p-4 rounded-lg bg-primary/10 border border-accent/20">
-                <p className="text-sm text-[#32A1E4] font-medium">
+                <p className="text-sm text-secondary font-medium">
                   πΆ Your business information has been saved and will be set up automatically after
                   email confirmation.
                 </p>
