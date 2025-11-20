@@ -6,7 +6,7 @@
  * 
  * @example
  * // Basic table
- * <div className="border border-white/10 rounded-lg overflow-hidden">
+ * <div className="border border-white/10 rounded-md overflow-hidden">
  *   <div className="overflow-x-auto">
  *     <Table>
  *       <TableHeader>
@@ -59,7 +59,7 @@ export const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('bg-[#171719] border-b border-white/8', className)}
+    className={cn('bg-input border-b border-white/8', className)}
     {...props}
   />
 ))
@@ -86,7 +86,7 @@ export const TableRow = React.forwardRef<
     className={cn(
       'border-b border-white/8',
       // Only apply background and hover styles in tbody, not in thead
-      '[tbody_&]:bg-[#101011] [tbody_&]:hover:bg-[#171719] [tbody_&]:transition-colors',
+      '[tbody_&]:bg-elev-1 [tbody_&]:hover:bg-input [tbody_&]:transition-colors',
       className
     )}
     role="row"
@@ -101,7 +101,7 @@ export const TableHead = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <th
     ref={ref}
-    className={cn('px-4 py-2 text-left text-xs font-normal text-white/80 tracking-tight', className)}
+    className={cn('px-4 py-2.5 text-left text-xs font-normal text-white/80 tracking-tight', className)}
     role="columnheader"
     {...props}
   />
