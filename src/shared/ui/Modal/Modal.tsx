@@ -151,6 +151,8 @@ export const Modal = ({
       }}
       role="dialog"
       aria-modal="true"
+      aria-labelledby={title ? "modal-title" : undefined}
+      aria-describedby={subtitle ? "modal-description" : undefined}
     >
       <PlainButton
         className="fixed inset-0 w-full h-full bg-transparent border-none cursor-default"
@@ -180,12 +182,12 @@ export const Modal = ({
                     )}
                     <div>
                       {title && (
-                        <h2 className="text-xl font-medium tracking-tight text-white">
+                        <h2 id="modal-title" className="text-xl font-medium tracking-tight text-white">
                           {title}
                         </h2>
                       )}
                       {subtitle && (
-                        <p className="text-sm text-white/70">
+                        <p id="modal-description" className="text-sm text-white/70">
                           {subtitle}
                         </p>
                       )}
