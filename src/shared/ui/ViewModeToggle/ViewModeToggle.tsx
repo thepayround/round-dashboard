@@ -40,12 +40,12 @@ export const ViewModeToggle = ({
   const sizeClasses = {
     sm: 'p-1.5',
     md: 'p-2',
-    lg: 'p-3'
+    lg: 'p-4'
   }
 
   return (
-    <div 
-      className={`flex items-center space-x-2 bg-black/20 rounded-lg p-1 ${className}`}
+    <div
+      className={`flex items-center space-x-2 bg-black/20 rounded-md p-1 ${className}`}
       role="group"
       aria-label={ariaLabel}
     >
@@ -59,20 +59,20 @@ export const ViewModeToggle = ({
             disabled={disabled}
             aria-pressed={isActive}
             aria-label={option.label}
-            size="sm"
+            size="md"
             variant="ghost"
             className={`
               ${sizeClasses[size]} 
               rounded-md 
               transition-all 
               duration-200
-              flex 
-              items-center 
-              space-x-2 
-              focus-visible:outline-none 
-              focus-visible:ring-2 
-              focus-visible:ring-primary 
-              focus-visible:ring-offset-2 
+              flex
+              items-center
+              space-x-2
+              focus-visible:outline-none
+              focus-visible:ring-1
+              focus-visible:ring-primary
+              focus-visible:ring-offset-2
               focus-visible:ring-offset-[#0A0A0A]
               disabled:opacity-50 
               disabled:cursor-not-allowed
