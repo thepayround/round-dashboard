@@ -6,7 +6,7 @@
  * 
  * @example
  * // Basic table
- * <div className="border border-white/10 rounded-md overflow-hidden">
+ * <div className="border border-white/10 rounded-lg overflow-hidden">
  *   <div className="overflow-x-auto">
  *     <Table>
  *       <TableHeader>
@@ -59,7 +59,7 @@ export const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('bg-input border-b border-white/8', className)}
+    className={cn('bg-bg-raised border-b border-border', className)}
     {...props}
   />
 ))
@@ -71,7 +71,7 @@ export const TableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn('divide-y divide-white/8', className)}
+    className={cn('divide-y divide-border', className)}
     {...props}
   />
 ))
@@ -84,9 +84,9 @@ export const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b border-white/8',
+      'border-b border-border transition-colors',
       // Only apply background and hover styles in tbody, not in thead
-      '[tbody_&]:bg-elev-1 [tbody_&]:hover:bg-input [tbody_&]:transition-colors',
+      '[tbody_&]:hover:bg-bg-hover',
       className
     )}
     role="row"
@@ -101,7 +101,7 @@ export const TableHead = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <th
     ref={ref}
-    className={cn('px-4 py-2.5 text-left text-xs font-normal text-white/80 tracking-tight', className)}
+    className={cn('px-4 py-3 text-left text-xs font-medium text-fg-muted tracking-tight', className)}
     role="columnheader"
     {...props}
   />
@@ -114,7 +114,7 @@ export const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('px-4 py-2 text-sm text-white/80', className)}
+    className={cn('px-4 py-3 text-sm text-fg', className)}
     {...props}
   />
 ))
@@ -144,15 +144,15 @@ export const SortableTableHead: React.FC<SortableTableHeadProps> = ({
   const direction = sortConfig?.direction
 
   // Determine aria-sort value for accessibility
-  const ariaSort = isSorted 
-    ? direction === 'asc' 
+  const ariaSort = isSorted
+    ? direction === 'asc'
       ? 'ascending' as const
       : 'descending' as const
     : 'none' as const
 
   return (
-    <TableHead 
-      className={className} 
+    <TableHead
+      className={className}
       aria-sort={ariaSort}
       {...props}
     >

@@ -24,7 +24,7 @@ const variants = {
 
 const sizes = {
   sm: 'p-1 w-7 h-7',
-  md: 'p-2 w-9 h-9',
+  md: 'p-2 w-10 h-10',
   lg: 'p-2 w-10 h-10'
 }
 
@@ -56,7 +56,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         type={type}
         className={`
           inline-flex items-center justify-center
-          rounded-md
+          rounded-lg
           transition-all duration-200
           outline-none focus-visible:ring-1 focus-visible:ring-[#14bdea] focus-visible:ring-offset-1 focus-visible:ring-offset-black
           disabled:opacity-50 disabled:cursor-not-allowed
@@ -68,8 +68,8 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         aria-busy={isLoading}
         {...props}
       >
-        { isLoading && <span className="sr-only" aria-live="polite">Loading...</span>}
-        { isLoading ? (
+        {isLoading && <span className="sr-only" aria-live="polite">Loading...</span>}
+        {isLoading ? (
           <Loader2 className={`${iconSizes[size]} animate-spin`} />
         ) : (
           <Icon className={iconSizes[size]} />

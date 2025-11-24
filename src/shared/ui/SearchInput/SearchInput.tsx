@@ -1,7 +1,7 @@
-import { Search, X, Loader2 } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import React, { useId, useRef, useCallback } from 'react'
 
-import { Input } from '@/shared/ui'
+import { Input, LoadingSpinner } from '@/shared/ui'
 import { IconButton } from '@/shared/ui/Button'
 
 interface SearchInputProps {
@@ -66,7 +66,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 
   const handleClear = useCallback(() => {
     onClear?.()
-    
+
     // Auto-focus input after clearing
     if (autoFocusOnClear && inputRef.current) {
       setTimeout(() => {
@@ -87,20 +87,20 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         onChange={handleChange}
         disabled={disabled}
         leftIcon={Search}
-        className="pl-10 pr-16 md:pr-20 h-9 text-xs font-light"
+        className="pl-10 pr-16 md:pr-20 h-10 text-xs font-light"
         autoComplete="off"
         spellCheck="false"
         data-testid="search-input"
       />
-      
+
       {/* Search Actions */}
       <div className="absolute right-2 md:right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
         {isSearching && (
           <div className="flex items-center justify-center w-7 h-7 md:w-6 md:h-6">
-            <Loader2 className="w-4 h-4 text-secondary animate-spin" />
+            <LoadingSpinner size="sm" color="secondary" />
           </div>
         )}
-        
+
         {value && onClear && !isSearching && (
           <IconButton
             onClick={handleClear}
@@ -110,7 +110,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
             type="button"
             disabled={disabled}
             aria-label="Clear search"
-            className="w-9 h-9 border border-white/10 hover:border-white/20 focus:ring-2 focus:ring-secondary"
+            className="w-10 h-10 border border-white/10 hover:border-white/20 focus:ring-2 focus:ring-secondary"
           />
         )}
       </div>

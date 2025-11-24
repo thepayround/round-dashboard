@@ -5,8 +5,8 @@ import { Button } from '../../ui/Button'
 import { SearchInput } from '../../ui/SearchInput'
 import { ViewModeToggle } from '../../ui/ViewModeToggle'
 import type { ViewMode, ViewModeOption } from '../../ui/ViewModeToggle'
+import { Drawer } from '../Drawer'
 import { FilterChipsBar } from '../FilterChipsBar'
-import { FilterPanel } from '../FilterPanel'
 
 import { useSearchFilterToolbarController } from './useSearchFilterToolbarController'
 
@@ -174,13 +174,13 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
       </div>
 
       {/* Slide-out Filter Panel */}
-      <FilterPanel
+      <Drawer
         isOpen={showFilters}
         onClose={onToggleFilters}
         title="Filters"
       >
         {filterFields.map(renderFilterField)}
-        
+
         {/* Clear All Button inside panel */}
         {onClearFilters && hasActiveFilters && (
           <div className="mt-6 pt-6 border-t border-[#1e1f22]">
@@ -197,7 +197,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
             </Button>
           </div>
         )}
-      </FilterPanel>
+      </Drawer>
     </>
   )
 }

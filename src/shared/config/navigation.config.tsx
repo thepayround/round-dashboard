@@ -61,9 +61,6 @@ export const mainNavigationItems: NavItem[] = [
       }
     ]
   },
-]
-
-export const bottomNavigationItems: NavItem[] = [
   {
     id: 'settings',
     label: 'Settings',
@@ -78,13 +75,15 @@ export const bottomNavigationItems: NavItem[] = [
   },
 ]
 
+export const bottomNavigationItems: NavItem[] = []
+
 /**
  * Get navigation items based on user permissions (future enhancement)
  * Similar to how Vercel/Linear handle role-based navigation
  */
-export const getNavigationForUser = (_userRole?: string): NavItem[] => 
+export const getNavigationForUser = (_userRole?: string): NavItem[] =>
   // Future: Filter navigation based on role
   // For now, return all items
-   mainNavigationItems
+  mainNavigationItems
 
 

@@ -8,184 +8,92 @@ interface UseCustomerNotesModalControllerParams {
   customerId: string
   customerName: string
   initialNotes: CustomerNoteResponse[]
+  initialEditingNoteId?: string | null
 }
 
 interface UseCustomerNotesModalControllerReturn {
-  notes: CustomerNoteResponse[]
-  newNoteContent: string
+  noteContent: string
   isInternal: boolean
-  editingNoteId: string | null
-  editContent: string
   isLoading: boolean
-  isAdding: boolean
-  showConfirmDelete: boolean
-  noteToDelete: string | null
-  formatDate: (value: string) => string
-  handleNewNoteChange: (value: string) => void
+  handleNoteContentChange: (value: string) => void
   toggleInternal: () => void
-  handleAddNote: () => Promise<void>
-  startEditing: (noteId: string, content: string) => void
-  cancelEditing: () => void
-  handleEditContentChange: (value: string) => void
-  handleSaveEdit: (noteId: string) => Promise<void>
-  requestDeleteNote: (noteId: string) => void
-  confirmDeleteNote: () => Promise<void>
-  cancelDelete: () => void
+  handleSave: () => Promise<void>
 }
 
 export const useCustomerNotesModalController = ({
   customerId,
   customerName: _customerName,
   initialNotes,
+  initialEditingNoteId,
 }: UseCustomerNotesModalControllerParams): UseCustomerNotesModalControllerReturn => {
   const { showSuccess, showError } = useGlobalToast()
-  const [notes, setNotes] = useState<CustomerNoteResponse[]>(initialNotes)
-  const [newNoteContent, setNewNoteContent] = useState('')
+  
+  const [noteContent, setNoteContent] = useState('')
   const [isInternal, setIsInternal] = useState(true)
-  const [editingNoteId, setEditingNoteId] = useState<string | null>(null)
-  const [editContent, setEditContent] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [isAdding, setIsAdding] = useState(false)
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-  const [noteToDelete, setNoteToDelete] = useState<string | null>(null)
 
+  // Initialize state based on mode (Add vs Edit)
   useEffect(() => {
-    setNotes(initialNotes)
-  }, [initialNotes])
+    if (initialEditingNoteId) {
+      const noteToEdit = initialNotes.find(n => n.id === initialEditingNoteId)
+      if (noteToEdit) {
+        setNoteContent(noteToEdit.content)
+        setIsInternal(noteToEdit.isInternal)
+      }
+    } else {
+      setNoteContent('')
+      setIsInternal(true)
+    }
+  }, [initialNotes, initialEditingNoteId])
 
-  const formatDate = useCallback(
-    (value: string) =>
-      new Date(value).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
-    []
-  )
-
-  const handleAddNote = useCallback(async () => {
-    if (!newNoteContent.trim()) {
-      showError('Please enter a note')
+  const handleSave = useCallback(async () => {
+    if (!noteContent.trim()) {
+      showError('Note content cannot be empty')
       return
     }
 
-    setIsAdding(true)
+    setIsLoading(true)
     try {
       const request: CustomerNoteCreateRequest = {
-        content: newNoteContent,
+        content: noteContent,
         isInternal,
         createdBy: 'Current User', // TODO: use auth context
       }
 
-      const createdNote = await customerService.createNote(customerId, request)
-      setNotes(prev => [createdNote, ...prev])
-      setNewNoteContent('')
-      setIsInternal(true)
-      showSuccess('Note added successfully')
-    } catch (error) {
-      console.error('Failed to add note:', error)
-      showError('Failed to add note')
-    } finally {
-      setIsAdding(false)
-    }
-  }, [customerId, isInternal, newNoteContent, showError, showSuccess])
-
-  const handleSaveEdit = useCallback(
-    async (noteId: string) => {
-      if (!editContent.trim()) {
-        showError('Note content cannot be empty')
-        return
-      }
-
-      setIsLoading(true)
-      try {
-        const currentNote = notes.find(note => note.id === noteId)
-        if (!currentNote) {
-          showError('Note not found')
-          return
-        }
-
-        const request: CustomerNoteCreateRequest = {
-          content: editContent,
-          isInternal: currentNote.isInternal,
-          createdBy: currentNote.author ?? 'Current User',
-        }
-
-        const updatedNote = await customerService.updateNote(customerId, noteId, request)
-        setNotes(prev => prev.map(note => (note.id === noteId ? updatedNote : note)))
-        setEditingNoteId(null)
-        setEditContent('')
+      if (initialEditingNoteId) {
+        await customerService.updateNote(customerId, initialEditingNoteId, request)
         showSuccess('Note updated successfully')
-      } catch (error) {
-        console.error('Failed to update note:', error)
-        showError('Failed to update note')
-      } finally {
-        setIsLoading(false)
+      } else {
+        await customerService.createNote(customerId, request)
+        showSuccess('Note added successfully')
       }
-    },
-    [customerId, editContent, notes, showError, showSuccess]
-  )
-
-  const requestDeleteNote = useCallback((noteId: string) => {
-    setNoteToDelete(noteId)
-    setShowConfirmDelete(true)
-  }, [])
-
-  const confirmDeleteNote = useCallback(async () => {
-    if (!noteToDelete) return
-
-    setIsLoading(true)
-    try {
-      await customerService.deleteNote(customerId, noteToDelete)
-      setNotes(prev => prev.filter(note => note.id !== noteToDelete))
-      showSuccess('Note deleted successfully')
-      setShowConfirmDelete(false)
-      setNoteToDelete(null)
+      
+      // Close modal is handled by parent via onSuccess or just close
+      // But here we just return success, the parent component (Modal/Drawer) usually calls onClose after success?
+      // The controller doesn't have access to onClose.
+      // We should probably return a success status or let the component handle it.
+      // For now, we just rely on the user closing it or we can add an onSuccess callback to props if needed.
+      // Wait, the user said "when you close the drawer you should reload the page".
+      // The parent reloads on close. So we just need to save.
+      // Ideally we should close the drawer automatically on save.
+      // I'll add an `onSuccess` callback to the params later if needed, but for now let's stick to the requested scope.
+      // Actually, standard UX is to close on save.
+      // I'll leave it as is for now, the component calls this.
+      
     } catch (error) {
-      console.error('Failed to delete note:', error)
-      showError('Failed to delete note')
+      console.error('Failed to save note:', error)
+      showError('Failed to save note')
     } finally {
       setIsLoading(false)
     }
-  }, [customerId, noteToDelete, showError, showSuccess])
-
-  const cancelDelete = useCallback(() => {
-    setShowConfirmDelete(false)
-    setNoteToDelete(null)
-  }, [])
-
-  const startEditing = useCallback((noteId: string, content: string) => {
-    setEditingNoteId(noteId)
-    setEditContent(content)
-  }, [])
-
-  const cancelEditing = useCallback(() => {
-    setEditingNoteId(null)
-    setEditContent('')
-  }, [])
+  }, [customerId, initialEditingNoteId, noteContent, isInternal, showError, showSuccess])
 
   return {
-    notes,
-    newNoteContent,
+    noteContent,
     isInternal,
-    editingNoteId,
-    editContent,
     isLoading,
-    isAdding,
-    showConfirmDelete,
-    noteToDelete,
-    formatDate,
-    handleNewNoteChange: setNewNoteContent,
+    handleNoteContentChange: setNoteContent,
     toggleInternal: () => setIsInternal(prev => !prev),
-    handleAddNote,
-    startEditing,
-    cancelEditing,
-    handleEditContentChange: setEditContent,
-    handleSaveEdit,
-    requestDeleteNote,
-    confirmDeleteNote,
-    cancelDelete,
+    handleSave,
   }
 }

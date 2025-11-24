@@ -22,7 +22,7 @@ export interface CardProps {
   hover?: boolean
   clickable?: boolean
   onClick?: () => void
-  
+
   // Stats card specific props
   title?: string
   value?: string | number
@@ -32,18 +32,18 @@ export interface CardProps {
     direction: 'up' | 'down' | 'neutral'
     label?: string
   }
-  
+
   // Navigation card specific props
   description?: string
   href?: string
   external?: boolean
   navigationVariant?: 'default' | 'compact'
   enhancedHover?: boolean
-  
+
   // Animation props
   animate?: boolean
   delay?: number
-  
+
   // Nested variant - for inner cards
   nested?: boolean
 }
@@ -82,22 +82,22 @@ const colorVariants = {
     hoverColor: 'group-hover:text-success'
   },
   warning: {
-    iconBg: 'bg-[#FFC107]/10',
-    border: 'border-[#FFC107]/20',
-    iconColor: 'text-[#FFC107]',
-    hoverColor: 'group-hover:text-[#FFC107]'
+    iconBg: 'bg-warning/10',
+    border: 'border-warning/20',
+    iconColor: 'text-warning',
+    hoverColor: 'group-hover:text-warning'
   },
   danger: {
-    iconBg: 'bg-red-500/10',
-    border: 'border-red-500/20',
-    iconColor: 'text-red-500',
+    iconBg: 'bg-destructive/10',
+    border: 'border-destructive/20',
+    iconColor: 'text-destructive',
     hoverColor: 'group-hover:text-primary'
   },
   neutral: {
     iconBg: 'bg-transparent',
-    border: 'border-[#25262a]',
-    iconColor: 'text-[#a3a3a3]',
-    hoverColor: 'group-hover:text-white'
+    border: 'border-border',
+    iconColor: 'text-fg-muted',
+    hoverColor: 'group-hover:text-fg'
   }
 }
 
@@ -131,12 +131,12 @@ const CardComponent = ({
     onPress: onClick,
     isInteractiveElement: isNavigationLink,
   })
-  
+
   const getTrendColor = (direction: 'up' | 'down' | 'neutral') => {
     switch (direction) {
       case 'up': return 'text-success'
-      case 'down': return 'text-[#FFC107]'
-      default: return 'text-gray-400'
+      case 'down': return 'text-warning'
+      default: return 'text-fg-muted'
     }
   }
 
@@ -145,22 +145,22 @@ const CardComponent = ({
   // Polar-inspired clean design
   const baseClasses = (nested || variant === 'nested')
     ? cn(
-        'transition-all duration-200',
-        paddingClass,
-        isInteractive && 'cursor-pointer hover:border-[#2c2d31]',
-        isFocused && 'ring-1 ring-white/10',
-        isPressed && 'scale-[0.995]',
-        className
-      )
+      'transition-all duration-200',
+      paddingClass,
+      isInteractive && 'cursor-pointer hover:border-border-hover',
+      isFocused && 'ring-1 ring-ring/20',
+      isPressed && 'scale-[0.995]',
+      className
+    )
     : cn(
-        'bg-[#171719] border border-[#1e1f22] rounded-md relative overflow-hidden group',
-        'transition-all duration-200',
-        paddingClass,
-        isInteractive && 'cursor-pointer hover:border-[#25262a]',
-        isFocused && 'ring-1 ring-white/10',
-        isPressed && 'scale-[0.995]',
-        className
-      )
+      'bg-card border border-border rounded-xl relative overflow-hidden group shadow-sm',
+      'transition-all duration-200',
+      paddingClass,
+      isInteractive && 'cursor-pointer hover:border-border-hover hover:shadow-md hover:bg-card-hover',
+      isFocused && 'ring-1 ring-ring/20',
+      isPressed && 'scale-[0.995]',
+      className
+    )
 
   const CardContent = () => (
     <div className="relative">
@@ -260,7 +260,7 @@ const CardComponent = ({
           )}
         </div>
       )}
-      
+
       {variant === 'nested' && children}
 
       {variant === 'default' && children}

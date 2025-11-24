@@ -4,23 +4,23 @@ import React from 'react'
 import { cn } from '@/shared/utils/cn'
 
 const toggleContainerVariants = cva(
-  'inline-flex items-center rounded-full transition-all peer-focus:outline-none peer-focus:ring-4 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
+  'inline-flex items-center rounded-full transition-all peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-ring peer-focus:ring-offset-2 peer-focus:ring-offset-bg peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
   {
     variants: {
       size: {
-        sm: 'w-8 h-5',
+        sm: 'w-9 h-5',
         lg: 'w-11 h-6',
       },
       color: {
-        cyan: 'bg-white/20 peer-focus:ring-secondary/30 peer-checked:bg-secondary',
-        green: 'bg-white/20 peer-focus:ring-success/30 peer-checked:bg-success',
-        blue: 'bg-white/20 peer-focus:ring-secondary/30 peer-checked:bg-secondary',
-        primary: 'bg-gray-600 peer-focus:ring-primary/20 peer-checked:bg-primary',
+        cyan: 'bg-input peer-checked:bg-primary',
+        green: 'bg-input peer-checked:bg-success',
+        blue: 'bg-input peer-checked:bg-primary',
+        primary: 'bg-input peer-checked:bg-primary',
       },
     },
     defaultVariants: {
       size: 'lg',
-      color: 'cyan',
+      color: 'primary',
     },
   }
 )
@@ -95,9 +95,9 @@ export const Toggle = React.forwardRef<HTMLInputElement, ToggleProps>(
           {hasTextContent && (
             <div className="flex flex-col">
               {label && label.trim().length > 0 && (
-                <span className="text-sm text-white/85">{label}</span>
+                <span className="text-sm text-fg">{label}</span>
               )}
-              {description && <span className="text-xs text-white/60">{description}</span>}
+              {description && <span className="text-xs text-fg-muted">{description}</span>}
             </div>
           )}
           <div className="relative inline-flex items-center min-w-[44px] min-h-[44px] justify-center lg:min-w-0 lg:min-h-0">

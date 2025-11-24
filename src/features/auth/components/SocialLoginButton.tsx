@@ -28,15 +28,15 @@ export const SocialLoginButton = ({
       type={type}
       variant="ghost"
       size="md"
-      icon={ isLoading ? undefined : Icon}
+      icon={isLoading ? undefined : Icon}
       disabled={disabled || isLoading}
-      className={`w-full h-9 bg-auth-bg text-white rounded-md border border-white/10 hover:border-white/20 transition-colors duration-200 hover:bg-auth-bg/80 ${className}`}
+      className={`w-full h-10 bg-auth-bg text-white rounded-lg border border-white/10 hover:border-white/20 transition-colors duration-200 hover:bg-auth-bg/80 ${className}`}
       {...props}
     >
-      { isLoading ? (
+      {isLoading ? (
         <span className="inline-flex items-center gap-2">
           <LoadingSpinner size="sm" />
-          { isLoadingLabel ?? label}
+          {isLoadingLabel ?? label}
         </span>
       ) : (
         label

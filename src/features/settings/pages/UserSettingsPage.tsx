@@ -1,15 +1,14 @@
 ﻿import { motion } from 'framer-motion'
-import { 
-  User as UserIcon, 
-  Shield, 
-  Bell, 
-  CreditCard, 
-  Loader2, 
+import {
+  User as UserIcon,
+  Shield,
+  Bell,
+  CreditCard,
   AlertCircle
 } from 'lucide-react'
 import React, { useState } from 'react'
 
-import { 
+import {
   SettingsNavigation,
   ProfileSection,
   SecuritySection,
@@ -25,6 +24,7 @@ import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { UserSettingsUpdateRequest } from '@/shared/services/api/userSettings.service'
 import { Button } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
+import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
 
 interface UserSettingsPageProps {
   // Props can be added here if needed in the future
@@ -45,35 +45,35 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
     updateNotificationPreference,
     clearError,
   } = useUserSettingsManager()
-  
+
   // Handle phone formatting at the page level - single API call
   const _phoneFormatting = usePhoneFormatting(user?.phoneNumberFormatted ?? user?.phone)
-    
+
   // Preload all dropdown options once when page loads
   const { isLoading: isLoadingOptions } = usePreloadAllOptions()
 
   const settingsSections = [
-    { 
-      id: 'profile', 
-      label: 'Profile & Display', 
+    {
+      id: 'profile',
+      label: 'Profile & Display',
       icon: UserIcon,
       description: 'Personal information and display preferences'
     },
-    { 
-      id: 'security', 
-      label: 'Password', 
+    {
+      id: 'security',
+      label: 'Password',
       icon: Shield,
       description: 'Password management and security'
     },
-    { 
-      id: 'notifications', 
-      label: 'Notifications', 
+    {
+      id: 'notifications',
+      label: 'Notifications',
       icon: Bell,
       description: 'Communication and alert preferences'
     },
-    { 
-      id: 'billing', 
-      label: 'Billing & Payments', 
+    {
+      id: 'billing',
+      label: 'Billing & Payments',
       icon: CreditCard,
       description: 'Payment methods and billing information'
     },
@@ -89,11 +89,11 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
           className="flex items-center justify-center py-12"
         >
           <Card animate={false} padding="lg" className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
-            <h3 className="text-sm font-normal tracking-tight text-white mb-2">
+            <LoadingSpinner size="lg" color="primary" className="mx-auto mb-4" />
+            <h3 className="text-sm font-medium tracking-tight text-fg mb-2">
               {isLoadingOptions ? 'Loading Settings...' : 'Initializing...'}
             </h3>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-fg-muted">
               {isLoadingOptions ? 'Preparing your preferences' : 'Setting up your account'}
             </p>
           </Card>
@@ -110,11 +110,11 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
           className="flex items-center justify-center py-24"
         >
           <Card animate={false} padding="xl" className="text-center max-w-md">
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-full w-fit mx-auto mb-6">
-              <AlertCircle className="w-8 h-8 text-primary" />
+            <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-full w-fit mx-auto mb-6">
+              <AlertCircle className="w-8 h-8 text-destructive" />
             </div>
-            <h3 className="text-lg font-medium text-white mb-2">Settings Unavailable</h3>
-            <p className="text-gray-400 mb-6">{error}</p>
+            <h3 className="text-lg font-medium text-fg mb-2">Settings Unavailable</h3>
+            <p className="text-fg-muted mb-6">{error}</p>
             <Button
               onClick={clearError}
               variant="primary"
@@ -142,7 +142,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
     switch (activeSection) {
       case 'profile':
         return (
-          <ProfileSection 
+          <ProfileSection
             user={commonProps.user}
             settings={commonProps.settings}
             updateSettings={commonProps.updateSettings}
@@ -153,16 +153,16 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
         return <SecuritySection />
       case 'notifications':
         return (
-          <NotificationsSection 
-            notifications={notifications} 
-            updateNotificationPreference={updateNotificationPreference} 
+          <NotificationsSection
+            notifications={notifications}
+            updateNotificationPreference={updateNotificationPreference}
           />
         )
       case 'billing':
         return <BillingSection />
       default:
         return (
-          <ProfileSection 
+          <ProfileSection
             user={commonProps.user}
             settings={commonProps.settings}
             updateSettings={commonProps.updateSettings}

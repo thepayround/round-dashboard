@@ -47,11 +47,11 @@ export interface NavigationItemProps {
  * 
  * @component
  */
-export const NavigationItem = memo<NavigationItemProps>(({ 
-  item, 
-  isCollapsed, 
-  expandedItems, 
-  isParentActive, 
+export const NavigationItem = memo<NavigationItemProps>(({
+  item,
+  isCollapsed,
+  expandedItems,
+  isParentActive,
   isActive,
   toggleExpanded,
   handleTooltipEnter,
@@ -74,11 +74,11 @@ export const NavigationItem = memo<NavigationItemProps>(({
         onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={cn(
-          'group relative flex items-center rounded-md transition-all duration-200 h-9 w-full',
-          'outline-none focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
+          'group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full',
+          'outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
           isParentActive(item)
-            ? 'bg-primary/10 text-white border border-primary/20'
-            : 'text-white/60 hover:text-white',
+            ? 'bg-primary/10 text-primary border border-primary/20'
+            : 'text-fg-muted hover:text-fg hover:bg-bg-hover',
           isCollapsed ? 'justify-center px-0' : 'px-3',
           isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
         )}
@@ -88,23 +88,22 @@ export const NavigationItem = memo<NavigationItemProps>(({
         tabIndex={isKeyboardNavigating ? -1 : 0}
         unstyled
       >
-        <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-4'} flex-shrink-0`} />
+        <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
 
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-geist font-medium whitespace-nowrap text-base leading-5">{item.label}</span>
+            <span className="font-medium whitespace-nowrap text-sm">{item.label}</span>
             <div className="inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors duration-200">
               <ChevronDown
-                className={`w-4 h-4 transition-transform duration-200 ${
-                  expandedItems.includes(item.id) ? 'transform rotate-180' : ''
-                }`}
+                className={`w-4 h-4 transition-transform duration-200 ${expandedItems.includes(item.id) ? 'transform rotate-180' : ''
+                  }`}
               />
             </div>
           </div>
         )}
-        
+
         {!isCollapsed && item.badge && (
-          <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-primary text-white rounded-full">
+          <span className="ml-2 px-2 py-0.5 text-xs font-medium tracking-tight bg-primary text-primary-contrast rounded-full">
             {item.badge}
           </span>
         )}
@@ -115,11 +114,11 @@ export const NavigationItem = memo<NavigationItemProps>(({
         onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={cn(
-          'group relative flex items-center rounded-md transition-all duration-200 h-9',
-          'outline-none focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
+          'group relative flex items-center rounded-lg transition-all duration-200 h-10',
+          'outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
           isParentActive(item)
-            ? 'bg-primary/10 text-white border border-primary/20'
-            : 'text-white/60 hover:text-white',
+            ? 'bg-primary/10 text-primary border border-primary/20'
+            : 'text-fg-muted hover:text-fg hover:bg-bg-hover',
           isCollapsed ? 'justify-center px-0' : 'px-3',
           isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
         )}
@@ -128,14 +127,14 @@ export const NavigationItem = memo<NavigationItemProps>(({
       >
         <item.icon className={cn(
           'w-4 h-4 flex-shrink-0',
-          !isCollapsed && 'mr-4'
+          !isCollapsed && 'mr-3'
         )} />
 
         {!isCollapsed && (
           <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-geist font-medium whitespace-nowrap text-base leading-5">{item.label}</span>
+            <span className="font-medium whitespace-nowrap text-sm">{item.label}</span>
             {item.badge && (
-              <span className="ml-2 px-2 py-0.5 text-xs font-normal tracking-tight bg-primary text-white rounded-full">
+              <span className="ml-2 px-2 py-0.5 text-xs font-medium tracking-tight bg-primary text-primary-contrast rounded-full">
                 {item.badge}
               </span>
             )}
@@ -150,14 +149,13 @@ export const NavigationItem = memo<NavigationItemProps>(({
         <motion.div
           {...ANIMATION_VARIANTS.expandCollapse}
           transition={transitionConfigs.normal}
-          className={`mt-1 ${
-            isCollapsed 
-              ? 'flex flex-col items-center space-y-1 py-1' 
-              : 'ml-6 space-y-1 border-l-2 border-pink-500/20 py-2'
-          }`}
+          className={`mt-1 ${isCollapsed
+              ? 'flex flex-col items-center space-y-1 py-1'
+              : 'ml-6 space-y-1 border-l border-border py-2'
+            }`}
         >
           {isCollapsed && (
-            <div className="w-8 h-px bg-pink-500/20 mb-1" />
+            <div className="w-8 h-px bg-border mb-1" />
           )}
 
           {item.subItems.map((subItem, index) => (
@@ -167,35 +165,34 @@ export const NavigationItem = memo<NavigationItemProps>(({
               onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
               onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
               className={cn(
-                'group relative flex items-center rounded-md transition-all duration-200',
-                'outline-none focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070708]',
+                'group relative flex items-center rounded-lg transition-all duration-200',
+                'outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
                 isActive(subItem.href)
-                  ? 'bg-primary/10 text-white border border-primary/20'
-                  : 'text-white/60 hover:text-white',
+                  ? 'bg-primary/10 text-primary border border-primary/20'
+                  : 'text-fg-muted hover:text-fg hover:bg-bg-hover',
                 isCollapsed
                   ? 'justify-center w-8 h-8 px-0'
-                  : 'h-8 px-4 mx-2'
+                  : 'h-9 px-4 mx-2'
               )}
             >
-              <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${
-                isCollapsed
+              <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${isCollapsed
                   ? 'w-3.5 h-3.5'
-                  : 'w-3.5 h-3.5 mr-4'
-              }`} />
+                  : 'w-3.5 h-3.5 mr-3'
+                }`} />
 
               {!isCollapsed && (
-                <span className="font-geist font-medium text-base leading-5 text-white/60 group-hover:text-white transition-colors duration-200 whitespace-nowrap">{subItem.label}</span>
+                <span className="font-medium text-sm text-fg-muted group-hover:text-fg transition-colors duration-200 whitespace-nowrap">{subItem.label}</span>
               )}
 
               {/* Connection indicator for collapsed mode */}
               {isCollapsed && index !== (item.subItems?.length ?? 0) - 1 && (
-                <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-white/5" />
+                <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-border" />
               )}
             </Link>
           ))}
 
           {isCollapsed && (
-            <div className="w-6 h-px bg-pink-500/20 mt-1" />
+            <div className="w-6 h-px bg-border mt-1" />
           )}
         </motion.div>
       )}

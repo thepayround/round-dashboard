@@ -15,16 +15,22 @@ interface UseCustomerDetailControllerResult {
   setCurrentTab: (tab: CustomerDetailTab) => void
   isEmailModalOpen: boolean
   isNotesModalOpen: boolean
+  editingNoteId: string | null
   isEditModalOpen: boolean
   isDangerousActionsModalOpen: boolean
+  isDeleteNoteConfirmOpen: boolean
+  noteToDelete: string | null
   openEmailModal: () => void
   closeEmailModal: () => void
-  openNotesModal: () => void
+  openNotesModal: (noteId?: string) => void
   closeNotesModal: () => void
   openEditModal: () => void
   closeEditModal: () => void
   openDangerousActionsModal: () => void
   closeDangerousActionsModal: () => void
+  requestDeleteNote: (noteId: string) => void
+  confirmDeleteNote: () => Promise<void>
+  cancelDeleteNote: () => void
   handleRetry: () => void
   handleStatusChanged: (newStatus: string) => void
   handleCustomerUpdated: (updatedCustomer: CustomerResponse) => void
@@ -33,7 +39,7 @@ interface UseCustomerDetailControllerResult {
 
 export const useCustomerDetailController = (customerId?: string): UseCustomerDetailControllerResult => {
   const navigate = useNavigate()
-  const { showError } = useGlobalToast()
+  const { showError, showSuccess } = useGlobalToast()
 
   const [customer, setCustomer] = useState<CustomerResponse | null>(null)
   const [loading, setLoading] = useState(true)
@@ -41,10 +47,13 @@ export const useCustomerDetailController = (customerId?: string): UseCustomerDet
   const [currentTab, setCurrentTab] = useState<CustomerDetailTab>('overview')
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false)
   const [isNotesModalOpen, setIsNotesModalOpen] = useState(false)
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDangerousActionsModalOpen, setIsDangerousActionsModalOpen] = useState(false)
+  const [isDeleteNoteConfirmOpen, setIsDeleteNoteConfirmOpen] = useState(false)
+  const [noteToDelete, setNoteToDelete] = useState<string | null>(null)
 
-  const loadCustomer = useCallback(async () => {
+  const loadCustomer = useCallback(async (options?: { silent?: boolean }) => {
     if (!customerId) {
       setError('Customer ID is missing')
       setLoading(false)
@@ -52,7 +61,9 @@ export const useCustomerDetailController = (customerId?: string): UseCustomerDet
     }
 
     try {
-      setLoading(true)
+      if (!options?.silent) {
+        setLoading(true)
+      }
       setError(null)
       const data = await customerService.get(customerId)
       setCustomer(data)
@@ -61,7 +72,9 @@ export const useCustomerDetailController = (customerId?: string): UseCustomerDet
       setError(message)
       showError(message)
     } finally {
-      setLoading(false)
+      if (!options?.silent) {
+        setLoading(false)
+      }
     }
   }, [customerId, showError])
 
@@ -88,10 +101,19 @@ export const useCustomerDetailController = (customerId?: string): UseCustomerDet
   const openEmailModal = useCallback(() => setIsEmailModalOpen(true), [])
   const closeEmailModal = useCallback(() => setIsEmailModalOpen(false), [])
 
-  const openNotesModal = useCallback(() => setIsNotesModalOpen(true), [])
+  const openNotesModal = useCallback((noteId?: string) => {
+    if (noteId) {
+      setEditingNoteId(noteId)
+    } else {
+      setEditingNoteId(null)
+    }
+    setIsNotesModalOpen(true)
+  }, [])
+
   const closeNotesModal = useCallback(() => {
     setIsNotesModalOpen(false)
-    void loadCustomer()
+    setEditingNoteId(null)
+    void loadCustomer({ silent: true })
   }, [loadCustomer])
 
   const openEditModal = useCallback(() => setIsEditModalOpen(true), [])
@@ -106,6 +128,31 @@ export const useCustomerDetailController = (customerId?: string): UseCustomerDet
     void loadCustomer()
   }, [loadCustomer])
 
+  const requestDeleteNote = useCallback((noteId: string) => {
+    setNoteToDelete(noteId)
+    setIsDeleteNoteConfirmOpen(true)
+  }, [])
+
+  const confirmDeleteNote = useCallback(async () => {
+    if (!customerId || !noteToDelete) return
+
+    try {
+      await customerService.deleteNote(customerId, noteToDelete)
+      showSuccess('Note deleted successfully')
+      setIsDeleteNoteConfirmOpen(false)
+      setNoteToDelete(null)
+      void loadCustomer()
+    } catch (error) {
+      console.error('Failed to delete note:', error)
+      showError('Failed to delete note')
+    }
+  }, [customerId, noteToDelete, loadCustomer, showError, showSuccess])
+
+  const cancelDeleteNote = useCallback(() => {
+    setIsDeleteNoteConfirmOpen(false)
+    setNoteToDelete(null)
+  }, [])
+
   return {
     customer,
     loading,
@@ -114,8 +161,11 @@ export const useCustomerDetailController = (customerId?: string): UseCustomerDet
     setCurrentTab,
     isEmailModalOpen,
     isNotesModalOpen,
+    editingNoteId,
     isEditModalOpen,
     isDangerousActionsModalOpen,
+    isDeleteNoteConfirmOpen,
+    noteToDelete,
     openEmailModal,
     closeEmailModal,
     openNotesModal,
@@ -124,6 +174,9 @@ export const useCustomerDetailController = (customerId?: string): UseCustomerDet
     closeEditModal,
     openDangerousActionsModal,
     closeDangerousActionsModal,
+    requestDeleteNote,
+    confirmDeleteNote,
+    cancelDeleteNote,
     handleRetry,
     handleStatusChanged,
     handleCustomerUpdated,

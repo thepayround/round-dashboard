@@ -92,7 +92,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             placeholder="John"
             disabled
             leftIcon={UserIcon}
-            className="opacity-60 cursor-not-allowed h-7 md:h-9 text-xs"
+            className="opacity-60 cursor-not-allowed text-xs"
           />
           <FormInput
             label="Last Name"
@@ -102,7 +102,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             placeholder="Doe"
             disabled
             leftIcon={UserIcon}
-            className="opacity-60 cursor-not-allowed h-7 md:h-9 text-xs"
+            className="opacity-60 cursor-not-allowed text-xs"
           />
           <FormInput
             label="Email Address"
@@ -112,7 +112,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
             placeholder="john.doe@example.com"
             disabled
             leftIcon={Mail}
-            className="opacity-60 cursor-not-allowed h-7 md:h-9 text-xs"
+            className="opacity-60 cursor-not-allowed text-xs"
           />
           <div className="relative">
             <FormInput
@@ -123,7 +123,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
               placeholder="No phone number provided"
               disabled
               leftIcon={Phone}
-              className="opacity-60 cursor-not-allowed h-7 md:h-9 text-xs"
+              className="opacity-60 cursor-not-allowed text-xs"
             />
             {(user?.phoneNumberFormatted ?? user?.phone) && (
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 mt-3 z-10">
@@ -165,10 +165,10 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
                 config={timezoneDropdownConfig}
                 value={formData.timezone}
                 onSelect={(value: string) => handleInputChange('timezone', value)}
-                className="w-full h-7 md:h-9"
+                className="w-full h-10"
               />
             </div>
-            
+
             <div className="space-y-2">
               <label htmlFor="language-dropdown" className="flex items-center gap-1.5 text-sm font-normal text-white/90 tracking-tight">
                 <Languages className="w-3 h-3" />
@@ -178,10 +178,10 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
                 config={languageDropdownConfig}
                 value={formData.language}
                 onSelect={(value: string) => handleInputChange('language', value)}
-                className="w-full h-7 md:h-9"
+                className="w-full h-10"
               />
             </div>
-            
+
             <div className="space-y-2">
               <label htmlFor="date-format-dropdown" className="flex items-center gap-1.5 text-sm font-normal text-white/90 tracking-tight">
                 <Calendar className="w-3 h-3" />
@@ -191,10 +191,10 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
                 config={dateFormatDropdownConfig}
                 value={formData.dateFormat}
                 onSelect={(value: string) => handleInputChange('dateFormat', value)}
-                className="w-full h-7 md:h-9"
+                className="w-full h-10"
               />
             </div>
-            
+
             <div className="space-y-2">
               <label htmlFor="time-format-dropdown" className="flex items-center gap-1.5 text-sm font-normal text-white/90 tracking-tight">
                 <Clock className="w-3 h-3" />
@@ -204,7 +204,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
                 config={timeFormatDropdownConfig}
                 value={formData.timeFormat}
                 onSelect={(value: string) => handleInputChange('timeFormat', value)}
-                className="w-full h-7 md:h-9"
+                className="w-full h-10"
               />
             </div>
           </div>
@@ -228,7 +228,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
               disabled={isSaving || !hasChanges}
               isLoading={isSaving}
               actionType="general"
-              className="h-8 md:h-9 px-4 text-xs"
+              className="h-10 px-4 text-xs"
             />
           </div>
         </form>

@@ -75,12 +75,12 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   return (
     <div className={className}>
       {label && (
-        <label 
+        <label
           id={labelId}
-          className="block text-sm font-normal tracking-tight text-white/80 mb-4"
+          className="block text-sm font-normal tracking-tight text-fg-muted mb-4"
         >
           {label}
-          {required && <span className="text-primary ml-1" aria-label="required">*</span>}
+          {required && <span className="text-destructive ml-1" aria-label="required">*</span>}
         </label>
       )}
 
@@ -101,14 +101,16 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
           const isSelected = value === option.value
           const optionDescId = option.description ? `radio-desc-${option.value}` : undefined
 
+          const Icon = option.icon
+
           return (
             <div
               key={option.value}
               className={cn(
-                'flex items-center p-4 min-h-[44px] rounded-lg border transition-all duration-200 cursor-pointer',
+                'flex items-center p-4 min-h-[44px] rounded-xl border transition-all duration-200 cursor-pointer',
                 isSelected
-                  ? 'border-secondary bg-secondary/10'
-                  : 'border-white/10 hover:border-white/20',
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-border-hover hover:bg-bg-hover',
                 option.disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
               )}
               onClick={() => !option.disabled && onValueChange(option.value)}
@@ -119,10 +121,10 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
                 id={option.value}
                 disabled={option.disabled}
                 aria-describedby={optionDescId}
-                className="flex-shrink-0 h-5 w-5 rounded-full border border-white/40 bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-all"
+                className="flex-shrink-0 h-5 w-5 rounded-full border border-border bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg transition-all data-[state=checked]:border-primary data-[state=checked]:text-primary"
               >
                 <RadioGroupPrimitive.Indicator className="flex items-center justify-center w-full h-full">
-                  <span className="block w-3 h-3 rounded-full bg-secondary" />
+                  <span className="block w-2.5 h-2.5 rounded-full bg-current" />
                 </RadioGroupPrimitive.Indicator>
               </RadioGroupPrimitive.Item>
 
@@ -131,18 +133,21 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
                 className="ml-3 flex-1 cursor-pointer"
               >
                 <div className="flex items-center space-x-3">
-                  {option.icon && (
-                    <option.icon 
-                      className="h-5 w-5 text-secondary" 
+                  {Icon && (
+                    <Icon
+                      className={cn(
+                        "h-5 w-5 transition-colors",
+                        isSelected ? "text-primary" : "text-fg-muted"
+                      )}
                       aria-hidden="true"
                     />
                   )}
                   <div>
-                    <div className="text-white font-medium tracking-tight">{option.label}</div>
+                    <div className={cn("font-medium tracking-tight transition-colors", isSelected ? "text-fg" : "text-fg")}>{option.label}</div>
                     {option.description && (
-                      <div 
+                      <div
                         id={optionDescId}
-                        className="text-sm text-white/60 mt-0.5"
+                        className="text-sm text-fg-muted mt-0.5"
                       >
                         {option.description}
                       </div>
@@ -156,9 +161,9 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
       </RadioGroupPrimitive.Root>
 
       {error && (
-        <p 
+        <p
           id={errorId}
-          className="mt-2 text-sm text-primary"
+          className="mt-2 text-sm text-destructive"
           role="alert"
           aria-live="polite"
         >

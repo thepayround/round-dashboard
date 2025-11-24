@@ -8,6 +8,7 @@ import { usePhoneInputController } from './usePhoneInputController'
 
 import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 import { PlainButton } from '@/shared/ui/Button'
+import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
 import { cn } from '@/shared/utils/cn'
 
 interface PhoneInputProps {
@@ -169,7 +170,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         tabIndex={-1}
         aria-label="Close dropdown"
       />
-      
+
       {/* Dropdown content */}
       <div
         ref={dropdownRef}
@@ -239,9 +240,9 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     <div className={className}>
       {/* Label */}
       {label && (
-        <label 
+        <label
           id={labelId}
-          htmlFor={inputId} 
+          htmlFor={inputId}
           className="auth-label"
         >
           {label}
@@ -253,7 +254,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
       <div className={cn(
         "relative flex w-full rounded-lg overflow-hidden transition-all duration-300",
         // Match auth-input height exactly
-        "h-9",
+        "h-10",
         // Match auth-input background and border exactly
         "bg-[#171719] border transition-[border-color] duration-200",
         (() => {
@@ -311,7 +312,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         >
           {(() => {
             if (isLoading) {
-              return <div className="w-4 h-4 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
+              return <LoadingSpinner size="sm" color="secondary" />
             }
             if (selectedCountry) {
               return (
@@ -340,7 +341,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
               </span>
             )
           })()}
-          <ChevronDown 
+          <ChevronDown
             className={cn(
               'w-3 h-3 text-gray-400 transition-transform duration-200 flex-shrink-0 flex items-center',
               isDropdownOpen && 'rotate-180'
@@ -440,11 +441,11 @@ interface CountryOptionProps {
   onClick: () => void
 }
 
-const CountryOption: React.FC<CountryOptionProps> = ({ 
-  country, 
-  isSelected, 
-  isHighlighted, 
-  onClick 
+const CountryOption: React.FC<CountryOptionProps> = ({
+  country,
+  isSelected,
+  isHighlighted,
+  onClick
 }) => (
   <div
     onClick={onClick}
@@ -475,7 +476,7 @@ const CountryOption: React.FC<CountryOptionProps> = ({
         </div>
       </div>
     </div>
-    
+
     {isSelected && (
       <Check className={dropdownStyles.option.checkIcon} />
     )}

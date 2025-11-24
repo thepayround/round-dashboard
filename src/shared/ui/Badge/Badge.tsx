@@ -42,7 +42,7 @@ export const Badge = ({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-md font-normal tracking-tight border',
+        'inline-flex items-center gap-1.5 rounded-lg font-normal tracking-tight border',
         variantStyles[variant],
         sizeStyles[size],
         className

@@ -55,14 +55,14 @@ export const Select = ({
   }
 
   const sizeClass =
-    size === 'sm' ? 'h-8' : size === 'lg' ? 'h-11' : 'h-9'
+    size === 'sm' ? 'h-8' : size === 'lg' ? 'h-12' : 'h-10' // Standard 40px
 
   return (
     <div className={containerClassName}>
       {label && (
-        <label className="block text-sm font-normal text-white/80 mb-2">
+        <label className="block text-sm font-medium text-fg mb-1.5">
           {label}
-          {required && <span className="text-primary ml-1">*</span>}
+          {required && <span className="text-destructive ml-1">*</span>}
         </label>
       )}
 
@@ -83,7 +83,7 @@ export const Select = ({
         <motion.div
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center space-x-2 text-sm text-red-500 mt-2"
+          className="flex items-center space-x-2 text-sm text-destructive mt-2"
         >
           <AlertCircle className="w-4 h-4" />
           <span>{error}</span>
@@ -91,7 +91,7 @@ export const Select = ({
       )}
 
       {helperText && !error && (
-        <p className="text-sm text-white/60 mt-2">
+        <p className="text-sm text-fg-muted mt-2">
           {helperText}
         </p>
       )}

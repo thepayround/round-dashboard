@@ -36,20 +36,20 @@ export const Checkbox = React.forwardRef<
             checked={checked}
             onCheckedChange={onCheckedChange}
             className={cn(
-              'flex h-5 w-5 items-center justify-center rounded border transition-all',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+              'flex h-5 w-5 items-center justify-center rounded border transition-all duration-200',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
               'disabled:cursor-not-allowed disabled:opacity-50',
               checked
-                ? 'bg-primary border-primary'
-                : 'bg-transparent border-white/20 hover:border-white/40',
-              error ? 'border-red-500' : '',
+                ? 'bg-primary border-primary text-primary-contrast'
+                : 'bg-input border-border hover:border-border-hover hover:bg-bg-hover',
+              error ? 'border-destructive' : '',
               className
             )}
             {...props}
           >
-            <CheckboxPrimitive.Indicator className="text-white">
-              {checked === 'indeterminate' && <Minus className="h-3 w-3" />}
-              {checked === true && <Check className="h-3 w-3" />}
+            <CheckboxPrimitive.Indicator className="text-current">
+              {checked === 'indeterminate' && <Minus className="h-3.5 w-3.5" />}
+              {checked === true && <Check className="h-3.5 w-3.5" />}
             </CheckboxPrimitive.Indicator>
           </CheckboxPrimitive.Root>
         </div>
@@ -57,7 +57,7 @@ export const Checkbox = React.forwardRef<
         {label && (
           <label
             htmlFor={checkboxId}
-            className="ml-3 text-sm font-normal text-white cursor-pointer select-none min-h-[44px] lg:min-h-0 flex items-center"
+            className="ml-3 text-sm font-medium text-fg cursor-pointer select-none min-h-[44px] lg:min-h-0 flex items-center"
           >
             {label}
           </label>
@@ -65,11 +65,11 @@ export const Checkbox = React.forwardRef<
       </div>
 
       {helperText && !error && (
-        <p className="mt-2 text-sm text-white/60">{helperText}</p>
+        <p className="mt-2 text-sm text-fg-muted">{helperText}</p>
       )}
 
       {error && (
-        <p className="mt-2 text-sm text-primary">{error}</p>
+        <p className="mt-2 text-sm text-destructive">{error}</p>
       )}
     </div>
   )

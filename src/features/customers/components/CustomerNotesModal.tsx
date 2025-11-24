@@ -1,23 +1,9 @@
-import {
-  Plus,
-  MessageSquare,
-  User,
-  Calendar,
-  Edit3,
-  Trash2,
-  Save,
-  RotateCcw,
-} from 'lucide-react'
-
 import { useCustomerNotesModalController } from '../hooks/useCustomerNotesModalController'
 
 import type { CustomerNoteResponse } from '@/shared/services/api/customer.service'
-import { EmptyState, IconBox } from '@/shared/ui'
-import { Button, IconButton } from '@/shared/ui/Button'
-import { Modal } from '@/shared/ui/Modal'
+import { Button, PlainButton } from '@/shared/ui/Button'
 import { Textarea } from '@/shared/ui/Textarea'
-import { cn } from '@/shared/utils/cn'
-import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
+import { Drawer } from '@/shared/widgets/Drawer'
 
 
 interface CustomerNotesModalProps {
@@ -26,6 +12,7 @@ interface CustomerNotesModalProps {
   customerId: string
   customerName: string
   initialNotes: CustomerNoteResponse[]
+  initialEditingNoteId?: string | null
 }
 
 export const CustomerNotesModal = ({
@@ -34,203 +21,83 @@ export const CustomerNotesModal = ({
   customerId,
   customerName,
   initialNotes,
+  initialEditingNoteId,
 }: CustomerNotesModalProps) => {
   const {
-    notes,
-    newNoteContent,
+    noteContent,
     isInternal,
-    editingNoteId,
-    editContent,
     isLoading,
-    isAdding,
-    showConfirmDelete,
-    formatDate,
-    handleNewNoteChange,
+    handleNoteContentChange,
     toggleInternal,
-    handleAddNote,
-    startEditing,
-    cancelEditing,
-    handleEditContentChange,
-    handleSaveEdit,
-    requestDeleteNote,
-    confirmDeleteNote,
-    cancelDelete,
+    handleSave,
   } = useCustomerNotesModalController({
     customerId,
     customerName,
     initialNotes,
+    initialEditingNoteId,
   })
 
+  const isEditMode = !!initialEditingNoteId
+  const title = isEditMode ? 'Edit Note' : 'Add Note'
+
   return (
-    <>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        title="Customer Notes"
-        subtitle={`Notes for ${customerName}`}
-        icon={MessageSquare}
-        size="lg"
-      >
-        <div className="space-y-6">
-          <div className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
-            <div className="flex items-start space-x-3">
-              <IconBox icon={MessageSquare} color="primary" className="border border-primary/30 rounded-xl bg-primary/10" />
-              <div>
-                <h3 className="text-sm font-normal tracking-tight text-white mb-1">
-                  Add a new internal note
-                </h3>
-                <p className="text-xs text-white/60">Share context with your team. Customers cannot see internal notes.</p>
-              </div>
-            </div>
-
-            <div className="space-y-4">
+    <Drawer
+      isOpen={isOpen}
+      onClose={onClose}
+      title={title}
+      className="md:w-[550px] lg:w-[550px]"
+    >
+      <div className="flex flex-col h-full">
+        <div className="flex-1 space-y-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="note-content" className="text-sm font-medium text-white/80">
+                Note
+              </label>
               <Textarea
-                value={newNoteContent}
-                onChange={event => handleNewNoteChange(event.target.value)}
-                placeholder="Write an internal note..."
-                rows={3}
-                size="sm"
+                id="note-content"
+                value={noteContent}
+                onChange={event => handleNoteContentChange(event.target.value)}
+                placeholder="Write a note..."
+                rows={8}
+                className="resize-none bg-white/5 border-white/10 focus:border-primary/50 focus:ring-0 focus:bg-white/5 rounded-lg text-white placeholder:text-white/60"
               />
-
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-center space-x-2">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    onClick={toggleInternal}
-                    className={cn(
-                      'px-3 py-1 rounded-full text-xs font-medium border transition-all',
-                      isInternal
-                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                        : 'bg-white/5 border-white/10 text-white/60'
-                    )}
-                  >
-                    Internal Note
-                  </Button>
-                  <span className="text-xs text-white/60">Only your team can see internal notes</span>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    icon={RotateCcw}
-                    onClick={() => {
-                      handleNewNoteChange('')
-                      if (!isInternal) {
-                        toggleInternal()
-                      }
-                    }}
-                  >
-                    Reset
-                  </Button>
-                  <Button
-                    onClick={handleAddNote}
-                    disabled={isAdding}
-                    variant="primary"
-                    icon={Plus}
-                    iconPosition="left"
-                    isLoading={isAdding}
-                  >
-                    {isAdding ? 'Adding...' : 'Add Note'}
-                  </Button>
-                </div>
-              </div>
             </div>
-          </div>
 
-          <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
-            {notes.length === 0 ? (
-              <EmptyState
-                icon={MessageSquare}
-                title="No notes yet"
-                description={`Start documenting important updates and interactions about ${customerName}.`}
-              />
-            ) : (
-              notes.map(note => (
-                <div key={note.id} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <IconBox icon={User} color="info" className="border border-secondary/30" />
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <p className="text-sm font-medium text-white">{note.author || 'Team member'}</p>
-                          {note.isInternal && (
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#F97316]/10 text-[#F97316] border border-[#F97316]/30">
-                              Internal
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center space-x-2 text-xs text-white/50">
-                          <Calendar className="w-3 h-3" />
-                          <span>{formatDate(note.createdDate)}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <IconButton
-                        icon={Edit3}
-                        aria-label="Edit note"
-                        size="sm"
-                        onClick={() => startEditing(note.id, note.content)}
-                      />
-                      <IconButton
-                        icon={Trash2}
-                        aria-label="Delete note"
-                        variant="danger"
-                        size="sm"
-                        onClick={() => requestDeleteNote(note.id)}
-                      />
-                    </div>
-                  </div>
-
-                  {editingNoteId === note.id ? (
-                    <div className="space-y-4">
-                      <Textarea
-                        value={editContent}
-                        onChange={event => handleEditContentChange(event.target.value)}
-                        rows={4}
-                        size="sm"
-                      />
-                      <div className="flex items-center justify-end space-x-2">
-                        <Button variant="ghost" size="sm" onClick={cancelEditing}>
-                          Cancel
-                        </Button>
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          icon={Save}
-                          isLoading={isLoading}
-                          disabled={isLoading}
-                          onClick={() => handleSaveEdit(note.id)}
-                        >
-                          Save
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-white/80 whitespace-pre-wrap">{note.content}</p>
-                  )}
+            <div className="flex items-center space-x-3">
+              <PlainButton
+                onClick={toggleInternal}
+                className="flex items-center space-x-3 cursor-pointer group"
+                unstyled
+              >
+                <div className={`w-10 h-6 rounded-full relative transition-colors duration-200 border border-transparent ${isInternal ? 'bg-primary' : 'bg-white/10 group-hover:bg-white/20'}`}>
+                  <div className={`absolute top-1 left-1 w-3.5 h-3.5 rounded-full bg-white transition-transform duration-200 ${isInternal ? 'translate-x-4' : 'translate-x-0'}`} />
                 </div>
-              ))
-            )}
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium text-white/90 select-none">Internal Note</span>
+                  <span className="text-xs text-white/50 select-none">Only visible to team members</span>
+                </div>
+              </PlainButton>
+            </div>
           </div>
         </div>
-      </Modal>
 
-      {showConfirmDelete && (
-        <ConfirmDialog
-          isOpen={showConfirmDelete}
-          onClose={cancelDelete}
-          onConfirm={confirmDeleteNote}
-          title="Delete Note"
-          message="Are you sure you want to delete this note? This action cannot be undone."
-          confirmLabel="Delete Note"
-          variant="danger"
-        />
-      )}
-    </>
+        <div className="pt-6 mt-auto">
+          <Button
+            onClick={async () => {
+              await handleSave()
+              onClose()
+            }}
+            disabled={isLoading}
+            variant="primary"
+            isLoading={isLoading}
+            size="md"
+            className="w-full sm:w-auto"
+          >
+            {isEditMode ? 'Save Changes' : 'Save Note'}
+          </Button>
+        </div>
+      </div>
+    </Drawer>
   )
 }

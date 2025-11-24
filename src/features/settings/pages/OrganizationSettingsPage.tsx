@@ -1,8 +1,8 @@
-﻿import { 
-  Building2, 
-  Users, 
-  CreditCard, 
-  Shield, 
+﻿import {
+  Building2,
+  Users,
+  CreditCard,
+  Shield,
   Bell,
   Palette,
   Globe
@@ -13,6 +13,7 @@ import { OrganizationSettingsForm } from '../components/OrganizationSettingsForm
 import { TeamManagementPage } from '../components/TeamManagementPage'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
+import { PageHeader } from '@/shared/ui'
 import { PlainButton } from '@/shared/ui/Button'
 import { Card } from '@/shared/ui/Card'
 
@@ -87,10 +88,10 @@ export const OrganizationSettingsPage: React.FC = () => {
           <Card title="Billing & Plans" description="Manage your subscription and billing information">
             <div className="space-y-6">
               <div className="text-center py-12">
-                <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Billing Management</h3>
-                <p className="text-gray-400">View and manage your subscription, billing details, and usage.</p>
-                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+                <CreditCard className="w-16 h-16 text-fg-muted mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-fg mb-2">Billing Management</h3>
+                <p className="text-fg-muted">View and manage your subscription, billing details, and usage.</p>
+                <p className="text-sm text-fg-muted/70 mt-2">This section is coming soon...</p>
               </div>
             </div>
           </Card>
@@ -100,10 +101,10 @@ export const OrganizationSettingsPage: React.FC = () => {
           <Card title="Security Settings" description="Manage security and authentication settings">
             <div className="space-y-6">
               <div className="text-center py-12">
-                <Shield className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Security Settings</h3>
-                <p className="text-gray-400">Configure two-factor authentication, security policies, and audit logs.</p>
-                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+                <Shield className="w-16 h-16 text-fg-muted mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-fg mb-2">Security Settings</h3>
+                <p className="text-fg-muted">Configure two-factor authentication, security policies, and audit logs.</p>
+                <p className="text-sm text-fg-muted/70 mt-2">This section is coming soon...</p>
               </div>
             </div>
           </Card>
@@ -113,10 +114,10 @@ export const OrganizationSettingsPage: React.FC = () => {
           <Card title="Notification Settings" description="Configure email and alert preferences">
             <div className="space-y-6">
               <div className="text-center py-12">
-                <Bell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Notification Preferences</h3>
-                <p className="text-gray-400">Manage email notifications and alert settings.</p>
-                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+                <Bell className="w-16 h-16 text-fg-muted mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-fg mb-2">Notification Preferences</h3>
+                <p className="text-fg-muted">Manage email notifications and alert settings.</p>
+                <p className="text-sm text-fg-muted/70 mt-2">This section is coming soon...</p>
               </div>
             </div>
           </Card>
@@ -126,10 +127,10 @@ export const OrganizationSettingsPage: React.FC = () => {
           <Card title="Branding Settings" description="Customize your organization&apos;s appearance">
             <div className="space-y-6">
               <div className="text-center py-12">
-                <Palette className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Branding & Appearance</h3>
-                <p className="text-gray-400">Upload logos, customize colors, and set branding preferences.</p>
-                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+                <Palette className="w-16 h-16 text-fg-muted mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-fg mb-2">Branding & Appearance</h3>
+                <p className="text-fg-muted">Upload logos, customize colors, and set branding preferences.</p>
+                <p className="text-sm text-fg-muted/70 mt-2">This section is coming soon...</p>
               </div>
             </div>
           </Card>
@@ -139,10 +140,10 @@ export const OrganizationSettingsPage: React.FC = () => {
           <Card title="Integrations" description="Connect with third-party services">
             <div className="space-y-6">
               <div className="text-center py-12">
-                <Globe className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Third-party Integrations</h3>
-                <p className="text-gray-400">Connect with external services and manage API access.</p>
-                <p className="text-sm text-gray-500 mt-2">This section is coming soon...</p>
+                <Globe className="w-16 h-16 text-fg-muted mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-fg mb-2">Third-party Integrations</h3>
+                <p className="text-fg-muted">Connect with external services and manage API access.</p>
+                <p className="text-sm text-fg-muted/70 mt-2">This section is coming soon...</p>
               </div>
             </div>
           </Card>
@@ -154,35 +155,28 @@ export const OrganizationSettingsPage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white">Organization Settings</h1>
-            <p className="text-gray-400 mt-1">
-              Manage your organization&apos;s settings, team, and preferences
-            </p>
-          </div>
-        </div>
+      <PageHeader
+        title="Organization Settings"
+      />
+      <div className="space-y-8">
 
         {/* Custom Tabs */}
         <div className="w-full">
           {/* Tab List */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-2 p-2 bg-gray-800/50 rounded-lg">
+          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-2 p-1.5 bg-bg-raised rounded-xl border border-border">
             {tabs.map((tab) => {
               const IconComponent = tab.icon
               return (
                 <PlainButton
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex flex-col items-center p-3 rounded-lg transition-all duration-200 ${
-                    activeTab === tab.id
-                      ? 'bg-purple-600/20 border border-purple-500/50 text-white'
-                      : 'hover:bg-gray-700/50 text-gray-300 hover:text-white'
-                  }`}
+                  className={`flex flex-col items-center p-3 rounded-lg transition-all duration-200 ${activeTab === tab.id
+                    ? 'bg-card border border-border text-fg shadow-sm'
+                    : 'text-fg-muted hover:text-fg hover:bg-bg-hover'
+                    }`}
                   unstyled
                 >
-                  <IconComponent className="w-5 h-5 mb-2" />
+                  <IconComponent className={`w-5 h-5 mb-2 ${activeTab === tab.id ? 'text-primary' : 'text-current'}`} />
                   <span className="text-xs font-medium">{tab.label}</span>
                 </PlainButton>
               )
@@ -190,7 +184,7 @@ export const OrganizationSettingsPage: React.FC = () => {
           </div>
 
           {/* Tab Content */}
-          <div className="mt-6">
+          <div className="mt-8">
             {renderTabContent()}
           </div>
         </div>

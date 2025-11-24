@@ -1,6 +1,6 @@
 ﻿import { Table, Grid3X3, List } from 'lucide-react'
 
-import { Button } from '@/shared/ui/Button'
+import { PlainButton } from '@/shared/ui/Button'
 
 export type ViewMode = 'table' | 'grid' | 'list'
 
@@ -32,20 +32,14 @@ export const ViewModeToggle = ({
   onChange,
   options = defaultOptions,
   showLabels = false,
-  size = 'md',
+  size: _size = 'md',
   className = '',
   disabled = false,
   ariaLabel = 'View mode toggle'
 }: ViewModeToggleProps) => {
-  const sizeClasses = {
-    sm: 'p-1.5',
-    md: 'p-2',
-    lg: 'p-4'
-  }
-
   return (
     <div
-      className={`flex items-center space-x-2 bg-black/20 rounded-md p-1 ${className}`}
+      className={`flex items-center bg-black/20 rounded-lg p-1.5 h-10 ${className}`}
       role="group"
       aria-label={ariaLabel}
     >
@@ -53,39 +47,39 @@ export const ViewModeToggle = ({
         const IconComponent = option.icon
         const isActive = value === option.value
         return (
-          <Button
+          <PlainButton
             key={option.value}
             onClick={() => onChange(option.value)}
             disabled={disabled}
             aria-pressed={isActive}
             aria-label={option.label}
-            size="md"
-            variant="ghost"
             className={`
-              ${sizeClasses[size]} 
-              rounded-md 
-              transition-all 
+              h-full
+              ${showLabels ? 'px-3' : 'w-7 px-0'}
+              rounded-md
+              transition-all
               duration-200
               flex
               items-center
-              space-x-2
+              justify-center
               focus-visible:outline-none
               focus-visible:ring-1
               focus-visible:ring-primary
               focus-visible:ring-offset-2
               focus-visible:ring-offset-[#0A0A0A]
-              disabled:opacity-50 
+              disabled:opacity-50
               disabled:cursor-not-allowed
               ${isActive
-                ? 'bg-white/10 text-white' 
+                ? 'bg-white/10 text-white shadow-sm'
                 : 'text-white/60 hover:text-white hover:bg-white/5'
               }
             `}
             title={option.label}
+            unstyled
           >
-            <IconComponent className="w-4 h-4" />
-            {showLabels && <span>{option.label}</span>}
-          </Button>
+            <IconComponent className="w-4 h-4 flex-shrink-0" />
+            {showLabels && <span className="ml-2 text-sm font-medium">{option.label}</span>}
+          </PlainButton>
         )
       })}
     </div>

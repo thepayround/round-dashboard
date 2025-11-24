@@ -44,7 +44,7 @@ export const FilterChipsBar: React.FC<FilterChipsBarProps> = ({
                  ${className}`}
     >
       <span className="text-sm text-white/60 mr-1">Active filters:</span>
-      
+
       <AnimatePresence mode="popLayout">
         {filters.map((filter) => (
           <FilterChip
@@ -60,7 +60,7 @@ export const FilterChipsBar: React.FC<FilterChipsBarProps> = ({
         <Button
           onClick={onClearAll}
           variant="danger"
-          size="sm"
+          size="md"
           icon={RotateCcw}
           iconPosition="left"
           className="ml-2"

@@ -1,7 +1,7 @@
 import { AlertTriangle, Trash2, Info, CheckCircle, HelpCircle } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-import { ActionButton } from '../ui/ActionButton'
+import { Button } from '../ui/Button'
 import { Modal } from '../ui/Modal'
 
 interface ConfirmDialogProps {
@@ -16,6 +16,8 @@ interface ConfirmDialogProps {
   isLoading?: boolean
   /** Optional custom icon to override the default variant icon */
   icon?: LucideIcon
+  /** Optional detailed list items to display */
+  details?: string[]
 }
 
 export const ConfirmDialog = ({
@@ -28,56 +30,40 @@ export const ConfirmDialog = ({
   cancelLabel = 'Cancel',
   variant = 'danger',
   isLoading = false,
-  icon
+  icon: _icon,
+  details
 }: ConfirmDialogProps) => {
   const getVariantStyles = () => {
     switch (variant) {
       case 'danger':
         return {
           icon: Trash2,
-          iconColor: 'text-white/90', // Polar.sh style - clean white icons
-          bgColor: 'bg-red-500/10',
-          borderColor: 'border-red-500/20',
-          buttonVariant: 'primary' as const
+          buttonClass: 'bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-600/30 font-medium'
         }
       case 'warning':
         return {
           icon: AlertTriangle,
-          iconColor: 'text-white/90',
-          bgColor: 'bg-yellow-500/10',
-          borderColor: 'border-yellow-500/20',
-          buttonVariant: 'primary' as const
+          buttonClass: 'bg-yellow-600 text-white hover:bg-yellow-700 shadow-lg shadow-yellow-600/30 font-medium'
         }
       case 'info':
         return {
           icon: Info,
-          iconColor: 'text-white/90',
-          bgColor: 'bg-blue-500/10',
-          borderColor: 'border-blue-500/20',
-          buttonVariant: 'primary' as const
+          buttonClass: 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30 font-medium'
         }
       case 'success':
         return {
           icon: CheckCircle,
-          iconColor: 'text-white/90',
-          bgColor: 'bg-success/10',
-          borderColor: 'border-success/20',
-          buttonVariant: 'success' as const
+          buttonClass: 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/30 font-medium'
         }
       case 'neutral':
         return {
           icon: HelpCircle,
-          iconColor: 'text-white/90',
-          bgColor: 'bg-white/5',
-          borderColor: 'border-white/10',
-          buttonVariant: 'primary' as const
+          buttonClass: 'bg-white/20 text-white hover:bg-white/30 shadow-lg font-medium'
         }
     }
   }
 
   const styles = getVariantStyles()
-  // Use custom icon if provided, otherwise use variant's default icon
-  const Icon = icon ?? styles.icon
 
   return (
     <Modal
@@ -85,39 +71,51 @@ export const ConfirmDialog = ({
       onClose={onClose}
       title={title}
       size="md"
+      centerInViewport
     >
-      <div className="space-y-4">
-        {/* Icon and Message */}
-        <div className="flex items-start space-x-2">
-          <div className={`flex-shrink-0 w-10 h-10 rounded-md ${styles.bgColor} ${styles.borderColor} border flex items-center justify-center`}>
-            <Icon className={`w-5 h-5 ${styles.iconColor}`} />
-          </div>
-          <div className="flex-1">
-            <p className="text-white/70 leading-relaxed font-normal tracking-tight">
-              {message}
-            </p>
-          </div>
+      <div className="space-y-6">
+        {/* Message */}
+        <div className="space-y-4">
+          <p className="text-white/70 text-[15px] leading-relaxed">
+            {message}
+          </p>
+
+          {/* Details list if provided */}
+          {details && details.length > 0 && (
+            <ul className="space-y-2 ml-1">
+              {details.map((detail, index) => (
+                <li key={index} className="flex items-start gap-2 text-white/60 text-sm">
+                  <span className="text-white/60 mt-0.5">•</span>
+                  <span>{detail}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end space-x-2 pt-2">
-          <ActionButton
-            label={cancelLabel}
+        <div className="flex justify-end gap-3 pt-2">
+          <Button
             onClick={onClose}
-            variant="secondary"
+            variant="ghost"
+            size="md"
             disabled={isLoading}
-            actionType="general"
-          />
-          <ActionButton
-            label={confirmLabel}
+            className="text-white/70 hover:text-white hover:bg-white/5 font-medium px-6"
+          >
+            {cancelLabel}
+          </Button>
+          <Button
             onClick={onConfirm}
-            variant={styles.buttonVariant}
+            size="md"
             isLoading={isLoading}
             disabled={isLoading}
-            actionType="general"
-          />
+            className={`${styles.buttonClass} px-6`}
+          >
+            {confirmLabel}
+          </Button>
         </div>
       </div>
     </Modal>
   )
 }
+

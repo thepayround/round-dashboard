@@ -172,7 +172,7 @@ export const InvitationAcceptancePage = () => {
                   type="email"
                   value={invitation.email}
                   disabled
-                  className="w-full h-9 px-3 pl-9 pr-9 bg-success/5 border border-success/20 rounded-lg text-white/70 placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-success/40 focus:border-success focus:bg-success/10 outline-none appearance-none"
+                  className="w-full h-10 px-3 pl-9 pr-9 bg-success/5 border border-success/20 rounded-lg text-white/70 placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-success/40 focus:border-success focus:bg-success/10 outline-none appearance-none"
                 />
                 <Check className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-success w-4 h-4" />
               </div>

@@ -21,25 +21,25 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
 }
 
 const variants = {
-  primary: 'bg-primary text-white border border-primary hover:bg-[#E02DD8]',
-  secondary: 'bg-transparent text-white border border-white/20 hover:bg-white/5',
-  ghost: 'bg-transparent text-white/80 border border-transparent hover:bg-white/5',
-  danger: 'bg-transparent text-white border border-red-500/30 hover:bg-red-500/10',
-  link: 'bg-transparent text-white/60 border border-transparent hover:text-white'
+  primary: 'bg-primary text-primary-contrast hover:bg-primary-hover shadow-sm hover:shadow-md border border-transparent',
+  secondary: 'bg-bg-raised text-fg border border-border hover:bg-bg-hover hover:border-border-hover shadow-sm',
+  ghost: 'bg-transparent text-fg-muted border border-transparent hover:bg-bg-hover hover:text-fg',
+  danger: 'bg-transparent text-destructive border border-destructive/30 hover:bg-destructive/10 hover:border-destructive/50',
+  link: 'bg-transparent text-primary border border-transparent hover:underline p-0 h-auto'
 }
 
 const sizes = {
-  sm: 'px-2 py-1 text-xs h-7',
-  md: 'px-4 py-2 text-sm h-9',
-  lg: 'px-4 py-2 text-sm h-10',
-  xl: 'px-6 py-2 text-sm h-11'
+  sm: 'px-3 py-1.5 text-xs h-8',
+  md: 'px-4 py-2 text-sm h-10', // Standard 40px
+  lg: 'px-6 py-2.5 text-base h-12',
+  xl: 'px-8 py-3 text-lg h-14'
 }
 
 const iconSizes = {
   sm: 'w-3.5 h-3.5',
   md: 'w-4 h-4',
-  lg: 'w-4 h-4',
-  xl: 'w-5 h-5'
+  lg: 'w-5 h-5',
+  xl: 'w-6 h-6'
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -67,7 +67,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         className={`
           inline-flex items-center justify-center gap-1.5
-          rounded-md font-normal tracking-tight
+          rounded-lg font-normal tracking-tight
           transition-all duration-200
           outline-none focus-visible:ring-1 focus-visible:ring-[#14bdea] focus-visible:ring-offset-1 focus-visible:ring-offset-black
           disabled:opacity-50 disabled:cursor-not-allowed

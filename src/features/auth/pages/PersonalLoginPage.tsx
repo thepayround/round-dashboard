@@ -68,7 +68,7 @@ export const PersonalLoginPage = () => {
 
       if (response.success && response.data) {
         login(response.data.user, response.data.accessToken)
-        
+
         const from =
           (location.state as { from?: { pathname?: string } })?.from?.pathname ?? '/dashboard'
         navigate(from, { replace: true })
@@ -198,8 +198,8 @@ export const PersonalLoginPage = () => {
             </div>
 
             {/* Social Login Buttons */}
-            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
-              <GoogleLoginButton 
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
+              <GoogleLoginButton
                 accountType="personal"
                 onSuccess={() => showSuccess('Successfully signed in with Google!')}
                 onError={(error) => showError(error)}
@@ -227,3 +227,5 @@ export const PersonalLoginPage = () => {
   )
 }
 
+
+// Force rebuild

@@ -38,7 +38,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const generatePageNumbers = () => {
     const pages: (number | string)[] = []
     const maxVisiblePages = 7
-    
+
     if (totalPages <= maxVisiblePages) {
       // Show all pages if total is small
       for (let i = 1; i <= totalPages; i++) {
@@ -47,7 +47,7 @@ const Pagination: React.FC<PaginationProps> = ({
     } else {
       // Always show first page
       pages.push(1)
-      
+
       if (currentPage <= 4) {
         // Show pages 1-5 with ellipsis
         for (let i = 2; i <= 5; i++) {
@@ -71,7 +71,7 @@ const Pagination: React.FC<PaginationProps> = ({
         pages.push(totalPages)
       }
     }
-    
+
     return pages
   }
 
@@ -89,7 +89,7 @@ const Pagination: React.FC<PaginationProps> = ({
           Showing <span className="text-white font-normal tracking-tight">{startItem}-{endItem}</span> of{' '}
           <span className="text-white font-normal tracking-tight">{totalItems}</span> items
         </div>
-        
+
         {showItemsPerPage && (
           <div className="flex items-center space-x-2">
             <label htmlFor="items-per-page" className="text-sm text-white/70 whitespace-nowrap">Items per page:</label>
@@ -97,7 +97,7 @@ const Pagination: React.FC<PaginationProps> = ({
               id="items-per-page"
               value={itemsPerPage}
               onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-              size="sm"
+              size="md"
               className="w-20"
             >
               {pageSizeOptions.map(size => (
@@ -109,14 +109,14 @@ const Pagination: React.FC<PaginationProps> = ({
           </div>
         )}
       </div>
-      
+
       {/* Pagination controls */}
       {totalPages > 1 && (
         <div className="flex items-center space-x-2">
           <div className="text-sm text-white/70 mr-4">
             Page {currentPage} of {totalPages}
           </div>
-          
+
           {/* First page button */}
           {showGoToFirst && (
             <IconButton
@@ -128,7 +128,7 @@ const Pagination: React.FC<PaginationProps> = ({
               aria-label="First page"
             />
           )}
-          
+
           {/* Previous page button */}
           <Button
             onClick={() => onPageChange(currentPage - 1)}
@@ -141,7 +141,7 @@ const Pagination: React.FC<PaginationProps> = ({
           >
             <span className="hidden sm:inline">Previous</span>
           </Button>
-          
+
           {/* Page numbers */}
           <div className="flex items-center space-x-1">
             {pageNumbers.map((page, index) => (
@@ -161,7 +161,7 @@ const Pagination: React.FC<PaginationProps> = ({
               </div>
             ))}
           </div>
-          
+
           {/* Next page button */}
           <Button
             onClick={() => onPageChange(currentPage + 1)}
@@ -174,7 +174,7 @@ const Pagination: React.FC<PaginationProps> = ({
           >
             <span className="hidden sm:inline">Next</span>
           </Button>
-          
+
           {/* Last page button */}
           {showGoToLast && (
             <IconButton

@@ -128,9 +128,9 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     })
 
     const sizeClasses = {
-      sm: 'h-9 px-4 text-xs',
-      md: 'h-9 px-4 text-xs',
-      lg: 'h-9 px-4 text-xs',
+      sm: 'h-10 px-4 text-xs',
+      md: 'h-10 px-4 text-xs',
+      lg: 'h-10 px-4 text-xs',
     }
 
     // Autofill style fixes for browser compatibility
@@ -168,7 +168,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 
     const inputClasses = cn(
       // Base styles
-      'w-full rounded-md border transition-all duration-200',
+      'w-full rounded-lg border transition-all duration-200',
       'bg-auth-bg border-auth-border text-white placeholder:text-auth-placeholder',
       'font-light tracking-tight appearance-none outline-none',
       // Focus & hover states
@@ -201,7 +201,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         )}
 
         <div className="relative">
-          { isLoading && (
+          {isLoading && (
             <Loader2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon-primary animate-spin z-10" />
           )}
 
@@ -213,7 +213,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             ref={ref}
             id={inputId}
             type={resolvedType}
-            placeholder={ isLoading && isLoadingText ? isLoadingText : placeholder}
+            placeholder={isLoading && isLoadingText ? isLoadingText : placeholder}
             value={value}
             onChange={onChange}
             onBlur={handleBlur}
@@ -231,7 +231,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             {...restProps}
           />
 
-          { isLoading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon animate-spin z-10" />}
+          {isLoading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-auth-icon animate-spin z-10" />}
 
           {!isLoading && RightIcon && (
             <RightIcon

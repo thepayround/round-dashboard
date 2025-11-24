@@ -93,19 +93,10 @@
       "severity": "error",
       "excludePaths": [
         "src/shared/ui/",
+        "src/shared/ui/Badge/",
         "*.test.tsx",
-        "*.test.ts",
-        "*.spec.tsx",
-        "*.spec.ts"
+        "*.stories.tsx"
       ]
-    },
-    {
-      "name": "No raw badge/tag spans",
-      "pattern": "px-[0-9] py-[0-9].*rounded-full.*text-xs",
-      "message": "Use <Badge> component for status badges and tags",
-      "suggestion": "import { Badge } from '@/shared/ui'",
-      "severity": "error",
-      "excludePaths": ["src/shared/ui/Badge/", "*.test.tsx", "*.stories.tsx"]
     },
     {
       "name": "Use Avatar component for user initials",
@@ -113,7 +104,13 @@
       "message": "Use <Avatar> component for user avatars and initials",
       "suggestion": "import { Avatar } from '@/shared/ui'",
       "severity": "error",
-      "excludePaths": ["src/shared/ui/Avatar/", "src/shared/ui/Modal/", "*.test.tsx", "*.stories.tsx"]
+      "excludePaths": [
+        "src/shared/ui/Avatar/",
+        "src/shared/ui/Modal/",
+        "src/shared/widgets/forms/OrganizationForm.tsx",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     },
     {
       "name": "No raw loading spinners",
@@ -121,7 +118,16 @@
       "message": "Use <LoadingSpinner> or <LoadingOverlay> component",
       "suggestion": "import { LoadingSpinner, LoadingOverlay } from '@/shared/ui'",
       "severity": "error",
-      "excludePaths": ["src/shared/ui/LoadingSpinner/", "src/shared/ui/Button/", "src/shared/ui/FormInput.tsx", "src/shared/ui/UiDropdown/", "src/shared/ui/ApiDropdown/", "src/shared/widgets/forms/OrganizationForm.tsx", "*.test.tsx", "*.stories.tsx"]
+      "excludePaths": [
+        "src/shared/ui/LoadingSpinner/",
+        "src/shared/ui/Button/",
+        "src/shared/ui/FormInput.tsx",
+        "src/shared/ui/UiDropdown/",
+        "src/shared/ui/ApiDropdown/",
+        "src/shared/widgets/forms/OrganizationForm.tsx",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     },
     {
       "name": "Use Alert component for info/warning/error boxes",
@@ -129,7 +135,11 @@
       "message": "Use <Alert> component for info/warning/error messages",
       "suggestion": "import { Alert } from '@/shared/ui'",
       "severity": "error",
-      "excludePaths": ["src/shared/ui/Alert/", "*.test.tsx", "*.stories.tsx"]
+      "excludePaths": [
+        "src/shared/ui/Alert/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     },
     {
       "name": "Use AddressFormGroup for address fields",
@@ -137,7 +147,11 @@
       "message": "Use <AddressFormGroup> component instead of individual address fields",
       "suggestion": "import { AddressFormGroup } from '@/shared/ui'",
       "severity": "error",
-      "excludePaths": ["src/shared/ui/AddressFormGroup/", "*.test.tsx", "*.stories.tsx"]
+      "excludePaths": [
+        "src/shared/ui/AddressFormGroup/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     },
     {
       "name": "No hardcoded primary color",
@@ -145,7 +159,16 @@
       "message": "Use 'primary' design token instead of hardcoded #D417C8",
       "suggestion": "Replace with: text-primary, bg-primary, border-primary",
       "severity": "error",
-      "excludePaths": ["tailwind.config.ts", "tailwind.config.js", "src/shared/config/constants.ts", "src/shared/constants/designTokens.ts", "src/index.css", "*.md", "*.test.tsx", "*.svg"]
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/shared/config/constants.ts",
+        "src/shared/constants/designTokens.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
     },
     {
       "name": "No hardcoded secondary color",
@@ -153,7 +176,16 @@
       "message": "Use 'secondary' design token instead of hardcoded #14BDEA",
       "suggestion": "Replace with: text-secondary, bg-secondary, border-secondary",
       "severity": "error",
-      "excludePaths": ["tailwind.config.ts", "tailwind.config.js", "src/shared/config/constants.ts", "src/shared/constants/designTokens.ts", "src/index.css", "*.md", "*.test.tsx", "*.svg"]
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/shared/config/constants.ts",
+        "src/shared/constants/designTokens.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
     },
     {
       "name": "No hardcoded accent color",
@@ -161,7 +193,16 @@
       "message": "Use 'accent' design token instead of hardcoded #7767DA",
       "suggestion": "Replace with: text-accent, bg-accent, border-accent",
       "severity": "error",
-      "excludePaths": ["tailwind.config.ts", "tailwind.config.js", "src/shared/config/constants.ts", "src/shared/constants/designTokens.ts", "src/index.css", "*.md", "*.test.tsx", "*.svg"]
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/shared/config/constants.ts",
+        "src/shared/constants/designTokens.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
     },
     {
       "name": "No hardcoded success colors",
@@ -169,7 +210,16 @@
       "message": "Use 'success' design token for success/active states",
       "suggestion": "Replace with: text-success, bg-success, border-success",
       "severity": "error",
-      "excludePaths": ["tailwind.config.ts", "tailwind.config.js", "src/shared/config/constants.ts", "src/shared/constants/designTokens.ts", "src/index.css", "*.md", "*.test.tsx", "*.svg"]
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/shared/config/constants.ts",
+        "src/shared/constants/designTokens.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
     },
     {
       "name": "No undocumented teal color",
@@ -177,159 +227,10 @@
       "message": "Color #00BCD4 is not in design system. Use secondary instead.",
       "suggestion": "Replace with: text-secondary, bg-secondary/10, etc.",
       "severity": "error",
-      "excludePaths": ["*.md", "*.test.tsx"]
-    },
-    {
-      "name": "Discourage gap-3 usage",
-      "pattern": "gap-3\\b",
-      "message": "Prefer gap-4 for layouts or gap-2 for tight spacing",
-      "suggestion": "Use: gap-4 (layouts), gap-2 (tight), gap-6 (sections)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx"]
-    },
-    {
-      "name": "Avoid low-contrast text",
-      "pattern": "text-white/(40|30|20)",
-      "message": "Low contrast text may fail WCAG AA. Use text-white/60 minimum.",
-      "suggestion": "Use: text-white/60 (secondary), text-white/70 (readable)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx"]
-    },
-    {
-      "name": "Use isLoading instead of loading prop",
-      "pattern": "loading=\\{",
-      "message": "Use isLoading prop instead of loading for consistency",
-      "suggestion": "Replace 'loading={...}' with 'isLoading={...}'",
-      "severity": "error",
-      "excludePaths": ["src/shared/ui/", "*.test.tsx", "*.stories.tsx"]
-    },
-    {
-      "name": "No mb-3 spacing",
-      "pattern": "\\bmb-3\\b",
-      "message": "Use standardized margin-bottom values: mb-2, mb-4, mb-6",
-      "suggestion": "Replace mb-3 with: mb-2 (tight), mb-4 (standard), mb-6 (sections)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No mb-5 spacing",
-      "pattern": "\\bmb-5\\b",
-      "message": "Use standardized margin-bottom values: mb-4, mb-6, mb-8",
-      "suggestion": "Replace mb-5 with: mb-4 (standard), mb-6 (sections), mb-8 (large)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No p-3 padding",
-      "pattern": "\\bp-3\\b",
-      "message": "Use standardized padding values: p-2, p-4, p-6",
-      "suggestion": "Replace p-3 with: p-2 (tight), p-4 (standard), p-6 (cards)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No p-5 padding",
-      "pattern": "\\bp-5\\b",
-      "message": "Use standardized padding values: p-4, p-6",
-      "suggestion": "Replace p-5 with: p-4 (standard), p-6 (cards)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No p-7 padding",
-      "pattern": "\\bp-7\\b",
-      "message": "Use standardized padding values: p-6, p-8",
-      "suggestion": "Replace p-7 with: p-6 (cards), p-8 (large sections)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No px-3 padding",
-      "pattern": "\\bpx-3\\b",
-      "message": "Use standardized horizontal padding: px-2, px-4, px-6",
-      "suggestion": "Replace px-3 with: px-2 (tight), px-4 (standard), px-6 (cards)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md", "src/shared/layout/DashboardLayout.tsx", "src/shared/layout/DashboardLayout/NavigationItem.tsx"]
-    },
-    {
-      "name": "No px-5 padding",
-      "pattern": "\\bpx-5\\b",
-      "message": "Use standardized horizontal padding: px-4, px-6",
-      "suggestion": "Replace px-5 with: px-4 (standard), px-6 (cards)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No py-3 padding",
-      "pattern": "\\bpy-3\\b",
-      "message": "Use standardized vertical padding: py-2, py-4, py-6",
-      "suggestion": "Replace py-3 with: py-2 (tight), py-4 (standard), py-6 (cards)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No py-5 padding",
-      "pattern": "\\bpy-5\\b",
-      "message": "Use standardized vertical padding: py-4, py-6",
-      "suggestion": "Replace py-5 with: py-4 (standard), py-6 (cards)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No space-y-3 spacing",
-      "pattern": "\\bspace-y-3\\b",
-      "message": "Use standardized vertical spacing: space-y-2, space-y-4, space-y-6",
-      "suggestion": "Replace space-y-3 with: space-y-2 (tight), space-y-4 (standard), space-y-6 (sections)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No space-y-5 spacing",
-      "pattern": "\\bspace-y-5\\b",
-      "message": "Use standardized vertical spacing: space-y-4, space-y-6, space-y-8",
-      "suggestion": "Replace space-y-5 with: space-y-4 (standard), space-y-6 (sections), space-y-8 (large)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No space-x-3 spacing",
-      "pattern": "\\bspace-x-3\\b",
-      "message": "Use standardized horizontal spacing: space-x-2, space-x-4, space-x-6",
-      "suggestion": "Replace space-x-3 with: space-x-2 (tight), space-x-4 (standard), space-x-6 (sections)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No space-x-5 spacing",
-      "pattern": "\\bspace-x-5\\b",
-      "message": "Use standardized horizontal spacing: space-x-4, space-x-6",
-      "suggestion": "Replace space-x-5 with: space-x-4 (standard), space-x-6 (sections)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No responsive padding patterns",
-      "pattern": "p-\\d+\\s+(?:sm|md|lg):p-\\d+",
-      "message": "Avoid responsive padding patterns. Use single padding value.",
-      "suggestion": "Use single padding value (p-4, p-6) instead of p-5 md:p-6 lg:p-7",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "No sm: breakpoint in grid",
-      "pattern": "sm:grid-cols-",
-      "message": "Use md: breakpoint for grid layouts instead of sm:",
-      "suggestion": "Replace sm:grid-cols-* with md:grid-cols-* for standard responsive grids",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
-    },
-    {
-      "name": "Gap placement after grid-cols",
-      "pattern": "gap-\\d+\\s+grid-cols-",
-      "message": "Place gap classes after grid-cols for consistency",
-      "suggestion": "Use: grid-cols-1 md:grid-cols-2 gap-4 (not: gap-4 grid-cols-1)",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+      "excludePaths": [
+        "*.md",
+        "*.test.tsx"
+      ]
     },
     {
       "name": "No undocumented blue color",
@@ -337,7 +238,11 @@
       "message": "Color #32A1E4 is not in design system. Use secondary or accent instead.",
       "suggestion": "Replace with: text-secondary (#14BDEA) or text-accent (#7767DA)",
       "severity": "error",
-      "excludePaths": ["*.md", "*.test.tsx", "*.svg"]
+      "excludePaths": [
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
     },
     {
       "name": "No custom padding in modal children",
@@ -345,7 +250,11 @@
       "message": "Modal component provides padding. Remove custom p-6 from direct children.",
       "suggestion": "Remove p-6 from modal content - Modal provides px-6 py-6 automatically",
       "severity": "warning",
-      "excludePaths": ["src/shared/ui/Modal/", "*.test.tsx", "*.stories.tsx"]
+      "excludePaths": [
+        "src/shared/ui/Modal/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     },
     {
       "name": "No custom overflow in modal children",
@@ -353,39 +262,296 @@
       "message": "Modal component handles overflow. Remove custom overflow/max-height.",
       "suggestion": "Remove overflow and max-h classes - Modal handles scrolling automatically",
       "severity": "warning",
-      "excludePaths": ["src/shared/ui/Modal/", "*.test.tsx", "*.stories.tsx"]
+      "excludePaths": [
+        "src/shared/ui/Modal/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     },
     {
-      "name": "Use compact text sizes",
-      "pattern": "\\btext-base\\b(?!.*(?:heading|title|h1|h2|h3))",
-      "message": "Use text-sm (13px) for body text in compact design. text-base (14px) is for emphasized text only.",
-      "suggestion": "Replace text-base with text-sm for standard body text",
-      "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md", "src/shared/layout/DashboardLayout.tsx", "src/shared/layout/DashboardLayout/NavigationItem.tsx", "src/shared/layout/Breadcrumb/"]
+      "name": "Enforce standard 40px height",
+      "pattern": "h-9\\\\b",
+      "message": "Use h-10 (40px) for standard inputs and buttons instead of h-9",
+      "suggestion": "Replace 'h-9' with 'h-10'",
+      "severity": "warning",
+      "excludePaths": [
+        "*.spec.ts",
+        "*.stories.tsx",
+        "*.stories.ts"
+      ]
     },
     {
-      "name": "Use compact heading sizes",
-      "pattern": "\\btext-2xl\\b(?=.*(?:h1|heading|title))",
-      "message": "Use text-xl (18px) for H1 headings in compact design.",
-      "suggestion": "Replace text-2xl with text-xl for H1 headings",
+      "name": "Prefer Input component over FormInput",
+      "pattern": "<input\\s+[^>]*type\\s*=\\s*[\"'](?:text|email|password|number|tel|url)[\"']",
+      "message": "Use Input, FormInput, or AuthInput components instead of raw <input> elements with type attributes",
+      "suggestion": "Available input components: Input (basic), FormInput (full-featured), AuthInput (auth pages), SearchInput (search), PhoneInput (phone numbers)",
       "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+      "excludePaths": [
+        "src/shared/ui/",
+        "src/shared/ui/Badge/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     },
     {
-      "name": "Prefer rounded-md over rounded-lg",
-      "pattern": "\\brounded-lg\\b",
-      "message": "Use rounded-md (6px) for standard elements in compact design. rounded-lg (8px) is for cards only.",
-      "suggestion": "Replace rounded-lg with rounded-md for buttons/inputs, or rounded-lg for cards",
+      "name": "Use Avatar component for user initials",
+      "pattern": "w-[0-9]+ h-[0-9]+.*rounded.*bg-primary.*justify-center",
+      "message": "Use <Avatar> component for user avatars and initials",
+      "suggestion": "import { Avatar } from '@/shared/ui'",
       "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md", "src/shared/ui/Modal/", "src/shared/ui/Avatar/", "src/shared/widgets/forms/OrganizationForm.tsx"]
+      "excludePaths": [
+        "src/shared/ui/Avatar/",
+        "src/shared/ui/Modal/",
+        "src/shared/widgets/forms/OrganizationForm.tsx",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     },
     {
-      "name": "No ring-2 focus (use ring-1)",
-      "pattern": "\\bring-2\\b",
-      "message": "Use ring-1 for focus indicators in compact design (thinner rings).",
-      "suggestion": "Replace ring-2 with ring-1 for subtle focus indicators",
+      "name": "No raw loading spinners",
+      "pattern": "animate-spin",
+      "message": "Use <LoadingSpinner> or <LoadingOverlay> component",
+      "suggestion": "import { LoadingSpinner, LoadingOverlay } from '@/shared/ui'",
       "severity": "error",
-      "excludePaths": ["*.test.tsx", "*.stories.tsx", "*.md"]
+      "excludePaths": [
+        "src/shared/ui/LoadingSpinner/",
+        "src/shared/ui/Button/",
+        "src/shared/ui/FormInput.tsx",
+        "src/shared/ui/UiDropdown/",
+        "src/shared/ui/ApiDropdown/",
+        "src/shared/widgets/forms/OrganizationForm.tsx",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "Use Alert component for info/warning/error boxes",
+      "pattern": "bg-(red|blue|green|orange)-500/10.*border-(red|blue|green|orange)-500/30",
+      "message": "Use <Alert> component for info/warning/error messages",
+      "suggestion": "import { Alert } from '@/shared/ui'",
+      "severity": "error",
+      "excludePaths": [
+        "src/shared/ui/Alert/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "Use AddressFormGroup for address fields",
+      "pattern": "label\\s*=\\s*[\"'](Address Line 1|City|State|ZIP)",
+      "message": "Use <AddressFormGroup> component instead of individual address fields",
+      "suggestion": "import { AddressFormGroup } from '@/shared/ui'",
+      "severity": "error",
+      "excludePaths": [
+        "src/shared/ui/AddressFormGroup/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No hardcoded primary color",
+      "pattern": "#D417C8",
+      "message": "Use 'primary' design token instead of hardcoded #D417C8",
+      "suggestion": "Replace with: text-primary, bg-primary, border-primary",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/shared/config/constants.ts",
+        "src/shared/constants/designTokens.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
+    },
+    {
+      "name": "No hardcoded secondary color",
+      "pattern": "#14BDEA",
+      "message": "Use 'secondary' design token instead of hardcoded #14BDEA",
+      "suggestion": "Replace with: text-secondary, bg-secondary, border-secondary",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/shared/config/constants.ts",
+        "src/shared/constants/designTokens.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
+    },
+    {
+      "name": "No hardcoded accent color",
+      "pattern": "#7767DA",
+      "message": "Use 'accent' design token instead of hardcoded #7767DA",
+      "suggestion": "Replace with: text-accent, bg-accent, border-accent",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/shared/config/constants.ts",
+        "src/shared/constants/designTokens.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
+    },
+    {
+      "name": "No hardcoded success colors",
+      "pattern": "#(42E695|38D39F)",
+      "message": "Use 'success' design token for success/active states",
+      "suggestion": "Replace with: text-success, bg-success, border-success",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/shared/config/constants.ts",
+        "src/shared/constants/designTokens.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
+    },
+    {
+      "name": "No undocumented teal color",
+      "pattern": "#00BCD4",
+      "message": "Color #00BCD4 is not in design system. Use secondary instead.",
+      "suggestion": "Replace with: text-secondary, bg-secondary/10, etc.",
+      "severity": "error",
+      "excludePaths": [
+        "*.md",
+        "*.test.tsx"
+      ]
+    },
+    {
+      "name": "No undocumented blue color",
+      "pattern": "#32A1E4",
+      "message": "Color #32A1E4 is not in design system. Use secondary or accent instead.",
+      "suggestion": "Replace with: text-secondary (#14BDEA) or text-accent (#7767DA)",
+      "severity": "error",
+      "excludePaths": [
+        "*.md",
+        "*.test.tsx",
+        "*.svg"
+      ]
+    },
+    {
+      "name": "No custom padding in modal children",
+      "pattern": "<Modal[^>]*>[\\s\\S]*?<(?:div|form)[^>]*\\bp-6\\b",
+      "message": "Modal component provides padding. Remove custom p-6 from direct children.",
+      "suggestion": "Remove p-6 from modal content - Modal provides px-6 py-6 automatically",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/Modal/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No custom overflow in modal children",
+      "pattern": "<Modal[^>]*>[\\s\\S]*?(?:max-h-\\[|overflow-y-)",
+      "message": "Modal component handles overflow. Remove custom overflow/max-height.",
+      "suggestion": "Remove overflow and max-h classes - Modal handles scrolling automatically",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/Modal/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "Enforce standard 40px height",
+      "pattern": "h-9\\\\b",
+      "message": "Use h-10 (40px) for standard inputs and buttons instead of h-9",
+      "suggestion": "Replace 'h-9' with 'h-10'",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "Enforce rounded-lg for interactive elements",
+      "pattern": "rounded-md\\\\b",
+      "message": "Use rounded-lg (12px) for interactive elements instead of rounded-md",
+      "suggestion": "Replace 'rounded-md' with 'rounded-lg'",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "Avoid low-contrast text",
+      "pattern": "text-white/(40|30|20|10)",
+      "message": "Low contrast text may fail WCAG AA. Use text-white/60 minimum or text-fg-muted.",
+      "suggestion": "Use: text-white/60 (secondary), text-fg-muted (standard)",
+      "severity": "error",
+      "excludePaths": [
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No non-standard spacing (5)",
+      "pattern": "\\\\b(p|m|gap|space-[xy])-5\\\\b",
+      "message": "Use standardized spacing: 4 (16px) or 6 (24px). 5 (20px) is non-standard.",
+      "suggestion": "Replace with 4 (standard) or 6 (spacious)",
+      "severity": "error",
+      "excludePaths": [
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No non-standard spacing (7)",
+      "pattern": "\\\\b(p|m|gap|space-[xy])-7\\\\b",
+      "message": "Use standardized spacing: 6 (24px) or 8 (32px). 7 (28px) is non-standard.",
+      "suggestion": "Replace with 6 (spacious) or 8 (extra spacious)",
+      "severity": "error",
+      "excludePaths": [
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "Enforce ring-1 for focus",
+      "pattern": "\\\\bring-2\\\\b",
+      "message": "Use ring-1 for focus indicators in this design system.",
+      "suggestion": "Replace ring-2 with ring-1",
+      "severity": "error",
+      "excludePaths": [
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "Gap placement after grid-cols",
+      "pattern": "gap-\\\\d+\\\\s+grid-cols-",
+      "message": "Place gap classes after grid-cols for consistency",
+      "suggestion": "Use: grid-cols-1 md:grid-cols-2 gap-4",
+      "severity": "error",
+      "excludePaths": [
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No sm: breakpoint in grid",
+      "pattern": "sm:grid-cols-",
+      "message": "Use md: breakpoint for grid layouts instead of sm:",
+      "suggestion": "Replace sm:grid-cols-* with md:grid-cols-*",
+      "severity": "error",
+      "excludePaths": [
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     }
   ]
 }

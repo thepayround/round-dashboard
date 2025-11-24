@@ -3,6 +3,7 @@ import { RotateCcw, Save } from 'lucide-react'
 import { useOrganizationFormController } from '../hooks/useOrganizationFormController'
 
 import { Button } from '@/shared/ui/Button'
+import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
 import { OrganizationForm } from '@/shared/widgets/forms/OrganizationForm'
 
 interface OrganizationSettingsFormProps {
@@ -25,7 +26,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
     return (
       <div className={`space-y-6 ${className}`}>
         <div className="flex items-center justify-center py-12">
-          <div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+          <LoadingSpinner size="lg" color="primary" />
         </div>
       </div>
     )
@@ -48,7 +49,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
             disabled={isSaving || !isDirty}
             icon={RotateCcw}
             variant="ghost"
-            size="sm"
+            size="md"
           >
             Reset
           </Button>
@@ -59,7 +60,7 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
             icon={Save}
             iconPosition="left"
             variant="primary"
-            size="sm"
+            size="md"
           >
             {isSaving ? 'Saving...' : 'Save Changes'}
           </Button>

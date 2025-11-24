@@ -8,6 +8,7 @@ import { AddressStep } from '@/features/onboarding/components/steps/AddressStep'
 import type { EnhancedAddressInfo } from '@/features/onboarding/types/onboarding'
 import { ActionButton } from '@/shared/ui/ActionButton'
 import { Card } from '@/shared/ui/Card'
+import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
 
 
 export const AddressManagementSection: React.FC = () => {
@@ -106,13 +107,13 @@ export const AddressManagementSection: React.FC = () => {
             >
               {isLoading && (
                 <div className="flex items-center justify-center py-12">
-                  <div className="w-8 h-8 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
+                  <LoadingSpinner size="lg" color="secondary" />
                   <span className="ml-3 text-white/60">Loading address data...</span>
                 </div>
               )}
 
               {!isLoading && isEditing && (
-        <AddressStep data={addressFormData} onChange={handleAddressFormDataChange} isPrePopulated />
+                <AddressStep data={addressFormData} onChange={handleAddressFormDataChange} isPrePopulated />
               )}
 
               {!isLoading && !isEditing && <ReadOnlyAddressForm />}

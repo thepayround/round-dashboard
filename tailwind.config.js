@@ -60,41 +60,63 @@ export default {
           DEFAULT: 'hsl(var(--bg))',        // Pure black #000000
           subtle: 'hsl(var(--bg-subtle))',  // #0a0a0a
           raised: 'hsl(var(--bg-raised))',  // #141414
+          hover: 'hsl(var(--bg-hover))',    // #1a1a1a
+          surface: '#141416',
+          table: '#101011',
         },
         fg: {
           DEFAULT: 'hsl(var(--fg))',        // Almost white
           muted: 'hsl(var(--fg-muted))',    // Gray
+          subtle: 'hsl(var(--fg-subtle))',  // Darker gray
         },
 
         // Your Brand Colors
         primary: {
           DEFAULT: 'hsl(var(--primary))',        // #D417C8 pink
+          hover: 'hsl(var(--primary-hover))',
           contrast: 'hsl(var(--accent-contrast))',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',      // #14BDEA cyan
+          hover: 'hsl(var(--secondary-hover))',
           contrast: 'hsl(var(--accent-contrast))',
         },
         accent: {
           DEFAULT: 'hsl(var(--accent))',         // #7767DA purple
+          hover: 'hsl(var(--accent-hover))',
           contrast: 'hsl(var(--accent-contrast))',
         },
 
         // Semantic colors
-        destructive: 'hsl(var(--destructive))',
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          hover: 'hsl(var(--destructive-hover))',
+          surface: '#401d1f',
+        },
         warning: 'hsl(var(--warning))',
         success: 'hsl(var(--success))',
 
         // UI elements
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
+        border: {
+          DEFAULT: 'hsl(var(--border))',
+          hover: 'hsl(var(--border-hover))',
+          active: 'hsl(var(--border-active))',
+        },
+        input: {
+          DEFAULT: 'hsl(var(--input))',
+          focus: 'hsl(var(--input-focus))',
+        },
         ring: 'hsl(var(--ring))',
-        card: 'hsl(var(--card))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          hover: 'hsl(var(--card-hover))',
+        },
 
         // Elevation system
         elev: {
           1: 'hsl(var(--elev-1))',
           2: 'hsl(var(--elev-2))',
+          3: 'hsl(var(--elev-3))',
         },
 
         // Auth system colors (for migration from auth-* CSS classes)
@@ -180,11 +202,11 @@ export default {
       // Compact border radius (Polar.sh inspired)
       borderRadius: {
         sm: '0.25rem',  // 4px - Small elements
-        DEFAULT: '0.375rem', // 6px - Standard (buttons, inputs)
-        md: '0.375rem', // 6px - Standard
-        lg: '0.5rem',   // 8px - Cards, modals
-        xl: '0.75rem',  // 12px - Large containers
-        '2xl': '1rem',  // 16px - Extra large
+        DEFAULT: '0.5rem', // 8px - Standard (buttons, inputs)
+        md: '0.5rem', // 8px - Standard
+        lg: '0.75rem',   // 12px - Cards, modals
+        xl: '1rem',  // 16px - Large containers
+        '2xl': '1.5rem',  // 24px - Extra large
       },
       // Compact spacing scale
       spacing: {
@@ -195,7 +217,7 @@ export default {
       // Compact font sizes (Polar.sh inspired)
       fontSize: {
         'tiny': ['0.625rem', { lineHeight: '1.2' }],  // 10px
-        'xs': ['0.6875rem', { lineHeight: '1.4' }],   // 11px
+        'xs': ['0.75rem', { lineHeight: '1.4' }],   // 12px
         'sm': ['0.8125rem', { lineHeight: '1.4' }],   // 13px
         'base': ['0.875rem', { lineHeight: '1.5' }],  // 14px
         'md': ['0.9375rem', { lineHeight: '1.5' }],   // 15px

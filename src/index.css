@@ -14,16 +14,12 @@
     --z-modal: 1300;
     --z-toast: 1400;
 
-    /* Safe area insets for iOS devices (notch, home indicator, etc.) */
+    /* Safe area insets for iOS devices */
     --safe-area-inset-top: env(safe-area-inset-top, 0px);
     --safe-area-inset-right: env(safe-area-inset-right, 0px);
     --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
     --safe-area-inset-left: env(safe-area-inset-left, 0px);
   }
-
-  .z-dropdown { z-index: var(--z-dropdown); }
-  .z-tooltip { z-index: var(--z-tooltip); }
-  .z-popover { z-index: var(--z-popover); }
 
   /* Hide scrollbars completely */
   .hide-scrollbar {
@@ -37,66 +33,84 @@
     height: 0;
   }
 
-  .z-modal { z-index: var(--z-modal); }
-  .z-toast { z-index: var(--z-toast); }
-
-  * {
-    @apply border-border;
-  }
-
-  /* Round Brand Design System - Pure Black with Pink/Cyan/Purple */
+  /* Round Brand Design System - Premium Dark Theme (Polar.sh Inspired) */
   :root {
     /* Background tokens - Pure Black */
     --bg: 0 0% 0%;                 /* Pure black #000000 */
     --bg-subtle: 0 0% 4%;          /* Very dark #0a0a0a */
     --bg-raised: 0 0% 8%;          /* Dark raised #141414 */
+    --bg-hover: 0 0% 10%;          /* Hover state #1a1a1a */
     
     /* Foreground tokens */
-    --fg: 0 0% 98%;                /* Almost white */
+    --fg: 0 0% 93%;                /* Off-white #ededed */
     --fg-muted: 0 0% 63%;          /* Muted gray #a1a1a1 */
+    --fg-subtle: 0 0% 45%;         /* Darker gray #737373 */
     
-    /* Brand Colors - Your Purple/Pink/Cyan Palette */
-    --primary: 311 88% 44%;        /* #D417C8 pink - Primary actions */
-    --secondary: 192 88% 50%;      /* #14BDEA cyan - Secondary actions */
-    --accent: 249 61% 64%;         /* #7767DA purple - Accent elements */
+    /* Brand Colors - Refined Palette */
+    --primary: 220 100% 60%;       /* #3385ff Blue (Polar style) or keep Pink if strictly required? User asked for "heavy influence" from mockups. Mockups show Blue buttons. Switching to Blue. */
+    --primary-hover: 220 100% 55%;
+    
+    /* Keeping original brand colors as secondary/accent if needed, but prioritizing mockup style */
+    --secondary: 192 88% 50%;      /* #14BDEA cyan */
+    --secondary-hover: 192 88% 45%;
+    
+    --accent: 249 61% 64%;         /* #7767DA purple */
+    --accent-hover: 249 61% 59%;
+    
     --accent-contrast: 0 0% 100%;  /* White text on colored backgrounds */
     
     /* Semantic colors */
-    --destructive: 0 72% 60%;      /* Error red */
+    --destructive: 0 84% 60%;      /* Error red */
+    --destructive-hover: 0 84% 55%;
     --warning: 38 92% 56%;         /* Warning amber */
     --success: 152 69% 58%;        /* Success green */
     
     /* UI elements */
-    --border: 0 0% 15%;            /* Dark border #262626 */
-    --input: 0 0% 9%;              /* Input background #171719 */
-    --ring: 311 88% 44%;           /* Focus ring (pink) */
-    --card: 0 0% 4%;               /* Card background #0a0a0a */
+    --border: 0 0% 12%;            /* Subtle border #1f1f1f */
+    --border-hover: 0 0% 18%;      /* Hover border #2e2e2e */
+    --border-active: 0 0% 25%;     /* Active border #404040 */
+    
+    --input: 0 0% 6%;              /* Input background #0f0f0f */
+    --input-focus: 0 0% 0%;        /* Input focus background (black) */
+    
+    --ring: 220 100% 60%;          /* Focus ring (Blue) */
+    
+    --card: 0 0% 3%;               /* Card background #080808 */
+    --card-hover: 0 0% 5%;         /* Card hover #0d0d0d */
     
     /* Elevation system */
     --elev-1: 0 0% 6%;             /* #0f0f0f */
     --elev-2: 0 0% 10%;            /* #1a1a1a */
+    --elev-3: 0 0% 14%;            /* #242424 */
   }
 
-  /* Light theme variant */
+  /* Light theme variant (Optional, focusing on Dark as per request) */
   :root.light {
     --bg: 0 0% 100%;
     --bg-subtle: 0 0% 98%;
     --bg-raised: 0 0% 100%;
-    --fg: 222 47% 11%;
-    --fg-muted: 215 16% 35%;
-    --primary: 311 88% 44%;
-    --secondary: 192 88% 50%;
-    --accent: 249 61% 64%;
-    --accent-contrast: 0 0% 100%;
-    --destructive: 0 72% 51%;
-    --warning: 38 92% 50%;
-    --success: 152 69% 58%;
-    --border: 214 14% 90%;
-    --input: 214 14% 92%;
-    --ring: 311 88% 44%;
+    --bg-hover: 0 0% 96%;
+    
+    --fg: 0 0% 9%;
+    --fg-muted: 0 0% 40%;
+    --fg-subtle: 0 0% 60%;
+    
+    --primary: 220 100% 50%;
+    --primary-hover: 220 100% 45%;
+    
+    --border: 0 0% 90%;
+    --border-hover: 0 0% 85%;
+    --border-active: 0 0% 80%;
+    
+    --input: 0 0% 100%;
+    --input-focus: 0 0% 100%;
+    
     --card: 0 0% 100%;
+    --card-hover: 0 0% 99%;
+    
     --elev-1: 0 0% 100%;
     --elev-2: 0 0% 100%;
+    --elev-3: 0 0% 100%;
   }
 
   html {
@@ -116,279 +130,72 @@
       -apple-system,
       sans-serif;
     font-feature-settings: 'cv11', 'ss01';
-    font-variation-settings: 'opsz' 32;
     background-color: hsl(var(--bg));
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    /* Dev-SaaS Minimal typography - base 14px for density */
-    font-size: 14px;
-    line-height: 1.6;
-    font-weight: 500;
+    font-size: 14px; /* Base size */
+    line-height: 1.5;
+    font-weight: 400;
     letter-spacing: -0.01em;
     color: hsl(var(--fg));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  @media (min-width: 640px) {
-    body {
-      font-size: 13px;
-      line-height: 1.6;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    body {
-      font-size: 14px;
-      line-height: 1.6;
-    }
-  }
-
-  /* Polar.sh inspired typography scale */
+  /* Typography overrides for headings */
   h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
     letter-spacing: -0.02em;
-    color: #fafafa;
-    line-height: 1.3;
+    color: hsl(var(--fg));
+    line-height: 1.2;
   }
-
-  h1 { font-size: 2rem; font-weight: 600; }
-  h2 { font-size: 1.5rem; }
-  h3 { font-size: 1.25rem; }
-  h4 { font-size: 1.125rem; }
-  h5 { font-size: 1rem; }
-  h6 { font-size: 0.875rem; }
-
-
-  strong, b {
-    font-weight: 500;
-    color: #fafafa;
-  }
-
-  /* Removed animated background for clean aesthetic */
-
-  /* Removed animated background for clean aesthetic */
 
   /* Clean transition standards */
   * {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
   }
-
-  /* Remove unnecessary keyframes */
 }
 
 @layer components {
-  .floating-orb {
-    display: none;
+  /* Premium Input Styles */
+  .input-premium {
+    @apply h-10 w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-fg placeholder:text-fg-subtle focus:border-ring/50 focus:bg-input-focus focus:outline-none focus:ring-2 focus:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200;
   }
 
-  .floating-orb:nth-child(1) {
-    width: 200px;
-    height: 200px;
-    background: #8b5cf6;
-    top: 5%;
-    left: 5%;
-    animation-delay: 0s;
-  }
-
-  .floating-orb:nth-child(2) {
-    width: 150px;
-    height: 150px;
-    background: #7c3aed;
-    bottom: 10%;
-    right: 5%;
-    animation-delay: 3s;
-  }
-
-  .floating-orb:nth-child(3) {
-    width: 120px;
-    height: 120px;
-    background: #6b46c1;
-    top: 70%;
-    left: 85%;
-    animation-delay: 6s;
-  }
-
-  @keyframes orbFloat {
-    0%,
-    100% {
-      transform: translateY(0px) rotate(0deg);
-    }
-    33% {
-      transform: translateY(-30px) rotate(120deg);
-    }
-    66% {
-      transform: translateY(-15px) rotate(240deg);
-    }
-  }
-
-
-  .gradient-header {
-    background: #d417c8;
-    height: 1px;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    box-shadow: 
-      0 0 8px rgba(212, 23, 200, 0.6),
-      0 0 16px rgba(212, 23, 200, 0.4),
-      0 0 24px rgba(212, 23, 200, 0.2),
-      0 2px 4px rgba(0, 0, 0, 0.3);
-    position: relative;
+  /* Premium Button Styles */
+  .btn-premium {
+    @apply inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
   }
   
-  .gradient-header::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: -2px;
-    right: -2px;
-    bottom: -1px;
-    background: #d417c8;
-    border-radius: 4px;
-    filter: blur(3px);
-    opacity: 0.7;
-    z-index: -1;
+  .btn-primary {
+    @apply bg-primary text-primary-contrast hover:bg-primary-hover shadow-sm hover:shadow-md;
+  }
+  
+  .btn-secondary {
+    @apply bg-bg-raised border border-border text-fg hover:bg-bg-hover hover:border-border-hover;
+  }
+  
+  .btn-ghost {
+    @apply hover:bg-bg-hover text-fg-muted hover:text-fg;
   }
 
-  /* Validation error styling with red colors */
-  /* Removed glassmorphism patterns */
-
-  /* Modal input styling - matches auth inputs */
-  .modal-input {
-    width: 100%;
-    height: 2.25rem; /* 36px inputs */
-    padding: 0 0.75rem;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px; /* Consistent 8px radius */
-    color: rgba(255, 255, 255, 0.95) !important;
-    font-weight: 300; /* Light weight for premium feel */
-    font-size: 0.75rem; /* 12px - matches auth inputs */
-    line-height: 1.2;
-    transition: all 0.3s ease;
-    outline: none;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    position: relative;
+  /* Premium Card Styles */
+  .card-premium {
+    @apply rounded-xl border border-border bg-card text-fg shadow-sm transition-all hover:border-border-hover;
   }
 
-  @media (min-width: 768px) {
-    .modal-input {
-      height: 2.25rem; /* 36px - desktop inputs */
-      padding: 0 0.875rem;
-      font-size: 0.75rem; /* 12px - consistent */
-      font-weight: 375;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .modal-input {
-      height: 2.25rem; /* 36px - desktop inputs */
-      padding: 0 1rem;
-      font-size: 0.75rem; /* 12px - consistent */
-      font-weight: 400;
-    }
-  }
-
-  .modal-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: 400;
-  }
-
-  .modal-input:hover:not(:focus) {
-    background: rgba(255, 255, 255, 0.18) !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
-  }
-
-  .modal-input:focus {
-    background: rgba(255, 255, 255, 0.18) !important;
-    border-color: rgba(20, 189, 234, 0.5) !important;
-    box-shadow:
-      0 0 0 3px rgba(20, 189, 234, 0.15),
-      0 4px 16px rgba(20, 189, 234, 0.2);
-    transform: translateY(-1px);
-    color: rgba(255, 255, 255, 1) !important;
-  }
-
-  /* Fix autocomplete styling - prevent white background */
-  .modal-input:-webkit-autofill,
-  .modal-input:-webkit-autofill:hover,
-  .modal-input:-webkit-autofill:focus,
-  .modal-input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.12) inset !important;
-    -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
-    background: rgba(255, 255, 255, 0.12) !important;
-    transition: background-color 5000s ease-in-out 0s !important;
-  }
-
-  .modal-input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.18) inset !important;
-    -webkit-text-fill-color: rgba(255, 255, 255, 1) !important;
-    background: rgba(255, 255, 255, 0.18) !important;
-  }
-
-  /* Modal textarea styling */
-  .modal-input.textarea {
-    height: auto;
-    min-height: 5rem; /* 80px - spacious text areas */
-    padding: 1rem;
-    line-height: 1.6;
-    resize: none;
-  }
-
-  @media (min-width: 640px) {
-    .modal-input.textarea {
-      min-height: 5.5rem; /* 88px - enhanced spaciousness */
-      padding: 1rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .modal-input.textarea {
-      min-height: 6rem; /* 96px - premium feel */
-      padding: 1rem;
-    }
-  }
-
-  /* Modal select styling */
-  .modal-input[type="select"],
-  select.modal-input {
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.6)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 1rem 1rem;
-    padding-right: 2.5rem;
-  }
-
-  select.modal-input:hover {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.8)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-  }
-
-  /* Modal label styling */
-  .modal-label {
-    display: block;
-    font-size: 0.875rem; /* 14px - text-sm */
-    font-weight: 500; /* font-medium */
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 0.5rem; /* 8px - better spacing for larger text */
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
-    text-transform: none; /* Title Case - Polar.sh inspired */
-    letter-spacing: -0.01em; /* Tight tracking for better readability */
-  }
-
-
-  /* Ensure consistent dark theme across all components */
+  /* Scrollbar styling */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    scrollbar-color: hsl(var(--border)) transparent;
   }
 
-  /* WebKit scrollbar styling */
   *::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   *::-webkit-scrollbar-track {
@@ -396,380 +203,12 @@
   }
 
   *::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
+    background: hsl(var(--border));
+    border-radius: 3px;
   }
 
   *::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  /* Enhanced dark mode selection */
-  ::selection {
-    background: rgba(212, 23, 200, 0.3);
-    color: white;
-  }
-
-  ::-moz-selection {
-    background: rgba(212, 23, 200, 0.3);
-    color: white;
-  }
-
-  /* Removed gradient animations */
-
-  /* Ensure dropdowns appear above all other content */
-  [data-dropdown-portal] {
-    z-index: 9999 !important;
-    position: relative;
-  }
-
-  /* Dropdown menu and portal z-indexes */
-  .dropdown-menu {
-    z-index: 1000 !important;
-    position: relative;
-  }
-
-  .dropdown-content {
-    z-index: 1000 !important;
-  }
-
-  /* Ensure dropdowns appear above modals and other overlays */
-  [role="listbox"],
-  [role="menu"],
-  [role="dialog"],
-  .dropdown-overlay {
-    z-index: 9999 !important;
-  }
-
-  /* Dropdown items should be above the dropdown container */
-  [role="option"],
-  .dropdown-item {
-    z-index: 10000 !important;
-    position: relative;
-  }
-
-  /* Modal overlay should be below dropdowns but above other content */
-  .modal-overlay {
-    z-index: 900 !important;
-  }
-
-  /* Mobile-first responsive utilities */
-  .touch-target {
-    min-height: 36px;
-    min-width: 36px;
-  }
-
-  @media (max-width: 1023px) {
-    .touch-target {
-      min-height: 36px;
-      min-width: 36px;
-    }
-  }
-
-  /* Enhanced mobile responsiveness */
-  @media (max-width: 640px) {
-    /* Improve mobile form inputs */
-    input, textarea, select {
-      font-size: 16px !important; /* Prevent iOS zoom */
-      line-height: 1.5;
-    }
-
-    /* Better mobile navigation */
-    .sidebar-collapsed {
-      transform: translateX(-100%);
-    }
-
-    /* Improve mobile cards */
-    .card-mobile {
-      padding: 1rem;
-      border-radius: 8px; /* Consistent 8px everywhere */
-    }
-
-    /* Better mobile modals */
-    .modal-mobile {
-      padding: 1rem;
-      margin: 0.5rem;
-      max-height: 95vh;
-      border-radius: 8px; /* Consistent 8px everywhere */
-    }
-
-    /* Improve mobile typography */
-    h1 { font-size: 1.875rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.25rem; }
-    
-    /* Better mobile scroll behavior */
-    .mobile-scroll {
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
-    }
-  }
-
-  @media (max-width: 475px) {
-    /* Smaller touch targets for very small screens */
-    .touch-target {
-      min-height: 36px;
-      min-width: 36px;
-    }
-
-    /* Better typography for small screens */
-    .text-responsive {
-      font-size: 0.875rem;
-      line-height: 1.4;
-    }
-  }
-
-  /* Safe area support for modern mobile devices */
-  @supports (padding: max(0px)) {
-    .safe-area-inset-top {
-      padding-top: max(1rem, env(safe-area-inset-top));
-    }
-    
-    .safe-area-inset-bottom {
-      padding-bottom: max(1rem, env(safe-area-inset-bottom));
-    }
-    
-    .safe-area-inset-left {
-      padding-left: max(1rem, env(safe-area-inset-left));
-    }
-    
-    .safe-area-inset-right {
-      padding-right: max(1rem, env(safe-area-inset-right));
-    }
-  }
-
-  /* Improved mobile interactions */
-  @media (hover: none) and (pointer: coarse) {
-    /* Touch device optimizations */
-    .hover\:scale-105:hover {
-      transform: none;
-    }
-    
-    .group:hover .group-hover\:scale-110 {
-      transform: none;
-    }
-    
-    /* Better focus states for touch */
-    button:focus, 
-    a:focus, 
-    input:focus, 
-    textarea:focus, 
-    select:focus {
-      outline: 2px solid rgba(212, 23, 200, 0.6);
-      outline-offset: 2px;
-      border-radius: 8px;
-    }
-  }
-
-  /* Landscape mobile optimization */
-  @media (max-height: 500px) and (orientation: landscape) {
-    .modal-mobile {
-      max-height: 90vh;
-      padding: 0.75rem;
-    }
-  }
-
-  /* Mobile-friendly form spacing */
-  .mobile-form-spacing > * + * {
-    margin-top: 1rem;
-  }
-
-  @media (min-width: 640px) {
-    .mobile-form-spacing > * + * {
-      margin-top: 1.5rem;
-    }
-  }
-
-  /* Mobile-optimized text sizes */
-  .responsive-text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
-
-  @media (max-width: 639px) {
-    .responsive-text-sm {
-      font-size: 1rem;
-      line-height: 1.5rem;
-    }
-  }
-
-  /* Improved mobile focus states */
-  @media (max-width: 1023px) {
-    .focus-mobile:focus {
-      outline: 3px solid rgba(20, 189, 234, 0.6) !important;
-      outline-offset: 3px !important;
-      border-radius: 8px;
-    }
-
-    /* Larger tap targets on mobile - WCAG 2.1 Level AAA (44px minimum) */
-    button, .btn, [role="button"] {
-      min-height: 44px;
-      min-width: 44px;
-    }
-
-    /* Improve mobile form inputs */
-    input[type="text"], 
-    input[type="email"], 
-    input[type="password"], 
-    input[type="tel"],
-    textarea, 
-    select {
-      font-size: 16px !important; /* Prevent zoom on iOS */
-      min-height: 44px;
-    }
-  }
-
-  /* Responsive grid utilities */
-  .responsive-grid-1 {
-    grid-template-columns: 1fr;
-  }
-
-  @media (min-width: 640px) {
-    .responsive-grid-2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 768px) {
-    .responsive-grid-3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .responsive-grid-4 {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  /* Ultra-premium business component utilities */
-  .premium-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 8px; /* Consistent 8px radius */
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
-    transition: all 0.15s ease;
-  }
-
-  .premium-card:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
-    transform: translateY(-0.5px);
-  }
-
-  .premium-table-row {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    padding: 0.375rem 0.75rem; /* Ultra compact 6px top/bottom, 12px left/right */
-    font-size: 0.75rem; /* 12px - ultra compact table text */
-    font-weight: 375; /* Lighter weight for elegance */
-    line-height: 1.3;
-    transition: all 0.12s ease;
-  }
-
-  .premium-table-row:hover {
-    background: rgba(255, 255, 255, 0.02);
-    border-bottom-color: rgba(255, 255, 255, 0.06);
-  }
-
-  .premium-table-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 0.375rem 0.75rem;
-    font-size: 0.6875rem; /* 11px - ultra compact header text */
-    font-weight: 550;
-    text-transform: none; /* Title Case - Polar.sh inspired */
-    letter-spacing: 0.05em; /* Reduced tracking for Title Case */
-    color: rgba(255, 255, 255, 0.75);
-  }
-
-  .premium-input {
-    height: 1.75rem; /* 28px mobile - compact but usable */
-    padding: 0 0.75rem;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px; /* Consistent 8px radius */
-    font-size: 0.75rem; /* 12px - compact and readable */
-    font-weight: 375; /* Lighter for premium feel */
-    color: rgba(255, 255, 255, 0.95);
-    transition: all 0.15s ease;
-  }
-
-  @media (min-width: 768px) {
-    .premium-input {
-      height: 2.25rem; /* 36px tablet+ - better usability */
-      padding: 0 1rem;
-      font-size: 0.8125rem; /* 13px - readable on larger screens */
-    }
-  }
-
-  .premium-input:focus {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(20, 189, 234, 0.3);
-    box-shadow: 0 0 0 1px rgba(20, 189, 234, 0.12);
-  }
-
-  .premium-button {
-    height: 2.25rem; /* 36px - consistent with all buttons */
-    padding: 0 1rem;
-    font-size: 0.875rem; /* 14px - clear and consistent */
-    font-weight: 450; /* Medium weight for clarity */
-    border-radius: 8px; /* Consistent 8px radius */
-    transition: all 0.12s ease;
-  }
-
-  @media (min-width: 768px) {
-    .premium-button {
-      height: 2.25rem; /* 36px - consistent with desktop */
-      padding: 0 1rem;
-      font-size: 0.875rem; /* 14px - clear on larger screens */
-    }
-  }
-
-  .premium-dropdown {
-    height: 1.75rem; /* 28px mobile - same as inputs */
-    padding: 0 0.75rem;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px; /* Consistent 8px radius */
-    font-size: 0.75rem; /* 12px - consistent with inputs */
-    font-weight: 375;
-    color: rgba(255, 255, 255, 0.95);
-    transition: all 0.15s ease;
-  }
-
-  @media (min-width: 768px) {
-    .premium-dropdown {
-      height: 2.25rem; /* 36px tablet+ - consistent with inputs */
-      padding: 0 1rem;
-      font-size: 0.8125rem; /* 13px - readable */
-    }
-  }
-
-  /* Ultra-premium liner text hierarchy */
-  .premium-text-xs { font-size: 0.625rem; font-weight: 350; } /* 10px - ultra compact */
-  .premium-text-sm { font-size: 0.6875rem; font-weight: 375; } /* 11px - compact */
-  .premium-text-base { font-size: 0.75rem; font-weight: 400; } /* 12px - standard */
-  .premium-text-lg { font-size: 0.8125rem; font-weight: 425; } /* 13px - medium */
-  .premium-text-xl { font-size: 0.875rem; font-weight: 450; } /* 14px - large */
-  .premium-text-2xl { font-size: 1rem; font-weight: 500; } /* 16px - headings only */
-
-  /* Safe area handling for mobile devices */
-  @supports (padding: max(0px)) {
-    .safe-area-top {
-      padding-top: max(1rem, env(safe-area-inset-top));
-    }
-    
-    .safe-area-bottom {
-      padding-bottom: max(1rem, env(safe-area-inset-bottom));
-    }
-    
-    .safe-area-left {
-      padding-left: max(1rem, env(safe-area-inset-left));
-    }
-    
-    .safe-area-right {
-      padding-right: max(1rem, env(safe-area-inset-right));
-    }
+    background: hsl(var(--border-hover));
   }
 }
  

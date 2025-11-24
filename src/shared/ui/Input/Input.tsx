@@ -9,34 +9,34 @@ import { cn } from '@/shared/utils/cn'
 
 const inputVariants = cva(
   [
-    // Base styles - Compact design for better information density
-    'w-full h-9 px-4 bg-auth-bg border border-auth-border rounded-md text-white placeholder:text-auth-placeholder font-light text-sm tracking-tight transition-all duration-200 hover:border-auth-border-hover focus:border-auth-primary focus:bg-auth-bg outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed',
-    // Autofill styles - prevent white background on autofill
-    '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+    // Base styles - Premium design
+    'w-full h-10 px-3 bg-input border border-border rounded-lg text-fg placeholder:text-fg-subtle font-normal text-sm transition-all duration-200 hover:border-border-hover focus:border-ring focus:ring-1 focus:ring-ring/20 focus:bg-input-focus outline-none appearance-none disabled:opacity-50 disabled:cursor-not-allowed',
+    // Autofill styles - match input background
+    '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_#0f0f0f_inset!important]',
     '[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
-    '[&:-webkit-autofill]:[background-color:#171719!important]',
+    '[&:-webkit-autofill]:[background-color:#0f0f0f!important]',
     '[&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s!important]',
     // Autofill hover state
-    '[&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+    '[&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0_1000px_#0f0f0f_inset!important]',
     '[&:-webkit-autofill:hover]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
     // Autofill focus state
-    '[&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0_1000px_#171719_inset!important]',
+    '[&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0_1000px_#0f0f0f_inset!important]',
     '[&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,1)!important]',
     // Internal autofill selected
-    '[&:-internal-autofill-selected]:[background-color:#171719!important]',
+    '[&:-internal-autofill-selected]:[background-color:#0f0f0f!important]',
     '[&:-internal-autofill-selected]:[color:rgba(255,255,255,0.95)!important]',
   ].join(' '),
   {
     variants: {
       size: {
-        sm: 'h-8 px-2 text-xs',
-        md: 'h-9 px-4 text-sm',
-        lg: 'h-10 px-4 text-sm',
+        sm: 'h-10 px-3 text-xs', // Standard 40px
+        md: 'h-10 px-3 text-sm', // Standard 40px
+        lg: 'h-10 px-4 text-base', // Standard 40px
       },
       variant: {
         default: '',
-        error: 'border-auth-error bg-auth-error-bg focus:border-auth-error',
-        success: 'border-success bg-success/5 focus:border-success',
+        error: 'border-destructive focus:border-destructive focus:ring-destructive/20',
+        success: 'border-success focus:border-success focus:ring-success/20',
       },
     },
     defaultVariants: {
@@ -48,7 +48,7 @@ const inputVariants = cva(
 
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
-    VariantProps<typeof inputVariants> {
+  VariantProps<typeof inputVariants> {
   /** Label text displayed above input */
   label?: string
   /** Error message to display below input */
@@ -121,17 +121,17 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-normal text-white/90 mb-1.5 tracking-tight"
+            className="block text-sm font-normal text-fg mb-1.5 tracking-tight"
           >
             {label}
-            {required && <span className="text-primary ml-1">*</span>}
+            {required && <span className="text-destructive ml-1">*</span>}
           </label>
         )}
 
         <div className="relative">
           {LeftIcon && (
             <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center">
-              <LeftIcon className="w-4 h-4 text-auth-icon-primary" />
+              <LeftIcon className="w-4 h-4 text-fg-muted" />
             </div>
           )}
 
@@ -155,8 +155,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               hasError
                 ? `${inputId}-error`
                 : helperText
-                ? `${inputId}-helper`
-                : undefined
+                  ? `${inputId}-helper`
+                  : undefined
             }
             {...props}
           />
@@ -165,7 +165,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <PlainButton
               type="button"
               onClick={handleCopy}
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 hover:text-white/90 text-auth-icon"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 hover:text-fg text-fg-muted"
               aria-label="Copy to clipboard"
               unstyled
             >
@@ -178,8 +178,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
 
           {RightIcon && !shouldShowCopyButton && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 hover:text-white/90">
-              <RightIcon className="w-4 h-4 text-auth-icon" />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 hover:text-fg">
+              <RightIcon className="w-4 h-4 text-fg-muted" />
             </div>
           )}
         </div>
@@ -191,7 +191,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="mt-1.5 flex items-center space-x-1.5 text-auth-error font-medium text-xs"
+              className="mt-1.5 flex items-center space-x-1.5 text-destructive font-medium text-xs"
               role="alert"
               aria-live="polite"
               aria-atomic="true"
@@ -204,7 +204,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {!error && helperText && (
             <p
               id={`${inputId}-helper`}
-              className="mt-1.5 text-xs text-white/60"
+              className="mt-1.5 text-xs text-fg-muted"
             >
               {helperText}
             </p>
@@ -212,7 +212,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </AnimatePresence>
 
         {shouldShowCharacterCount && (
-          <p className="mt-1 text-xs text-white/60 text-right">
+          <p className="mt-1 text-xs text-fg-muted text-right">
             {currentLength} / {maxLength}
           </p>
         )}

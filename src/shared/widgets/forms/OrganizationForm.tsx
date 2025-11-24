@@ -3,7 +3,7 @@ import { Building, ExternalLink } from 'lucide-react'
 import { useCallback } from 'react'
 
 import { useCurrency } from '@/shared/hooks/useCurrency'
-import { Input, Textarea, UiDropdown } from '@/shared/ui'
+import { Input, Textarea, UiDropdown, IconBox, LoadingSpinner } from '@/shared/ui'
 import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig } from '@/shared/ui/ApiDropdown'
 
 export interface OrganizationFormData {
@@ -93,21 +93,19 @@ export const OrganizationForm = ({
 
       {/* Form Sections */}
       <div className="space-y-6">
-        
+
         {/* Company Identity Section */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.3 : 0.1 }}
-          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+          className="bg-card border border-border rounded-xl p-6 shadow-sm"
         >
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-              <Building className="w-4 h-4 text-secondary" />
-            </div>
+            <IconBox icon={Building} color="secondary" size="md" />
             <div>
-              <h3 className="text-sm font-medium text-white">Company Identity</h3>
-              <p className="text-xs text-gray-400">Basic company information</p>
+              <h3 className="text-sm font-medium text-fg">Company Identity</h3>
+              <p className="text-xs text-fg-muted">Basic company information</p>
             </div>
           </div>
 
@@ -157,23 +155,21 @@ export const OrganizationForm = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: showHeader ? 0.4 : 0.2 }}
-          className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+          className="bg-card border border-border rounded-xl p-6 shadow-sm"
         >
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-              <Building className="w-4 h-4 text-secondary" />
-            </div>
+            <IconBox icon={Building} color="secondary" size="md" />
             <div>
-              <h3 className="text-sm font-medium text-white">Business Details</h3>
-              <p className="text-xs text-gray-400">Industry and company classification</p>
+              <h3 className="text-sm font-medium text-fg">Business Details</h3>
+              <p className="text-xs text-fg-muted">Industry and company classification</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Country */}
             <div>
-              <span className="block text-sm font-medium text-gray-300 mb-2">
-                Country <span className="text-red-400">*</span>
+              <span className="block text-sm font-medium text-fg-muted mb-1.5">
+                Country <span className="text-destructive">*</span>
               </span>
               <ApiDropdown
                 config={countryDropdownConfig}
@@ -183,13 +179,13 @@ export const OrganizationForm = ({
                 error={!!errors.country}
                 allowClear
               />
-              {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
+              {errors.country && <p className="mt-1 text-sm text-destructive">{errors.country}</p>}
             </div>
 
             {/* Industry */}
             <div>
-              <span className="block text-sm font-medium text-gray-300 mb-2">
-                Industry <span className="text-red-400">*</span>
+              <span className="block text-sm font-medium text-fg-muted mb-1.5">
+                Industry <span className="text-destructive">*</span>
               </span>
               <ApiDropdown
                 config={industryDropdownConfig}
@@ -199,13 +195,13 @@ export const OrganizationForm = ({
                 error={!!errors.industry}
                 allowClear
               />
-              {errors.industry && <p className="mt-1 text-sm text-red-400">{errors.industry}</p>}
+              {errors.industry && <p className="mt-1 text-sm text-destructive">{errors.industry}</p>}
             </div>
 
             {/* Company Size */}
             <div>
-              <span className="block text-sm font-medium text-gray-300 mb-2">
-                Company Size <span className="text-red-400">*</span>
+              <span className="block text-sm font-medium text-fg-muted mb-1.5">
+                Company Size <span className="text-destructive">*</span>
               </span>
               <ApiDropdown
                 config={companySizeDropdownConfig}
@@ -215,13 +211,13 @@ export const OrganizationForm = ({
                 error={!!errors.companySize}
                 allowClear
               />
-              {errors.companySize && <p className="mt-1 text-sm text-red-400">{errors.companySize}</p>}
+              {errors.companySize && <p className="mt-1 text-sm text-destructive">{errors.companySize}</p>}
             </div>
 
             {/* Organization Type */}
             <div>
-              <span className="block text-sm font-medium text-gray-300 mb-2">
-                Organization Type <span className="text-red-400">*</span>
+              <span className="block text-sm font-medium text-fg-muted mb-1.5">
+                Organization Type <span className="text-destructive">*</span>
               </span>
               <ApiDropdown
                 config={organizationTypeDropdownConfig}
@@ -231,7 +227,7 @@ export const OrganizationForm = ({
                 error={!!errors.organizationType}
                 allowClear
               />
-              {errors.organizationType && <p className="mt-1 text-sm text-red-400">{errors.organizationType}</p>}
+              {errors.organizationType && <p className="mt-1 text-sm text-destructive">{errors.organizationType}</p>}
             </div>
 
             {/* Registration Number */}
@@ -266,28 +262,28 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.5 : 0.3 }}
-            className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+            className="bg-card border border-border rounded-xl p-6 shadow-sm"
           >
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent/20 to-primary/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
                 <span className="text-sm font-semibold text-accent">{currencySymbol}</span>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-white">Financial Information</h3>
-                <p className="text-xs text-gray-400">Revenue and currency settings</p>
+                <h3 className="text-sm font-medium text-fg">Financial Information</h3>
+                <p className="text-xs text-fg-muted">Revenue and currency settings</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Currency */}
               <div>
-                <label htmlFor="currency" className="auth-label">
-                  Currency <span className="text-red-400">*</span>
+                <label htmlFor="currency" className="block text-sm font-medium text-fg-muted mb-1.5">
+                  Currency <span className="text-destructive">*</span>
                 </label>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10 pointer-events-none">
                     {currencyLoading ? (
-                      <div className="w-3 h-3 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
+                      <LoadingSpinner size="xs" color="secondary" />
                     ) : (
                       <span className="text-sm font-semibold text-secondary">
                         {currencySymbol}
@@ -313,14 +309,14 @@ export const OrganizationForm = ({
 
               {/* Revenue */}
               <div>
-                <label htmlFor="revenue" className="auth-label">
+                <label htmlFor="revenue" className="block text-sm font-medium text-fg-muted mb-1.5">
                   Annual Revenue
-                  <span className="text-gray-500 ml-2">({data.currency})</span>
+                  <span className="text-fg-subtle ml-2">({data.currency})</span>
                 </label>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10">
                     {currencyLoading ? (
-                      <div className="w-3 h-3 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
+                      <LoadingSpinner size="xs" color="secondary" />
                     ) : (
                       <span className="text-sm font-semibold text-secondary">
                         {currencySymbol}
@@ -348,15 +344,15 @@ export const OrganizationForm = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: showHeader ? 0.6 : 0.4 }}
-            className="bg-white/4 backdrop-blur-xl border border-white/12 rounded-lg p-6"
+            className="bg-card border border-border rounded-xl p-6 shadow-sm"
           >
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                <span className="text-sm font-semibold text-primary">π</span>
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <span className="text-sm font-semibold text-primary">πŸŒ </span>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-white">Regional Settings</h3>
-                <p className="text-xs text-gray-400">Time zone and fiscal year settings</p>
+                <h3 className="text-sm font-medium text-fg">Regional Settings</h3>
+                <p className="text-xs text-fg-muted">Time zone and fiscal year settings</p>
               </div>
             </div>
 

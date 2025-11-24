@@ -58,7 +58,7 @@ const generateBreadcrumbs = (pathname: string): BreadcrumbItem[] => {
 }
 
 const BreadcrumbSeparator: React.FC = () => (
-  <span className="text-gray-400 mx-1.5 text-xs">/</span>
+  <span className="text-fg-muted/50 mx-2 text-xs">/</span>
 )
 
 const BreadcrumbItem: React.FC<{ item: BreadcrumbItem; index: number }> = ({ item, index }) => {
@@ -70,13 +70,13 @@ const BreadcrumbItem: React.FC<{ item: BreadcrumbItem; index: number }> = ({ ite
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
       className={cn(
-        'transition-all duration-200 hover:transition-all',
+        'transition-colors duration-200',
         isActive
-          ? 'text-[#BD2CD0] font-medium'
-          : 'text-gray-400 hover:text-gray-200'
+          ? 'text-fg font-medium'
+          : 'text-fg-muted hover:text-fg'
       )}
     >
-      <span className="text-sm">{label}</span>
+      <span className="text-sm font-medium">{label}</span>
     </motion.span>
   )
 
@@ -84,7 +84,7 @@ const BreadcrumbItem: React.FC<{ item: BreadcrumbItem; index: number }> = ({ ite
   return (
     <Link
       to={href ?? '#'}
-      className="block rounded outline-none focus-visible:ring-1 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#101011]"
+      className="block rounded outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
     >
       {content}
     </Link>
@@ -102,7 +102,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, className }) => {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
-        className={cn('mb-2', className)}
+        className={cn('mb-6 border-b border-border pb-4', className)}
       >
         <div className="flex items-center flex-wrap">
           {breadcrumbItems.map((item, index) => (
@@ -113,9 +113,6 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, className }) => {
           ))}
         </div>
       </motion.nav>
-
-      {/* Gradient header - below breadcrumbs, above page content */}
-      <div className="gradient-header mb-2" />
     </div>
   )
 }

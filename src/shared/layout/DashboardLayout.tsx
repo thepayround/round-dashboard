@@ -1,16 +1,16 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { PanelLeft, PanelLeftClose, User, LogOut, X } from 'lucide-react'
+import { PanelLeft, PanelLeftClose, LogOut, X, Settings } from 'lucide-react'
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
-import ColorLogo from '@/assets/logos/color-logo.svg'
+import ColorLogo from '../../assets/logos/color-logo.svg?url'
+
 import { mainNavigationItems, bottomNavigationItems } from '@/shared/config/navigation.config'
-import { Breadcrumb } from '@/shared/layout/Breadcrumb'
 import { NavigationItem } from '@/shared/layout/DashboardLayout/NavigationItem'
 import { LAYOUT_CONSTANTS, ANIMATION_VARIANTS } from '@/shared/layout/DashboardLayout/constants'
 import type { DashboardLayoutProps } from '@/shared/layout/DashboardLayout/types'
 import { useDashboardLayoutController } from '@/shared/layout/DashboardLayout/useDashboardLayoutController'
-import { Button, IconButton, UserButton } from '@/shared/ui/Button'
+import { Button, IconButton, PlainButton } from '@/shared/ui/Button'
 import { cn } from '@/shared/utils/cn'
 
 // Logo text component (reusable, kept here as it's small and only used in mobile header)
@@ -38,7 +38,7 @@ const MobileHeader = memo(({
     role="banner"
     aria-label="Mobile header"
     style={{
-      paddingTop: 'max(1rem, var(--safe-area-inset-top))',
+      paddingTop: 'unset',
       paddingLeft: 'max(1rem, var(--safe-area-inset-left))',
       paddingRight: 'max(1rem, var(--safe-area-inset-right))',
       height: 'calc(3.5rem + var(--safe-area-inset-top))'
@@ -95,11 +95,11 @@ export const DashboardLayout = memo(({
     isKeyboardNavigating,
     handleTooltipEnter,
     handleTooltipLeave,
-    handleUserTooltipEnter,
+    handleUserTooltipEnter: _handleUserTooltipEnter,
     hoveredTooltip,
     showProfileDropdown,
     setShowProfileDropdown,
-    profileDropdownRef,
+    profileDropdownRef: _profileDropdownRef,
     userDisplayName,
     secondaryUserInfo,
     userAvatar,
@@ -116,7 +116,7 @@ export const DashboardLayout = memo(({
 
   return (
     <div
-      className="min-h-screen relative bg-[#070708]"
+      className="min-h-screen relative bg-bg"
       style={{
         '--sidebar-width': isCollapsed ? '80px' : '220px'
       } as React.CSSProperties}
@@ -126,7 +126,7 @@ export const DashboardLayout = memo(({
         type="button"
         onClick={handleSkipToMainContent}
         variant="primary"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:shadow-lg focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#070708]"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:shadow-lg focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg"
       >
         Skip to main content
       </Button>
@@ -135,7 +135,7 @@ export const DashboardLayout = memo(({
 
       {/* Mobile Header - Fixed at top */}
       {isMobileView && (
-        <MobileHeader 
+        <MobileHeader
           onMenuClick={toggleSidebar}
           isMenuOpen={!isCollapsed}
         />
@@ -147,7 +147,7 @@ export const DashboardLayout = memo(({
           <motion.div
             {...ANIMATION_VARIANTS.fadeIn}
             transition={transitionConfigs.normal}
-            className="fixed inset-0 bg-black/50 z-[60] lg:hidden"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] lg:hidden"
             onClick={() => setIsCollapsed(true)}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
@@ -175,231 +175,203 @@ export const DashboardLayout = memo(({
           x: isMobileView && isCollapsed ? -SIDEBAR.WIDTH_EXPANDED : (isSwiping ? swipeOffset : 0)
         }}
         transition={isSwiping ? { duration: 0 } : transitionConfigs.sidebar}
-        className={`fixed left-0 top-0 h-full bg-[#070708] ${isMobileView ? 'z-[70] shadow-2xl' : 'z-auto'}`}
+        className={`fixed left-0 top-0 h-full bg-bg flex flex-col ${isMobileView ? 'z-[70] shadow-2xl' : 'z-auto'}`}
         aria-label="Sidebar navigation"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
         style={isMobileView ? {
-          touchAction: 'pan-y', // Allow vertical scrolling but control horizontal
+          touchAction: 'pan-y',
           paddingTop: 'var(--safe-area-inset-top)',
           paddingBottom: 'var(--safe-area-inset-bottom)'
         } : {
           touchAction: 'auto'
         }}
       >
-        {/* Logo Section with Collapse Button - Desktop Only */}
-        {!isMobileView && (
-          <div className="flex-shrink-0">
-            {!isCollapsed ? (
-              // Expanded: Logo on left, button on right (same row)
-              <div className="flex flex-row items-center justify-between pl-4 pr-2 pt-4 pb-2">
-                <Link
-                  to="/dashboard"
-                  className="flex items-center gap-2 transition-colors duration-200 cursor-pointer min-w-0"
-                >
-                  <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
-                  <LogoText />
-                </Link>
-
-                {/* Collapse button at same height as logo */}
-                <IconButton
-                  onClick={toggleSidebar}
-                  icon={PanelLeftClose}
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-400 hover:text-white flex-shrink-0"
-                  aria-label="Collapse sidebar"
-                  title="Collapse sidebar (Ctrl+Shift+B)"
-                />
-              </div>
-            ) : (
-              // Collapsed: Logo on top, button below
-              <div className="flex flex-col items-center gap-2 pt-4 pb-2">
-                <Link
-                  to="/dashboard"
-                  className="flex items-center justify-center transition-colors duration-200 cursor-pointer"
-                >
-                  <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
-                </Link>
-
-                {/* Expand button below logo */}
-                <IconButton
-                  onClick={toggleSidebar}
-                  icon={PanelLeft}
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-400 hover:text-white"
-                  aria-label="Expand sidebar"
-                  title="Expand sidebar (Ctrl+Shift+B)"
-                />
-              </div>
+        {/* Logo Section */}
+        <div className={cn(
+          "flex-shrink-0 h-20 flex items-center transition-all duration-200",
+          isCollapsed ? "justify-center px-0" : "px-4"
+        )}>
+          <Link
+            to="/dashboard"
+            className={cn(
+              "flex items-center gap-3 transition-opacity duration-200 hover:opacity-80",
+              isCollapsed ? "hidden" : "flex"
             )}
+          >
+            <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
+            <LogoText />
+          </Link>
+
+          {/* Logo for collapsed state */}
+          {isCollapsed && (
+            <Link to="/dashboard" className="hover:opacity-80 transition-opacity">
+              <img src={ColorLogo} alt="Round Logo" className="w-8 h-8" />
+            </Link>
+          )}
+
+          {/* Collapse Button - Only visible when expanded */}
+          {!isMobileView && !isCollapsed && (
+            <IconButton
+              onClick={toggleSidebar}
+              icon={PanelLeftClose}
+              variant="ghost"
+              size="md"
+              className="ml-auto text-fg-muted hover:text-fg"
+              aria-label="Collapse sidebar"
+            />
+          )}
+        </div>
+
+        {/* Expand Button Section - Only visible when collapsed */}
+        {!isMobileView && isCollapsed && (
+          <div className="flex-shrink-0 h-10 flex items-center justify-center px-2 mb-2">
+            <IconButton
+              onClick={toggleSidebar}
+              icon={PanelLeft}
+              variant="ghost"
+              size="md"
+              className="text-fg-muted hover:text-fg"
+              aria-label="Expand sidebar"
+            />
           </div>
         )}
 
-        {/* Mobile Header inside sidebar - Same as desktop */}
+        {/* Mobile Header inside sidebar */}
         {isMobileView && !isCollapsed && (
-          <div className="flex-shrink-0">
-            <div className="flex flex-row items-center justify-between gap-2 p-2 pt-3.5">
-              <Link
-                to="/dashboard"
-                className="flex items-center gap-2 transition-colors duration-200 cursor-pointer min-w-0"
-              >
-                <img src={ColorLogo} alt="Round Logo" className="w-8 h-8 flex-shrink-0" />
-                <LogoText />
-              </Link>
-
-              {/* Close button - same as desktop collapse button */}
-              <IconButton
-                onClick={toggleSidebar}
-                icon={PanelLeftClose}
-                variant="ghost"
-                size="sm"
-                className="text-gray-400 hover:text-white flex-shrink-0"
-                aria-label="Close sidebar"
-                title="Close sidebar"
-              />
-            </div>
+          <div className="absolute top-4 right-4">
+            <IconButton
+              onClick={toggleSidebar}
+              icon={PanelLeftClose}
+              variant="ghost"
+              size="md"
+              className="text-fg-muted hover:text-fg"
+              aria-label="Close sidebar"
+            />
           </div>
         )}
 
-        {/* Main Content Area - Flex container for navigation and bottom sections */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden pt-4">
           {/* Navigation */}
           <nav
             ref={navigationRef}
-            className={`hide-scrollbar flex-1 py-4 space-y-1.5 overflow-y-auto overflow-x-hidden ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4')}`}
-            style={{ paddingBottom: showProfileDropdown ? '16rem' : '8rem' }}
+            className={`hide-scrollbar flex-1 space-y-1 overflow-y-auto overflow-x-hidden ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4')}`}
             role="navigation"
             aria-label="Main navigation"
           >
-          {resolvedNavigationItems.map(item => (
-            <NavigationItem
-              key={item.id}
-              item={item}
-              isCollapsed={isCollapsed}
-              expandedItems={expandedItems}
-              isParentActive={isParentActive}
-              isActive={isActive}
-              toggleExpanded={toggleExpanded}
-              handleTooltipEnter={handleTooltipEnter}
-              handleTooltipLeave={handleTooltipLeave}
-              getAllNavItems={getAllNavItems}
-              focusedIndex={focusedIndex}
-              isKeyboardNavigating={isKeyboardNavigating}
-              transitionConfigs={transitionConfigs}
-            />
-          ))}
+            {resolvedNavigationItems.map(item => (
+              <NavigationItem
+                key={item.id}
+                item={item}
+                isCollapsed={isCollapsed}
+                expandedItems={expandedItems}
+                isParentActive={isParentActive}
+                isActive={isActive}
+                toggleExpanded={toggleExpanded}
+                handleTooltipEnter={handleTooltipEnter}
+                handleTooltipLeave={handleTooltipLeave}
+                getAllNavItems={getAllNavItems}
+                focusedIndex={focusedIndex}
+                isKeyboardNavigating={isKeyboardNavigating}
+                transitionConfigs={transitionConfigs}
+              />
+            ))}
+          </nav>
 
-          {/* Bottom Navigation Items - Include in main navigation */}
-          {resolvedBottomNavItems.map(item => (
-            <Link
-              key={item.id}
-              to={item.href}
-              onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, undefined, e)}
-              onMouseLeave={handleTooltipLeave}
-              className={cn(
-                'group relative flex items-center rounded-md transition-all duration-200 h-9',
-                isActive(item.href)
-                  ? 'bg-primary/10 text-white border border-primary/20'
-                  : 'text-white/60 hover:text-white',
-                isCollapsed ? 'justify-center px-0' : 'px-3',
-                isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
-              )}
-              aria-label={item.label}
-              tabIndex={isKeyboardNavigating ? -1 : 0}
-            >
-              <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-4'} flex-shrink-0`} />
+          {/* Bottom Navigation */}
+          {resolvedBottomNavItems.length > 0 && (
+            <div className={`space-y-1 ${isMobileView ? 'px-4' : (isCollapsed ? 'px-2' : 'px-4')} pb-2`}>
+              {resolvedBottomNavItems.map(item => (
+                <NavigationItem
+                  key={item.id}
+                  item={item}
+                  isCollapsed={isCollapsed}
+                  expandedItems={expandedItems}
+                  isParentActive={isParentActive}
+                  isActive={isActive}
+                  toggleExpanded={toggleExpanded}
+                  handleTooltipEnter={handleTooltipEnter}
+                  handleTooltipLeave={handleTooltipLeave}
+                  getAllNavItems={getAllNavItems}
+                  focusedIndex={focusedIndex}
+                  isKeyboardNavigating={isKeyboardNavigating}
+                  transitionConfigs={transitionConfigs}
+                />
+              ))}
+            </div>
+          )}
 
-              {!isCollapsed && (
-                <div className="overflow-hidden">
-                  <span className="font-geist font-medium whitespace-nowrap text-base leading-5">{item.label}</span>
-                </div>
-              )}
-
-            </Link>
-          ))}
-
-        </nav>
-
-        {/* Fixed User Profile Section at Bottom */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[#070708] z-10">
-            {/* Expandable Profile Menu Items */}
+          {/* User Profile Section - Polar Style */}
+          <div className="mt-auto px-0 pb-0 relative">
+            {/* Dropdown Menu (Opens Upwards) */}
             <AnimatePresence>
               {showProfileDropdown && (
                 <motion.div
-                  {...ANIMATION_VARIANTS.expandCollapse}
-                  transition={transitionConfigs.normal}
-                  className={`overflow-hidden bg-[#070708] border-t border-[#262626] mx-2 space-y-1.5 ${isCollapsed ? 'px-2 py-2' : 'px-4 py-2'}`}
-                >
-                <Link
-                  to="/user-settings"
-                  onClick={() => setShowProfileDropdown(false)}
-                  onMouseEnter={(e) => handleTooltipEnter('user-settings', 'User Settings', undefined, e)}
-                  onMouseLeave={handleTooltipLeave}
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.1 }}
                   className={cn(
-                    'group relative flex items-center rounded-md transition-all duration-200 h-9',
-                    isActive('/user-settings')
-                      ? 'bg-primary/10 text-white border border-primary/20'
-                      : 'text-white/60 hover:text-white',
-                    isCollapsed ? 'justify-center px-0' : 'px-3'
+                    "absolute bottom-full mb-2 bg-card rounded-xl shadow-lg overflow-hidden z-50",
+                    isCollapsed ? "left-0 right-0" : "left-0 right-0"
                   )}
-                  aria-label="User Settings"
                 >
-                  <User className={`w-4 h-4 ${isCollapsed ? '' : 'mr-4'} flex-shrink-0`} />
-                  {!isCollapsed && (
-                    <div className="overflow-hidden">
-                      <span className="font-geist font-medium whitespace-nowrap text-base leading-5">
-                        User Settings
-                      </span>
-                    </div>
-                  )}
-                </Link>
+                  <div className="p-0 space-y-1">
+                    <Link
+                      to="/user-settings"
+                      className={cn(
+                        "flex items-center text-sm text-fg-muted hover:text-fg hover:bg-bg-hover rounded-lg transition-all duration-200",
+                        isCollapsed ? "gap-0 px-0 h-10 justify-center" : "gap-3 px-4 h-10"
+                      )}
+                      onClick={() => setShowProfileDropdown(false)}
+                    >
+                      <Settings className="w-4 h-4 flex-shrink-0" />
+                      {!isCollapsed && <span className="font-medium">Settings</span>}
+                    </Link>
+                    <PlainButton
+                      onClick={handleLogout}
+                      className={cn(
+                        "w-full flex items-center text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-all duration-200 text-left",
+                        isCollapsed ? "gap-0 px-0 h-10 justify-center" : "gap-3 px-4 h-10"
+                      )}
+                    >
+                      <LogOut className="w-4 h-4 flex-shrink-0" />
+                      {!isCollapsed && <span className="font-medium">Logout</span>}
+                    </PlainButton>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-                <Button
-                  type="button"
-                  variant="link"
-                  icon={LogOut}
-                  iconPosition="left"
-                  onClick={() => {
-                    setShowProfileDropdown(false)
-                    handleLogout()
-                  }}
-                  onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
-                  onMouseLeave={handleTooltipLeave}
-                  className={cn(
-                    'group relative rounded-md transition-all duration-200 h-9',
-                    isCollapsed ? 'justify-center px-0' : 'px-6'
-                  )}
-                  aria-label="Logout"
-                >
-                  {!isCollapsed ? 'Logout' : ''}
-                </Button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            <PlainButton
+              onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+              className={cn(
+                "w-full border-t border-border bg-bg transition-all duration-200 cursor-pointer",
+                isCollapsed ? "py-3 px-0 border-0 bg-transparent flex items-center justify-center" : "py-3 px-4 mx-2",
+                showProfileDropdown ? "border-t-primary" : ""
+              )}
+            >
+              <div className={cn(
+                "flex items-center gap-3",
+                isCollapsed && "justify-center"
+              )}>
+                <div className={cn(
+                  "rounded-full bg-bg flex items-center justify-center flex-shrink-0 overflow-hidden",
+                  isCollapsed ? "w-14 h-14" : "w-8 h-8"
+                )}>
+                  {userAvatar}
+                </div>
 
-          {/* Divider */}
-          <div className="border-t border-white/10 mx-2 bg-[#070708]" />
-          
-          {/* User Profile */}
-          <div className={cn('py-2 bg-[#070708]', isCollapsed ? 'px-2' : 'px-4')}>
-            <div className="relative" ref={profileDropdownRef}>
-              <UserButton
-                onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                onMouseEnter={handleUserTooltipEnter}
-                onMouseLeave={handleTooltipLeave}
-                collapsed={isCollapsed}
-                isExpanded={showProfileDropdown}
-                name={userDisplayName}
-                subtitle={secondaryUserInfo}
-                avatar={userAvatar}
-                aria-label="User profile menu"
-                aria-expanded={showProfileDropdown}
-              />
-            </div>
-          </div>
+                {!isCollapsed && (
+                  <div className="flex-1 min-w-0 overflow-hidden text-left">
+                    <p className="text-sm font-medium text-fg truncate">{userDisplayName}</p>
+                    <p className="text-xs text-fg-muted truncate">{secondaryUserInfo}</p>
+                  </div>
+                )}
+              </div>
+            </PlainButton>
           </div>
         </div>
       </motion.aside>
@@ -411,9 +383,8 @@ export const DashboardLayout = memo(({
           <motion.div
             {...ANIMATION_VARIANTS.tooltip}
             transition={transitionConfigs.fast}
-            className={`fixed bg-[#171719] border border-white/10 text-white rounded-md pointer-events-none z-tooltip shadow-xl ${
-              hoveredTooltip.isUser ? 'px-4 py-2 text-xs max-w-[250px]' : 'px-4 py-2 text-sm whitespace-nowrap'
-            }`}
+            className={`fixed bg-card border border-border text-fg rounded-lg pointer-events-none z-[100] shadow-xl ${hoveredTooltip.isUser ? 'px-4 py-3 text-xs max-w-[250px]' : 'px-3 py-2 text-sm whitespace-nowrap'
+              }`}
             style={{
               top: hoveredTooltip.position.top,
               left: hoveredTooltip.position.left
@@ -421,12 +392,12 @@ export const DashboardLayout = memo(({
           >
             {hoveredTooltip.isUser ? (
               <div>
-                <div className="font-normal mb-2 text-white tracking-tight">
+                <div className="font-medium mb-1 text-fg tracking-tight">
                   {hoveredTooltip.label}
                 </div>
-                <div className="text-white/90 text-sm leading-relaxed space-y-1">
+                <div className="text-fg-muted text-xs leading-relaxed space-y-0.5">
                   <div>{hoveredTooltip.userInfo?.role as React.ReactNode} at {hoveredTooltip.userInfo?.company as React.ReactNode}</div>
-                  <div className="text-white/90">{hoveredTooltip.userInfo?.email as React.ReactNode}</div>
+                  <div className="text-fg-muted">{hoveredTooltip.userInfo?.email as React.ReactNode}</div>
                 </div>
               </div>
             ) : (
@@ -445,64 +416,64 @@ export const DashboardLayout = memo(({
           <motion.div
             {...ANIMATION_VARIANTS.fadeIn}
             transition={transitionConfigs.normal}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
             onClick={() => setShowShortcuts(false)}
           >
             <motion.div
               {...ANIMATION_VARIANTS.modal}
               transition={transitionConfigs.normal}
-              className="bg-[#171719] border border-white/10 rounded-md p-6 max-w-md mx-4"
+              className="bg-card border border-border rounded-xl p-6 max-w-md mx-4 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-normal text-white tracking-tight">Keyboard Shortcuts</h3>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-medium text-fg tracking-tight">Keyboard Shortcuts</h3>
                 <IconButton
                   onClick={() => setShowShortcuts(false)}
                   icon={X}
                   variant="ghost"
-                  size="sm"
-                  className="text-white/60 hover:text-white"
+                  size="md"
+                  className="text-fg-muted hover:text-fg"
                   aria-label="Close shortcuts help"
                 />
               </div>
-              
-              <div className="space-y-4 text-sm">
+
+              <div className="space-y-6 text-sm">
                 <div>
-                  <h4 className="text-white font-normal mb-2 tracking-tight">Navigation</h4>
-                  <div className="space-y-1 text-white/60">
-                    <div className="flex justify-between">
+                  <h4 className="text-fg font-medium mb-3 tracking-tight">Navigation</h4>
+                  <div className="space-y-2 text-fg-muted">
+                    <div className="flex justify-between items-center">
                       <span>Dashboard</span>
-                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+1</kbd>
+                      <kbd className="px-2 py-1 bg-bg-raised border border-border rounded text-xs font-mono text-fg">Alt+1</kbd>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <span>Customers</span>
-                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+2</kbd>
+                      <kbd className="px-2 py-1 bg-bg-raised border border-border rounded text-xs font-mono text-fg">Alt+2</kbd>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <span>Catalog</span>
-                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Alt+3</kbd>
+                      <kbd className="px-2 py-1 bg-bg-raised border border-border rounded text-xs font-mono text-fg">Alt+3</kbd>
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
-                  <h4 className="text-white font-normal mb-2">Sidebar</h4>
-                  <div className="space-y-1 text-white/60">
-                    <div className="flex justify-between">
+                  <h4 className="text-fg font-medium mb-3">Sidebar</h4>
+                  <div className="space-y-2 text-fg-muted">
+                    <div className="flex justify-between items-center">
                       <span>Toggle Sidebar</span>
-                      <kbd className="px-2 py-1 bg-white/5 rounded text-xs">Ctrl+Shift+B</kbd>
+                      <kbd className="px-2 py-1 bg-bg-raised border border-border rounded text-xs font-mono text-fg">Ctrl+Shift+B</kbd>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <span>Arrow Navigation</span>
-                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">β†‘β†“</kbd>
+                      <kbd className="px-2 py-1 bg-bg-raised border border-border rounded text-xs font-mono text-fg">β†‘β†“</kbd>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <span>Select Item</span>
-                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Enter</kbd>
+                      <kbd className="px-2 py-1 bg-bg-raised border border-border rounded text-xs font-mono text-fg">Enter</kbd>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <span>Close/Escape</span>
-                      <kbd className="px-2 py-1 bg-white/20 rounded text-xs">Esc</kbd>
+                      <kbd className="px-2 py-1 bg-bg-raised border border-border rounded text-xs font-mono text-fg">Esc</kbd>
                     </div>
                   </div>
                 </div>
@@ -520,14 +491,13 @@ export const DashboardLayout = memo(({
           marginLeft: isMobileView ? 0 : (isCollapsed ? SIDEBAR.WIDTH_COLLAPSED : SIDEBAR.WIDTH_EXPANDED)
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className={`relative z-10 ${isMobileView ? 'mt-14 p-0' : 'p-2'}`}
+        className={`relative z-10 ${isMobileView ? 'mt-14 p-0' : 'py-2 pl-2'}`}
         style={isMobileView ? {
           paddingBottom: 'max(1rem, var(--safe-area-inset-bottom))'
         } : undefined}
       >
         <div className={`bg-[#101011] overflow-y-auto scrollbar-thin ${isMobileView ? 'min-h-[calc(100vh-4rem)]' : 'h-[calc(100vh-1rem)] rounded-xl'}`}>
-          <div className={`max-w-6xl lg:max-w-7xl xl:max-w-screen-2xl mx-auto ${isMobileView ? 'px-4 py-4' : 'px-6 py-6'}`}>
-            <Breadcrumb />
+          <div className={`max-w-[1400px] mx-auto ${isMobileView ? 'px-4 py-4' : 'px-6 py-6'}`}>
             {children}
           </div>
         </div>

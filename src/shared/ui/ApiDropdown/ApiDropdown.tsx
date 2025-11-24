@@ -13,6 +13,7 @@ import { Button, IconButton } from '../Button'
 import { dropdownStyles, getOptionClasses } from '../dropdown-styles.config'
 
 import { useDropdownController } from '@/shared/ui/hooks/useDropdownController'
+import { cn } from '@/shared/utils/cn'
 
 export interface ApiDropdownOption {
   value: string
@@ -85,6 +86,7 @@ export const ApiDropdown = <T = unknown>({
     listboxId,
     activeDescendantId,
     toggleDropdown,
+    closeDropdown,
     handleOptionSelect,
     handleClearSelection,
     handleTriggerKeyDown,
@@ -118,46 +120,56 @@ export const ApiDropdown = <T = unknown>({
 
   const dropdownPortal = isOpen
     ? createPortal(
+      <>
+        <div
+          className={`${dropdownStyles.backdrop.base} ${dropdownStyles.backdrop.zIndex}`}
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              event.stopPropagation()
+              closeDropdown()
+            }
+          }}
+          role="presentation"
+        />
         <div
           ref={dropdownRef}
-          className="dropdown-portal"
+          className={dropdownStyles.container.positioning}
           style={{
-            position: 'absolute',
-            top: dropdownPosition.top,
-            left: dropdownPosition.left,
-            width: dropdownPosition.width,
-            zIndex: 60,
+            top: `${dropdownPosition.top}px`,
+            left: `${dropdownPosition.left}px`,
+            width: `${dropdownPosition.width}px`,
+            zIndex: 9999,
           }}
         >
-          <div className="bg-[#0F1017] border border-white/10 rounded-md shadow-2xl max-h-80 overflow-hidden flex flex-col">
-            <div className="p-4 border-b border-white/5">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-md bg-white/5 flex items-center justify-center">
-                  {config.icon}
-                </div>
-                <div>
-                  <p className="text-white text-sm font-medium leading-tight">{config.placeholder}</p>
-                  <p className="text-white/60 text-xs leading-tight">Search or select an option</p>
-                </div>
-              </div>
-
-              <div className="relative mt-3">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+          <div className={`${dropdownStyles.container.base} ${dropdownStyles.container.maxHeight}`}>
+            <div className={dropdownStyles.search.container}>
+              <div className="relative">
+                <Search className={dropdownStyles.search.icon} />
                 <input
                   ref={searchInputRef}
                   type="text"
                   value={searchTerm}
                   onChange={(event) => setSearchTerm(event.target.value)}
                   placeholder={config.searchPlaceholder}
-                  className="w-full bg-white/5 border border-white/10 rounded-md pl-9 pr-4 py-2 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-1 focus:ring-secondary"
+                  className={dropdownStyles.search.input}
                   aria-label={config.searchPlaceholder}
                   disabled={disabled}
                 />
+                {searchTerm && (
+                  <IconButton
+                    onClick={() => setSearchTerm('')}
+                    variant="ghost"
+                    size="sm"
+                    icon={X}
+                    aria-label="Clear search"
+                    className={dropdownStyles.search.clearButton}
+                  />
+                )}
               </div>
             </div>
 
             <div
-              className="max-h-64 overflow-y-auto"
+              className={dropdownStyles.list.container}
               role="listbox"
               id={listboxId}
               aria-activedescendant={activeDescendantId}
@@ -166,59 +178,62 @@ export const ApiDropdown = <T = unknown>({
             >
               {isError ? (
                 <div className="p-4 flex flex-col items-center text-center space-y-4">
-                  <p className="text-white/70 text-sm">{config.errorText}</p>
-                  <Button size="sm" variant="secondary" onClick={() => refetch()}>
+                  <p className="text-destructive text-sm">{config.errorText}</p>
+                  <Button size="md" variant="secondary" onClick={() => refetch()}>
                     Retry
                   </Button>
                 </div>
               ) : isLoading ? (
                 <div className="p-6 flex flex-col items-center text-center space-y-4">
                   <div className="w-6 h-6 border border-secondary/30 border-t-secondary rounded-full animate-spin" />
-                  <p className="text-white/60 text-sm">Loading options...</p>
+                  <p className="text-fg-muted text-xs">Loading options...</p>
                 </div>
               ) : filteredOptions.length === 0 ? (
-                <div className="p-4 text-center text-white/60 text-sm">{config.noResultsText}</div>
+                <div className={dropdownStyles.list.empty}>{config.noResultsText}</div>
               ) : (
-                filteredOptions.map((option, index) => (
-                  <div
-                    key={option.value}
-                    id={`${listboxId}-option-${index}`}
-                    role="option"
-                    aria-selected={option.value === value}
-                    tabIndex={0}
-                    className={getOptionClasses(index === highlightedIndex, option.value === value)}
-                    onMouseEnter={() => setHighlightedIndex(index)}
-                    onClick={() => handleOptionSelect(option)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        handleOptionSelect(option)
-                      }
-                    }}
-                  >
-                    <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
-                      {option.icon && (
-                        <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
-                          {option.icon}
-                        </span>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <div className={dropdownStyles.option.label}>{option.label}</div>
-                        {option.description && (
-                          <div className={dropdownStyles.option.description}>{option.description}</div>
+                <div className={`${dropdownStyles.list.padding} ${dropdownStyles.list.spacing}`}>
+                  {filteredOptions.map((option, index) => (
+                    <div
+                      key={option.value}
+                      id={`${listboxId}-option-${index}`}
+                      role="option"
+                      aria-selected={option.value === value}
+                      tabIndex={0}
+                      className={getOptionClasses(index === highlightedIndex, option.value === value)}
+                      onMouseEnter={() => setHighlightedIndex(index)}
+                      onClick={() => handleOptionSelect(option)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          handleOptionSelect(option)
+                        }
+                      }}
+                    >
+                      <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
+                        {option.icon && (
+                          <span className="flex-shrink-0 w-4 h-4 flex items-center justify-center text-fg-muted">
+                            {option.icon}
+                          </span>
                         )}
+                        <div className="flex-1 min-w-0">
+                          <div className={dropdownStyles.option.label}>{option.label}</div>
+                          {option.description && (
+                            <div className={dropdownStyles.option.description}>{option.description}</div>
+                          )}
+                        </div>
                       </div>
-                    </div>
 
-                    {option.value === value && <Check className={dropdownStyles.option.checkIcon} />}
-                  </div>
-                ))
+                      {option.value === value && <Check className={dropdownStyles.option.checkIcon} />}
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
-        </div>,
-        document.body
-      )
+        </div>
+      </>,
+      document.body
+    )
     : null
 
   return (
@@ -232,15 +247,14 @@ export const ApiDropdown = <T = unknown>({
           }
         }}
         onKeyDown={disabled ? undefined : handleTriggerKeyDown}
-        className={`
-          relative w-full h-9 pl-9 pr-4 rounded-md border transition-all duration-300
-          bg-[#171719] border-[#333333] text-white flex items-center justify-between
-          font-light text-xs outline-none
-          ${error ? 'border-[#ef4444]' : ''}
-          ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}
-          ${isOpen && !error ? 'border-[#14bdea] ring-1 ring-[#14bdea]/25' : ''}
-          ${isOpen && error ? 'border-[#ef4444] ring-1 ring-[#ef4444]/25' : ''}
-        `}
+        className={cn(
+          'relative w-full h-10 rounded-lg border bg-input border-border text-fg flex items-center justify-between font-normal text-sm outline-none transition-all duration-200 hover:border-border-hover focus:border-ring focus:ring-1 focus:ring-ring/20',
+          'pl-9 pr-4', // Always has icon padding in ApiDropdown as config.icon is required
+          error && 'border-destructive focus:border-destructive',
+          disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer',
+          isOpen && !error && 'border-ring ring-1 ring-ring/20',
+          isOpen && error && 'border-destructive'
+        )}
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
@@ -252,19 +266,19 @@ export const ApiDropdown = <T = unknown>({
         aria-busy={isLoading}
         tabIndex={disabled ? -1 : 0}
       >
-        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 flex items-center justify-center">
+        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-fg-muted flex items-center justify-center">
           {selectedOption?.icon ?? <div className="w-4 h-4 flex items-center justify-center">{config.icon}</div>}
         </div>
 
         <div className="flex-1 text-left truncate flex items-center">
           {(() => {
             if (isLoading && value && !selectedOption) {
-              return <span className="text-white/60 font-normal leading-none">Loading {value}...</span>
+              return <span className="text-fg-muted font-normal leading-none">Loading {value}...</span>
             }
             if (selectedOption) {
-              return <span className="text-white/95 font-medium leading-none">{selectedOption.label}</span>
+              return <span className="text-fg font-medium leading-none">{selectedOption.label}</span>
             }
-            return <span className="text-white/60 font-normal leading-none">{config.placeholder}</span>
+            return <span className="text-fg-subtle font-normal leading-none">{config.placeholder}</span>
           })()}
         </div>
 
@@ -281,11 +295,11 @@ export const ApiDropdown = <T = unknown>({
               variant="ghost"
               size="sm"
               aria-label="Clear selection"
-              className="w-5 h-5 p-0"
+              className="w-5 h-5 p-0 text-fg-muted hover:text-fg"
             />
           )}
 
-          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-4 h-4 text-fg-muted transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
         </div>
       </div>
 

@@ -14,6 +14,7 @@ interface ModalProps {
   showHeader?: boolean
   className?: string
   icon?: React.ComponentType<{ className?: string }>
+  centerInViewport?: boolean
 }
 
 const sizeClasses = {
@@ -32,7 +33,8 @@ export const Modal = ({
   size = 'md',
   showHeader = true,
   className = '',
-  icon: Icon
+  icon: Icon,
+  centerInViewport = false
 }: ModalProps) => {
   const { isMobile, isTablet } = useResponsive()
   const modalRef = useRef<HTMLDivElement>(null)
@@ -65,7 +67,8 @@ export const Modal = ({
 
   // Calculate modal positioning to center between sidebar and right edge
   const getModalPositioning = () => {
-    if (isMobile || isTablet) {
+    // If centerInViewport is true, always center in full viewport
+    if (centerInViewport || isMobile || isTablet) {
       return { left: 0, width: '100vw' }
     }
 
@@ -161,54 +164,54 @@ export const Modal = ({
         tabIndex={-1}
         unstyled
       />
-          <div
-            ref={modalRef}
-            role="document"
-            className={`
+      <div
+        ref={modalRef}
+        role="document"
+        className={`
               relative w-full ${sizeClasses[size]} max-h-[90vh] mx-auto
-              bg-[#101011] border border-[#333333]
-              rounded-md shadow-2xl overflow-hidden
+              bg-[#1c1c1e] border border-white/10
+              rounded-xl shadow-2xl overflow-hidden
               ${className}
             `}
-          >
-              {/* Header */}
-              {showHeader && (
-                <div className="flex items-center justify-between px-6 py-4 border-b border-[#333333]">
-                  <div className="flex items-center space-x-2">
-                    {Icon && (
-                      <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-                        <Icon className="w-4 h-4 text-white" />
-                      </div>
-                    )}
-                    <div>
-                      {title && (
-                        <h2 id="modal-title" className="text-lg font-medium tracking-tight text-white">
-                          {title}
-                        </h2>
-                      )}
-                      {subtitle && (
-                        <p id="modal-description" className="text-xs text-white/70">
-                          {subtitle}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <IconButton
-                    onClick={onClose}
-                    icon={X}
-                    variant="ghost"
-                    size="sm"
-                    aria-label="Close modal"
-                    className="ml-3 flex-shrink-0 border border-white/10 hover:border-white/20"
-                  />
+      >
+        {/* Header */}
+        {showHeader && (
+          <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+            <div className="flex items-center space-x-3">
+              {Icon && (
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Icon className="w-4 h-4 text-primary" />
                 </div>
               )}
-
-              {/* Content */}
-              <div className="px-6 py-4 max-h-[calc(90vh-88px)] overflow-y-auto">
-                {children}
+              <div>
+                {title && (
+                  <h2 id="modal-title" className="text-lg font-medium tracking-tight text-white">
+                    {title}
+                  </h2>
+                )}
+                {subtitle && (
+                  <p id="modal-description" className="text-xs text-white/60">
+                    {subtitle}
+                  </p>
+                )}
               </div>
             </div>
+            <IconButton
+              onClick={onClose}
+              icon={X}
+              variant="ghost"
+              size="sm"
+              aria-label="Close modal"
+              className="ml-3 flex-shrink-0 hover:bg-white/5 text-white/60 hover:text-white"
+            />
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="px-6 py-6 max-h-[calc(90vh-88px)] overflow-y-auto">
+          {children}
+        </div>
+      </div>
     </div>
   )
 }

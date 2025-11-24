@@ -1,29 +1,33 @@
-﻿import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import React, { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
 import { IconButton } from '@/shared/ui/Button'
+import { cn } from '@/shared/utils/cn'
 
-export interface FilterPanelProps {
+export interface DrawerProps {
   isOpen: boolean
   onClose: () => void
   children: React.ReactNode
   title?: string
   isLoading?: boolean
+  className?: string
 }
 
 /**
- * Slide-out filter panel component
+ * Slide-out drawer component
  * Opens from the right side of the screen
- * Full-width on mobile, 400px on desktop
+ * Full-width on mobile, 400px on desktop (default)
+ * Can be used for filters, forms, settings, or any slide-out content
  */
-export const FilterPanel: React.FC<FilterPanelProps> = ({
+export const Drawer: React.FC<DrawerProps> = ({
   isOpen,
   onClose,
   children,
-  title = 'Filters',
-  isLoading = false
+  title = 'Panel',
+  isLoading = false,
+  className
 }) => {
   const panelRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
@@ -32,7 +36,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   useEffect(() => {
     if (isOpen && window.innerWidth < 768) {
       // Save current scroll position
-      const {scrollY} = window
+      const { scrollY } = window
       document.body.style.position = 'fixed'
       document.body.style.top = `-${scrollY}px`
       document.body.style.width = '100%'
@@ -54,12 +58,12 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       const focusableElements = panelRef.current.querySelectorAll<HTMLElement>(
         'input, select, textarea, button, [tabindex]:not([tabindex="-1"])'
       )
-      
+
       // Focus first input/select if available, otherwise focus close button
       const firstInput = Array.from(focusableElements).find(
         el => el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'TEXTAREA'
       )
-      
+
       if (firstInput) {
         firstInput.focus()
       } else if (closeButtonRef.current) {
@@ -97,7 +101,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       if (e.shiftKey && document.activeElement === firstElement) {
         e.preventDefault()
         lastElement?.focus()
-      } 
+      }
       // If Tab on last element, go to first
       else if (!e.shiftKey && document.activeElement === lastElement) {
         e.preventDefault()
@@ -110,8 +114,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   }, [isOpen])
 
   // Respect prefers-reduced-motion
-  const prefersReducedMotion = 
-    typeof window !== 'undefined' && 
+  const prefersReducedMotion =
+    typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const panelTransition = prefersReducedMotion
@@ -133,31 +137,33 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             exit={{ opacity: 0 }}
             transition={backdropTransition}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 md:bg-transparent z-[60]"
+            className="fixed inset-0 bg-black/40 z-[60]"
             aria-hidden="true"
           />
 
-          {/* Filter Panel */}
+          {/* Drawer Panel */}
           <motion.div
             ref={panelRef}
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={panelTransition}
-            className="fixed inset-y-0 right-0 w-full md:w-[400px] lg:w-[450px]
-                     bg-[#171719]
-                     border-l border-[#1e1f22]
-                     shadow-2xl shadow-black/50
-                     z-[70]
-                     flex flex-col"
+            className={cn(
+              "fixed inset-y-0 right-0 w-full md:w-[400px] lg:w-[450px]",
+              "bg-[#171719]",
+              "border-l border-[#1e1f22]",
+              "z-[70]",
+              "flex flex-col",
+              className
+            )}
             role="dialog"
             aria-modal="true"
-            aria-labelledby="filter-panel-title"
+            aria-labelledby="drawer-title"
           >
             {/* Header */}
             <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-[#1e1f22] sticky top-0 bg-[#171719] z-10">
-              <h2 
-                id="filter-panel-title" 
+              <h2
+                id="drawer-title"
                 className="text-xl font-medium tracking-tight text-white"
               >
                 {title}
@@ -168,7 +174,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
                 icon={X}
                 variant="ghost"
                 size="md"
-                aria-label="Close filters"
+                aria-label={`Close ${title.toLowerCase()}`}
                 className="hover:bg-white/10"
               />
             </div>
@@ -193,13 +199,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             </div>
 
             {/* Screen reader live region for announcements */}
-            <div 
-              role="status" 
-              aria-live="polite" 
+            <div
+              role="status"
+              aria-live="polite"
               aria-atomic="true"
               className="sr-only"
             >
-              {isOpen && 'Filter panel opened'}
+              {isOpen && `${title} opened`}
             </div>
           </motion.div>
         </>
@@ -208,8 +214,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   )
 
   // Render panel in a portal at document.body level to avoid z-index and positioning issues
-  return typeof document !== 'undefined' 
+  return typeof document !== 'undefined'
     ? createPortal(panelContent, document.body)
     : null
 }
-

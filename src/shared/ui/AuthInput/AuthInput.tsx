@@ -73,8 +73,8 @@ export const AuthInput = forwardRef<
   })
 
   const baseInputClasses = `
-    w-full h-9 px-4 py-1.5
-    bg-[#171719] border border-[#333333] rounded-md
+    w-full h-10 px-4 py-1.5
+    bg-[#171719] border border-[#333333] rounded-lg
     text-white placeholder-[#737373] text-xs font-light
     focus:outline-none focus:border-[#14bdea]
     transition-all duration-150 ease-out

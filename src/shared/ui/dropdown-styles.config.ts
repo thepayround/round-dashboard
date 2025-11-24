@@ -47,7 +47,7 @@
 export const dropdownStyles = {
   // Container (dropdown menu)
   container: {
-    base: 'bg-[#101011] border border-white/20 rounded-lg shadow-2xl overflow-hidden flex flex-col ring-1 ring-white/10',
+    base: 'bg-card border border-border rounded-xl shadow-2xl overflow-hidden flex flex-col ring-1 ring-ring/10',
     maxHeight: 'max-h-80',
     positioning: 'fixed z-[9999]',
     minWidth: 'min-w-[280px]',
@@ -55,17 +55,17 @@ export const dropdownStyles = {
 
   // Backdrop overlay
   backdrop: {
-    base: 'fixed inset-0 bg-black/5',
+    base: 'fixed inset-0 bg-black/20 backdrop-blur-[1px]',
     zIndex: 'z-[9998]',
   },
 
   // Search input section
   search: {
-    container: 'p-2.5 border-b border-white/10',
-    input: 'w-full pl-9 pr-8 py-1.5 bg-[#171719] border border-[#333333] rounded-lg text-white/95 placeholder-[#737373] text-xs focus:border-[#14bdea] focus:outline-none',
-    icon: 'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60',
-    clearButton: 'absolute right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-white/10 rounded-lg',
-    clearIcon: 'w-3 h-3 text-white/60 hover:text-white/90',
+    container: 'p-2 border-b border-border',
+    input: 'w-full pl-9 pr-8 py-2 bg-input border border-border rounded-lg text-fg placeholder-fg-subtle text-sm focus:border-ring focus:ring-1 focus:ring-ring/20 focus:outline-none transition-all duration-200',
+    icon: 'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-fg-muted',
+    clearButton: 'absolute right-2.5 top-1/2 transform -translate-y-1/2 p-0.5 hover:bg-bg-hover rounded-lg transition-colors',
+    clearIcon: 'w-3 h-3 text-fg-muted hover:text-fg',
   },
 
   // Options list section
@@ -73,42 +73,42 @@ export const dropdownStyles = {
     container: 'flex-1 overflow-y-auto',
     padding: 'p-1.5',
     spacing: 'space-y-0.5',
-    empty: 'p-3 text-center text-white/60 text-xs',
+    empty: 'p-4 text-center text-fg-muted text-sm',
   },
 
   // Individual option item
   option: {
-    base: 'px-2.5 py-3 lg:py-2 min-h-[44px] lg:min-h-0 rounded-lg cursor-pointer flex items-center justify-between',
-    spacing: 'space-x-2.5',
+    base: 'px-3 py-2.5 rounded-lg cursor-pointer flex items-center justify-between transition-all duration-150',
+    spacing: 'space-x-3',
 
     // States
-    highlighted: 'bg-white/10 border border-white/20 transition-colors duration-150 ease-out',
-    selected: 'bg-[#14BDEA]/15 border border-[#14BDEA]/30 transition-colors duration-150 ease-out',
-    default: 'border border-transparent hover:border-white/15 hover:bg-white/5 transition-colors duration-150 ease-out',
+    highlighted: 'bg-bg-hover border border-border-hover',
+    selected: 'bg-primary/10 border border-primary/20',
+    default: 'border border-transparent hover:border-border-hover hover:bg-bg-hover',
 
     // Content
-    label: 'text-white/95 font-light truncate text-xs',
-    description: 'text-white/60 text-xs truncate',
-    checkIcon: 'w-4 h-4 text-[#14BDEA] flex-shrink-0',
+    label: 'text-fg font-normal truncate text-sm',
+    description: 'text-fg-muted text-xs truncate',
+    checkIcon: 'w-4 h-4 text-primary flex-shrink-0',
   },
 
-  // Colors
+  // Colors (Reference only, styles use Tailwind classes)
   colors: {
-    primary: '#14BDEA',      // Cyan - for selection/highlight
-    accent: '#D417C8',       // Magenta - for accents (not used in dropdowns)
-    background: '#101011',   // Dropdown background
-    inputBg: '#171719',      // Input background
-    border: '#333333',       // Input border
-    borderLight: 'white/20', // Dropdown border
-    text: 'white/95',        // Primary text
-    textMuted: 'white/60',   // Muted text
-    placeholder: '#737373',  // Placeholder text
+    primary: 'hsl(var(--primary))',
+    accent: 'hsl(var(--accent))',
+    background: 'hsl(var(--card))',
+    inputBg: 'hsl(var(--input))',
+    border: 'hsl(var(--border))',
+    borderLight: 'hsl(var(--border))',
+    text: 'hsl(var(--fg))',
+    textMuted: 'hsl(var(--fg-muted))',
+    placeholder: 'hsl(var(--fg-subtle))',
   },
 
   // Typography
   typography: {
-    fontWeight: 'font-light',
-    fontSize: 'text-xs',
+    fontWeight: 'font-normal',
+    fontSize: 'text-sm',
   },
 } as const
 
