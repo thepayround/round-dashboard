@@ -146,8 +146,8 @@ export const useDashboardLayoutController = ({
 
   const profileDropdownRef = useRef<HTMLDivElement>(null)
 
-  const isActive = useCallback((href: string) => {
-    if (href === '/' || href === '/dashboard') {
+  const isActive = useCallback((href: string, exact?: boolean) => {
+    if (href === '/' || href === '/dashboard' || exact) {
       return location.pathname === href
     }
     return location.pathname.startsWith(href)
@@ -156,9 +156,9 @@ export const useDashboardLayoutController = ({
   const isParentActive = useCallback(
     (item: NavItem) => {
       if (item.subItems) {
-        return item.subItems.some(subItem => isActive(subItem.href)) || isActive(item.href)
+        return item.subItems.some(subItem => isActive(subItem.href, subItem.exact)) || isActive(item.href, item.exact)
       }
-      return isActive(item.href)
+      return isActive(item.href, item.exact)
     },
     [isActive]
   )

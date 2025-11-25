@@ -51,7 +51,8 @@ export const mainNavigationItems: NavItem[] = [
         id: 'product-families',
         label: 'Product Families',
         icon: Grid3X3,
-        href: '/catalog'
+        href: '/catalog',
+        exact: true
       },
       {
         id: 'plans',

@@ -25,7 +25,7 @@ export interface NavigationItemProps {
   isCollapsed: boolean
   expandedItems: string[]
   isParentActive: (item: NavItem) => boolean
-  isActive: (href: string) => boolean
+  isActive: (href: string, exact?: boolean) => boolean
   toggleExpanded: (itemId: string) => void
   handleTooltipEnter: (itemId: string, label: string, badge: string | undefined, event: React.MouseEvent) => void
   handleTooltipLeave: () => void
@@ -150,8 +150,8 @@ export const NavigationItem = memo<NavigationItemProps>(({
           {...ANIMATION_VARIANTS.expandCollapse}
           transition={transitionConfigs.normal}
           className={`mt-1 ${isCollapsed
-              ? 'flex flex-col items-center space-y-1 py-1'
-              : 'ml-6 space-y-1 border-l border-border py-2'
+            ? 'flex flex-col items-center space-y-1 py-1'
+            : 'ml-6 space-y-1 border-l border-border py-2'
             }`}
         >
           {isCollapsed && (
@@ -167,7 +167,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
               className={cn(
                 'group relative flex items-center rounded-lg transition-all duration-200',
                 'outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
-                isActive(subItem.href)
+                isActive(subItem.href, subItem.exact)
                   ? 'bg-primary/10 text-primary border border-primary/20'
                   : 'text-fg-muted hover:text-fg hover:bg-bg-hover',
                 isCollapsed
@@ -176,8 +176,8 @@ export const NavigationItem = memo<NavigationItemProps>(({
               )}
             >
               <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${isCollapsed
-                  ? 'w-3.5 h-3.5'
-                  : 'w-3.5 h-3.5 mr-3'
+                ? 'w-3.5 h-3.5'
+                : 'w-3.5 h-3.5 mr-3'
                 }`} />
 
               {!isCollapsed && (

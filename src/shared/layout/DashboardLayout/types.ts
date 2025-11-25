@@ -9,6 +9,7 @@ export interface NavItem {
   icon: React.ComponentType<{ className?: string }>
   href: string
   badge?: string
+  exact?: boolean
   subItems?: NavItem[]
 }
 
