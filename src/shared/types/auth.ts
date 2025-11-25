@@ -26,8 +26,8 @@ export interface BaseUser {
   updatedAt: string
   onboardingCompleted?: boolean
   onboardingData?: Partial<OnboardingData>
-  roundAccountId?: string // For backward compatibility
-  roundAccountUsers?: RoundAccountUser[] // Backend API response format
+  roundAccountId?: string
+  roundAccountUsers?: RoundAccountUser[]
 }
 
 export interface PersonalUser extends BaseUser {

@@ -1,73 +1,107 @@
 /**
- * Centralized Token Management Utility
- * Handles all token storage, retrieval, and management operations
+ * Secure Token Manager - Memory-Only Storage
+ * Gold Standard Implementation: Tokens NEVER stored in localStorage (XSS protection)
+ * Access tokens in memory only, refresh tokens in HttpOnly cookies
  */
 
-const TOKEN_KEY = 'auth_token'
-const REFRESH_TOKEN_KEY = 'refresh_token'
-
-export const tokenManager = {
-  /**
-   * Get the access token from storage
-   */
-  getToken: (): string | null => localStorage.getItem(TOKEN_KEY),
+class SecureTokenManager {
+  private accessToken: string | null = null;
+  private tokenExpiry: number | null = null;
+  private refreshTimer: NodeJS.Timeout | null = null;
 
   /**
-   * Set the access token in storage
+   * Set access token in memory only
    */
-  setToken: (token: string): void => {
-    localStorage.setItem(TOKEN_KEY, token)
-  },
+  setAccessToken(token: string): void {
+    // Validate token is a string and looks like a JWT
+    if (!token || typeof token !== 'string') {
+      console.error('Invalid token provided to setAccessToken:', typeof token, token);
+      return;
+    }
+
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      console.error('Token is not a valid JWT (expected 3 parts, got ' + parts.length + '):', token);
+      return;
+    }
+
+    this.accessToken = token;
+    
+    // Decode JWT to get expiry (JWT uses Base64URL, need to convert to standard Base64)
+    try {
+      // Convert Base64URL to standard Base64 (replace - with +, _ with /, and add padding)
+      const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const padding = '='.repeat((4 - (base64.length % 4)) % 4);
+      const payload = JSON.parse(atob(base64 + padding));
+      
+      this.tokenExpiry = payload.exp * 1000; // Convert to milliseconds
+      
+      // Schedule automatic refresh 1 minute before expiry
+      this.scheduleTokenRefresh();
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+    }
+  }
 
   /**
-   * Get the refresh token from storage
+   * Get access token if still valid
    */
-  getRefreshToken: (): string | null => localStorage.getItem(REFRESH_TOKEN_KEY),
+  getAccessToken(): string | null {
+    // Check if token expired
+    if (this.tokenExpiry && Date.now() >= this.tokenExpiry) {
+      this.clearAccessToken();
+      return null;
+    }
+    return this.accessToken;
+  }
 
   /**
-   * Set the refresh token in storage
+   * Check if user is authenticated
    */
-  setRefreshToken: (token: string): void => {
-    localStorage.setItem(REFRESH_TOKEN_KEY, token)
-  },
+  isAuthenticated(): boolean {
+    return this.getAccessToken() !== null;
+  }
 
   /**
-   * Set both access and refresh tokens
+   * Clear access token from memory
    */
-  setTokens: (accessToken: string, refreshToken: string): void => {
-    localStorage.setItem(TOKEN_KEY, accessToken)
-    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
-  },
+  clearAccessToken(): void {
+    this.accessToken = null;
+    this.tokenExpiry = null;
+    if (this.refreshTimer) {
+      clearTimeout(this.refreshTimer);
+      this.refreshTimer = null;
+    }
+  }
 
   /**
-   * Remove the access token from storage
+   * Schedule automatic token refresh before expiry
    */
-  removeToken: (): void => {
-    localStorage.removeItem(TOKEN_KEY)
-  },
+  private scheduleTokenRefresh(): void {
+    if (this.refreshTimer) {
+      clearTimeout(this.refreshTimer);
+    }
+
+    if (this.tokenExpiry) {
+      // Refresh 1 minute (60 seconds) before expiry
+      const refreshTime = this.tokenExpiry - Date.now() - 60000;
+      
+      if (refreshTime > 0) {
+        this.refreshTimer = setTimeout(() => {
+          // Trigger refresh through event
+          window.dispatchEvent(new CustomEvent('token-refresh-needed'));
+        }, refreshTime);
+      }
+    }
+  }
 
   /**
-   * Remove the refresh token from storage
+   * Get token expiry time
    */
-  removeRefreshToken: (): void => {
-    localStorage.removeItem(REFRESH_TOKEN_KEY)
-  },
-
-  /**
-   * Remove all tokens from storage
-   */
-  clearTokens: (): void => {
-    localStorage.removeItem(TOKEN_KEY)
-    localStorage.removeItem(REFRESH_TOKEN_KEY)
-  },
-
-  /**
-   * Check if a valid access token exists
-   */
-  hasToken: (): boolean => !!localStorage.getItem(TOKEN_KEY),
-
-  /**
-   * Check if a valid refresh token exists
-   */
-  hasRefreshToken: (): boolean => !!localStorage.getItem(REFRESH_TOKEN_KEY),
+  getTokenExpiry(): number | null {
+    return this.tokenExpiry;
+  }
 }
+
+export const tokenManager = new SecureTokenManager();
+

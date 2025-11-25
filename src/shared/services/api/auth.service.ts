@@ -7,6 +7,7 @@ import axios from 'axios'
 import { httpClient } from './base/client'
 import { ENDPOINTS } from './base/config'
 
+
 import type {
   ApiResponse,
   LoginRequest,
@@ -15,7 +16,7 @@ import type {
   RefreshTokenResponse,
 } from '@/shared/types/api'
 import type { User } from '@/shared/types/auth'
-import { SecureFormData } from '@/shared/utils/encryption'
+import { tokenManager } from '@/shared/utils/tokenManager'
 
 export class AuthService {
   private client = httpClient.getClient()
@@ -31,24 +32,18 @@ export class AuthService {
     password: string
   }): Promise<ApiResponse<AuthResponse>> {
     try {
-
-      // Option 3: Advanced Obfuscation (currently active - better than major companies)
-      const securePayload = SecureFormData.createSecureLoginPayload(
-        credentials.email,
-        credentials.password
-      )
-
-
-      const loginData: LoginRequest & { encoded?: boolean } = securePayload
+      // Send plaintext password over HTTPS - this is the gold standard
+      const loginData: LoginRequest = {
+        identifier: credentials.email,
+        password: credentials.password  // Direct transmission over TLS
+      }
 
       const response = await this.client.post(ENDPOINTS.AUTH.LOGIN, loginData)
 
       if (response.data.succeeded && response.data.token) {
-        // Store tokens
+        // Store access token in memory only
         httpClient.setStoredToken(response.data.token)
-        if (response.data.refreshToken) {
-          localStorage.setItem('refresh_token', response.data.refreshToken)
-        }
+        // Refresh token is in HttpOnly cookie (automatic)
 
         // Get user information using the token
         const userResponse = await this.getCurrentUser()
@@ -66,7 +61,7 @@ export class AuthService {
           data: {
             user: userResponse.data,
             accessToken: response.data.token,
-            refreshToken: response.data.refreshToken || '',
+            refreshToken: ''  // Never exposed to client
           },
           message: 'Login successful',
         }
@@ -202,60 +197,54 @@ export class AuthService {
   }
 
   /**
-   * Logout user
+   * Logout user - Clear memory token and server-side cookie
    */
   async logout(): Promise<ApiResponse<null>> {
     try {
-      await this.client.post(ENDPOINTS.AUTH.LOGOUT)
-      this.clearStoredTokens()
+      // Call backend to clear refresh token cookie
+      await this.client.post(ENDPOINTS.AUTH.LOGOUT, {})
+      
+      // Clear access token from memory
+      httpClient.setStoredToken('')
       this.userCache = null // Clear user cache
       this.pendingUserRequest = null // Clear pending request
+
       return {
         success: true,
         data: null,
-        message: 'Logout successful',
+        message: 'Logged out successfully',
       }
     } catch (error) {
-      // Clear tokens even if logout fails
-      this.clearStoredTokens()
+      // Clear tokens anyway
+      httpClient.setStoredToken('')
       this.userCache = null // Clear user cache
       this.pendingUserRequest = null // Clear pending request
+      
       return {
         success: true,
         data: null,
-        message: 'Logout successful',
+        message: 'Logged out',
       }
     }
   }
 
   /**
    * Refresh authentication token
+   * Note: Refresh token sent automatically via HttpOnly cookie
    */
   async refreshToken(): Promise<ApiResponse<RefreshTokenResponse>> {
     try {
-      const refreshToken = localStorage.getItem('refresh_token')
-      if (!refreshToken) {
-        return {
-          success: false,
-          error: 'No refresh token available',
-        }
-      }
-
-      const response = await this.client.post(ENDPOINTS.AUTH.REFRESH_TOKEN, {
-        refreshToken,
-      })
+      // Refresh token sent automatically via cookie (withCredentials: true)
+      const response = await this.client.post(ENDPOINTS.AUTH.REFRESH_TOKEN, {})
 
       if (response.data.token) {
         httpClient.setStoredToken(response.data.token)
-        if (response.data.refreshToken) {
-          localStorage.setItem('refresh_token', response.data.refreshToken)
-        }
 
         return {
           success: true,
           data: {
             token: response.data.token,
-            refreshToken: response.data.refreshToken,
+            refreshToken: ''  // In HttpOnly cookie
           },
         }
       }
@@ -265,7 +254,7 @@ export class AuthService {
         error: 'Token refresh failed',
       }
     } catch (error) {
-      this.clearStoredTokens()
+      httpClient.setStoredToken('')
       return {
         success: false,
         error: 'Token refresh failed',
@@ -302,11 +291,8 @@ export class AuthService {
       const response = await this.client.post(url, {})
 
       if (response.data.succeeded && response.data.token) {
-        // Store tokens
-        httpClient.setStoredToken(response.data.token)
-        if (response.data.refreshToken) {
-          localStorage.setItem('refresh_token', response.data.refreshToken)
-        }
+        // Store access token in memory only (refresh token is in HttpOnly cookie)
+        tokenManager.setAccessToken(response.data.token)
 
         // Get actual user information using the token
         const userResponse = await this.getCurrentUser()
@@ -324,7 +310,7 @@ export class AuthService {
           data: {
             user: userResponse.data,
             accessToken: response.data.token,
-            refreshToken: response.data.refreshToken,
+            refreshToken: '',  // Never exposed to client
           },
           message: 'Email confirmed and logged in successfully',
         }
@@ -476,11 +462,8 @@ export class AuthService {
       })
 
       if (response.data.succeeded && response.data.token) {
-        // Store tokens
-        httpClient.setStoredToken(response.data.token)
-        if (response.data.refreshToken) {
-          localStorage.setItem('refresh_token', response.data.refreshToken)
-        }
+        // Store access token in memory only (refresh token is in HttpOnly cookie)
+        tokenManager.setAccessToken(response.data.token)
 
         // Get user information using the token
         const userResponse = await this.getCurrentUser()
@@ -498,7 +481,7 @@ export class AuthService {
           data: {
             user: userResponse.data,
             accessToken: response.data.token,
-            refreshToken: response.data.refreshToken || '',
+            refreshToken: '',  // Never exposed to client
           },
           message: 'Google authentication successful',
         }

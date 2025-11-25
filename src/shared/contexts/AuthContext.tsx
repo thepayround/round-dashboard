@@ -92,66 +92,94 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // Check for existing session on mount
   useEffect(() => {
-    let isMounted = true // Prevent duplicate calls
+    let isMounted = true
 
     const checkExistingSession = async () => {
-      const token = tokenManager.getToken()
+      // Check if we have a token in memory
+      const token = tokenManager.getAccessToken()
 
-      if (!token) {
-        dispatch({ type: 'SET_LOADING', payload: false })
-        return
+      if (token) {
+        // We have a token in memory, validate it by fetching user
+        try {
+          const { authService } = await import('@/shared/services/api')
+          const response = await authService.getCurrentUser()
+
+          if (response.success && response.data && isMounted) {
+            dispatch({
+              type: 'LOGIN_SUCCESS',
+              payload: {
+                user: response.data,
+                token,
+              },
+            })
+            return
+          }
+        } catch (error) {
+          console.error('Error validating session:', error)
+        }
       }
 
+      // No token in memory, try to refresh using HttpOnly cookie
       try {
-        // Import authService here to avoid circular dependency
         const { authService } = await import('@/shared/services/api')
-        const response = await authService.getCurrentUser()
+        const refreshResponse = await authService.refreshToken()
 
-        if (response.success && response.data && isMounted) {
-          dispatch({
-            type: 'LOGIN_SUCCESS',
-            payload: {
-              user: response.data,
-              token,
-            },
-          })
-        } else if (isMounted) {
-          // Invalid token, remove from storage
-          localStorage.removeItem('auth_token')
-          localStorage.removeItem('refresh_token')
-          dispatch({ type: 'SET_LOADING', payload: false })
+        if (refreshResponse.success && refreshResponse.data?.token && isMounted) {
+          // Store new access token in memory
+          tokenManager.setAccessToken(refreshResponse.data.token)
+
+          // Fetch user data
+          const userResponse = await authService.getCurrentUser()
+          
+          if (userResponse.success && userResponse.data && isMounted) {
+            dispatch({
+              type: 'LOGIN_SUCCESS',
+              payload: {
+                user: userResponse.data,
+                token: refreshResponse.data.token,
+              },
+            })
+            return
+          }
         }
       } catch (error) {
-        console.error('Error checking session:', error)
-        if (isMounted) {
-          localStorage.removeItem('auth_token')
-          localStorage.removeItem('refresh_token')
-          dispatch({ type: 'SET_LOADING', payload: false })
-        }
+        // No valid refresh token cookie, user needs to log in
+        // Silent fail - this is expected for new users
+      }
+
+      if (isMounted) {
+        dispatch({ type: 'SET_LOADING', payload: false })
       }
     }
 
     checkExistingSession()
 
     return () => {
-      isMounted = false // Cleanup to prevent duplicate calls
+      isMounted = false
     }
   }, [])
 
-  const login = (user: User, token: string, refreshToken?: string) => {
-    localStorage.setItem('auth_token', token)
-    if (refreshToken) {
-      localStorage.setItem('refresh_token', refreshToken)
-    }
+  const login = (user: User, token: string, _refreshToken?: string) => {
+    // Store access token in memory only (refresh token is in HttpOnly cookie)
+    tokenManager.setAccessToken(token)
+    
     dispatch({
       type: 'LOGIN_SUCCESS',
       payload: { user, token },
     })
   }
 
-  const logout = () => {
-    localStorage.removeItem('auth_token')
-    localStorage.removeItem('refresh_token')
+  const logout = async () => {
+    // Clear access token from memory
+    tokenManager.clearAccessToken()
+    
+    // Call backend to clear HttpOnly cookie
+    try {
+      const { authService } = await import('@/shared/services/api')
+      await authService.logout()
+    } catch (error) {
+      console.error('Error during logout:', error)
+    }
     
     // Clear round account cache on logout
     import('@/shared/hooks/useRoundAccount').then(({ clearRoundAccountCache }) => {

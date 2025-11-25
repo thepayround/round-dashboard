@@ -44,7 +44,7 @@ class ApiClient {
     // Request interceptor to add auth token and correlation ID
     this.client.interceptors.request.use(
       config => {
-        const token = tokenManager.getToken()
+        const token = tokenManager.getAccessToken()
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }
@@ -64,7 +64,7 @@ class ApiClient {
       (error: AxiosError) => {
         if (error.response?.status === 401) {
           // Token expired or invalid
-          tokenManager.clearTokens()
+          tokenManager.clearAccessToken()
           // Only redirect if not already on login page
           if (!window.location.pathname.includes('/login')) {
             window.location.href = '/login'
@@ -98,8 +98,8 @@ class ApiClient {
       )
 
       if (validatedResponse.succeeded && validatedResponse.token) {
-        // Store tokens using tokenManager
-        tokenManager.setTokens(validatedResponse.token, validatedResponse.refreshToken)
+        // Store access token in memory only
+        tokenManager.setAccessToken(validatedResponse.token)
 
         // Get user information using the token
         const userResponse = await this.getCurrentUser()
@@ -194,30 +194,21 @@ class ApiClient {
   }
 
   /**
-   * Refresh authentication token
+   * Refresh authentication token using HttpOnly cookie
    */
   async refreshToken(): Promise<ApiResponse<{ token: string; refreshToken: string }>> {
     try {
-      const refreshToken = localStorage.getItem('refresh_token')
-      if (!refreshToken) {
-        return {
-          success: false,
-          error: 'No refresh token available',
-        }
-      }
-
-      const response = await this.client.post(API_ENDPOINTS.AUTH.REFRESH_TOKEN, {
-        refreshToken,
-      })
+      // Refresh token is sent automatically via HttpOnly cookie (withCredentials: true)
+      const response = await this.client.post(API_ENDPOINTS.AUTH.REFRESH_TOKEN, {})
 
       if (response.data.token) {
-        tokenManager.setTokens(response.data.token, response.data.refreshToken || refreshToken)
+        tokenManager.setAccessToken(response.data.token)
 
         return {
           success: true,
           data: {
             token: response.data.token,
-            refreshToken: response.data.refreshToken,
+            refreshToken: '', // Never exposed to client
           },
         }
       }
@@ -227,7 +218,7 @@ class ApiClient {
         error: 'Token refresh failed',
       }
     } catch (error) {
-      tokenManager.clearTokens()
+      tokenManager.clearAccessToken()
       return {
         success: false,
         error: 'Token refresh failed',
@@ -241,14 +232,14 @@ class ApiClient {
   async logout(): Promise<ApiResponse<null>> {
     try {
       await this.client.post(API_ENDPOINTS.AUTH.LOGOUT)
-      tokenManager.clearTokens()
+      tokenManager.clearAccessToken()
       return {
         success: true,
         message: 'Logout successful',
       }
     } catch (error) {
       // Clear tokens even if logout fails
-      tokenManager.clearTokens()
+      tokenManager.clearAccessToken()
       return {
         success: true,
         message: 'Logout successful',
@@ -288,8 +279,8 @@ class ApiClient {
       const response = await this.client.post<LoginResponse>(url, {})
 
       if (response.data.succeeded && response.data.token) {
-        // Store tokens using tokenManager
-        tokenManager.setTokens(response.data.token, response.data.refreshToken)
+        // Store access token in memory only
+        tokenManager.setAccessToken(response.data.token)
 
         // Create user object from the response
         // Note: The backend doesn't return user info in login response,
@@ -410,7 +401,7 @@ class ApiClient {
 
   async getCurrentUser(): Promise<ApiResponse<User>> {
     try {
-      const token = tokenManager.getToken()
+      const token = tokenManager.getAccessToken()
       if (!token) {
         return {
           success: false,
@@ -664,14 +655,14 @@ class ApiClient {
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {
-    return tokenManager.hasToken()
+    return tokenManager.isAuthenticated()
   }
 
   /**
    * Get stored auth token
    */
   getToken(): string | null {
-    return tokenManager.getToken()
+    return tokenManager.getAccessToken()
   }
 
   /**

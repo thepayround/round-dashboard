@@ -149,15 +149,46 @@ export class TeamService {
    */
   async registerWithInvitation(request: RegisterWithInvitationRequest): Promise<ApiResponse<{ message: string; token: string; refreshToken: string; user: User }>> {
     try {
-      const response = await httpClient.getClient().post<{ message: string; token: string; refreshToken: string; user: User }>(
+      const response = await httpClient.getClient().post<{ succeeded: boolean; token: string; expiresIn: number; message: string }>(
         `${this.baseUrl}/register-with-invitation`, 
         request
       )
       
+      if (response.data.succeeded && response.data.token) {
+        // Store access token in memory only
+        const { tokenManager } = await import('@/shared/utils/tokenManager')
+        tokenManager.setAccessToken(response.data.token)
+
+        // Get user data
+        const { authService } = await import('./auth.service')
+        const userResponse = await authService.getCurrentUser()
+
+        if (!userResponse.success || !userResponse.data) {
+          return {
+            success: false,
+            data: undefined,
+            message: 'Failed to retrieve user information',
+            error: 'Failed to retrieve user information'
+          }
+        }
+
+        return {
+          success: true,
+          data: {
+            message: response.data.message,
+            token: response.data.token,
+            refreshToken: '',  // Never exposed to client
+            user: userResponse.data
+          },
+          message: 'Registration successful'
+        }
+      }
+
       return {
-        success: true,
-        data: response.data,
-        message: 'Registration successful'
+        success: false,
+        data: undefined,
+        message: 'Registration failed',
+        error: 'Registration failed'
       }
     } catch (error: unknown) {
       const axiosError = error as { response?: { status?: number; data?: { message?: string } } }
