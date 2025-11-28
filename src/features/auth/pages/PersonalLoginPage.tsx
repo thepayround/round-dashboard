@@ -215,7 +215,7 @@ export const PersonalLoginPage = () => {
             <div className="text-center space-y-4">
               <p className="text-white/85">
                 Don&apos;t have an account?{' '}
-                <Link to="/signup" className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
+                <Link to="/identities/register" className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
                   Create personal account
                 </Link>
               </p>

@@ -130,7 +130,7 @@ export const BusinessLoginPage = () => {
             </div>
 
             {/* Social Login Buttons */}
-            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
               <GoogleLoginButton 
                 accountType="business"
                 onSuccess={() => showSuccess('Successfully signed in with Google!')}
@@ -147,7 +147,7 @@ export const BusinessLoginPage = () => {
             <div className="text-center space-y-4">
               <p className="text-white/85">
                 Don&apos;t have an account?{' '}
-                <Link to="/signup/business" className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
+                <Link to="/identities/register-business" className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">
                   Create business account
                 </Link>
               </p>

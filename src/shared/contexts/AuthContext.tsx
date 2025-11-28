@@ -95,6 +95,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     let isMounted = true
 
     const checkExistingSession = async () => {
+      // Skip session check on public auth pages (login, register)
+      const currentPath = window.location.pathname
+      const isPublicAuthPage = 
+        currentPath.includes('/login') || 
+        currentPath.includes('/identities/register') || 
+        currentPath.startsWith('/auth/') ||
+        currentPath === '/invite' || // Invitation acceptance
+        currentPath === '/' // Welcome page
+
+      if (isPublicAuthPage) {
+        if (isMounted) {
+          dispatch({ type: 'SET_LOADING', payload: false })
+        }
+        return
+      }
+
       // Check if we have a token in memory
       const token = tokenManager.getAccessToken()
 

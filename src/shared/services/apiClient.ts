@@ -65,8 +65,9 @@ class ApiClient {
         if (error.response?.status === 401) {
           // Token expired or invalid
           tokenManager.clearAccessToken()
-          // Only redirect if not already on login page
-          if (!window.location.pathname.includes('/login')) {
+          // Don't redirect if already on login or register pages
+          const currentPath = window.location.pathname
+          if (!currentPath.includes('/login') && !currentPath.includes('/identities/register') && !currentPath.includes('/auth/')) {
             window.location.href = '/login'
           }
         }
