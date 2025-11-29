@@ -112,6 +112,9 @@ export const PersonalRegisterPage = () => {
 
             {/* Phone Number */}
             <div className="grid gap-2">
+              <Label htmlFor="phone">
+                Phone Number <span className="text-destructive">*</span>
+              </Label>
               <PhoneInput
                 id="phone"
                 name="phone"
@@ -119,7 +122,6 @@ export const PersonalRegisterPage = () => {
                 onChange={handlePhoneChange}
                 onBlur={handlePhoneBlur}
                 validateOnBlur={false}
-                label="Phone Number"
                 placeholder="Phone number"
                 error={phoneError}
                 defaultCountry="GR"
@@ -127,7 +129,7 @@ export const PersonalRegisterPage = () => {
               />
               {phoneError && (
                 <p className="text-sm text-destructive flex items-center gap-1">
-                  <AlertCircle className="w-4 h-4" />
+                  <AlertCircle className="w-3.5 h-3.5" />
                   {phoneError}
                 </p>
               )}
