@@ -140,7 +140,7 @@ export const BusinessLoginPage = () => {
 
           <div className="mt-4 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <Link to="/signup/business" className="text-primary underline-offset-4 hover:underline">
+            <Link to="/identities/register-business" className="text-primary underline-offset-4 hover:underline">
               Create business account
             </Link>
           </div>

@@ -10,9 +10,9 @@ export const RegisterPage = () => {
 
   const handleAccountTypeSelect = (type: AccountType) => {
     if (type === 'personal') {
-      navigate('/auth/register/personal')
+      navigate('/identities/register')
     } else if (type === 'business') {
-      navigate('/auth/register/business')
+      navigate('/identities/register-business')
     }
   }
 

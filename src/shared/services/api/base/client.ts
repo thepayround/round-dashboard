@@ -31,23 +31,37 @@ class BaseHttpClient {
     // Request interceptor to add auth token
     this.client.interceptors.request.use(
       async (config: InternalAxiosRequestConfig) => {
-        // Skip token for login/register/google-auth endpoints
+        // Skip token for public auth endpoints
         if (config.url?.includes('/login') || 
             config.url?.includes('/register') || 
-            config.url?.includes('/google-auth')) {
+            config.url?.includes('/google-auth') ||
+            config.url?.includes('/confirm-email') ||
+            config.url?.includes('/resend')) {
           return config;
         }
 
         let token = tokenManager.getAccessToken();
         
-        // If no token or expired, try to refresh
+        // If no token or expired, try to refresh ONLY if not on public pages
         if (!token && !config.url?.includes('/refresh-token')) {
+          const currentPath = window.location.pathname;
+          const isPublicPage = 
+            currentPath.includes('/login') || 
+            currentPath.includes('/identities/register') || 
+            currentPath.startsWith('/auth/') ||
+            currentPath === '/invite' ||
+            currentPath === '/';
+          
+          // Don't try to refresh on public pages - just proceed without token
+          if (isPublicPage) {
+            return config;
+          }
+          
           try {
             token = await this.refreshAccessToken();
           } catch (error) {
             // Refresh failed, redirect to login
-            const currentPath = window.location.pathname;
-            if (!currentPath.includes('/auth/') && !currentPath.includes('/login')) {
+            if (!isPublicPage) {
               window.location.href = '/login';
             }
             return Promise.reject(error);
@@ -73,6 +87,19 @@ class BaseHttpClient {
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
 
+          // Check if we're on a public page - don't retry refresh
+          const currentPath = window.location.pathname;
+          const isPublicPage = 
+            currentPath.includes('/login') || 
+            currentPath.includes('/identities/register') || 
+            currentPath.startsWith('/auth/') ||
+            currentPath === '/invite' ||
+            currentPath === '/';
+          
+          if (isPublicPage) {
+            return Promise.reject(error);
+          }
+
           try {
             const newToken = await this.refreshAccessToken();
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
@@ -81,8 +108,7 @@ class BaseHttpClient {
             // Refresh failed, clear tokens and redirect
             tokenManager.clearAccessToken();
             
-            const currentPath = window.location.pathname;
-            if (!currentPath.includes('/auth/') && !currentPath.includes('/login')) {
+            if (!isPublicPage) {
               window.location.href = '/login';
             }
             

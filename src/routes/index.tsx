@@ -117,11 +117,11 @@ export const routes: RouteObject[] = [
     element: withAuthLayout(<BusinessLoginPage />)
   },
   {
-    path: '/signup',
+    path: '/identities/register',
     element: withAuthLayout(<PersonalRegisterPage />)
   },
   {
-    path: '/signup/business',
+    path: '/identities/register-business',
     element: withAuthLayout(<BusinessRegisterPage />)
   },
   {
@@ -137,7 +137,7 @@ export const routes: RouteObject[] = [
     ]
   },
   {
-    path: '/register',
+    path: '/invite',
     element: <InvitationAcceptancePage />
   },
   {

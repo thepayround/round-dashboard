@@ -79,73 +79,75 @@ export const PersonalLoginPage = () => {
 
   return (
     <Card>
-            <CardHeader>
-              <CardTitle>Login to your Round account</CardTitle>
-              <CardDescription>
-                Enter your email below to login to your account
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="flex flex-col gap-8">
-                  <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="email@example.com"
-                      {...form.register('email')}
-                      aria-invalid={!!form.formState.errors.email}
-                      required
-                    />
-                    {form.formState.errors.email && (
-                      <p className="text-sm text-destructive">
-                        {form.formState.errors.email.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="grid gap-2">
-                    <div className="flex items-center">
-                      <Label htmlFor="password">Password</Label>
-                      <Link
-                        to="/auth/forgot-password"
-                        className="ml-auto inline-block text-sm text-muted-foreground underline-offset-4 hover:underline"
-                      >
-                        Forgot your password?
-                      </Link>
-                    </div>
-                    <PasswordInput
-                      id="password"
-                      placeholder="********"
-                      {...form.register('password')}
-                      aria-invalid={!!form.formState.errors.password}
-                      required
-                    />
-                    {form.formState.errors.password && (
-                      <p className="text-sm text-destructive">
-                        {form.formState.errors.password.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    <Button type="submit" disabled={isLoading} className="w-full">
-                      {isLoading ? 'Signing in...' : 'Login'}
-                    </Button>
-                    <GoogleLoginButton
-                      accountType="personal"
-                      onSuccess={() => showSuccess('Successfully signed in with Google!')}
-                      onError={(error) => showError(error)}
-                    />
-                  </div>
-                </div>
-                <div className="mt-4 text-center text-sm text-muted-foreground">
-                  Don&apos;t have an account?{' '}
-                  <Link to="/signup" className="text-primary underline-offset-4 hover:underline">
-                    Sign up
-                  </Link>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+      <CardHeader>
+        <CardTitle>Login to your Round account</CardTitle>
+        <CardDescription>
+          Enter your email below to login to your account
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex flex-col gap-8">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="email@example.com"
+                {...form.register('email')}
+                aria-invalid={!!form.formState.errors.email}
+                autoComplete="email"
+                required
+              />
+              {form.formState.errors.email && (
+                <p className="text-sm text-destructive">
+                  {form.formState.errors.email.message}
+                </p>
+              )}
+            </div>
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+                <Link
+                  to="/auth/forgot-password"
+                  className="ml-auto inline-block text-sm text-muted-foreground underline-offset-4 hover:underline"
+                >
+                  Forgot your password?
+                </Link>
+              </div>
+              <PasswordInput
+                id="password"
+                placeholder="********"
+                {...form.register('password')}
+                aria-invalid={!!form.formState.errors.password}
+                autoComplete="current-password"
+                required
+              />
+              {form.formState.errors.password && (
+                <p className="text-sm text-destructive">
+                  {form.formState.errors.password.message}
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col gap-4">
+              <Button type="submit" disabled={isLoading} className="w-full">
+                {isLoading ? 'Signing in...' : 'Login'}
+              </Button>
+              <GoogleLoginButton
+                accountType="personal"
+                onSuccess={() => showSuccess('Successfully signed in with Google!')}
+                onError={(error) => showError(error)}
+              />
+            </div>
+          </div>
+          <div className="mt-4 text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{' '}
+            <Link to="/identities/register" className="text-primary underline-offset-4 hover:underline">
+              Sign up
+            </Link>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   )
 }
