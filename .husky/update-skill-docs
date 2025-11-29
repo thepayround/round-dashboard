@@ -1,0 +1,16 @@
+#!/bin/sh
+# Auto-update skill documentation when component files change
+
+echo "📚 Updating skill documentation..."
+
+# Update component list
+node .claude/skills/ui-ux-shadcn/scripts/update-components.js
+
+# Sync theme variables  
+node .claude/skills/ui-ux-shadcn/scripts/sync-theme.js
+
+# Stage the updated files
+git add .claude/skills/ui-ux-shadcn/references/shadcn-components.md
+git add .claude/skills/ui-ux-shadcn/references/ui-rules.md
+
+echo "✅ Skill docs updated"

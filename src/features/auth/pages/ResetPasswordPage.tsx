@@ -1,65 +1,166 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
-import { Lock, Eye, EyeOff, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Lock, Eye, EyeOff, AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { useState, useCallback, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
 
-import { useResetPasswordController } from '../hooks/useResetPasswordController'
-
-import { Input } from '@/shared/ui'
-import { ActionButton } from '@/shared/ui/ActionButton'
+import { useAsyncAction } from '@/shared/hooks'
+import { useAuth } from '@/shared/hooks/useAuth'
+import { apiClient } from '@/shared/services/apiClient'
+import type { User } from '@/shared/types/auth'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
-import { IconButton } from '@/shared/ui/Button'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
+import { Alert, AlertDescription } from '@/shared/ui/shadcn/alert'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/shadcn/form'
+import { Input } from '@/shared/ui/shadcn/input'
+import { handleApiError } from '@/shared/utils'
+
+const resetPasswordSchema = z.object({
+  newPassword: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number'),
+  confirmPassword: z.string().min(1, 'Please confirm your password'),
+}).refine(data => data.newPassword === data.confirmPassword, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
+})
+
+type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>
 
 export const ResetPasswordPage = () => {
-  const {
-    values,
-    errors,
-    handleBlur,
-    handlePasswordChange,
-    handleConfirmPasswordChange,
-    handleSubmit,
-    isSubmitting,
-    apiError,
-    isSuccess,
-    showPassword,
-    showConfirmPassword,
-    toggleShowPassword,
-    toggleShowConfirmPassword,
-    disableSubmit,
-    goToLogin,
-    tokenError,
-    tokenEmail,
-  } = useResetPasswordController()
+  const navigate = useNavigate()
+  const { login } = useAuth()
+  const [searchParams] = useSearchParams()
+  const { loading: isSubmitting, execute } = useAsyncAction()
+
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [tokenData, setTokenData] = useState({ email: '', token: '' })
+  const [tokenError, setTokenError] = useState<string | null>(null)
+  const [tokenEmail, setTokenEmail] = useState('')
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [apiError, setApiError] = useState('')
+
+  const form = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      newPassword: '',
+      confirmPassword: '',
+    },
+  })
+
+  // Validate token from URL
+  useEffect(() => {
+    const email = searchParams.get('email') ?? searchParams.get('userId') ?? ''
+    const token = searchParams.get('token') ?? ''
+
+    if (!email || !token) {
+      setTokenError('Invalid or missing reset link parameters. Please request a new password reset.')
+      return
+    }
+
+    setTokenData({
+      email: decodeURIComponent(email),
+      token: decodeURIComponent(token),
+    })
+    setTokenEmail(decodeURIComponent(email))
+    setTokenError(null)
+  }, [searchParams])
+
+  const handleAutoLogin = useCallback(async () => {
+    try {
+      const response = await apiClient.login({
+        email: tokenData.email,
+        password: form.getValues('newPassword'),
+      })
+
+      if (response.success && response.data) {
+        const loginData = response.data as unknown as Record<string, unknown>
+        const token = typeof loginData.token === 'string' ? loginData.token : ''
+        const refreshToken = typeof loginData.refreshToken === 'string' ? loginData.refreshToken : undefined
+        const user = loginData.user as User | undefined
+        if (user && token) {
+          login(user, token, refreshToken)
+        }
+        navigate('/dashboard', { replace: true })
+      } else {
+        navigate('/login')
+      }
+    } catch {
+      navigate('/login')
+    }
+  }, [login, navigate, tokenData.email, form])
+
+  const onSubmit = useCallback(
+    async (data: ResetPasswordFormData) => {
+      setApiError('')
+
+      if (tokenError) {
+        return
+      }
+
+      await execute(
+        async () => {
+          const response = await apiClient.resetPassword(
+            tokenData.email,
+            tokenData.token,
+            data.newPassword,
+            data.confirmPassword
+          )
+
+          if (response.success) {
+            setIsSuccess(true)
+            setTimeout(() => {
+              void handleAutoLogin()
+            }, 1500)
+          } else {
+            setApiError(response.error ?? 'Failed to reset password')
+          }
+        },
+        {
+          onError: error => {
+            const message = handleApiError(error, 'ResetPassword')
+            setApiError(message)
+          },
+        }
+      )
+    },
+    [execute, handleAutoLogin, tokenData, tokenError]
+  )
+
+  const goToLogin = useCallback(() => navigate('/login'), [navigate])
+
+  // Invalid token error state
   if (tokenError) {
     return (
       <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
-        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div className="floating-orb" />
-          <div className="floating-orb" />
-          <div className="floating-orb" />
-        </div>
-        
+
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="w-full max-w-[360px] mx-auto relative z-10"
         >
-          <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
+          <div className="bg-card/50 border border-border rounded-lg p-6 relative overflow-hidden z-10">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/15 flex items-center justify-center">
-                <AlertCircle className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-destructive/15 flex items-center justify-center">
+                <AlertCircle className="w-8 h-8 text-destructive" />
               </div>
-              <h1 className="text-2xl font-medium tracking-tight text-white mb-4">Invalid Reset Link</h1>
-              <p className="text-white/85 mb-6">
-                {tokenError}
-              </p>
-              <Link
-                to="/auth/forgot-password"
-                className="bg-auth-magenta text-white font-medium h-9 px-4 rounded-lg border-0 inline-flex items-center justify-center text-sm whitespace-nowrap transition-colors duration-200 hover:bg-auth-magenta-hover disabled:bg-[#525252] disabled:opacity-50 disabled:cursor-not-allowed space-x-2"
-              >
-                <span>Request New Reset Link</span>
-                <ArrowRight className="w-4 h-4" />
+              <h1 className="text-2xl font-medium tracking-tight text-foreground mb-4">Invalid Reset Link</h1>
+              <p className="text-muted-foreground mb-6">{tokenError}</p>
+              <Link to="/auth/forgot-password">
+                <Button size="lg">
+                  Request New Reset Link
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
               </Link>
             </div>
           </div>
@@ -71,11 +172,6 @@ export const ResetPasswordPage = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-      </div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -90,7 +186,7 @@ export const ResetPasswordPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo />
 
-        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
+        <div className="bg-card/50 border border-border rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="gradient-header" />
@@ -102,22 +198,22 @@ export const ResetPasswordPage = () => {
             >
               {!isSuccess ? (
                 <>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-foreground mb-2 relative">
                     Reset Password
                   </h1>
-                  <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">
-                    Enter your new password for <strong className="text-white">{tokenEmail}</strong>
+                  <p className="text-muted-foreground text-sm md:text-base lg:text-sm font-medium">
+                    Enter your new password for <strong className="text-foreground">{tokenEmail}</strong>
                   </p>
                 </>
               ) : (
                 <>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary flex items-center justify-center">
-                    <CheckCircle className="w-8 h-8 text-white" />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                    <CheckCircle2 className="w-8 h-8 text-primary" />
                   </div>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-white mb-2 relative">
+                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-foreground mb-2 relative">
                     Password Reset Successful
                   </h1>
-                  <p className="text-white/85 text-sm md:text-base lg:text-sm font-medium">
+                  <p className="text-muted-foreground text-sm md:text-base lg:text-sm font-medium">
                     Your password has been successfully reset. You will be logged in automatically...
                   </p>
                 </>
@@ -132,115 +228,120 @@ export const ResetPasswordPage = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
+                  className="mb-6"
                 >
-                  <div className="flex items-center space-x-2 text-primary">
-                    <AlertCircle className="w-5 h-5" />
-                    <span className="text-sm font-medium">{apiError}</span>
-                  </div>
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{apiError}</AlertDescription>
+                  </Alert>
                 </motion.div>
               )}
 
               {/* Reset Password Form */}
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                {/* New Password */}
-                <div className="relative">
-                  <Input
-                    id="newPassword"
-                    label="New Password"
-                    leftIcon={Lock}
-                    type={showPassword ? 'text' : 'password'}
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+                  {/* New Password */}
+                  <FormField
+                    control={form.control}
                     name="newPassword"
-                    value={values.newPassword}
-                    onChange={handlePasswordChange}
-                    onBlur={handleBlur('newPassword')}
-                    placeholder="Enter your new password"
-                    error={errors.newPassword}
-                    className="pr-9"
-                    required
-                    autoComplete="new-password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground font-medium">New Password</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+                            <Input
+                              {...field}
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder="Enter your new password"
+                              className="pl-10 pr-10 bg-input border-border"
+                              autoComplete="new-password"
+                            />
+                            <Button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              variant="ghost"
+                              size="icon"
+                              className="absolute right-0 top-1/2 -translate-y-1/2 h-full px-3 hover:bg-transparent"
+                            >
+                              {showPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
+                            </Button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <IconButton
-                    type="button"
-                    onClick={toggleShowPassword}
-                    icon={showPassword ? EyeOff : Eye}
-                    variant="ghost"
-                    size="md"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    className="absolute right-3 top-[42px] -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
-                  />
-                </div>
 
-                {/* Confirm Password */}
-                <div className="relative">
-                  <Input
-                    id="confirmPassword"
-                    label="Confirm New Password"
-                    leftIcon={Lock}
-                    type={showConfirmPassword ? 'text' : 'password'}
+                  {/* Confirm Password */}
+                  <FormField
+                    control={form.control}
                     name="confirmPassword"
-                    value={values.confirmPassword}
-                    onChange={handleConfirmPasswordChange}
-                    onBlur={handleBlur('confirmPassword')}
-                    placeholder="Confirm your new password"
-                    error={errors.confirmPassword}
-                    className="pr-9"
-                    required
-                    autoComplete="new-password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-foreground font-medium">Confirm New Password</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+                            <Input
+                              {...field}
+                              type={showConfirmPassword ? 'text' : 'password'}
+                              placeholder="Confirm your new password"
+                              className="pl-10 pr-10 bg-input border-border"
+                              autoComplete="new-password"
+                            />
+                            <Button
+                              type="button"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                              variant="ghost"
+                              size="icon"
+                              className="absolute right-0 top-1/2 -translate-y-1/2 h-full px-3 hover:bg-transparent"
+                            >
+                              {showConfirmPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
+                            </Button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <IconButton
-                    type="button"
-                    onClick={toggleShowConfirmPassword}
-                    icon={showConfirmPassword ? EyeOff : Eye}
-                    variant="ghost"
-                    size="md"
-                    aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
-                    className="absolute right-3 top-[42px] -translate-y-1/2 z-10 flex items-center justify-center cursor-pointer transition-colors duration-200 text-auth-icon hover:text-white/90"
-                  />
-                </div>
 
-                {/* Submit Button */}
-                <ActionButton
-                  type="submit"
-                  label={isSubmitting ? 'Resetting Password...' : 'Reset Password'}
-                  disabled={disableSubmit}
-                  icon={ArrowRight}
-                  isLoading={isSubmitting}
-                  size="md"
-                  animated={false}
-                  actionType="auth"
-                  className="mt-8 w-full"
-                />
+                  {/* Password Requirements */}
+                  <div className="p-4 rounded-lg bg-muted/50 border border-border">
+                    <PasswordStrengthIndicator
+                      password={form.watch('newPassword')}
+                      showStrengthBar={!!form.watch('newPassword')}
+                    />
+                  </div>
 
-                {/* Password Requirements */}
-                <div className="p-4 rounded-lg bg-gray-800/50 border border-gray-700/50">
-                  <PasswordStrengthIndicator 
-                    password={values.newPassword}
-                    showStrengthBar={!!values.newPassword}
-                  />
-                </div>
-              </form>
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    disabled={!form.formState.isValid || isSubmitting}
+                    className="w-full mt-8"
+                    size="lg"
+                  >
+                    {isSubmitting ? 'Resetting Password...' : 'Reset Password'}
+                    {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" />}
+                  </Button>
+                </form>
+              </Form>
             </>
           ) : (
             <>
               {/* Success State */}
               <div className="space-y-6">
-                <div className="p-4 rounded-lg bg-success/10 border border-success/20">
-                  <div className="text-success text-sm font-medium">
+                <Alert className="bg-success/10 border-success/20 text-success">
+                  <AlertDescription>
                     <p>Your password has been successfully reset and all existing sessions have been invalidated for security.</p>
-                  </div>
-                </div>
+                  </AlertDescription>
+                </Alert>
 
                 {/* Action Button */}
-                <ActionButton
-                  label="Continue to Sign In"
-                  onClick={goToLogin}
-                  icon={ArrowRight}
-                  size="md"
-                  animated={false}
-                  actionType="auth"
-                  className="w-full "
-                />
+                <Button onClick={goToLogin} className="w-full" size="lg">
+                  Continue to Sign In
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
               </div>
             </>
           )}
@@ -249,6 +350,3 @@ export const ResetPasswordPage = () => {
     </div>
   )
 }
-
-
-

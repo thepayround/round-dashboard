@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion'
-import { Palette, Image } from 'lucide-react'
+import { Palette, Image, Loader2 } from 'lucide-react'
 import React from 'react'
 
 import { useBrandingController } from '../../hooks/useBrandingController'
 
 import { FileInput } from '@/shared/ui'
-import { Button } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
 
 
 export const BrandingSection: React.FC = () => {
@@ -37,7 +37,7 @@ export const BrandingSection: React.FC = () => {
         </p>
       </div>
 
-      <Card animate={false} padding="lg">
+      <Card className="p-6">
         <div className="flex items-center gap-4 mb-6">
           <div className="p-2 bg-primary/20 rounded-lg">
             <Image className="w-5 h-5 text-primary" />
@@ -87,14 +87,20 @@ export const BrandingSection: React.FC = () => {
         <div className="flex justify-end mt-8">
           <Button
             onClick={handleSaveBranding}
-            disabled={disableSave}
-            isLoading={isSaving}
-            icon={Palette}
-            iconPosition="left"
-            variant="primary"
-            size="sm"
+            disabled={disableSave || isSaving}
+            variant="default"
           >
-            {isSaving ? 'Saving...' : 'Save Branding'}
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Palette className="mr-2 h-4 w-4" />
+                Save Branding
+              </>
+            )}
           </Button>
         </div>
       </Card>

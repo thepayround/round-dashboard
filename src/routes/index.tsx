@@ -93,11 +93,16 @@ const OrganizationSettingsPage = lazy(() =>
     default: module.OrganizationSettingsPage
   }))
 )
+const ShadcnDemoPage = lazy(() =>
+  import('@/features/demo/ShadcnDemoPage').then(module => ({
+    default: module.ShadcnDemoPage
+  }))
+)
 
 export const routes: RouteObject[] = [
   {
     path: '/',
-    element: <WelcomePage />
+    element: withAuthLayout(<WelcomePage />)
   },
   {
     path: '/home',
@@ -166,6 +171,10 @@ export const routes: RouteObject[] = [
   {
     path: '/settings',
     element: withProtectedRoute(<OrganizationSettingsPage />)
+  },
+  {
+    path: '/shadcn-demo',
+    element: withProtectedRoute(<ShadcnDemoPage />)
   },
   {
     path: '*',

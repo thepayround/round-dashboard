@@ -2,7 +2,7 @@
 import { X } from 'lucide-react'
 import React from 'react'
 
-import { PlainButton } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/shadcn/button'
 
 export interface FilterChipProps {
   label: string
@@ -31,14 +31,15 @@ export const FilterChip = React.forwardRef<HTMLDivElement, FilterChipProps>(
       >
         <span className="font-medium text-white/70">{label}:</span>
         <span className="text-white">{value}</span>
-        <PlainButton
+        <Button
           onClick={onRemove}
-          className="p-0.5 hover:bg-white/10 rounded transition-colors ml-1"
+          variant="ghost"
+          size="icon"
+          className="p-0.5 hover:bg-white/10 rounded transition-colors ml-1 h-5 w-5"
           aria-label={`Remove ${label} filter`}
-          unstyled
         >
           <X className="w-3.5 h-3.5 text-white/60 group-hover:text-white transition-colors" />
-        </PlainButton>
+        </Button>
       </motion.div>
     )
   }

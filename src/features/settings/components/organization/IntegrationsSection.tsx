@@ -4,9 +4,9 @@ import React from 'react'
 
 import { useIntegrationsController } from '../../hooks/useIntegrationsController'
 
-import { Badge, type BadgeVariant } from '@/shared/ui/Badge'
-import { Button, IconButton } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { Badge } from '@/shared/ui/shadcn/badge'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
 
 
 const statusIcon = (status: 'connected' | 'available' | 'configured') => {
@@ -22,16 +22,16 @@ const statusIcon = (status: 'connected' | 'available' | 'configured') => {
   }
 }
 
-const statusVariant = (status: 'connected' | 'available' | 'configured'): BadgeVariant => {
+const statusVariant = (status: 'connected' | 'available' | 'configured'): 'default' | 'secondary' | 'destructive' | 'outline' => {
   switch (status) {
     case 'connected':
-      return 'success'
+      return 'default'
     case 'configured':
-      return 'info'
+      return 'secondary'
     case 'available':
-      return 'neutral'
+      return 'outline'
     default:
-      return 'neutral'
+      return 'outline'
   }
 }
 
@@ -62,7 +62,7 @@ export const IntegrationsSection: React.FC = () => {
         </p>
       </div>
 
-      <Card animate={false} padding="lg">
+      <Card className="p-6 lg:p-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <div className="p-2 bg-primary/20 rounded-lg">
@@ -73,7 +73,8 @@ export const IntegrationsSection: React.FC = () => {
               <p className="text-xs text-gray-400">Securely manage access to your APIs and integrations</p>
             </div>
           </div>
-          <Button variant="secondary" icon={Plus} size="sm">
+          <Button variant="secondary">
+            <Plus className="w-4 h-4 mr-2" />
             Generate Key
           </Button>
         </div>
@@ -84,7 +85,7 @@ export const IntegrationsSection: React.FC = () => {
               key={category.id}
               type="button"
               onClick={() => handleCategoryChange(category.id)}
-              variant={activeCategory === category.id ? 'primary' : 'ghost'}
+              variant={activeCategory === category.id ? 'default' : 'ghost'}
               className={`justify-between h-auto py-3 ${
                 activeCategory === category.id ? 'bg-primary/10' : ''
               }`}
@@ -101,7 +102,7 @@ export const IntegrationsSection: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredIntegrations.map(integration => (
-          <Card key={integration.id} animate={false} padding="lg">
+          <Card key={integration.id} className="p-6 lg:p-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
                 <span className="text-2xl">{integration.icon}</span>
@@ -110,7 +111,7 @@ export const IntegrationsSection: React.FC = () => {
                   <p className="text-xs text-gray-400">{integration.description}</p>
                 </div>
               </div>
-              <Badge variant={statusVariant(integration.status)} size="sm">
+              <Badge variant={statusVariant(integration.status)}>
                 {integration.status}
               </Badge>
             </div>
@@ -128,21 +129,23 @@ export const IntegrationsSection: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 {integration.status === 'connected' && (
-                  <Button variant="ghost" size="sm" onClick={() => handleDisconnect(integration.id)}>
+                  <Button variant="ghost" onClick={() => handleDisconnect(integration.id)}>
                     Disconnect
                   </Button>
                 )}
                 {integration.status === 'available' && (
-                  <Button variant="primary" size="sm" onClick={() => handleConnect(integration.id)}>
+                  <Button variant="default" onClick={() => handleConnect(integration.id)}>
                     Connect
                   </Button>
                 )}
                 {integration.status === 'configured' && (
-                  <Button variant="secondary" size="sm" onClick={() => handleConfigure(integration.id)}>
+                  <Button variant="secondary" onClick={() => handleConfigure(integration.id)}>
                     Configure
                   </Button>
                 )}
-                <IconButton icon={ExternalLink} variant="ghost" size="sm" aria-label="Open details" />
+                <Button variant="ghost" size="icon" aria-label="Open details">
+                  <ExternalLink className="w-4 h-4" />
+                </Button>
               </div>
             </div>
           </Card>

@@ -18,11 +18,10 @@ import TeamMembersTable from '../components/TeamMembersTable'
 import { useTeamManagementController } from '../hooks/useTeamManagementController'
 import type { TeamInvitation, UserRole } from '../types/team.types'
 
-import { LoadingSpinner } from '@/shared/ui'
-import { ActionButton } from '@/shared/ui/ActionButton'
-import { Badge } from '@/shared/ui/Badge'
-import { Button } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
+import { Badge } from '@/shared/ui/shadcn/badge'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
 import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
 import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
 
@@ -136,7 +135,8 @@ export const TeamManagementPage: React.FC = () => {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
-          <LoadingSpinner size="xl" color="primary" label="Loading team data..." />
+          <LoadingSpinner size="lg" />
+          <p className="text-white/70 mt-4">Loading team data...</p>
         </div>
       </div>
     )
@@ -149,13 +149,12 @@ export const TeamManagementPage: React.FC = () => {
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-white mb-2">Error Loading Team</h3>
           <p className="text-gray-400 mb-4">{error}</p>
-          <ActionButton
-            label="Retry"
+          <Button
             onClick={refreshTeam}
             variant="secondary"
-            size="sm"
-            actionType="general"
-          />
+          >
+            Retry
+          </Button>
         </div>
       </div>
     )
@@ -178,20 +177,19 @@ export const TeamManagementPage: React.FC = () => {
                 Manage team members, roles, and invitations
               </p>
             </div>
-            <ActionButton
-              label="Invite Member"
+            <Button
               onClick={openInviteModal}
-              icon={UserPlus}
-              variant="primary"
-              size="md"
-              actionType="create"
-            />
+              variant="default"
+            >
+              <UserPlus className="mr-2 h-4 w-4" />
+              Invite Member
+            </Button>
           </div>
         </div>
 
       {/* Tabs */}
       <div>
-        <Card padding="lg">
+        <Card className="p-6">
           <nav className="flex space-x-2">
             {tabs.map((tab) => {
               const IconComponent = tab.icon
@@ -200,13 +198,12 @@ export const TeamManagementPage: React.FC = () => {
                 <Button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  variant={isActive ? 'primary' : 'ghost'}
-                  size="md"
+                  variant={isActive ? 'default' : 'ghost'}
                   className={`space-x-2 ${isActive ? 'bg-primary/20 border-white/20' : ''}`}
                 >
                   <IconComponent className="w-4 h-4" />
                   <span className="font-medium">{tab.label}</span>
-                  <Badge variant="neutral" size="sm">
+                  <Badge variant="outline">
                     {tab.count}
                   </Badge>
                 </Button>
@@ -234,7 +231,7 @@ export const TeamManagementPage: React.FC = () => {
         />
 
         {/* Content */}
-        <Card padding="lg">
+        <Card className="p-6">
           {activeTab === 'members' ? (
             <div>
               <div className="flex items-center justify-between mb-6">
@@ -254,13 +251,13 @@ export const TeamManagementPage: React.FC = () => {
                     }
                   </p>
                   {!currentSearchQuery && roleFilter === 'all' && (
-                    <ActionButton
-                      label="Invite First Member"
+                    <Button
                       onClick={openInviteModal}
-                      icon={UserPlus}
-                      variant="primary"
-                      size="sm"
-                    />
+                      variant="default"
+                    >
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Invite First Member
+                    </Button>
                   )}
                 </div>
               ) : (
@@ -306,7 +303,7 @@ export const TeamManagementPage: React.FC = () => {
                         key={invitation.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all duration-200"
+                        className="p-4 bg-white/5 border border-border rounded-lg hover:bg-white/10 transition-all duration-200"
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -359,8 +356,7 @@ export const TeamManagementPage: React.FC = () => {
                                   </Button>
                                   <Button
                                     onClick={() => handleCancelInvitation(invitation)}
-                                    variant="danger"
-                                    size="sm"
+                                    variant="destructive"
                                     className="bg-red-500/20"
                                   >
                                     Cancel

@@ -1,8 +1,13 @@
-import type { ApiDropdownConfig } from '../ApiDropdown'
-import { ApiDropdown } from '../ApiDropdown'
-import { FormInput } from '../FormInput'
+import { Input } from '../shadcn/input'
+import { Label } from '../shadcn/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../shadcn/select'
 
 import type { Address } from './types'
+
+export interface CountryOption {
+  code: string
+  name: string
+}
 
 export interface AddressFormGroupProps {
   label?: string
@@ -11,8 +16,7 @@ export interface AddressFormGroupProps {
   errors?: Partial<Record<keyof Address, string>>
   required?: boolean
   disabled?: boolean
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  countryDropdownConfig: ApiDropdownConfig<any>
+  countries?: CountryOption[]
 }
 
 export const AddressFormGroup = ({
@@ -22,7 +26,7 @@ export const AddressFormGroup = ({
   errors,
   required = false,
   disabled = false,
-  countryDropdownConfig,
+  countries = [],
 }: AddressFormGroupProps) => {
   const handleFieldChange = (field: keyof Address, fieldValue: string) => {
     onChange({
@@ -34,64 +38,109 @@ export const AddressFormGroup = ({
   return (
     <div className="space-y-4">
       {label && (
-        <h4 className="text-sm font-medium text-white">{label}</h4>
+        <h4 className="text-sm font-medium text-foreground">{label}</h4>
       )}
 
       {/* Address Lines */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormInput
-          label="Address Line 1"
-          value={value.line1}
-          onChange={(e) => handleFieldChange('line1', e.target.value)}
-          error={errors?.line1}
-          required={required}
-          disabled={disabled}
-        />
-        <FormInput
-          label="Address Line 2"
-          value={value.line2 ?? ''}
-          onChange={(e) => handleFieldChange('line2', e.target.value)}
-          error={errors?.line2}
-          disabled={disabled}
-          placeholder="Apt, suite, unit, etc. (optional)"
-        />
+        <div className="space-y-2">
+          <Label htmlFor="line1">
+            Address Line 1{required && <span className="text-destructive"> *</span>}
+          </Label>
+          <Input
+            id="line1"
+            value={value.line1}
+            onChange={(e) => handleFieldChange('line1', e.target.value)}
+            disabled={disabled}
+          />
+          {errors?.line1 && (
+            <p className="text-sm text-destructive">{errors.line1}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="line2">Address Line 2</Label>
+          <Input
+            id="line2"
+            value={value.line2 ?? ''}
+            onChange={(e) => handleFieldChange('line2', e.target.value)}
+            disabled={disabled}
+            placeholder="Apt, suite, unit, etc. (optional)"
+          />
+          {errors?.line2 && (
+            <p className="text-sm text-destructive">{errors.line2}</p>
+          )}
+        </div>
       </div>
 
       {/* City, State, ZIP, Country */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <FormInput
-          label="City"
-          value={value.city}
-          onChange={(e) => handleFieldChange('city', e.target.value)}
-          error={errors?.city}
-          required={required}
-          disabled={disabled}
-        />
-        <FormInput
-          label="State / Province"
-          value={value.state ?? ''}
-          onChange={(e) => handleFieldChange('state', e.target.value)}
-          error={errors?.state}
-          disabled={disabled}
-        />
-        <FormInput
-          label="ZIP / Postal Code"
-          value={value.zipCode}
-          onChange={(e) => handleFieldChange('zipCode', e.target.value)}
-          error={errors?.zipCode}
-          required={required}
-          disabled={disabled}
-        />
-        <div>
-          <div className="space-y-2">
-            <span className="auth-label">Country{required && <span className="text-primary"> *</span>}</span>
-            <ApiDropdown
-              config={countryDropdownConfig}
-              value={value.country}
-              onSelect={(country) => handleFieldChange('country', country)}
-              disabled={disabled}
-            />
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="city">
+            City{required && <span className="text-destructive"> *</span>}
+          </Label>
+          <Input
+            id="city"
+            value={value.city}
+            onChange={(e) => handleFieldChange('city', e.target.value)}
+            disabled={disabled}
+          />
+          {errors?.city && (
+            <p className="text-sm text-destructive">{errors.city}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="state">State / Province</Label>
+          <Input
+            id="state"
+            value={value.state ?? ''}
+            onChange={(e) => handleFieldChange('state', e.target.value)}
+            disabled={disabled}
+          />
+          {errors?.state && (
+            <p className="text-sm text-destructive">{errors.state}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="zipCode">
+            ZIP / Postal Code{required && <span className="text-destructive"> *</span>}
+          </Label>
+          <Input
+            id="zipCode"
+            value={value.zipCode}
+            onChange={(e) => handleFieldChange('zipCode', e.target.value)}
+            disabled={disabled}
+          />
+          {errors?.zipCode && (
+            <p className="text-sm text-destructive">{errors.zipCode}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="country">
+            Country{required && <span className="text-destructive"> *</span>}
+          </Label>
+          <Select
+            value={value.country}
+            onValueChange={(country) => handleFieldChange('country', country)}
+            disabled={disabled}
+          >
+            <SelectTrigger id="country">
+              <SelectValue placeholder="Select country" />
+            </SelectTrigger>
+            <SelectContent>
+              {countries.map((country) => (
+                <SelectItem key={country.code} value={country.code}>
+                  {country.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors?.country && (
+            <p className="text-sm text-destructive">{errors.country}</p>
+          )}
         </div>
       </div>
     </div>

@@ -22,9 +22,9 @@ import { usePhoneFormatting } from '@/shared/hooks/usePhoneFormatting'
 import { useUserSettingsManager } from '@/shared/hooks/useUserSettingsManager'
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { UserSettingsUpdateRequest } from '@/shared/services/api/userSettings.service'
-import { Button } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
 import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
 
 interface UserSettingsPageProps {
   // Props can be added here if needed in the future
@@ -88,8 +88,8 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
           animate={{ opacity: 1 }}
           className="flex items-center justify-center py-12"
         >
-          <Card animate={false} padding="lg" className="text-center">
-            <LoadingSpinner size="lg" color="primary" className="mx-auto mb-4" />
+          <Card className="p-6 text-center">
+            <LoadingSpinner size="lg" className="mx-auto mb-4" />
             <h3 className="text-sm font-medium tracking-tight text-fg mb-2">
               {isLoadingOptions ? 'Loading Settings...' : 'Initializing...'}
             </h3>
@@ -109,7 +109,7 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
           animate={{ opacity: 1 }}
           className="flex items-center justify-center py-24"
         >
-          <Card animate={false} padding="xl" className="text-center max-w-md">
+          <Card className="p-8 text-center max-w-md">
             <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-full w-fit mx-auto mb-6">
               <AlertCircle className="w-8 h-8 text-destructive" />
             </div>
@@ -117,8 +117,8 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
             <p className="text-fg-muted mb-6">{error}</p>
             <Button
               onClick={clearError}
-              variant="primary"
-              size="md"
+              variant="default"
+              size="default"
               className="px-6"
             >
               Try Again

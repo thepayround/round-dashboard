@@ -1,14 +1,13 @@
-﻿import React from 'react'
+﻿import type { ColumnDef } from '@tanstack/react-table'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useCustomerTableController } from '../hooks/useCustomerTableController'
 
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
-import {
-  Badge,
-  Avatar
-} from '@/shared/ui'
-import { DataTable, type Column } from '@/shared/ui/DataTable/DataTable'
+import { DataTable } from '@/shared/ui/DataTable/DataTable'
+import { Avatar, AvatarFallback } from '@/shared/ui/shadcn/avatar'
+import { Badge } from '@/shared/ui/shadcn/badge'
 
 interface SortConfig {
   field: string
@@ -25,10 +24,18 @@ interface CustomerTableProps {
   selectedIds?: string[]
 }
 
+// Helper function to generate initials from name
+const getInitials = (name: string): string => {
+  if (!name) return '?'
+  const parts = name.trim().split(' ')
+  if (parts.length === 1) return parts[0].charAt(0).toUpperCase()
+  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase()
+}
+
 const CustomerTable: React.FC<CustomerTableProps> = ({
   customers,
-  sortConfig,
-  onSort,
+  sortConfig: _sortConfig,
+  onSort: _onSort,
   isLoading = false,
   selectable = false,
   onSelectionChange,
@@ -38,7 +45,6 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   const {
     getStatusMeta,
     formatDate,
-    clearSelection,
   } = useCustomerTableController({
     customers,
     selectable,
@@ -46,64 +52,74 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
     onSelectionChange,
   })
 
-  const columns: Column<CustomerResponse>[] = [
+  const columns: ColumnDef<CustomerResponse, unknown>[] = [
     {
       header: 'Customer',
       accessorKey: 'displayName',
-      sortable: true,
-      cell: (customer) => (
-        <div className="flex items-center space-x-2">
-          <Avatar name={customer.displayName} />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center space-x-2">
-              <div className="font-normal text-white tracking-tight truncate">
-                {customer.effectiveDisplayName ?? customer.displayName}
+      cell: ({ row }) => {
+        const customer = row.original
+        return (
+          <div className="flex items-center space-x-2">
+            <Avatar>
+              <AvatarFallback className="bg-primary/10 text-primary">
+                {getInitials(customer.displayName)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center space-x-2">
+                <div className="font-normal text-white tracking-tight truncate">
+                  {customer.effectiveDisplayName ?? customer.displayName}
+                </div>
+                {customer.isBusinessCustomer && (
+                  <span className="px-2 py-1 bg-white/5 text-white/80 border border-border rounded text-xs font-normal tracking-tight flex-shrink-0">
+                    Business
+                  </span>
+                )}
               </div>
-              {customer.isBusinessCustomer && (
-                <span className="px-2 py-1 bg-white/5 text-white/80 border border-white/10 rounded text-xs font-normal tracking-tight flex-shrink-0">
-                  Business
-                </span>
-              )}
-            </div>
-            <div className="text-sm text-white/60 truncate">
-              {customer.firstName} {customer.lastName}
+              <div className="text-sm text-white/60 truncate">
+                {customer.firstName} {customer.lastName}
+              </div>
             </div>
           </div>
-        </div>
-      )
+        )
+      }
     },
     {
       header: 'Contact',
       accessorKey: 'email',
-      sortable: true,
-      cell: (customer) => (
-        <div className="space-y-1">
-          <div className="text-sm text-white/80 truncate">{customer.email}</div>
-          {customer.phoneNumber && (
-            <div className="text-sm text-white/60 truncate">{customer.phoneNumber}</div>
-          )}
-        </div>
-      )
+      cell: ({ row }) => {
+        const customer = row.original
+        return (
+          <div className="space-y-1">
+            <div className="text-sm text-white/80 truncate">{customer.email}</div>
+            {customer.phoneNumber && (
+              <div className="text-sm text-white/60 truncate">{customer.phoneNumber}</div>
+            )}
+          </div>
+        )
+      }
     },
     {
       header: 'Company',
       accessorKey: 'company',
-      sortable: true,
-      cell: (customer) => (
-        <div className="text-sm text-white/80 truncate">
-          {customer.company ?? '-'}
-        </div>
-      )
+      cell: ({ row }) => {
+        const customer = row.original
+        return (
+          <div className="text-sm text-white/80 truncate">
+            {customer.company ?? '-'}
+          </div>
+        )
+      }
     },
     {
       header: 'Status',
       accessorKey: 'status',
-      sortable: true,
-      cell: (customer) => {
+      cell: ({ row }) => {
+        const customer = row.original
         const statusMeta = getStatusMeta(customer.status)
         return (
           <div className="flex items-center space-x-2">
-            <Badge variant={statusMeta.variant} size="md">
+            <Badge variant={statusMeta.variant}>
               {statusMeta.label}
             </Badge>
             {customer.portalAccess && (
@@ -116,18 +132,22 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
     {
       header: 'Currency',
       accessorKey: 'currency',
-      sortable: true,
-      cell: (customer) => (
-        <div className="text-sm text-white/80">{customer.currency}</div>
-      )
+      cell: ({ row }) => {
+        const customer = row.original
+        return (
+          <div className="text-sm text-white/80">{customer.currency}</div>
+        )
+      }
     },
     {
       header: 'Joined',
       accessorKey: 'signupDate',
-      sortable: true,
-      cell: (customer) => (
-        <div className="text-sm text-white/80">{formatDate(customer.signupDate)}</div>
-      )
+      cell: ({ row }) => {
+        const customer = row.original
+        return (
+          <div className="text-sm text-white/80">{formatDate(customer.signupDate)}</div>
+        )
+      }
     }
   ]
 
@@ -135,16 +155,12 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
     <DataTable
       data={customers}
       columns={columns}
-      keyField="id"
-      sortConfig={sortConfig}
-      onSort={onSort}
       isLoading={isLoading}
-      selectable={selectable}
-      selectedIds={selectedIds}
-      onSelectionChange={onSelectionChange}
+      enableRowSelection={selectable}
       onRowClick={(customer) => navigate(`/customers/${customer.id}`)}
-      selectionSummaryLabel="selected"
-      onClearSelection={clearSelection}
+      showPagination={true}
+      showSearch={false}
+      pageSize={12}
     />
   )
 }

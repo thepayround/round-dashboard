@@ -10,7 +10,7 @@ import { NavigationItem } from '@/shared/layout/DashboardLayout/NavigationItem'
 import { LAYOUT_CONSTANTS, ANIMATION_VARIANTS } from '@/shared/layout/DashboardLayout/constants'
 import type { DashboardLayoutProps } from '@/shared/layout/DashboardLayout/types'
 import { useDashboardLayoutController } from '@/shared/layout/DashboardLayout/useDashboardLayoutController'
-import { Button, IconButton, PlainButton } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/shadcn/button'
 import { cn } from '@/shared/utils/cn'
 
 // Logo text component (reusable, kept here as it's small and only used in mobile header)
@@ -34,7 +34,7 @@ const MobileHeader = memo(({
   isMenuOpen: boolean
 }) => (
   <header
-    className="fixed top-0 left-0 right-0 h-14 bg-[#070708] border-b border-white/10 z-[50] flex items-center justify-between px-4"
+    className="fixed top-0 left-0 right-0 h-14 bg-[#070708] border-b border-border z-[50] flex items-center justify-between px-4"
     role="banner"
     aria-label="Mobile header"
     style={{
@@ -44,14 +44,15 @@ const MobileHeader = memo(({
       height: 'calc(3.5rem + var(--safe-area-inset-top))'
     }}
   >
-    <IconButton
+    <Button
       onClick={onMenuClick}
-      icon={PanelLeft}
       variant="ghost"
-      size="md"
+      size="icon"
       className="text-gray-400 hover:text-white"
       aria-label={isMenuOpen ? "Close sidebar" : "Open sidebar"}
-    />
+    >
+      <PanelLeft className="h-4 w-4" />
+    </Button>
 
     <Link to="/dashboard" className="flex items-center space-x-2">
       <img src={ColorLogo} alt="Round Logo" className="w-7 h-7" />
@@ -125,8 +126,8 @@ export const DashboardLayout = memo(({
       <Button
         type="button"
         onClick={handleSkipToMainContent}
-        variant="primary"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:shadow-lg focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg"
+        variant="default"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
       >
         Skip to main content
       </Button>
@@ -213,42 +214,45 @@ export const DashboardLayout = memo(({
 
           {/* Collapse Button - Only visible when expanded */}
           {!isMobileView && !isCollapsed && (
-            <IconButton
+            <Button
               onClick={toggleSidebar}
-              icon={PanelLeftClose}
               variant="ghost"
-              size="md"
+              size="icon"
               className="ml-auto text-fg-muted hover:text-fg"
               aria-label="Collapse sidebar"
-            />
+            >
+              <PanelLeftClose className="h-4 w-4" />
+            </Button>
           )}
         </div>
 
         {/* Expand Button Section - Only visible when collapsed */}
         {!isMobileView && isCollapsed && (
           <div className="flex-shrink-0 h-10 flex items-center justify-center px-2 mb-2">
-            <IconButton
+            <Button
               onClick={toggleSidebar}
-              icon={PanelLeft}
               variant="ghost"
-              size="md"
+              size="icon"
               className="text-fg-muted hover:text-fg"
               aria-label="Expand sidebar"
-            />
+            >
+              <PanelLeft className="h-4 w-4" />
+            </Button>
           </div>
         )}
 
         {/* Mobile Header inside sidebar */}
         {isMobileView && !isCollapsed && (
           <div className="absolute top-4 right-4">
-            <IconButton
+            <Button
               onClick={toggleSidebar}
-              icon={PanelLeftClose}
               variant="ghost"
-              size="md"
+              size="icon"
               className="text-fg-muted hover:text-fg"
               aria-label="Close sidebar"
-            />
+            >
+              <PanelLeftClose className="h-4 w-4" />
+            </Button>
           </div>
         )}
 
@@ -330,25 +334,27 @@ export const DashboardLayout = memo(({
                       <Settings className="w-4 h-4 flex-shrink-0" />
                       {!isCollapsed && <span className="font-medium">Settings</span>}
                     </Link>
-                    <PlainButton
+                    <Button
                       onClick={handleLogout}
+                      variant="ghost"
                       className={cn(
-                        "w-full flex items-center text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-all duration-200 text-left",
+                        "w-full flex items-center justify-start text-sm text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all duration-200",
                         isCollapsed ? "gap-0 px-0 h-10 justify-center" : "gap-3 px-4 h-10"
                       )}
                     >
-                      <LogOut className="w-4 h-4 flex-shrink-0" />
+                      <LogOut className="h-4 w-4 flex-shrink-0" />
                       {!isCollapsed && <span className="font-medium">Logout</span>}
-                    </PlainButton>
+                    </Button>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <PlainButton
+            <Button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+              variant="ghost"
               className={cn(
-                "w-full border-t border-border bg-bg transition-all duration-200 cursor-pointer",
+                "w-full border-t border-border bg-bg transition-all duration-200 cursor-pointer h-auto justify-start",
                 isCollapsed ? "py-3 px-0 border-0 bg-transparent flex items-center justify-center" : "py-3 px-4 mx-2",
                 showProfileDropdown ? "border-t-primary" : ""
               )}
@@ -371,7 +377,7 @@ export const DashboardLayout = memo(({
                   </div>
                 )}
               </div>
-            </PlainButton>
+            </Button>
           </div>
         </div>
       </motion.aside>
@@ -427,14 +433,15 @@ export const DashboardLayout = memo(({
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-medium text-fg tracking-tight">Keyboard Shortcuts</h3>
-                <IconButton
+                <Button
                   onClick={() => setShowShortcuts(false)}
-                  icon={X}
                   variant="ghost"
-                  size="md"
+                  size="icon"
                   className="text-fg-muted hover:text-fg"
                   aria-label="Close shortcuts help"
-                />
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
 
               <div className="space-y-6 text-sm">

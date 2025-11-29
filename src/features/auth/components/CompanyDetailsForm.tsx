@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion'
-import { Building, Hash, CreditCard, AlertCircle } from 'lucide-react'
+import { Building, Hash, CreditCard } from 'lucide-react'
 
 import { useCompanyDetailsFormController } from '../hooks/useCompanyDetailsFormController'
 
+import { useCurrency } from '@/shared/hooks/useCurrency'
 import type { CompanyInfo, Currency } from '@/shared/types/business'
-import { Input } from '@/shared/ui'
-import { ApiDropdown, currencyDropdownConfig } from '@/shared/ui/ApiDropdown'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
 import type { ValidationError } from '@/shared/utils/validation'
 
 
@@ -38,6 +40,8 @@ export const CompanyDetailsForm = ({
     onErrorsChange,
   })
 
+  const { currencies, isLoading: isCurrenciesLoading } = useCurrency()
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -66,77 +70,124 @@ export const CompanyDetailsForm = ({
       </div>
 
       {/* Company Name */}
-      <Input
-        id="companyName"
-        label="Company Name *"
-        leftIcon={Building}
-        type="text"
-        value={companyInfo.companyName}
-        onChange={e => handleInputChange('companyName', e.target.value)}
-        onBlur={e => handleInputBlur('companyName', e.target.value)}
-        placeholder="Acme Corporation"
-        error={hasCompanyError('companyName') ? getCompanyError('companyName') : undefined}
-        required
-      />
+      <div className="space-y-2">
+        <Label htmlFor="companyName" className="text-sm font-normal text-white/90 tracking-tight">
+          Company Name<span className="text-destructive"> *</span>
+        </Label>
+        <div className="relative">
+          <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            id="companyName"
+            type="text"
+            value={companyInfo.companyName}
+            onChange={e => handleInputChange('companyName', e.target.value)}
+            onBlur={e => handleInputBlur('companyName', e.target.value)}
+            placeholder="Acme Corporation"
+            className="pl-10"
+            required
+            aria-invalid={hasCompanyError('companyName')}
+            aria-describedby={hasCompanyError('companyName') ? 'companyName-error' : undefined}
+          />
+        </div>
+        {hasCompanyError('companyName') && (
+          <p id="companyName-error" className="text-sm text-destructive">
+            {getCompanyError('companyName')}
+          </p>
+        )}
+      </div>
 
       {/* Registration Number & Tax ID Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Registration Number */}
-        <Input
-          id="registrationNumber"
-          label="Registration Number *"
-          leftIcon={Hash}
-          type="text"
-          value={companyInfo.registrationNumber}
-          onChange={e => handleInputChange('registrationNumber', e.target.value)}
-          onBlur={e => handleInputBlur('registrationNumber', e.target.value)}
-          placeholder="12345678"
-          error={hasCompanyError('registrationNumber') ? getCompanyError('registrationNumber') : undefined}
-          required
-        />
+        <div className="space-y-2">
+          <Label htmlFor="registrationNumber" className="text-sm font-normal text-white/90 tracking-tight">
+            Registration Number<span className="text-destructive"> *</span>
+          </Label>
+          <div className="relative">
+            <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              id="registrationNumber"
+              type="text"
+              value={companyInfo.registrationNumber}
+              onChange={e => handleInputChange('registrationNumber', e.target.value)}
+              onBlur={e => handleInputBlur('registrationNumber', e.target.value)}
+              placeholder="12345678"
+              className="pl-10"
+              required
+              aria-invalid={hasCompanyError('registrationNumber')}
+              aria-describedby={hasCompanyError('registrationNumber') ? 'registrationNumber-error' : undefined}
+            />
+          </div>
+          {hasCompanyError('registrationNumber') && (
+            <p id="registrationNumber-error" className="text-sm text-destructive">
+              {getCompanyError('registrationNumber')}
+            </p>
+          )}
+        </div>
 
         {/* Tax ID */}
-        <Input
-          id="taxId"
-          label="Tax ID"
-          leftIcon={CreditCard}
-          type="text"
-          value={companyInfo.taxId}
-          onChange={e => handleInputChange('taxId', e.target.value)}
-          onBlur={e => handleInputBlur('taxId', e.target.value)}
-          placeholder="XX-XXXXXXX"
-          error={hasCompanyError('taxId') ? getCompanyError('taxId') : undefined}
-        />
+        <div className="space-y-2">
+          <Label htmlFor="taxId" className="text-sm font-normal text-white/90 tracking-tight">
+            Tax ID
+          </Label>
+          <div className="relative">
+            <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              id="taxId"
+              type="text"
+              value={companyInfo.taxId}
+              onChange={e => handleInputChange('taxId', e.target.value)}
+              onBlur={e => handleInputBlur('taxId', e.target.value)}
+              placeholder="XX-XXXXXXX"
+              className="pl-10"
+              aria-invalid={hasCompanyError('taxId')}
+              aria-describedby={hasCompanyError('taxId') ? 'taxId-error' : undefined}
+            />
+          </div>
+          {hasCompanyError('taxId') && (
+            <p id="taxId-error" className="text-sm text-destructive">
+              {getCompanyError('taxId')}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Currency */}
-      <div>
-        <label htmlFor="currency" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-          Currency *
-        </label>
-        <ApiDropdown
-          config={currencyDropdownConfig}
+      <div className="space-y-2">
+        <Label htmlFor="currency" className="text-sm font-normal text-white/90 tracking-tight">
+          Currency<span className="text-destructive"> *</span>
+        </Label>
+        <Select
           value={companyInfo.currency ?? ''}
-          onSelect={value => {
+          onValueChange={value => {
             handleSelectChange('currency', value as Currency)
             // Clear any existing currency error when selection is made
             if (hasCompanyError('currency')) {
               onErrorsChange(errors.filter(error => error.field !== 'currency'))
             }
           }}
-          onClear={() => handleSelectChange('currency', '')}
-          error={hasCompanyError('currency')}
-          allowClear
-        />
-        {hasCompanyError('currency') && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
+          disabled={isCurrenciesLoading}
+        >
+          <SelectTrigger
+            id="currency"
+            className="w-full"
+            aria-invalid={hasCompanyError('currency')}
+            aria-describedby={hasCompanyError('currency') ? 'currency-error' : undefined}
           >
-            <AlertCircle className="w-4 h-4" />
-            <span>{getCompanyError('currency')}</span>
-          </motion.div>
+            <SelectValue placeholder={isCurrenciesLoading ? 'Loading currencies...' : 'Select currency'} />
+          </SelectTrigger>
+          <SelectContent>
+            {currencies.map(currency => (
+              <SelectItem key={currency.code} value={currency.code}>
+                {currency.code} - {currency.name} ({currency.symbol})
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {hasCompanyError('currency') && (
+          <p id="currency-error" className="text-sm text-destructive">
+            {getCompanyError('currency')}
+          </p>
         )}
       </div>
     </motion.div>

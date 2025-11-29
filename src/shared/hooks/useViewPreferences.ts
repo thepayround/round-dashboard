@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from 'react'
 
-import type { ViewMode } from '@/shared/ui/ViewModeToggle'
+import type { ViewMode } from '@/shared/widgets/SearchFilterToolbar/SearchFilterToolbar'
 
 interface ViewPreferences {
   viewMode: ViewMode

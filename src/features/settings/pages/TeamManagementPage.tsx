@@ -1,4 +1,4 @@
-import { Users, MoreHorizontal, Mail, Shield, Trash2, UserPlus } from 'lucide-react'
+import { Users, MoreHorizontal, Mail, Shield, Trash2, UserPlus, AlertTriangle, Search } from 'lucide-react'
 import { useState } from 'react'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
@@ -11,10 +11,35 @@ import {
     TableCell,
     Badge,
     Card,
-    PageHeader
+    Input,
+    Label,
+    Button
 } from '@/shared/ui'
-import { Button, IconButton } from '@/shared/ui/Button'
-import { SearchInput } from '@/shared/ui/SearchInput'
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogAction,
+    AlertDialogCancel
+} from '@/shared/ui/shadcn/alert-dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter
+} from '@/shared/ui/shadcn/dialog'
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem
+} from '@/shared/ui/shadcn/select'
 
 // Mock team member data
 interface TeamMember {
@@ -27,7 +52,7 @@ interface TeamMember {
     lastActive: string
 }
 
-const MOCK_TEAM_MEMBERS: TeamMember[] = [
+const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     {
         id: '1',
         name: 'John Doe',
@@ -68,53 +93,105 @@ const MOCK_TEAM_MEMBERS: TeamMember[] = [
 
 export const TeamManagementPage = () => {
     const [searchQuery, setSearchQuery] = useState('')
+    const [members, setMembers] = useState<TeamMember[]>(INITIAL_TEAM_MEMBERS)
 
-    const filteredMembers = MOCK_TEAM_MEMBERS.filter(member =>
+    // Modal states
+    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
+    const [memberToEdit, setMemberToEdit] = useState<TeamMember | null>(null)
+    const [memberToRemove, setMemberToRemove] = useState<TeamMember | null>(null)
+
+    // Form states
+    const [inviteEmail, setInviteEmail] = useState('')
+    const [inviteRole, setInviteRole] = useState('member')
+    const [newRole, setNewRole] = useState('')
+
+    const filteredMembers = members.filter(member =>
         member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         member.email.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
-    const getRoleVariant = (role: string): 'primary' | 'neutral' | 'success' => {
+    const getRoleVariant = (role: string): 'default' | 'secondary' | 'destructive' | 'outline' => {
         switch (role) {
-            case 'owner': return 'primary'
-            case 'admin': return 'success'
-            case 'member': return 'neutral'
-            default: return 'neutral'
+            case 'owner': return 'default'
+            case 'admin': return 'secondary'
+            case 'member': return 'outline'
+            default: return 'outline'
         }
     }
 
-    const getStatusVariant = (status: string): 'success' | 'warning' | 'neutral' => {
+    const getStatusVariant = (status: string): 'default' | 'secondary' | 'destructive' | 'outline' => {
         switch (status) {
-            case 'active': return 'success'
-            case 'pending': return 'warning'
-            default: return 'neutral'
+            case 'active': return 'default'
+            case 'pending': return 'secondary'
+            default: return 'outline'
         }
+    }
+
+    const handleInviteMember = () => {
+        if (!inviteEmail) return
+
+        const newMember: TeamMember = {
+            id: Math.random().toString(36).substr(2, 9),
+            name: inviteEmail.split('@')[0], // Simple name extraction
+            email: inviteEmail,
+            role: inviteRole as TeamMember['role'],
+            status: 'pending',
+            joinedDate: new Date().toISOString(),
+            lastActive: 'Never'
+        }
+
+        setMembers([...members, newMember])
+        setIsInviteModalOpen(false)
+        setInviteEmail('')
+        setInviteRole('member')
+    }
+
+    const handleChangeRole = () => {
+        if (!memberToEdit || !newRole) return
+
+        setMembers(members.map(m =>
+            m.id === memberToEdit.id
+                ? { ...m, role: newRole as TeamMember['role'] }
+                : m
+        ))
+        setMemberToEdit(null)
+        setNewRole('')
+    }
+
+    const handleRemoveMember = () => {
+        if (!memberToRemove) return
+
+        setMembers(members.filter(m => m.id !== memberToRemove.id))
+        setMemberToRemove(null)
     }
 
     return (
         <DashboardLayout>
-            <PageHeader
-                title="Team Management"
-                actions={
-                    <Button
-                        variant="primary"
-                        size="md"
-                        icon={UserPlus}
-                        iconPosition="left"
-                        onClick={() => {/* TODO: Implement invite member */}}
-                    >
-                        Invite Member
-                    </Button>
-                }
-            />
+            {/* Inline Page Header */}
+            <div className="flex items-center justify-between mb-6">
+                <h1 className="text-2xl font-semibold tracking-tight">Team Management</h1>
+                <Button
+                    variant="default"
+                    size="default"
+                    onClick={() => setIsInviteModalOpen(true)}
+                >
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Invite Member
+                </Button>
+            </div>
+
             <div className="space-y-6">
                 {/* Search */}
-                <Card padding="md">
-                    <SearchInput
-                        value={searchQuery}
-                        onChange={setSearchQuery}
-                        placeholder="Search team members by name or email..."
-                    />
+                <Card className="p-4">
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search team members by name or email..."
+                            className="pl-9"
+                        />
+                    </div>
                 </Card>
 
                 {/* Team Members Table */}
@@ -153,7 +230,6 @@ export const TeamManagementPage = () => {
                                     <TableCell>
                                         <Badge
                                             variant={getRoleVariant(member.role)}
-                                            size="md"
                                             className="capitalize"
                                         >
                                             <Shield className="w-3 h-3 mr-1" />
@@ -163,7 +239,6 @@ export const TeamManagementPage = () => {
                                     <TableCell>
                                         <Badge
                                             variant={getStatusVariant(member.status)}
-                                            size="md"
                                             className="capitalize"
                                         >
                                             {member.status}
@@ -187,31 +262,37 @@ export const TeamManagementPage = () => {
                                         <div className="flex items-center justify-end gap-2">
                                             {member.role !== 'owner' && (
                                                 <>
-                                                    <IconButton
-                                                        icon={Shield}
+                                                    <Button
                                                         variant="ghost"
-                                                        size="sm"
+                                                        size="icon"
                                                         aria-label="Change role"
-                                                        className="text-fg-muted hover:text-fg"
-                                                        onClick={() => {/* TODO: Implement change role */}}
-                                                    />
-                                                    <IconButton
-                                                        icon={Trash2}
+                                                        className="h-8 w-8 text-fg-muted hover:text-fg"
+                                                        onClick={() => {
+                                                            setMemberToEdit(member)
+                                                            setNewRole(member.role)
+                                                        }}
+                                                    >
+                                                        <Shield className="h-4 w-4" />
+                                                    </Button>
+                                                    <Button
                                                         variant="ghost"
-                                                        size="sm"
+                                                        size="icon"
                                                         aria-label="Remove member"
-                                                        className="text-fg-muted hover:text-destructive"
-                                                        onClick={() => {/* TODO: Implement remove member */}}
-                                                    />
+                                                        className="h-8 w-8 text-fg-muted hover:text-destructive"
+                                                        onClick={() => setMemberToRemove(member)}
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
                                                 </>
                                             )}
-                                            <IconButton
-                                                icon={MoreHorizontal}
+                                            <Button
                                                 variant="ghost"
-                                                size="sm"
+                                                size="icon"
                                                 aria-label="More actions"
-                                                className="text-fg-muted hover:text-fg"
-                                            />
+                                                className="h-8 w-8 text-fg-muted hover:text-fg"
+                                            >
+                                                <MoreHorizontal className="h-4 w-4" />
+                                            </Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -222,8 +303,127 @@ export const TeamManagementPage = () => {
 
                 {/* Results count */}
                 <div className="text-sm text-fg-muted">
-                    Showing {filteredMembers.length} of {MOCK_TEAM_MEMBERS.length} team members
+                    Showing {filteredMembers.length} of {members.length} team members
                 </div>
+
+                {/* Invite Member Dialog */}
+                <Dialog open={isInviteModalOpen} onOpenChange={setIsInviteModalOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Invite Team Member</DialogTitle>
+                            <DialogDescription>
+                                Send an invitation to join your team.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email Address</Label>
+                                <Input
+                                    id="email"
+                                    placeholder="colleague@company.com"
+                                    value={inviteEmail}
+                                    onChange={(e) => setInviteEmail(e.target.value)}
+                                    type="email"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="role">Role</Label>
+                                <Select value={inviteRole} onValueChange={setInviteRole}>
+                                    <SelectTrigger id="role">
+                                        <SelectValue placeholder="Select a role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="admin">Admin</SelectItem>
+                                        <SelectItem value="member">Member</SelectItem>
+                                        <SelectItem value="viewer">Viewer</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button
+                                variant="outline"
+                                onClick={() => setIsInviteModalOpen(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="default"
+                                onClick={handleInviteMember}
+                                disabled={!inviteEmail}
+                            >
+                                Send Invite
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
+                {/* Change Role Dialog */}
+                <Dialog open={!!memberToEdit} onOpenChange={(open) => !open && setMemberToEdit(null)}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Change Member Role</DialogTitle>
+                            <DialogDescription>
+                                Update role for {memberToEdit?.name}
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="new-role">Role</Label>
+                                <Select value={newRole} onValueChange={setNewRole}>
+                                    <SelectTrigger id="new-role">
+                                        <SelectValue placeholder="Select a role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="admin">Admin</SelectItem>
+                                        <SelectItem value="member">Member</SelectItem>
+                                        <SelectItem value="viewer">Viewer</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button
+                                variant="outline"
+                                onClick={() => setMemberToEdit(null)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="default"
+                                onClick={handleChangeRole}
+                            >
+                                Update Role
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
+                {/* Remove Member Dialog */}
+                <AlertDialog open={!!memberToRemove} onOpenChange={(open) => !open && setMemberToRemove(null)}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <div className="flex items-center gap-2">
+                                <AlertTriangle className="h-5 w-5 text-destructive" />
+                                <AlertDialogTitle>Remove Team Member</AlertDialogTitle>
+                            </div>
+                            <AlertDialogDescription>
+                                Are you sure you want to remove {memberToRemove?.name} from the team? This action cannot be undone.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel onClick={() => setMemberToRemove(null)}>
+                                Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={handleRemoveMember}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                                Remove Member
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </DashboardLayout>
     )

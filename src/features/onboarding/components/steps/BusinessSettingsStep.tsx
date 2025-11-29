@@ -4,11 +4,40 @@ import { Settings } from 'lucide-react'
 import { useBusinessSettingsStepController } from '../../hooks/useBusinessSettingsStepController'
 import type { BusinessSettings } from '../../types/onboarding'
 
-import { 
-  ApiDropdown, 
-  timezoneDropdownConfig, 
-  fiscalYearDropdownConfig 
-} from '@/shared/ui/ApiDropdown'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/shadcn/select'
+
+// Timezone options
+const timezones = [
+  { value: 'America/New_York', label: 'Eastern Time (ET)' },
+  { value: 'America/Chicago', label: 'Central Time (CT)' },
+  { value: 'America/Denver', label: 'Mountain Time (MT)' },
+  { value: 'America/Los_Angeles', label: 'Pacific Time (PT)' },
+  { value: 'America/Anchorage', label: 'Alaska Time (AKT)' },
+  { value: 'Pacific/Honolulu', label: 'Hawaii Time (HT)' },
+  { value: 'UTC', label: 'UTC' },
+]
+
+// Fiscal year start months
+const fiscalYearMonths = [
+  { value: '1', label: 'January' },
+  { value: '2', label: 'February' },
+  { value: '3', label: 'March' },
+  { value: '4', label: 'April' },
+  { value: '5', label: 'May' },
+  { value: '6', label: 'June' },
+  { value: '7', label: 'July' },
+  { value: '8', label: 'August' },
+  { value: '9', label: 'September' },
+  { value: '10', label: 'October' },
+  { value: '11', label: 'November' },
+  { value: '12', label: 'December' },
+]
 
 interface BusinessSettingsStepProps {
   data: BusinessSettings
@@ -53,26 +82,36 @@ export const BusinessSettingsStep = ({
         {/* Timezone */}
         <div>
           <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">Timezone</span>
-          <ApiDropdown
-            config={timezoneDropdownConfig}
-            value={data.timezone}
-            onSelect={value => handleSelectChange('timezone', value)}
-            error={!!errors.timezone}
-            allowClear={false}
-          />
+          <Select value={data.timezone} onValueChange={(value: string) => handleSelectChange('timezone', value)}>
+            <SelectTrigger className={errors.timezone ? 'border-red-500' : ''}>
+              <SelectValue placeholder="Select timezone" />
+            </SelectTrigger>
+            <SelectContent>
+              {timezones.map((tz) => (
+                <SelectItem key={tz.value} value={tz.value}>
+                  {tz.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {errors.timezone && <p className="mt-1 text-sm text-primary">{errors.timezone}</p>}
         </div>
 
         {/* Fiscal Year Start */}
         <div>
           <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">Fiscal Year Start</span>
-          <ApiDropdown
-            config={fiscalYearDropdownConfig}
-            value={data.fiscalYearStart}
-            onSelect={value => handleSelectChange('fiscalYearStart', value)}
-            error={!!errors.fiscalYearStart}
-            allowClear={false}
-          />
+          <Select value={data.fiscalYearStart} onValueChange={(value: string) => handleSelectChange('fiscalYearStart', value)}>
+            <SelectTrigger className={errors.fiscalYearStart ? 'border-red-500' : ''}>
+              <SelectValue placeholder="Select fiscal year start" />
+            </SelectTrigger>
+            <SelectContent>
+              {fiscalYearMonths.map((month) => (
+                <SelectItem key={month.value} value={month.value}>
+                  {month.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {errors.fiscalYearStart && (
             <p className="mt-1 text-sm text-primary">{errors.fiscalYearStart}</p>
           )}

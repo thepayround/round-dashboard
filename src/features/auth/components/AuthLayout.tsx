@@ -1,19 +1,26 @@
 import { motion } from 'framer-motion'
-import { Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
+
+import WhiteLogo from '@/assets/logos/white-logo.svg?url'
 
 interface AuthLayoutProps {
   children?: React.ReactNode
 }
 
 export const AuthLayout = ({ children }: AuthLayoutProps = {}) => (
-  <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
-    {/* Animated Background */}
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      <div className="floating-orb" />
-      <div className="floating-orb" />
-      <div className="floating-orb" />
+  <div className="h-screen w-screen flex items-center justify-center p-6 overflow-hidden">
+    {/* Logo - outside motion.div so it appears immediately */}
+    <div className="fixed top-6 left-6 md:top-10 md:left-10 z-50">
+      <Link to="/" className="inline-block transition-opacity hover:opacity-80">
+        <img
+          src={WhiteLogo}
+          alt="Round Logo"
+          className="h-10 w-10"
+          loading="eager"
+          fetchPriority="high"
+        />
+      </Link>
     </div>
-
 
     {/* Main Content */}
     <motion.div
@@ -24,7 +31,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps = {}) => (
         delay: 0.3,
         ease: 'easeOut',
       }}
-      className="relative z-10 w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto"
+      className="w-full max-w-sm"
     >
       {children ?? <Outlet />}
     </motion.div>

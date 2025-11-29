@@ -7,8 +7,8 @@ import { dropdownStyles, getOptionClasses } from '../dropdown-styles.config'
 import { usePhoneInputController } from './usePhoneInputController'
 
 import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
-import { PlainButton } from '@/shared/ui/Button'
 import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
+import { Button } from '@/shared/ui/shadcn/button'
 import { cn } from '@/shared/utils/cn'
 
 interface PhoneInputProps {
@@ -197,15 +197,16 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                 className={dropdownStyles.search.input}
               />
               {searchTerm && (
-                <PlainButton
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setSearchTerm('')}
                   className={dropdownStyles.search.clearButton}
                   type="button"
                   aria-label="Clear search"
-                  unstyled
                 >
                   <X className={dropdownStyles.search.clearIcon} />
-                </PlainButton>
+                </Button>
               )}
             </div>
           </div>
@@ -256,7 +257,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         // Match auth-input height exactly
         "h-10",
         // Match auth-input background and border exactly
-        "bg-[#171719] border transition-[border-color] duration-200",
+        "bg-input border transition-[border-color] duration-200",
         (() => {
           // Match auth-input CSS: simple border color change on focus
           if ((isFocused || isDropdownOpen) && hasError) {

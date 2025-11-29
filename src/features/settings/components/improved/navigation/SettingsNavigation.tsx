@@ -2,8 +2,7 @@
 import { Settings } from 'lucide-react'
 import React from 'react'
 
-import { PlainButton } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { Card } from '@/shared/ui/shadcn/card'
 
 
 interface SettingsSection {
@@ -30,7 +29,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
       transition={{ delay: 0.1 }}
       className="lg:sticky lg:top-6 lg:self-start"
     >
-      <Card animate={false} padding="none" className="overflow-hidden">
+      <Card className="overflow-hidden p-0">
         <div className="p-3 border-b border-white/8">
           <div className="flex items-center gap-2">
             <Settings className="w-3 h-3 text-gray-400" />
@@ -44,7 +43,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
             const isActive = activeSection === section.id
             
             return (
-              <PlainButton
+              <button
                 key={section.id}
                 onClick={() => onSectionChange(section.id)}
                 className={`w-full flex items-center justify-between p-3 rounded-lg transition-all duration-200 group text-left mb-1 ${
@@ -52,7 +51,6 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
                     ? 'bg-primary/10 text-white border border-primary/20 shadow-glass-sm'
                     : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
                 }`}
-                unstyled
               >
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <div className={`p-1.5 rounded-lg transition-all duration-200 ${
@@ -70,7 +68,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
                     <p className="text-xs font-normal tracking-tight truncate">{section.label}</p>
                   </div>
                 </div>
-              </PlainButton>
+              </button>
             )
           })}
         </nav>

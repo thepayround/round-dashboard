@@ -11,10 +11,11 @@ import {
 
 import { useEmailComposeModalController } from '../hooks/useEmailComposeModalController'
 
-import { Button, IconButton } from '@/shared/ui/Button'
-import { FormInput } from '@/shared/ui/FormInput'
-import { Modal } from '@/shared/ui/Modal'
-import { Textarea } from '@/shared/ui/Textarea'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/shadcn/dialog'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
+import { Textarea } from '@/shared/ui/shadcn/textarea'
 
 
 interface EmailComposeModalProps {
@@ -49,119 +50,148 @@ export const EmailComposeModal = ({
   })
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleCancel}
-      title="Compose Email"
-      subtitle={`Send email to ${customerName}`}
-      icon={Mail}
-      size="lg"
-    >
-      <div className="space-y-6">
-        <div className="space-y-4">
-          <FormInput
-            label="To"
-            type="email"
-            leftIcon={Mail}
-            value={formData.to}
-            onChange={event => handleInputChange('to', event.target.value)}
-            placeholder="customer@example.com"
-          />
+    <Dialog open={isOpen} onOpenChange={handleCancel}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="flex items-center space-x-2">
+            <Mail className="w-5 h-5" />
+            <span>Compose Email</span>
+          </DialogTitle>
+          <p className="text-sm text-muted-foreground">Send email to {customerName}</p>
+        </DialogHeader>
 
-          <FormInput
-            label={
-              <span>
-                Subject <span className="text-primary">*</span>
-              </span>
-            }
-            leftIcon={FileText}
-            value={formData.subject}
-            onChange={event => handleInputChange('subject', event.target.value)}
-            placeholder="Enter email subject..."
-            required
-          />
-        </div>
-
-        <div>
-          <span className="auth-label mb-2 block">Quick Templates</span>
-          <div className="flex flex-wrap gap-2">
-            {templates.map(template => (
-              <Button key={template.key} onClick={() => handleInsertTemplate(template.key)} variant="ghost" size="sm">
-                {template.label}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex-1">
-              <Textarea
-                id="message-textarea"
-                label={
-                  <span>
-                    Message <span className="text-primary">*</span>
-                  </span>
-                }
-                value={formData.message}
-                onChange={event => handleInputChange('message', event.target.value)}
-                rows={12}
-                placeholder="Write your message..."
-                required
-              />
+        <div className="space-y-6 pt-4">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email-to">To</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="email-to"
+                  type="email"
+                  value={formData.to}
+                  onChange={event => handleInputChange('to', event.target.value)}
+                  placeholder="customer@example.com"
+                  className="pl-10"
+                />
+              </div>
             </div>
-            <div className="flex items-center gap-2 ml-4">
-              <Button
-                type="button"
-                onClick={handleToggleHtml}
-                variant={formData.isHtml ? 'primary' : 'ghost'}
-                size="sm"
-                icon={Type}
-                iconPosition="left"
-                className={formData.isHtml ? 'bg-secondary/20 text-secondary border-secondary/30' : ''}
-              >
-                HTML
-              </Button>
-              {formData.isHtml && (
-                <div className="flex items-center gap-1">
-                  <IconButton icon={Bold} aria-label="Bold" size="sm" />
-                  <IconButton icon={Italic} aria-label="Italic" size="sm" />
-                  <IconButton icon={LinkIcon} aria-label="Insert link" size="sm" />
-                </div>
-              )}
+
+            <div className="space-y-2">
+              <Label htmlFor="email-subject">
+                Subject<span className="text-destructive"> *</span>
+              </Label>
+              <div className="relative">
+                <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="email-subject"
+                  value={formData.subject}
+                  onChange={event => handleInputChange('subject', event.target.value)}
+                  placeholder="Enter email subject..."
+                  className="pl-10"
+                  required
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          <Button variant="ghost" icon={Paperclip} iconPosition="left">
-            Add Attachment
-          </Button>
-        </div>
-      </div>
+          <div className="space-y-2">
+            <Label>Quick Templates</Label>
+            <div className="flex flex-wrap gap-2">
+              {templates.map(template => (
+                <Button
+                  key={template.key}
+                  type="button"
+                  onClick={() => handleInsertTemplate(template.key)}
+                  variant="ghost"
+                  size="sm"
+                >
+                  {template.label}
+                </Button>
+              ))}
+            </div>
+          </div>
 
-      <div className="border-t border-white/10 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="text-xs text-white/60">
-            This email will be logged in the customer&apos;s activity history
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="message-textarea">
+                Message<span className="text-destructive"> *</span>
+              </Label>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  onClick={handleToggleHtml}
+                  variant={formData.isHtml ? 'default' : 'ghost'}
+                  size="sm"
+                  className={formData.isHtml ? 'bg-secondary/20 text-secondary border-secondary/30' : ''}
+                >
+                  <Type className="mr-2 h-4 w-4" />
+                  HTML
+                </Button>
+                {formData.isHtml && (
+                  <div className="flex items-center gap-1">
+                    <Button type="button" variant="ghost" size="sm" aria-label="Bold">
+                      <Bold className="h-4 w-4" />
+                    </Button>
+                    <Button type="button" variant="ghost" size="sm" aria-label="Italic">
+                      <Italic className="h-4 w-4" />
+                    </Button>
+                    <Button type="button" variant="ghost" size="sm" aria-label="Insert link">
+                      <LinkIcon className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+            <Textarea
+              id="message-textarea"
+              value={formData.message}
+              onChange={event => handleInputChange('message', event.target.value)}
+              rows={12}
+              placeholder="Write your message..."
+              className="resize-none"
+              required
+            />
           </div>
-          <div className="flex items-center space-x-3">
-            <Button onClick={handleCancel} disabled={isSending} variant="ghost">
-              Cancel
+
+          <div>
+            <Button type="button" variant="ghost">
+              <Paperclip className="mr-2 h-4 w-4" />
+              Add Attachment
             </Button>
-            <Button
-              onClick={handleSend}
-              disabled={isSending || !formData.subject.trim() || !formData.message.trim()}
-              variant="primary"
-              icon={Send}
-              iconPosition="left"
-              isLoading={isSending}
-            >
-              Send Email
-            </Button>
+          </div>
+
+          <div className="border-t border-border pt-4">
+            <div className="flex items-center justify-between">
+              <div className="text-xs text-muted-foreground">
+                This email will be logged in the customer&apos;s activity history
+              </div>
+              <div className="flex items-center space-x-3">
+                <Button type="button" onClick={handleCancel} disabled={isSending} variant="ghost">
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleSend}
+                  disabled={isSending || !formData.subject.trim() || !formData.message.trim()}
+                >
+                  {isSending ? (
+                    <>
+                      <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-4 w-4" />
+                      Send Email
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   )
 }

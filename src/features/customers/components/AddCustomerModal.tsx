@@ -3,13 +3,18 @@ import React from 'react'
 
 import { useAddCustomerModalController } from '../hooks/useAddCustomerModalController'
 
+import { useCurrencies, useCountries } from '@/shared/hooks/api/useCountryCurrency'
+import { useTimezones, useLanguages } from '@/shared/hooks/api/useUserSettingsOptions'
 import { CustomerType } from '@/shared/types/customer.types'
-import { Input, Toggle, Badge, AddressFormGroup, IconBox, SectionHeader, type Address } from '@/shared/ui'
-import { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig } from '@/shared/ui/ApiDropdown'
-import { languageDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
-import { Button } from '@/shared/ui/Button'
-import { Modal } from '@/shared/ui/Modal'
+import { AddressFormGroup, type Address } from '@/shared/ui'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
+import { Badge } from '@/shared/ui/shadcn/badge'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/shadcn/dialog'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
+import { Switch } from '@/shared/ui/shadcn/switch'
 
 interface AddCustomerModalProps {
   isOpen: boolean
@@ -36,39 +41,48 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
     handleSubmit,
   } = useAddCustomerModalController({ onClose, onCustomerAdded })
 
+  // Fetch dropdown data
+  const { data: currencies } = useCurrencies()
+  const { data: countries } = useCountries()
+  const { data: timezones } = useTimezones()
+  const { data: languages } = useLanguages()
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Add New Customer"
-      subtitle="Create a new customer profile"
-      icon={User}
-      size="xl"
-    >
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-8">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center space-x-2">
+            <User className="w-5 h-5" />
+            <span>Add New Customer</span>
+          </DialogTitle>
+          <p className="text-sm text-muted-foreground">Create a new customer profile</p>
+        </DialogHeader>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-8">
         {/* Basic Information */}
         <div className="space-y-6">
-          <SectionHeader icon={User} title="Basic Information" iconColor="text-primary" />
+          <div className="flex items-center space-x-2 mb-4">
+            <User className="w-5 h-5 text-primary" />
+            <h3 className="text-lg font-semibold text-foreground">Basic Information</h3>
+          </div>
           
           {/* Customer Type Selection */}
           <div className="space-y-4">
-            <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Customer Type</span>
+            <Label>Customer Type</Label>
             <div className="grid grid-cols-2 gap-4">
               <Button
                 type="button"
                 onClick={() => handleCustomerTypeChange(CustomerType.Individual)}
-                variant={formData.type === CustomerType.Individual ? 'primary' : 'secondary'}
-                size="md"
-                icon={User}
-                iconPosition="left"
-                fullWidth
-                className={`justify-start p-4 h-auto ${
+                variant={formData.type === CustomerType.Individual ? 'default' : 'secondary'}
+                size="default"
+                className={`w-full justify-start p-4 h-auto ${
                   formData.type === CustomerType.Individual
                     ? 'border-primary bg-primary/10'
                     : ''
                 }`}
               >
+                <User className="mr-2 w-5 h-5" />
                 <div className="text-left">
                   <div className="font-medium">Individual</div>
                   <div className="text-sm opacity-75">Personal customer</div>
@@ -77,17 +91,15 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
               <Button
                 type="button"
                 onClick={() => handleCustomerTypeChange(CustomerType.Business)}
-                variant={formData.type === CustomerType.Business ? 'primary' : 'secondary'}
-                size="md"
-                icon={Building2}
-                iconPosition="left"
-                fullWidth
-                className={`justify-start p-4 h-auto ${
+                variant={formData.type === CustomerType.Business ? 'default' : 'secondary'}
+                size="default"
+                className={`w-full justify-start p-4 h-auto ${
                   formData.type === CustomerType.Business
                     ? 'border-secondary bg-secondary/10'
                     : ''
                 }`}
               >
+                <Building2 className="mr-2 w-5 h-5" />
                 <div className="text-left">
                   <div className="font-medium">Business</div>
                   <div className="text-sm opacity-75">Company customer</div>
@@ -98,41 +110,56 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           
           {/* Name and Email Row - Symmetric 3-column */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Input
-                id="firstName"
-                value={formData.firstName}
-                onChange={(e) => handleInputChange('firstName', e.target.value)}
-                placeholder="John"
-                label="First Name"
-                leftIcon={User}
-                required
-              />
+            <div className="space-y-2">
+              <Label htmlFor="firstName">
+                First Name<span className="text-destructive"> *</span>
+              </Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="firstName"
+                  value={formData.firstName}
+                  onChange={(e) => handleInputChange('firstName', e.target.value)}
+                  placeholder="John"
+                  className="pl-10"
+                  required
+                />
+              </div>
             </div>
 
-            <div>
-              <Input
-                id="lastName"
-                value={formData.lastName}
-                onChange={(e) => handleInputChange('lastName', e.target.value)}
-                placeholder="Doe"
-                label="Last Name"
-                leftIcon={User}
-                required
-              />
+            <div className="space-y-2">
+              <Label htmlFor="lastName">
+                Last Name<span className="text-destructive"> *</span>
+              </Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="lastName"
+                  value={formData.lastName}
+                  onChange={(e) => handleInputChange('lastName', e.target.value)}
+                  placeholder="Doe"
+                  className="pl-10"
+                  required
+                />
+              </div>
             </div>
 
-            <div>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                placeholder="john@example.com"
-                label="Email Address"
-                leftIcon={Mail}
-                required
-              />
+            <div className="space-y-2">
+              <Label htmlFor="email">
+                Email Address<span className="text-destructive"> *</span>
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  placeholder="john@example.com"
+                  className="pl-10"
+                  required
+                />
+              </div>
             </div>
           </div>
           
@@ -162,30 +189,38 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
             
             {/* Company field - only for business customers */}
             {formData.type === CustomerType.Business && (
-              <div>
-                <Input
-                  id="company"
-                  value={formData.company}
-                  onChange={(e) => handleInputChange('company', e.target.value)}
-                  placeholder="Acme Corporation"
-                  label="Company"
-                  leftIcon={Building2}
-                  required={formData.type === CustomerType.Business}
-                />
+              <div className="space-y-2">
+                <Label htmlFor="company">
+                  Company<span className="text-destructive"> *</span>
+                </Label>
+                <div className="relative">
+                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="company"
+                    value={formData.company}
+                    onChange={(e) => handleInputChange('company', e.target.value)}
+                    placeholder="Acme Corporation"
+                    className="pl-10"
+                    required={formData.type === CustomerType.Business}
+                  />
+                </div>
               </div>
             )}
 
             {/* Tax Number field - only for business customers */}
             {formData.type === CustomerType.Business && (
-              <div>
-                <Input
-                  id="taxNumber"
-                  value={formData.taxNumber}
-                  onChange={(e) => handleInputChange('taxNumber', e.target.value)}
-                  placeholder="Enter tax number"
-                  label="Tax Number"
-                  leftIcon={Hash}
-                />
+              <div className="space-y-2">
+                <Label htmlFor="taxNumber">Tax Number</Label>
+                <div className="relative">
+                  <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="taxNumber"
+                    value={formData.taxNumber}
+                    onChange={(e) => handleInputChange('taxNumber', e.target.value)}
+                    placeholder="Enter tax number"
+                    className="pl-10"
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -193,46 +228,76 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Preferences */}
         <div className="space-y-6">
-          <SectionHeader icon={Globe} title="Preferences" iconColor="text-secondary" />
+          <div className="flex items-center space-x-2 mb-4">
+            <Globe className="w-5 h-5 text-secondary" />
+            <h3 className="text-lg font-semibold text-foreground">Preferences</h3>
+          </div>
           
           {/* Symmetric 3-column layout */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <div className="space-y-2">
-                <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Currency</span>
-                <ApiDropdown
-                  config={currencyDropdownConfig}
+                <Label htmlFor="currency">Currency</Label>
+                <Select
                   value={formData.currency}
-                  onSelect={(value) => handleInputChange('currency', value)}
-                  allowClear
-                />
+                  onValueChange={(value) => handleInputChange('currency', value)}
+                >
+                  <SelectTrigger id="currency">
+                    <SelectValue placeholder="Select currency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {currencies.map((currency) => (
+                      <SelectItem key={currency.currencyCodeAlpha} value={currency.currencyCodeAlpha}>
+                        {currency.currencyName} ({currency.currencyCodeAlpha})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             
             <div>
               <div className="space-y-2">
-                <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight flex items-center space-x-2">
+                <Label htmlFor="language" className="flex items-center space-x-2">
                   <Languages className="w-4 h-4" />
                   <span>Language</span>
-                </span>
-                <ApiDropdown
-                  config={languageDropdownConfig}
+                </Label>
+                <Select
                   value={formData.locale}
-                  onSelect={(value) => handleInputChange('locale', value)}
-                  allowClear
-                />
+                  onValueChange={(value) => handleInputChange('locale', value)}
+                >
+                  <SelectTrigger id="language">
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {languages.map((language) => (
+                      <SelectItem key={language.value} value={language.value}>
+                        {language.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             
             <div>
               <div className="space-y-2">
-                <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">Timezone</span>
-                <ApiDropdown
-                  config={timezoneDropdownConfig}
+                <Label htmlFor="timezone">Timezone</Label>
+                <Select
                   value={formData.timezone}
-                  onSelect={(value) => handleInputChange('timezone', value)}
-                  allowClear
-                />
+                  onValueChange={(value) => handleInputChange('timezone', value)}
+                >
+                  <SelectTrigger id="timezone">
+                    <SelectValue placeholder="Select timezone" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {timezones.map((timezone) => (
+                      <SelectItem key={timezone.value} value={timezone.value}>
+                        {timezone.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
@@ -240,18 +305,27 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Tags */}
         <div className="space-y-4">
-          <SectionHeader icon={Tag} title="Tags" iconColor="text-accent" />
+          <div className="flex items-center space-x-2 mb-4">
+            <Tag className="w-5 h-5 text-accent" />
+            <h3 className="text-lg font-semibold text-foreground">Tags</h3>
+          </div>
           
           <div className="flex flex-wrap gap-2 mb-4">
             {(formData.tags ?? []).map((tag, index) => (
               <Badge
                 key={index}
-                variant="primary"
-                size="lg"
-                removable
-                onRemove={() => handleRemoveTag(tag)}
+                variant="default"
+                className="group relative pr-8"
               >
                 {tag}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveTag(tag)}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 rounded-sm opacity-70 hover:opacity-100"
+                  aria-label={`Remove ${tag} tag`}
+                >
+                  ×
+                </button>
               </Badge>
             ))}
           </div>
@@ -268,7 +342,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
               type="button"
               onClick={handleAddTag}
               variant="secondary"
-              size="md"
+              size="default"
               className="bg-accent/20 text-accent border-accent/30 hover:bg-accent/30"
             >
               Add
@@ -278,7 +352,10 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
 
         {/* Billing Address */}
         <div className="space-y-6">
-          <SectionHeader icon={MapPin} title="Billing Address" iconColor="text-success" />
+          <div className="flex items-center space-x-2 mb-4">
+            <MapPin className="w-5 h-5 text-success" />
+            <h3 className="text-lg font-semibold text-foreground">Billing Address</h3>
+          </div>
 
           <AddressFormGroup
             value={formData.billingAddress ?? {
@@ -293,7 +370,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               handleInputChange('billingAddress', address as any)
             }}
-            countryDropdownConfig={countryDropdownConfig}
+            countries={countries.map(c => ({ code: c.countryCodeAlpha2, name: c.countryName }))}
           />
         </div>
 
@@ -301,16 +378,20 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         <div className="space-y-4">
           {/* Header with Toggle */}
           <div className="flex items-center justify-between">
-            <SectionHeader icon={Truck} title="Shipping Address" iconColor="text-secondary" />
-            
-            <Toggle
-              label="Same as billing"
-              checked={sameAsBilling}
-              onChange={(e) => handleSameAsBillingChange(e.target.checked)}
-              size="lg"
-              color="cyan"
-              aria-label="Use Billing as Shipping Address"
-            />
+            <div className="flex items-center space-x-2">
+              <Truck className="w-5 h-5 text-secondary" />
+              <h3 className="text-lg font-semibold text-foreground">Shipping Address</h3>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="same-as-billing"
+                checked={sameAsBilling}
+                onCheckedChange={handleSameAsBillingChange}
+                aria-label="Use Billing as Shipping Address"
+              />
+              <Label htmlFor="same-as-billing">Same as billing</Label>
+            </div>
           </div>
           
           {/* Address Fields or Same as Billing Message */}
@@ -340,81 +421,89 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 handleInputChange('shippingAddress', address as any)
               }}
-              countryDropdownConfig={countryDropdownConfig}
+              countries={countries.map(c => ({ code: c.countryCodeAlpha2, name: c.countryName }))}
             />
           )}
         </div>
 
         {/* Customer Settings */}
         <div className="space-y-6">
-          <SectionHeader icon={Settings} title="Customer Settings" iconColor="text-[#FFC107]" />
-          
+          <div className="flex items-center space-x-2 mb-4">
+            <Settings className="w-5 h-5 text-[#FFC107]" />
+            <h3 className="text-lg font-semibold text-foreground">Customer Settings</h3>
+          </div>
+
           <div className="grid grid-cols-1 gap-4">
             {/* Portal Access Setting */}
-            <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
+            <div className="flex items-center justify-between p-4 bg-white/5 border border-border rounded-lg hover:bg-white/8 transition-all duration-200">
               <div className="flex items-center space-x-3 flex-1">
-                <IconBox icon={User} color="success" />
+                <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
+                  <User className="w-5 h-5 text-success" />
+                </div>
                 <div>
-                  <h4 className="text-white font-medium">Customer Portal Access</h4>
-                  <p className="text-white/60 text-sm" id="portal-access-description">Allow customer to access their portal dashboard</p>
+                  <h4 className="text-foreground font-medium">Customer Portal Access</h4>
+                  <p className="text-muted-foreground text-sm" id="portal-access-description">Allow customer to access their portal dashboard</p>
                 </div>
               </div>
-              <Toggle
-                label=""
+              <Switch
+                id="portal-access"
                 checked={formData.portalAccess}
-                onChange={(e) => handleInputChange('portalAccess', e.target.checked)}
-                size="lg"
-                color="green"
+                onCheckedChange={(checked) => handleInputChange('portalAccess', checked)}
                 aria-label="Customer Portal Access"
               />
             </div>
 
             {/* Auto Collection Setting */}
-            <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 transition-all duration-200">
+            <div className="flex items-center justify-between p-4 bg-white/5 border border-border rounded-lg hover:bg-white/8 transition-all duration-200">
               <div className="flex items-center space-x-3 flex-1">
-                <IconBox icon={Settings} color="info" />
+                <div className="w-10 h-10 rounded-lg bg-info/10 flex items-center justify-center">
+                  <Settings className="w-5 h-5 text-info" />
+                </div>
                 <div>
-                  <h4 className="text-white font-medium">Automatic Payment Collection</h4>
-                  <p className="text-white/60 text-sm" id="auto-collection-description">Automatically collect payments when invoices are due</p>
+                  <h4 className="text-foreground font-medium">Automatic Payment Collection</h4>
+                  <p className="text-muted-foreground text-sm" id="auto-collection-description">Automatically collect payments when invoices are due</p>
                 </div>
               </div>
-              <Toggle
-                label=""
+              <Switch
+                id="auto-collection"
                 checked={formData.autoCollection}
-                onChange={(e) => handleInputChange('autoCollection', e.target.checked)}
-                size="lg"
-                color="blue"
+                onCheckedChange={(checked) => handleInputChange('autoCollection', checked)}
                 aria-label="Automatic Payment Collection"
               />
             </div>
           </div>
         </div>
-      </form>
+        </form>
 
-      {/* Footer */}
-      <div className="flex items-center justify-end space-x-3 px-6 py-4 border-t border-white/10">
-        <Button
-          type="button"
-          onClick={onClose}
-          variant="ghost"
-          size="md"
-          className="text-white/70 hover:text-white"
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          disabled={loading}
-          variant="primary"
-          size="md"
-          icon={Save}
-          iconPosition="left"
-          isLoading={loading}
-        >
-          {loading ? 'Creating...' : 'Create Customer'}
-        </Button>
-      </div>
-    </Modal>
+        {/* Footer */}
+        <div className="flex items-center justify-end space-x-3 pt-6 border-t border-border">
+          <Button
+            type="button"
+            onClick={onClose}
+            variant="ghost"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={loading}
+            variant="default"
+          >
+            {loading ? (
+              <>
+                <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                Creating...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Create Customer
+              </>
+            )}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

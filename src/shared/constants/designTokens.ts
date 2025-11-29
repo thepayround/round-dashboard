@@ -263,13 +263,13 @@ export const classPatterns = {
    */
   authInput: `
     w-full h-9 px-4
-    bg-[#171719] border border-[#333333] rounded-md
-    text-white placeholder:text-[#737373]
+    bg-input border border-[#333333] rounded-md
+    text-white placeholder:text-muted-foreground
     font-light text-xs tracking-tight
     transition-all duration-200
     outline-none appearance-none
     hover:border-[#404040]
-    focus:border-[#14BDEA] focus:bg-[#171719]
+    focus:border-[#14BDEA] focus:bg-input
     disabled:opacity-50 disabled:cursor-not-allowed
   `,
 
@@ -308,7 +308,7 @@ export const classPatterns = {
    * Updated for compact design system
    */
   btnPrimary: `
-    bg-[#D417C8] text-white font-medium
+    bg-primary text-white font-medium
     h-9 px-4 rounded-md border-0
     inline-flex items-center justify-center
     text-sm whitespace-nowrap
@@ -396,7 +396,7 @@ export const classPatterns = {
    * Auth card (Tailwind equivalent of .auth-card)
    */
   authCard: `
-    bg-white/[0.02] border border-white/10 rounded-lg
+    bg-white/[0.02] border border-border rounded-lg
     p-6
     relative overflow-hidden z-10
     transition-all duration-150

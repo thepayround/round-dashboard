@@ -92,7 +92,7 @@ export const Interactive: Story = {
     const [file, setFile] = useState<File | null>(null)
 
     return (
-      <div className="p-6 bg-[#0a0a0a]">
+      <div className="p-6 bg-muted">
         <FileInput
           label="Upload Logo"
           helperText="PNG or SVG (max 2MB)"
@@ -105,7 +105,7 @@ export const Interactive: Story = {
           maxSize={2}
         />
         {file && (
-          <div className="mt-4 p-4 bg-[#171719] border border-[#333333] rounded-lg">
+          <div className="mt-4 p-4 bg-input border border-[#333333] rounded-lg">
             <p className="text-xs text-white/60">File selected:</p>
             <p className="text-sm text-white">{file.name}</p>
             <p className="text-xs text-white/60">
@@ -121,7 +121,7 @@ export const Interactive: Story = {
 // All states showcase
 export const AllStates: Story = {
   render: () => (
-    <div className="space-y-6 p-6 bg-[#0a0a0a]">
+    <div className="space-y-6 p-6 bg-muted">
       <FileInput label="Default" accept="image/*" onChange={() => {}} />
       <FileInput
         label="With helper text"

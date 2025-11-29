@@ -1,10 +1,22 @@
-﻿import { motion } from 'framer-motion'
-import { Building, ExternalLink } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Building, ExternalLink, Loader2 } from 'lucide-react'
 import { useCallback } from 'react'
 
-import { useCurrency } from '@/shared/hooks/useCurrency'
-import { Input, Textarea, UiDropdown, IconBox, LoadingSpinner } from '@/shared/ui'
-import { ApiDropdown, countryDropdownConfig, industryDropdownConfig, companySizeDropdownConfig, organizationTypeDropdownConfig } from '@/shared/ui/ApiDropdown'
+import { useCurrencies, useCountries } from '@/shared/hooks/api'
+import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
+import { useIndustries } from '@/shared/hooks/api/useIndustry'
+import { useOrganizationTypes } from '@/shared/hooks/api/useOrganizationType'
+import { useTimezones } from '@/shared/hooks/api/useUserSettingsOptions'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/shadcn/select'
+import { Textarea } from '@/shared/ui/shadcn/textarea'
 
 export interface OrganizationFormData {
   companyName: string
@@ -45,10 +57,16 @@ export const OrganizationForm = ({
   showRegionalSettings = true,
   className = ''
 }: OrganizationFormProps) => {
-  const { getCurrencySymbol, isLoading: currencyLoading } = useCurrency()
+  // Fetch options from API
+  const { data: countries, isLoading: countriesLoading } = useCountries()
+  const { data: currencies, isLoading: currenciesLoading } = useCurrencies()
+  const { data: industries, isLoading: industriesLoading } = useIndustries()
+  const { data: companySizes, isLoading: companySizesLoading } = useCompanySizes()
+  const { data: organizationTypes, isLoading: organizationTypesLoading } = useOrganizationTypes()
+  const { data: timezones, isLoading: timezonesLoading } = useTimezones()
 
   // Get currency symbol
-  const currencySymbol = getCurrencySymbol(data.currency || 'USD')
+  const currencySymbol = currencies.find(c => c.currencyCodeAlpha === (data.currency || 'USD'))?.currencySymbol || '$'
 
   // Handle input changes
   const handleInputChange = useCallback((field: keyof OrganizationFormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -64,6 +82,12 @@ export const OrganizationForm = ({
       [field]: value,
     })
   }, [data, onChange])
+
+  // Fiscal year months
+  const fiscalYearMonths = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ]
 
   return (
     <motion.div
@@ -102,7 +126,9 @@ export const OrganizationForm = ({
           className="bg-card border border-border rounded-xl p-6 shadow-sm"
         >
           <div className="flex items-center gap-4 mb-6">
-            <IconBox icon={Building} color="secondary" size="md" />
+            <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+              <Building className="w-5 h-5 text-secondary" />
+            </div>
             <div>
               <h3 className="text-sm font-medium text-fg">Company Identity</h3>
               <p className="text-xs text-fg-muted">Basic company information</p>
@@ -111,41 +137,63 @@ export const OrganizationForm = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Company Name */}
-            <Input
-              id="companyName"
-              type="text"
-              label="Company Name"
-              leftIcon={Building}
-              value={data.companyName}
-              onChange={handleInputChange('companyName')}
-              placeholder="Acme Corporation"
-              error={errors.companyName}
-              required
-            />
+            <div className="space-y-2">
+              <Label htmlFor="companyName" className="text-fg-muted">
+                Company Name <span className="text-destructive">*</span>
+              </Label>
+              <div className="relative">
+                <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary" />
+                <Input
+                  id="companyName"
+                  type="text"
+                  value={data.companyName}
+                  onChange={handleInputChange('companyName')}
+                  placeholder="Acme Corporation"
+                  className={`pl-10 ${errors.companyName ? 'border-destructive' : ''}`}
+                />
+              </div>
+              {errors.companyName && (
+                <p className="text-sm text-destructive">{errors.companyName}</p>
+              )}
+            </div>
 
             {/* Website */}
-            <Input
-              id="website"
-              type="url"
-              label="Website"
-              leftIcon={ExternalLink}
-              value={data.website}
-              onChange={handleInputChange('website')}
-              placeholder="https://www.example.com"
-              error={errors.website}
-            />
+            <div className="space-y-2">
+              <Label htmlFor="website" className="text-fg-muted">
+                Website
+              </Label>
+              <div className="relative">
+                <ExternalLink className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary" />
+                <Input
+                  id="website"
+                  type="url"
+                  value={data.website}
+                  onChange={handleInputChange('website')}
+                  placeholder="https://www.example.com"
+                  className={`pl-10 ${errors.website ? 'border-destructive' : ''}`}
+                />
+              </div>
+              {errors.website && (
+                <p className="text-sm text-destructive">{errors.website}</p>
+              )}
+            </div>
 
             {/* Description - Full Width */}
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 space-y-2">
+              <Label htmlFor="description" className="text-fg-muted">
+                Description
+              </Label>
               <Textarea
                 id="description"
-                label="Description"
                 value={data.description}
                 onChange={handleInputChange('description')}
                 placeholder="Brief description of your company..."
                 rows={3}
-                error={errors.description}
+                className={errors.description ? 'border-destructive' : ''}
               />
+              {errors.description && (
+                <p className="text-sm text-destructive">{errors.description}</p>
+              )}
             </div>
           </div>
         </motion.div>
@@ -158,7 +206,9 @@ export const OrganizationForm = ({
           className="bg-card border border-border rounded-xl p-6 shadow-sm"
         >
           <div className="flex items-center gap-4 mb-6">
-            <IconBox icon={Building} color="secondary" size="md" />
+            <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+              <Building className="w-5 h-5 text-secondary" />
+            </div>
             <div>
               <h3 className="text-sm font-medium text-fg">Business Details</h3>
               <p className="text-xs text-fg-muted">Industry and company classification</p>
@@ -167,92 +217,168 @@ export const OrganizationForm = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Country */}
-            <div>
-              <span className="block text-sm font-medium text-fg-muted mb-1.5">
+            <div className="space-y-2">
+              <Label htmlFor="country" className="text-fg-muted">
                 Country <span className="text-destructive">*</span>
-              </span>
-              <ApiDropdown
-                config={countryDropdownConfig}
+              </Label>
+              <Select
                 value={data.country}
-                onSelect={value => handleSelectChange('country', value)}
-                onClear={() => handleSelectChange('country', '')}
-                error={!!errors.country}
-                allowClear
-              />
-              {errors.country && <p className="mt-1 text-sm text-destructive">{errors.country}</p>}
+                onValueChange={(value) => handleSelectChange('country', value)}
+                disabled={countriesLoading}
+              >
+                <SelectTrigger id="country" className={errors.country ? 'border-destructive' : ''}>
+                  <SelectValue placeholder={countriesLoading ? 'Loading...' : 'Select country'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {countriesLoading ? (
+                    <div className="flex items-center justify-center py-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
+                  ) : (
+                    countries.map((country) => (
+                      <SelectItem key={country.countryCodeAlpha2} value={country.countryCodeAlpha2}>
+                        {country.countryName}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              {errors.country && (
+                <p className="text-sm text-destructive">{errors.country}</p>
+              )}
             </div>
 
             {/* Industry */}
-            <div>
-              <span className="block text-sm font-medium text-fg-muted mb-1.5">
+            <div className="space-y-2">
+              <Label htmlFor="industry" className="text-fg-muted">
                 Industry <span className="text-destructive">*</span>
-              </span>
-              <ApiDropdown
-                config={industryDropdownConfig}
+              </Label>
+              <Select
                 value={data.industry}
-                onSelect={value => handleSelectChange('industry', value)}
-                onClear={() => handleSelectChange('industry', '')}
-                error={!!errors.industry}
-                allowClear
-              />
-              {errors.industry && <p className="mt-1 text-sm text-destructive">{errors.industry}</p>}
+                onValueChange={(value) => handleSelectChange('industry', value)}
+                disabled={industriesLoading}
+              >
+                <SelectTrigger id="industry" className={errors.industry ? 'border-destructive' : ''}>
+                  <SelectValue placeholder={industriesLoading ? 'Loading...' : 'Select industry'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {industriesLoading ? (
+                    <div className="flex items-center justify-center py-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
+                  ) : (
+                    industries.map((industry) => (
+                      <SelectItem key={industry.code} value={industry.code}>
+                        {industry.name}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              {errors.industry && (
+                <p className="text-sm text-destructive">{errors.industry}</p>
+              )}
             </div>
 
             {/* Company Size */}
-            <div>
-              <span className="block text-sm font-medium text-fg-muted mb-1.5">
+            <div className="space-y-2">
+              <Label htmlFor="companySize" className="text-fg-muted">
                 Company Size <span className="text-destructive">*</span>
-              </span>
-              <ApiDropdown
-                config={companySizeDropdownConfig}
+              </Label>
+              <Select
                 value={data.companySize}
-                onSelect={value => handleSelectChange('companySize', value)}
-                onClear={() => handleSelectChange('companySize', '')}
-                error={!!errors.companySize}
-                allowClear
-              />
-              {errors.companySize && <p className="mt-1 text-sm text-destructive">{errors.companySize}</p>}
+                onValueChange={(value) => handleSelectChange('companySize', value)}
+                disabled={companySizesLoading}
+              >
+                <SelectTrigger id="companySize" className={errors.companySize ? 'border-destructive' : ''}>
+                  <SelectValue placeholder={companySizesLoading ? 'Loading...' : 'Select company size'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {companySizesLoading ? (
+                    <div className="flex items-center justify-center py-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
+                  ) : (
+                    companySizes.map((size) => (
+                      <SelectItem key={size.code} value={size.code}>
+                        {size.name}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              {errors.companySize && (
+                <p className="text-sm text-destructive">{errors.companySize}</p>
+              )}
             </div>
 
             {/* Organization Type */}
-            <div>
-              <span className="block text-sm font-medium text-fg-muted mb-1.5">
+            <div className="space-y-2">
+              <Label htmlFor="organizationType" className="text-fg-muted">
                 Organization Type <span className="text-destructive">*</span>
-              </span>
-              <ApiDropdown
-                config={organizationTypeDropdownConfig}
+              </Label>
+              <Select
                 value={data.organizationType}
-                onSelect={value => handleSelectChange('organizationType', value)}
-                onClear={() => handleSelectChange('organizationType', '')}
-                error={!!errors.organizationType}
-                allowClear
-              />
-              {errors.organizationType && <p className="mt-1 text-sm text-destructive">{errors.organizationType}</p>}
+                onValueChange={(value) => handleSelectChange('organizationType', value)}
+                disabled={organizationTypesLoading}
+              >
+                <SelectTrigger id="organizationType" className={errors.organizationType ? 'border-destructive' : ''}>
+                  <SelectValue placeholder={organizationTypesLoading ? 'Loading...' : 'Select organization type'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {organizationTypesLoading ? (
+                    <div className="flex items-center justify-center py-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
+                  ) : (
+                    organizationTypes.map((type) => (
+                      <SelectItem key={type.code} value={type.code}>
+                        {type.name}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              {errors.organizationType && (
+                <p className="text-sm text-destructive">{errors.organizationType}</p>
+              )}
             </div>
 
             {/* Registration Number */}
-            <Input
-              id="registrationNumber"
-              type="text"
-              label="Registration Number"
-              value={data.registrationNumber}
-              onChange={handleInputChange('registrationNumber')}
-              placeholder="12345678"
-              error={errors.registrationNumber}
-              required
-            />
+            <div className="space-y-2">
+              <Label htmlFor="registrationNumber" className="text-fg-muted">
+                Registration Number <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="registrationNumber"
+                type="text"
+                value={data.registrationNumber}
+                onChange={handleInputChange('registrationNumber')}
+                placeholder="12345678"
+                className={errors.registrationNumber ? 'border-destructive' : ''}
+              />
+              {errors.registrationNumber && (
+                <p className="text-sm text-destructive">{errors.registrationNumber}</p>
+              )}
+            </div>
 
             {/* Tax ID */}
-            <Input
-              id="taxId"
-              type="text"
-              label="Tax ID"
-              value={data.taxId}
-              onChange={handleInputChange('taxId')}
-              placeholder="XX-XXXXXXX"
-              error={errors.taxId}
-              required
-            />
+            <div className="space-y-2">
+              <Label htmlFor="taxId" className="text-fg-muted">
+                Tax ID <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="taxId"
+                type="text"
+                value={data.taxId}
+                onChange={handleInputChange('taxId')}
+                placeholder="XX-XXXXXXX"
+                className={errors.taxId ? 'border-destructive' : ''}
+              />
+              {errors.taxId && (
+                <p className="text-sm text-destructive">{errors.taxId}</p>
+              )}
+            </div>
           </div>
         </motion.div>
 
@@ -276,47 +402,55 @@ export const OrganizationForm = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Currency */}
-              <div>
-                <label htmlFor="currency" className="block text-sm font-medium text-fg-muted mb-1.5">
+              <div className="space-y-2">
+                <Label htmlFor="currency" className="text-fg-muted">
                   Currency <span className="text-destructive">*</span>
-                </label>
+                </Label>
                 <div className="relative">
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10 pointer-events-none">
-                    {currencyLoading ? (
-                      <LoadingSpinner size="xs" color="secondary" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10 pointer-events-none">
+                    {currenciesLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin text-secondary" />
                     ) : (
                       <span className="text-sm font-semibold text-secondary">
                         {currencySymbol}
                       </span>
                     )}
                   </div>
-                  <UiDropdown
-                    id="currency"
+                  <Select
                     value={data.currency}
-                    onSelect={(value: string) => handleSelectChange('currency', value)}
-                    options={[
-                      { value: 'USD', label: 'USD - US Dollar' },
-                      { value: 'EUR', label: 'EUR - Euro' },
-                      { value: 'GBP', label: 'GBP - British Pound' },
-                      { value: 'CAD', label: 'CAD - Canadian Dollar' },
-                      { value: 'AUD', label: 'AUD - Australian Dollar' },
-                      { value: 'JPY', label: 'JPY - Japanese Yen' },
-                    ]}
-                    className="[&>div]:pl-12"
-                  />
+                    onValueChange={(value) => handleSelectChange('currency', value)}
+                    disabled={currenciesLoading}
+                  >
+                    <SelectTrigger id="currency" className="pl-10">
+                      <SelectValue placeholder={currenciesLoading ? 'Loading...' : 'Select currency'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {currenciesLoading ? (
+                        <div className="flex items-center justify-center py-2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        </div>
+                      ) : (
+                        currencies.map((currency) => (
+                          <SelectItem key={currency.currencyCodeAlpha} value={currency.currencyCodeAlpha}>
+                            {currency.currencyCodeAlpha} - {currency.currencyName}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
               {/* Revenue */}
-              <div>
-                <label htmlFor="revenue" className="block text-sm font-medium text-fg-muted mb-1.5">
+              <div className="space-y-2">
+                <Label htmlFor="revenue" className="text-fg-muted">
                   Annual Revenue
-                  <span className="text-fg-subtle ml-2">({data.currency})</span>
-                </label>
+                  <span className="text-fg-subtle ml-2">({data.currency || 'USD'})</span>
+                </Label>
                 <div className="relative">
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10">
-                    {currencyLoading ? (
-                      <LoadingSpinner size="xs" color="secondary" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10">
+                    {currenciesLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin text-secondary" />
                     ) : (
                       <span className="text-sm font-semibold text-secondary">
                         {currencySymbol}
@@ -329,10 +463,12 @@ export const OrganizationForm = ({
                     value={data.revenue}
                     onChange={handleInputChange('revenue')}
                     placeholder="1000000"
-                    error={errors.revenue}
-                    className="pl-12"
+                    className={`pl-10 ${errors.revenue ? 'border-destructive' : ''}`}
                   />
                 </div>
+                {errors.revenue && (
+                  <p className="text-sm text-destructive">{errors.revenue}</p>
+                )}
               </div>
             </div>
           </motion.div>
@@ -348,7 +484,7 @@ export const OrganizationForm = ({
           >
             <div className="flex items-center gap-4 mb-6">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <span className="text-sm font-semibold text-primary">πŸŒ </span>
+                <span className="text-sm font-semibold text-primary">🌍</span>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-fg">Regional Settings</h3>
@@ -358,44 +494,55 @@ export const OrganizationForm = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Time Zone */}
-              <UiDropdown
-                id="timeZone"
-                label="Time Zone"
-                value={data.timeZone}
-                onSelect={(value: string) => handleSelectChange('timeZone', value)}
-                options={[
-                  { value: 'UTC', label: 'UTC - Coordinated Universal Time' },
-                  { value: 'America/New_York', label: 'EST - Eastern Standard Time' },
-                  { value: 'America/Chicago', label: 'CST - Central Standard Time' },
-                  { value: 'America/Denver', label: 'MST - Mountain Standard Time' },
-                  { value: 'America/Los_Angeles', label: 'PST - Pacific Standard Time' },
-                  { value: 'Europe/London', label: 'GMT - Greenwich Mean Time' },
-                  { value: 'Europe/Paris', label: 'CET - Central European Time' },
-                  { value: 'Asia/Tokyo', label: 'JST - Japan Standard Time' },
-                ]}
-              />
+              <div className="space-y-2">
+                <Label htmlFor="timeZone" className="text-fg-muted">
+                  Time Zone
+                </Label>
+                <Select
+                  value={data.timeZone}
+                  onValueChange={(value) => handleSelectChange('timeZone', value)}
+                  disabled={timezonesLoading}
+                >
+                  <SelectTrigger id="timeZone">
+                    <SelectValue placeholder={timezonesLoading ? 'Loading...' : 'Select time zone'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {timezonesLoading ? (
+                      <div className="flex items-center justify-center py-2">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      </div>
+                    ) : (
+                      timezones.map((timezone) => (
+                        <SelectItem key={timezone.value} value={timezone.value}>
+                          {timezone.label}
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
 
               {/* Fiscal Year Start */}
-              <UiDropdown
-                id="fiscalYearStart"
-                label="Fiscal Year Start"
-                value={data.fiscalYearStart}
-                onSelect={(value: string) => handleSelectChange('fiscalYearStart', value)}
-                options={[
-                  { value: 'January', label: 'January' },
-                  { value: 'February', label: 'February' },
-                  { value: 'March', label: 'March' },
-                  { value: 'April', label: 'April' },
-                  { value: 'May', label: 'May' },
-                  { value: 'June', label: 'June' },
-                  { value: 'July', label: 'July' },
-                  { value: 'August', label: 'August' },
-                  { value: 'September', label: 'September' },
-                  { value: 'October', label: 'October' },
-                  { value: 'November', label: 'November' },
-                  { value: 'December', label: 'December' },
-                ]}
-              />
+              <div className="space-y-2">
+                <Label htmlFor="fiscalYearStart" className="text-fg-muted">
+                  Fiscal Year Start
+                </Label>
+                <Select
+                  value={data.fiscalYearStart}
+                  onValueChange={(value) => handleSelectChange('fiscalYearStart', value)}
+                >
+                  <SelectTrigger id="fiscalYearStart">
+                    <SelectValue placeholder="Select fiscal year start" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fiscalYearMonths.map((month) => (
+                      <SelectItem key={month} value={month}>
+                        {month}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </motion.div>
         )}
@@ -403,4 +550,3 @@ export const OrganizationForm = ({
     </motion.div>
   )
 }
-

@@ -4,8 +4,8 @@ import { memo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ANIMATION_VARIANTS } from '@/shared/layout/DashboardLayout/constants'
-import { Avatar } from '@/shared/ui'
-import { PlainButton } from '@/shared/ui/Button'
+import { Avatar, AvatarFallback } from '@/shared/ui'
+import { Button } from '@/shared/ui/shadcn/button'
 import { cn } from '@/shared/utils/cn'
 
 /**
@@ -132,9 +132,10 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
               )}
             </Link>
 
-            <PlainButton
+            <Button
+              variant="ghost"
               onClick={handleLogoutClick}
-              onMouseEnter={(e) => handleTooltipEnter('logout', 'Logout', undefined, e)}
+              onMouseEnter={(e: React.MouseEvent) => handleTooltipEnter('logout', 'Logout', undefined, e)}
               onMouseLeave={handleTooltipLeave}
               className={cn(
                 'group relative flex items-center rounded-lg transition-all duration-200 h-9 w-full',
@@ -142,7 +143,6 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
                 isCollapsed ? 'justify-center px-0' : 'px-6'
               )}
               aria-label="Logout"
-              unstyled
             >
               <LogOut className={`w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 ${isCollapsed ? '' : 'mr-2.5 md:mr-3 lg:mr-2.5'} flex-shrink-0`} />
 
@@ -151,18 +151,19 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
                   <span className="font-normal whitespace-nowrap text-sm md:text-base lg:text-sm">Logout</span>
                 </div>
               )}
-            </PlainButton>
+            </Button>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Divider */}
-      <div className="border-t border-white/10 mx-2" />
+      <div className="border-t border-border mx-2" />
       
       {/* User Profile */}
       <div className={cn('py-2', isCollapsed ? 'px-2' : 'px-4 md:px-6 lg:px-4')}>
         <div className="relative" ref={profileDropdownRef}>
-          <PlainButton
+          <Button
+            variant="ghost"
             onClick={handleDropdownToggle}
             onMouseEnter={handleUserTooltipEnter}
             onMouseLeave={handleTooltipLeave}
@@ -173,16 +174,18 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
             )}
             aria-label="User profile menu"
             aria-expanded={showProfileDropdown}
-            unstyled
           >
             {/* User Avatar */}
             <div className={`flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`}>
               {user ? (
-                <Avatar
-                  name={user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.firstName || user.lastName || 'User'}
-                  size="sm"
-                  shape="circle"
-                />
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-primary/20 text-white text-xs">
+                    {(() => {
+                      const name = user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.firstName || user.lastName || 'User'
+                      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+                    })()}
+                  </AvatarFallback>
+                </Avatar>
               ) : (
                 <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
                   <User className="w-4 h-4 text-white/60" />
@@ -210,7 +213,7 @@ export const SidebarFooter = memo<SidebarFooterProps>(({
                 }`} 
               />
             )}
-          </PlainButton>
+          </Button>
         </div>
       </div>
     </div>

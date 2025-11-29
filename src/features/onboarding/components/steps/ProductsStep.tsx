@@ -5,7 +5,7 @@ import type { StepComponentProps } from '../../config/types'
 import { useProductsStepController } from '../../hooks/useProductsStepController'
 import type { ProductInfo } from '../../types/onboarding'
 
-import { ActionButton } from '@/shared/ui/ActionButton'
+import { Button } from '@/shared/ui/shadcn/button'
 
 type ProductsStepProps = StepComponentProps<ProductInfo>
 
@@ -52,13 +52,12 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
                 </p>
               </div>
 
-              <ActionButton
-                label="Add Product"
+              <Button
                 onClick={handleAddProduct}
-                size="md"
-                variant="primary"
-                animated={false}
-              />
+                variant="default"
+              >
+                Add Product
+              </Button>
             </div>
           </div>
         </div>
@@ -75,7 +74,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
               {products.map(product => (
                 <div
                   key={product.id}
-                  className="p-4 rounded-lg bg-[#212124] border border-[#2c2d31]"
+                  className="p-4 rounded-lg bg-muted border border-[#2c2d31]"
                 >
                   <div className="flex items-center justify-between">
                     <div>

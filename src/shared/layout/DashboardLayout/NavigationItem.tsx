@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { ANIMATION_VARIANTS } from '@/shared/layout/DashboardLayout/constants'
 import type { NavItem } from '@/shared/layout/DashboardLayout/types'
-import { PlainButton } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/shadcn/button'
 import { cn } from '@/shared/utils/cn'
 
 /**
@@ -64,14 +64,15 @@ export const NavigationItem = memo<NavigationItemProps>(({
   <div>
     {/* Main Navigation Item */}
     {item.subItems ? (
-      <PlainButton
+      <Button
+        variant="ghost"
         type="button"
-        onClick={(e) => {
+        onClick={(e: React.MouseEvent) => {
           e.preventDefault()
           e.stopPropagation()
           toggleExpanded(item.id)
         }}
-        onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
+        onMouseEnter={(e: React.MouseEvent) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={cn(
           'group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full',
@@ -86,7 +87,6 @@ export const NavigationItem = memo<NavigationItemProps>(({
         aria-haspopup="menu"
         aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
         tabIndex={isKeyboardNavigating ? -1 : 0}
-        unstyled
       >
         <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
 
@@ -107,11 +107,11 @@ export const NavigationItem = memo<NavigationItemProps>(({
             {item.badge}
           </span>
         )}
-      </PlainButton>
+      </Button>
     ) : (
       <Link
         to={item.href}
-        onMouseEnter={(e) => handleTooltipEnter(item.id, item.label, item.badge, e)}
+        onMouseEnter={(e: React.MouseEvent) => handleTooltipEnter(item.id, item.label, item.badge, e)}
         onMouseLeave={handleTooltipLeave}
         className={cn(
           'group relative flex items-center rounded-lg transition-all duration-200 h-10',

@@ -1,4 +1,4 @@
-﻿import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users,
   Eye,
@@ -23,13 +23,12 @@ import { useCustomersController } from '../hooks/useCustomersController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
-import { Checkbox, Badge, EmptyState, type BadgeVariant, PageHeader } from '@/shared/ui'
-import { ActionButton } from '@/shared/ui/ActionButton'
-import { IconButton } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { Checkbox } from '@/shared/ui'
 import { Pagination } from '@/shared/ui/Pagination'
-import { PageSkeleton } from '@/shared/ui/Skeleton/PageSkeleton'
-import { Skeleton } from '@/shared/ui/Skeleton/Skeleton'
+import { Badge } from '@/shared/ui/shadcn/badge'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card, CardContent } from '@/shared/ui/shadcn/card'
+import { Skeleton } from '@/shared/ui/shadcn/skeleton'
 import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
 
 
@@ -58,20 +57,20 @@ const getStatusText = (status: number | string): string => {
   }
 }
 
-const getStatusVariant = (status: number | string): BadgeVariant => {
+const getStatusVariant = (status: number | string): 'default' | 'secondary' | 'destructive' | 'outline' => {
   const statusValue = typeof status === 'string' ? parseInt(status) : status
 
   switch (statusValue) {
     case CustomerStatus.Active:
-      return 'success'
+      return 'default' // Active uses primary color (success-like)
     case CustomerStatus.Inactive:
-      return 'neutral'
+      return 'outline' // Inactive uses neutral outline
     case CustomerStatus.Suspended:
-      return 'warning'
+      return 'secondary' // Suspended uses secondary color (warning-like)
     case CustomerStatus.Cancelled:
-      return 'error'
+      return 'destructive' // Cancelled uses destructive (error)
     default:
-      return 'neutral'
+      return 'outline'
   }
 }
 
@@ -125,16 +124,37 @@ const CustomersPage: React.FC = () => {
   if (initialLoading) {
     return (
       <DashboardLayout>
-        <PageSkeleton />
+        {/* Page Skeleton - Inline replacement for PageSkeleton */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between pb-6">
+            <Skeleton className="h-9 w-48" />
+          </div>
+          <div className="space-y-4">
+            <Skeleton className="h-12 w-full" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Card key={i} className="h-64">
+                  <CardContent className="p-6">
+                    <Skeleton className="h-full w-full" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
       </DashboardLayout>
     )
   }
 
   return (
     <DashboardLayout>
-      <PageHeader
-        title="Customers"
-      />
+      {/* Page Header - Inline replacement for PageHeader */}
+      <div className="flex items-center justify-between pb-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-white">Customers</h1>
+        </div>
+      </div>
+
       <div className="space-y-6">
         {/* All-in-one Search and Action Toolbar */}
         <div className="space-y-4">
@@ -156,57 +176,63 @@ const CustomersPage: React.FC = () => {
                   <>
                     {selectedCustomers.length > 0 && (
                       <>
-                        <ActionButton
-                          label={`Export (${selectedCustomers.length})`}
+                        <Button
                           variant="ghost"
                           size="sm"
-                          icon={Download}
                           onClick={handleExportSelected}
-                        />
-                        <ActionButton
-                          label={`Bulk Edit (${selectedCustomers.length})`}
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Export ({selectedCustomers.length})
+                        </Button>
+                        <Button
                           variant="ghost"
                           size="sm"
-                          icon={Edit}
                           onClick={handleBulkEdit}
-                        />
+                        >
+                          <Edit className="h-4 w-4 mr-2" />
+                          Bulk Edit ({selectedCustomers.length})
+                        </Button>
                       </>
                     )}
-                    <ActionButton
-                      label="Cancel Selection"
+                    <Button
                       variant="ghost"
-                      size="md"
-                      icon={Square}
+                      size="default"
                       onClick={() => {
                         setSelectedCustomers([])
                         setSelectionMode(false)
                       }}
-                    />
+                    >
+                      <Square className="h-4 w-4 mr-2" />
+                      Cancel Selection
+                    </Button>
                   </>
                 ) : (
                   <>
-                    <ActionButton
-                      label="Select"
+                    <Button
                       variant="ghost"
-                      size="md"
-                      icon={CheckSquare}
+                      size="default"
                       onClick={() => setSelectionMode(true)}
-                    />
-                    <ActionButton
-                      label="Export All"
+                    >
+                      <CheckSquare className="h-4 w-4 mr-2" />
+                      Select
+                    </Button>
+                    <Button
                       variant="ghost"
-                      size="md"
-                      icon={Download}
+                      size="default"
                       onClick={handleExportAll}
-                    />
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Export All
+                    </Button>
                   </>
                 )}
-                <ActionButton
-                  label="Add Customer"
-                  variant="primary"
-                  size="md"
+                <Button
+                  variant="default"
+                  size="default"
                   onClick={openAddModal}
-                />
+                >
+                  Add Customer
+                </Button>
               </>
             }
           />
@@ -228,10 +254,10 @@ const CustomersPage: React.FC = () => {
                 {skeletonLoading ? (
                   // Skeleton loading for grid view
                   Array.from({ length: itemsPerPage }).map((_, index) => (
-                    <Card key={`skeleton-${index}`} padding="lg" className="h-full">
+                    <Card key={`skeleton-${index}`} className="p-6 h-full">
                       <div className="space-y-6">
                         <div className="flex items-start gap-4">
-                          <Skeleton variant="rectangle" className="w-11 h-11 rounded-xl" />
+                          <Skeleton className="w-11 h-11 rounded-xl" />
                           <div className="flex-1 space-y-2">
                             <Skeleton className="h-5 w-3/4" />
                             <Skeleton className="h-4 w-1/2" />
@@ -259,7 +285,7 @@ const CustomersPage: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="group relative h-full"
                     >
-                      <Card padding="lg" className="h-full hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
+                      <Card className="p-6 h-full hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
                         {/* Card selection checkbox - only show in selection mode */}
                         {selectionMode && (
                           <div className={`absolute top-4 right-4 transition-all duration-200 ${selectedCustomers.includes(customer.id) ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100'
@@ -302,21 +328,22 @@ const CustomersPage: React.FC = () => {
                               )}
                             </div>
                             {customer.company && (
-                              <p className="text-sm text-[#a3a3a3]">{customer.company}</p>
+                              <p className="text-sm text-muted-foreground">{customer.company}</p>
                             )}
                           </div>
-                          <IconButton
-                            icon={MoreHorizontal}
+                          <Button
                             variant="ghost"
-                            size="sm"
+                            size="icon"
                             aria-label="Customer actions"
                             className="text-white/50 hover:text-white"
-                          />
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
                         </div>
 
                         {/* Information Cards */}
                         <div className="space-y-4 mb-4">
-                          <Card variant="nested" padding="md">
+                          <Card className="p-4">
                             <div className="flex items-center gap-4">
                               <Mail className="w-4 h-4 text-secondary" />
                               <div className="flex-1 min-w-0">
@@ -327,7 +354,7 @@ const CustomersPage: React.FC = () => {
                           </Card>
 
                           {customer.phoneNumber && (
-                            <Card variant="nested" padding="md">
+                            <Card className="p-4">
                               <div className="flex items-center gap-4">
                                 <Phone className="w-4 h-4 text-success" />
                                 <div className="flex-1">
@@ -339,7 +366,7 @@ const CustomersPage: React.FC = () => {
                           )}
 
                           {customer.billingAddress && (
-                            <Card variant="nested" padding="md">
+                            <Card className="p-4">
                               <div className="flex items-center gap-4">
                                 <MapPin className="w-4 h-4 text-amber-400" />
                                 <div className="flex-1 min-w-0">
@@ -352,7 +379,7 @@ const CustomersPage: React.FC = () => {
                             </Card>
                           )}
 
-                          <Card variant="nested" padding="md">
+                          <Card className="p-4">
                             <div className="flex items-center gap-4">
                               <Calendar className="w-4 h-4 text-accent" />
                               <div>
@@ -365,7 +392,7 @@ const CustomersPage: React.FC = () => {
 
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2">
-                            <Badge variant={getStatusVariant(customer.status)} size="md">
+                            <Badge variant={getStatusVariant(customer.status)}>
                               {getStatusText(customer.status)}
                             </Badge>
                           </div>
@@ -388,7 +415,7 @@ const CustomersPage: React.FC = () => {
 
                         {/* Tags */}
                         {customer.tags.length > 0 && (
-                          <div className="mt-4 pt-4 border-t border-white/10">
+                          <div className="mt-4 pt-4 border-t border-border">
                             <div className="flex flex-wrap gap-1">
                               {customer.tags.slice(0, 3).map((tag: string, index: number) => (
                                 <span
@@ -399,7 +426,7 @@ const CustomersPage: React.FC = () => {
                                 </span>
                               ))}
                               {customer.tags.length > 3 && (
-                                <span className="px-2 py-1 bg-[#262626] text-[#a3a3a3] rounded text-xs">
+                                <span className="px-2 py-1 bg-[#262626] text-muted-foreground rounded text-xs">
                                   +{customer.tags.length - 3}
                                 </span>
                               )}
@@ -449,22 +476,24 @@ const CustomersPage: React.FC = () => {
           />
         )}
 
-        {/* Empty State */}
+        {/* Empty State - Inline replacement for EmptyState */}
         {!loading && displayedCustomers.length === 0 && (
-          <EmptyState
-            icon={Users}
-            title="No customers found"
-            description={
-              hasSearchOrFilters
+          <div className="flex flex-col items-center justify-center p-12 text-center">
+            <div className="mb-4 rounded-full bg-muted p-4">
+              <Users className="h-10 w-10 text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-medium text-foreground">No customers found</h3>
+            <p className="mt-2 text-sm text-muted-foreground max-w-md">
+              {hasSearchOrFilters
                 ? 'No customers match your current filters. Try adjusting your search criteria or clearing some filters.'
-                : 'Get started by adding your first customer'
-            }
-            action={!hasSearchOrFilters ? {
-              label: 'Add Customer',
-              onClick: openAddModal,
-              variant: 'primary'
-            } : undefined}
-          />
+                : 'Get started by adding your first customer'}
+            </p>
+            {!hasSearchOrFilters && (
+              <Button type="button" onClick={openAddModal} className="mt-6">
+                Add Customer
+              </Button>
+            )}
+          </div>
         )}
 
         {/* Add Customer Modal */}
@@ -479,4 +508,3 @@ const CustomersPage: React.FC = () => {
 }
 
 export default CustomersPage
-

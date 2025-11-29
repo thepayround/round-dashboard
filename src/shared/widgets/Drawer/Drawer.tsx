@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import React, { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
-import { IconButton } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/shadcn/button'
 import { cn } from '@/shared/utils/cn'
 
 export interface DrawerProps {
@@ -150,7 +150,7 @@ export const Drawer: React.FC<DrawerProps> = ({
             transition={panelTransition}
             className={cn(
               "fixed inset-y-0 right-0 w-full md:w-[400px] lg:w-[450px]",
-              "bg-[#171719]",
+              "bg-input",
               "border-l border-[#1e1f22]",
               "z-[70]",
               "flex flex-col",
@@ -161,22 +161,24 @@ export const Drawer: React.FC<DrawerProps> = ({
             aria-labelledby="drawer-title"
           >
             {/* Header */}
-            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-[#1e1f22] sticky top-0 bg-[#171719] z-10">
+            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-[#1e1f22] sticky top-0 bg-input z-10">
               <h2
                 id="drawer-title"
                 className="text-xl font-medium tracking-tight text-white"
               >
                 {title}
               </h2>
-              <IconButton
+              <Button
                 ref={closeButtonRef}
+                type="button"
                 onClick={onClose}
-                icon={X}
                 variant="ghost"
-                size="md"
+                size="icon"
                 aria-label={`Close ${title.toLowerCase()}`}
                 className="hover:bg-white/10"
-              />
+              >
+                <X className="h-4 w-4" />
+              </Button>
             </div>
 
             {/* Content */}

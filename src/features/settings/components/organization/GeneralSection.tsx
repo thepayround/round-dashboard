@@ -3,7 +3,7 @@ import React from 'react'
 
 import { OrganizationSettingsForm } from '../OrganizationSettingsForm'
 
-import { Card } from '@/shared/ui/Card'
+import { Card } from '@/shared/ui/shadcn/card'
 
 
 export const GeneralSection: React.FC = () => (
@@ -25,7 +25,7 @@ export const GeneralSection: React.FC = () => (
         </p>
       </div>
 
-      <Card animate={false} padding="lg">
+      <Card className="p-6">
         <OrganizationSettingsForm />
       </Card>
     </motion.div>

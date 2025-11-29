@@ -9,7 +9,8 @@ import {
   ArrowUpRight,
   MapPin,
   Calendar,
-  Building2
+  Building2,
+  Loader2
 } from 'lucide-react'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -18,10 +19,16 @@ import { useDashboardPageController } from '../hooks/useDashboardPageController'
 import type { DateRangePreset } from '../hooks/useDashboardPageController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
-import { Alert, LoadingSpinner, UiDropdown, PageHeader } from '@/shared/ui'
-import { ActionButton } from '@/shared/ui/ActionButton'
-import { Button } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { Alert, AlertDescription } from '@/shared/ui/shadcn/alert'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/shadcn/select'
 import { sanitizeUrl } from '@/shared/utils/urlSanitization'
 
 export const DashboardPage = () => {
@@ -64,7 +71,8 @@ export const DashboardPage = () => {
         <div className="p-8">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2">
-              <LoadingSpinner size="md" label="Loading your account..." />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="text-sm text-fg-muted">Loading your account...</span>
             </div>
           </div>
         </div>
@@ -88,33 +96,33 @@ export const DashboardPage = () => {
 
   return (
     <DashboardLayout>
-      <PageHeader
-        title={`Welcome back, ${welcomeName}!`}
-        actions={
-          roundAccount && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.1 }}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-full border ${roundAccount.status.toLowerCase() === 'active'
-                  ? 'bg-success/10 border-success/20'
-                  : 'bg-fg-muted/10 border-fg-muted/20'
+      <div className="flex items-center justify-between pb-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-white">{`Welcome back, ${welcomeName}!`}</h1>
+        </div>
+        {roundAccount && (
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.1 }}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-full border ${roundAccount.status.toLowerCase() === 'active'
+                ? 'bg-success/10 border-success/20'
+                : 'bg-fg-muted/10 border-fg-muted/20'
+              }`}
+          >
+            <CheckCircle
+              className={`w-5 h-5 ${roundAccount.status.toLowerCase() === 'active' ? 'text-success' : 'text-fg-muted'
+                }`}
+            />
+            <span
+              className={`font-medium tracking-tight text-sm ${roundAccount.status.toLowerCase() === 'active' ? 'text-success' : 'text-fg-muted'
                 }`}
             >
-              <CheckCircle
-                className={`w-5 h-5 ${roundAccount.status.toLowerCase() === 'active' ? 'text-success' : 'text-fg-muted'
-                  }`}
-              />
-              <span
-                className={`font-medium tracking-tight text-sm ${roundAccount.status.toLowerCase() === 'active' ? 'text-success' : 'text-fg-muted'
-                  }`}
-              >
-                {roundAccount.status}
-              </span>
-            </motion.div>
-          )
-        }
-      />
+              {roundAccount.status}
+            </span>
+          </motion.div>
+        )}
+      </div>
       <div className="space-y-8">
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -126,37 +134,66 @@ export const DashboardPage = () => {
             </div>
             <div className="flex flex-wrap items-center gap-4">
               <div>
-                <UiDropdown
-                  label="Date range"
-                  options={dateRangeOptions.map(opt => ({ value: opt.id, label: opt.label }))}
+                <div className="text-xs font-medium text-fg-muted mb-1.5">Date range</div>
+                <Select
                   value={filters.dateRange.preset}
-                  onSelect={(value: string) => handleDateRangeChange(value as DateRangePreset)}
-                  allowSearch={false}
-                />
+                  onValueChange={(value) => handleDateRangeChange(value as DateRangePreset)}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {dateRangeOptions.map(opt => (
+                      <SelectItem key={opt.id} value={opt.id}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
-                <UiDropdown
-                  label="Segment"
-                  options={segmentOptions.map(opt => ({ value: opt.id, label: opt.label }))}
+                <div className="text-xs font-medium text-fg-muted mb-1.5">Segment</div>
+                <Select
                   value={filters.segmentId}
-                  onSelect={handleSegmentChange}
-                  allowSearch={false}
-                />
+                  onValueChange={handleSegmentChange}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {segmentOptions.map(opt => (
+                      <SelectItem key={opt.id} value={opt.id}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <Button
                 type="button"
                 variant="secondary"
-                size="md"
+                size="default"
                 onClick={refreshMetrics}
-                isLoading={isRefreshing}
+                disabled={isRefreshing}
+                className="mt-6"
               >
-                Refresh
+                {isRefreshing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Refreshing...
+                  </>
+                ) : (
+                  'Refresh'
+                )}
               </Button>
             </div>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-fg-muted">
             {isMetricsLoading && (
-              <LoadingSpinner size="xs" label="Refreshing metrics…" className="text-fg-muted" />
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Refreshing metrics…</span>
+              </div>
             )}
             {lastUpdated && (
               <span>Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -164,10 +201,9 @@ export const DashboardPage = () => {
           </div>
         </div>
         {metricsError && (
-          <Alert
-            variant="error"
-            description={metricsError}
-          />
+          <Alert variant="destructive">
+            <AlertDescription>{metricsError}</AlertDescription>
+          </Alert>
         )}
 
         {kpis.length > 0 && (
@@ -178,7 +214,7 @@ export const DashboardPage = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
           >
             {kpis.map(kpi => (
-              <Card key={kpi.id} padding="lg" className="relative overflow-hidden">
+              <Card key={kpi.id} className="relative overflow-hidden p-6">
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-fg-muted">{kpi.label}</p>
@@ -208,7 +244,7 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18 }}
           >
-            <Card padding="lg">
+            <Card className="p-6">
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-6">
                 <div>
                   <h3 className="text-base font-medium text-fg">Revenue trend</h3>
@@ -262,7 +298,7 @@ export const DashboardPage = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
           >
             {/* Account Type */}
-            <Card padding="md">
+            <Card className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="text-fg-muted text-xs font-medium tracking-tight mb-1">Account type</div>
@@ -275,7 +311,7 @@ export const DashboardPage = () => {
             </Card>
 
             {/* Account Status */}
-            <Card padding="md">
+            <Card className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="text-fg-muted text-xs font-medium tracking-tight mb-1">Account status</div>
@@ -288,7 +324,7 @@ export const DashboardPage = () => {
             </Card>
 
             {/* Created Date */}
-            <Card padding="md">
+            <Card className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="text-fg-muted text-xs font-medium tracking-tight mb-1">Created date</div>
@@ -304,7 +340,7 @@ export const DashboardPage = () => {
 
             {/* Currency */}
             {roundAccount.organization?.currency && (
-              <Card padding="md">
+              <Card className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="text-fg-muted text-xs font-medium tracking-tight mb-1">Currency</div>
@@ -328,7 +364,7 @@ export const DashboardPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Card padding="lg">
+              <Card className="p-6">
                 <div className="flex items-start gap-3 mb-6">
                   <div className="p-2 bg-secondary/10 rounded-lg border border-secondary/20">
                     <Building className="w-5 h-5 text-secondary" />
@@ -397,7 +433,7 @@ export const DashboardPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <Card padding="lg">
+                <Card className="p-6">
                   <div className="flex items-start gap-3 mb-6">
                     <div className="p-2 bg-accent/10 rounded-lg border border-accent/20">
                       <Building className="w-5 h-5 text-accent" />
@@ -463,7 +499,7 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <Card padding="lg">
+            <Card className="p-6">
               <div className="flex items-start gap-3 mb-6">
                 <div className="p-2 bg-accent/10 rounded-lg border border-accent/20">
                   <MapPin className="w-5 h-5 text-accent" />
@@ -516,7 +552,7 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <Card padding="lg">
+            <Card className="p-6">
               <div className="flex items-start gap-3 mb-6">
                 <div className="p-2 bg-secondary/10 rounded-lg border border-secondary/20">
                   <Users className="w-5 h-5 text-secondary" />
@@ -563,7 +599,7 @@ export const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card padding="xl">
+            <Card className="p-8">
               <div className="text-center">
                 <Building className="w-16 h-16 text-fg-muted mx-auto mb-4" />
                 <h3 className="text-xl font-medium tracking-tight text-fg mb-2">No Round Account Found</h3>
@@ -571,20 +607,20 @@ export const DashboardPage = () => {
                   It looks like you don&apos;t have a Round account set up yet, or there was an issue loading your account data.
                 </p>
                 <div className="flex items-center justify-center gap-4">
-                  <ActionButton
-                    label="Contact Support"
+                  <Button
                     onClick={() => navigate('/help')}
-                    size="md"
+                    size="default"
                     variant="secondary"
-                    animated={false}
-                  />
-                  <ActionButton
-                    label="Refresh Page"
+                  >
+                    Contact Support
+                  </Button>
+                  <Button
                     onClick={() => window.location.reload()}
-                    size="md"
-                    variant="primary"
-                    animated={false}
-                  />
+                    size="default"
+                    variant="default"
+                  >
+                    Refresh Page
+                  </Button>
                 </div>
               </div>
             </Card>

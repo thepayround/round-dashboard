@@ -1,5 +1,5 @@
-﻿import { motion } from 'framer-motion'
-import { CheckCircle, XCircle, Mail, RefreshCw, AlertCircle } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { CheckCircle, XCircle, Mail, RefreshCw, AlertCircle, ArrowRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 
@@ -7,7 +7,8 @@ import { useAuth as useAuthAPI, useOrganization } from '@/shared/hooks/api'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { organizationService } from '@/shared/services/api'
 import type { User } from '@/shared/types/auth'
-import { Button } from '@/shared/ui/Button'
+import { Alert, AlertDescription } from '@/shared/ui/shadcn/alert'
+import { Button } from '@/shared/ui/shadcn/button'
 
 export const EmailConfirmationPage = () => {
   const [searchParams] = useSearchParams()
@@ -41,7 +42,7 @@ export const EmailConfirmationPage = () => {
         try {
           const companyInfo = businessData.companyInfo as Record<string, unknown>
           const billingAddress = businessData.billingAddress as Record<string, unknown> | undefined
-          
+
           // Create organization with proper field mapping
           const orgResponse = await createOrganization({
             name: (companyInfo?.companyName as string) ?? '',
@@ -49,18 +50,18 @@ export const EmailConfirmationPage = () => {
             website: (companyInfo?.website as string) ?? '',
             size: companyInfo?.employeeCount?.toString() ?? '',
             revenue: 0, // Default value
-            category: (companyInfo?.industry as string) ?? 'business', // Default to 'business' 
+            category: (companyInfo?.industry as string) ?? 'business', // Default to 'business'
             type: (companyInfo?.businessType as string) ?? '',
             registrationNumber: (companyInfo?.registrationNumber as string) ?? '',
             currency: (companyInfo?.currency as string) ?? '',
             timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            country: (billingAddress?.country as string) ?? '', 
+            country: (billingAddress?.country as string) ?? '',
             userId,
             fiscalYearStart: 'January', // Default fiscal year start
           })
 
           if (orgResponse.success && orgResponse.data) {
-            
+
             // Create organization address if billing address exists
             if (billingAddress && orgResponse.data.organizationId) {
               try {
@@ -76,12 +77,12 @@ export const EmailConfirmationPage = () => {
                   addressType: 'billing' as const,
                   isPrimary: true,
                 }
-                
+
                 const addressResult = await organizationService.createOrganizationAddress(
                   orgResponse.data.organizationId,
                   addressData
                 )
-                
+
                 if (addressResult.success) {
                   // Address created successfully
                 } else {
@@ -190,11 +191,11 @@ export const EmailConfirmationPage = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                className="w-16 h-16 border border-primary border-t-transparent rounded-full"
+                className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full"
               />
             </div>
-            <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Confirming Your Email</h2>
-            <p className="text-white/85">Please wait while we confirm your email address...</p>
+            <h2 className="text-2xl font-medium tracking-tight text-foreground mb-4">Confirming Your Email</h2>
+            <p className="text-muted-foreground">Please wait while we confirm your email address...</p>
           </motion.div>
         )
 
@@ -214,32 +215,33 @@ export const EmailConfirmationPage = () => {
             >
               <CheckCircle className="w-16 h-16 text-success" />
             </motion.div>
-            <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Email Confirmed!</h2>
-            <p className="text-white/85 mb-6">{message}</p>
+            <h2 className="text-2xl font-medium tracking-tight text-foreground mb-4">Email Confirmed!</h2>
+            <p className="text-muted-foreground mb-6">{message}</p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="p-4 rounded-lg bg-success/10 border border-success/20 mb-6"
+              className="mb-6"
             >
-              <p className="text-success text-sm">
-                π‰ Welcome to Round! You&apos;re now logged in and will be redirected to get started
-                in a few seconds...
-              </p>
+              <Alert className="bg-success/10 border-success/20 text-success">
+                <AlertDescription>
+                  🎉 Welcome to Round! You&apos;re now logged in and will be redirected to get started
+                  in a few seconds...
+                </AlertDescription>
+              </Alert>
             </motion.div>
 
-            <Link
-              to="/get-started"
-              className="bg-auth-magenta text-white font-medium h-9 px-4 rounded-lg border-0 inline-flex items-center justify-center text-sm whitespace-nowrap transition-colors duration-200 hover:bg-auth-magenta-hover disabled:bg-[#525252] disabled:opacity-50 disabled:cursor-not-allowed space-x-2"
-            >
-              <span>Get Started</span>
-              <motion.span
-                animate={{ x: [0, 4, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-              >
-                β†’
-              </motion.span>
+            <Link to="/get-started">
+              <Button size="lg">
+                Get Started
+                <motion.span
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+                >
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </motion.span>
+              </Button>
             </Link>
           </motion.div>
         )
@@ -258,35 +260,35 @@ export const EmailConfirmationPage = () => {
               transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}
               className="flex justify-center mb-6"
             >
-              <XCircle className="w-16 h-16 text-red-500" />
+              <XCircle className="w-16 h-16 text-destructive" />
             </motion.div>
-            <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Confirmation Failed</h2>
-            <p className="text-white/85 mb-6">{message}</p>
+            <h2 className="text-2xl font-medium tracking-tight text-foreground mb-4">Confirmation Failed</h2>
+            <p className="text-muted-foreground mb-6">{message}</p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
+              className="mb-6"
             >
-              <div className="flex items-center space-x-2 text-primary">
-                <AlertCircle className="w-5 h-5" />
-                <span className="text-sm">
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
                   The confirmation link may have expired or is invalid.
-                </span>
-              </div>
+                </AlertDescription>
+              </Alert>
             </motion.div>
 
             {resendMessage && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 mb-6"
+                className="mb-6"
               >
-                <div className="flex items-center space-x-2 text-blue-400">
-                  <Mail className="w-5 h-5" />
-                  <span className="text-sm">{resendMessage}</span>
-                </div>
+                <Alert className="bg-blue-500/10 border-blue-500/20 text-blue-400">
+                  <Mail className="h-4 w-4" />
+                  <AlertDescription>{resendMessage}</AlertDescription>
+                </Alert>
               </motion.div>
             )}
 
@@ -295,19 +297,16 @@ export const EmailConfirmationPage = () => {
                 onClick={handleResendEmail}
                 disabled={isResending}
                 variant="secondary"
-                size="md"
-                icon={isResending ? RefreshCw : Mail}
-                iconPosition="left"
-                isLoading={isResending}
+                size="lg"
               >
+                {isResending ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
                 {isResending ? 'Sending...' : 'Get Help'}
               </Button>
 
-              <Link
-                to="/login"
-                className="bg-auth-magenta text-white font-medium h-9 px-4 rounded-lg border-0 inline-flex items-center justify-center text-sm whitespace-nowrap transition-colors duration-200 hover:bg-auth-magenta-hover disabled:bg-[#525252] disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Back to Login
+              <Link to="/login">
+                <Button size="lg">
+                  Back to Login
+                </Button>
               </Link>
             </div>
           </motion.div>
@@ -321,11 +320,6 @@ export const EmailConfirmationPage = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-      </div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -335,7 +329,7 @@ export const EmailConfirmationPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150"
+        className="bg-card/50 border border-border rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150"
       >
         {/* Header */}
         <div className="text-center mb-10">
@@ -346,8 +340,8 @@ export const EmailConfirmationPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-4xl font-medium tracking-tight text-white mb-4 relative">Email Confirmation</h1>
-            <p className="text-white/85 text-lg font-medium">Verifying your email address</p>
+            <h1 className="text-4xl font-medium tracking-tight text-foreground mb-4 relative">Email Confirmation</h1>
+            <p className="text-muted-foreground text-lg font-medium">Verifying your email address</p>
           </motion.div>
         </div>
 
@@ -357,4 +351,3 @@ export const EmailConfirmationPage = () => {
     </div>
   )
 }
-

@@ -7,6 +7,7 @@ import {
   Mail,
   Lock,
   AlertCircle,
+  Loader2,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -14,12 +15,12 @@ import { BillingAddressForm } from '../components/BillingAddressForm'
 import { CompanyDetailsForm } from '../components/CompanyDetailsForm'
 import { useBusinessRegisterController } from '../hooks/useBusinessRegisterController'
 
-import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
-import { Button } from '@/shared/ui/Button'
-import { FormInput } from '@/shared/ui/FormInput'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
 
 export const BusinessRegisterPage = () => {
   const {
@@ -102,50 +103,109 @@ export const BusinessRegisterPage = () => {
             <div className="space-y-6">
               {/* Name Fields Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormInput
-                  id="firstName"
-                  name="firstName"
-                  label="First Name"
-                  leftIcon={User}
-                  value={personalValues.firstName}
-                  onChange={handlePersonalChange('firstName')}
-                  onBlur={handlePersonalBlur('firstName')}
-                  placeholder="John"
-                  error={personalErrors.firstName}
-                  required
-                  size="sm"
-                />
+                {/* First Name */}
+                <div>
+                  <Label htmlFor="firstName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
+                    First Name <span className="text-primary">*</span>
+                  </Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon w-4 h-4" />
+                    <Input
+                      id="firstName"
+                      name="firstName"
+                      value={personalValues.firstName}
+                      onChange={handlePersonalChange('firstName')}
+                      onBlur={handlePersonalBlur('firstName')}
+                      placeholder="John"
+                      className="w-full h-10 px-3 pl-9 bg-white/[0.02] border border-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-border-hover focus:border-secondary focus:bg-white/[0.04] outline-none appearance-none"
+                      aria-invalid={!!personalErrors.firstName}
+                      aria-describedby={personalErrors.firstName ? 'firstName-error' : undefined}
+                    />
+                  </div>
+                  {personalErrors.firstName && (
+                    <motion.div
+                      id="firstName-error"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      <AlertCircle className="w-4 h-4" />
+                      <span>{personalErrors.firstName}</span>
+                    </motion.div>
+                  )}
+                </div>
 
-                <FormInput
-                  id="lastName"
-                  name="lastName"
-                  label="Last Name"
-                  leftIcon={User}
-                  value={personalValues.lastName}
-                  onChange={handlePersonalChange('lastName')}
-                  onBlur={handlePersonalBlur('lastName')}
-                  placeholder="Doe"
-                  error={personalErrors.lastName}
-                  required
-                  size="sm"
-                />
+                {/* Last Name */}
+                <div>
+                  <Label htmlFor="lastName" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
+                    Last Name <span className="text-primary">*</span>
+                  </Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon w-4 h-4" />
+                    <Input
+                      id="lastName"
+                      name="lastName"
+                      value={personalValues.lastName}
+                      onChange={handlePersonalChange('lastName')}
+                      onBlur={handlePersonalBlur('lastName')}
+                      placeholder="Doe"
+                      className="w-full h-10 px-3 pl-9 bg-white/[0.02] border border-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-border-hover focus:border-secondary focus:bg-white/[0.04] outline-none appearance-none"
+                      aria-invalid={!!personalErrors.lastName}
+                      aria-describedby={personalErrors.lastName ? 'lastName-error' : undefined}
+                    />
+                  </div>
+                  {personalErrors.lastName && (
+                    <motion.div
+                      id="lastName-error"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      <AlertCircle className="w-4 h-4" />
+                      <span>{personalErrors.lastName}</span>
+                    </motion.div>
+                  )}
+                </div>
               </div>
 
               {/* Email */}
-              <FormInput
-                id="email"
-                type="email"
-                name="email"
-                label="Email Address"
-                leftIcon={Mail}
-                value={personalValues.email}
-                onChange={handlePersonalChange('email')}
-                onBlur={handlePersonalBlur('email')}
-                placeholder="john@company.com"
-                error={personalErrors.email}
-                required
-                size="sm"
-              />
+              <div>
+                <Label htmlFor="email" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
+                  Email Address <span className="text-primary">*</span>
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon w-4 h-4" />
+                  <Input
+                    id="email"
+                    type="email"
+                    name="email"
+                    value={personalValues.email}
+                    onChange={handlePersonalChange('email')}
+                    onBlur={handlePersonalBlur('email')}
+                    placeholder="john@company.com"
+                    className="w-full h-10 px-3 pl-9 bg-white/[0.02] border border-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-border-hover focus:border-secondary focus:bg-white/[0.04] outline-none appearance-none"
+                    aria-invalid={!!personalErrors.email}
+                    aria-describedby={personalErrors.email ? 'email-error' : undefined}
+                  />
+                </div>
+                {personalErrors.email && (
+                  <motion.div
+                    id="email-error"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
+                    role="alert"
+                    aria-live="polite"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{personalErrors.email}</span>
+                  </motion.div>
+                )}
+              </div>
 
               {/* Phone */}
               <div>
@@ -178,26 +238,42 @@ export const BusinessRegisterPage = () => {
 
               {/* Password */}
               <div>
-                <FormInput
-                  id="password"
-                  type="password"
-                  name="password"
-                  label="Password"
-                  leftIcon={Lock}
-                  value={personalValues.password}
-                  onChange={handlePersonalChange('password')}
-                  onBlur={handlePersonalBlur('password')}
-                  placeholder="Create a strong password"
-                  error={personalErrors.password}
-                  required
-                  size="sm"
-                  passwordToggle
-                />
+                <Label htmlFor="password" className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
+                  Password <span className="text-primary">*</span>
+                </Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center text-auth-icon w-4 h-4" />
+                  <Input
+                    id="password"
+                    type="password"
+                    name="password"
+                    value={personalValues.password}
+                    onChange={handlePersonalChange('password')}
+                    onBlur={handlePersonalBlur('password')}
+                    placeholder="Create a strong password"
+                    className="w-full h-10 px-3 pl-9 bg-white/[0.02] border border-border rounded-lg text-white placeholder:text-auth-placeholder font-light text-xs tracking-tight transition-all duration-200 hover:border-border-hover focus:border-secondary focus:bg-white/[0.04] outline-none appearance-none"
+                    aria-invalid={!!personalErrors.password}
+                    aria-describedby={personalErrors.password ? 'password-error' : undefined}
+                  />
+                </div>
+                {personalErrors.password && (
+                  <motion.div
+                    id="password-error"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
+                    role="alert"
+                    aria-live="polite"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{personalErrors.password}</span>
+                  </motion.div>
+                )}
 
                 {/* Password Strength Indicator */}
                 {personalValues.password && (
                   <div className="mt-3">
-                    <PasswordStrengthIndicator 
+                    <PasswordStrengthIndicator
                       password={personalValues.password}
                       showStrengthBar
                     />
@@ -253,11 +329,6 @@ export const BusinessRegisterPage = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-      </div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -272,7 +343,7 @@ export const BusinessRegisterPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo className="sm:mb-10" />
 
-        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
+        <div className="bg-white/[0.02] border border-border rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8 lg:mb-10">
           <div className="gradient-header" />
@@ -344,11 +415,10 @@ export const BusinessRegisterPage = () => {
               onClick={multiStepForm.goToPrevious}
               disabled={!multiStepForm.canGoPrevious}
               variant="ghost"
-              size="md"
-              icon={ArrowLeft}
-              iconPosition="left"
+              size="default"
               className="h-9 min-w-[100px] sm:min-w-[140px]"
             >
+              <ArrowLeft className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Previous</span>
               <span className="sm:hidden">Prev</span>
             </Button>
@@ -362,7 +432,7 @@ export const BusinessRegisterPage = () => {
                   onClick={handleSkipBilling}
                   disabled={isSubmitting}
                   variant="ghost"
-                  size="md"
+                  size="default"
                   className="h-9 min-w-[80px] sm:min-w-[100px]"
                 >
                   <span className="hidden sm:inline">Skip for now</span>
@@ -372,25 +442,36 @@ export const BusinessRegisterPage = () => {
 
               {/* Continue button - show on step 0, step 2, and step 1 when billing is complete */}
               {(multiStepForm.currentStep !== 1 || isBillingComplete) && (
-                <ActionButton
-                  label={(() => {
-                    if (isSubmitting) return 'Creating...'
-                    if (multiStepForm.isLastStep) return 'Create Account'
-                    return 'Continue'
-                  })()}
+                <Button
                   onClick={handleNextStep}
                   disabled={
                     isSubmitting ||
                     (multiStepForm.currentStep === 0 && !isPersonalValid) ||
                     (multiStepForm.currentStep === 2 && (!isCompanyValid || !isCompanyComplete))
                   }
-                  icon={multiStepForm.isLastStep ? CheckCircle : ArrowRight}
-                  isLoading={isSubmitting}
-                  size="md"
-                  animated={false}
-                  actionType={multiStepForm.isLastStep ? "auth" : "navigation"}
-                  className="min-w-[120px] sm:min-w-[160px]"
-                />
+                  size="default"
+                  className={`min-w-[120px] sm:min-w-[160px] ${
+                    multiStepForm.isLastStep
+                      ? 'bg-secondary hover:bg-secondary/90 text-white'
+                      : 'bg-white/10 hover:bg-white/20 text-white'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      {multiStepForm.isLastStep ? 'Create Account' : 'Continue'}
+                      {multiStepForm.isLastStep ? (
+                        <CheckCircle className="w-4 h-4 ml-2" />
+                      ) : (
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      )}
+                    </>
+                  )}
+                </Button>
               )}
             </div>
           </motion.div>

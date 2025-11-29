@@ -1,14 +1,14 @@
 ﻿import React from 'react'
 
-import { Card } from '@/shared/ui/Card'
-import { Skeleton } from '@/shared/ui/Skeleton/Skeleton'
+import { Card } from '@/shared/ui/shadcn/card'
+import { Skeleton } from '@/shared/ui/shadcn/skeleton'
 
 export const CustomerDetailSkeleton: React.FC = () => (
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
     {/* Left Column - Main Info */}
     <div className="lg:col-span-2 space-y-6">
       {/* Header Card */}
-      <Card padding="md" className="space-y-4">
+      <Card className="p-4 space-y-4">
         <div className="flex items-start gap-4">
           <Skeleton className="w-10 h-10 rounded-lg" />
           <div className="flex-1">
@@ -38,7 +38,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
       </Card>
 
       {/* Addresses Card */}
-      <Card padding="md" className="space-y-4">
+      <Card className="p-4 space-y-4">
         <div className="flex items-start gap-4">
           <Skeleton className="w-10 h-10 rounded-lg" />
           <div className="flex-1">
@@ -62,7 +62,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
       </Card>
 
       {/* Metadata Card */}
-      <Card padding="md" className="space-y-4">
+      <Card className="p-4 space-y-4">
         <div className="flex items-start gap-4">
           <Skeleton className="w-10 h-10 rounded-lg" />
           <div className="flex-1">
@@ -99,7 +99,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
     {/* Right Column - Actions and Status */}
     <div className="space-y-6">
       {/* Quick Actions */}
-      <Card padding="md">
+      <Card className="p-4">
         <div className="flex items-start gap-4 mb-4">
           <Skeleton className="w-10 h-10 rounded-lg" />
           <div>
@@ -116,7 +116,7 @@ export const CustomerDetailSkeleton: React.FC = () => (
       </Card>
 
       {/* Status Information */}
-      <Card padding="md">
+      <Card className="p-4">
         <div className="flex items-start gap-4 mb-4">
           <Skeleton className="w-10 h-10 rounded-lg" />
           <div>

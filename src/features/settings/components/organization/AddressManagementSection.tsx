@@ -6,9 +6,9 @@ import { useAddressManagementController } from '../../hooks/useAddressManagement
 
 import { AddressStep } from '@/features/onboarding/components/steps/AddressStep'
 import type { EnhancedAddressInfo } from '@/features/onboarding/types/onboarding'
-import { ActionButton } from '@/shared/ui/ActionButton'
-import { Card } from '@/shared/ui/Card'
 import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
 
 
 export const AddressManagementSection: React.FC = () => {
@@ -36,14 +36,10 @@ export const AddressManagementSection: React.FC = () => {
       <MapPin className="w-16 h-16 text-white/60 mx-auto mb-4" />
       <h3 className="text-lg font-medium text-white/80 mb-2">No billing address found</h3>
       <p className="text-white/60 mb-6">Add your billing address for invoicing and tax purposes</p>
-      <ActionButton
-        label="Add Billing Address"
-        onClick={handleStartEdit}
-        icon={MapPin}
-        variant="primary"
-        actionType="general"
-        size="sm"
-      />
+      <Button onClick={handleStartEdit} variant="default">
+        <MapPin className="w-4 h-4 mr-2" />
+        Add Billing Address
+      </Button>
     </div>
   )
 
@@ -57,14 +53,10 @@ export const AddressManagementSection: React.FC = () => {
     return (
       <div className="space-y-6">
         <div className="flex justify-end">
-          <ActionButton
-            label="Edit Address"
-            onClick={handleStartEdit}
-            icon={Edit}
-            variant="secondary"
-            actionType="general"
-            size="sm"
-          />
+          <Button onClick={handleStartEdit} variant="secondary">
+            <Edit className="w-4 h-4 mr-2" />
+            Edit Address
+          </Button>
         </div>
 
         <AddressStep data={addressFormData} onChange={handleAddressFormDataChange} isPrePopulated readOnly />
@@ -97,7 +89,7 @@ export const AddressManagementSection: React.FC = () => {
       )}
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-12">
-        <Card padding="lg">
+        <Card className="p-6 lg:p-8">
           <AnimatePresence mode="wait">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -107,7 +99,7 @@ export const AddressManagementSection: React.FC = () => {
             >
               {isLoading && (
                 <div className="flex items-center justify-center py-12">
-                  <LoadingSpinner size="lg" color="secondary" />
+                  <LoadingSpinner size="lg" />
                   <span className="ml-3 text-white/60">Loading address data...</span>
                 </div>
               )}
@@ -128,25 +120,19 @@ export const AddressManagementSection: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between"
         >
-          <ActionButton
-            label="Cancel"
-            onClick={handleCancelEdit}
-            icon={X}
-            variant="ghost"
-            actionType="general"
-            size="sm"
-          />
+          <Button onClick={handleCancelEdit} variant="ghost">
+            <X className="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
 
-          <ActionButton
-            label={buttonLabel}
+          <Button
             onClick={handleSave}
             disabled={!isFormValid || isSaving}
-            variant="primary"
-            icon={CheckCircle}
-            isLoading={isSaving}
-            actionType="navigation"
-            size="sm"
-          />
+            variant="default"
+          >
+            {!isSaving && <CheckCircle className="w-4 h-4 mr-2" />}
+            {buttonLabel}
+          </Button>
         </motion.div>
       )}
     </div>

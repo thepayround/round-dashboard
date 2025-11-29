@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 
-import { RoundButton } from '../../ui/Button'
+import { Button } from '../../ui/shadcn/button'
 
 export interface StepIndicatorProps {
   number: number
@@ -62,14 +62,12 @@ export const StepIndicator = ({
   return (
     <div className="flex flex-col items-center gap-4">
       {/* Circular Indicator Button */}
-      <RoundButton
+      <Button
+        type="button"
         onClick={onClick}
         disabled={!isClickable}
-        className={`transition-all duration-300 ease-out focus-visible:ring-primary/60 focus-visible:ring-offset-[#000000] ${circleConfig.className}`}
-        variant={circleConfig.variant}
-        glow={circleConfig.glow}
-        size="md"
-        shape="circle"
+        className={`h-12 w-12 rounded-full p-0 transition-all duration-300 ease-out focus-visible:ring-primary/60 focus-visible:ring-offset-[#000000] ${circleConfig.className}`}
+        variant={circleConfig.variant === 'primary' ? 'default' : circleConfig.variant === 'success' ? 'default' : circleConfig.variant}
         aria-label={`Step ${number}: ${label}${isCompleted ? ' (completed)' : ''}${isActive ? ' (current)' : ''}`}
         aria-current={isActive ? 'step' : undefined}
       >
@@ -89,22 +87,19 @@ export const StepIndicator = ({
             </span>
           )}
         </motion.div>
-      </RoundButton>
+      </Button>
 
       {/* Label */}
-      <RoundButton
+      <Button
+        type="button"
         onClick={onClick}
         disabled={!isClickable}
-        className={`
-          text-xs font-normal text-center max-w-[120px]
-          ${labelClasses}
-        `}
-        shape="pill"
+        className={`text-xs font-normal text-center max-w-[120px] rounded-full ${labelClasses}`}
         size="sm"
         variant={isActive || isCompleted ? 'secondary' : 'ghost'}
       >
         {label}
-      </RoundButton>
+      </Button>
     </div>
   )
 }

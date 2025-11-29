@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
 
-import { Input } from '../../ui'
-import { UiDropdown, type UiDropdownOption } from '../../ui/UiDropdown'
+import { Input } from '../../ui/shadcn/input'
+import { Label } from '../../ui/shadcn/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/shadcn/select'
 import type { ActiveFilter } from '../FilterChipsBar'
 
 import type { FilterField, SearchFilterToolbarProps } from './SearchFilterToolbar'
@@ -30,47 +31,49 @@ export const useSearchFilterToolbarController = ({
     switch (field.type) {
       case 'select':
         return (
-          <div key={field.id}>
-            <span className="block text-sm font-normal text-white/80 tracking-tight mb-2">
-              {field.label}
-            </span>
-            <UiDropdown
-              options={
-                field.options?.map((option): UiDropdownOption => ({
-                  value: option.value ?? option.id,
-                  label: option.name,
-                })) ?? []
-              }
+          <div key={field.id} className="space-y-2">
+            <Label>{field.label}</Label>
+            <Select
               value={String(field.value)}
-              onSelect={(selectedValue: string) => field.onChange(selectedValue)}
-              onClear={field.onClear}
-              placeholder={field.placeholder ?? `Select ${field.label.toLowerCase()}`}
-              allowClear
-            />
+              onValueChange={(selectedValue: string) => field.onChange(selectedValue)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={field.placeholder ?? `Select ${field.label.toLowerCase()}`} />
+              </SelectTrigger>
+              <SelectContent>
+                {field.options?.map((option) => (
+                  <SelectItem key={option.id} value={option.value ?? option.id}>
+                    {option.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         )
       case 'input':
         return (
-          <Input
-            key={field.id}
-            id={field.id}
-            type="text"
-            label={field.label}
-            value={field.value}
-            onChange={event => field.onChange(event.target.value)}
-            placeholder={field.placeholder}
-          />
+          <div key={field.id} className="space-y-2">
+            <Label htmlFor={field.id}>{field.label}</Label>
+            <Input
+              id={field.id}
+              type="text"
+              value={String(field.value)}
+              onChange={event => field.onChange(event.target.value)}
+              placeholder={field.placeholder}
+            />
+          </div>
         )
       case 'date':
         return (
-          <Input
-            key={field.id}
-            id={field.id}
-            type="date"
-            label={field.label}
-            value={field.value}
-            onChange={event => field.onChange(event.target.value)}
-          />
+          <div key={field.id} className="space-y-2">
+            <Label htmlFor={field.id}>{field.label}</Label>
+            <Input
+              id={field.id}
+              type="date"
+              value={String(field.value)}
+              onChange={event => field.onChange(event.target.value)}
+            />
+          </div>
         )
       case 'custom':
         return (

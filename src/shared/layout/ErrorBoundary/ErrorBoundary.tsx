@@ -1,7 +1,7 @@
 import { AlertTriangle } from 'lucide-react'
 import React, { Component, ErrorInfo, ReactNode } from 'react'
 
-import { Button } from '../../ui/Button'
+import { Button } from '../../ui/shadcn/button'
 
 interface Props {
   children: ReactNode
@@ -53,7 +53,7 @@ export class ErrorBoundary extends Component<Props, State> {
       // Default error UI
       return (
         <div className="min-h-screen bg-[#101011] flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-[#171719] border border-red-500/20 rounded-lg p-8 text-center">
+          <div className="max-w-md w-full bg-input border border-red-500/20 rounded-lg p-8 text-center">
             <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertTriangle className="w-8 h-8 text-red-500" />
             </div>
@@ -78,7 +78,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <Button variant="secondary" onClick={this.handleReset}>
                 Try Again
               </Button>
-              <Button variant="primary" onClick={this.handleReload}>
+              <Button variant="default" onClick={this.handleReload}>
                 Reload Page
               </Button>
             </div>

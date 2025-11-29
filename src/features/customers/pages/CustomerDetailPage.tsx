@@ -33,10 +33,9 @@ import { EmailComposeModal } from '../components/EmailComposeModal'
 import { useCustomerDetailController, type CustomerDetailTab } from '../hooks/useCustomerDetailController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
-import { EmptyState } from '@/shared/ui'
-import { Button, IconButton, PlainButton } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/Table/Table'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/shadcn/table'
 import { cn } from '@/shared/utils/cn'
 import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
 
@@ -107,7 +106,7 @@ const CustomerDetailPage: React.FC = () => {
 
   const QuickActionButton = ({
     label,
-    icon,
+    icon: Icon,
     onClick,
     variant = 'ghost',
     className = '',
@@ -122,16 +121,14 @@ const CustomerDetailPage: React.FC = () => {
       type="button"
       onClick={onClick}
       variant={variant}
-      size="md"
-      icon={icon}
-      iconPosition="left"
-      fullWidth
+      size="default"
       className={cn(
-        'justify-start border border-white/10',
+        'w-full justify-start border border-border gap-2',
         variant === 'secondary' && 'bg-primary/20 border-primary/30 hover:bg-primary/30',
         className
       )}
     >
+      <Icon className="w-4 h-4" />
       {label}
     </Button>
   )
@@ -187,7 +184,7 @@ const CustomerDetailPage: React.FC = () => {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <Card padding="lg" className="bg-bg-surface">
+          <Card className="bg-bg-surface p-6">
             <div className="flex items-start gap-4 mb-6">
               <div className="p-4 bg-primary/20 rounded-xl border border-primary/30">
                 {customer.isBusinessCustomer ? (
@@ -296,7 +293,7 @@ const CustomerDetailPage: React.FC = () => {
             </div>
           </Card>
 
-          <Card padding="lg" className="bg-bg-surface">
+          <Card className="bg-bg-surface p-6">
             <div className="flex items-start gap-4 mb-6">
               <div className="p-4 bg-primary/20 rounded-xl border border-secondary/30">
                 <MapPin className="w-5 h-5 text-secondary" />
@@ -340,17 +337,16 @@ const CustomerDetailPage: React.FC = () => {
                 )}
               </div>
             ) : (
-              <EmptyState
-                icon={MapPin}
-                title="No addresses on file"
-                description="Customer addresses will appear here once added"
-                className="border border-dashed border-white/20 rounded-xl"
-              />
+              <div className="flex flex-col items-center justify-center p-12 text-center border border-dashed border-white/20 rounded-xl">
+                <MapPin className="w-10 h-10 text-white/60 mb-4" />
+                <h3 className="text-lg font-medium text-foreground">No addresses on file</h3>
+                <p className="mt-2 text-sm text-muted-foreground max-w-md">Customer addresses will appear here once added</p>
+              </div>
             )}
           </Card>
 
           {(customer.tags.length > 0 || Object.keys(customer.customFields).length > 0) && (
-            <Card padding="lg" className="bg-bg-surface">
+            <Card className="bg-bg-surface p-6">
               <div className="flex items-start gap-4 mb-6">
                 <div className="p-4 bg-primary/20 rounded-xl border border-accent/30">
                   <Tag className="w-5 h-5 text-accent" />
@@ -396,7 +392,7 @@ const CustomerDetailPage: React.FC = () => {
 
         <div className="space-y-6">
 
-          <Card padding="lg" className="bg-bg-surface">
+          <Card className="bg-bg-surface p-6">
             <div className="flex items-start gap-4 mb-6">
               <div className="p-4 bg-primary/20 rounded-xl border border-emerald-500/30">
                 <Zap className="w-5 h-5 text-emerald-400" />
@@ -420,12 +416,12 @@ const CustomerDetailPage: React.FC = () => {
                 label="Delete Customer"
                 icon={Trash2}
                 onClick={openDangerousActionsModal}
-                className="bg-[#371b1d] hover:bg-[#4a2428] border-red-400/30 hover:border-red-400/30 text-white"
+                className="bg-destructive/10 hover:bg-[#4a2428] border-red-400/30 hover:border-red-400/30 text-white"
               />
             </div>
           </Card>
 
-          <Card padding="lg" className="bg-[#141416]">
+          <Card className="bg-[#141416] p-6">
             <div className="flex items-start gap-4 mb-6">
               <div className="p-4 bg-warning/20 rounded-xl border border-amber-500/30">
                 <Activity className="w-5 h-5 text-amber-400" />
@@ -488,19 +484,20 @@ const CustomerDetailPage: React.FC = () => {
 
     return (
       <div className="space-y-6">
-        <Card padding="lg" className="bg-bg-surface">
+        <Card className="bg-bg-surface p-6">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="text-lg font-medium text-white">Recent Notes</h2>
               <p className="text-sm text-white/60">Keep track of context and conversations</p>
             </div>
-            <Button onClick={() => openNotesModal()} variant="primary" size="md" icon={Plus} iconPosition="left">
+            <Button type="button" onClick={() => openNotesModal()} variant="default" size="default" className="gap-2">
+              <Plus className="w-4 h-4" />
               Add Note
             </Button>
           </div>
 
           {customer.notes.length > 0 ? (
-            <div className="border border-white/10 rounded-lg overflow-hidden bg-bg-table">
+            <div className="border border-border rounded-lg overflow-hidden bg-bg-table">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -521,17 +518,19 @@ const CustomerDetailPage: React.FC = () => {
                       <TableCell className="text-fg-muted">{note.author}</TableCell>
                       <TableCell className="text-right text-fg-muted">{formatDate(note.createdDate)}</TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>
-                        <IconButton
-                          icon={Trash2}
+                        <Button
+                          type="button"
                           variant="ghost"
-                          size="sm"
+                          size="icon"
                           aria-label="Delete note"
-                          className="text-fg-muted hover:text-destructive hover:bg-destructive/10"
+                          className="text-fg-muted hover:text-destructive hover:bg-destructive/10 h-8 w-8"
                           onClick={(e) => {
                             e.stopPropagation()
                             requestDeleteNote(note.id)
                           }}
-                        />
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -539,7 +538,7 @@ const CustomerDetailPage: React.FC = () => {
               </Table>
             </div>
           ) : (
-            <div className="text-center py-10 border border-dashed border-white/10 rounded-xl">
+            <div className="text-center py-10 border border-dashed border-border rounded-xl">
               <FileText className="w-10 h-10 text-white/60 mx-auto mb-4" />
               <p className="text-sm text-white/60">No notes yet. Click &quot;Manage Notes&quot; to add one.</p>
             </div>
@@ -550,9 +549,9 @@ const CustomerDetailPage: React.FC = () => {
   }
 
   const renderInvoicesContent = () => (
-    <Card padding="lg">
+    <Card className="p-6">
       <div className="flex items-start gap-4 mb-4">
-        <div className="p-4 bg-primary/20 rounded-xl border border-white/10">
+        <div className="p-4 bg-primary/20 rounded-xl border border-border">
           <CreditCard className="w-5 h-5 text-white" />
         </div>
         <div>
@@ -560,7 +559,7 @@ const CustomerDetailPage: React.FC = () => {
           <p className="text-sm text-white/60">Billing history and upcoming payments</p>
         </div>
       </div>
-      <div className="text-center py-10 border border-dashed border-white/10 rounded-xl">
+      <div className="text-center py-10 border border-dashed border-border rounded-xl">
         <CreditCard className="w-10 h-10 text-white/60 mx-auto mb-4" />
         <p className="text-sm text-white/60 mb-4">Invoices will appear here once billing is connected.</p>
         <Link
@@ -609,15 +608,16 @@ const CustomerDetailPage: React.FC = () => {
             <Button
               type="button"
               onClick={() => handleBackNavigation()}
-              variant="primary"
-              size="md"
-              icon={ArrowLeft}
-              iconPosition="left"
+              variant="default"
+              size="default"
+              className="gap-2"
             >
+              <ArrowLeft className="w-4 h-4" />
               Back to Customers
             </Button>
             {hasError && (
-              <Button onClick={handleRetry} variant="secondary" size="md" icon={CheckCircle} iconPosition="left">
+              <Button type="button" onClick={handleRetry} variant="secondary" size="default" className="gap-2">
+                <CheckCircle className="w-4 h-4" />
                 Try Again
               </Button>
             )}
@@ -636,14 +636,16 @@ const CustomerDetailPage: React.FC = () => {
           className="flex items-center justify-between"
         >
           <div className="flex items-center gap-6">
-            <IconButton
-              icon={ArrowLeft}
-              onClick={() => navigate('/customers')}
+            <Button
+              type="button"
               variant="ghost"
-              size="md"
+              size="icon"
+              onClick={() => navigate('/customers')}
               className="text-white/60 hover:text-white"
               aria-label="Back to customers"
-            />
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
 
             <div className="flex items-center gap-4">
               <h1 className="text-xl font-medium text-white">{customer.effectiveDisplayName ?? customer.displayName}</h1>
@@ -657,7 +659,7 @@ const CustomerDetailPage: React.FC = () => {
 
         <div className="flex gap-6">
           {DETAIL_TABS.map(tab => (
-            <PlainButton
+            <button
               key={tab.id}
               onClick={() => setCurrentTab(tab.id)}
               className={cn(
@@ -666,7 +668,6 @@ const CustomerDetailPage: React.FC = () => {
                   ? 'text-white'
                   : 'text-white/60 hover:text-white'
               )}
-              unstyled
             >
               {tab.label}
               {currentTab === tab.id && (
@@ -676,7 +677,7 @@ const CustomerDetailPage: React.FC = () => {
                   transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                 />
               )}
-            </PlainButton>
+            </button>
           ))}
         </div>
 

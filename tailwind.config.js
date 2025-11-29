@@ -1,291 +1,97 @@
-/**
- * Tailwind CSS Configuration for Round Dashboard
- *
- * PURPOSE:
- * Tailwind CSS is a utility-first CSS framework that provides low-level utility classes
- * to build custom designs. This config customizes Tailwind to match Round's design system.
- *
- * WHEN TO MODIFY:
- * - Adding new brand colors or design tokens
- * - Creating custom components or utilities
- * - Integrating with design systems
- * - Adding responsive breakpoints
- * - Customizing spacing, typography, or shadows
- *
- * CONFIGURATION OPTIONS:
- * - content: Files to scan for class names (enables purging unused CSS)
- * - darkMode: Dark mode strategy ('media', 'class', 'selector')
- * - theme: Customize or extend default theme (colors, spacing, fonts, etc.)
- * - plugins: Add functionality (@tailwindcss/forms, @tailwindcss/typography, etc.)
- * - corePlugins: Enable/disable core utilities
- * - variants: Configure responsive, hover, focus variants
- *
- * ALTERNATIVE CONFIGURATIONS:
- * - For component libraries: Add safelist for dynamic classes
- * - For better performance: Configure purge options more specifically
- * - For custom design systems: Completely override default theme
- * - For plugins: Add @tailwindcss/forms, @tailwindcss/typography, @tailwindcss/aspect-ratio
- */
-
 /** @type {import('tailwindcss').Config} */
 export default {
-  // Files to scan for Tailwind classes (enables CSS purging in production)
+  darkMode: ["class"],
   content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-    // Add additional paths if needed:
-    // "./components/**/*.{js,ts,jsx,tsx}",
-    // "./pages/**/*.{js,ts,jsx,tsx}",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
-
-  // Dark mode configuration
-  darkMode: 'class', // Use 'class' strategy (toggle via class on html/body)
-
-  // Theme customization
   theme: {
-    // Custom responsive breakpoints
-    screens: {
-      'xs': '475px',    // Extra small devices
-      'sm': '640px',    // Small devices (landscape phones, 640px and up)
-      'md': '768px',    // Medium devices (tablets, 768px and up)
-      'lg': '1024px',   // Large devices (desktops, 1024px and up)
-      'xl': '1280px',   // Extra large devices (large desktops, 1280px and up)
-      '2xl': '1536px',  // 2X large devices (larger desktops, 1536px and up)
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
     },
-    // Extend default theme (keeps defaults + adds custom)
     extend: {
+      fontFamily: {
+        sans: [
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"Segoe UI"',
+          "Roboto",
+          '"Helvetica Neue"',
+          "Arial",
+          '"Noto Sans"',
+          "sans-serif",
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+          '"Noto Color Emoji"',
+        ],
+      },
+      boxShadow: {
+        xs: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      },
       colors: {
-        // Round Brand Design System - Pure Black with Pink/Cyan/Purple
-        bg: {
-          DEFAULT: 'hsl(var(--bg))',        // Pure black #000000
-          subtle: 'hsl(var(--bg-subtle))',  // #0a0a0a
-          raised: 'hsl(var(--bg-raised))',  // #141414
-          hover: 'hsl(var(--bg-hover))',    // #1a1a1a
-          surface: '#141416',
-          table: '#101011',
-        },
-        fg: {
-          DEFAULT: 'hsl(var(--fg))',        // Almost white
-          muted: 'hsl(var(--fg-muted))',    // Gray
-          subtle: 'hsl(var(--fg-subtle))',  // Darker gray
-        },
-
-        // Your Brand Colors
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: 'hsl(var(--primary))',        // #D417C8 pink
-          hover: 'hsl(var(--primary-hover))',
-          contrast: 'hsl(var(--accent-contrast))',
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',      // #14BDEA cyan
-          hover: 'hsl(var(--secondary-hover))',
-          contrast: 'hsl(var(--accent-contrast))',
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',         // #7767DA purple
-          hover: 'hsl(var(--accent-hover))',
-          contrast: 'hsl(var(--accent-contrast))',
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
-
-        // Semantic colors
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          hover: 'hsl(var(--destructive-hover))',
-          surface: '#401d1f',
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
         },
-        warning: 'hsl(var(--warning))',
-        success: 'hsl(var(--success))',
-
-        // UI elements
-        border: {
-          DEFAULT: 'hsl(var(--border))',
-          hover: 'hsl(var(--border-hover))',
-          active: 'hsl(var(--border-active))',
-        },
-        input: {
-          DEFAULT: 'hsl(var(--input))',
-          focus: 'hsl(var(--input-focus))',
-        },
-        ring: 'hsl(var(--ring))',
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          hover: 'hsl(var(--card-hover))',
-        },
-
-        // Elevation system
-        elev: {
-          1: 'hsl(var(--elev-1))',
-          2: 'hsl(var(--elev-2))',
-          3: 'hsl(var(--elev-3))',
-        },
-
-        // Auth system colors (for migration from auth-* CSS classes)
-        auth: {
-          // Backgrounds
-          bg: '#171719',          // Input/card background
-          'bg-hover': '#1F1F21',  // Hover state background
-
-          // Borders
-          border: '#333333',        // Default border
-          'border-hover': '#404040', // Hover border
-
-          // Text & Icons
-          text: 'rgba(255, 255, 255, 1)',
-          'text-muted': 'rgba(255, 255, 255, 0.85)',
-          placeholder: '#737373',
-          icon: 'rgba(255, 255, 255, 0.6)',
-          'icon-primary': '#C084FC', // Purple accent for icons
-
-          // Brand colors
-          primary: '#14BDEA',       // Cyan - links, focus
-          'primary-hover': '#17D1FF',
-          magenta: '#D417C8',       // Magenta - primary actions
-          'magenta-hover': '#E02DD8',
-
-          // Validation
-          error: '#EF4444',
-          'error-bg': 'rgba(239, 68, 68, 0.12)',
-          success: '#10B981',
-          warning: '#F59E0B',
-        },
-
-        // Subtle gray scale (Polar.sh inspired)
-        'gray-subtle': {
-          50: '#FAFAFA',  // Very light background
-          100: '#F5F5F5', // Card backgrounds, hover
-          200: '#E5E5E5', // Borders
-          300: '#D4D4D4', // Muted borders
-          600: '#737373', // Secondary text
-          700: '#525252', // Body text (dark)
-          800: '#404040', // Muted elements (dark)
-          900: '#262626', // Deep dark
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
       },
-      // Minimal - removed gradients per design system
-      // Custom font family
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'], // Primary font stack
-        geist: ['GeistSans', 'GeistSans Fallback', 'sans-serif'], // Geist font for navigation
-        // Add custom fonts:
-        // mono: ['Fira Code', 'monospace'],
-        // serif: ['Georgia', 'serif'],
-      },
-      // Polar.sh inspired font weights
-      fontWeight: {
-        thin: '200',
-        extralight: '200',
-        light: '300',
-        normal: '400',
-        medium: '500',
-        semibold: '600',
-        bold: '700',
-      },
-      letterSpacing: {
-        tighter: '-0.02em',
-        tight: '-0.01em',
-        normal: '0',
-        wide: '0.01em',
-        wider: '0.02em',
-        widest: '0.03em',
-      },
-      // Minimal shadow system (Polar.sh inspired)
-      boxShadow: {
-        subtle: '0 1px 2px rgba(0, 0, 0, 0.05)',
-        card: '0 2px 8px rgba(0, 0, 0, 0.08)',
-        hover: '0 4px 12px rgba(0, 0, 0, 0.12)',
-        modal: '0 8px 24px rgba(0, 0, 0, 0.15)',
-        // Thinner focus rings (1px instead of 3px)
-        focus: '0 0 0 1px rgba(20, 189, 234, 0.4)',
-        'focus-error': '0 0 0 1px rgba(220, 38, 38, 0.4)',
-        'focus-success': '0 0 0 1px rgba(5, 150, 105, 0.4)',
-      },
-      // Compact border radius (Polar.sh inspired)
       borderRadius: {
-        sm: '0.25rem',  // 4px - Small elements
-        DEFAULT: '0.5rem', // 8px - Standard (buttons, inputs)
-        md: '0.5rem', // 8px - Standard
-        lg: '0.75rem',   // 12px - Cards, modals
-        xl: '1rem',  // 16px - Large containers
-        '2xl': '1.5rem',  // 24px - Extra large
+        xl: "calc(var(--radius) + 4px)",
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
-      // Compact spacing scale
-      spacing: {
-        13: '3.25rem',
-        15: '3.75rem',
-        18: '4.5rem', // 72px - Large spacing
-      },
-      // Compact font sizes (Polar.sh inspired)
-      fontSize: {
-        'tiny': ['0.625rem', { lineHeight: '1.2' }],  // 10px
-        'xs': ['0.75rem', { lineHeight: '1.4' }],   // 12px
-        'sm': ['0.8125rem', { lineHeight: '1.4' }],   // 13px
-        'base': ['0.875rem', { lineHeight: '1.5' }],  // 14px
-        'md': ['0.9375rem', { lineHeight: '1.5' }],   // 15px
-        'lg': ['1rem', { lineHeight: '1.5' }],        // 16px
-        'xl': ['1.125rem', { lineHeight: '1.4' }],    // 18px
-        '2xl': ['1.25rem', { lineHeight: '1.4' }],    // 20px
-        '3xl': ['1.5rem', { lineHeight: '1.3' }],     // 24px
-        '4xl': ['2rem', { lineHeight: '1.2' }],       // 32px
-      },
-      transitionDuration: {
-        fast: '150ms',
-        base: '200ms',
-      },
-      transitionTimingFunction: {
-        out: 'cubic-bezier(.2,.8,.2,1)',
-      },
-      // Custom animations
-      animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out', // Fade in animation
-        'slide-up': 'slideUp 0.3s ease-out', // Slide up animation
-        'slide-down': 'slideDown 0.3s ease-out', // Slide down animation
-        'scale-in': 'scaleIn 0.2s ease-out', // Scale in animation
-      },
-      // Custom keyframes for animations
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
-        slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
-        slideDown: {
-          '0%': { transform: 'translateY(-10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        scaleIn: {
-          '0%': { transform: 'scale(0.95)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
-    // Complete theme override (uncomment to replace defaults entirely):
-    // colors: { /* custom colors only */ },
-    // spacing: { /* custom spacing only */ },
-    // screens: { /* custom breakpoints only */ },
   },
-
-  // Plugins extend Tailwind with additional utilities
-  plugins: [
-    // Popular plugins to consider:
-    // require('@tailwindcss/forms'),        // Better form styling
-    // require('@tailwindcss/typography'),   // Rich text styling
-    // require('@tailwindcss/aspect-ratio'), // Aspect ratio utilities
-    // require('@tailwindcss/container-queries'), // Container queries
-  ],
-
-  // Advanced configuration options:
-  // corePlugins: {
-  //   preflight: false,  // Disable Tailwind's base styles
-  // },
-  // prefix: 'tw-',      // Add prefix to all utilities
-  // important: true,    // Make all utilities !important
-  // separator: '_',     // Change separator (default is ':')
-  // safelist: [         // Always include these classes
-  //   'bg-red-500',
-  //   'text-3xl',
-  //   { pattern: /bg-(red|green|blue)-(100|200|300)/ }
-  // ],
+  plugins: [require("tailwindcss-animate")],
 }

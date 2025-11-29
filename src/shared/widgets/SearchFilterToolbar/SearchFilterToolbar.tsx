@@ -1,14 +1,20 @@
-import { Filter, RotateCcw } from 'lucide-react'
+import { Filter, RotateCcw, Search, X } from 'lucide-react'
 import React from 'react'
 
-import { Button } from '../../ui/Button'
-import { SearchInput } from '../../ui/SearchInput'
-import { ViewModeToggle } from '../../ui/ViewModeToggle'
-import type { ViewMode, ViewModeOption } from '../../ui/ViewModeToggle'
+import { Button } from '../../ui/shadcn/button'
+import { Input } from '../../ui/shadcn/input'
 import { Drawer } from '../Drawer'
 import { FilterChipsBar } from '../FilterChipsBar'
 
 import { useSearchFilterToolbarController } from './useSearchFilterToolbarController'
+
+export type ViewMode = 'grid' | 'list' | 'table'
+
+export interface ViewModeOption {
+  value: ViewMode
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+}
 
 export interface FilterField {
   id: string
@@ -28,7 +34,7 @@ export interface SearchFilterToolbarProps {
   searchQuery: string
   onSearchChange: (value: string) => void
   searchPlaceholder?: string
-  
+
   // Enhanced search features
   isSearching?: boolean
   onClearSearch?: () => void
@@ -36,21 +42,21 @@ export interface SearchFilterToolbarProps {
     total: number
     filtered: number
   }
-  
+
   // Filter functionality
   showFilters: boolean
   onToggleFilters: () => void
   filterFields?: FilterField[]
   onClearFilters?: () => void
-  
+
   // View mode functionality (optional)
   viewMode?: ViewMode
   onViewModeChange?: (mode: ViewMode) => void
   viewModeOptions?: ViewModeOption[]
-  
+
   // Styling
   className?: string
-  
+
   // Additional actions (optional)
   additionalActions?: React.ReactNode
 }
@@ -96,41 +102,66 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 {/* View Mode Toggle - First on left */}
                 {viewMode && onViewModeChange && viewModeOptions && (
-                  <div className="flex-shrink-0">
-                    <ViewModeToggle
-                      value={viewMode}
-                      onChange={onViewModeChange}
-                      options={viewModeOptions}
-                    />
+                  <div className="flex-shrink-0 inline-flex rounded-md border border-border bg-input p-1">
+                    {viewModeOptions.map((option) => {
+                      const Icon = option.icon
+                      return (
+                        <Button
+                          key={option.value}
+                          type="button"
+                          onClick={() => onViewModeChange(option.value)}
+                          variant={viewMode === option.value ? 'default' : 'ghost'}
+                          size="sm"
+                          className="gap-2"
+                        >
+                          <Icon className="h-4 w-4" />
+                          {option.label}
+                        </Button>
+                      )
+                    })}
                   </div>
                 )}
-                
+
                 {/* Search Input - Flexible middle section */}
-                <div className="flex-1 min-w-[200px] max-w-md">
-                  <SearchInput
+                <div className="flex-1 min-w-[200px] max-w-md relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
                     value={searchQuery}
-                    onChange={onSearchChange}
-                    onClear={onClearSearch}
+                    onChange={(e) => onSearchChange(e.target.value)}
                     placeholder={searchPlaceholder}
-                    isSearching={isSearching}
-                    className="w-full"
+                    className="pl-10 pr-10"
                   />
+                  {searchQuery && onClearSearch && (
+                    <Button
+                      type="button"
+                      onClick={onClearSearch}
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {isSearching && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    </div>
+                  )}
                 </div>
-                
+
                 {/* Filters Button */}
                 {filterFields.length > 0 && (
                   <Button
+                    type="button"
                     onClick={onToggleFilters}
                     variant="secondary"
-                    size="md"
-                    icon={Filter}
-                    iconPosition="left"
                   >
+                    <Filter className="mr-2 h-4 w-4" />
                     Filters
                   </Button>
                 )}
               </div>
-              
+
               {/* Right Section - Additional Actions stay at far right */}
               {additionalActions && (
                 <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
@@ -185,14 +216,13 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
         {onClearFilters && hasActiveFilters && (
           <div className="mt-6 pt-6 border-t border-[#1e1f22]">
             <Button
+              type="button"
               onClick={onClearFilters}
-              variant="danger"
-              size="md"
-              icon={RotateCcw}
-              iconPosition="left"
-              fullWidth
+              variant="destructive"
+              className="w-full"
               aria-label="Clear all filters"
             >
+              <RotateCcw className="mr-2 h-4 w-4" />
               Clear All Filters
             </Button>
           </div>

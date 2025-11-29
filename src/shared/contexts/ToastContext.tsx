@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
-import { createContext, useContext } from 'react'
+import { createContext, useCallback, useContext } from 'react'
 
-import { useToast } from '../hooks/useToast'
 import type { ToastType } from '../ui/Toast'
-import { Toast } from '../ui/Toast'
+
+import { toast } from '@/shared/hooks/use-toast'
 
 interface ToastContextValue {
   showToast: (type: ToastType, message: string, details?: Record<string, string>) => void
@@ -31,15 +31,41 @@ interface ToastProviderProps {
 }
 
 export const ToastProvider = ({ children }: ToastProviderProps) => {
-  const {
-    toast,
-    showToast,
-    showSuccess,
-    showError,
-    showWarning,
-    showInfo,
-    hideToast,
-  } = useToast()
+  const showToast = useCallback((type: ToastType, message: string, details?: Record<string, string>) => {
+    toast({
+      variant: type,
+      title: message,
+      description: details ? (
+        <div className="mt-2 space-y-1">
+          {Object.entries(details).map(([key, value]) => (
+            <div key={key} className="text-sm">
+              <span className="font-medium">{key}:</span> {value}
+            </div>
+          ))}
+        </div>
+      ) : undefined,
+    })
+  }, [])
+
+  const showSuccess = useCallback((message: string, details?: Record<string, string>) => {
+    showToast('success', message, details)
+  }, [showToast])
+
+  const showError = useCallback((message: string, details?: Record<string, string>) => {
+    showToast('error', message, details)
+  }, [showToast])
+
+  const showWarning = useCallback((message: string, details?: Record<string, string>) => {
+    showToast('warning', message, details)
+  }, [showToast])
+
+  const showInfo = useCallback((message: string, details?: Record<string, string>) => {
+    showToast('info', message, details)
+  }, [showToast])
+
+  const hideToast = useCallback(() => {
+    // Shadcn toast auto-dismisses, but we can provide a no-op for API compatibility
+  }, [])
 
   const value: ToastContextValue = {
     showToast,
@@ -53,14 +79,6 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      {/* Global Toast Component - positioned at top-right corner */}
-      <Toast
-        isVisible={toast.isVisible}
-        type={toast.type}
-        message={toast.message}
-        details={toast.details}
-        onClose={hideToast}
-      />
     </ToastContext.Provider>
   )
 }

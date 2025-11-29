@@ -1,9 +1,9 @@
-import { RotateCcw, Save } from 'lucide-react'
+import { RotateCcw, Save, Loader2 } from 'lucide-react'
 
 import { useOrganizationFormController } from '../hooks/useOrganizationFormController'
 
-import { Button } from '@/shared/ui/Button'
 import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
+import { Button } from '@/shared/ui/shadcn/button'
 import { OrganizationForm } from '@/shared/widgets/forms/OrganizationForm'
 
 interface OrganizationSettingsFormProps {
@@ -47,22 +47,27 @@ export const OrganizationSettingsForm = ({ className = '' }: OrganizationSetting
           <Button
             onClick={handleReset}
             disabled={isSaving || !isDirty}
-            icon={RotateCcw}
             variant="ghost"
-            size="md"
           >
+            <RotateCcw className="mr-2 h-4 w-4" />
             Reset
           </Button>
           <Button
             onClick={handleSave}
             disabled={!isDirty || isSaving}
-            isLoading={isSaving}
-            icon={Save}
-            iconPosition="left"
-            variant="primary"
-            size="md"
+            variant="default"
           >
-            {isSaving ? 'Saving...' : 'Save Changes'}
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Save Changes
+              </>
+            )}
           </Button>
         </div>
       </div>

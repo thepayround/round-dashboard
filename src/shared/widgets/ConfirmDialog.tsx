@@ -1,8 +1,15 @@
-import { AlertTriangle, Trash2, Info, CheckCircle, HelpCircle } from 'lucide-react'
+import { AlertTriangle, Trash2, Info, CheckCircle, HelpCircle, Loader2 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-import { Button } from '../ui/Button'
-import { Modal } from '../ui/Modal'
+import { Button } from '../ui/shadcn/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter
+} from '../ui/shadcn/dialog'
 
 interface ConfirmDialogProps {
   isOpen: boolean
@@ -64,41 +71,40 @@ export const ConfirmDialog = ({
   }
 
   const styles = getVariantStyles()
+  const Icon = _icon || styles.icon
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={title}
-      size="md"
-      centerInViewport
-    >
-      <div className="space-y-6">
-        {/* Message */}
-        <div className="space-y-4">
-          <p className="text-white/70 text-[15px] leading-relaxed">
-            {message}
-          </p>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <div className="flex items-center gap-2">
+            <Icon className="h-5 w-5" />
+            <DialogTitle>{title}</DialogTitle>
+          </div>
+          <DialogDescription asChild>
+            <div className="space-y-4 pt-2">
+              <p className="text-white/70 text-[15px] leading-relaxed">
+                {message}
+              </p>
 
-          {/* Details list if provided */}
-          {details && details.length > 0 && (
-            <ul className="space-y-2 ml-1">
-              {details.map((detail, index) => (
-                <li key={index} className="flex items-start gap-2 text-white/60 text-sm">
-                  <span className="text-white/60 mt-0.5">•</span>
-                  <span>{detail}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* Actions */}
-        <div className="flex justify-end gap-3 pt-2">
+              {/* Details list if provided */}
+              {details && details.length > 0 && (
+                <ul className="space-y-2 ml-1">
+                  {details.map((detail, index) => (
+                    <li key={index} className="flex items-start gap-2 text-white/60 text-sm">
+                      <span className="text-white/60 mt-0.5">•</span>
+                      <span>{detail}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
           <Button
             onClick={onClose}
             variant="ghost"
-            size="md"
             disabled={isLoading}
             className="text-white/70 hover:text-white hover:bg-white/5 font-medium px-6"
           >
@@ -106,16 +112,21 @@ export const ConfirmDialog = ({
           </Button>
           <Button
             onClick={onConfirm}
-            size="md"
-            isLoading={isLoading}
             disabled={isLoading}
             className={`${styles.buttonClass} px-6`}
           >
-            {confirmLabel}
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {confirmLabel}
+              </>
+            ) : (
+              confirmLabel
+            )}
           </Button>
-        </div>
-      </div>
-    </Modal>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

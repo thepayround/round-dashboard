@@ -13,7 +13,7 @@ import { LAYOUT_CONSTANTS } from '@/shared/layout/DashboardLayout/constants'
 import type { NavItem, TooltipState } from '@/shared/layout/DashboardLayout/types'
 import { apiClient } from '@/shared/services/apiClient'
 import type { User as AuthUser } from '@/shared/types/auth'
-import { Avatar } from '@/shared/ui'
+import { Avatar, AvatarFallback } from '@/shared/ui'
 
 interface UseDashboardLayoutControllerParams {
   navigationItems: NavItem[]
@@ -213,11 +213,11 @@ export const useDashboardLayoutController = ({
       const name = firstName && lastName ? `${firstName} ${lastName}` : firstName || lastName || 'User'
 
       return (
-        <Avatar
-          name={name}
-          size="sm"
-          shape="circle"
-        />
+        <Avatar className="h-8 w-8">
+          <AvatarFallback className="bg-primary/20 text-white text-xs">
+            {name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
+          </AvatarFallback>
+        </Avatar>
       )
     }
 

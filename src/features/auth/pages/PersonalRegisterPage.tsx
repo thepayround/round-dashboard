@@ -1,5 +1,6 @@
 ﻿import { motion } from 'framer-motion'
-import { User, Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react'
+import { User, Mail, Lock, AlertCircle, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 
@@ -9,11 +10,12 @@ import { usePersonalRegisterController } from '../hooks/usePersonalRegisterContr
 
 import { FacebookIcon } from '@/features/auth/components/icons/SocialIcons'
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
-import { FormInput } from '@/shared/ui'
-import { ActionButton } from '@/shared/ui/ActionButton'
 import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
 
 export const PersonalRegisterPage = () => {
   const navigate = useNavigate()
@@ -28,15 +30,11 @@ export const PersonalRegisterPage = () => {
 
   const { values, errors, handleChange, handleBlur } = form
   const { phoneData, phoneError, handlePhoneChange, handlePhoneBlur } = phone
+  const [showPassword, setShowPassword] = useState(false)
 
   return (
     <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-      </div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -51,7 +49,7 @@ export const PersonalRegisterPage = () => {
         {/* Centered Logo Above Form */}
         <AuthLogo />
 
-        <div className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
+        <div className="bg-white/[0.02] border border-border rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
           {/* Header */}
           <div className="text-center mb-6">
             <div className="gradient-header" />
@@ -71,50 +69,80 @@ export const PersonalRegisterPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 lg:space-y-4">
           {/* Name Fields Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormInput
-              id="firstName"
-              name="firstName"
-              label="First Name"
-              leftIcon={User}
-              value={values.firstName}
-              onChange={handleChange('firstName')}
-              onBlur={handleBlur('firstName')}
-              placeholder="John"
-              error={errors.firstName}
-              required
-              size="sm"
-            />
+            <div>
+              <Label htmlFor="firstName" className="text-white/90 text-sm mb-2 block">
+                First Name <span className="text-red-400">*</span>
+              </Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  value={values.firstName}
+                  onChange={handleChange('firstName')}
+                  onBlur={handleBlur('firstName')}
+                  placeholder="John"
+                  className="pl-10"
+                />
+              </div>
+              {errors.firstName && (
+                <p className="mt-1.5 text-sm text-red-400 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  {errors.firstName}
+                </p>
+              )}
+            </div>
 
-            <FormInput
-              id="lastName"
-              name="lastName"
-              label="Last Name"
-              leftIcon={User}
-              value={values.lastName}
-              onChange={handleChange('lastName')}
-              onBlur={handleBlur('lastName')}
-              placeholder="Doe"
-              error={errors.lastName}
-              required
-              size="sm"
-            />
+            <div>
+              <Label htmlFor="lastName" className="text-white/90 text-sm mb-2 block">
+                Last Name <span className="text-red-400">*</span>
+              </Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  value={values.lastName}
+                  onChange={handleChange('lastName')}
+                  onBlur={handleBlur('lastName')}
+                  placeholder="Doe"
+                  className="pl-10"
+                />
+              </div>
+              {errors.lastName && (
+                <p className="mt-1.5 text-sm text-red-400 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  {errors.lastName}
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Email Address */}
-          <FormInput
-            id="email"
-            type="email"
-            name="email"
-            label="Email Address"
-            leftIcon={Mail}
-            value={values.email}
-            onChange={handleChange('email')}
-            onBlur={handleBlur('email')}
-            placeholder="example@gmail.com"
-            error={errors.email}
-            required
-            size="sm"
-          />
+          <div>
+            <Label htmlFor="email" className="text-white/90 text-sm mb-2 block">
+              Email Address <span className="text-red-400">*</span>
+            </Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Input
+                id="email"
+                type="email"
+                name="email"
+                value={values.email}
+                onChange={handleChange('email')}
+                onBlur={handleBlur('email')}
+                placeholder="example@gmail.com"
+                className="pl-10"
+              />
+            </div>
+            {errors.email && (
+              <p className="mt-1.5 text-sm text-red-400 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {errors.email}
+              </p>
+            )}
+          </div>
 
           {/* Phone Number */}
           <div>
@@ -147,26 +175,41 @@ export const PersonalRegisterPage = () => {
 
           {/* Password */}
           <div>
-            <FormInput
-              id="password"
-              type="password"
-              name="password"
-              label="Password"
-              leftIcon={Lock}
-              value={values.password}
-              onChange={handleChange('password')}
-              onBlur={handleBlur('password')}
-              placeholder="Create a strong password"
-              error={errors.password}
-              required
-              size="sm"
-              passwordToggle
-            />
+            <Label htmlFor="password" className="text-white/90 text-sm mb-2 block">
+              Password <span className="text-red-400">*</span>
+            </Label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={values.password}
+                onChange={handleChange('password')}
+                onBlur={handleBlur('password')}
+                placeholder="Create a strong password"
+                className="pl-10 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/60 transition-colors"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="mt-1.5 text-sm text-red-400 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {errors.password}
+              </p>
+            )}
 
             {/* Password Strength Indicator */}
             {values.password && (
               <div className="mt-3">
-                <PasswordStrengthIndicator 
+                <PasswordStrengthIndicator
                   password={values.password}
                   showStrengthBar
                 />
@@ -185,17 +228,23 @@ export const PersonalRegisterPage = () => {
           </div>
 
           {/* Submit Button */}
-          <ActionButton
+          <Button
             type="submit"
-            label={isSubmitting ? 'Creating Account...' : 'Create Personal Account'}
-            disabled={!isFormReady}
-            icon={ArrowRight}
-            isLoading={isSubmitting}
-            size="md"
-            animated={false}
-            actionType="auth"
+            disabled={!isFormReady || isSubmitting}
             className="mt-6 md:mt-8 lg:mt-6 w-full"
-          />
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Creating Account...
+              </>
+            ) : (
+              <>
+                Create Personal Account
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
 
           {/* Divider */}
           <div className="relative flex items-center justify-center my-6 before:content-[''] before:flex-1 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/15 before:to-transparent before:mr-4 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-transparent after:via-white/15 after:to-transparent after:ml-4">

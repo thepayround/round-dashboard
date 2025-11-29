@@ -1,46 +1,46 @@
 /**
- * Shared UI surface area. Prefer importing directly from here instead of the
- * legacy '@/shared/components' barrel.
+ * Shared UI surface area - SHADCN ONLY
+ *
+ * IMPORTANT: Most components have been deleted to force pure Shadcn usage.
+ * Import directly from shadcn instead:
+ *
+ * import { Button } from '@/shared/ui/shadcn/button'
+ * import { Input } from '@/shared/ui/shadcn/input'
+ * import { Dialog } from '@/shared/ui/shadcn/dialog'
+ * etc.
  */
 
-export { Button, IconButton, PlainButton, RoundButton, UserButton } from './Button'
-export { ActionButton } from './ActionButton'
-export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from './Badge'
-export { Avatar, type AvatarProps, type AvatarSize, type AvatarShape } from './Avatar'
-export { LoadingSpinner, LoadingOverlay, type LoadingSpinnerProps, type LoadingOverlayProps, type SpinnerSize, type SpinnerColor } from './LoadingSpinner'
-export { EmptyState, type EmptyStateProps } from './EmptyState'
-export { Alert, type AlertProps, type AlertVariant } from './Alert'
-export { AddressFormGroup, type AddressFormGroupProps, type Address } from './AddressFormGroup'
-export { IconBox, type IconBoxProps, type IconBoxSize, type IconBoxColor } from './IconBox'
-export { AuthInput } from './AuthInput'
+// Keep only these specialized components
+export { AddressFormGroup, type Address } from './AddressFormGroup'
 export { AuthLogo } from './AuthLogo'
 export { WhiteLogo } from './WhiteLogo'
-export { Card, ActionCard } from './Card'
-export { Checkbox } from './Checkbox'
-export { Toggle, type ToggleProps } from './Toggle'
-export { Input } from './Input'
-export { Textarea } from './Textarea'
-export { RadioGroup } from './RadioGroup'
-export { Modal } from './Modal'
-export { SearchInput } from './SearchInput'
-export { SectionHeader, type SectionHeaderProps } from './SectionHeader'
+export { DataTable } from './DataTable/DataTable'
+export { EmptyState, type EmptyStateProps } from './EmptyState'
+export { FileInput, type FileInputProps } from './FileInput'
+export { LoadingSpinner, type LoadingSpinnerProps } from './LoadingSpinner'
 export { PageHeader, type PageHeaderProps } from './PageHeader'
-export { ViewModeToggle } from './ViewModeToggle'
-export type { ViewMode, ViewModeOption } from './ViewModeToggle'
 export { Pagination } from './Pagination'
 export { PasswordStrengthIndicator } from './PasswordStrengthIndicator'
-export { Toast } from './Toast'
 export { PhoneInput } from './PhoneInput'
-export { PhoneDisplay } from './PhoneDisplay'
-export type { PhoneDisplayProps, CountryInfo } from './PhoneDisplay'
-export { FormInput } from './FormInput'
-export { FileInput, type FileInputProps } from './FileInput'
-export { NumberInput, type NumberInputProps } from './NumberInput'
-export { DateInput, type DateInputProps } from './DateInput'
-export { TimeInput, type TimeInputProps } from './TimeInput'
-export { MaskedInput, type MaskedInputProps, type MaskType } from './MaskedInput'
-export { Autocomplete, type AutocompleteProps, type AutocompleteSuggestion } from './Autocomplete'
-export { ApiDropdown, countryDropdownConfig, currencyDropdownConfig, timezoneDropdownConfig, type ApiDropdownConfig, type ApiDropdownOption } from './ApiDropdown'
-export { UiDropdown, type UiDropdownOption } from './UiDropdown'
-export { dropdownStyles, getOptionClasses } from './dropdown-styles.config'
-export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, SortableTableHead } from './Table'
+export { PhoneDisplay, type PhoneDisplayProps, type CountryInfo } from './PhoneDisplay'
+export { Toast } from './Toast'
+
+// Re-export commonly used Shadcn components for convenience
+export { Button } from './shadcn/button'
+export { Input } from './shadcn/input'
+export { Badge, type BadgeProps } from './shadcn/badge'
+export { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from './shadcn/card'
+export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from './shadcn/dialog'
+export { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './shadcn/select'
+export { Switch } from './shadcn/switch'
+export { Checkbox } from './shadcn/checkbox'
+export { Label } from './shadcn/label'
+export { Textarea } from './shadcn/textarea'
+export { Avatar, AvatarImage, AvatarFallback } from './shadcn/avatar'
+export { Skeleton } from './shadcn/skeleton'
+export { Alert, AlertTitle, AlertDescription } from './shadcn/alert'
+export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption } from './shadcn/table'
+export { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from './shadcn/form'
+
+// Type exports for compatibility
+export type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline'

@@ -45,7 +45,7 @@
 import { AlertCircle, Upload, X, File, Eye, Download } from 'lucide-react'
 import React, { useRef, useState, useCallback } from 'react'
 
-import { Button } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/shadcn/button'
 import { cn } from '@/shared/utils/cn'
 
 export interface FileInputProps {
@@ -326,33 +326,30 @@ export const FileInput: React.FC<FileInputProps> = ({
                   {onPreview && (
                     <Button
                       variant="ghost"
-                      icon={Eye}
-                      iconPosition="left"
                       size="sm"
                       onClick={handlePreview}
                     >
+                      <Eye className="mr-2 h-4 w-4" />
                       Preview
                     </Button>
                   )}
                   {onDownload && (
                     <Button
                       variant="ghost"
-                      icon={Download}
-                      iconPosition="left"
                       size="sm"
                       onClick={handleDownload}
                     >
+                      <Download className="mr-2 h-4 w-4" />
                       Download
                     </Button>
                   )}
                   <Button
-                    variant="danger"
-                    icon={X}
-                    iconPosition="left"
+                    variant="destructive"
                     size="sm"
                     onClick={handleRemove}
                     disabled={disabled}
                   >
+                    <X className="mr-2 h-4 w-4" />
                     Remove
                   </Button>
                 </div>

@@ -17,7 +17,7 @@ export const ProtectedRoute = ({ children, requireOnboarding = false }: Protecte
   // Show loading spinner while checking authentication
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -29,7 +29,7 @@ export const ProtectedRoute = ({ children, requireOnboarding = false }: Protecte
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-              className="w-12 h-12 border-[3px] border-white/10 border-t-primary rounded-full"
+              className="w-12 h-12 border-[3px] border-border border-t-primary rounded-full"
             />
           </div>
 

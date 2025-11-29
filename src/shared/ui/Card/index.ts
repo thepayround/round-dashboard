@@ -1,6 +1,0 @@
-export { Card } from './Card'
-export type { CardProps } from './Card'
-export { CardHeader } from './Card.Header'
-export { CardContent } from './Card.Content'
-export { CardFooter } from './Card.Footer'
-export { ActionCard } from './ActionCard'

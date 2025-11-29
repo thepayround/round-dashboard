@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
+import { ArrowLeft, AlertCircle, ArrowRight, CheckCircle, Loader2 } from 'lucide-react'
 import React from 'react'
 
 import { TabNavigation } from '../components/TabNavigation'
@@ -7,9 +7,7 @@ import { getStepConfig } from '../config/stepsConfig'
 import { useGetStartedController } from '../hooks/useGetStartedController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
-import { LoadingSpinner } from '@/shared/ui'
-import { ActionButton } from '@/shared/ui/ActionButton'
-import { Button } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/shadcn/button'
 
 export const GetStartedPage = () => {
   const {
@@ -51,8 +49,9 @@ export const GetStartedPage = () => {
 
       if (shouldShowLoading) {
         return (
-          <div className="flex items-center justify-center py-12">
-            <LoadingSpinner size="lg" color="secondary" label={`Loading ${stepConfig.title.toLowerCase()} data...`} className="text-white/60" />
+          <div className="flex flex-col items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
+            <p className="text-sm text-fg-muted">Loading {stepConfig.title.toLowerCase()} data...</p>
           </div>
         )
       }
@@ -149,24 +148,25 @@ export const GetStartedPage = () => {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
             {!isFirstStep() ? (
-              <Button onClick={handleBack} variant="ghost" icon={ArrowLeft} iconPosition="left" size="sm">
+              <Button onClick={handleBack} variant="ghost" size="sm" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
                 Back
               </Button>
             ) : (
               <div />
             )}
 
-            <ActionButton
-              label={getButtonText()}
+            <Button
               onClick={handleNext}
               disabled={!isStepValid(currentStep) || isCompleting}
-              variant={isLastStep() ? 'success' : 'primary'}
-              icon={isLastStep() ? CheckCircle : ArrowRight}
-              isLoading={isCompleting}
-              animated={false}
-              actionType="navigation"
+              variant={isLastStep() ? 'default' : 'default'}
               size="sm"
-            />
+              className="gap-2"
+            >
+              {isCompleting && <Loader2 className="h-4 w-4 animate-spin" />}
+              {getButtonText()}
+              {!isCompleting && (isLastStep() ? <CheckCircle className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />)}
+            </Button>
           </motion.div>
         </div>
       </div>

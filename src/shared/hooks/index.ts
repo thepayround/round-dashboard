@@ -14,7 +14,6 @@ export {
 
 // Existing hooks
 export { useAuth } from './useAuth'
-export { useToast } from './useToast'
 export { useCurrency } from './useCurrency'
 export { useAutoSave } from './useAutoSave'
 export { useDebouncedSearch } from './useDebouncedSearch'

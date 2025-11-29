@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion'
-import { Mail, ArrowLeft, AlertCircle, ArrowRight } from 'lucide-react'
+import { Mail, ArrowLeft, AlertCircle, ArrowRight, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { useAsyncAction, useForm } from '@/shared/hooks'
 import { apiClient } from '@/shared/services/apiClient'
-import { Input } from '@/shared/ui'
-import { ActionButton } from '@/shared/ui/ActionButton'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
 import { validators, handleApiError } from '@/shared/utils'
 
 export const ResendConfirmationPage = () => {
@@ -58,11 +59,6 @@ export const ResendConfirmationPage = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-      </div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -72,7 +68,7 @@ export const ResendConfirmationPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150"
+        className="bg-white/[0.02] border border-border rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150"
       >
         {/* Header */}
         <div className="text-center mb-10">
@@ -120,31 +116,48 @@ export const ResendConfirmationPage = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <Input
-            id="email"
-            label="Email Address"
-            leftIcon={Mail}
-            type="email"
-            name="email"
-            value={values.email}
-            onChange={handleChange('email')}
-            onBlur={handleBlur('email')}
-            placeholder="Enter your email"
-            error={errors.email}
-            required
-          />
+          <div>
+            <Label htmlFor="email" className="text-white/90 text-sm mb-2 block">
+              Email Address <span className="text-red-400">*</span>
+            </Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Input
+                id="email"
+                type="email"
+                name="email"
+                value={values.email}
+                onChange={handleChange('email')}
+                onBlur={handleBlur('email')}
+                placeholder="Enter your email"
+                className="pl-10"
+              />
+            </div>
+            {errors.email && (
+              <p className="mt-1.5 text-sm text-red-400 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {errors.email}
+              </p>
+            )}
+          </div>
 
-          <ActionButton
+          <Button
             type="submit"
-            label={isSubmitting ? 'Sending...' : 'Send Confirmation Email'}
             disabled={!isFormValid || isSubmitting}
-            icon={ArrowRight}
-            isLoading={isSubmitting}
-            size="md"
-            animated={false}
-            actionType="auth"
             className="w-full"
-          />
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              <>
+                Send Confirmation Email
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
         </form>
 
         {/* Back to Login */}

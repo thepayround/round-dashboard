@@ -2,8 +2,8 @@
 import { Lock, Eye, AlertTriangle, Key, Users } from 'lucide-react'
 import React from 'react'
 
-import { Button } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
 
 
 export const SecuritySection: React.FC = () => (
@@ -26,7 +26,7 @@ export const SecuritySection: React.FC = () => (
       </div>
 
       {/* Security Policies */}
-      <Card animate={false} padding="lg">
+      <Card className="p-6">
         <div className="flex items-center gap-4 mb-6">
           <div className="p-2 bg-primary/20 rounded-lg">
             <Lock className="w-5 h-5 text-primary" />
@@ -38,7 +38,7 @@ export const SecuritySection: React.FC = () => (
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card variant="nested" padding="lg">
+          <Card className="p-6 bg-white/5">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Key className="w-4 h-4 text-blue-400" />
@@ -50,16 +50,12 @@ export const SecuritySection: React.FC = () => (
               </div>
             </div>
             <p className="text-xs text-gray-400 mb-4">Require 2FA for all organization members</p>
-            <Button
-              variant="primary"
-              size="sm"
-              fullWidth
-            >
+            <Button variant="default" size="sm" className="w-full">
               Enable 2FA
             </Button>
           </Card>
 
-          <Card variant="nested" padding="lg">
+          <Card className="p-6 bg-white/5">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-success" />
@@ -71,11 +67,7 @@ export const SecuritySection: React.FC = () => (
               </div>
             </div>
             <p className="text-xs text-gray-400 mb-4">Single Sign-On with Google Workspace</p>
-            <Button
-              variant="ghost"
-              size="sm"
-              fullWidth
-            >
+            <Button variant="ghost" size="sm" className="w-full">
               Configure SSO
             </Button>
           </Card>
@@ -83,7 +75,7 @@ export const SecuritySection: React.FC = () => (
       </Card>
 
       {/* Audit Logs */}
-      <Card animate={false} padding="lg">
+      <Card className="p-6">
         <div className="flex items-center gap-4 mb-6">
           <div className="p-2 bg-primary/20 rounded-lg">
             <Eye className="w-5 h-5 text-secondary" />

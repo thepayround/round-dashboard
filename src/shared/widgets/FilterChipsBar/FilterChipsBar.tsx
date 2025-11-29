@@ -4,7 +4,7 @@ import React from 'react'
 
 import { FilterChip } from '../FilterChip'
 
-import { Button } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/shadcn/button'
 
 export interface ActiveFilter {
   id: string
@@ -40,7 +40,7 @@ export const FilterChipsBar: React.FC<FilterChipsBarProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       className={`flex flex-wrap items-center gap-2 p-4
-                 bg-[#171719] border border-[#1e1f22] rounded-lg
+                 bg-input border border-[#1e1f22] rounded-lg
                  ${className}`}
     >
       <span className="text-sm text-white/60 mr-1">Active filters:</span>
@@ -59,13 +59,11 @@ export const FilterChipsBar: React.FC<FilterChipsBarProps> = ({
       {onClearAll && filters.length > 0 && (
         <Button
           onClick={onClearAll}
-          variant="danger"
-          size="md"
-          icon={RotateCcw}
-          iconPosition="left"
+          variant="destructive"
           className="ml-2"
           aria-label="Clear all filters"
         >
+          <RotateCcw className="mr-2 h-4 w-4" />
           Clear All
         </Button>
       )}

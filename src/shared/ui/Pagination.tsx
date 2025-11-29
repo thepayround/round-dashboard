@@ -1,8 +1,9 @@
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
 import React from 'react'
 
-import { Button, IconButton } from './Button'
-import { Select } from './Select'
+import { Button } from './shadcn/button'
+import { Label } from './shadcn/label'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './shadcn/select'
 
 interface PaginationProps {
   currentPage: number
@@ -82,7 +83,7 @@ const Pagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <div className={`flex items-center justify-between border-t border-white/10 px-6 py-4 ${className}`}>
+    <div className={`flex items-center justify-between border-t border-border px-6 py-4 ${className}`}>
       {/* Items info and per-page selector */}
       <div className="flex items-center space-x-6">
         <div className="text-sm text-white/70">
@@ -92,19 +93,18 @@ const Pagination: React.FC<PaginationProps> = ({
 
         {showItemsPerPage && (
           <div className="flex items-center space-x-2">
-            <label htmlFor="items-per-page" className="text-sm text-white/70 whitespace-nowrap">Items per page:</label>
-            <Select
-              id="items-per-page"
-              value={itemsPerPage}
-              onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-              size="md"
-              className="w-20"
-            >
-              {pageSizeOptions.map(size => (
-                <option key={size} value={size} className="bg-[#0a0a0a]">
-                  {size}
-                </option>
-              ))}
+            <Label htmlFor="items-per-page" className="text-sm text-white/70 whitespace-nowrap">Items per page:</Label>
+            <Select value={String(itemsPerPage)} onValueChange={(value) => onItemsPerPageChange(Number(value))}>
+              <SelectTrigger id="items-per-page" className="w-20">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {pageSizeOptions.map(size => (
+                  <SelectItem key={size} value={String(size)}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           </div>
         )}
@@ -119,14 +119,15 @@ const Pagination: React.FC<PaginationProps> = ({
 
           {/* First page button */}
           {showGoToFirst && (
-            <IconButton
+            <Button
               onClick={() => onPageChange(1)}
               disabled={currentPage === 1}
-              icon={ChevronsLeft}
               variant="ghost"
-              size="lg"
+              size="icon"
               aria-label="First page"
-            />
+            >
+              <ChevronsLeft />
+            </Button>
           )}
 
           {/* Previous page button */}
@@ -134,11 +135,10 @@ const Pagination: React.FC<PaginationProps> = ({
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
             variant="ghost"
-            size="md"
-            icon={ChevronLeft}
-            iconPosition="left"
+            size="sm"
             className="px-3"
           >
+            <ChevronLeft />
             <span className="hidden sm:inline">Previous</span>
           </Button>
 
@@ -151,8 +151,8 @@ const Pagination: React.FC<PaginationProps> = ({
                 ) : (
                   <Button
                     onClick={() => onPageChange(page as number)}
-                    variant={currentPage === page ? 'primary' : 'ghost'}
-                    size="md"
+                    variant={currentPage === page ? 'default' : 'ghost'}
+                    size="sm"
                     className="w-10 px-0"
                   >
                     {page}
@@ -167,24 +167,24 @@ const Pagination: React.FC<PaginationProps> = ({
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             variant="ghost"
-            size="md"
-            icon={ChevronRight}
-            iconPosition="right"
+            size="sm"
             className="px-3"
           >
             <span className="hidden sm:inline">Next</span>
+            <ChevronRight />
           </Button>
 
           {/* Last page button */}
           {showGoToLast && (
-            <IconButton
+            <Button
               onClick={() => onPageChange(totalPages)}
               disabled={currentPage === totalPages}
-              icon={ChevronsRight}
               variant="ghost"
-              size="lg"
+              size="icon"
               aria-label="Last page"
-            />
+            >
+              <ChevronsRight />
+            </Button>
           )}
         </div>
       )}

@@ -10,7 +10,6 @@ import {
   type UseDebouncedSearchReturn,
 } from '@/shared/hooks/useDebouncedSearch'
 import { useRoundAccount } from '@/shared/hooks/useRoundAccount'
-import { teamRoleDropdownConfig } from '@/shared/ui/ApiDropdown'
 import type { FilterField } from '@/shared/widgets/SearchFilterToolbar'
 
 
@@ -119,7 +118,7 @@ export const useTeamManagementController = (): UseTeamManagementControllerReturn
   const roleFilterOptions = useMemo(
     () => [
       { id: 'all', name: 'All Roles', value: 'all' },
-      ...teamRoleDropdownConfig.mapToOptions(ROLE_FILTER_FALLBACKS).map(option => ({
+      ...ROLE_FILTER_FALLBACKS.map((option: { value: UserRole; label: string; description: string }) => ({
         id: option.value,
         name: option.label,
         value: option.value,

@@ -1,11 +1,14 @@
 import { motion } from 'framer-motion'
-import { MapPin, Building, AlertCircle, Truck } from 'lucide-react'
+import { MapPin, Building, Truck } from 'lucide-react'
 
 import { useBillingAddressFormController } from '../hooks/useBillingAddressFormController'
 
+import { useCountries } from '@/shared/hooks/api/useCountryCurrency'
 import type { BillingAddress } from '@/shared/types/business'
-import { Input, Toggle } from '@/shared/ui'
-import { ApiDropdown, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
+import { Switch } from '@/shared/ui/shadcn/switch'
 import type { ValidationError } from '@/shared/utils/validation'
 
 
@@ -92,6 +95,8 @@ export const AddressForm = ({
     showShipping,
   })
 
+  const { data: countries, isLoading: countriesLoading } = useCountries()
+
   const showShippingEnabled = resolvedShowShipping
   const handleInputBlur = (field: keyof BillingAddress, value: string) => {
     handleFieldBlur(field, value)
@@ -130,95 +135,137 @@ export const AddressForm = ({
         {/* Billing Address Fields */}
         <div className="space-y-6">
           {/* Street Address */}
-          <Input
-            id="billing-street"
-            label={`Street Address${!isOptional ? ' *' : ''}`}
-            leftIcon={MapPin}
-            type="text"
-            value={currentBillingAddress.street}
-            onChange={e => handleAddressChange('billing', 'street', e.target.value)}
-            onBlur={e => handleInputBlur('street', e.target.value)}
-            placeholder="123 Main Street"
-            error={hasBillingErrors('street') ? getBillingError('street') : undefined}
-            required={!isOptional}
-          />
+          <div className="space-y-2">
+            <Label htmlFor="billing-street">
+              Street Address{!isOptional && <span className="text-destructive"> *</span>}
+            </Label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                id="billing-street"
+                type="text"
+                value={currentBillingAddress.street}
+                onChange={e => handleAddressChange('billing', 'street', e.target.value)}
+                onBlur={e => handleInputBlur('street', e.target.value)}
+                placeholder="123 Main Street"
+                className="pl-10"
+                required={!isOptional}
+              />
+            </div>
+            {hasBillingErrors('street') && (
+              <p className="text-sm text-destructive">{getBillingError('street')}</p>
+            )}
+          </div>
 
           {/* Street Address 2 */}
-          <Input
-            id="billing-street2"
-            label="Street Address 2"
-            leftIcon={Building}
-            type="text"
-            value={currentBillingAddress.street2 ?? ''}
-            onChange={e => handleAddressChange('billing', 'street2', e.target.value)}
-            placeholder="Apartment, suite, etc."
-          />
+          <div className="space-y-2">
+            <Label htmlFor="billing-street2">Street Address 2</Label>
+            <div className="relative">
+              <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                id="billing-street2"
+                type="text"
+                value={currentBillingAddress.street2 ?? ''}
+                onChange={e => handleAddressChange('billing', 'street2', e.target.value)}
+                placeholder="Apartment, suite, etc."
+                className="pl-10"
+              />
+            </div>
+          </div>
 
           {/* City & State Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              id="billing-city"
-              label={`City${!isOptional ? ' *' : ''}`}
-              leftIcon={Building}
-              type="text"
-              value={currentBillingAddress.city}
-              onChange={e => handleAddressChange('billing', 'city', e.target.value)}
-              onBlur={e => handleInputBlur('city', e.target.value)}
-              placeholder="New York"
-              error={hasBillingErrors('city') ? getBillingError('city') : undefined}
-              required={!isOptional}
-            />
+            <div className="space-y-2">
+              <Label htmlFor="billing-city">
+                City{!isOptional && <span className="text-destructive"> *</span>}
+              </Label>
+              <div className="relative">
+                <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="billing-city"
+                  type="text"
+                  value={currentBillingAddress.city}
+                  onChange={e => handleAddressChange('billing', 'city', e.target.value)}
+                  onBlur={e => handleInputBlur('city', e.target.value)}
+                  placeholder="New York"
+                  className="pl-10"
+                  required={!isOptional}
+                />
+              </div>
+              {hasBillingErrors('city') && (
+                <p className="text-sm text-destructive">{getBillingError('city')}</p>
+              )}
+            </div>
 
-            <Input
-              id="billing-state"
-              label={`State/Province${!isOptional ? ' *' : ''}`}
-              leftIcon={MapPin}
-              type="text"
-              value={currentBillingAddress.state}
-              onChange={e => handleAddressChange('billing', 'state', e.target.value)}
-              onBlur={e => handleInputBlur('state', e.target.value)}
-              placeholder="NY"
-              error={hasBillingErrors('state') ? getBillingError('state') : undefined}
-              required={!isOptional}
-            />
+            <div className="space-y-2">
+              <Label htmlFor="billing-state">
+                State/Province{!isOptional && <span className="text-destructive"> *</span>}
+              </Label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="billing-state"
+                  type="text"
+                  value={currentBillingAddress.state}
+                  onChange={e => handleAddressChange('billing', 'state', e.target.value)}
+                  onBlur={e => handleInputBlur('state', e.target.value)}
+                  placeholder="NY"
+                  className="pl-10"
+                  required={!isOptional}
+                />
+              </div>
+              {hasBillingErrors('state') && (
+                <p className="text-sm text-destructive">{getBillingError('state')}</p>
+              )}
+            </div>
           </div>
 
           {/* ZIP Code & Country Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              id="billing-zipCode"
-              label={`ZIP/Postal Code${!isOptional ? ' *' : ''}`}
-              leftIcon={MapPin}
-              type="text"
-              value={currentBillingAddress.zipCode}
-              onChange={e => handleAddressChange('billing', 'zipCode', e.target.value)}
-              onBlur={e => handleInputBlur('zipCode', e.target.value)}
-              placeholder="10001"
-              error={hasBillingErrors('zipCode') ? getBillingError('zipCode') : undefined}
-              required={!isOptional}
-            />
+            <div className="space-y-2">
+              <Label htmlFor="billing-zipCode">
+                ZIP/Postal Code{!isOptional && <span className="text-destructive"> *</span>}
+              </Label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="billing-zipCode"
+                  type="text"
+                  value={currentBillingAddress.zipCode}
+                  onChange={e => handleAddressChange('billing', 'zipCode', e.target.value)}
+                  onBlur={e => handleInputBlur('zipCode', e.target.value)}
+                  placeholder="10001"
+                  className="pl-10"
+                  required={!isOptional}
+                />
+              </div>
+              {hasBillingErrors('zipCode') && (
+                <p className="text-sm text-destructive">{getBillingError('zipCode')}</p>
+              )}
+            </div>
 
-            <div>
-              <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                Country {!isOptional && '*'}
-              </span>
-              <ApiDropdown
-                config={countryDropdownConfig}
+            <div className="space-y-2">
+              <Label htmlFor="billing-country">
+                Country{!isOptional && <span className="text-destructive"> *</span>}
+              </Label>
+              <Select
                 value={currentBillingAddress.country}
-                onSelect={value => handleAddressChange('billing', 'country', value)}
-                onClear={() => handleAddressChange('billing', 'country', '')}
-                error={hasBillingErrors('country')}
-                allowClear={isOptional}
-              />
+                onValueChange={value => handleAddressChange('billing', 'country', value)}
+                disabled={countriesLoading}
+              >
+                <SelectTrigger id="billing-country">
+                  <SelectValue placeholder={countriesLoading ? 'Loading countries...' : 'Select country'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {countries.map(country => (
+                    <SelectItem key={country.countryCodeAlpha2} value={country.countryCodeAlpha2}>
+                      {country.countryName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {hasBillingErrors('country') && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 flex items-center space-x-2 text-auth-error font-medium text-sm"
-                >
-                  <AlertCircle className="w-4 h-4" />
-                  <span>{getBillingError('country')}</span>
-                </motion.div>
+                <p className="text-sm text-destructive">{getBillingError('country')}</p>
               )}
             </div>
           </div>
@@ -235,14 +282,17 @@ export const AddressForm = ({
               <span>Shipping Address</span>
             </h3>
 
-            <Toggle
-              label="Same as billing"
-              checked={sameAsBilling}
-              onChange={(e) => handleSameAsBillingToggle(e.target.checked)}
-              size="lg"
-              color="cyan"
-              aria-label="Use Billing as Shipping Address"
-            />
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="same-as-billing" className="text-sm">
+                Same as billing
+              </Label>
+              <Switch
+                id="same-as-billing"
+                checked={sameAsBilling}
+                onCheckedChange={handleSameAsBillingToggle}
+                aria-label="Use Billing as Shipping Address"
+              />
+            </div>
           </div>
 
           {/* Shipping Address Fields or Same as Billing Message */}
@@ -261,77 +311,119 @@ export const AddressForm = ({
           ) : (
             <div className="space-y-6">
               {/* Shipping Street Address */}
-              <Input
-                id="shipping-street"
-                label={`Street Address${!isOptional ? ' *' : ''}`}
-                leftIcon={MapPin}
-                type="text"
-                value={currentShippingAddress.street}
-                onChange={e => handleAddressChange('shipping', 'street', e.target.value)}
-                placeholder="123 Main Street"
-                required={!isOptional}
-              />
+              <div className="space-y-2">
+                <Label htmlFor="shipping-street">
+                  Street Address{!isOptional && <span className="text-destructive"> *</span>}
+                </Label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="shipping-street"
+                    type="text"
+                    value={currentShippingAddress.street}
+                    onChange={e => handleAddressChange('shipping', 'street', e.target.value)}
+                    placeholder="123 Main Street"
+                    className="pl-10"
+                    required={!isOptional}
+                  />
+                </div>
+              </div>
 
               {/* Shipping Street Address 2 */}
-              <Input
-                id="shipping-street2"
-                label="Street Address 2"
-                leftIcon={Building}
-                type="text"
-                value={currentShippingAddress.street2 ?? ''}
-                onChange={e => handleAddressChange('shipping', 'street2', e.target.value)}
-                placeholder="Apartment, suite, etc."
-              />
+              <div className="space-y-2">
+                <Label htmlFor="shipping-street2">Street Address 2</Label>
+                <div className="relative">
+                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="shipping-street2"
+                    type="text"
+                    value={currentShippingAddress.street2 ?? ''}
+                    onChange={e => handleAddressChange('shipping', 'street2', e.target.value)}
+                    placeholder="Apartment, suite, etc."
+                    className="pl-10"
+                  />
+                </div>
+              </div>
 
               {/* Shipping City & State Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  id="shipping-city"
-                  label={`City${!isOptional ? ' *' : ''}`}
-                  leftIcon={Building}
-                  type="text"
-                  value={currentShippingAddress.city}
-                  onChange={e => handleAddressChange('shipping', 'city', e.target.value)}
-                  placeholder="New York"
-                  required={!isOptional}
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="shipping-city">
+                    City{!isOptional && <span className="text-destructive"> *</span>}
+                  </Label>
+                  <div className="relative">
+                    <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="shipping-city"
+                      type="text"
+                      value={currentShippingAddress.city}
+                      onChange={e => handleAddressChange('shipping', 'city', e.target.value)}
+                      placeholder="New York"
+                      className="pl-10"
+                      required={!isOptional}
+                    />
+                  </div>
+                </div>
 
-                <Input
-                  id="shipping-state"
-                  label={`State/Province${!isOptional ? ' *' : ''}`}
-                  leftIcon={MapPin}
-                  type="text"
-                  value={currentShippingAddress.state}
-                  onChange={e => handleAddressChange('shipping', 'state', e.target.value)}
-                  placeholder="NY"
-                  required={!isOptional}
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="shipping-state">
+                    State/Province{!isOptional && <span className="text-destructive"> *</span>}
+                  </Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="shipping-state"
+                      type="text"
+                      value={currentShippingAddress.state}
+                      onChange={e => handleAddressChange('shipping', 'state', e.target.value)}
+                      placeholder="NY"
+                      className="pl-10"
+                      required={!isOptional}
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Shipping ZIP Code & Country Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  id="shipping-zipCode"
-                  label={`ZIP/Postal Code${!isOptional ? ' *' : ''}`}
-                  leftIcon={MapPin}
-                  type="text"
-                  value={currentShippingAddress.zipCode}
-                  onChange={e => handleAddressChange('shipping', 'zipCode', e.target.value)}
-                  placeholder="10001"
-                  required={!isOptional}
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="shipping-zipCode">
+                    ZIP/Postal Code{!isOptional && <span className="text-destructive"> *</span>}
+                  </Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="shipping-zipCode"
+                      type="text"
+                      value={currentShippingAddress.zipCode}
+                      onChange={e => handleAddressChange('shipping', 'zipCode', e.target.value)}
+                      placeholder="10001"
+                      className="pl-10"
+                      required={!isOptional}
+                    />
+                  </div>
+                </div>
 
-                <div>
-                  <span className="block text-sm font-normal text-white/90 mb-2 tracking-tight">
-                    Country {!isOptional && '*'}
-                  </span>
-                  <ApiDropdown
-                    config={countryDropdownConfig}
+                <div className="space-y-2">
+                  <Label htmlFor="shipping-country">
+                    Country{!isOptional && <span className="text-destructive"> *</span>}
+                  </Label>
+                  <Select
                     value={currentShippingAddress.country}
-                    onSelect={value => handleAddressChange('shipping', 'country', value)}
-                    onClear={() => handleAddressChange('shipping', 'country', '')}
-                    allowClear={isOptional}
-                  />
+                    onValueChange={value => handleAddressChange('shipping', 'country', value)}
+                    disabled={countriesLoading}
+                  >
+                    <SelectTrigger id="shipping-country">
+                      <SelectValue placeholder={countriesLoading ? 'Loading countries...' : 'Select country'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map(country => (
+                        <SelectItem key={country.countryCodeAlpha2} value={country.countryCodeAlpha2}>
+                          {country.countryName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>

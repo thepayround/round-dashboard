@@ -2,8 +2,8 @@
 import { CreditCard, Calendar, DollarSign, FileText, TrendingUp } from 'lucide-react'
 import React from 'react'
 
-import { Button } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
 
 
 export const BillingSection: React.FC = () => (
@@ -26,7 +26,7 @@ export const BillingSection: React.FC = () => (
       </div>
 
       {/* Current Plan */}
-      <Card animate={false} padding="lg">
+      <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <div className="p-2 bg-primary/20 rounded-lg">
@@ -37,16 +37,13 @@ export const BillingSection: React.FC = () => (
               <p className="text-xs text-gray-400">Your active subscription</p>
             </div>
           </div>
-          <Button
-            variant="primary"
-            size="sm"
-          >
+          <Button variant="default">
             Upgrade Plan
           </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card variant="nested" padding="lg">
+          <Card className="p-6 bg-white/5">
             <div className="flex items-center gap-2 mb-2">
               <DollarSign className="w-4 h-4 text-success" />
               <span className="text-xs font-normal tracking-tight text-gray-300">Monthly Cost</span>
@@ -55,7 +52,7 @@ export const BillingSection: React.FC = () => (
             <p className="text-xs text-gray-400">Professional Plan</p>
           </Card>
 
-          <Card variant="nested" padding="lg">
+          <Card className="p-6 bg-white/5">
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="w-4 h-4 text-blue-400" />
               <span className="text-xs font-normal tracking-tight text-gray-300">Next Billing</span>
@@ -64,7 +61,7 @@ export const BillingSection: React.FC = () => (
             <p className="text-xs text-gray-400">Auto-renewal enabled</p>
           </Card>
 
-          <Card variant="nested" padding="lg">
+          <Card className="p-6 bg-white/5">
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-4 h-4 text-purple-400" />
               <span className="text-xs font-normal tracking-tight text-gray-300">Usage</span>
@@ -76,7 +73,7 @@ export const BillingSection: React.FC = () => (
       </Card>
 
       {/* Billing History */}
-      <Card animate={false} padding="lg">
+      <Card className="p-6">
         <div className="flex items-center gap-4 mb-6">
           <div className="p-2 bg-primary/20 rounded-lg">
             <FileText className="w-5 h-5 text-secondary" />

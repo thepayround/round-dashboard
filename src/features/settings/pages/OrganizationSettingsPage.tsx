@@ -14,8 +14,7 @@ import { TeamManagementPage } from '../components/TeamManagementPage'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import { PageHeader } from '@/shared/ui'
-import { PlainButton } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { Card } from '@/shared/ui/shadcn/card'
 
 
 interface TabItem {
@@ -85,7 +84,11 @@ export const OrganizationSettingsPage: React.FC = () => {
         )
       case 'billing':
         return (
-          <Card title="Billing & Plans" description="Manage your subscription and billing information">
+          <Card className="space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-lg font-medium text-fg">Billing & Plans</h3>
+              <p className="text-sm text-fg-muted">Manage your subscription and billing information</p>
+            </div>
             <div className="space-y-6">
               <div className="text-center py-12">
                 <CreditCard className="w-16 h-16 text-fg-muted mx-auto mb-4" />
@@ -98,7 +101,11 @@ export const OrganizationSettingsPage: React.FC = () => {
         )
       case 'security':
         return (
-          <Card title="Security Settings" description="Manage security and authentication settings">
+          <Card className="space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-lg font-medium text-fg">Security Settings</h3>
+              <p className="text-sm text-fg-muted">Manage security and authentication settings</p>
+            </div>
             <div className="space-y-6">
               <div className="text-center py-12">
                 <Shield className="w-16 h-16 text-fg-muted mx-auto mb-4" />
@@ -111,7 +118,11 @@ export const OrganizationSettingsPage: React.FC = () => {
         )
       case 'notifications':
         return (
-          <Card title="Notification Settings" description="Configure email and alert preferences">
+          <Card className="space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-lg font-medium text-fg">Notification Settings</h3>
+              <p className="text-sm text-fg-muted">Configure email and alert preferences</p>
+            </div>
             <div className="space-y-6">
               <div className="text-center py-12">
                 <Bell className="w-16 h-16 text-fg-muted mx-auto mb-4" />
@@ -124,7 +135,11 @@ export const OrganizationSettingsPage: React.FC = () => {
         )
       case 'branding':
         return (
-          <Card title="Branding Settings" description="Customize your organization&apos;s appearance">
+          <Card className="space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-lg font-medium text-fg">Branding Settings</h3>
+              <p className="text-sm text-fg-muted">Customize your organization&apos;s appearance</p>
+            </div>
             <div className="space-y-6">
               <div className="text-center py-12">
                 <Palette className="w-16 h-16 text-fg-muted mx-auto mb-4" />
@@ -137,7 +152,11 @@ export const OrganizationSettingsPage: React.FC = () => {
         )
       case 'integrations':
         return (
-          <Card title="Integrations" description="Connect with third-party services">
+          <Card className="space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-lg font-medium text-fg">Integrations</h3>
+              <p className="text-sm text-fg-muted">Connect with third-party services</p>
+            </div>
             <div className="space-y-6">
               <div className="text-center py-12">
                 <Globe className="w-16 h-16 text-fg-muted mx-auto mb-4" />
@@ -167,18 +186,17 @@ export const OrganizationSettingsPage: React.FC = () => {
             {tabs.map((tab) => {
               const IconComponent = tab.icon
               return (
-                <PlainButton
+                <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex flex-col items-center p-3 rounded-lg transition-all duration-200 ${activeTab === tab.id
                     ? 'bg-card border border-border text-fg shadow-sm'
                     : 'text-fg-muted hover:text-fg hover:bg-bg-hover'
                     }`}
-                  unstyled
                 >
                   <IconComponent className={`w-5 h-5 mb-2 ${activeTab === tab.id ? 'text-primary' : 'text-current'}`} />
                   <span className="text-xs font-medium">{tab.label}</span>
-                </PlainButton>
+                </button>
               )
             })}
           </div>

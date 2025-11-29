@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
 import ColorLogo from '@/assets/logos/color-logo.svg'
-import { IconButton } from '@/shared/ui/Button'
+import { Button } from '@/shared/ui/shadcn/button'
 import { cn } from '@/shared/utils/cn'
 
 /**
@@ -62,15 +62,16 @@ export const SidebarHeader = memo<SidebarHeaderProps>(({
               </Link>
               
               {/* Collapse button at same height as logo */}
-              <IconButton
+              <Button
                 onClick={toggleSidebar}
-                icon={PanelLeftClose}
                 variant="ghost"
-                size="md"
+                size="icon"
                 aria-label="Collapse sidebar"
                 title="Collapse sidebar (Ctrl+Shift+B)"
                 className="flex-shrink-0"
-              />
+              >
+                <PanelLeftClose className="h-4 w-4" />
+              </Button>
             </div>
           ) : (
             // Collapsed: Logo on top, button below
@@ -83,20 +84,21 @@ export const SidebarHeader = memo<SidebarHeaderProps>(({
               </Link>
               
               {/* Expand button below logo */}
-              <IconButton
+              <Button
                 onClick={toggleSidebar}
-                icon={PanelLeft}
                 variant="ghost"
-                size="md"
+                size="icon"
                 aria-label="Expand sidebar"
                 title="Expand sidebar (Ctrl+Shift+B)"
-              />
+              >
+                <PanelLeft className="h-4 w-4" />
+              </Button>
             </div>
           )}
         </div>
 
         {/* Divider below logo */}
-        <div className="border-t border-white/10 mx-2"></div>
+        <div className="border-t border-border mx-2"></div>
       </>
     )}
 
@@ -114,20 +116,21 @@ export const SidebarHeader = memo<SidebarHeaderProps>(({
             </Link>
             
             {/* Close button - same as desktop collapse button */}
-            <IconButton
+            <Button
               onClick={toggleSidebar}
-              icon={PanelLeftClose}
               variant="ghost"
-              size="md"
+              size="icon"
               aria-label="Close sidebar"
               title="Close sidebar"
               className="flex-shrink-0"
-            />
+            >
+              <PanelLeftClose className="h-4 w-4" />
+            </Button>
           </div>
         </div>
 
         {/* Divider below logo */}
-        <div className="border-t border-white/10 mx-2"></div>
+        <div className="border-t border-border mx-2"></div>
       </>
     )}
   </>

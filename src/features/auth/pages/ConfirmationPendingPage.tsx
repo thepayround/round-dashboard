@@ -1,10 +1,11 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Mail, RefreshCw, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 import { apiClient } from '@/shared/services/apiClient'
-import { Button } from '@/shared/ui/Button'
+import { Alert, AlertDescription } from '@/shared/ui/shadcn/alert'
+import { Button } from '@/shared/ui/shadcn/button'
 
 export const ConfirmationPendingPage = () => {
   const location = useLocation()
@@ -47,11 +48,6 @@ export const ConfirmationPendingPage = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-        <div className="floating-orb" />
-      </div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -61,7 +57,7 @@ export const ConfirmationPendingPage = () => {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.2,
         }}
-        className="bg-white/[0.02] border border-white/10 rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150"
+        className="bg-card/50 border border-border rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150"
       >
         {/* Header */}
         <div className="text-center mb-10">
@@ -72,8 +68,8 @@ export const ConfirmationPendingPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative"
           >
-            <h1 className="text-4xl font-medium tracking-tight text-white mb-4 relative">Check Your Email</h1>
-            <p className="text-white/85 text-lg font-medium">
+            <h1 className="text-4xl font-medium tracking-tight text-foreground mb-4 relative">Check Your Email</h1>
+            <p className="text-muted-foreground text-lg font-medium">
               We&apos;ve sent you a confirmation link
             </p>
           </motion.div>
@@ -93,8 +89,8 @@ export const ConfirmationPendingPage = () => {
             transition={{ delay: 0.8, duration: 0.5, type: 'spring' }}
             className="flex justify-center mb-6"
           >
-            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
-              <Mail className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+              <Mail className="w-8 h-8 text-primary" />
             </div>
           </motion.div>
 
@@ -105,22 +101,24 @@ export const ConfirmationPendingPage = () => {
             transition={{ delay: 1, duration: 0.6 }}
             className="mb-8"
           >
-            <h2 className="text-2xl font-medium tracking-tight text-white mb-4">Registration Successful!</h2>
-            <p className="text-white/85 mb-4">We&apos;ve sent a confirmation email to:</p>
+            <h2 className="text-2xl font-medium tracking-tight text-foreground mb-4">Registration Successful!</h2>
+            <p className="text-muted-foreground mb-4">We&apos;ve sent a confirmation email to:</p>
             <p className="text-lg font-medium text-primary mb-6">
               {email || 'your email address'}
             </p>
-            <p className="text-white/85 text-sm">
+            <p className="text-muted-foreground text-sm">
               Click the link in the email to confirm your account
               {hasBusinessData ? ' and set up your business profile' : ''} and get started with
               Round.
             </p>
             {hasBusinessData && (
-              <div className="mt-4 p-4 rounded-lg bg-primary/10 border border-accent/20">
-                <p className="text-sm text-secondary font-medium">
-                  πΆ Your business information has been saved and will be set up automatically after
-                  email confirmation.
-                </p>
+              <div className="mt-4">
+                <Alert className="bg-primary/10 border-primary/20">
+                  <AlertDescription className="text-sm text-foreground font-medium">
+                    💼 Your business information has been saved and will be set up automatically after
+                    email confirmation.
+                  </AlertDescription>
+                </Alert>
               </div>
             )}
           </motion.div>
@@ -130,31 +128,31 @@ export const ConfirmationPendingPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.6 }}
-            className="p-6 rounded-lg bg-primary/10 border border-white/10 mb-8"
+            className="p-6 rounded-lg bg-muted/50 border border-border mb-8"
           >
-            <h3 className="text-lg font-medium tracking-tight text-white mb-4">What to do next:</h3>
+            <h3 className="text-lg font-medium tracking-tight text-foreground mb-4">What to do next:</h3>
             <div className="space-y-4 text-left">
               <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm font-medium tracking-tight">1</span>
+                <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-foreground text-sm font-medium tracking-tight">1</span>
                 </div>
-                <p className="text-white/85 text-sm">
+                <p className="text-muted-foreground text-sm">
                   Check your email inbox (and spam folder if needed)
                 </p>
               </div>
               <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm font-medium tracking-tight">2</span>
+                <div className="w-6 h-6 bg-secondary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-foreground text-sm font-medium tracking-tight">2</span>
                 </div>
-                <p className="text-white/85 text-sm">
+                <p className="text-muted-foreground text-sm">
                   Click the &quot;Confirm Email&quot; button in the email
                 </p>
               </div>
               <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-white text-sm font-medium tracking-tight">3</span>
+                <div className="w-6 h-6 bg-accent/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-foreground text-sm font-medium tracking-tight">3</span>
                 </div>
-                <p className="text-white/85 text-sm">
+                <p className="text-muted-foreground text-sm">
                   {hasBusinessData
                     ? "Your business account will be automatically set up and you'll be redirected to your dashboard"
                     : "You'll be redirected to complete your setup"}
@@ -168,15 +166,11 @@ export const ConfirmationPendingPage = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`p-4 rounded-lg border mb-6 ${
-                resendSuccess
-                  ? 'bg-success/10 border-success/20'
-                  : 'bg-red-500/10 border-red-500/20'
-              }`}
+              className="mb-6"
             >
-              <p className={`text-sm ${resendSuccess ? 'text-success' : 'text-primary'}`}>
-                {resendMessage}
-              </p>
+              <Alert variant={resendSuccess ? undefined : 'destructive'} className={resendSuccess ? 'bg-success/10 border-success/20 text-success' : undefined}>
+                <AlertDescription>{resendMessage}</AlertDescription>
+              </Alert>
             </motion.div>
           )}
 
@@ -188,17 +182,14 @@ export const ConfirmationPendingPage = () => {
             className="space-y-4"
           >
             <div className="text-center">
-              <p className="text-white/85 text-sm mb-4">Didn&apos;t receive the email?</p>
+              <p className="text-muted-foreground text-sm mb-4">Didn&apos;t receive the email?</p>
               <Button
                 onClick={handleResendEmail}
                 disabled={isResending || !email}
                 variant="secondary"
-                size="md"
-                icon={isResending ? RefreshCw : Mail}
-                iconPosition="left"
-                isLoading={isResending}
-                className="mx-auto"
+                size="lg"
               >
+                {isResending ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
                 {isResending ? 'Sending...' : 'Resend Email'}
               </Button>
             </div>
@@ -206,7 +197,7 @@ export const ConfirmationPendingPage = () => {
             <div className="flex items-center justify-center">
               <Link
                 to="/login"
-                className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px flex items-center space-x-2"
+                className="text-primary font-semibold no-underline transition-all duration-300 hover:text-primary/80 flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Login</span>
@@ -218,4 +209,3 @@ export const ConfirmationPendingPage = () => {
     </div>
   )
 }
-

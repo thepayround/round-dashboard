@@ -29,10 +29,10 @@ interface UseCustomerTableControllerReturn {
 }
 
 const STATUS_MAP: Record<number, StatusMeta> = {
-  1: { label: 'Active', variant: 'success' },
-  2: { label: 'Inactive', variant: 'neutral' },
-  3: { label: 'Suspended', variant: 'warning' },
-  4: { label: 'Cancelled', variant: 'error' },
+  1: { label: 'Active', variant: 'default' },
+  2: { label: 'Inactive', variant: 'outline' },
+  3: { label: 'Suspended', variant: 'secondary' },
+  4: { label: 'Cancelled', variant: 'destructive' },
 }
 
 const defaultStatus: StatusMeta = STATUS_MAP[1]

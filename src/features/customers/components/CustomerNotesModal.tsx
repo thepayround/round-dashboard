@@ -1,10 +1,11 @@
 import { useCustomerNotesModalController } from '../hooks/useCustomerNotesModalController'
 
 import type { CustomerNoteResponse } from '@/shared/services/api/customer.service'
-import { Button, PlainButton } from '@/shared/ui/Button'
-import { Textarea } from '@/shared/ui/Textarea'
-import { Drawer } from '@/shared/widgets/Drawer'
-
+import { Button } from '@/shared/ui/shadcn/button'
+import { Label } from '@/shared/ui/shadcn/label'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/shared/ui/shadcn/sheet'
+import { Switch } from '@/shared/ui/shadcn/switch'
+import { Textarea } from '@/shared/ui/shadcn/textarea'
 
 interface CustomerNotesModalProps {
   isOpen: boolean
@@ -41,63 +42,66 @@ export const CustomerNotesModal = ({
   const title = isEditMode ? 'Edit Note' : 'Add Note'
 
   return (
-    <Drawer
-      isOpen={isOpen}
-      onClose={onClose}
-      title={title}
-      className="md:w-[550px] lg:w-[550px]"
-    >
-      <div className="flex flex-col h-full">
-        <div className="flex-1 space-y-6">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="note-content" className="text-sm font-medium text-white/80">
-                Note
-              </label>
-              <Textarea
-                id="note-content"
-                value={noteContent}
-                onChange={event => handleNoteContentChange(event.target.value)}
-                placeholder="Write a note..."
-                rows={8}
-                className="resize-none bg-white/5 border-white/10 focus:border-primary/50 focus:ring-0 focus:bg-white/5 rounded-lg text-white placeholder:text-white/60"
-              />
-            </div>
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetContent className="w-full sm:w-[550px]">
+        <SheetHeader>
+          <SheetTitle>{title}</SheetTitle>
+        </SheetHeader>
 
-            <div className="flex items-center space-x-3">
-              <PlainButton
-                onClick={toggleInternal}
-                className="flex items-center space-x-3 cursor-pointer group"
-                unstyled
-              >
-                <div className={`w-10 h-6 rounded-full relative transition-colors duration-200 border border-transparent ${isInternal ? 'bg-primary' : 'bg-white/10 group-hover:bg-white/20'}`}>
-                  <div className={`absolute top-1 left-1 w-3.5 h-3.5 rounded-full bg-white transition-transform duration-200 ${isInternal ? 'translate-x-4' : 'translate-x-0'}`} />
-                </div>
+        <div className="flex flex-col h-full pt-6">
+          <div className="flex-1 space-y-6">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="note-content">Note</Label>
+                <Textarea
+                  id="note-content"
+                  value={noteContent}
+                  onChange={event => handleNoteContentChange(event.target.value)}
+                  placeholder="Write a note..."
+                  rows={8}
+                  className="resize-none"
+                />
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <Switch
+                  id="internal-note"
+                  checked={isInternal}
+                  onCheckedChange={toggleInternal}
+                />
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-white/90 select-none">Internal Note</span>
-                  <span className="text-xs text-white/50 select-none">Only visible to team members</span>
+                  <Label htmlFor="internal-note" className="font-medium cursor-pointer">
+                    Internal Note
+                  </Label>
+                  <span className="text-xs text-muted-foreground">Only visible to team members</span>
                 </div>
-              </PlainButton>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="pt-6 mt-auto">
-          <Button
-            onClick={async () => {
-              await handleSave()
-              onClose()
-            }}
-            disabled={isLoading}
-            variant="primary"
-            isLoading={isLoading}
-            size="md"
-            className="w-full sm:w-auto"
-          >
-            {isEditMode ? 'Save Changes' : 'Save Note'}
-          </Button>
+          <div className="pt-6 mt-auto">
+            <Button
+              onClick={async () => {
+                await handleSave()
+                onClose()
+              }}
+              disabled={isLoading}
+              variant="default"
+              size="default"
+              className="w-full sm:w-auto"
+            >
+              {isLoading ? (
+                <>
+                  <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  Saving...
+                </>
+              ) : (
+                <>{isEditMode ? 'Save Changes' : 'Save Note'}</>
+              )}
+            </Button>
+          </div>
         </div>
-      </div>
-    </Drawer>
+      </SheetContent>
+    </Sheet>
   )
 }

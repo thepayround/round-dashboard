@@ -1,10 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 
-import { countryDropdownConfig } from '../ApiDropdown'
-
 import { AddressFormGroup } from './AddressFormGroup'
+import type { CountryOption } from './AddressFormGroup'
 import type { Address } from './types'
+
+// Mock country data for stories
+const countries: CountryOption[] = [
+  { code: 'US', name: 'United States' },
+  { code: 'CA', name: 'Canada' },
+  { code: 'GB', name: 'United Kingdom' },
+  { code: 'AU', name: 'Australia' },
+  { code: 'DE', name: 'Germany' },
+  { code: 'FR', name: 'France' },
+]
 
 const meta = {
   title: 'UI/AddressFormGroup',
@@ -40,7 +49,7 @@ export const Default: Story = {
   args: {
     value: defaultAddress,
     onChange: () => {},
-    countryDropdownConfig,
+    countries,
   },
 }
 
@@ -49,7 +58,7 @@ export const WithLabel: Story = {
     label: 'Billing Address',
     value: defaultAddress,
     onChange: () => {},
-    countryDropdownConfig,
+    countries,
   },
 }
 
@@ -58,7 +67,7 @@ export const Filled: Story = {
     label: 'Shipping Address',
     value: filledAddress,
     onChange: () => {},
-    countryDropdownConfig,
+    countries,
   },
 }
 
@@ -68,7 +77,7 @@ export const Required: Story = {
     value: defaultAddress,
     onChange: () => {},
     required: true,
-    countryDropdownConfig,
+    countries,
   },
 }
 
@@ -78,7 +87,7 @@ export const Disabled: Story = {
     value: filledAddress,
     onChange: () => {},
     disabled: true,
-    countryDropdownConfig,
+    countries,
   },
 }
 
@@ -94,7 +103,7 @@ export const WithErrors: Story = {
       zipCode: 'ZIP code is required',
       country: 'Country is required',
     },
-    countryDropdownConfig,
+    countries,
   },
 }
 
@@ -102,7 +111,7 @@ export const Interactive: Story = {
   args: {
     value: defaultAddress,
     onChange: () => {},
-    countryDropdownConfig,
+    countries,
   },
   render: () => {
     const [address, setAddress] = useState<Address>(defaultAddress)
@@ -114,9 +123,9 @@ export const Interactive: Story = {
           value={address}
           onChange={setAddress}
           required
-          countryDropdownConfig={countryDropdownConfig}
+          countries={countries}
         />
-        <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+        <div className="p-4 bg-white/5 rounded-lg border border-border">
           <h4 className="text-sm font-medium text-white mb-2">Address Data:</h4>
           <pre className="text-xs text-white/70">
             {JSON.stringify(address, null, 2)}
@@ -131,7 +140,7 @@ export const MultipleAddresses: Story = {
   args: {
     value: defaultAddress,
     onChange: () => {},
-    countryDropdownConfig,
+    countries,
   },
   render: () => {
     const [billingAddress, setBillingAddress] = useState<Address>(filledAddress)
@@ -144,14 +153,14 @@ export const MultipleAddresses: Story = {
           value={billingAddress}
           onChange={setBillingAddress}
           required
-          countryDropdownConfig={countryDropdownConfig}
+          countries={countries}
         />
-        <div className="border-t border-white/10 pt-8">
+        <div className="border-t border-border pt-8">
           <AddressFormGroup
             label="Shipping Address"
             value={shippingAddress}
             onChange={setShippingAddress}
-            countryDropdownConfig={countryDropdownConfig}
+            countries={countries}
           />
         </div>
       </div>

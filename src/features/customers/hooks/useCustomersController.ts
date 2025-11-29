@@ -6,8 +6,14 @@ import { useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
 import { useViewPreferences } from '@/shared/hooks/useViewPreferences'
 import { customerService, CustomerType as ApiCustomerType } from '@/shared/services/api/customer.service'
 import type { CustomerResponse, CustomerSearchParams } from '@/shared/services/api/customer.service'
-import type { ViewMode, ViewModeOption } from '@/shared/ui/ViewModeToggle'
-import type { FilterField } from '@/shared/widgets/SearchFilterToolbar'
+import type { FilterField, ViewMode } from '@/shared/widgets/SearchFilterToolbar/SearchFilterToolbar'
+
+// Define ViewModeOption locally
+export interface ViewModeOption {
+  value: ViewMode
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+}
 
 type SortField = 'displayName' | 'email' | 'company' | 'status' | 'signupDate' | 'currency'
 type SortDirection = 'asc' | 'desc'

@@ -14,12 +14,12 @@ import {
   TableRow,
   TableHead,
   TableCell,
-  SortableTableHead,
   Badge,
+  Button,
   Avatar,
-  type BadgeVariant
+  AvatarFallback,
+  type BadgeProps
 } from '@/shared/ui'
-import { IconButton } from '@/shared/ui/Button'
 
 interface SortConfig {
   field: string
@@ -43,15 +43,15 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
   onRemoveMember,
   isLoading = false
 }) => {
-  const roleLabels: Record<UserRole, { label: string; variant: BadgeVariant }> = {
-    SuperAdmin: { label: 'Super Admin', variant: 'success' },
-    Admin: { label: 'Admin', variant: 'warning' },
-    TeamManager: { label: 'Team Manager', variant: 'info' },
-    TeamMember: { label: 'Team Member', variant: 'success' },
-    Sales: { label: 'Sales', variant: 'info' },
-    Finance: { label: 'Finance', variant: 'warning' },
-    Support: { label: 'Support', variant: 'primary' },
-    Viewer: { label: 'Viewer', variant: 'neutral' }
+  const roleLabels: Record<UserRole, { label: string; variant: BadgeProps['variant'] }> = {
+    SuperAdmin: { label: 'Super Admin', variant: 'default' },
+    Admin: { label: 'Admin', variant: 'secondary' },
+    TeamManager: { label: 'Team Manager', variant: 'outline' },
+    TeamMember: { label: 'Team Member', variant: 'default' },
+    Sales: { label: 'Sales', variant: 'outline' },
+    Finance: { label: 'Finance', variant: 'secondary' },
+    Support: { label: 'Support', variant: 'default' },
+    Viewer: { label: 'Viewer', variant: 'outline' }
   }
 
   const formatDate = (dateString: string) => new Intl.DateTimeFormat('en-US', {
@@ -66,18 +66,30 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
         <Table>
           <TableHeader>
             <TableRow>
-              <SortableTableHead field="fullName" sortConfig={sortConfig} onSort={onSort}>
-                Member
-              </SortableTableHead>
-              <SortableTableHead field="email" sortConfig={sortConfig} onSort={onSort}>
-                Email
-              </SortableTableHead>
-              <SortableTableHead field="role" sortConfig={sortConfig} onSort={onSort}>
-                Role
-              </SortableTableHead>
-              <SortableTableHead field="joinedAt" sortConfig={sortConfig} onSort={onSort}>
-                Joined
-              </SortableTableHead>
+              <TableHead
+                className="cursor-pointer hover:bg-muted/50"
+                onClick={() => onSort('fullName')}
+              >
+                Member {sortConfig.field === 'fullName' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </TableHead>
+              <TableHead
+                className="cursor-pointer hover:bg-muted/50"
+                onClick={() => onSort('email')}
+              >
+                Email {sortConfig.field === 'email' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </TableHead>
+              <TableHead
+                className="cursor-pointer hover:bg-muted/50"
+                onClick={() => onSort('role')}
+              >
+                Role {sortConfig.field === 'role' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </TableHead>
+              <TableHead
+                className="cursor-pointer hover:bg-muted/50"
+                onClick={() => onSort('joinedAt')}
+              >
+                Joined {sortConfig.field === 'joinedAt' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -91,7 +103,15 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                 >
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      <Avatar name={member.fullName || `${member.firstName} ${member.lastName}`} />
+                      <Avatar>
+                        <AvatarFallback className="bg-primary/10 text-primary">
+                          {(member.fullName || `${member.firstName} ${member.lastName}`)
+                            .split(' ')
+                            .map(n => n[0])
+                            .join('')
+                            .toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center space-x-2">
                           <div className="font-normal text-white tracking-tight truncate">
@@ -108,7 +128,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                     <div className="text-sm text-white/80 truncate">{member.email}</div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={roleConfig.variant} size="md">
+                    <Badge variant={roleConfig.variant}>
                       {member.roleName || roleConfig.label}
                     </Badge>
                   </TableCell>
@@ -117,20 +137,23 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-end space-x-2">
-                      <IconButton
-                        icon={Edit}
+                      <Button
+                        size="icon"
+                        variant="ghost"
                         onClick={() => onEditMember(member)}
                         aria-label="Edit member role"
-                        size="md"
-                      />
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
                       {!member.isOwner && (
-                        <IconButton
-                          icon={Trash2}
+                        <Button
+                          size="icon"
+                          variant="ghost"
                           onClick={() => onRemoveMember(member)}
                           aria-label="Remove member"
-                          variant="danger"
-                          size="md"
-                        />
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
                       )}
                     </div>
                   </TableCell>

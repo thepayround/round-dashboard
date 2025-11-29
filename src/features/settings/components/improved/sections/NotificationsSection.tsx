@@ -12,8 +12,8 @@ import React from 'react'
 
 import { useAdvancedNotificationsController } from '../../../hooks/useAdvancedNotificationsController'
 
-import { Toggle } from '@/shared/ui'
-import { Card } from '@/shared/ui/Card'
+import { Card } from '@/shared/ui/shadcn/card'
+import { Switch } from '@/shared/ui/shadcn/switch'
 
 
 
@@ -103,7 +103,7 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card animate={false} padding="md" className="bg-white/5 border border-white/10">
+              <Card className="p-4 bg-white/5 border border-border">
                 <div className="space-y-4">
                   {/* Type Header */}
                   <div className="flex items-start gap-4">
@@ -119,18 +119,15 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
                   {/* Channel Controls */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {channels.map((channel) => (
-                      <div key={`${type.id}-${channel.id}`} className="p-3 bg-white/5 border border-white/10 rounded-lg">
+                      <div key={`${type.id}-${channel.id}`} className="p-3 bg-white/5 border border-border rounded-lg">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-1.5">
                             <channel.icon className="w-3 h-3 text-gray-300" />
                             <span className="text-xs font-normal tracking-tight text-white">{channel.label}</span>
                           </div>
-                          <Toggle
-                            label=""
+                          <Switch
                             checked={getNotificationSetting(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms')}
-                            onChange={(e) => handleToggleChange(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms', e.target.checked)}
-                            size="sm"
-                            color="primary"
+                            onCheckedChange={(checked) => handleToggleChange(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms', checked)}
                             aria-label={`Enable ${channel.label} notifications for ${type.label}`}
                           />
                         </div>

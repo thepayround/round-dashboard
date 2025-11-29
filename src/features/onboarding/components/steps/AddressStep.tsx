@@ -1,12 +1,14 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { MapPin, Building, Hash, Info } from 'lucide-react'
 
 import type { StepComponentProps } from '../../config/types'
 import { useAddressStepController } from '../../hooks/useAddressStepController'
 import type { EnhancedAddressInfo } from '../../types/onboarding'
 
-import { ApiDropdown, countryDropdownConfig } from '@/shared/ui/ApiDropdown'
-import { FormInput } from '@/shared/ui/FormInput'
+import { useCountries } from '@/shared/hooks/api/useCountryCurrency'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
 
 interface AddressStepProps extends StepComponentProps<EnhancedAddressInfo> {
   errors?: Record<string, string>
@@ -25,6 +27,9 @@ export const AddressStep = ({
     data,
     onChange,
   })
+
+  // Fetch countries data
+  const { data: countries = [] } = useCountries()
 
 
   return (
@@ -58,101 +63,176 @@ export const AddressStep = ({
       {/* Form */}
       <div className="max-w-[520px] mx-auto space-y-6">
         {/* Address Name */}
-        <FormInput
-          label="Address Name"
-          value={billingAddress.name}
-          onChange={(e) => handleAddressChange('name', e.target.value)}
-          placeholder="Main Office, Headquarters, etc."
-          leftIcon={Building}
-          error={errors.name}
-          disabled={readOnly}
-        />
+        <div className="space-y-2">
+          <Label htmlFor="address-name">Address Name</Label>
+          <div className="relative">
+            <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              id="address-name"
+              value={billingAddress.name}
+              onChange={(e) => handleAddressChange('name', e.target.value)}
+              placeholder="Main Office, Headquarters, etc."
+              className="pl-10"
+              disabled={readOnly}
+              aria-invalid={!!errors.name}
+              aria-describedby={errors.name ? 'address-name-error' : undefined}
+            />
+          </div>
+          {errors.name && (
+            <p id="address-name-error" className="mt-1 text-sm text-primary">
+              {errors.name}
+            </p>
+          )}
+        </div>
 
         {/* Street Address */}
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div className="sm:col-span-3">
-            <FormInput
-              label="Street Address"
-              value={billingAddress.addressLine1}
-              onChange={(e) => handleAddressChange('addressLine1', e.target.value)}
-              placeholder="123 Main Street, Suite 100"
-              leftIcon={MapPin}
-              error={errors.addressLine1}
-              disabled={readOnly}
-            />
+            <div className="space-y-2">
+              <Label htmlFor="street-address">Street Address</Label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="street-address"
+                  value={billingAddress.addressLine1}
+                  onChange={(e) => handleAddressChange('addressLine1', e.target.value)}
+                  placeholder="123 Main Street, Suite 100"
+                  className="pl-10"
+                  disabled={readOnly}
+                  aria-invalid={!!errors.addressLine1}
+                  aria-describedby={errors.addressLine1 ? 'street-address-error' : undefined}
+                />
+              </div>
+              {errors.addressLine1 && (
+                <p id="street-address-error" className="mt-1 text-sm text-primary">
+                  {errors.addressLine1}
+                </p>
+              )}
+            </div>
           </div>
 
           <div>
-            <FormInput
-              label={
-                <div className="flex items-center space-x-2">
-                  <span>Unit #</span>
-                  <div className="group relative">
-                    <Info className="w-4 h-4 text-gray-400 cursor-help" />
-                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-white/10 z-50">
-                      Building/unit number
-                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 border border-transparent border-t-gray-900/95" />
-                    </div>
+            <div className="space-y-2">
+              <Label htmlFor="unit-number" className="flex items-center space-x-2">
+                <span>Unit #</span>
+                <div className="group relative">
+                  <Info className="w-4 h-4 text-gray-400 cursor-help" />
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap border border-border z-50">
+                    Building/unit number
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border border-transparent border-t-gray-900/95" />
                   </div>
                 </div>
-              }
-              value={billingAddress.number}
-              onChange={(e) => handleAddressChange('number', e.target.value)}
-              placeholder="123A"
-              leftIcon={Hash}
-              error={errors.number}
-              disabled={readOnly}
-            />
+              </Label>
+              <div className="relative">
+                <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="unit-number"
+                  value={billingAddress.number}
+                  onChange={(e) => handleAddressChange('number', e.target.value)}
+                  placeholder="123A"
+                  className="pl-10"
+                  disabled={readOnly}
+                  aria-invalid={!!errors.number}
+                  aria-describedby={errors.number ? 'unit-number-error' : undefined}
+                />
+              </div>
+              {errors.number && (
+                <p id="unit-number-error" className="mt-1 text-sm text-primary">
+                  {errors.number}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Location Details */}
         <div className="space-y-4">
-          <FormInput
-            label="City"
-            value={billingAddress.city}
-            onChange={(e) => handleAddressChange('city', e.target.value)}
-            placeholder="San Francisco"
-            error={errors.city}
-            disabled={readOnly}
-          />
+          <div className="space-y-2">
+            <Label htmlFor="city">City</Label>
+            <Input
+              id="city"
+              value={billingAddress.city}
+              onChange={(e) => handleAddressChange('city', e.target.value)}
+              placeholder="San Francisco"
+              disabled={readOnly}
+              aria-invalid={!!errors.city}
+              aria-describedby={errors.city ? 'city-error' : undefined}
+            />
+            {errors.city && (
+              <p id="city-error" className="mt-1 text-sm text-primary">
+                {errors.city}
+              </p>
+            )}
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <FormInput
-              label="State / Province"
-              value={billingAddress.state}
-              onChange={(e) => handleAddressChange('state', e.target.value)}
-              placeholder="California"
-              error={errors.state}
-              disabled={readOnly}
-            />
+            <div className="space-y-2">
+              <Label htmlFor="state">State / Province</Label>
+              <Input
+                id="state"
+                value={billingAddress.state}
+                onChange={(e) => handleAddressChange('state', e.target.value)}
+                placeholder="California"
+                disabled={readOnly}
+                aria-invalid={!!errors.state}
+                aria-describedby={errors.state ? 'state-error' : undefined}
+              />
+              {errors.state && (
+                <p id="state-error" className="mt-1 text-sm text-primary">
+                  {errors.state}
+                </p>
+              )}
+            </div>
 
-            <FormInput
-              label="ZIP / Postal Code"
-              value={billingAddress.zipCode}
-              onChange={(e) => handleAddressChange('zipCode', e.target.value)}
-              placeholder="94102"
-              error={errors.zipCode}
-              disabled={readOnly}
-            />
+            <div className="space-y-2">
+              <Label htmlFor="zip-code">ZIP / Postal Code</Label>
+              <Input
+                id="zip-code"
+                value={billingAddress.zipCode}
+                onChange={(e) => handleAddressChange('zipCode', e.target.value)}
+                placeholder="94102"
+                disabled={readOnly}
+                aria-invalid={!!errors.zipCode}
+                aria-describedby={errors.zipCode ? 'zip-code-error' : undefined}
+              />
+              {errors.zipCode && (
+                <p id="zip-code-error" className="mt-1 text-sm text-primary">
+                  {errors.zipCode}
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="space-y-2">
-            <span className="auth-label">Country</span>
-            <ApiDropdown
-              config={countryDropdownConfig}
+            <Label htmlFor="country">Country</Label>
+            <Select
               value={billingAddress.country}
-              onSelect={value => handleSelectChange('country', value)}
-              onClear={() => handleSelectChange('country', '')}
-              error={!!errors.country}
-              allowClear={!readOnly}
+              onValueChange={(value) => handleSelectChange('country', value)}
               disabled={readOnly}
-            />
-            {errors.country && <p className="mt-1 text-sm text-primary">{errors.country}</p>}
+            >
+              <SelectTrigger
+                id="country"
+                aria-invalid={!!errors.country}
+                aria-describedby={errors.country ? 'country-error' : undefined}
+              >
+                <SelectValue placeholder="Select country" />
+              </SelectTrigger>
+              <SelectContent>
+                {countries.map((country) => (
+                  <SelectItem key={country.countryCodeAlpha2} value={country.countryCodeAlpha2}>
+                    {country.countryName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.country && (
+              <p id="country-error" className="mt-1 text-sm text-primary">
+                {errors.country}
+              </p>
+            )}
           </div>
         </div>
       </div>
     </motion.div>
   )
 }
-

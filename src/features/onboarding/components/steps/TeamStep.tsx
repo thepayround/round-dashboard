@@ -5,10 +5,16 @@ import type { StepComponentProps } from '../../config/types'
 import { useTeamStepController } from '../../hooks/useTeamStepController'
 import type { TeamSettings } from '../../types/onboarding'
 
-import { ApiDropdown } from '@/shared/ui/ApiDropdown'
-import { teamRoleDropdownConfig } from '@/shared/ui/ApiDropdown/configs'
-import { Button, IconButton } from '@/shared/ui/Button'
-import { Input } from '@/shared/ui/Input'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Input } from '@/shared/ui/shadcn/input'
+import { Label } from '@/shared/ui/shadcn/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/shadcn/select'
 
 
 interface TeamStepProps extends StepComponentProps<TeamSettings> {
@@ -57,39 +63,57 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
         <div className="p-4">
           <div className="space-y-4">
             <div className="flex gap-4 items-end">
-              <div className="flex-1">
-                <Input
-                  id="inviteEmail"
-                  type="email"
-                  label="Email Address"
-                  value={inviteEmail}
-                  onChange={event => handleInviteEmailChange(event.target.value)}
-                  placeholder="colleague@example.com"
-                  leftIcon={Mail}
-                  size="sm"
-                />
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="inviteEmail" className="text-xs font-normal text-gray-400">
+                  Email Address
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input
+                    id="inviteEmail"
+                    type="email"
+                    value={inviteEmail}
+                    onChange={event => handleInviteEmailChange(event.target.value)}
+                    placeholder="colleague@example.com"
+                    className="pl-10 h-9"
+                  />
+                </div>
               </div>
-              <div className="w-40">
-                <label htmlFor="inviteRole" className="auth-label">
+              <div className="w-40 space-y-2">
+                <Label htmlFor="inviteRole" className="text-xs font-normal text-gray-400">
                   Role
-                </label>
-                <ApiDropdown
-                  config={teamRoleDropdownConfig}
-                  value={inviteRole}
-                  onSelect={handleInviteRoleChange}
-                />
+                </Label>
+                <Select value={inviteRole} onValueChange={handleInviteRoleChange}>
+                  <SelectTrigger id="inviteRole" className="h-9">
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="TeamMember">Team Member</SelectItem>
+                    <SelectItem value="TeamManager">Team Manager</SelectItem>
+                    <SelectItem value="TeamOwner">Team Owner</SelectItem>
+                    <SelectItem value="Admin">Admin</SelectItem>
+                    <SelectItem value="Viewer">Viewer</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <Button
                 onClick={handleInviteTeamMember}
                 disabled={!canInvite}
                 variant="secondary"
-                size="md"
-                icon={isLoading ? Loader2 : UserPlus}
-                iconPosition="left"
-                isLoading={isLoading}
-                className="shrink-0"
+                size="default"
+                className="shrink-0 h-9"
               >
-                {isLoading ? 'Sending...' : 'Invite'}
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="w-4 h-4" />
+                    Invite
+                  </>
+                )}
               </Button>
             </div>
           </div>
@@ -108,7 +132,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                   key={invitation.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-3 rounded-lg bg-[#212124] border border-[#2c2d31]"
+                  className="p-3 rounded-lg bg-muted border border-[#2c2d31]"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
@@ -127,14 +151,15 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                         </div>
                       </div>
                     </div>
-                    <IconButton
+                    <Button
                       onClick={() => handleRemoveInvitation(invitation.id)}
-                      icon={Trash2}
-                      variant="danger"
-                      size="sm"
+                      variant="destructive"
+                      size="icon"
                       aria-label="Remove invitation"
-                      className="hover:bg-red-400/10"
-                    />
+                      className="h-8 w-8 hover:bg-red-400/10"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </motion.div>
               ))}

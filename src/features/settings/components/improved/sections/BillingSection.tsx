@@ -9,10 +9,10 @@ import {
 } from 'lucide-react'
 import React from 'react'
 
-import { Toggle } from '@/shared/ui'
-import { ActionButton } from '@/shared/ui/ActionButton'
-import { PlainButton } from '@/shared/ui/Button'
-import { Card } from '@/shared/ui/Card'
+import { Button } from '@/shared/ui/shadcn/button'
+import { Card } from '@/shared/ui/shadcn/card'
+import { Label } from '@/shared/ui/shadcn/label'
+import { Switch } from '@/shared/ui/shadcn/switch'
 
 
 export const BillingSection: React.FC = () => (
@@ -23,7 +23,7 @@ export const BillingSection: React.FC = () => (
       className="space-y-4"
     >
       {/* Billing Overview */}
-      <Card animate={false} padding="md">
+      <Card className="p-4">
         <div className="flex items-start gap-4 mb-4">
           <div className="p-2 bg-primary/15 rounded-lg border border-success/20">
             <CreditCard className="w-4 h-4 text-success" />
@@ -56,25 +56,26 @@ export const BillingSection: React.FC = () => (
       </Card>
 
       {/* Payment Methods */}
-      <Card animate={false} padding="md">
+      <Card className="p-4">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-xs font-normal tracking-tight text-white mb-1">Payment Methods</h3>
             <p className="text-sm text-white/90">Manage your saved payment methods</p>
           </div>
-          <ActionButton
-            label="Add Payment Method"
-            icon={Plus}
+          <Button
             variant="secondary"
             size="sm"
             onClick={() => {}}
             className="h-7 px-3 text-sm"
-          />
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Payment Method
+          </Button>
         </div>
 
         {/* Payment Method Card */}
         <div className="space-y-4">
-          <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
+          <div className="p-3 bg-white/5 border border-border rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="p-1.5 bg-blue-500/20 rounded-lg">
@@ -95,12 +96,12 @@ export const BillingSection: React.FC = () => (
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <PlainButton className="text-primary hover:text-[#BD2CD0] text-sm font-normal transition-colors duration-200" unstyled>
+                <button className="text-primary hover:text-[#BD2CD0] text-sm font-normal transition-colors duration-200">
                   Edit
-                </PlainButton>
-                <PlainButton className="text-white/90 hover:text-white text-sm font-normal transition-colors duration-200" unstyled>
+                </button>
+                <button className="text-white/90 hover:text-white text-sm font-normal transition-colors duration-200">
                   Remove
-                </PlainButton>
+                </button>
               </div>
             </div>
           </div>
@@ -110,7 +111,7 @@ export const BillingSection: React.FC = () => (
       {/* Billing Details */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Billing Address */}
-        <Card animate={false} padding="md">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
               <div className="p-2 bg-purple-500/20 rounded-lg">
@@ -121,16 +122,17 @@ export const BillingSection: React.FC = () => (
                 <p className="text-sm text-white/90">Your billing information</p>
               </div>
             </div>
-            <ActionButton
-              label="Edit"
-              icon={Edit3}
+            <Button
               variant="secondary"
               size="sm"
               onClick={() => {}}
-            />
+            >
+              <Edit3 className="w-4 h-4 mr-2" />
+              Edit
+            </Button>
           </div>
 
-          <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
+          <div className="p-3 bg-white/5 border border-border rounded-lg">
             <div className="space-y-1 text-sm text-white/90">
               <p className="text-white font-medium text-xs">Acme Corporation</p>
               <p>123 Business Street</p>
@@ -142,7 +144,7 @@ export const BillingSection: React.FC = () => (
         </Card>
 
         {/* Invoice Preferences */}
-        <Card animate={false} padding="md">
+        <Card className="p-4">
           <div className="flex items-center gap-4 mb-4">
             <div className="p-2 bg-orange-500/20 rounded-lg">
               <Download className="w-4 h-4 text-orange-400" />
@@ -154,35 +156,34 @@ export const BillingSection: React.FC = () => (
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-white/5 border border-border rounded-lg">
               <div className="flex items-center gap-4">
                 <div className="p-1.5 bg-blue-500/20 rounded-lg">
                   <Download className="w-4 h-4 text-blue-400" />
                 </div>
-                <div>
+                <Label htmlFor="email-invoices" className="cursor-pointer">
                   <p className="text-xs font-normal tracking-tight text-white">Email invoices</p>
                   <p className="text-sm text-white/90">Receive invoices via email</p>
-                </div>
+                </Label>
               </div>
-              <Toggle
-                label=""
+              <Switch
+                id="email-invoices"
                 checked={true}
-                onChange={() => {}}
-                size="sm"
-                color="primary"
+                onCheckedChange={() => {}}
                 aria-label="Enable email invoices"
               />
             </div>
 
             <div className="flex gap-4">
-              <ActionButton
-                label="Download Latest Invoice"
-                icon={Download}
+              <Button
                 variant="secondary"
                 size="sm"
                 onClick={() => {}}
                 className="text-sm"
-              />
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download Latest Invoice
+              </Button>
             </div>
           </div>
         </Card>

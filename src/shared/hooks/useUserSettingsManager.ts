@@ -6,8 +6,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 
-import { useToast } from './useToast'
-
+import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import { useUserSettings as useUserSettingsAPI } from '@/shared/hooks/api'
 import type {
   UserSettings,
@@ -53,7 +52,7 @@ export const useUserSettingsManager = (): UseUserSettingsManagerReturn => {
 
   // API hooks and utilities
   const userSettingsAPI = useUserSettingsAPI()
-  const { showSuccess, showError } = useToast()
+  const { showSuccess, showError } = useGlobalToast()
 
   /**
    * Clear error state

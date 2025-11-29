@@ -3,7 +3,7 @@ import { MoreHorizontal } from 'lucide-react'
 import type { ReactNode } from 'react';
 import { useState, useRef, useEffect } from 'react'
 
-import { IconButton, PlainButton } from '../../ui/Button'
+import { Button } from '../../ui/shadcn/button'
 
 export interface ActionMenuItem {
   id: string
@@ -122,36 +122,45 @@ export const ActionMenu = ({
     setFocusedIndex(-1)
   }
 
+  const getSizeClass = () => {
+    switch (size) {
+      case 'sm': return 'h-8 w-8'
+      case 'lg': return 'h-12 w-12'
+      default: return 'h-10 w-10'
+    }
+  }
+
   return (
     <div className={`relative ${className}`}>
       {trigger ? (
-        <PlainButton
+        <Button
           ref={triggerRef}
           onClick={handleTriggerClick}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          className={`${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+          variant="ghost"
+          className={`p-0 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
           aria-expanded={isOpen}
           aria-haspopup="menu"
           aria-label="Actions menu"
-          unstyled
         >
           {trigger}
-        </PlainButton>
+        </Button>
       ) : (
-        <IconButton
+        <Button
           ref={triggerRef}
           onClick={handleTriggerClick}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          icon={MoreHorizontal}
           variant="ghost"
-          size={size}
-          className="opacity-0 group-hover:opacity-100 transition-opacity"
+          size="icon"
+          className={`opacity-0 group-hover:opacity-100 transition-opacity ${getSizeClass()}`}
           aria-expanded={isOpen}
           aria-haspopup="menu"
           aria-label="Actions menu"
-        />
+        >
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
       )}
 
       <AnimatePresence>
@@ -162,7 +171,7 @@ export const ActionMenu = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.15 }}
-            className={`absolute top-full mt-1 z-50 bg-black/90 border border-white/10 rounded-lg py-1 min-w-[160px] shadow-xl ${positionClasses[position]}`}
+            className={`absolute top-full mt-1 z-50 bg-black/90 border border-border rounded-lg py-1 min-w-[160px] shadow-xl ${positionClasses[position]}`}
             role="menu"
             aria-orientation="vertical"
           >
@@ -176,10 +185,11 @@ export const ActionMenu = ({
                   {item.divider && (
                     <div className="h-px bg-white/10 my-1" role="separator" />
                   )}
-                  <PlainButton
+                  <Button
                     onClick={() => handleItemClick(item)}
                     disabled={item.disabled}
-                    className={`w-full flex items-center space-x-2 px-3 py-2 text-sm transition-colors rounded-md mx-1 ${
+                    variant="ghost"
+                    className={`w-full justify-start gap-2 px-3 py-2 text-sm transition-colors rounded-md mx-1 h-auto ${
                       isEnabled
                         ? `${variantClasses[item.variant ?? 'default']} ${
                             isFocused ? 'bg-white/20' : ''
@@ -189,11 +199,10 @@ export const ActionMenu = ({
                     role="menuitem"
                     tabIndex={isEnabled ? 0 : -1}
                     aria-disabled={item.disabled}
-                    unstyled
                   >
                     {Icon && <Icon className="w-4 h-4 flex-shrink-0" />}
                     <span>{item.label}</span>
-                  </PlainButton>
+                  </Button>
                 </div>
               )
             })}

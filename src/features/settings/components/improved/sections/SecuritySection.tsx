@@ -5,7 +5,7 @@ import React from 'react'
 import { ChangePasswordForm } from '../../ChangePasswordForm'
 
 import type { UserSettings } from '@/shared/services/api/userSettings.service'
-import { Card } from '@/shared/ui/Card'
+import { Card } from '@/shared/ui/shadcn/card'
 
 interface SecuritySectionProps {
   settings?: UserSettings | null
@@ -20,7 +20,7 @@ export const SecuritySection: React.FC<SecuritySectionProps> = () => (
       transition={{ delay: 0.2 }}
       className="space-y-4"
     >
-      <Card animate={false} padding="md">
+      <Card className="p-4">
         <div className="flex items-start gap-4 mb-4">
           <div className="p-2 bg-primary/15 rounded-lg border border-purple-500/20">
             <Lock className="w-3.5 h-3.5 text-purple-400" />
