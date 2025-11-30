@@ -365,14 +365,15 @@ export const BusinessRegisterPage = () => {
 
             {/* Skip link - only show on billing step */}
             {multiStepForm.currentStep === 1 && (
-              <button
+              <Button
                 type="button"
                 onClick={handleSkipBilling}
                 disabled={isSubmitting}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                variant="ghost"
+                className="text-sm text-muted-foreground hover:text-foreground"
               >
                 Skip this step
-              </button>
+              </Button>
             )}
           </div>
 

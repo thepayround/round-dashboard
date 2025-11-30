@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { motion } from 'framer-motion'
-import { Lock, Eye, EyeOff, AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { AlertCircle, ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { useState, useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -10,12 +9,12 @@ import { useAsyncAction } from '@/shared/hooks'
 import { useAuth } from '@/shared/hooks/useAuth'
 import { apiClient } from '@/shared/services/apiClient'
 import type { User } from '@/shared/types/auth'
-import { AuthLogo } from '@/shared/ui/AuthLogo'
 import { PasswordStrengthIndicator } from '@/shared/ui/PasswordStrengthIndicator'
 import { Alert, AlertDescription } from '@/shared/ui/shadcn/alert'
 import { Button } from '@/shared/ui/shadcn/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/shadcn/form'
-import { Input } from '@/shared/ui/shadcn/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/shadcn/card'
+import { Label } from '@/shared/ui/shadcn/label'
+import { PasswordInput } from '@/shared/ui/shadcn/password-input'
 import { handleApiError } from '@/shared/utils'
 
 const resetPasswordSchema = z.object({
@@ -39,8 +38,6 @@ export const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams()
   const { loading: isSubmitting, execute } = useAsyncAction()
 
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [tokenData, setTokenData] = useState({ email: '', token: '' })
   const [tokenError, setTokenError] = useState<string | null>(null)
   const [tokenEmail, setTokenEmail] = useState('')
@@ -141,212 +138,134 @@ export const ResetPasswordPage = () => {
   // Invalid token error state
   if (tokenError) {
     return (
-      <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="w-full max-w-[360px] mx-auto relative z-10"
-        >
-          <div className="bg-card/50 border border-border rounded-lg p-6 relative overflow-hidden z-10">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-destructive/15 flex items-center justify-center">
-                <AlertCircle className="w-8 h-8 text-destructive" />
-              </div>
-              <h1 className="text-2xl font-medium tracking-tight text-foreground mb-4">Invalid Reset Link</h1>
-              <p className="text-muted-foreground mb-6">{tokenError}</p>
-              <Link to="/auth/forgot-password">
-                <Button size="lg">
-                  Request New Reset Link
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
-            </div>
+      <Card>
+        <CardHeader>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-destructive/10 flex items-center justify-center">
+            <AlertCircle className="w-8 h-8 text-destructive" />
           </div>
-        </motion.div>
-      </div>
+          <CardTitle className="text-center">Invalid Reset Link</CardTitle>
+          <CardDescription className="text-center">{tokenError}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button asChild className="w-full">
+            <Link to="/auth/forgot-password">
+              Request New Reset Link
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  // Success state
+  if (isSuccess) {
+    return (
+      <Card>
+        <CardHeader>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+            <CheckCircle2 className="w-8 h-8 text-primary" />
+          </div>
+          <CardTitle className="text-center">Password Reset Successful</CardTitle>
+          <CardDescription className="text-center">
+            Your password has been successfully reset. You will be logged in automatically...
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-8">
+            <Alert className="bg-primary/10 border-primary/20">
+              <AlertDescription>
+                Your password has been successfully reset and all existing sessions have been invalidated for security.
+              </AlertDescription>
+            </Alert>
+
+            <Button onClick={goToLogin} className="w-full">
+              Continue to Sign In
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     )
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center pb-12 z-[1]">
-      {/* Animated Background */}
+    <Card>
+      <CardHeader>
+        <CardTitle>Reset Password</CardTitle>
+        <CardDescription>
+          Enter your new password for <strong className="text-foreground">{tokenEmail}</strong>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {apiError && (
+          <Alert variant="destructive" className="mb-8">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{apiError}</AlertDescription>
+          </Alert>
+        )}
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 30 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{
-          duration: 0.8,
-          ease: [0.16, 1, 0.3, 1],
-          delay: 0.2,
-        }}
-        className="w-full max-w-[360px] mx-auto relative z-10"
-      >
-        {/* Centered Logo Above Form */}
-        <AuthLogo />
-
-        <div className="bg-card/50 border border-border rounded-lg p-6 relative overflow-hidden z-10 transition-all duration-150">
-          {/* Header */}
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="gradient-header" />
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="relative"
-            >
-              {!isSuccess ? (
-                <>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-foreground mb-2 relative">
-                    Reset Password
-                  </h1>
-                  <p className="text-muted-foreground text-sm md:text-base lg:text-sm font-medium">
-                    Enter your new password for <strong className="text-foreground">{tokenEmail}</strong>
-                  </p>
-                </>
-              ) : (
-                <>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                    <CheckCircle2 className="w-8 h-8 text-primary" />
-                  </div>
-                  <h1 className="text-xl md:text-2xl lg:text-xl font-medium tracking-tight text-foreground mb-2 relative">
-                    Password Reset Successful
-                  </h1>
-                  <p className="text-muted-foreground text-sm md:text-base lg:text-sm font-medium">
-                    Your password has been successfully reset. You will be logged in automatically...
-                  </p>
-                </>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex flex-col gap-8">
+            <div className="grid gap-2">
+              <Label htmlFor="newPassword">New Password</Label>
+              <PasswordInput
+                id="newPassword"
+                placeholder="Enter your new password"
+                {...form.register('newPassword')}
+                aria-invalid={!!form.formState.errors.newPassword}
+                autoComplete="new-password"
+              />
+              {form.formState.errors.newPassword && (
+                <p className="text-sm text-destructive">
+                  {form.formState.errors.newPassword.message}
+                </p>
               )}
-            </motion.div>
-          </div>
+            </div>
 
-          {!isSuccess ? (
-            <>
-              {/* API Error Message */}
-              {apiError && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6"
-                >
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{apiError}</AlertDescription>
-                  </Alert>
-                </motion.div>
+            <div className="grid gap-2">
+              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <PasswordInput
+                id="confirmPassword"
+                placeholder="Confirm your new password"
+                {...form.register('confirmPassword')}
+                aria-invalid={!!form.formState.errors.confirmPassword}
+                autoComplete="new-password"
+              />
+              {form.formState.errors.confirmPassword && (
+                <p className="text-sm text-destructive">
+                  {form.formState.errors.confirmPassword.message}
+                </p>
               )}
+            </div>
 
-              {/* Reset Password Form */}
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
-                  {/* New Password */}
-                  <FormField
-                    control={form.control}
-                    name="newPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground font-medium">New Password</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
-                            <Input
-                              {...field}
-                              type={showPassword ? 'text' : 'password'}
-                              placeholder="Enter your new password"
-                              className="pl-10 pr-10 bg-input border-border"
-                              autoComplete="new-password"
-                            />
-                            <Button
-                              type="button"
-                              onClick={() => setShowPassword(!showPassword)}
-                              variant="ghost"
-                              size="icon"
-                              className="absolute right-0 top-1/2 -translate-y-1/2 h-full px-3 hover:bg-transparent"
-                            >
-                              {showPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
-                            </Button>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Confirm Password */}
-                  <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-foreground font-medium">Confirm New Password</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
-                            <Input
-                              {...field}
-                              type={showConfirmPassword ? 'text' : 'password'}
-                              placeholder="Confirm your new password"
-                              className="pl-10 pr-10 bg-input border-border"
-                              autoComplete="new-password"
-                            />
-                            <Button
-                              type="button"
-                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                              variant="ghost"
-                              size="icon"
-                              className="absolute right-0 top-1/2 -translate-y-1/2 h-full px-3 hover:bg-transparent"
-                            >
-                              {showConfirmPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
-                            </Button>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Password Requirements */}
-                  <div className="p-4 rounded-lg bg-muted/50 border border-border">
-                    <PasswordStrengthIndicator
-                      password={form.watch('newPassword')}
-                      showStrengthBar={!!form.watch('newPassword')}
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <Button
-                    type="submit"
-                    disabled={!form.formState.isValid || isSubmitting}
-                    className="w-full mt-8"
-                    size="lg"
-                  >
-                    {isSubmitting ? 'Resetting Password...' : 'Reset Password'}
-                    {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" />}
-                  </Button>
-                </form>
-              </Form>
-            </>
-          ) : (
-            <>
-              {/* Success State */}
-              <div className="space-y-6">
-                <Alert className="bg-success/10 border-success/20 text-success">
-                  <AlertDescription>
-                    <p>Your password has been successfully reset and all existing sessions have been invalidated for security.</p>
-                  </AlertDescription>
-                </Alert>
-
-                {/* Action Button */}
-                <Button onClick={goToLogin} className="w-full" size="lg">
-                  Continue to Sign In
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+            {/* Password Strength Indicator */}
+            {form.watch('newPassword') && (
+              <div className="p-4 rounded-lg bg-muted/50 border border-border">
+                <PasswordStrengthIndicator
+                  password={form.watch('newPassword')}
+                  showStrengthBar
+                />
               </div>
-            </>
-          )}
-        </div>
-      </motion.div>
-    </div>
+            )}
+
+            <div className="flex flex-col gap-4">
+              <Button
+                type="submit"
+                disabled={!form.formState.isValid || isSubmitting}
+                className="w-full"
+              >
+                {isSubmitting ? 'Resetting Password...' : 'Reset Password'}
+              </Button>
+
+              <Button variant="link" asChild className="w-full">
+                <Link to="/login">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Sign In
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   )
 }
