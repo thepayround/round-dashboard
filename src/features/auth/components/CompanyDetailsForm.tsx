@@ -1,5 +1,4 @@
-import { motion } from 'framer-motion'
-import { Building, Hash, CreditCard } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 
 import { useCompanyDetailsFormController } from '../hooks/useCompanyDetailsFormController'
 
@@ -43,109 +42,73 @@ export const CompanyDetailsForm = ({
   const { currencies, isLoading: isCurrenciesLoading } = useCurrency()
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="space-y-6"
-    >
-      {/* Header */}
-      <div className="text-center mb-8">
-        <motion.h2
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-2xl font-normal tracking-tight text-white mb-2"
-        >
-          Company Information
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-white/85"
-        >
-          Tell us about your company for billing and compliance
-        </motion.p>
-      </div>
-
+    <div className="flex flex-col gap-6">
       {/* Company Name */}
-      <div className="space-y-2">
-        <Label htmlFor="companyName" className="text-sm font-normal text-white/90 tracking-tight">
-          Company Name<span className="text-destructive"> *</span>
+      <div className="grid gap-2">
+        <Label htmlFor="companyName">
+          Company Name <span className="text-destructive">*</span>
         </Label>
-        <div className="relative">
-          <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            id="companyName"
-            type="text"
-            value={companyInfo.companyName}
-            onChange={e => handleInputChange('companyName', e.target.value)}
-            onBlur={e => handleInputBlur('companyName', e.target.value)}
-            placeholder="Acme Corporation"
-            className="pl-10"
-            required
-            aria-invalid={hasCompanyError('companyName')}
-            aria-describedby={hasCompanyError('companyName') ? 'companyName-error' : undefined}
-          />
-        </div>
+        <Input
+          id="companyName"
+          type="text"
+          value={companyInfo.companyName}
+          onChange={e => handleInputChange('companyName', e.target.value)}
+          onBlur={e => handleInputBlur('companyName', e.target.value)}
+          placeholder="Acme Corporation"
+          required
+          aria-invalid={hasCompanyError('companyName')}
+          aria-describedby={hasCompanyError('companyName') ? 'companyName-error' : undefined}
+        />
         {hasCompanyError('companyName') && (
-          <p id="companyName-error" className="text-sm text-destructive">
+          <p id="companyName-error" className="text-sm text-destructive flex items-center gap-1">
+            <AlertCircle className="w-3.5 h-3.5" />
             {getCompanyError('companyName')}
           </p>
         )}
       </div>
 
       {/* Registration Number & Tax ID Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4">
         {/* Registration Number */}
-        <div className="space-y-2">
-          <Label htmlFor="registrationNumber" className="text-sm font-normal text-white/90 tracking-tight">
-            Registration Number<span className="text-destructive"> *</span>
+        <div className="grid gap-2">
+          <Label htmlFor="registrationNumber">
+            Registration Number <span className="text-destructive">*</span>
           </Label>
-          <div className="relative">
-            <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              id="registrationNumber"
-              type="text"
-              value={companyInfo.registrationNumber}
-              onChange={e => handleInputChange('registrationNumber', e.target.value)}
-              onBlur={e => handleInputBlur('registrationNumber', e.target.value)}
-              placeholder="12345678"
-              className="pl-10"
-              required
-              aria-invalid={hasCompanyError('registrationNumber')}
-              aria-describedby={hasCompanyError('registrationNumber') ? 'registrationNumber-error' : undefined}
-            />
-          </div>
+          <Input
+            id="registrationNumber"
+            type="text"
+            value={companyInfo.registrationNumber}
+            onChange={e => handleInputChange('registrationNumber', e.target.value)}
+            onBlur={e => handleInputBlur('registrationNumber', e.target.value)}
+            placeholder="12345678"
+            required
+            aria-invalid={hasCompanyError('registrationNumber')}
+            aria-describedby={hasCompanyError('registrationNumber') ? 'registrationNumber-error' : undefined}
+          />
           {hasCompanyError('registrationNumber') && (
-            <p id="registrationNumber-error" className="text-sm text-destructive">
+            <p id="registrationNumber-error" className="text-sm text-destructive flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" />
               {getCompanyError('registrationNumber')}
             </p>
           )}
         </div>
 
         {/* Tax ID */}
-        <div className="space-y-2">
-          <Label htmlFor="taxId" className="text-sm font-normal text-white/90 tracking-tight">
-            Tax ID
-          </Label>
-          <div className="relative">
-            <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              id="taxId"
-              type="text"
-              value={companyInfo.taxId}
-              onChange={e => handleInputChange('taxId', e.target.value)}
-              onBlur={e => handleInputBlur('taxId', e.target.value)}
-              placeholder="XX-XXXXXXX"
-              className="pl-10"
-              aria-invalid={hasCompanyError('taxId')}
-              aria-describedby={hasCompanyError('taxId') ? 'taxId-error' : undefined}
-            />
-          </div>
+        <div className="grid gap-2">
+          <Label htmlFor="taxId">Tax ID</Label>
+          <Input
+            id="taxId"
+            type="text"
+            value={companyInfo.taxId}
+            onChange={e => handleInputChange('taxId', e.target.value)}
+            onBlur={e => handleInputBlur('taxId', e.target.value)}
+            placeholder="XX-XXXXXXX"
+            aria-invalid={hasCompanyError('taxId')}
+            aria-describedby={hasCompanyError('taxId') ? 'taxId-error' : undefined}
+          />
           {hasCompanyError('taxId') && (
-            <p id="taxId-error" className="text-sm text-destructive">
+            <p id="taxId-error" className="text-sm text-destructive flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" />
               {getCompanyError('taxId')}
             </p>
           )}
@@ -153,9 +116,9 @@ export const CompanyDetailsForm = ({
       </div>
 
       {/* Currency */}
-      <div className="space-y-2">
-        <Label htmlFor="currency" className="text-sm font-normal text-white/90 tracking-tight">
-          Currency<span className="text-destructive"> *</span>
+      <div className="grid gap-2">
+        <Label htmlFor="currency">
+          Currency <span className="text-destructive">*</span>
         </Label>
         <Select
           value={companyInfo.currency ?? ''}
@@ -170,7 +133,6 @@ export const CompanyDetailsForm = ({
         >
           <SelectTrigger
             id="currency"
-            className="w-full"
             aria-invalid={hasCompanyError('currency')}
             aria-describedby={hasCompanyError('currency') ? 'currency-error' : undefined}
           >
@@ -185,16 +147,12 @@ export const CompanyDetailsForm = ({
           </SelectContent>
         </Select>
         {hasCompanyError('currency') && (
-          <p id="currency-error" className="text-sm text-destructive">
+          <p id="currency-error" className="text-sm text-destructive flex items-center gap-1">
+            <AlertCircle className="w-3.5 h-3.5" />
             {getCompanyError('currency')}
           </p>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }
-
-
-
-
-

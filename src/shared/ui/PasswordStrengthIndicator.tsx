@@ -80,10 +80,10 @@ export const PasswordStrengthIndicator = ({
       {showStrengthBar && password && (
         <div className="space-y-1">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-white/60">Password Strength</span>
+            <span className="text-muted-foreground">Password Strength</span>
             <span className={`font-normal ${strength.color}`}>{strength.label}</span>
           </div>
-          <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-300 ${
                 (() => {
@@ -102,17 +102,17 @@ export const PasswordStrengthIndicator = ({
 
       {/* Requirements Checklist */}
       <div className="space-y-1.5">
-        <p className="text-xs font-normal text-white/60">
+        <p className="text-xs font-normal text-muted-foreground">
           {isAllMet ? 'All requirements met!' : 'Password must contain:'}
         </p>
         <ul className="space-y-1">
-          {requirements.map((requirement, index) => {
+          {requirements.map((requirement) => {
             const isMet = requirement.test(password)
             return (
               <li
-                key={index}
+                key={requirement.label}
                 className={`flex items-center gap-2 text-xs transition-colors ${
-                  isMet ? 'text-emerald-400' : 'text-white/60'
+                  isMet ? 'text-emerald-400' : 'text-muted-foreground'
                 }`}
               >
                 {isMet ? (
