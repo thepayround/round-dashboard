@@ -3,12 +3,13 @@ import { Mail, UserPlus } from 'lucide-react'
 import { useInviteMemberModalController } from '../hooks/useInviteMemberModalController'
 import type { UserRole } from '../types/team.types'
 
+import { Combobox } from '@/shared/ui/Combobox'
+import type { ComboboxOption } from '@/shared/ui/Combobox/types'
 import { Alert, AlertDescription } from '@/shared/ui/shadcn/alert'
 import { Button } from '@/shared/ui/shadcn/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/shadcn/dialog'
 import { Input } from '@/shared/ui/shadcn/input'
 import { Label } from '@/shared/ui/shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
 
 interface InviteMemberModalProps {
   isOpen: boolean
@@ -17,15 +18,15 @@ interface InviteMemberModalProps {
   isLoading?: boolean
 }
 
-const ROLE_OPTIONS: { value: UserRole; label: string; description: string }[] = [
-  { value: 'SuperAdmin', label: 'Super Admin', description: 'Full system access' },
-  { value: 'Admin', label: 'Admin', description: 'Manage team and settings' },
-  { value: 'TeamManager', label: 'Team Manager', description: 'Manage team members' },
-  { value: 'TeamMember', label: 'Team Member', description: 'Standard access' },
-  { value: 'Sales', label: 'Sales', description: 'Sales team member' },
-  { value: 'Finance', label: 'Finance', description: 'Finance team member' },
-  { value: 'Support', label: 'Support', description: 'Support team member' },
-  { value: 'Viewer', label: 'Viewer', description: 'Read-only access' },
+const ROLE_OPTIONS: ComboboxOption<UserRole>[] = [
+  { value: 'SuperAdmin', label: 'Super Admin - Full system access' },
+  { value: 'Admin', label: 'Admin - Manage team and settings' },
+  { value: 'TeamManager', label: 'Team Manager - Manage team members' },
+  { value: 'TeamMember', label: 'Team Member - Standard access' },
+  { value: 'Sales', label: 'Sales - Sales team member' },
+  { value: 'Finance', label: 'Finance - Finance team member' },
+  { value: 'Support', label: 'Support - Support team member' },
+  { value: 'Viewer', label: 'Viewer - Read-only access' },
 ]
 
 export const InviteMemberModal = ({
@@ -81,21 +82,15 @@ export const InviteMemberModal = ({
 
           <div className="space-y-2">
             <Label htmlFor="invite-role">Select Role</Label>
-            <Select value={selectedRole} onValueChange={value => handleRoleChange(value as UserRole)}>
-              <SelectTrigger id="invite-role">
-                <SelectValue placeholder="Select a role" />
-              </SelectTrigger>
-              <SelectContent>
-                {ROLE_OPTIONS.map(role => (
-                  <SelectItem key={role.value} value={role.value}>
-                    <div className="flex flex-col">
-                      <span>{role.label}</span>
-                      <span className="text-xs text-muted-foreground">{role.description}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Combobox
+              id="invite-role"
+              options={ROLE_OPTIONS}
+              value={selectedRole}
+              onChange={value => handleRoleChange((value ?? 'TeamMember') as UserRole)}
+              placeholder="Select a role"
+              searchable={true}
+              clearable={false}
+            />
           </div>
 
           {error && (

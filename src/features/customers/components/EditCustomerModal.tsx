@@ -3,18 +3,20 @@ import React from 'react'
 
 import { useEditCustomerModalController } from '../hooks/useEditCustomerModalController'
 
-import { useCurrencies, useCountries } from '@/shared/hooks/api/useCountryCurrency'
+import { useCountries } from '@/shared/hooks/api/useCountryCurrency'
 import { useTimezones, useLanguages } from '@/shared/hooks/api/useUserSettingsOptions'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
 import { CustomerType } from '@/shared/types/customer.types'
 import { AddressFormGroup, type Address } from '@/shared/ui'
+import { Combobox } from '@/shared/ui/Combobox'
+import type { ComboboxOption } from '@/shared/ui/Combobox/types'
+import { CurrencySelect } from '@/shared/ui/CurrencySelect'
 import { PhoneInput } from '@/shared/ui/PhoneInput'
 import { Badge } from '@/shared/ui/shadcn/badge'
 import { Button } from '@/shared/ui/shadcn/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/shadcn/dialog'
 import { Input } from '@/shared/ui/shadcn/input'
 import { Label } from '@/shared/ui/shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
 import { Switch } from '@/shared/ui/shadcn/switch'
 
 interface EditCustomerModalProps {
@@ -48,10 +50,20 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
   } = useEditCustomerModalController({ customer, onCustomerUpdated, onClose })
 
   // Fetch dropdown data
-  const { data: currencies } = useCurrencies()
   const { data: countries } = useCountries()
   const { data: timezones } = useTimezones()
   const { data: languages } = useLanguages()
+
+  // Transform to ComboboxOption format
+  const languageOptions: ComboboxOption<string>[] = languages.map(lang => ({
+    value: lang.value,
+    label: lang.label,
+  }))
+
+  const timezoneOptions: ComboboxOption<string>[] = timezones.map(tz => ({
+    value: tz.value,
+    label: tz.label,
+  }))
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -286,59 +298,40 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                   <Languages className="w-4 h-4" />
                   <span>Language</span>
                 </Label>
-                <Select
+                <Combobox
+                  id="language"
+                  options={languageOptions}
                   value={formData.locale}
-                  onValueChange={(value) => handleInputChange('locale', value)}
-                >
-                  <SelectTrigger id="language">
-                    <SelectValue placeholder="Select language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {languages.map((language) => (
-                      <SelectItem key={language.value} value={language.value}>
-                        {language.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  onChange={(value) => handleInputChange('locale', value ?? '')}
+                  placeholder="Select language"
+                  searchable={true}
+                  clearable={true}
+                />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="currency">Currency</Label>
-                <Select
+                <CurrencySelect
+                  id="currency"
                   value={formData.currency}
-                  onValueChange={(value) => handleInputChange('currency', value)}
-                >
-                  <SelectTrigger id="currency">
-                    <SelectValue placeholder="Select currency" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {currencies.map((currency) => (
-                      <SelectItem key={currency.currencyCodeAlpha} value={currency.currencyCodeAlpha}>
-                        {currency.currencyName} ({currency.currencyCodeAlpha})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  onChange={(value) => handleInputChange('currency', value ?? '')}
+                  placeholder="Select currency"
+                  searchable={true}
+                  clearable={true}
+                />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="timezone">Timezone</Label>
-                <Select
+                <Combobox
+                  id="timezone"
+                  options={timezoneOptions}
                   value={formData.timezone}
-                  onValueChange={(value) => handleInputChange('timezone', value)}
-                >
-                  <SelectTrigger id="timezone">
-                    <SelectValue placeholder="Select timezone" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {timezones.map((timezone) => (
-                      <SelectItem key={timezone.value} value={timezone.value}>
-                        {timezone.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  onChange={(value) => handleInputChange('timezone', value ?? '')}
+                  placeholder="Select timezone"
+                  searchable={true}
+                  clearable={true}
+                />
               </div>
             </div>
 

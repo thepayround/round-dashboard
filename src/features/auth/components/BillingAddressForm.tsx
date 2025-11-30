@@ -2,11 +2,10 @@ import { AlertCircle, Truck } from 'lucide-react'
 
 import { useBillingAddressFormController } from '../hooks/useBillingAddressFormController'
 
-import { useCountries } from '@/shared/hooks/api/useCountryCurrency'
 import type { BillingAddress } from '@/shared/types/business'
+import { CountrySelect } from '@/shared/ui/CountrySelect'
 import { Input } from '@/shared/ui/shadcn/input'
 import { Label } from '@/shared/ui/shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
 import { Switch } from '@/shared/ui/shadcn/switch'
 import type { ValidationError } from '@/shared/utils/validation'
 
@@ -70,8 +69,6 @@ export const AddressForm = ({
     showShipping,
   })
 
-  const { data: countries, isLoading: countriesLoading } = useCountries()
-
   const showShippingEnabled = resolvedShowShipping
   const handleInputBlur = (field: keyof BillingAddress, value: string) => {
     handleFieldBlur(field, value)
@@ -92,13 +89,17 @@ export const AddressForm = ({
           onBlur={e => handleInputBlur('street', e.target.value)}
           placeholder="123 Main Street"
           required={!isOptional}
+          aria-invalid={hasBillingErrors('street')}
+          aria-describedby={hasBillingErrors('street') ? 'billing-street-error' : undefined}
         />
-        {hasBillingErrors('street') && (
-          <p className="text-sm text-destructive flex items-center gap-1">
-            <AlertCircle className="w-3.5 h-3.5" />
-            {getBillingError('street')}
-          </p>
-        )}
+        <div className="min-h-5">
+          {hasBillingErrors('street') && (
+            <p id="billing-street-error" className="text-sm text-destructive flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" />
+              {getBillingError('street')}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Street Address 2 */}
@@ -114,7 +115,7 @@ export const AddressForm = ({
       </div>
 
       {/* City & State Row */}
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 items-start">
         <div className="grid gap-2">
           <Label htmlFor="billing-city">
             City{!isOptional && <span className="text-destructive"> *</span>}
@@ -127,19 +128,21 @@ export const AddressForm = ({
             onBlur={e => handleInputBlur('city', e.target.value)}
             placeholder="New York"
             required={!isOptional}
+            aria-invalid={hasBillingErrors('city')}
+            aria-describedby={hasBillingErrors('city') ? 'billing-city-error' : undefined}
           />
-          {hasBillingErrors('city') && (
-            <p className="text-sm text-destructive flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {getBillingError('city')}
-            </p>
-          )}
+          <div className="min-h-5">
+            {hasBillingErrors('city') && (
+              <p id="billing-city-error" className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {getBillingError('city')}
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="billing-state">
-            State/Province{!isOptional && <span className="text-destructive"> *</span>}
-          </Label>
+          <Label htmlFor="billing-state">State/Province</Label>
           <Input
             id="billing-state"
             type="text"
@@ -147,19 +150,22 @@ export const AddressForm = ({
             onChange={e => handleAddressChange('billing', 'state', e.target.value)}
             onBlur={e => handleInputBlur('state', e.target.value)}
             placeholder="NY"
-            required={!isOptional}
+            aria-invalid={hasBillingErrors('state')}
+            aria-describedby={hasBillingErrors('state') ? 'billing-state-error' : undefined}
           />
-          {hasBillingErrors('state') && (
-            <p className="text-sm text-destructive flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {getBillingError('state')}
-            </p>
-          )}
+          <div className="min-h-5">
+            {hasBillingErrors('state') && (
+              <p id="billing-state-error" className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {getBillingError('state')}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
       {/* ZIP Code & Country Row */}
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 items-start">
         <div className="grid gap-2">
           <Label htmlFor="billing-zipCode">
             ZIP/Postal Code{!isOptional && <span className="text-destructive"> *</span>}
@@ -172,41 +178,40 @@ export const AddressForm = ({
             onBlur={e => handleInputBlur('zipCode', e.target.value)}
             placeholder="10001"
             required={!isOptional}
+            aria-invalid={hasBillingErrors('zipCode')}
+            aria-describedby={hasBillingErrors('zipCode') ? 'billing-zipCode-error' : undefined}
           />
-          {hasBillingErrors('zipCode') && (
-            <p className="text-sm text-destructive flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {getBillingError('zipCode')}
-            </p>
-          )}
+          <div className="min-h-5">
+            {hasBillingErrors('zipCode') && (
+              <p id="billing-zipCode-error" className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {getBillingError('zipCode')}
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="grid gap-2">
           <Label htmlFor="billing-country">
             Country{!isOptional && <span className="text-destructive"> *</span>}
           </Label>
-          <Select
+          <CountrySelect
+            id="billing-country"
             value={currentBillingAddress.country}
-            onValueChange={value => handleAddressChange('billing', 'country', value)}
-            disabled={countriesLoading}
-          >
-            <SelectTrigger id="billing-country">
-              <SelectValue placeholder={countriesLoading ? 'Loading countries...' : 'Select country'} />
-            </SelectTrigger>
-            <SelectContent>
-              {countries.map(country => (
-                <SelectItem key={country.countryCodeAlpha2} value={country.countryCodeAlpha2}>
-                  {country.countryName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {hasBillingErrors('country') && (
-            <p className="text-sm text-destructive flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {getBillingError('country')}
-            </p>
-          )}
+            onChange={value => handleAddressChange('billing', 'country', value || '')}
+            placeholder="Select country"
+            required={!isOptional}
+            clearable={true}
+            searchable={true}
+          />
+          <div className="min-h-5">
+            {hasBillingErrors('country') && (
+              <p id="billing-country-error" className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {getBillingError('country')}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -286,16 +291,13 @@ export const AddressForm = ({
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="shipping-state">
-                    State/Province{!isOptional && <span className="text-destructive"> *</span>}
-                  </Label>
+                  <Label htmlFor="shipping-state">State/Province</Label>
                   <Input
                     id="shipping-state"
                     type="text"
                     value={currentShippingAddress.state}
                     onChange={e => handleAddressChange('shipping', 'state', e.target.value)}
                     placeholder="NY"
-                    required={!isOptional}
                   />
                 </div>
               </div>
@@ -320,22 +322,15 @@ export const AddressForm = ({
                   <Label htmlFor="shipping-country">
                     Country{!isOptional && <span className="text-destructive"> *</span>}
                   </Label>
-                  <Select
+                  <CountrySelect
+                    id="shipping-country"
                     value={currentShippingAddress.country}
-                    onValueChange={value => handleAddressChange('shipping', 'country', value)}
-                    disabled={countriesLoading}
-                  >
-                    <SelectTrigger id="shipping-country">
-                      <SelectValue placeholder={countriesLoading ? 'Loading countries...' : 'Select country'} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {countries.map(country => (
-                        <SelectItem key={country.countryCodeAlpha2} value={country.countryCodeAlpha2}>
-                          {country.countryName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    onChange={value => handleAddressChange('shipping', 'country', value || '')}
+                    placeholder="Select country"
+                    required={!isOptional}
+                    clearable={true}
+                    searchable={true}
+                  />
                 </div>
               </div>
             </div>

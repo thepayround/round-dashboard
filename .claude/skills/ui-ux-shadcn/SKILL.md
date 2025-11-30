@@ -134,6 +134,102 @@ import { DataTable } from '@/shared/ui/DataTable/DataTable'
 />
 ```
 
+### Dropdowns / Select Components
+
+**IMPORTANT**: Do NOT use the basic `Select` component from `@/shared/ui/shadcn/select` for data selection in forms. Use the `Combobox` component or specialized select components instead.
+
+#### When to Use Each Component
+
+| Use Case | Component | Import |
+|----------|-----------|--------|
+| Country selection | `CountrySelect` | `@/shared/ui/CountrySelect` |
+| Currency selection | `CurrencySelect` | `@/shared/ui/CurrencySelect` |
+| Any searchable list | `Combobox` | `@/shared/ui/Combobox` |
+| Simple UI filters (page size, date range) | `Select` | `@/shared/ui/shadcn/select` |
+
+#### Combobox Features
+
+- ✅ Search/filter functionality
+- ✅ Clear button to reset selection
+- ✅ Loading states
+- ✅ Keyboard navigation
+- ✅ ARIA accessibility
+- ✅ Consistent styling (`bg-transparent dark:bg-input/30`)
+
+#### Example Country Selection
+
+```tsx
+import { CountrySelect } from '@/shared/ui/CountrySelect'
+
+<CountrySelect
+  id="country"
+  value={formData.country}
+  onChange={(value) => handleChange('country', value ?? '')}
+  placeholder="Select country"
+  searchable={true}
+  clearable={true}
+/>
+```
+
+#### Example Currency Selection
+
+```tsx
+import { CurrencySelect } from '@/shared/ui/CurrencySelect'
+
+<CurrencySelect
+  id="currency"
+  value={formData.currency}
+  onChange={(value) => handleChange('currency', value ?? '')}
+  placeholder="Select currency"
+  searchable={true}
+  clearable={true}
+/>
+```
+
+#### Example Custom Options with Combobox
+
+```tsx
+import { Combobox } from '@/shared/ui/Combobox'
+import type { ComboboxOption } from '@/shared/ui/Combobox/types'
+
+const roleOptions: ComboboxOption<string>[] = [
+  { value: 'admin', label: 'Admin - Full access' },
+  { value: 'member', label: 'Member - Standard access' },
+]
+
+<Combobox
+  id="role"
+  options={roleOptions}
+  value={selectedRole}
+  onChange={(value) => setSelectedRole(value ?? '')}
+  placeholder="Select role"
+  searchable={true}
+  clearable={false}  // false for required fields
+/>
+```
+
+#### Anti-Pattern - Do NOT Use Basic Select for Form Data
+
+```tsx
+// BAD - Don't use basic Select for data selection
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
+
+<Select value={country} onValueChange={setCountry}>
+  <SelectTrigger>
+    <SelectValue placeholder="Select country" />
+  </SelectTrigger>
+  <SelectContent>
+    {countries.map(c => <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>)}
+  </SelectContent>
+</Select>
+```
+
+#### When Basic Select is Acceptable
+
+- Pagination page size selectors
+- Simple UI filters (Today/Week/Month)
+- Non-data UI controls
+
 ### Dialogs/Modals
 ```tsx
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/shared/ui/shadcn/dialog'

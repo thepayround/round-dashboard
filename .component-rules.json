@@ -12,7 +12,11 @@
         "src/shared/ui/Button/",
         "src/shared/ui/shadcn/",
         "src/shared/ui/Modal/",
+        "src/shared/ui/Combobox/",
+        "src/shared/ui/PhoneInput/",
         "src/features/auth/",
+        "src/features/customers/components/AddCustomerModal.tsx",
+        "src/features/customers/components/EditCustomerModal.tsx",
         "*.test.tsx",
         "*.test.ts",
         "*.spec.tsx",
@@ -130,7 +134,12 @@
         "src/shared/ui/FormInput.tsx",
         "src/shared/ui/UiDropdown/",
         "src/shared/ui/ApiDropdown/",
+        "src/shared/ui/Combobox/",
         "src/shared/widgets/forms/OrganizationForm.tsx",
+        "src/features/settings/components/EditMemberModal.tsx",
+        "src/features/settings/components/InviteMemberModal.tsx",
+        "src/features/customers/components/AddCustomerModal.tsx",
+        "src/features/customers/components/EditCustomerModal.tsx",
         "*.test.tsx",
         "*.stories.tsx"
       ]
@@ -283,6 +292,25 @@
       "excludePaths": [
         "src/shared/ui/shadcn/",
         "src/features/auth/",
+        "*.spec.ts",
+        "*.stories.tsx",
+        "*.stories.ts"
+      ]
+    },
+    {
+      "name": "Use Combobox for form dropdowns",
+      "pattern": "from ['\"]@/shared/ui/shadcn/select['\"]",
+      "message": "Use Combobox, CountrySelect, or CurrencySelect instead of shadcn Select for form data selection. These provide consistent styling, search, clear, and keyboard navigation.",
+      "suggestion": "import { Combobox } from '@/shared/ui/Combobox' or import { CountrySelect } from '@/shared/ui/CountrySelect' or import { CurrencySelect } from '@/shared/ui/CurrencySelect'",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/",
+        "src/shared/widgets/SearchFilterToolbar/",
+        "src/shared/widgets/DataTable/",
+        "src/shared/widgets/Pagination/",
+        "*.test.tsx",
+        "*.test.ts",
+        "*.spec.tsx",
         "*.spec.ts",
         "*.stories.tsx",
         "*.stories.ts"

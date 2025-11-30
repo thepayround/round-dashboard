@@ -169,7 +169,7 @@ export const Combobox = React.forwardRef(<T = string,>(
           {/* Dropdown */}
           <div
             ref={dropdownRef}
-            className="fixed z-50 rounded-md border border-input bg-popover shadow-lg"
+            className="fixed z-50 rounded-md border border-input bg-card shadow-lg"
             style={{
               top: `${dropdownPosition.top}px`,
               left: `${dropdownPosition.left}px`,
@@ -179,7 +179,7 @@ export const Combobox = React.forwardRef(<T = string,>(
           >
             {/* Search Input */}
             {searchable && (
-              <div className="border-b border-input p-2">
+              <div className="border-b border-border p-2">
                 <div className="relative">
                   <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -291,8 +291,87 @@ export const Combobox = React.forwardRef(<T = string,>(
       )
     : null
 
+  const triggerElement = (
+    <div
+      ref={triggerRef}
+      id={inputId}
+      onClick={toggleDropdown}
+      onKeyDown={handleKeyDown}
+      className={cn(
+        'h-9 w-full px-3 rounded-md border border-input shadow-xs',
+        'bg-transparent dark:bg-input/30',
+        'flex items-center justify-between gap-2',
+        'cursor-pointer transition-[color,box-shadow]',
+        'focus:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+        isOpen && 'border-ring ring-ring/50 ring-[3px]',
+        hasError && 'border-destructive',
+        disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
+        className
+      )}
+      role="combobox"
+      aria-expanded={isOpen}
+      aria-controls={listboxId}
+      aria-haspopup="listbox"
+      aria-invalid={hasError}
+      aria-describedby={hasError ? errorId : undefined}
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
+    >
+      {/* Selected Value or Placeholder */}
+      <div className="flex-1 text-sm truncate flex items-center gap-2">
+        {isLoading && !isOpen ? (
+          <>
+            <LoaderCircle className="h-4 w-4 animate-spin text-muted-foreground" />
+            <span className="text-muted-foreground">Loading...</span>
+          </>
+        ) : selectedOption ? (
+          <>
+            {selectedOption.icon && <span className="flex-shrink-0">{selectedOption.icon}</span>}
+            <span>{selectedOption.label}</span>
+          </>
+        ) : (
+          <span className="text-muted-foreground">{placeholder}</span>
+        )}
+      </div>
+
+      {/* Controls */}
+      <div className="flex items-center gap-1 flex-shrink-0">
+        {clearable && selectedOption && !disabled && !isLoading && (
+          <Button
+            onClick={handleClear}
+            variant="ghost"
+            size="sm"
+            className="h-auto w-auto p-1 hover:bg-accent"
+            type="button"
+            aria-label="Clear selection"
+          >
+            <X className="h-3.5 w-3.5" />
+          </Button>
+        )}
+
+        <ChevronDown
+          className={cn(
+            'h-4 w-4 text-muted-foreground transition-transform duration-200',
+            isOpen && 'rotate-180'
+          )}
+        />
+      </div>
+    </div>
+  )
+
+  // If no label or error, render trigger directly without wrapper
+  if (!label && !hasError) {
+    return (
+      <>
+        {triggerElement}
+        {portal}
+      </>
+    )
+  }
+
+  // With label or error, render with wrapper
   return (
-    <div ref={ref} className={cn('w-full', className)}>
+    <div ref={ref} className="w-full">
       {/* Label */}
       {label && (
         <label htmlFor={inputId} className="block text-sm font-medium mb-2">
@@ -301,70 +380,7 @@ export const Combobox = React.forwardRef(<T = string,>(
         </label>
       )}
 
-      {/* Trigger */}
-      <div
-        ref={triggerRef}
-        id={inputId}
-        onClick={toggleDropdown}
-        onKeyDown={handleKeyDown}
-        className={cn(
-          'h-9 px-3 rounded-md border bg-background',
-          'flex items-center justify-between gap-2',
-          'cursor-pointer transition-colors',
-          'focus:outline-none focus:ring-2 focus:ring-ring/50',
-          isOpen && 'border-ring ring-2 ring-ring/50',
-          hasError && 'border-destructive',
-          disabled && 'opacity-50 cursor-not-allowed pointer-events-none'
-        )}
-        role="combobox"
-        aria-expanded={isOpen}
-        aria-controls={listboxId}
-        aria-haspopup="listbox"
-        aria-invalid={hasError}
-        aria-describedby={hasError ? errorId : undefined}
-        aria-disabled={disabled}
-        tabIndex={disabled ? -1 : 0}
-      >
-        {/* Selected Value or Placeholder */}
-        <div className="flex-1 text-sm truncate flex items-center gap-2">
-          {isLoading && !isOpen ? (
-            <>
-              <LoaderCircle className="h-4 w-4 animate-spin text-muted-foreground" />
-              <span className="text-muted-foreground">Loading...</span>
-            </>
-          ) : selectedOption ? (
-            <>
-              {selectedOption.icon && <span className="flex-shrink-0">{selectedOption.icon}</span>}
-              <span>{selectedOption.label}</span>
-            </>
-          ) : (
-            <span className="text-muted-foreground">{placeholder}</span>
-          )}
-        </div>
-
-        {/* Controls */}
-        <div className="flex items-center gap-1 flex-shrink-0">
-          {clearable && selectedOption && !disabled && !isLoading && (
-            <Button
-              onClick={handleClear}
-              variant="ghost"
-              size="sm"
-              className="h-auto w-auto p-1 hover:bg-accent"
-              type="button"
-              aria-label="Clear selection"
-            >
-              <X className="h-3.5 w-3.5" />
-            </Button>
-          )}
-
-          <ChevronDown
-            className={cn(
-              'h-4 w-4 text-muted-foreground transition-transform duration-200',
-              isOpen && 'rotate-180'
-            )}
-          />
-        </div>
-      </div>
+      {triggerElement}
 
       {/* Error Message */}
       {hasError && (

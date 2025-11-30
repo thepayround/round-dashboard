@@ -1,6 +1,9 @@
+import { useMemo } from 'react'
+
+import { Combobox } from '../Combobox'
+import type { ComboboxOption } from '../Combobox/types'
 import { Input } from '../shadcn/input'
 import { Label } from '../shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../shadcn/select'
 
 import type { Address } from './types'
 
@@ -34,6 +37,10 @@ export const AddressFormGroup = ({
       [field]: fieldValue,
     })
   }
+
+  // Transform countries to ComboboxOption format
+  const countryOptions: ComboboxOption<string>[] = useMemo(() =>
+    countries.map(c => ({ value: c.code, label: c.name })), [countries])
 
   return (
     <div className="space-y-4">
@@ -122,25 +129,17 @@ export const AddressFormGroup = ({
           <Label htmlFor="country">
             Country{required && <span className="text-destructive"> *</span>}
           </Label>
-          <Select
+          <Combobox
+            id="country"
+            options={countryOptions}
             value={value.country}
-            onValueChange={(country) => handleFieldChange('country', country)}
+            onChange={(country) => handleFieldChange('country', country ?? '')}
+            placeholder="Select country"
             disabled={disabled}
-          >
-            <SelectTrigger id="country">
-              <SelectValue placeholder="Select country" />
-            </SelectTrigger>
-            <SelectContent>
-              {countries.map((country) => (
-                <SelectItem key={country.code} value={country.code}>
-                  {country.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors?.country && (
-            <p className="text-sm text-destructive">{errors.country}</p>
-          )}
+            error={errors?.country}
+            searchable={true}
+            clearable={true}
+          />
         </div>
       </div>
     </div>

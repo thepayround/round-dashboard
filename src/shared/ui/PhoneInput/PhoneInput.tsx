@@ -181,9 +181,9 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           minWidth: '280px',
         }}
       >
-        <div className="rounded-md border border-input bg-popover shadow-lg max-h-[300px] overflow-hidden">
+        <div className="rounded-md border border-input bg-card shadow-lg max-h-[300px] overflow-hidden">
           {/* Search input */}
-          <div className="border-b border-input p-2">
+          <div className="border-b border-border p-2">
             <div className="relative">
               <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input

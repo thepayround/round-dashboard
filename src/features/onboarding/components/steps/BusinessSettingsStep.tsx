@@ -1,19 +1,14 @@
-﻿import { motion } from 'framer-motion'
-import { AlertCircle, Settings } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Settings } from 'lucide-react'
 
 import { useBusinessSettingsStepController } from '../../hooks/useBusinessSettingsStepController'
 import type { BusinessSettings } from '../../types/onboarding'
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/shadcn/select'
+import { Combobox } from '@/shared/ui/Combobox'
+import type { ComboboxOption } from '@/shared/ui/Combobox/types'
 
 // Timezone options
-const timezones = [
+const timezoneOptions: ComboboxOption<string>[] = [
   { value: 'America/New_York', label: 'Eastern Time (ET)' },
   { value: 'America/Chicago', label: 'Central Time (CT)' },
   { value: 'America/Denver', label: 'Mountain Time (MT)' },
@@ -24,7 +19,7 @@ const timezones = [
 ]
 
 // Fiscal year start months
-const fiscalYearMonths = [
+const fiscalYearOptions: ComboboxOption<string>[] = [
   { value: '1', label: 'January' },
   { value: '2', label: 'February' },
   { value: '3', label: 'March' },
@@ -80,49 +75,31 @@ export const BusinessSettingsStep = ({
       {/* Form */}
       <div className="max-w-[420px] mx-auto space-y-6">
         {/* Timezone */}
-        <div>
-          <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">Timezone</span>
-          <Select value={data.timezone} onValueChange={(value: string) => handleSelectChange('timezone', value)}>
-            <SelectTrigger className={errors.timezone ? 'border-destructive' : ''}>
-              <SelectValue placeholder="Select timezone" />
-            </SelectTrigger>
-            <SelectContent>
-              {timezones.map((tz) => (
-                <SelectItem key={tz.value} value={tz.value}>
-                  {tz.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.timezone && (
-            <div className="mt-1 flex items-center gap-2 text-sm text-destructive">
-              <AlertCircle className="h-4 w-4" />
-              <span>{errors.timezone}</span>
-            </div>
-          )}
+        <div className="grid gap-2">
+          <span className="block text-sm font-normal tracking-tight text-gray-300">Timezone</span>
+          <Combobox
+            options={timezoneOptions}
+            value={data.timezone}
+            onChange={(value) => handleSelectChange('timezone', value ?? '')}
+            placeholder="Select timezone"
+            error={errors.timezone}
+            searchable={true}
+            clearable={true}
+          />
         </div>
 
         {/* Fiscal Year Start */}
-        <div>
-          <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">Fiscal Year Start</span>
-          <Select value={data.fiscalYearStart} onValueChange={(value: string) => handleSelectChange('fiscalYearStart', value)}>
-            <SelectTrigger className={errors.fiscalYearStart ? 'border-destructive' : ''}>
-              <SelectValue placeholder="Select fiscal year start" />
-            </SelectTrigger>
-            <SelectContent>
-              {fiscalYearMonths.map((month) => (
-                <SelectItem key={month.value} value={month.value}>
-                  {month.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.fiscalYearStart && (
-            <div className="mt-1 flex items-center gap-2 text-sm text-destructive">
-              <AlertCircle className="h-4 w-4" />
-              <span>{errors.fiscalYearStart}</span>
-            </div>
-          )}
+        <div className="grid gap-2">
+          <span className="block text-sm font-normal tracking-tight text-gray-300">Fiscal Year Start</span>
+          <Combobox
+            options={fiscalYearOptions}
+            value={data.fiscalYearStart}
+            onChange={(value) => handleSelectChange('fiscalYearStart', value ?? '')}
+            placeholder="Select fiscal year start"
+            error={errors.fiscalYearStart}
+            searchable={true}
+            clearable={true}
+          />
         </div>
       </div>
     </motion.div>

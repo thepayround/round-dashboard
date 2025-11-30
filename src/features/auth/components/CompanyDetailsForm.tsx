@@ -2,11 +2,10 @@ import { AlertCircle } from 'lucide-react'
 
 import { useCompanyDetailsFormController } from '../hooks/useCompanyDetailsFormController'
 
-import { useCurrency } from '@/shared/hooks/useCurrency'
 import type { CompanyInfo, Currency } from '@/shared/types/business'
+import { CurrencySelect } from '@/shared/ui/CurrencySelect'
 import { Input } from '@/shared/ui/shadcn/input'
 import { Label } from '@/shared/ui/shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
 import type { ValidationError } from '@/shared/utils/validation'
 
 
@@ -39,8 +38,6 @@ export const CompanyDetailsForm = ({
     onErrorsChange,
   })
 
-  const { currencies, isLoading: isCurrenciesLoading } = useCurrency()
-
   return (
     <div className="flex flex-col gap-6">
       {/* Company Name */}
@@ -59,16 +56,18 @@ export const CompanyDetailsForm = ({
           aria-invalid={hasCompanyError('companyName')}
           aria-describedby={hasCompanyError('companyName') ? 'companyName-error' : undefined}
         />
-        {hasCompanyError('companyName') && (
-          <p id="companyName-error" className="text-sm text-destructive flex items-center gap-1">
-            <AlertCircle className="w-3.5 h-3.5" />
-            {getCompanyError('companyName')}
-          </p>
-        )}
+        <div className="min-h-5">
+          {hasCompanyError('companyName') && (
+            <p id="companyName-error" className="text-sm text-destructive flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" />
+              {getCompanyError('companyName')}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Registration Number & Tax ID Row */}
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 items-start">
         {/* Registration Number */}
         <div className="grid gap-2">
           <Label htmlFor="registrationNumber">
@@ -85,12 +84,14 @@ export const CompanyDetailsForm = ({
             aria-invalid={hasCompanyError('registrationNumber')}
             aria-describedby={hasCompanyError('registrationNumber') ? 'registrationNumber-error' : undefined}
           />
-          {hasCompanyError('registrationNumber') && (
-            <p id="registrationNumber-error" className="text-sm text-destructive flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {getCompanyError('registrationNumber')}
-            </p>
-          )}
+          <div className="min-h-5">
+            {hasCompanyError('registrationNumber') && (
+              <p id="registrationNumber-error" className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {getCompanyError('registrationNumber')}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Tax ID */}
@@ -106,12 +107,14 @@ export const CompanyDetailsForm = ({
             aria-invalid={hasCompanyError('taxId')}
             aria-describedby={hasCompanyError('taxId') ? 'taxId-error' : undefined}
           />
-          {hasCompanyError('taxId') && (
-            <p id="taxId-error" className="text-sm text-destructive flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {getCompanyError('taxId')}
-            </p>
-          )}
+          <div className="min-h-5">
+            {hasCompanyError('taxId') && (
+              <p id="taxId-error" className="text-sm text-destructive flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {getCompanyError('taxId')}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -120,38 +123,29 @@ export const CompanyDetailsForm = ({
         <Label htmlFor="currency">
           Currency <span className="text-destructive">*</span>
         </Label>
-        <Select
+        <CurrencySelect
+          id="currency"
           value={companyInfo.currency ?? ''}
-          onValueChange={value => {
-            handleSelectChange('currency', value as Currency)
+          onChange={value => {
+            handleSelectChange('currency', (value ?? '') as Currency)
             // Clear any existing currency error when selection is made
             if (hasCompanyError('currency')) {
               onErrorsChange(errors.filter(error => error.field !== 'currency'))
             }
           }}
-          disabled={isCurrenciesLoading}
-        >
-          <SelectTrigger
-            id="currency"
-            aria-invalid={hasCompanyError('currency')}
-            aria-describedby={hasCompanyError('currency') ? 'currency-error' : undefined}
-          >
-            <SelectValue placeholder={isCurrenciesLoading ? 'Loading currencies...' : 'Select currency'} />
-          </SelectTrigger>
-          <SelectContent>
-            {currencies.map(currency => (
-              <SelectItem key={currency.code} value={currency.code}>
-                {currency.code} - {currency.name} ({currency.symbol})
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {hasCompanyError('currency') && (
-          <p id="currency-error" className="text-sm text-destructive flex items-center gap-1">
-            <AlertCircle className="w-3.5 h-3.5" />
-            {getCompanyError('currency')}
-          </p>
-        )}
+          placeholder="Select currency"
+          required
+          clearable={true}
+          searchable={true}
+        />
+        <div className="min-h-5">
+          {hasCompanyError('currency') && (
+            <p id="currency-error" className="text-sm text-destructive flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" />
+              {getCompanyError('currency')}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   )

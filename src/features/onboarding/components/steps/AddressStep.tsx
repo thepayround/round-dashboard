@@ -5,10 +5,9 @@ import type { StepComponentProps } from '../../config/types'
 import { useAddressStepController } from '../../hooks/useAddressStepController'
 import type { EnhancedAddressInfo } from '../../types/onboarding'
 
-import { useCountries } from '@/shared/hooks/api/useCountryCurrency'
+import { CountrySelect } from '@/shared/ui/CountrySelect'
 import { Input } from '@/shared/ui/shadcn/input'
 import { Label } from '@/shared/ui/shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/shadcn/select'
 
 interface AddressStepProps extends StepComponentProps<EnhancedAddressInfo> {
   errors?: Record<string, string>
@@ -27,9 +26,6 @@ export const AddressStep = ({
     data,
     onChange,
   })
-
-  // Fetch countries data
-  const { data: countries = [] } = useCountries()
 
 
   return (
@@ -211,26 +207,15 @@ export const AddressStep = ({
 
           <div className="space-y-2">
             <Label htmlFor="country">Country</Label>
-            <Select
+            <CountrySelect
+              id="country"
               value={billingAddress.country}
-              onValueChange={(value) => handleSelectChange('country', value)}
+              onChange={(value) => handleSelectChange('country', value ?? '')}
+              placeholder="Select country"
               disabled={readOnly}
-            >
-              <SelectTrigger
-                id="country"
-                aria-invalid={!!errors.country}
-                aria-describedby={errors.country ? 'country-error' : undefined}
-              >
-                <SelectValue placeholder="Select country" />
-              </SelectTrigger>
-              <SelectContent>
-                {countries.map((country) => (
-                  <SelectItem key={country.countryCodeAlpha2} value={country.countryCodeAlpha2}>
-                    {country.countryName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              searchable={true}
+              clearable={true}
+            />
             {errors.country && (
               <div id="country-error" className="mt-1 flex items-center gap-2 text-sm text-destructive">
                 <AlertCircle className="h-4 w-4" />

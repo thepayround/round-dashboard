@@ -1,21 +1,18 @@
 import { motion } from 'framer-motion'
 import { Building, ExternalLink, Loader2 } from 'lucide-react'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
-import { useCurrencies, useCountries } from '@/shared/hooks/api'
+import { useCurrencies } from '@/shared/hooks/api'
 import { useCompanySizes } from '@/shared/hooks/api/useCompanySize'
 import { useIndustries } from '@/shared/hooks/api/useIndustry'
 import { useOrganizationTypes } from '@/shared/hooks/api/useOrganizationType'
 import { useTimezones } from '@/shared/hooks/api/useUserSettingsOptions'
+import { Combobox } from '@/shared/ui/Combobox'
+import type { ComboboxOption } from '@/shared/ui/Combobox/types'
+import { CountrySelect } from '@/shared/ui/CountrySelect'
+import { CurrencySelect } from '@/shared/ui/CurrencySelect'
 import { Input } from '@/shared/ui/shadcn/input'
 import { Label } from '@/shared/ui/shadcn/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/shadcn/select'
 import { Textarea } from '@/shared/ui/shadcn/textarea'
 
 export interface OrganizationFormData {
@@ -58,7 +55,6 @@ export const OrganizationForm = ({
   className = ''
 }: OrganizationFormProps) => {
   // Fetch options from API
-  const { data: countries, isLoading: countriesLoading } = useCountries()
   const { data: currencies, isLoading: currenciesLoading } = useCurrencies()
   const { data: industries, isLoading: industriesLoading } = useIndustries()
   const { data: companySizes, isLoading: companySizesLoading } = useCompanySizes()
@@ -67,6 +63,34 @@ export const OrganizationForm = ({
 
   // Get currency symbol
   const currencySymbol = currencies.find(c => c.currencyCodeAlpha === (data.currency || 'USD'))?.currencySymbol || '$'
+
+  // Transform to ComboboxOption format
+  const industryOptions: ComboboxOption<string>[] = useMemo(() =>
+    industries.map(ind => ({ value: ind.code, label: ind.name })), [industries])
+
+  const companySizeOptions: ComboboxOption<string>[] = useMemo(() =>
+    companySizes.map(size => ({ value: size.code, label: size.name })), [companySizes])
+
+  const organizationTypeOptions: ComboboxOption<string>[] = useMemo(() =>
+    organizationTypes.map(type => ({ value: type.code, label: type.name })), [organizationTypes])
+
+  const timezoneOptions: ComboboxOption<string>[] = useMemo(() =>
+    timezones.map(tz => ({ value: tz.value, label: tz.label })), [timezones])
+
+  const fiscalYearOptions: ComboboxOption<string>[] = useMemo(() => [
+    { value: 'January', label: 'January' },
+    { value: 'February', label: 'February' },
+    { value: 'March', label: 'March' },
+    { value: 'April', label: 'April' },
+    { value: 'May', label: 'May' },
+    { value: 'June', label: 'June' },
+    { value: 'July', label: 'July' },
+    { value: 'August', label: 'August' },
+    { value: 'September', label: 'September' },
+    { value: 'October', label: 'October' },
+    { value: 'November', label: 'November' },
+    { value: 'December', label: 'December' },
+  ], [])
 
   // Handle input changes
   const handleInputChange = useCallback((field: keyof OrganizationFormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -82,12 +106,6 @@ export const OrganizationForm = ({
       [field]: value,
     })
   }, [data, onChange])
-
-  // Fiscal year months
-  const fiscalYearMonths = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ]
 
   return (
     <motion.div
@@ -221,31 +239,15 @@ export const OrganizationForm = ({
               <Label htmlFor="country" className="text-fg-muted">
                 Country <span className="text-destructive">*</span>
               </Label>
-              <Select
+              <CountrySelect
+                id="country"
                 value={data.country}
-                onValueChange={(value) => handleSelectChange('country', value)}
-                disabled={countriesLoading}
-              >
-                <SelectTrigger id="country" className={errors.country ? 'border-destructive' : ''}>
-                  <SelectValue placeholder={countriesLoading ? 'Loading...' : 'Select country'} />
-                </SelectTrigger>
-                <SelectContent>
-                  {countriesLoading ? (
-                    <div className="flex items-center justify-center py-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    </div>
-                  ) : (
-                    countries.map((country) => (
-                      <SelectItem key={country.countryCodeAlpha2} value={country.countryCodeAlpha2}>
-                        {country.countryName}
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
-              {errors.country && (
-                <p className="text-sm text-destructive">{errors.country}</p>
-              )}
+                onChange={(value) => handleSelectChange('country', value ?? '')}
+                placeholder="Select country"
+                error={errors.country}
+                searchable={true}
+                clearable={true}
+              />
             </div>
 
             {/* Industry */}
@@ -253,31 +255,18 @@ export const OrganizationForm = ({
               <Label htmlFor="industry" className="text-fg-muted">
                 Industry <span className="text-destructive">*</span>
               </Label>
-              <Select
+              <Combobox
+                id="industry"
+                options={industryOptions}
                 value={data.industry}
-                onValueChange={(value) => handleSelectChange('industry', value)}
+                onChange={(value) => handleSelectChange('industry', value ?? '')}
+                placeholder="Select industry"
+                error={errors.industry}
                 disabled={industriesLoading}
-              >
-                <SelectTrigger id="industry" className={errors.industry ? 'border-destructive' : ''}>
-                  <SelectValue placeholder={industriesLoading ? 'Loading...' : 'Select industry'} />
-                </SelectTrigger>
-                <SelectContent>
-                  {industriesLoading ? (
-                    <div className="flex items-center justify-center py-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    </div>
-                  ) : (
-                    industries.map((industry) => (
-                      <SelectItem key={industry.code} value={industry.code}>
-                        {industry.name}
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
-              {errors.industry && (
-                <p className="text-sm text-destructive">{errors.industry}</p>
-              )}
+                isLoading={industriesLoading}
+                searchable={true}
+                clearable={true}
+              />
             </div>
 
             {/* Company Size */}
@@ -285,31 +274,18 @@ export const OrganizationForm = ({
               <Label htmlFor="companySize" className="text-fg-muted">
                 Company Size <span className="text-destructive">*</span>
               </Label>
-              <Select
+              <Combobox
+                id="companySize"
+                options={companySizeOptions}
                 value={data.companySize}
-                onValueChange={(value) => handleSelectChange('companySize', value)}
+                onChange={(value) => handleSelectChange('companySize', value ?? '')}
+                placeholder="Select company size"
+                error={errors.companySize}
                 disabled={companySizesLoading}
-              >
-                <SelectTrigger id="companySize" className={errors.companySize ? 'border-destructive' : ''}>
-                  <SelectValue placeholder={companySizesLoading ? 'Loading...' : 'Select company size'} />
-                </SelectTrigger>
-                <SelectContent>
-                  {companySizesLoading ? (
-                    <div className="flex items-center justify-center py-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    </div>
-                  ) : (
-                    companySizes.map((size) => (
-                      <SelectItem key={size.code} value={size.code}>
-                        {size.name}
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
-              {errors.companySize && (
-                <p className="text-sm text-destructive">{errors.companySize}</p>
-              )}
+                isLoading={companySizesLoading}
+                searchable={true}
+                clearable={true}
+              />
             </div>
 
             {/* Organization Type */}
@@ -317,31 +293,18 @@ export const OrganizationForm = ({
               <Label htmlFor="organizationType" className="text-fg-muted">
                 Organization Type <span className="text-destructive">*</span>
               </Label>
-              <Select
+              <Combobox
+                id="organizationType"
+                options={organizationTypeOptions}
                 value={data.organizationType}
-                onValueChange={(value) => handleSelectChange('organizationType', value)}
+                onChange={(value) => handleSelectChange('organizationType', value ?? '')}
+                placeholder="Select organization type"
+                error={errors.organizationType}
                 disabled={organizationTypesLoading}
-              >
-                <SelectTrigger id="organizationType" className={errors.organizationType ? 'border-destructive' : ''}>
-                  <SelectValue placeholder={organizationTypesLoading ? 'Loading...' : 'Select organization type'} />
-                </SelectTrigger>
-                <SelectContent>
-                  {organizationTypesLoading ? (
-                    <div className="flex items-center justify-center py-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    </div>
-                  ) : (
-                    organizationTypes.map((type) => (
-                      <SelectItem key={type.code} value={type.code}>
-                        {type.name}
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
-              {errors.organizationType && (
-                <p className="text-sm text-destructive">{errors.organizationType}</p>
-              )}
+                isLoading={organizationTypesLoading}
+                searchable={true}
+                clearable={true}
+              />
             </div>
 
             {/* Registration Number */}
@@ -406,39 +369,14 @@ export const OrganizationForm = ({
                 <Label htmlFor="currency" className="text-fg-muted">
                   Currency <span className="text-destructive">*</span>
                 </Label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10 pointer-events-none">
-                    {currenciesLoading ? (
-                      <Loader2 className="h-4 w-4 animate-spin text-secondary" />
-                    ) : (
-                      <span className="text-sm font-semibold text-secondary">
-                        {currencySymbol}
-                      </span>
-                    )}
-                  </div>
-                  <Select
-                    value={data.currency}
-                    onValueChange={(value) => handleSelectChange('currency', value)}
-                    disabled={currenciesLoading}
-                  >
-                    <SelectTrigger id="currency" className="pl-10">
-                      <SelectValue placeholder={currenciesLoading ? 'Loading...' : 'Select currency'} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {currenciesLoading ? (
-                        <div className="flex items-center justify-center py-2">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        </div>
-                      ) : (
-                        currencies.map((currency) => (
-                          <SelectItem key={currency.currencyCodeAlpha} value={currency.currencyCodeAlpha}>
-                            {currency.currencyCodeAlpha} - {currency.currencyName}
-                          </SelectItem>
-                        ))
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <CurrencySelect
+                  id="currency"
+                  value={data.currency}
+                  onChange={(value) => handleSelectChange('currency', value ?? '')}
+                  placeholder="Select currency"
+                  searchable={true}
+                  clearable={true}
+                />
               </div>
 
               {/* Revenue */}
@@ -498,28 +436,17 @@ export const OrganizationForm = ({
                 <Label htmlFor="timeZone" className="text-fg-muted">
                   Time Zone
                 </Label>
-                <Select
+                <Combobox
+                  id="timeZone"
+                  options={timezoneOptions}
                   value={data.timeZone}
-                  onValueChange={(value) => handleSelectChange('timeZone', value)}
+                  onChange={(value) => handleSelectChange('timeZone', value ?? '')}
+                  placeholder="Select time zone"
                   disabled={timezonesLoading}
-                >
-                  <SelectTrigger id="timeZone">
-                    <SelectValue placeholder={timezonesLoading ? 'Loading...' : 'Select time zone'} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {timezonesLoading ? (
-                      <div className="flex items-center justify-center py-2">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      </div>
-                    ) : (
-                      timezones.map((timezone) => (
-                        <SelectItem key={timezone.value} value={timezone.value}>
-                          {timezone.label}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
+                  isLoading={timezonesLoading}
+                  searchable={true}
+                  clearable={true}
+                />
               </div>
 
               {/* Fiscal Year Start */}
@@ -527,21 +454,15 @@ export const OrganizationForm = ({
                 <Label htmlFor="fiscalYearStart" className="text-fg-muted">
                   Fiscal Year Start
                 </Label>
-                <Select
+                <Combobox
+                  id="fiscalYearStart"
+                  options={fiscalYearOptions}
                   value={data.fiscalYearStart}
-                  onValueChange={(value) => handleSelectChange('fiscalYearStart', value)}
-                >
-                  <SelectTrigger id="fiscalYearStart">
-                    <SelectValue placeholder="Select fiscal year start" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {fiscalYearMonths.map((month) => (
-                      <SelectItem key={month} value={month}>
-                        {month}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  onChange={(value) => handleSelectChange('fiscalYearStart', value ?? '')}
+                  placeholder="Select fiscal year start"
+                  searchable={true}
+                  clearable={true}
+                />
               </div>
             </div>
           </motion.div>

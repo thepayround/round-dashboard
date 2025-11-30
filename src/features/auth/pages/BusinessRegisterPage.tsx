@@ -33,7 +33,6 @@ export const BusinessRegisterPage = () => {
     isPersonalValid,
     isCompanyValid,
     isCompanyComplete,
-    isBillingComplete,
     handleNextStep,
     handleSkipBilling,
   } = useBusinessRegisterController()
@@ -103,7 +102,7 @@ export const BusinessRegisterPage = () => {
         return (
           <div className="flex flex-col gap-6">
             {/* Name Fields Row */}
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-4 items-start">
               <div className="grid gap-2">
                 <Label htmlFor="firstName">
                   First Name <span className="text-destructive">*</span>
@@ -116,15 +115,18 @@ export const BusinessRegisterPage = () => {
                   onBlur={handlePersonalBlur('firstName')}
                   placeholder="John"
                   aria-invalid={!!personalErrors.firstName}
+                  aria-describedby={personalErrors.firstName ? 'firstName-error' : undefined}
                   autoComplete="given-name"
                   required
                 />
-                {personalErrors.firstName && (
-                  <p className="text-sm text-destructive flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {personalErrors.firstName}
-                  </p>
-                )}
+                <div className="min-h-5">
+                  {personalErrors.firstName && (
+                    <p id="firstName-error" className="text-sm text-destructive flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {personalErrors.firstName}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="grid gap-2">
@@ -139,15 +141,18 @@ export const BusinessRegisterPage = () => {
                   onBlur={handlePersonalBlur('lastName')}
                   placeholder="Doe"
                   aria-invalid={!!personalErrors.lastName}
+                  aria-describedby={personalErrors.lastName ? 'lastName-error' : undefined}
                   autoComplete="family-name"
                   required
                 />
-                {personalErrors.lastName && (
-                  <p className="text-sm text-destructive flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {personalErrors.lastName}
-                  </p>
-                )}
+                <div className="min-h-5">
+                  {personalErrors.lastName && (
+                    <p id="lastName-error" className="text-sm text-destructive flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {personalErrors.lastName}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -165,15 +170,18 @@ export const BusinessRegisterPage = () => {
                 onBlur={handlePersonalBlur('email')}
                 placeholder="john@company.com"
                 aria-invalid={!!personalErrors.email}
+                aria-describedby={personalErrors.email ? 'email-error' : undefined}
                 autoComplete="email"
                 required
               />
-              {personalErrors.email && (
-                <p className="text-sm text-destructive flex items-center gap-1">
-                  <AlertCircle className="w-3.5 h-3.5" />
-                  {personalErrors.email}
-                </p>
-              )}
+              <div className="min-h-5">
+                {personalErrors.email && (
+                  <p id="email-error" className="text-sm text-destructive flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    {personalErrors.email}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Phone */}
@@ -193,12 +201,14 @@ export const BusinessRegisterPage = () => {
                 defaultCountry="GR"
                 showValidation={false}
               />
-              {phoneError && (
-                <p className="text-sm text-destructive flex items-center gap-1">
-                  <AlertCircle className="w-3.5 h-3.5" />
-                  {phoneError}
-                </p>
-              )}
+              <div className="min-h-5">
+                {phoneError && (
+                  <p id="phone-error" className="text-sm text-destructive flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    {phoneError}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Password */}
@@ -214,15 +224,18 @@ export const BusinessRegisterPage = () => {
                 onBlur={handlePersonalBlur('password')}
                 placeholder="Create a strong password"
                 aria-invalid={!!personalErrors.password}
+                aria-describedby={personalErrors.password ? 'password-error' : undefined}
                 autoComplete="new-password"
                 required
               />
-              {personalErrors.password && (
-                <p className="text-sm text-destructive flex items-center gap-1">
-                  <AlertCircle className="w-3.5 h-3.5" />
-                  {personalErrors.password}
-                </p>
-              )}
+              <div className="min-h-5">
+                {personalErrors.password && (
+                  <p id="password-error" className="text-sm text-destructive flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    {personalErrors.password}
+                  </p>
+                )}
+              </div>
 
               {/* Password Strength Indicator */}
               {personalValues.password && (
