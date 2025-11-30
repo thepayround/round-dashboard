@@ -161,13 +161,12 @@ export const ForgotPasswordPage = () => {
                 {isSubmitting ? 'Sending...' : 'Send Reset Link'}
               </Button>
 
-              <Link
-                to="/login"
-                className="text-center text-sm text-primary underline-offset-4 hover:underline inline-flex items-center justify-center gap-2"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Back to Sign In</span>
-              </Link>
+              <Button variant="link" asChild className="w-full">
+                <Link to="/login">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Sign In
+                </Link>
+              </Button>
             </div>
           </div>
         </form>
