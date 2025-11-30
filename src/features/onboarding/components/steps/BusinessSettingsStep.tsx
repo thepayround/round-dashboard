@@ -1,5 +1,5 @@
 ﻿import { motion } from 'framer-motion'
-import { Settings } from 'lucide-react'
+import { AlertCircle, Settings } from 'lucide-react'
 
 import { useBusinessSettingsStepController } from '../../hooks/useBusinessSettingsStepController'
 import type { BusinessSettings } from '../../types/onboarding'
@@ -83,7 +83,7 @@ export const BusinessSettingsStep = ({
         <div>
           <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">Timezone</span>
           <Select value={data.timezone} onValueChange={(value: string) => handleSelectChange('timezone', value)}>
-            <SelectTrigger className={errors.timezone ? 'border-red-500' : ''}>
+            <SelectTrigger className={errors.timezone ? 'border-destructive' : ''}>
               <SelectValue placeholder="Select timezone" />
             </SelectTrigger>
             <SelectContent>
@@ -94,14 +94,19 @@ export const BusinessSettingsStep = ({
               ))}
             </SelectContent>
           </Select>
-          {errors.timezone && <p className="mt-1 text-sm text-primary">{errors.timezone}</p>}
+          {errors.timezone && (
+            <div className="mt-1 flex items-center gap-2 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4" />
+              <span>{errors.timezone}</span>
+            </div>
+          )}
         </div>
 
         {/* Fiscal Year Start */}
         <div>
           <span className="block text-sm font-normal tracking-tight text-gray-300 mb-2">Fiscal Year Start</span>
           <Select value={data.fiscalYearStart} onValueChange={(value: string) => handleSelectChange('fiscalYearStart', value)}>
-            <SelectTrigger className={errors.fiscalYearStart ? 'border-red-500' : ''}>
+            <SelectTrigger className={errors.fiscalYearStart ? 'border-destructive' : ''}>
               <SelectValue placeholder="Select fiscal year start" />
             </SelectTrigger>
             <SelectContent>
@@ -113,7 +118,10 @@ export const BusinessSettingsStep = ({
             </SelectContent>
           </Select>
           {errors.fiscalYearStart && (
-            <p className="mt-1 text-sm text-primary">{errors.fiscalYearStart}</p>
+            <div className="mt-1 flex items-center gap-2 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4" />
+              <span>{errors.fiscalYearStart}</span>
+            </div>
           )}
         </div>
       </div>

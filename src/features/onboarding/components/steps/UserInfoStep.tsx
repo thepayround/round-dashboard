@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { User, Mail, Phone } from 'lucide-react'
+import { AlertCircle, User, Mail, Phone } from 'lucide-react'
 
 import { useUserInfoStepController } from '../../hooks/useUserInfoStepController'
 import type { UserInfo } from '../../types/onboarding'
@@ -85,9 +85,10 @@ export const UserInfoStep = ({
               />
             </div>
             {errors.firstName && (
-              <p id="firstName-error" className="text-xs text-red-400">
-                {errors.firstName}
-              </p>
+              <div id="firstName-error" className="flex items-center gap-2 text-sm text-destructive">
+                <AlertCircle className="h-4 w-4" />
+                <span>{errors.firstName}</span>
+              </div>
             )}
           </div>
 
@@ -108,9 +109,10 @@ export const UserInfoStep = ({
               />
             </div>
             {errors.lastName && (
-              <p id="lastName-error" className="text-xs text-red-400">
-                {errors.lastName}
-              </p>
+              <div id="lastName-error" className="flex items-center gap-2 text-sm text-destructive">
+                <AlertCircle className="h-4 w-4" />
+                <span>{errors.lastName}</span>
+              </div>
             )}
           </div>
         </div>
@@ -134,9 +136,10 @@ export const UserInfoStep = ({
             />
           </div>
           {errors.email && (
-            <p id="email-error" className="text-xs text-red-400">
-              {errors.email}
-            </p>
+            <div id="email-error" className="flex items-center gap-2 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4" />
+              <span>{errors.email}</span>
+            </div>
           )}
         </div>
 
@@ -159,9 +162,10 @@ export const UserInfoStep = ({
             />
           </div>
           {errors.phone && (
-            <p id="phone-error" className="text-xs text-red-400">
-              {errors.phone}
-            </p>
+            <div id="phone-error" className="flex items-center gap-2 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4" />
+              <span>{errors.phone}</span>
+            </div>
           )}
         </div>
       </div>

@@ -105,9 +105,9 @@ export const ResendConfirmationPage = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
+            className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 mb-6"
           >
-            <div className="flex items-center space-x-2 text-primary">
+            <div className="flex items-center space-x-2 text-destructive">
               <AlertCircle className="w-5 h-5" />
               <span className="text-sm font-medium">{apiError}</span>
             </div>
@@ -118,7 +118,7 @@ export const ResendConfirmationPage = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <Label htmlFor="email" className="text-white/90 text-sm mb-2 block">
-              Email Address <span className="text-red-400">*</span>
+              Email Address <span className="text-destructive">*</span>
             </Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
@@ -134,10 +134,10 @@ export const ResendConfirmationPage = () => {
               />
             </div>
             {errors.email && (
-              <p className="mt-1.5 text-sm text-red-400 flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" />
-                {errors.email}
-              </p>
+              <div className="mt-1.5 flex items-center gap-2 text-sm text-destructive">
+                <AlertCircle className="h-4 w-4" />
+                <span>{errors.email}</span>
+              </div>
             )}
           </div>
 

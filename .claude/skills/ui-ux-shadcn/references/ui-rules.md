@@ -148,14 +148,55 @@ import { Button } from '@/shared/ui/shadcn/button'
 
 ### Inputs
 
+All input components use shared styles from `input-styles.ts` for consistency.
+
 ```tsx
 import { Input } from '@/shared/ui/shadcn/input'
+import { PasswordInput } from '@/shared/ui/shadcn/password-input'
+import { Textarea } from '@/shared/ui/shadcn/textarea'
 
-// Default styling handles all theme variables
+// Standard text input
 <Input
   type="email"
   placeholder="Enter email"
   className="pl-10" // Only add position/spacing overrides
+/>
+
+// Password input with show/hide toggle
+<PasswordInput
+  placeholder="Enter password"
+  autoComplete="current-password"
+/>
+
+// Multi-line text input
+<Textarea
+  placeholder="Enter description"
+  rows={4}
+/>
+```
+
+**Creating custom input components:**
+
+```tsx
+import { inputStyles, textareaStyles } from '@/shared/ui/shadcn/input-styles'
+import { cn } from '@/shared/utils/cn'
+
+// Use inputStyles for single-line inputs, textareaStyles for multi-line
+<input className={cn(inputStyles, 'pr-10', className)} />
+```
+
+### Phone Input
+
+```tsx
+import { PhoneInput } from '@/shared/ui/PhoneInput'
+
+<PhoneInput
+  label="Phone Number"
+  value={phone}
+  onChange={setPhone}
+  defaultCountry="US"
+  validateOnBlur={true}
+  error={serverError}
 />
 ```
 
@@ -194,6 +235,35 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
   </DialogContent>
 </Dialog>
 ```
+
+### Error Messages
+
+Use the standard error state pattern with `AlertCircle` icon:
+
+```tsx
+import { AlertCircle } from 'lucide-react'
+
+// Standard error message pattern
+{error && (
+  <div className="flex items-center gap-2 text-sm text-destructive">
+    <AlertCircle className="h-4 w-4" />
+    <span>{error}</span>
+  </div>
+)}
+
+// Required field indicator
+<Label>
+  Email <span className="text-destructive">*</span>
+</Label>
+```
+
+**Important:**
+
+- ✅ Always use `text-destructive` for error text
+- ✅ Use `AlertCircle` icon (h-4 w-4) before error message
+- ✅ Use `flex items-center gap-2 text-sm` layout
+- ❌ Never use `text-red-*` hardcoded colors
+- ❌ Never use `text-primary` for errors
 
 ## Don't Do This
 

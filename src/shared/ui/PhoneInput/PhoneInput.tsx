@@ -1,14 +1,13 @@
-import { ChevronDown, Search, AlertCircle, X, Check } from 'lucide-react'
+import { AlertCircle, ChevronDown, Search, X, Check } from 'lucide-react'
 import React from 'react'
 import { createPortal } from 'react-dom'
-
-import { dropdownStyles, getOptionClasses } from '../dropdown-styles.config'
 
 import { usePhoneInputController } from './usePhoneInputController'
 
 import type { CountryPhoneInfo } from '@/shared/services/api/phoneValidation.service'
 import { LoadingSpinner } from '@/shared/ui/LoadingSpinner'
-import { Button } from '@/shared/ui/shadcn/button'
+import { inputStyles } from '@/shared/ui/shadcn/input-styles'
+import { Label } from '@/shared/ui/shadcn/label'
 import { cn } from '@/shared/utils/cn'
 
 interface PhoneInputProps {
@@ -155,7 +154,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     <>
       {/* Backdrop overlay */}
       <div
-        className={`${dropdownStyles.backdrop.base} ${dropdownStyles.backdrop.zIndex}`}
+        className="fixed inset-0 z-40"
         onClick={(e) => {
           if (e.target === e.currentTarget) {
             closeDropdown()
@@ -174,51 +173,65 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
       {/* Dropdown content */}
       <div
         ref={dropdownRef}
-        className={dropdownStyles.container.positioning}
+        className="fixed z-50"
         style={{
           top: `${dropdownPosition.top}px`,
           left: `${dropdownPosition.left}px`,
           width: `${dropdownPosition.width}px`,
-          zIndex: 9999,
           minWidth: '280px',
         }}
       >
-        <div className={`${dropdownStyles.container.base} ${dropdownStyles.container.maxHeight}`}>
+        <div className="rounded-md border border-input bg-popover shadow-lg max-h-[300px] overflow-hidden">
           {/* Search input */}
-          <div className={dropdownStyles.search.container}>
+          <div className="border-b border-input p-2">
             <div className="relative">
-              <Search className={dropdownStyles.search.icon} />
+              <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 ref={searchInputRef}
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search countries..."
-                className={dropdownStyles.search.input}
+                className={cn(
+                  inputStyles,
+                  'h-8 pl-8 pr-8'
+                )}
+                aria-label="Search options"
               />
               {searchTerm && (
-                <Button
-                  variant="ghost"
-                  size="icon"
+                <button
                   onClick={() => setSearchTerm('')}
-                  className={dropdownStyles.search.clearButton}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-accent rounded p-0.5"
                   type="button"
                   aria-label="Clear search"
                 >
-                  <X className={dropdownStyles.search.clearIcon} />
-                </Button>
+                  <X className="h-3.5 w-3.5 text-muted-foreground" />
+                </button>
               )}
             </div>
           </div>
 
           {/* Countries list */}
-          <div id="phone-countries-listbox" className={dropdownStyles.list.container} onScroll={(e) => e.stopPropagation()}>
+          <div
+            id="phone-countries-listbox"
+            className={cn(
+              "overflow-y-auto max-h-60",
+              "[&::-webkit-scrollbar]:w-1.5",
+              "[&::-webkit-scrollbar-track]:bg-transparent",
+              "[&::-webkit-scrollbar-thumb]:bg-muted-foreground/20",
+              "[&::-webkit-scrollbar-thumb]:rounded-full",
+              "[&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground/40"
+            )}
+            onScroll={(e) => e.stopPropagation()}
+            role="listbox"
+            aria-label="Countries"
+          >
             {filteredCountries.length === 0 ? (
-              <div className={dropdownStyles.list.empty}>
+              <div className="py-6 text-center text-sm text-muted-foreground">
                 No countries found
               </div>
             ) : (
-              <div className={`${dropdownStyles.list.padding} ${dropdownStyles.list.spacing}`}>
+              <div className="py-1">
                 {filteredCountries.map((country, index) => (
                   <CountryOption
                     key={country.countryCode}
@@ -238,117 +251,106 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
   ) : null
 
   return (
-    <div className={className}>
+    <div className={cn("space-y-2", className)}>
       {/* Label */}
       {label && (
-        <label
+        <Label
           id={labelId}
           htmlFor={inputId}
-          className="auth-label"
         >
           {label}
-          {required && <span className="text-primary ml-1" aria-label="required">*</span>}
-        </label>
+        </Label>
       )}
 
       {/* Phone Input Container */}
       <div className={cn(
-        "relative flex w-full rounded-lg overflow-hidden transition-all duration-300",
-        // Match auth-input height exactly
-        "h-10",
-        // Match auth-input background and border exactly
-        "bg-input border transition-[border-color] duration-200",
-        (() => {
-          // Match auth-input CSS: simple border color change on focus
-          if ((isFocused || isDropdownOpen) && hasError) {
-            // Red border on error focus
-            return "border-[#ef4444]"
-          }
-          if (isFocused || isDropdownOpen) {
-            // Blue border on focus (matches auth-input:focus)
-            return "border-[#14bdea]"
-          }
-          if (hasError) {
-            // Error state without focus
-            return "border-[#ef4444] bg-[rgba(239,68,68,0.12)]"
-          }
-          return "border-[#333333]"
-        })(),
+        "relative flex w-full rounded-md overflow-clip",
+        // Height: 36px (same as shadcn Input)
+        "h-9",
+        // Shadcn background and border (matches inputStyles)
+        "bg-transparent dark:bg-input/30 border border-input shadow-xs",
+        // Transition
+        "transition-[color,box-shadow]",
+        // Shadcn focus pattern (applied when input or dropdown is focused)
+        (isFocused || isDropdownOpen) && "border-ring ring-ring/50 ring-[3px]",
+        // Error state
+        hasError && "border-destructive",
         disabled && "opacity-50 cursor-not-allowed"
       )}>
         {/* Country Selector */}
-        <div
-          ref={triggerRef}
-          onClick={handleToggle}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault()
-              handleToggle()
-            }
-          }}
-          style={{ display: 'flex', alignItems: 'center' }}
-          className={cn(
-            'relative gap-2 h-full min-w-[120px] border-r cursor-pointer',
-            // Match auth-input consistent padding (12px)
-            'px-3',
-            // Match auth-input text styling exactly
-            'text-white/95 text-xs font-light outline-none',
-            // Match auth-input border color
-            'border-[#333333]',
-            // Simple background states without animations
-            (() => {
-              if (hasError) {
-                // Error state
-                return 'bg-[rgba(239,68,68,0.12)]'
+        <div className="relative flex items-center h-full min-w-[120px] border-r border-input">
+          <button
+            type="button"
+            ref={triggerRef}
+            onClick={handleToggle}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                handleToggle()
               }
-              return 'bg-transparent hover:bg-white/[0.08]'
-            })(),
-            disabled && 'opacity-50 cursor-not-allowed'
-          )}
-          role="combobox"
-          aria-expanded={isDropdownOpen}
-          aria-haspopup="listbox"
-          aria-controls="phone-countries-listbox"
-          tabIndex={disabled ? -1 : 0}
-        >
-          {(() => {
-            if (isLoading) {
-              return <LoadingSpinner size="sm" color="secondary" />
-            }
-            if (selectedCountry) {
-              return (
-                <>
-                  <span
-                    className={`fi fi-${selectedCountry.countryCode.toLowerCase()} fis flex-shrink-0`}
-                    style={{ fontSize: '1.25rem', lineHeight: '1' }}
-                    role="img"
-                    aria-label={selectedCountry.countryName}
-                  />
-                  <span
-                    className="text-xs md:text-xs text-white/95 truncate flex items-center"
-                    style={{ lineHeight: '1' }}
-                  >
-                    +{selectedCountry.phoneCode}
-                  </span>
-                </>
-              )
-            }
-            return (
-              <span
-                className="text-xs md:text-xs text-white/60 flex items-center"
-                style={{ lineHeight: '1' }}
-              >
-                Select
-              </span>
-            )
-          })()}
-          <ChevronDown
+            }}
             className={cn(
-              'w-3 h-3 text-gray-400 transition-transform duration-200 flex-shrink-0 flex items-center',
-              isDropdownOpen && 'rotate-180'
+              'flex items-center gap-2 h-full w-full px-3 pr-8',
+              'text-sm text-foreground outline-none',
+              'hover:bg-accent/50 transition-colors',
+              disabled && 'cursor-not-allowed'
             )}
-            style={{ lineHeight: '1' }}
-          />
+            role="combobox"
+            aria-expanded={isDropdownOpen}
+            aria-haspopup="listbox"
+            aria-controls="phone-countries-listbox"
+            tabIndex={disabled ? -1 : 0}
+            disabled={disabled}
+          >
+            {(() => {
+              if (isLoading) {
+                return <LoadingSpinner size="sm" color="secondary" />
+              }
+              if (selectedCountry) {
+                return (
+                  <>
+                    <span
+                      className={cn(
+                        `fi fi-${selectedCountry.countryCode.toLowerCase()} fis`,
+                        'flex-shrink-0 overflow-hidden rounded-sm text-xl leading-none'
+                      )}
+                      role="img"
+                      aria-label={selectedCountry.countryName}
+                    />
+                    <span className="truncate">
+                      +{selectedCountry.phoneCode}
+                    </span>
+                  </>
+                )
+              }
+              return (
+                <span className="text-muted-foreground">
+                  Select
+                </span>
+              )
+            })()}
+            <ChevronDown
+              className={cn(
+                'w-4 h-4 text-muted-foreground transition-transform flex-shrink-0 ml-auto',
+                isDropdownOpen && 'rotate-180'
+              )}
+            />
+          </button>
+
+          {/* Clear country button */}
+          {selectedCountry && !disabled && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleCountrySelect(null as any)
+              }}
+              className="absolute right-1 hover:bg-accent rounded p-0.5 transition-colors"
+              type="button"
+              aria-label="Clear country"
+            >
+              <X className="h-3.5 w-3.5 text-muted-foreground" />
+            </button>
+          )}
         </div>
 
         {/* Phone Number Input */}
@@ -371,61 +373,41 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             aria-invalid={hasError}
             aria-describedby={hasError && displayError ? errorId : undefined}
             className={cn(
-              'w-full bg-transparent focus:outline-none',
-              // Match auth-input consistent padding (12px)
-              'px-3',
-              // Match auth-input text color and size exactly
-              isFocused ? 'text-white' : 'text-white/95',
-              'text-xs font-light', // Match auth-input font size/weight
-              // Match auth-input placeholder styling exactly
-              'placeholder:text-white/60 placeholder:font-light',
-              // Autofill/autocomplete styling fixes (same as FormInput)
-              '[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
-              '[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
-              '[&:-webkit-autofill]:[background-color:transparent!important]',
-              '[&:-webkit-autofill]:[background-image:none!important]',
-              '[&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s!important]',
-              // Hover state
-              '[&:-webkit-autofill:hover]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
-              '[&:-webkit-autofill:hover]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
-              '[&:-webkit-autofill:hover]:[background-color:transparent!important]',
-              '[&:-webkit-autofill:hover]:[background-image:none!important]',
-              '[&:-webkit-autofill:hover]:[transition:background-color_5000s_ease-in-out_0s!important]',
-              // Focus state
-              '[&:-webkit-autofill:focus]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.18)_inset!important]',
-              '[&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,1)!important]',
-              '[&:-webkit-autofill:focus]:[background-color:transparent!important]',
-              '[&:-webkit-autofill:focus]:[transition:background-color_5000s_ease-in-out_0s!important]',
-              // Active state
-              '[&:-webkit-autofill:active]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
-              '[&:-webkit-autofill:active]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
-              '[&:-webkit-autofill:active]:[background-color:transparent!important]',
-              '[&:-webkit-autofill:active]:[background-image:none!important]',
-              '[&:-webkit-autofill:active]:[transition:background-color_5000s_ease-in-out_0s!important]',
-              // Internal autofill selected
-              '[&:-internal-autofill-selected]:[background-color:rgba(255,255,255,0.12)!important]',
-              '[&:-internal-autofill-selected]:[background-image:none!important]',
-              '[&:-internal-autofill-selected]:[color:rgba(255,255,255,0.95)!important]',
-              '[&:-internal-autofill-selected]:[-webkit-text-fill-color:rgba(255,255,255,0.95)!important]',
-              '[&:-internal-autofill-selected]:[-webkit-box-shadow:0_0_0_1000px_rgba(255,255,255,0.12)_inset!important]',
-              disabled && 'cursor-not-allowed opacity-50'
+              'w-full h-full bg-transparent px-3 pr-10',
+              'text-sm text-foreground placeholder:text-muted-foreground',
+              'focus:outline-none',
+              disabled && 'cursor-not-allowed'
             )}
             autoComplete="tel"
           />
+          {/* Clear Button */}
+          {phoneNumber && !disabled && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onChange('')
+              }}
+              className="absolute right-3 hover:bg-accent rounded p-0.5 transition-colors"
+              type="button"
+              aria-label="Clear phone number"
+            >
+              <X className="h-3.5 w-3.5 text-muted-foreground" />
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Error Message - Only show if showValidation is true */}
+      {/* Error Message - Matches shadcn error state pattern */}
       {showValidation && hasError && displayError && (
-        <p
+        <div
           id={errorId}
-          className="mt-2 flex items-center space-x-2 auth-validation-error text-sm"
+          className="flex items-center gap-2 text-sm text-destructive"
           role="alert"
           aria-live="polite"
         >
-          <AlertCircle className="w-4 h-4" aria-hidden="true" />
+          <AlertCircle className="h-4 w-4" />
           <span>{displayError}</span>
-        </p>
+        </div>
       )}
 
       {/* Portal-rendered dropdown */}
@@ -456,34 +438,38 @@ const CountryOption: React.FC<CountryOptionProps> = ({
         onClick()
       }
     }}
-    className={getOptionClasses(isHighlighted, isSelected)}
+    className={cn(
+      'relative flex items-center gap-2 px-3 py-2 cursor-pointer text-sm',
+      'transition-colors select-none',
+      'hover:bg-accent hover:text-accent-foreground',
+      isHighlighted && 'bg-accent text-accent-foreground',
+      isSelected && 'font-medium'
+    )}
     role="option"
     aria-selected={isSelected}
     tabIndex={0}
   >
-    <div className={`flex items-center ${dropdownStyles.option.spacing} flex-1 min-w-0`}>
+    <div className="flex items-center gap-2 flex-1 min-w-0">
       <span
-        className={`fi fi-${country.countryCode.toLowerCase()} fis flex-shrink-0`}
-        style={{ fontSize: '1.25rem' }}
+        className={cn(
+          `fi fi-${country.countryCode.toLowerCase()} fis`,
+          'flex-shrink-0 overflow-hidden rounded-sm text-xl'
+        )}
         role="img"
         aria-label={country.countryName}
       />
       <div className="flex-1 min-w-0">
-        <div className={`${dropdownStyles.option.label} truncate`}>
+        <div className="truncate">
           {country.countryName}
         </div>
-        <div className={`${dropdownStyles.option.description} truncate`}>
+        <div className="text-xs text-muted-foreground truncate">
           +{country.phoneCode}
         </div>
       </div>
     </div>
 
     {isSelected && (
-      <Check className={dropdownStyles.option.checkIcon} />
+      <Check className="h-4 w-4 flex-shrink-0 text-primary" />
     )}
   </div>
 )
-
-
-
-

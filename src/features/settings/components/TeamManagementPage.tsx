@@ -146,7 +146,7 @@ export const TeamManagementPage: React.FC = () => {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
           <h3 className="text-lg font-medium text-white mb-2">Error Loading Team</h3>
           <p className="text-gray-400 mb-4">{error}</p>
           <Button

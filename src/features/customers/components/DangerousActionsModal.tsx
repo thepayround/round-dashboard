@@ -99,8 +99,8 @@ export const DangerousActionsModal = ({
 
                 <div className="bg-white/5 border border-border rounded-xl p-6 hover:bg-white/10 transition-all duration-200">
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="p-2 bg-red-500/20 rounded-lg border border-red-500/30">
-                      <Trash2 className="w-5 h-5 text-red-400" />
+                    <div className="p-2 bg-destructive/20 rounded-lg border border-destructive/30">
+                      <Trash2 className="w-5 h-5 text-destructive" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-medium tracking-tight text-white mb-2">Delete Customer</h3>

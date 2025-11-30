@@ -360,15 +360,15 @@ export const FileInput: React.FC<FileInputProps> = ({
       </div>
 
       {error && (
-        <p
+        <div
           id={errorId}
-          className="text-sm text-red-500 font-medium flex items-center space-x-2"
+          className="flex items-center gap-2 text-sm text-destructive"
           role="alert"
           aria-live="polite"
         >
-          <AlertCircle className="w-3.5 h-3.5" />
+          <AlertCircle className="h-4 w-4" />
           <span>{error}</span>
-        </p>
+        </div>
       )}
     </div>
   )

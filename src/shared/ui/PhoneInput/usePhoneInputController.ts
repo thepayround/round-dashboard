@@ -52,7 +52,7 @@ export const usePhoneInputController = ({
   const [isFocused, setIsFocused] = useState(false)
 
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const phoneInputRef = useRef<HTMLInputElement>(null)
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null)

@@ -82,7 +82,7 @@ export const BrandingSection: React.FC = () => {
           />
         </div>
 
-        {error && <p className="text-sm text-red-400 mt-4">{error}</p>}
+        {error && <p className="text-sm text-destructive mt-4">{error}</p>}
 
         <div className="flex justify-end mt-8">
           <Button

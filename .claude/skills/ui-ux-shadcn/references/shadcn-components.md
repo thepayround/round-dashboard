@@ -8,13 +8,19 @@ All Shadcn components are located in `src/shared/ui/shadcn/`
 
 - `checkbox.tsx` - Checkbox inputs
 - `form.tsx` - Form field wrappers
-- `input.tsx` - Text inputs
+- `input.tsx` - Text inputs (uses shared `inputStyles`)
+- `input-styles.ts` - **Shared input styles** for consistent styling across all input components
 - `label.tsx` - Form labels
+- `password-input.tsx` - Password input with show/hide toggle (uses shared `inputStyles`)
 - `radio-group.tsx` - Radio button groups
 - `select.tsx` - Dropdown select
 - `slider.tsx` - Range sliders
 - `switch.tsx` - Toggle switches
-- `textarea.tsx` - Multi-line text inputs
+- `textarea.tsx` - Multi-line text inputs (uses shared `textareaStyles`)
+
+### Custom Form Components (in `src/shared/ui/`)
+
+- `PhoneInput/` - International phone input with country selector (uses shared `inputStyles`)
 
 ### Layout Components
 
@@ -64,6 +70,13 @@ Direct Shadcn imports:
 import { Dialog } from '@/shared/ui/shadcn/dialog'
 import { Form, FormField } from '@/shared/ui/shadcn/form'
 import { Input } from '@/shared/ui/shadcn/input'
+import { PasswordInput } from '@/shared/ui/shadcn/password-input'
+import { Textarea } from '@/shared/ui/shadcn/textarea'
+```
+
+For custom input components that need consistent styling:
+```tsx
+import { inputStyles, textareaStyles } from '@/shared/ui/shadcn/input-styles'
 ```
 
 Wrapper imports:
@@ -80,3 +93,5 @@ import { DataTable } from '@/shared/ui/DataTable/DataTable'
 3. Leverage Form components for all forms
 4. Use consistent sizing (default is sufficient for most cases)
 5. All components support accessibility features
+6. **For new input-like components**: Import from `input-styles.ts` to maintain consistent styling
+7. Use `PasswordInput` for password fields (includes show/hide toggle)

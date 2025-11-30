@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { MapPin, Building, Hash, Info } from 'lucide-react'
+import { AlertCircle, MapPin, Building, Hash, Info } from 'lucide-react'
 
 import type { StepComponentProps } from '../../config/types'
 import { useAddressStepController } from '../../hooks/useAddressStepController'
@@ -79,9 +79,10 @@ export const AddressStep = ({
             />
           </div>
           {errors.name && (
-            <p id="address-name-error" className="mt-1 text-sm text-primary">
-              {errors.name}
-            </p>
+            <div id="address-name-error" className="mt-1 flex items-center gap-2 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4" />
+              <span>{errors.name}</span>
+            </div>
           )}
         </div>
 
@@ -104,9 +105,10 @@ export const AddressStep = ({
                 />
               </div>
               {errors.addressLine1 && (
-                <p id="street-address-error" className="mt-1 text-sm text-primary">
-                  {errors.addressLine1}
-                </p>
+                <div id="street-address-error" className="mt-1 flex items-center gap-2 text-sm text-destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>{errors.addressLine1}</span>
+                </div>
               )}
             </div>
           </div>
@@ -137,9 +139,10 @@ export const AddressStep = ({
                 />
               </div>
               {errors.number && (
-                <p id="unit-number-error" className="mt-1 text-sm text-primary">
-                  {errors.number}
-                </p>
+                <div id="unit-number-error" className="mt-1 flex items-center gap-2 text-sm text-destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>{errors.number}</span>
+                </div>
               )}
             </div>
           </div>
@@ -159,9 +162,10 @@ export const AddressStep = ({
               aria-describedby={errors.city ? 'city-error' : undefined}
             />
             {errors.city && (
-              <p id="city-error" className="mt-1 text-sm text-primary">
-                {errors.city}
-              </p>
+              <div id="city-error" className="mt-1 flex items-center gap-2 text-sm text-destructive">
+                <AlertCircle className="h-4 w-4" />
+                <span>{errors.city}</span>
+              </div>
             )}
           </div>
 
@@ -178,9 +182,10 @@ export const AddressStep = ({
                 aria-describedby={errors.state ? 'state-error' : undefined}
               />
               {errors.state && (
-                <p id="state-error" className="mt-1 text-sm text-primary">
-                  {errors.state}
-                </p>
+                <div id="state-error" className="mt-1 flex items-center gap-2 text-sm text-destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>{errors.state}</span>
+                </div>
               )}
             </div>
 
@@ -196,9 +201,10 @@ export const AddressStep = ({
                 aria-describedby={errors.zipCode ? 'zip-code-error' : undefined}
               />
               {errors.zipCode && (
-                <p id="zip-code-error" className="mt-1 text-sm text-primary">
-                  {errors.zipCode}
-                </p>
+                <div id="zip-code-error" className="mt-1 flex items-center gap-2 text-sm text-destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>{errors.zipCode}</span>
+                </div>
               )}
             </div>
           </div>
@@ -226,9 +232,10 @@ export const AddressStep = ({
               </SelectContent>
             </Select>
             {errors.country && (
-              <p id="country-error" className="mt-1 text-sm text-primary">
-                {errors.country}
-              </p>
+              <div id="country-error" className="mt-1 flex items-center gap-2 text-sm text-destructive">
+                <AlertCircle className="h-4 w-4" />
+                <span>{errors.country}</span>
+              </div>
             )}
           </div>
         </div>
