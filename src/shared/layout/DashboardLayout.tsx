@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { PanelLeft, PanelLeftClose, LogOut, X, Settings } from 'lucide-react'
+import { PanelLeft, PanelLeftClose, LogOut, X, Settings, ChevronUp } from 'lucide-react'
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -329,12 +329,12 @@ export const DashboardLayout = memo(({
               )}
             </AnimatePresence>
 
+            <div className="mx-2 border-t border-border" />
             <button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               className={cn(
-                "w-full flex items-center gap-3 border-t border-border transition-colors hover:bg-accent",
-                isCollapsed ? "p-3 justify-center" : "p-4",
-                showProfileDropdown && "bg-accent"
+                "w-full flex items-center gap-3",
+                isCollapsed ? "p-3 justify-center" : "p-4"
               )}
             >
               <div className={cn(
@@ -345,10 +345,18 @@ export const DashboardLayout = memo(({
               </div>
 
               {!isCollapsed && (
-                <div className="flex-1 min-w-0 text-left">
-                  <p className="text-sm font-medium text-foreground truncate">{userDisplayName}</p>
-                  <p className="text-xs text-muted-foreground truncate">{secondaryUserInfo}</p>
-                </div>
+                <>
+                  <div className="flex-1 min-w-0 text-left">
+                    <p className="text-sm font-medium text-foreground truncate">{userDisplayName}</p>
+                    <p className="text-xs text-muted-foreground truncate">{secondaryUserInfo}</p>
+                  </div>
+                  <ChevronUp
+                    className={cn(
+                      "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
+                      showProfileDropdown ? "rotate-0" : "rotate-180"
+                    )}
+                  />
+                </>
               )}
             </button>
           </div>
@@ -474,7 +482,7 @@ export const DashboardLayout = memo(({
         transition={{ duration: 0.15, ease: 'easeOut' }}
         className={cn(
           'relative z-10',
-          isMobileView ? 'mt-14 p-0' : 'py-2 pl-2'
+          isMobileView ? 'mt-14 p-0' : 'py-2'
         )}
         style={isMobileView ? {
           paddingBottom: 'max(1rem, var(--safe-area-inset-bottom))'
