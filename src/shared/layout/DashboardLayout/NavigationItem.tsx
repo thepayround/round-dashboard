@@ -1,11 +1,10 @@
-﻿import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ANIMATION_VARIANTS } from '@/shared/layout/DashboardLayout/constants'
 import type { NavItem } from '@/shared/layout/DashboardLayout/types'
-import { Button } from '@/shared/ui/shadcn/button'
 import { cn } from '@/shared/utils/cn'
 
 /**
@@ -37,14 +36,14 @@ export interface NavigationItemProps {
 
 /**
  * NavigationItem Component
- * 
+ *
  * Renders a single navigation item with support for:
  * - Collapsible sub-items
  * - Active state highlighting
  * - Keyboard navigation
  * - Tooltips in collapsed mode
  * - Badges for notifications
- * 
+ *
  * @component
  */
 export const NavigationItem = memo<NavigationItemProps>(({
@@ -60,145 +59,139 @@ export const NavigationItem = memo<NavigationItemProps>(({
   focusedIndex,
   isKeyboardNavigating,
   transitionConfigs
-}) => (
-  <div>
-    {/* Main Navigation Item */}
-    {item.subItems ? (
-      <Button
-        variant="ghost"
-        type="button"
-        onClick={(e: React.MouseEvent) => {
-          e.preventDefault()
-          e.stopPropagation()
-          toggleExpanded(item.id)
-        }}
-        onMouseEnter={(e: React.MouseEvent) => handleTooltipEnter(item.id, item.label, item.badge, e)}
-        onMouseLeave={handleTooltipLeave}
-        className={cn(
-          'group relative flex items-center rounded-lg transition-all duration-200 h-10 w-full',
-          'outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
-          isParentActive(item)
-            ? 'bg-primary/10 text-primary border border-primary/20'
-            : 'text-fg-muted hover:text-fg hover:bg-bg-hover',
-          isCollapsed ? 'justify-center px-0' : 'px-3',
-          isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
-        )}
-        aria-expanded={expandedItems.includes(item.id)}
-        aria-haspopup="menu"
-        aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
-        tabIndex={isKeyboardNavigating ? -1 : 0}
-      >
-        <item.icon className={`w-4 h-4 ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
+}) => {
+  const isExpanded = expandedItems.includes(item.id)
+  const itemIsActive = isParentActive(item)
+  const isFocused = isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id)
 
-        {!isCollapsed && (
-          <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-medium whitespace-nowrap text-sm">{item.label}</span>
-            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors duration-200">
-              <ChevronDown
-                className={`w-4 h-4 transition-transform duration-200 ${expandedItems.includes(item.id) ? 'transform rotate-180' : ''
-                  }`}
-              />
-            </div>
-          </div>
-        )}
+  // Base styles for all nav items
+  const baseStyles = cn(
+    'group relative flex items-center w-full rounded-md transition-colors',
+    'text-sm font-medium',
+    'outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+    isCollapsed ? 'h-10 justify-center' : 'h-10 px-3 gap-3',
+    isFocused && 'ring-2 ring-ring'
+  )
 
-        {!isCollapsed && item.badge && (
-          <span className="ml-2 px-2 py-0.5 text-xs font-medium tracking-tight bg-primary text-primary-contrast rounded-full">
-            {item.badge}
-          </span>
-        )}
-      </Button>
-    ) : (
-      <Link
-        to={item.href}
-        onMouseEnter={(e: React.MouseEvent) => handleTooltipEnter(item.id, item.label, item.badge, e)}
-        onMouseLeave={handleTooltipLeave}
-        className={cn(
-          'group relative flex items-center rounded-lg transition-all duration-200 h-10',
-          'outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
-          isParentActive(item)
-            ? 'bg-primary/10 text-primary border border-primary/20'
-            : 'text-fg-muted hover:text-fg hover:bg-bg-hover',
-          isCollapsed ? 'justify-center px-0' : 'px-3',
-          isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id) && 'ring-1 ring-ring'
-        )}
-        aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
-        tabIndex={isKeyboardNavigating ? -1 : 0}
-      >
-        <item.icon className={cn(
-          'w-4 h-4 flex-shrink-0',
-          !isCollapsed && 'mr-3'
-        )} />
+  // Active/hover state styles
+  const stateStyles = itemIsActive
+    ? 'bg-accent text-accent-foreground'
+    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
 
-        {!isCollapsed && (
-          <div className="flex items-center justify-between flex-1 overflow-hidden">
-            <span className="font-medium whitespace-nowrap text-sm">{item.label}</span>
-            {item.badge && (
-              <span className="ml-2 px-2 py-0.5 text-xs font-medium tracking-tight bg-primary text-primary-contrast rounded-full">
-                {item.badge}
-              </span>
-            )}
-          </div>
-        )}
-      </Link>
-    )}
-
-    {/* Sub-items */}
-    <AnimatePresence>
-      {item.subItems && expandedItems.includes(item.id) && (
-        <motion.div
-          {...ANIMATION_VARIANTS.expandCollapse}
-          transition={transitionConfigs.normal}
-          className={`mt-1 ${isCollapsed
-            ? 'flex flex-col items-center space-y-1 py-1'
-            : 'ml-6 space-y-1 border-l border-border py-2'
-            }`}
+  return (
+    <div className="space-y-1">
+      {/* Main Navigation Item */}
+      {item.subItems ? (
+        // Parent item with sub-items (expandable)
+        <button
+          type="button"
+          onClick={(e: React.MouseEvent) => {
+            e.preventDefault()
+            e.stopPropagation()
+            toggleExpanded(item.id)
+          }}
+          onMouseEnter={(e: React.MouseEvent) => handleTooltipEnter(item.id, item.label, item.badge, e)}
+          onMouseLeave={handleTooltipLeave}
+          className={cn(baseStyles, stateStyles)}
+          aria-expanded={isExpanded}
+          aria-haspopup="menu"
+          aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
+          tabIndex={isKeyboardNavigating ? -1 : 0}
         >
-          {isCollapsed && (
-            <div className="w-8 h-px bg-border mb-1" />
+          <item.icon className="h-4 w-4 shrink-0" />
+
+          {!isCollapsed && (
+            <>
+              <span className="flex-1 text-left truncate">{item.label}</span>
+              {item.badge && (
+                <span className="px-1.5 py-0.5 text-xs font-medium bg-primary text-primary-foreground rounded-full">
+                  {item.badge}
+                </span>
+              )}
+              <ChevronDown
+                className={cn(
+                  'h-4 w-4 shrink-0 transition-transform duration-200',
+                  isExpanded && 'rotate-180'
+                )}
+              />
+            </>
           )}
+        </button>
+      ) : (
+        // Leaf item (direct link)
+        <Link
+          to={item.href}
+          onMouseEnter={(e: React.MouseEvent) => handleTooltipEnter(item.id, item.label, item.badge, e)}
+          onMouseLeave={handleTooltipLeave}
+          className={cn(baseStyles, stateStyles)}
+          aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
+          tabIndex={isKeyboardNavigating ? -1 : 0}
+        >
+          <item.icon className="h-4 w-4 shrink-0" />
 
-          {item.subItems.map((subItem, index) => (
-            <Link
-              key={subItem.id}
-              to={subItem.href}
-              onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
-              onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
-              className={cn(
-                'group relative flex items-center rounded-lg transition-all duration-200',
-                'outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
-                isActive(subItem.href, subItem.exact)
-                  ? 'bg-primary/10 text-primary border border-primary/20'
-                  : 'text-fg-muted hover:text-fg hover:bg-bg-hover',
-                isCollapsed
-                  ? 'justify-center w-8 h-8 px-0'
-                  : 'h-9 px-4 mx-2'
+          {!isCollapsed && (
+            <>
+              <span className="flex-1 truncate">{item.label}</span>
+              {item.badge && (
+                <span className="px-1.5 py-0.5 text-xs font-medium bg-primary text-primary-foreground rounded-full">
+                  {item.badge}
+                </span>
               )}
-            >
-              <subItem.icon className={`flex-shrink-0 transition-all duration-200 ${isCollapsed
-                ? 'w-3.5 h-3.5'
-                : 'w-3.5 h-3.5 mr-3'
-                }`} />
-
-              {!isCollapsed && (
-                <span className="font-medium text-sm text-fg-muted group-hover:text-fg transition-colors duration-200 whitespace-nowrap">{subItem.label}</span>
-              )}
-
-              {/* Connection indicator for collapsed mode */}
-              {isCollapsed && index !== (item.subItems?.length ?? 0) - 1 && (
-                <div className="absolute left-1/2 -bottom-0.5 transform -translate-x-1/2 w-px h-1 bg-border" />
-              )}
-            </Link>
-          ))}
-
-          {isCollapsed && (
-            <div className="w-6 h-px bg-border mt-1" />
+            </>
           )}
-        </motion.div>
+        </Link>
       )}
-    </AnimatePresence>
-  </div>
-))
+
+      {/* Sub-items */}
+      <AnimatePresence>
+        {item.subItems && isExpanded && (
+          <motion.div
+            {...ANIMATION_VARIANTS.expandCollapse}
+            transition={transitionConfigs.normal}
+            className={cn(
+              'overflow-hidden',
+              isCollapsed
+                ? 'flex flex-col items-center space-y-1 pt-1'
+                : 'pl-4 space-y-1 border-l border-border ml-5'
+            )}
+          >
+            {item.subItems.map((subItem) => {
+              const subItemIsActive = isActive(subItem.href, subItem.exact)
+
+              return (
+                <Link
+                  key={subItem.id}
+                  to={subItem.href}
+                  onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
+                  onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
+                  className={cn(
+                    'group relative flex items-center rounded-md transition-colors',
+                    'text-sm font-medium',
+                    'outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                    isCollapsed
+                      ? 'h-8 w-8 justify-center'
+                      : 'h-9 px-3 gap-3',
+                    subItemIsActive
+                      ? 'bg-accent text-accent-foreground'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                  )}
+                >
+                  <subItem.icon className={cn(
+                    'shrink-0',
+                    isCollapsed ? 'h-3.5 w-3.5' : 'h-4 w-4'
+                  )} />
+
+                  {!isCollapsed && (
+                    <span className="truncate">{subItem.label}</span>
+                  )}
+                </Link>
+              )
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+})
 
 NavigationItem.displayName = 'NavigationItem'
-
