@@ -5,16 +5,10 @@ import type { StepComponentProps } from '../../config/types'
 import { useTeamStepController } from '../../hooks/useTeamStepController'
 import type { TeamSettings } from '../../types/onboarding'
 
+import { SimpleSelect } from '@/shared/ui/SimpleSelect'
 import { Button } from '@/shared/ui/shadcn/button'
 import { Input } from '@/shared/ui/shadcn/input'
 import { Label } from '@/shared/ui/shadcn/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/shadcn/select'
 
 
 interface TeamStepProps extends StepComponentProps<TeamSettings> {
@@ -83,18 +77,20 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                 <Label htmlFor="inviteRole" className="text-xs font-normal text-gray-400">
                   Role
                 </Label>
-                <Select value={inviteRole} onValueChange={handleInviteRoleChange}>
-                  <SelectTrigger id="inviteRole" className="h-9">
-                    <SelectValue placeholder="Select role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="TeamMember">Team Member</SelectItem>
-                    <SelectItem value="TeamManager">Team Manager</SelectItem>
-                    <SelectItem value="TeamOwner">Team Owner</SelectItem>
-                    <SelectItem value="Admin">Admin</SelectItem>
-                    <SelectItem value="Viewer">Viewer</SelectItem>
-                  </SelectContent>
-                </Select>
+                <SimpleSelect
+                  id="inviteRole"
+                  options={[
+                    { value: 'TeamMember', label: 'Team Member' },
+                    { value: 'TeamManager', label: 'Team Manager' },
+                    { value: 'TeamOwner', label: 'Team Owner' },
+                    { value: 'Admin', label: 'Admin' },
+                    { value: 'Viewer', label: 'Viewer' }
+                  ]}
+                  value={inviteRole}
+                  onChange={handleInviteRoleChange}
+                  placeholder="Select role"
+                  className="h-9"
+                />
               </div>
               <Button
                 onClick={handleInviteTeamMember}

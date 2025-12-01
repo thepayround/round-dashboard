@@ -69,7 +69,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
     'group relative flex items-center w-full rounded-md transition-colors',
     'text-sm font-medium',
     'outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-    isCollapsed ? 'h-10 justify-center' : 'h-10 px-3 gap-3',
+    isCollapsed ? 'h-9 justify-center' : 'h-9 px-3 gap-3',
     isFocused && 'ring-2 ring-ring'
   )
 

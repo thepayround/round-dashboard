@@ -2,6 +2,7 @@ import { User, Mail, Lock, Calendar, Search, X } from 'lucide-react'
 import { useState } from 'react'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
+import { SimpleSelect } from '@/shared/ui/SimpleSelect'
 import { Alert } from '@/shared/ui/shadcn/alert'
 import { Avatar } from '@/shared/ui/shadcn/avatar'
 import { Badge } from '@/shared/ui/shadcn/badge'
@@ -18,13 +19,6 @@ import {
 } from '@/shared/ui/shadcn/dialog'
 import { Input } from '@/shared/ui/shadcn/input'
 import { Label } from '@/shared/ui/shadcn/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/shadcn/select'
 import { Separator } from '@/shared/ui/shadcn/separator'
 import { Skeleton } from '@/shared/ui/shadcn/skeleton'
 import {
@@ -168,17 +162,18 @@ export const ShadcnDemoPage = () => {
 
           <div className="max-w-xs space-y-2">
             <Label htmlFor="select">Choose an option</Label>
-            <Select>
-              <SelectTrigger id="select">
-                <SelectValue placeholder="Select an option" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="option1">Option 1</SelectItem>
-                <SelectItem value="option2">Option 2</SelectItem>
-                <SelectItem value="option3">Option 3</SelectItem>
-                <SelectItem value="option4">Option 4</SelectItem>
-              </SelectContent>
-            </Select>
+            <SimpleSelect
+              id="select"
+              options={[
+                { value: 'option1', label: 'Option 1' },
+                { value: 'option2', label: 'Option 2' },
+                { value: 'option3', label: 'Option 3' },
+                { value: 'option4', label: 'Option 4' }
+              ]}
+              value=""
+              onChange={() => {}}
+              placeholder="Select an option"
+            />
           </div>
         </section>
 

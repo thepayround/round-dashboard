@@ -15,6 +15,7 @@ import {
     Label,
     Button
 } from '@/shared/ui'
+import { SimpleSelect } from '@/shared/ui/SimpleSelect'
 import {
     AlertDialog,
     AlertDialogContent,
@@ -33,13 +34,6 @@ import {
     DialogDescription,
     DialogFooter
 } from '@/shared/ui/shadcn/dialog'
-import {
-    Select,
-    SelectTrigger,
-    SelectValue,
-    SelectContent,
-    SelectItem
-} from '@/shared/ui/shadcn/select'
 
 // Mock team member data
 interface TeamMember {
@@ -328,16 +322,17 @@ export const TeamManagementPage = () => {
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="role">Role</Label>
-                                <Select value={inviteRole} onValueChange={setInviteRole}>
-                                    <SelectTrigger id="role">
-                                        <SelectValue placeholder="Select a role" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="admin">Admin</SelectItem>
-                                        <SelectItem value="member">Member</SelectItem>
-                                        <SelectItem value="viewer">Viewer</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <SimpleSelect
+                                    id="role"
+                                    options={[
+                                        { value: 'admin', label: 'Admin' },
+                                        { value: 'member', label: 'Member' },
+                                        { value: 'viewer', label: 'Viewer' }
+                                    ]}
+                                    value={inviteRole}
+                                    onChange={setInviteRole}
+                                    placeholder="Select a role"
+                                />
                             </div>
                         </div>
                         <DialogFooter>
@@ -370,16 +365,17 @@ export const TeamManagementPage = () => {
                         <div className="space-y-4">
                             <div className="space-y-2">
                                 <Label htmlFor="new-role">Role</Label>
-                                <Select value={newRole} onValueChange={setNewRole}>
-                                    <SelectTrigger id="new-role">
-                                        <SelectValue placeholder="Select a role" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="admin">Admin</SelectItem>
-                                        <SelectItem value="member">Member</SelectItem>
-                                        <SelectItem value="viewer">Viewer</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <SimpleSelect
+                                    id="new-role"
+                                    options={[
+                                        { value: 'admin', label: 'Admin' },
+                                        { value: 'member', label: 'Member' },
+                                        { value: 'viewer', label: 'Viewer' }
+                                    ]}
+                                    value={newRole}
+                                    onChange={setNewRole}
+                                    placeholder="Select a role"
+                                />
                             </div>
                         </div>
                         <DialogFooter>

@@ -461,7 +461,7 @@ const { data: countries, isLoading } = useCountries()
 ## Related Components
 
 - **PhoneInput** - International phone number input with country selection
-- **Select** - Simple dropdown (shadcn native)
+- **SimpleSelect** - Simple dropdown for fixed options (use instead of shadcn Select)
 - **Command** - Command palette-style search
 
 ---

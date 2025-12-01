@@ -25,13 +25,15 @@ export { PhoneInput } from './PhoneInput'
 export { PhoneDisplay, type PhoneDisplayProps, type CountryInfo } from './PhoneDisplay'
 export { Toast } from './Toast'
 
+// SimpleSelect - Use this for simple fixed-option dropdowns (matches Combobox styling)
+export { SimpleSelect, type SimpleSelectOption, type SimpleSelectProps } from './SimpleSelect'
+
 // Re-export commonly used Shadcn components for convenience
 export { Button } from './shadcn/button'
 export { Input } from './shadcn/input'
 export { Badge, type BadgeProps } from './shadcn/badge'
 export { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from './shadcn/card'
 export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from './shadcn/dialog'
-export { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './shadcn/select'
 export { Switch } from './shadcn/switch'
 export { Checkbox } from './shadcn/checkbox'
 export { Label } from './shadcn/label'

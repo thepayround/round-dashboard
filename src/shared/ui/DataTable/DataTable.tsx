@@ -22,16 +22,10 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 
+import { SimpleSelect } from '@/shared/ui/SimpleSelect'
 import { Button } from '@/shared/ui/shadcn/button'
 import { Checkbox } from '@/shared/ui/shadcn/checkbox'
 import { Input } from '@/shared/ui/shadcn/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/shadcn/select'
 import {
   Table,
   TableBody,
@@ -226,23 +220,17 @@ export function DataTable<TData, TValue>({
           <div className="flex items-center space-x-6 lg:space-x-8">
             <div className="flex items-center space-x-2">
               <p className="text-sm font-medium text-foreground">Rows per page</p>
-              <Select
+              <SimpleSelect
+                options={[10, 20, 30, 40, 50, 100].map((pageSize) => ({
+                  value: `${pageSize}`,
+                  label: `${pageSize}`
+                }))}
                 value={`${table.getState().pagination.pageSize}`}
-                onValueChange={(value) => {
+                onChange={(value) => {
                   table.setPageSize(Number(value))
                 }}
-              >
-                <SelectTrigger className="h-8 w-[70px]">
-                  <SelectValue placeholder={table.getState().pagination.pageSize} />
-                </SelectTrigger>
-                <SelectContent side="top">
-                  {[10, 20, 30, 40, 50, 100].map((pageSize) => (
-                    <SelectItem key={pageSize} value={`${pageSize}`}>
-                      {pageSize}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                className="w-[70px]"
+              />
             </div>
             <div className="flex w-[120px] items-center justify-center text-sm font-medium text-foreground">
               Page {table.getState().pagination.pageIndex + 1} of{' '}

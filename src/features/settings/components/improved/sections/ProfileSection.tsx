@@ -17,17 +17,11 @@ import { useProfileSectionController } from '../../../hooks/useProfileSectionCon
 import type { UserSettingsUpdateRequest, UserSettings } from '@/shared/services/api/userSettings.service'
 import type { User } from '@/shared/types/auth'
 import { PhoneDisplay } from '@/shared/ui/PhoneDisplay'
+import { SimpleSelect } from '@/shared/ui/SimpleSelect'
 import { Button } from '@/shared/ui/shadcn/button'
 import { Card, CardContent } from '@/shared/ui/shadcn/card'
 import { Input } from '@/shared/ui/shadcn/input'
 import { Label } from '@/shared/ui/shadcn/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/shadcn/select'
 
 // Dropdown options
 const timezones = [
@@ -217,18 +211,14 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
                   <Globe className="w-3 h-3" />
                   Timezone
                 </Label>
-                <Select value={formData.timezone} onValueChange={(value: string) => handleInputChange('timezone', value)}>
-                  <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Select timezone" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {timezones.map((tz) => (
-                      <SelectItem key={tz.value} value={tz.value}>
-                        {tz.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SimpleSelect
+                  id="timezone-dropdown"
+                  options={timezones}
+                  value={formData.timezone}
+                  onChange={(value: string) => handleInputChange('timezone', value)}
+                  placeholder="Select timezone"
+                  className="w-full"
+                />
               </div>
 
               <div className="space-y-2">
@@ -236,18 +226,14 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
                   <Languages className="w-3 h-3" />
                   Language
                 </Label>
-                <Select value={formData.language} onValueChange={(value: string) => handleInputChange('language', value)}>
-                  <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Select language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {languages.map((lang) => (
-                      <SelectItem key={lang.value} value={lang.value}>
-                        {lang.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SimpleSelect
+                  id="language-dropdown"
+                  options={languages}
+                  value={formData.language}
+                  onChange={(value: string) => handleInputChange('language', value)}
+                  placeholder="Select language"
+                  className="w-full"
+                />
               </div>
 
               <div className="space-y-2">
@@ -255,18 +241,14 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
                   <Calendar className="w-3 h-3" />
                   Date Format
                 </Label>
-                <Select value={formData.dateFormat} onValueChange={(value: string) => handleInputChange('dateFormat', value)}>
-                  <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Select date format" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {dateFormats.map((format) => (
-                      <SelectItem key={format.value} value={format.value}>
-                        {format.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SimpleSelect
+                  id="date-format-dropdown"
+                  options={dateFormats}
+                  value={formData.dateFormat}
+                  onChange={(value: string) => handleInputChange('dateFormat', value)}
+                  placeholder="Select date format"
+                  className="w-full"
+                />
               </div>
 
               <div className="space-y-2">
@@ -274,18 +256,14 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
                   <Clock className="w-3 h-3" />
                   Time Format
                 </Label>
-                <Select value={formData.timeFormat} onValueChange={(value: string) => handleInputChange('timeFormat', value)}>
-                  <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Select time format" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {timeFormats.map((format) => (
-                      <SelectItem key={format.value} value={format.value}>
-                        {format.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SimpleSelect
+                  id="time-format-dropdown"
+                  options={timeFormats}
+                  value={formData.timeFormat}
+                  onChange={(value: string) => handleInputChange('timeFormat', value)}
+                  placeholder="Select time format"
+                  className="w-full"
+                />
               </div>
             </div>
 

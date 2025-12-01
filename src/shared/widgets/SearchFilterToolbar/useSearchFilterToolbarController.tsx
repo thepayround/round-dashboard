@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
 
+import { SimpleSelect } from '../../ui/SimpleSelect'
 import { Input } from '../../ui/shadcn/input'
 import { Label } from '../../ui/shadcn/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/shadcn/select'
 import type { ActiveFilter } from '../FilterChipsBar'
 
 import type { FilterField, SearchFilterToolbarProps } from './SearchFilterToolbar'
@@ -33,21 +33,15 @@ export const useSearchFilterToolbarController = ({
         return (
           <div key={field.id} className="space-y-2">
             <Label>{field.label}</Label>
-            <Select
+            <SimpleSelect
+              options={field.options?.map((option) => ({
+                value: option.value ?? option.id,
+                label: option.name
+              })) ?? []}
               value={String(field.value)}
-              onValueChange={(selectedValue: string) => field.onChange(selectedValue)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={field.placeholder ?? `Select ${field.label.toLowerCase()}`} />
-              </SelectTrigger>
-              <SelectContent>
-                {field.options?.map((option) => (
-                  <SelectItem key={option.id} value={option.value ?? option.id}>
-                    {option.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(selectedValue: string) => field.onChange(selectedValue)}
+              placeholder={field.placeholder ?? `Select ${field.label.toLowerCase()}`}
+            />
           </div>
         )
       case 'input':

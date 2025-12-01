@@ -12,6 +12,48 @@ Comprehensive task list for migrating **PhoneInput** and **ApiDropdown** to full
 
 ---
 
+## ✅ Dropdown Component Standards
+
+### When to Use Which Component
+
+| Component | Use Case | Features |
+|-----------|----------|----------|
+| **SimpleSelect** | Fixed options, simple dropdowns | No search, lightweight, h-9 height |
+| **Combobox** | API data, searchable, many options | Search, icons, descriptions, loading states |
+| **PhoneInput** | Phone numbers with country selection | Validation, flags, phone codes |
+
+### ⚠️ Important: Always use SimpleSelect for simple dropdowns
+
+**DO NOT use shadcn Select directly.** Use `SimpleSelect` instead for consistent UI/UX:
+
+```tsx
+// ✅ CORRECT - Use SimpleSelect
+import { SimpleSelect } from '@/shared/ui/SimpleSelect'
+
+<SimpleSelect
+  options={[
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+  ]}
+  value={selected}
+  onChange={setSelected}
+  label="Choose option"
+/>
+
+// ❌ WRONG - Don't use shadcn Select directly
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/shared/ui/shadcn/select'
+```
+
+**SimpleSelect features:**
+
+- Matches Combobox styling exactly
+- Portal rendering (no z-index issues)
+- Keyboard navigation
+- h-9 (36px) standard height
+- Consistent focus ring styling
+
+---
+
 ## 🔧 PhoneInput Migration to Shadcn UI
 
 ### Overview

@@ -1,9 +1,9 @@
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
 import React from 'react'
 
+import { SimpleSelect } from './SimpleSelect'
 import { Button } from './shadcn/button'
 import { Label } from './shadcn/label'
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './shadcn/select'
 
 interface PaginationProps {
   currentPage: number
@@ -94,18 +94,16 @@ const Pagination: React.FC<PaginationProps> = ({
         {showItemsPerPage && (
           <div className="flex items-center space-x-2">
             <Label htmlFor="items-per-page" className="text-sm text-white/70 whitespace-nowrap">Items per page:</Label>
-            <Select value={String(itemsPerPage)} onValueChange={(value) => onItemsPerPageChange(Number(value))}>
-              <SelectTrigger id="items-per-page" className="w-20">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {pageSizeOptions.map(size => (
-                  <SelectItem key={size} value={String(size)}>
-                    {size}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <SimpleSelect
+              id="items-per-page"
+              options={pageSizeOptions.map(size => ({
+                value: String(size),
+                label: String(size)
+              }))}
+              value={String(itemsPerPage)}
+              onChange={(value) => onItemsPerPageChange(Number(value))}
+              className="w-20"
+            />
           </div>
         )}
       </div>
