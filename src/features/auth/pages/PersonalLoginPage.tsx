@@ -76,6 +76,8 @@ export const PersonalLoginPage = () => {
   }
 
   const isLoading = form.formState.isSubmitting
+  const { email, password } = form.watch()
+  const isFormFilled = email.trim() !== '' && password.trim() !== ''
 
   return (
     <Card>
@@ -97,7 +99,6 @@ export const PersonalLoginPage = () => {
                 {...form.register('email')}
                 aria-invalid={!!form.formState.errors.email}
                 autoComplete="email"
-                required
               />
               {form.formState.errors.email && (
                 <p className="text-sm text-destructive">
@@ -121,7 +122,6 @@ export const PersonalLoginPage = () => {
                 {...form.register('password')}
                 aria-invalid={!!form.formState.errors.password}
                 autoComplete="current-password"
-                required
               />
               {form.formState.errors.password && (
                 <p className="text-sm text-destructive">
@@ -130,7 +130,7 @@ export const PersonalLoginPage = () => {
               )}
             </div>
             <div className="flex flex-col gap-4">
-              <Button type="submit" disabled={isLoading} className="w-full">
+              <Button type="submit" disabled={isLoading || !isFormFilled} className="w-full">
                 {isLoading ? 'Signing in...' : 'Login'}
               </Button>
               <GoogleLoginButton

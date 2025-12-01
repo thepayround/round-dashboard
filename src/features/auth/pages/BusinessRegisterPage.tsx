@@ -117,7 +117,6 @@ export const BusinessRegisterPage = () => {
                   aria-invalid={!!personalErrors.firstName}
                   aria-describedby={personalErrors.firstName ? 'firstName-error' : undefined}
                   autoComplete="given-name"
-                  required
                 />
                 <div className="min-h-5">
                   {personalErrors.firstName && (
@@ -143,7 +142,6 @@ export const BusinessRegisterPage = () => {
                   aria-invalid={!!personalErrors.lastName}
                   aria-describedby={personalErrors.lastName ? 'lastName-error' : undefined}
                   autoComplete="family-name"
-                  required
                 />
                 <div className="min-h-5">
                   {personalErrors.lastName && (
@@ -172,7 +170,6 @@ export const BusinessRegisterPage = () => {
                 aria-invalid={!!personalErrors.email}
                 aria-describedby={personalErrors.email ? 'email-error' : undefined}
                 autoComplete="email"
-                required
               />
               <div className="min-h-5">
                 {personalErrors.email && (
@@ -226,7 +223,6 @@ export const BusinessRegisterPage = () => {
                 aria-invalid={!!personalErrors.password}
                 aria-describedby={personalErrors.password ? 'password-error' : undefined}
                 autoComplete="new-password"
-                required
               />
               <div className="min-h-5">
                 {personalErrors.password && (

@@ -51,7 +51,6 @@ export const PersonalRegisterPage = () => {
                   placeholder="John"
                   aria-invalid={!!errors.firstName}
                   autoComplete="given-name"
-                  required
                 />
                 {errors.firstName && (
                   <p className="text-sm text-destructive flex items-center gap-1">
@@ -74,7 +73,6 @@ export const PersonalRegisterPage = () => {
                   placeholder="Doe"
                   aria-invalid={!!errors.lastName}
                   autoComplete="family-name"
-                  required
                 />
                 {errors.lastName && (
                   <p className="text-sm text-destructive flex items-center gap-1">
@@ -100,7 +98,6 @@ export const PersonalRegisterPage = () => {
                 placeholder="email@example.com"
                 aria-invalid={!!errors.email}
                 autoComplete="email"
-                required
               />
               {errors.email && (
                 <p className="text-sm text-destructive flex items-center gap-1">
@@ -149,7 +146,6 @@ export const PersonalRegisterPage = () => {
                 placeholder="Create a strong password"
                 aria-invalid={!!errors.password}
                 autoComplete="new-password"
-                required
               />
               {errors.password && (
                 <p className="text-sm text-destructive flex items-center gap-1">

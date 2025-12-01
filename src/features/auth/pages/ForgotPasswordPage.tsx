@@ -147,7 +147,6 @@ export const ForgotPasswordPage = () => {
                 {...form.register('email')}
                 aria-invalid={!!form.formState.errors.email}
                 autoComplete="email"
-                required
               />
               {form.formState.errors.email && (
                 <p className="text-sm text-destructive">
@@ -157,7 +156,7 @@ export const ForgotPasswordPage = () => {
             </div>
 
             <div className="flex flex-col gap-4">
-              <Button type="submit" disabled={isSubmitting} className="w-full">
+              <Button type="submit" disabled={isSubmitting || !form.watch('email').trim()} className="w-full">
                 {isSubmitting ? 'Sending...' : 'Send Reset Link'}
               </Button>
 
