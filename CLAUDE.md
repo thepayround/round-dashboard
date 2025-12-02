@@ -119,6 +119,81 @@ Desktop: 36-40px (optimized)
 h-11 lg:h-9   /* Inputs/Buttons on mobile→desktop */
 ```
 
+### Button Sizing Standards
+
+**IMPORTANT:** Use consistent button sizes across the app:
+
+| Context | Size Prop | Height | Usage |
+|---------|-----------|--------|-------|
+| Header/toolbar actions | `default` (or omit) | 36px (h-9) | "Send Email", "Edit", "Save", "Add Customer" |
+| Form submit buttons | `default` (or omit) | 36px (h-9) | Primary form actions |
+| Full-width card actions | `default` (or omit) | 36px (h-9) | Settings cards, modal actions |
+| Navigation buttons | `default` (or omit) | 36px (h-9) | "Back", "Next", "Continue" |
+| Icon-only buttons | `size="icon"` | 36x36px (h-9 w-9) | Toolbar icons, row actions |
+| Compact toolbar toggles | `size="sm"` | 32px (h-8) | Text formatting, filter toggles |
+
+```tsx
+// ✅ CORRECT - Standard action button (36px)
+<Button variant="default" onClick={handleSave}>Save</Button>
+<Button variant="secondary" onClick={openEmail}>Send Email</Button>
+
+// ✅ CORRECT - Icon button (36x36px)
+<Button variant="ghost" size="icon">
+  <Bold className="h-4 w-4" />
+</Button>
+
+// ✅ CORRECT - Compact toolbar toggle (32px)
+<Button variant="outline" size="sm">
+  <Type className="h-3.5 w-3.5" />
+  HTML
+</Button>
+
+// ❌ WRONG - Don't override icon button size
+<Button size="icon" className="h-8 w-8">...</Button>
+
+// ❌ WRONG - Don't use size="sm" for primary actions
+<Button size="sm" onClick={handleSubmit}>Save Changes</Button>
+```
+
+### Portal Components in Sheets/Modals (CRITICAL)
+
+**IMPORTANT:** When creating dropdown/popover components that use `createPortal`, they MUST include:
+
+1. **High z-index:** `z-[9999]` to appear above Radix overlays
+2. **Pointer events:** `pointer-events-auto` to override Radix's `pointer-events: none` on body
+3. **Scroll containment:** `overscroll-contain` + event handlers to prevent scroll propagation
+
+```tsx
+// ✅ CORRECT - Portal dropdown that works inside Sheet/Modal
+createPortal(
+  <div className="fixed z-[9999] pointer-events-auto ...">
+    <div
+      className="overflow-y-auto overscroll-contain ..."
+      onWheel={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+    >
+      {/* dropdown content */}
+    </div>
+  </div>,
+  document.body
+)
+
+// ❌ WRONG - Will NOT be clickable inside Sheet/Modal
+createPortal(
+  <div className="fixed z-50 ...">
+    {/* dropdown content - blocked by Radix pointer-events: none */}
+  </div>,
+  document.body
+)
+```
+
+**Why?**
+- Radix UI (Sheet, Dialog, Modal) sets `pointer-events: none` on `document.body` to trap focus
+- Radix also locks body scroll, so dropdown scroll events propagate to the Sheet
+- `overscroll-contain` + `onWheel`/`onTouchMove` handlers prevent scroll leaking
+
+**Components already fixed:** `Combobox`, `PhoneInput`, `SimpleSelect`, `CurrencySelect`
+
 ---
 
 ## 🏗️ Architecture Patterns

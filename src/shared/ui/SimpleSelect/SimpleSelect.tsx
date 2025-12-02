@@ -213,21 +213,36 @@ export const SimpleSelect = <T extends string = string>({
     }
   }, [isOpen, updatePosition])
 
+  // Close on click outside
+  React.useEffect(() => {
+    if (!isOpen) return
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node
+      if (
+        triggerRef.current &&
+        !triggerRef.current.contains(target) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target)
+      ) {
+        closeDropdown()
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen, closeDropdown])
+
   // Portal content
   const portal = isOpen
     ? createPortal(
         <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-40"
-            onClick={closeDropdown}
-            aria-hidden="true"
-          />
-
-          {/* Dropdown */}
+          {/* Dropdown - z-[9999] and pointer-events-auto to work inside Radix dialogs/sheets */}
           <div
             ref={dropdownRef}
-            className="fixed z-50 rounded-md border border-input bg-card shadow-lg"
+            className="fixed z-[9999] pointer-events-auto rounded-md border border-input bg-card shadow-lg"
             style={{
               top: `${dropdownPosition.top}px`,
               left: `${dropdownPosition.left}px`,
@@ -237,7 +252,7 @@ export const SimpleSelect = <T extends string = string>({
           >
             <div
               className={cn(
-                'overflow-y-auto py-1',
+                'overflow-y-auto py-1 overscroll-contain',
                 '[&::-webkit-scrollbar]:w-1.5',
                 '[&::-webkit-scrollbar-track]:bg-transparent',
                 '[&::-webkit-scrollbar-thumb]:bg-muted-foreground/20',
@@ -248,6 +263,8 @@ export const SimpleSelect = <T extends string = string>({
               role="listbox"
               id={listboxId}
               aria-label={label || 'Options'}
+              onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
             >
               {options.map((option, index) => (
                 <div

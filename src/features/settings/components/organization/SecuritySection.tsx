@@ -50,7 +50,7 @@ export const SecuritySection: React.FC = () => (
               </div>
             </div>
             <p className="text-xs text-gray-400 mb-4">Require 2FA for all organization members</p>
-            <Button variant="default" size="sm" className="w-full">
+            <Button variant="default" className="w-full">
               Enable 2FA
             </Button>
           </Card>
@@ -67,7 +67,7 @@ export const SecuritySection: React.FC = () => (
               </div>
             </div>
             <p className="text-xs text-gray-400 mb-4">Single Sign-On with Google Workspace</p>
-            <Button variant="ghost" size="sm" className="w-full">
+            <Button variant="ghost" className="w-full">
               Configure SSO
             </Button>
           </Card>

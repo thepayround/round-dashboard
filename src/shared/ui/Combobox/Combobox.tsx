@@ -155,21 +155,14 @@ export const Combobox = React.forwardRef(<T = string,>(
     [onChange, onClear]
   )
 
-  // Portal content
+  // Portal content - Use z-[9999] to ensure dropdowns appear above all overlays including sheets
   const portal = isOpen
     ? createPortal(
         <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-40"
-            onClick={closeDropdown}
-            aria-hidden="true"
-          />
-
-          {/* Dropdown */}
+          {/* Dropdown - z-[9999] and pointer-events-auto to work inside Radix dialogs/sheets */}
           <div
             ref={dropdownRef}
-            className="fixed z-50 rounded-md border border-input bg-card shadow-lg"
+            className="fixed z-[9999] pointer-events-auto rounded-md border border-input bg-card shadow-lg"
             style={{
               top: `${dropdownPosition.top}px`,
               left: `${dropdownPosition.left}px`,
@@ -217,7 +210,7 @@ export const Combobox = React.forwardRef(<T = string,>(
             {/* Options List */}
             <div
               className={cn(
-                "overflow-y-auto py-1",
+                "overflow-y-auto py-1 overscroll-contain",
                 // Modern thin scrollbar (custom webkit styles)
                 "[&::-webkit-scrollbar]:w-1.5",
                 "[&::-webkit-scrollbar-track]:bg-transparent",
@@ -229,6 +222,8 @@ export const Combobox = React.forwardRef(<T = string,>(
               role="listbox"
               id={listboxId}
               aria-label={label || 'Options'}
+              onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
             >
               {isSearching || isLoading ? (
                 <div className="flex items-center justify-center py-8">

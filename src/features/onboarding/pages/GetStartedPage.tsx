@@ -148,7 +148,7 @@ export const GetStartedPage = () => {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
             {!isFirstStep() ? (
-              <Button onClick={handleBack} variant="ghost" size="sm" className="gap-2">
+              <Button onClick={handleBack} variant="ghost" className="gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 Back
               </Button>
@@ -159,8 +159,7 @@ export const GetStartedPage = () => {
             <Button
               onClick={handleNext}
               disabled={!isStepValid(currentStep) || isCompleting}
-              variant={isLastStep() ? 'default' : 'default'}
-              size="sm"
+              variant="default"
               className="gap-2"
             >
               {isCompleting && <Loader2 className="h-4 w-4 animate-spin" />}

@@ -130,13 +130,13 @@ export const EmailComposeModal = ({
                 </Button>
                 {formData.isHtml && (
                   <div className="flex items-center gap-1">
-                    <Button type="button" variant="ghost" size="sm" aria-label="Bold">
+                    <Button type="button" variant="ghost" size="icon" aria-label="Bold">
                       <Bold className="h-4 w-4" />
                     </Button>
-                    <Button type="button" variant="ghost" size="sm" aria-label="Italic">
+                    <Button type="button" variant="ghost" size="icon" aria-label="Italic">
                       <Italic className="h-4 w-4" />
                     </Button>
-                    <Button type="button" variant="ghost" size="sm" aria-label="Insert link">
+                    <Button type="button" variant="ghost" size="icon" aria-label="Insert link">
                       <LinkIcon className="h-4 w-4" />
                     </Button>
                   </div>

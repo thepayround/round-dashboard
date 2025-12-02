@@ -132,7 +132,6 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     handleCountrySelect,
     handlePhoneChange,
     handlePhoneBlur,
-    closeDropdown,
     placeholderText,
     hasError,
     displayError,
@@ -152,28 +151,10 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
   })
   const dropdownPortal = isDropdownOpen ? createPortal(
     <>
-      {/* Backdrop overlay */}
-      <div
-        className="fixed inset-0 z-40"
-        onClick={(e) => {
-          if (e.target === e.currentTarget) {
-            closeDropdown()
-          }
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') {
-            closeDropdown()
-          }
-        }}
-        role="button"
-        tabIndex={-1}
-        aria-label="Close dropdown"
-      />
-
-      {/* Dropdown content */}
+      {/* Dropdown content - z-[9999] and pointer-events-auto to work inside Radix dialogs/sheets */}
       <div
         ref={dropdownRef}
-        className="fixed z-50"
+        className="fixed z-[9999] pointer-events-auto"
         style={{
           top: `${dropdownPosition.top}px`,
           left: `${dropdownPosition.left}px`,
@@ -215,16 +196,17 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
           <div
             id="phone-countries-listbox"
             className={cn(
-              "overflow-y-auto max-h-60",
+              "overflow-y-auto max-h-60 overscroll-contain",
               "[&::-webkit-scrollbar]:w-1.5",
               "[&::-webkit-scrollbar-track]:bg-transparent",
               "[&::-webkit-scrollbar-thumb]:bg-muted-foreground/20",
               "[&::-webkit-scrollbar-thumb]:rounded-full",
               "[&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground/40"
             )}
-            onScroll={(e) => e.stopPropagation()}
             role="listbox"
             aria-label="Countries"
+            onWheel={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
           >
             {filteredCountries.length === 0 ? (
               <div className="py-6 text-center text-sm text-muted-foreground">
@@ -342,7 +324,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             <button
               onClick={(e) => {
                 e.stopPropagation()
-                handleCountrySelect(null as any)
+                handleCountrySelect(null)
               }}
               className="absolute right-1 hover:bg-accent rounded p-0.5 transition-colors"
               type="button"

@@ -269,8 +269,8 @@ export const useAddCustomerModalController = ({
   }, [])
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault()
+    async (e?: React.FormEvent) => {
+      e?.preventDefault()
       setLoading(true)
 
       if (!isFormValid()) {

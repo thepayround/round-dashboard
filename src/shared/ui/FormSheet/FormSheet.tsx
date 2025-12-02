@@ -32,7 +32,7 @@ export interface FormSheetProps {
   /** Cancel button text */
   cancelLabel?: string
   /** Called when submit button is clicked */
-  onSubmit?: () => void | Promise<void>
+  onSubmit?: (e?: React.FormEvent) => void | Promise<void>
   /** Called when cancel button is clicked (defaults to closing sheet) */
   onCancel?: () => void
   /** Whether the form is currently submitting */

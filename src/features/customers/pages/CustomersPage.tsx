@@ -18,7 +18,7 @@ import {
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { AddCustomerModal } from '../components/AddCustomerModal'
+import { AddCustomerSheet } from '../components/AddCustomerSheet'
 import CustomerTable, { type VisibilityState } from '../components/CustomerTable'
 import { useCustomersController } from '../hooks/useCustomersController'
 import { getStatusMeta } from '../utils'
@@ -541,8 +541,8 @@ const CustomersPage: React.FC = () => {
           </div>
         )}
 
-        {/* Add Customer Modal */}
-        <AddCustomerModal
+        {/* Add Customer Sheet */}
+        <AddCustomerSheet
           isOpen={showAddModal}
           onClose={closeAddModal}
           onCustomerAdded={handleCustomerAdded}

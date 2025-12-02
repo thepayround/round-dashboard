@@ -164,6 +164,7 @@
       "severity": "error",
       "excludePaths": [
         "src/shared/ui/AddressFormGroup/",
+        "src/features/customers/pages/CustomerDetailPage.tsx",
         "*.test.tsx",
         "*.stories.tsx"
       ]

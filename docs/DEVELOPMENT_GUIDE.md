@@ -134,6 +134,43 @@ When adding new dependencies that might affect linting:
 - Maintain 80%+ code coverage
 - Place tests in `__tests__/` directories for better organization
 
+### Button Sizing Standards
+
+Use consistent button sizes across the application:
+
+| Context | Size Prop | Height | Example |
+|---------|-----------|--------|---------|
+| Header/toolbar actions | `default` (or omit) | 36px | "Save", "Edit", "Send Email" |
+| Form submit buttons | `default` (or omit) | 36px | Primary form actions |
+| Full-width card actions | `default` (or omit) | 36px | Settings cards |
+| Navigation buttons | `default` (or omit) | 36px | "Back", "Next" |
+| Icon-only buttons | `size="icon"` | 36x36px | Toolbar icons |
+| Compact toolbar toggles | `size="sm"` | 32px | Text formatting |
+
+**Rules:**
+
+- ✅ Use `size="icon"` for icon-only buttons (not `size="sm"`)
+- ✅ Omit `size` prop for standard 36px buttons
+- ❌ Don't override icon button sizes with className
+- ❌ Don't use `size="sm"` for primary/submit buttons
+
+### Portal Components in Sheets/Modals
+
+When creating dropdown components that use `createPortal` to render outside the React tree:
+
+**Required for dropdowns inside Sheet/Modal:**
+
+1. Container: `className="fixed z-[9999] pointer-events-auto ..."`
+2. Scroll area: `className="overflow-y-auto overscroll-contain ..." onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}`
+
+**Why?**
+
+- `z-[9999]` - Ensures dropdown appears above Radix Sheet/Dialog overlays (z-50)
+- `pointer-events-auto` - Overrides Radix's `pointer-events: none` on body
+- `overscroll-contain` + event handlers - Prevents scroll from leaking to the Sheet
+
+Without these, dropdowns will be unclickable or scroll the Sheet instead of the dropdown list.
+
 ### Common Commands
 
 ```bash

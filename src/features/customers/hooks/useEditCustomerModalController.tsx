@@ -43,6 +43,7 @@ export const useEditCustomerModalController = ({
   const [billingAddress, setBillingAddress] = useState<CustomerAddressCreateRequest>({
     type: 'billing',
     isPrimary: true,
+    name: customer.billingAddress?.name ?? '',
     line1: customer.billingAddress?.line1 ?? '',
     line2: customer.billingAddress?.line2 ?? '',
     city: customer.billingAddress?.city ?? '',
@@ -54,6 +55,7 @@ export const useEditCustomerModalController = ({
   const [shippingAddress, setShippingAddress] = useState<CustomerAddressCreateRequest>({
     type: 'shipping',
     isPrimary: false,
+    name: customer.shippingAddress?.name ?? '',
     line1: customer.shippingAddress?.line1 ?? '',
     line2: customer.shippingAddress?.line2 ?? '',
     city: customer.shippingAddress?.city ?? '',
@@ -87,6 +89,7 @@ export const useEditCustomerModalController = ({
     setBillingAddress({
       type: 'billing',
       isPrimary: true,
+      name: customer.billingAddress?.name ?? '',
       line1: customer.billingAddress?.line1 ?? '',
       line2: customer.billingAddress?.line2 ?? '',
       city: customer.billingAddress?.city ?? '',
@@ -98,6 +101,7 @@ export const useEditCustomerModalController = ({
     setShippingAddress({
       type: 'shipping',
       isPrimary: false,
+      name: customer.shippingAddress?.name ?? '',
       line1: customer.shippingAddress?.line1 ?? '',
       line2: customer.shippingAddress?.line2 ?? '',
       city: customer.shippingAddress?.city ?? '',
@@ -177,8 +181,8 @@ export const useEditCustomerModalController = ({
   }, [])
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault()
+    async (e?: React.FormEvent) => {
+      e?.preventDefault()
       setIsSaving(true)
 
       try {

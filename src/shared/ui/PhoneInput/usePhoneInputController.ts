@@ -242,7 +242,7 @@ export const usePhoneInputController = ({
   }, [calculatePosition, closeDropdown, isDropdownOpen])
 
   const handleCountrySelect = useCallback(
-    (country: CountryPhoneInfo) => {
+    (country: CountryPhoneInfo | null) => {
       setSelectedCountry(country)
       setIsDropdownOpen(false)
       setSearchTerm('')
