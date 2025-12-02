@@ -8,77 +8,43 @@ import {
   Calendar,
   MapPin,
   MoreHorizontal,
-  Download,
   Building2,
   User,
+  Download,
   CheckSquare,
   Square,
+  Trash2,
 } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { AddCustomerModal } from '../components/AddCustomerModal'
-import CustomerTable from '../components/CustomerTable'
+import CustomerTable, { type VisibilityState } from '../components/CustomerTable'
 import { useCustomersController } from '../hooks/useCustomersController'
+import { getStatusMeta } from '../utils'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
-import { Checkbox } from '@/shared/ui'
-import { Pagination } from '@/shared/ui/Pagination'
+import { ColumnVisibilityToggle } from '@/shared/ui/DataTable/DataTable'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/shared/ui/shadcn/alert-dialog'
 import { Badge } from '@/shared/ui/shadcn/badge'
 import { Button } from '@/shared/ui/shadcn/button'
 import { Card, CardContent } from '@/shared/ui/shadcn/card'
 import { Skeleton } from '@/shared/ui/shadcn/skeleton'
 import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
 
-
-// CustomerStatus enum values from backend
-enum CustomerStatus {
-  Active = 1,
-  Inactive = 2,
-  Suspended = 3,
-  Cancelled = 4
-}
-
-const getStatusText = (status: number | string): string => {
-  const statusValue = typeof status === 'string' ? parseInt(status) : status
-
-  switch (statusValue) {
-    case CustomerStatus.Active:
-      return 'Active'
-    case CustomerStatus.Inactive:
-      return 'Inactive'
-    case CustomerStatus.Suspended:
-      return 'Suspended'
-    case CustomerStatus.Cancelled:
-      return 'Cancelled'
-    default:
-      return 'Unknown'
-  }
-}
-
-const getStatusVariant = (status: number | string): 'default' | 'secondary' | 'destructive' | 'outline' => {
-  const statusValue = typeof status === 'string' ? parseInt(status) : status
-
-  switch (statusValue) {
-    case CustomerStatus.Active:
-      return 'default' // Active uses primary color (success-like)
-    case CustomerStatus.Inactive:
-      return 'outline' // Inactive uses neutral outline
-    case CustomerStatus.Suspended:
-      return 'secondary' // Suspended uses secondary color (warning-like)
-    case CustomerStatus.Cancelled:
-      return 'destructive' // Cancelled uses destructive (error)
-    default:
-      return 'outline'
-  }
-}
-
 const CustomersPage: React.FC = () => {
   const {
     customers: displayedCustomers,
-    totalCount,
-    totalPages,
     loading,
     skeletonLoading,
     initialLoading,
@@ -95,24 +61,145 @@ const CustomersPage: React.FC = () => {
     showAddModal,
     openAddModal,
     closeAddModal,
-    currentPage,
-    handlePageChange,
     itemsPerPage,
-    handleItemsPerPageChange,
-    sortConfig,
-    handleSortChange,
-    selectionMode,
-    setSelectionMode,
-    selectedCustomers,
-    setSelectedCustomers,
     handleCustomerAdded,
-    handleExportSelected,
-    handleBulkEdit,
-    handleExportAll,
     searchSummary,
   } = useCustomersController()
 
+  // Selection state for export functionality
+  const [selectionMode, setSelectionMode] = useState(false)
+  const [selectedCustomerIds, setSelectedCustomerIds] = useState<string[]>([])
+
+  // Delete confirmation state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [customerToDelete, setCustomerToDelete] = useState<CustomerResponse | null>(null)
+  const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false)
+
+  // Column visibility state - show only essential columns by default
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    id: true,
+    displayName: true,
+    email: true,
+    company: true,
+    status: true,
+    currency: true,
+    signupDate: true,
+    phoneNumber: false,
+    portalAccess: false,
+    autoCollection: false,
+    locale: false,
+    timezone: false,
+    taxNumber: false,
+    tags: false,
+    lastActivityDate: false,
+    createdDate: false,
+    modifiedDate: false,
+  })
+
+  // Column definitions for visibility toggle (only hideable columns)
+  const columnDefinitions = [
+    { id: 'email', visible: columnVisibility.email !== false },
+    { id: 'company', visible: columnVisibility.company !== false },
+    { id: 'status', visible: columnVisibility.status !== false },
+    { id: 'currency', visible: columnVisibility.currency !== false },
+    { id: 'signupDate', visible: columnVisibility.signupDate !== false },
+    { id: 'phoneNumber', visible: columnVisibility.phoneNumber !== false },
+    { id: 'portalAccess', visible: columnVisibility.portalAccess !== false },
+    { id: 'autoCollection', visible: columnVisibility.autoCollection !== false },
+    { id: 'locale', visible: columnVisibility.locale !== false },
+    { id: 'timezone', visible: columnVisibility.timezone !== false },
+    { id: 'taxNumber', visible: columnVisibility.taxNumber !== false },
+    { id: 'tags', visible: columnVisibility.tags !== false },
+    { id: 'lastActivityDate', visible: columnVisibility.lastActivityDate !== false },
+    { id: 'createdDate', visible: columnVisibility.createdDate !== false },
+    { id: 'modifiedDate', visible: columnVisibility.modifiedDate !== false },
+  ]
+
+  const handleColumnToggle = (columnId: string, visible: boolean) => {
+    setColumnVisibility(prev => ({ ...prev, [columnId]: visible }))
+  }
+
   const hasSearchOrFilters = Boolean(searchQuery) || hasActiveFilters
+
+  // Export handlers
+  const handleExportSelected = () => {
+    if (selectedCustomerIds.length === 0) return
+    const selectedCustomers = displayedCustomers.filter(c => selectedCustomerIds.includes(c.id))
+    const csvContent = convertToCSV(selectedCustomers)
+    downloadCSV(csvContent, `customers-export-${new Date().toISOString().split('T')[0]}.csv`)
+  }
+
+  const handleExportAll = () => {
+    const csvContent = convertToCSV(displayedCustomers)
+    downloadCSV(csvContent, `customers-all-${new Date().toISOString().split('T')[0]}.csv`)
+  }
+
+  const convertToCSV = (customers: CustomerResponse[]) => {
+    const headers = ['ID', 'Display Name', 'First Name', 'Last Name', 'Email', 'Phone', 'Company', 'Status', 'Currency', 'Signup Date']
+    const rows = customers.map(c => [
+      c.id,
+      c.displayName,
+      c.firstName,
+      c.lastName,
+      c.email,
+      c.phoneNumber ?? '',
+      c.company ?? '',
+      c.status,
+      c.currency,
+      c.signupDate
+    ])
+    return [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n')
+  }
+
+  const downloadCSV = (content: string, filename: string) => {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = filename
+    link.click()
+    URL.revokeObjectURL(link.href)
+  }
+
+  // Delete handlers
+  const handleDeleteClick = (customer: CustomerResponse) => {
+    setCustomerToDelete(customer)
+    setDeleteDialogOpen(true)
+  }
+
+  const handleConfirmDelete = () => {
+    if (customerToDelete) {
+      // TODO: Call actual delete API when backend endpoint is available
+      // deleteCustomer(customerToDelete.id)
+    }
+    setDeleteDialogOpen(false)
+    setCustomerToDelete(null)
+  }
+
+  const handleBulkDeleteClick = () => {
+    if (selectedCustomerIds.length > 0) {
+      setBulkDeleteDialogOpen(true)
+    }
+  }
+
+  const handleConfirmBulkDelete = () => {
+    // TODO: Call actual bulk delete API when backend endpoint is available
+    // bulkDeleteCustomers(selectedCustomerIds)
+    setSelectedCustomerIds([])
+    setSelectionMode(false)
+    setBulkDeleteDialogOpen(false)
+  }
+
+  // Duplicate handler - navigates to add customer with pre-filled data
+  const handleDuplicate = (customer: CustomerResponse) => {
+    // Store customer data in sessionStorage for the add modal to pick up
+    const duplicateData = {
+      ...customer,
+      id: undefined, // Clear ID so a new one will be generated
+      displayName: `${customer.displayName} (Copy)`,
+    }
+    sessionStorage.setItem('duplicateCustomerData', JSON.stringify(duplicateData))
+    openAddModal()
+  }
 
   const formatDate = (dateString: string) => new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -148,10 +235,10 @@ const CustomersPage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      {/* Page Header - Inline replacement for PageHeader */}
+      {/* Page Header */}
       <div className="flex items-center justify-between pb-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Customers</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Customers</h1>
         </div>
       </div>
 
@@ -170,27 +257,35 @@ const CustomersPage: React.FC = () => {
             viewMode={viewMode}
             onViewModeChange={handleViewModeChange}
             viewModeOptions={viewModeOptions}
+            columnsToggle={
+              viewMode === 'table' ? (
+                <ColumnVisibilityToggle
+                  columns={columnDefinitions}
+                  onToggle={handleColumnToggle}
+                />
+              ) : undefined
+            }
             additionalActions={
-              <>
+              <div className="flex items-center gap-2">
                 {selectionMode ? (
                   <>
-                    {selectedCustomers.length > 0 && (
+                    {selectedCustomerIds.length > 0 && (
                       <>
                         <Button
-                          variant="ghost"
-                          size="sm"
+                          variant="destructive"
+                          size="default"
+                          onClick={handleBulkDeleteClick}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete ({selectedCustomerIds.length})
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="default"
                           onClick={handleExportSelected}
                         >
                           <Download className="h-4 w-4 mr-2" />
-                          Export ({selectedCustomers.length})
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleBulkEdit}
-                        >
-                          <Edit className="h-4 w-4 mr-2" />
-                          Bulk Edit ({selectedCustomers.length})
+                          Export ({selectedCustomerIds.length})
                         </Button>
                       </>
                     )}
@@ -198,12 +293,12 @@ const CustomersPage: React.FC = () => {
                       variant="ghost"
                       size="default"
                       onClick={() => {
-                        setSelectedCustomers([])
+                        setSelectedCustomerIds([])
                         setSelectionMode(false)
                       }}
                     >
                       <Square className="h-4 w-4 mr-2" />
-                      Cancel Selection
+                      Cancel
                     </Button>
                   </>
                 ) : (
@@ -217,12 +312,12 @@ const CustomersPage: React.FC = () => {
                       Select
                     </Button>
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="default"
                       onClick={handleExportAll}
                     >
                       <Download className="h-4 w-4 mr-2" />
-                      Export All
+                      Export
                     </Button>
                   </>
                 )}
@@ -233,7 +328,7 @@ const CustomersPage: React.FC = () => {
                 >
                   Add Customer
                 </Button>
-              </>
+              </div>
             }
           />
         </div>
@@ -286,153 +381,117 @@ const CustomersPage: React.FC = () => {
                       className="group relative h-full"
                     >
                       <Card className="p-6 h-full hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
-                        {/* Card selection checkbox - only show in selection mode */}
-                        {selectionMode && (
-                          <div className={`absolute top-4 right-4 transition-all duration-200 ${selectedCustomers.includes(customer.id) ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100'
-                            }`}>
-                            <div className={`relative ${selectedCustomers.includes(customer.id) ? 'bg-primary/20 p-1 rounded-lg border border-primary/50' : ''}`}>
-                              <Checkbox
-                                checked={selectedCustomers.includes(customer.id)}
-                                onCheckedChange={(checked) => {
-                                  if (checked) {
-                                    setSelectedCustomers([...selectedCustomers, customer.id])
-                                  } else {
-                                    setSelectedCustomers(selectedCustomers.filter(id => id !== customer.id))
-                                  }
-                                }}
-                                aria-label={`Select customer ${customer.displayName}`}
-                                className="w-5 h-5"
-                              />
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Header Section */}
-                        <div className="flex items-start gap-4 mb-6">
-                          <div className="p-3 bg-primary/10 rounded-xl border border-primary/20">
-                            {customer.isBusinessCustomer ? (
-                              <Building2 className="w-5 h-5 text-primary" />
-                            ) : (
-                              <User className="w-5 h-5 text-primary" />
-                            )}
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-medium text-white group-hover:text-primary transition-colors tracking-tight">
-                                {customer.effectiveDisplayName || customer.displayName}
-                              </h3>
-                              {customer.isBusinessCustomer && (
-                                <span className="px-2 py-1 bg-secondary/10 text-secondary border border-secondary/20 rounded text-xs font-medium">
-                                  Business
-                                </span>
+                        <div className="space-y-4">
+                          {/* Header Section */}
+                          <div className="flex items-start gap-4">
+                            <div className="p-3 bg-primary/10 rounded-xl border border-primary/20">
+                              {customer.isBusinessCustomer ? (
+                                <Building2 className="w-5 h-5 text-primary" />
+                              ) : (
+                                <User className="w-5 h-5 text-primary" />
                               )}
                             </div>
-                            {customer.company && (
-                              <p className="text-sm text-muted-foreground">{customer.company}</p>
-                            )}
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2">
+                                <h3 className="font-medium text-foreground group-hover:text-primary transition-colors tracking-tight">
+                                  {customer.effectiveDisplayName || customer.displayName}
+                                </h3>
+                                {customer.isBusinessCustomer && (
+                                  <Badge variant="secondary">Business</Badge>
+                                )}
+                              </div>
+                              {customer.company && (
+                                <p className="text-sm text-muted-foreground">{customer.company}</p>
+                              )}
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Customer actions"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label="Customer actions"
-                            className="text-white/50 hover:text-white"
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </div>
 
-                        {/* Information Cards */}
-                        <div className="space-y-4 mb-4">
-                          <Card className="p-4">
-                            <div className="flex items-center gap-4">
-                              <Mail className="w-4 h-4 text-secondary" />
+                          {/* Information Cards */}
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                              <Mail className="w-4 h-4 text-muted-foreground" />
                               <div className="flex-1 min-w-0">
-                                <div className="text-sm font-normal tracking-tight text-white truncate">{customer.email}</div>
-                                <div className="text-xs text-white/60">Primary email</div>
+                                <div className="text-sm text-foreground truncate">{customer.email}</div>
+                                <div className="text-xs text-muted-foreground">Primary email</div>
                               </div>
                             </div>
-                          </Card>
 
-                          {customer.phoneNumber && (
-                            <Card className="p-4">
-                              <div className="flex items-center gap-4">
-                                <Phone className="w-4 h-4 text-success" />
+                            {customer.phoneNumber && (
+                              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                                <Phone className="w-4 h-4 text-muted-foreground" />
                                 <div className="flex-1">
-                                  <div className="text-sm font-normal tracking-tight text-white">{customer.phoneNumber}</div>
-                                  <div className="text-xs text-white/60">Phone number</div>
+                                  <div className="text-sm text-foreground">{customer.phoneNumber}</div>
+                                  <div className="text-xs text-muted-foreground">Phone number</div>
                                 </div>
                               </div>
-                            </Card>
-                          )}
+                            )}
 
-                          {customer.billingAddress && (
-                            <Card className="p-4">
-                              <div className="flex items-center gap-4">
-                                <MapPin className="w-4 h-4 text-amber-400" />
+                            {customer.billingAddress && (
+                              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                                <MapPin className="w-4 h-4 text-muted-foreground" />
                                 <div className="flex-1 min-w-0">
-                                  <div className="text-sm font-normal tracking-tight text-white truncate">
+                                  <div className="text-sm text-foreground truncate">
                                     {customer.billingAddress.city}, {customer.billingAddress.country}
                                   </div>
-                                  <div className="text-xs text-white/60">Location</div>
+                                  <div className="text-xs text-muted-foreground">Location</div>
                                 </div>
                               </div>
-                            </Card>
-                          )}
+                            )}
 
-                          <Card className="p-4">
-                            <div className="flex items-center gap-4">
-                              <Calendar className="w-4 h-4 text-accent" />
+                            <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                              <Calendar className="w-4 h-4 text-muted-foreground" />
                               <div>
-                                <div className="text-sm font-normal tracking-tight text-white">{formatDate(customer.signupDate)}</div>
-                                <div className="text-xs text-white/60">Customer since</div>
+                                <div className="text-sm text-foreground">{formatDate(customer.signupDate)}</div>
+                                <div className="text-xs text-muted-foreground">Customer since</div>
                               </div>
                             </div>
-                          </Card>
-                        </div>
+                          </div>
 
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <Badge variant={getStatusVariant(customer.status)}>
-                              {getStatusText(customer.status)}
+                          {/* Status and Actions */}
+                          <div className="flex items-center justify-between pt-2">
+                            <Badge variant={getStatusMeta(customer.status).variant}>
+                              {getStatusMeta(customer.status).label}
                             </Badge>
-                          </div>
 
-                          <div className="flex items-center space-x-2">
-                            <Link
-                              to={`/customers/${customer.id}`}
-                              className="p-2 text-white/50 hover:text-secondary hover:bg-secondary/10 rounded-lg transition-all duration-200"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Link>
-                            <Link
-                              to={`/customers/${customer.id}?mode=edit`}
-                              className="p-2 text-white/50 hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-200"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Link>
-                          </div>
-                        </div>
-
-                        {/* Tags */}
-                        {customer.tags.length > 0 && (
-                          <div className="mt-4 pt-4 border-t border-border">
-                            <div className="flex flex-wrap gap-1">
-                              {customer.tags.slice(0, 3).map((tag: string, index: number) => (
-                                <span
-                                  key={index}
-                                  className="px-2 py-1 bg-accent/20 text-accent border border-accent/30 rounded text-xs"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                              {customer.tags.length > 3 && (
-                                <span className="px-2 py-1 bg-[#262626] text-muted-foreground rounded text-xs">
-                                  +{customer.tags.length - 3}
-                                </span>
-                              )}
+                            <div className="flex items-center gap-1">
+                              <Button variant="ghost" size="icon" asChild>
+                                <Link to={`/customers/${customer.id}`} aria-label="View customer">
+                                  <Eye className="w-4 h-4" />
+                                </Link>
+                              </Button>
+                              <Button variant="ghost" size="icon" asChild>
+                                <Link to={`/customers/${customer.id}?mode=edit`} aria-label="Edit customer">
+                                  <Edit className="w-4 h-4" />
+                                </Link>
+                              </Button>
                             </div>
                           </div>
-                        )}
+
+                          {/* Tags */}
+                          {customer.tags.length > 0 && (
+                            <div className="pt-3 border-t border-border">
+                              <div className="flex flex-wrap gap-1">
+                                {customer.tags.slice(0, 3).map((tag: string, index: number) => (
+                                  <Badge key={index} variant="outline" className="text-xs">
+                                    {tag}
+                                  </Badge>
+                                ))}
+                                {customer.tags.length > 3 && (
+                                  <Badge variant="secondary" className="text-xs">
+                                    +{customer.tags.length - 3}
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </Card>
                     </motion.div>
                   ))
@@ -448,35 +507,21 @@ const CustomersPage: React.FC = () => {
               >
                 <CustomerTable
                   customers={displayedCustomers}
-                  sortConfig={sortConfig}
-                  onSort={handleSortChange}
                   isLoading={loading || skeletonLoading}
                   selectable={selectionMode}
-                  selectedIds={selectedCustomers}
-                  onSelectionChange={setSelectedCustomers}
+                  selectedIds={selectedCustomerIds}
+                  onSelectionChange={setSelectedCustomerIds}
+                  onDelete={handleDeleteClick}
+                  onDuplicate={handleDuplicate}
+                  columnVisibility={columnVisibility}
+                  onColumnVisibilityChange={setColumnVisibility}
                 />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Pagination */}
-        {!loading && totalCount > 0 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={totalCount}
-            itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
-            onItemsPerPageChange={handleItemsPerPageChange}
-            showItemsPerPage
-            showGoToFirst
-            showGoToLast
-            pageSizeOptions={[6, 12, 24, 48]}
-          />
-        )}
-
-        {/* Empty State - Inline replacement for EmptyState */}
+        {/* Empty State */}
         {!loading && displayedCustomers.length === 0 && (
           <div className="flex flex-col items-center justify-center p-12 text-center">
             <div className="mb-4 rounded-full bg-muted p-4">
@@ -502,6 +547,56 @@ const CustomersPage: React.FC = () => {
           onClose={closeAddModal}
           onCustomerAdded={handleCustomerAdded}
         />
+
+        {/* Single Delete Confirmation Dialog */}
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Customer</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete{' '}
+                <span className="font-medium text-foreground">
+                  {customerToDelete?.effectiveDisplayName ?? customerToDelete?.displayName}
+                </span>
+                ? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleConfirmDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Bulk Delete Confirmation Dialog */}
+        <AlertDialog open={bulkDeleteDialogOpen} onOpenChange={setBulkDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete {selectedCustomerIds.length} Customers</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete{' '}
+                <span className="font-medium text-foreground">
+                  {selectedCustomerIds.length} customer{selectedCustomerIds.length > 1 ? 's' : ''}
+                </span>
+                ? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleConfirmBulkDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete {selectedCustomerIds.length} Customer{selectedCustomerIds.length > 1 ? 's' : ''}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </DashboardLayout>
   )

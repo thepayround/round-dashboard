@@ -1,4 +1,4 @@
-import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck } from 'lucide-react'
+import { Save, User, Building2, Mail, MapPin, Plus, Languages, CreditCard, Globe, Settings, Truck, X } from 'lucide-react'
 import React from 'react'
 
 import { useEditCustomerModalController } from '../hooks/useEditCustomerModalController'
@@ -338,7 +338,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
             {/* Customer Settings */}
             <div className="grid grid-cols-1 gap-4">
               {/* Portal Access Setting */}
-              <div className="flex items-center justify-between p-4 bg-white/5 border border-border rounded-lg hover:bg-white/8 transition-all duration-200">
+              <div className="flex items-center justify-between p-4 bg-muted/50 border border-border rounded-lg hover:bg-muted transition-all duration-200">
                 <div className="flex items-center space-x-3 flex-1">
                   <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
                     <User className="w-5 h-5 text-success" />
@@ -357,7 +357,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
               </div>
 
               {/* Auto Collection Setting */}
-              <div className="flex items-center justify-between p-4 bg-white/5 border border-border rounded-lg hover:bg-white/8 transition-all duration-200">
+              <div className="flex items-center justify-between p-4 bg-muted/50 border border-border rounded-lg hover:bg-muted transition-all duration-200">
                 <div className="flex items-center space-x-3 flex-1">
                   <div className="w-10 h-10 rounded-lg bg-info/10 flex items-center justify-center">
                     <Settings className="w-5 h-5 text-info" />
@@ -391,7 +391,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                 <span>Billing Address</span>
               </h4>
 
-              <div className="p-4 bg-white/5 border border-border rounded-lg">
+              <div className="p-4 bg-muted/50 border border-border rounded-lg">
                 <AddressFormGroup
                   value={billingAddress}
                   onChange={(address: Address) => {
@@ -414,16 +414,15 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                 <Button
                   type="button"
                   onClick={handleCopyBillingToShipping}
-                  variant="ghost"
+                  variant="secondary"
                   size="sm"
-                  className="bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
                 >
                   <Plus className="mr-2 w-4 h-4" />
                   Copy from Billing
                 </Button>
               </div>
 
-              <div className="p-4 bg-white/5 border border-border rounded-lg">
+              <div className="p-4 bg-muted/50 border border-border rounded-lg">
                 <AddressFormGroup
                   value={shippingAddress}
                   onChange={(address: Address) => {
@@ -458,7 +457,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
                     className="absolute right-1 top-1/2 -translate-y-1/2 rounded-sm opacity-70 hover:opacity-100"
                     aria-label={`Remove ${tag} tag`}
                   >
-                    ×
+                    <X className="h-3 w-3" />
                   </button>
                 </Badge>
               ))}

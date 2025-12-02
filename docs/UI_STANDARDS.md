@@ -288,15 +288,390 @@ When creating new authentication pages:
 
 ---
 
+## Data Table Standards
+
+### DataTable Component
+
+All data tables in the application must use the standardized `DataTable` component.
+
+**Location:** `src/shared/ui/DataTable/`
+
+```tsx
+import { DataTable, SortableHeader } from '@/shared/ui/DataTable/DataTable'
+```
+
+**Requirements:**
+- Use `DataTable` for all tabular data display
+- Use `SortableHeader` for all sortable columns
+- Mark essential columns as `enableHiding: false` (ID, Name, Actions)
+- Default page size: `12` rows
+- Enable pagination for datasets > 12 rows
+- Use minimal scrollbar styling (automatically applied)
+
+### Column Visibility
+
+For tables with many columns:
+
+```tsx
+// ✅ STANDARD: External column visibility management
+const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+  id: true,              // Essential - always visible
+  name: true,            // Essential - always visible
+  email: true,           // Important - visible by default
+  phoneNumber: false,    // Optional - hidden by default
+  createdDate: false,    // Optional - hidden by default
+})
+```
+
+**Requirements:**
+- Essential columns (ID, Name, Actions): `enableHiding: false`
+- Important columns: Visible by default
+- Optional columns: Hidden by default (user can show them)
+- Integrate column toggle with `SearchFilterToolbar` when available
+
+### Sortable Headers
+
+```tsx
+// ✅ STANDARD: Sortable column header
+{
+  accessorKey: 'name',
+  header: ({ column }) => (
+    <SortableHeader column={column}>Name</SortableHeader>
+  ),
+  cell: ({ row }) => row.original.name,
+}
+```
+
+**Requirements:**
+- All data columns should be sortable
+- Actions column: `enableSorting: false`
+- Use `SortableHeader` component (shows arrow indicators)
+
+### Actions Column
+
+```tsx
+// ✅ STANDARD: Actions dropdown
+{
+  id: 'actions',
+  header: () => <div className="text-right">Actions</div>,
+  cell: ({ row }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="h-8 w-8">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {/* Menu items */}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  enableSorting: false,
+  enableHiding: false,
+}
+```
+
+**Requirements:**
+- Right-aligned header and content
+- Use `MoreHorizontal` icon (3 dots)
+- Button: `variant="ghost"`, `size="icon"`, `h-8 w-8`
+- Stop propagation: `onClick={(e) => e.stopPropagation()}`
+- Actions: `enableSorting: false`, `enableHiding: false`
+
+### Custom Cell Rendering
+
+```tsx
+// ✅ STANDARD: Badge for status
+{
+  accessorKey: 'status',
+  header: ({ column }) => (
+    <SortableHeader column={column}>Status</SortableHeader>
+  ),
+  cell: ({ row }) => {
+    const status = row.original.status
+    return (
+      <Badge variant={status === 'active' ? 'default' : 'secondary'}>
+        {status}
+      </Badge>
+    )
+  }
+}
+
+// ✅ STANDARD: Monospace font for IDs/codes
+{
+  accessorKey: 'id',
+  header: ({ column }) => (
+    <SortableHeader column={column}>ID</SortableHeader>
+  ),
+  cell: ({ row }) => (
+    <div className="text-sm text-muted-foreground font-mono">
+      {row.original.id}
+    </div>
+  ),
+  enableHiding: false,
+}
+```
+
+### Horizontal Scrollbar
+
+DataTable automatically applies minimal scrollbar styling:
+
+```css
+/* Applied via scrollbar-thin class */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;  /* Thin scrollbar */
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  border-radius: 3px;
+}
+```
+
+**Requirements:**
+- Scrollbar: 6px height/width
+- Color: Matches `--border` theme color
+- Rounded corners: 3px
+- Transparent track
+
+### Loading States
+
+```tsx
+// ✅ STANDARD: Pass loading state to DataTable
+<DataTable
+  data={items}
+  columns={columns}
+  isLoading={loading || fetchingMore}
+/>
+```
+
+**Requirements:**
+- Always pass `isLoading` prop
+- Show loading during initial fetch
+- Show loading during refresh/refetch
+- Built-in loading UI provided by DataTable
+
+### Empty States
+
+```tsx
+// ✅ STANDARD: Custom empty message
+<DataTable
+  data={items}
+  columns={columns}
+  emptyMessage="No customers found. Try adjusting your filters."
+/>
+```
+
+**Requirements:**
+- Provide context-specific empty message
+- Suggest next action when applicable
+- Use `emptyMessage` prop
+
+### Reference Implementation
+
+See `src/features/customers/components/CustomerTable.tsx` for a complete production example demonstrating:
+- 17 columns with smart visibility defaults
+- Sortable headers on all data columns
+- Row actions dropdown (Edit, Duplicate, Delete)
+- Integration with SearchFilterToolbar
+- External column visibility management
+- Custom cell rendering (Badges, Avatars, Tags)
+
+**Full Documentation:** See [DataTable Guide](./DATATABLE_GUIDE.md) for comprehensive usage examples.
+
+---
+
+## Sheet (Side Panel) Standards
+
+### When to Use Sheet vs Dialog
+
+| Use Case | Component | Reason |
+|----------|-----------|--------|
+| Quick actions (notes, tags) | Sheet (`size="sm"`) | Easy side access, doesn't block view |
+| Form editing (customer, plan) | Sheet (`size="lg"` or `xl`) | More space for complex forms |
+| Detail views | Sheet (`size="full"`) | Full detail without leaving page |
+| Confirmations (delete, archive) | Dialog | Focused decision, blocks action |
+| Alerts/Warnings | Dialog | Critical attention required |
+
+### Sheet Component Structure
+
+```tsx
+// ✅ STANDARD: Proper Sheet structure
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetBody,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+} from '@/shared/ui/shadcn/sheet'
+
+<Sheet open={isOpen} onOpenChange={onClose}>
+  <SheetContent size="lg">
+    <SheetHeader>
+      <SheetTitle>Edit Customer</SheetTitle>
+      <SheetDescription>Update customer information</SheetDescription>
+    </SheetHeader>
+
+    <SheetBody>
+      {/* Scrollable content area */}
+      <form className="space-y-6">
+        {/* Form fields */}
+      </form>
+    </SheetBody>
+
+    <SheetFooter>
+      <Button variant="secondary" onClick={onClose}>Cancel</Button>
+      <Button type="submit">Save Changes</Button>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>
+```
+
+### Size Variants
+
+| Size | Width | Use Case |
+|------|-------|----------|
+| `sm` | 384px | Simple forms (notes, quick actions) |
+| `default` | 448px | Standard forms |
+| `lg` | 512px | Complex forms (customer details) |
+| `xl` | 576px | Large forms with multiple sections |
+| `full` | 672px | Full detail views |
+
+```tsx
+// ✅ STANDARD: Size prop usage
+<SheetContent size="sm">   {/* Notes, tags */}
+<SheetContent size="lg">   {/* Customer edit, plan edit */}
+<SheetContent size="full"> {/* Full detail views */}
+```
+
+### Layout Requirements
+
+**Structure:**
+- Use `SheetHeader` → `SheetBody` → `SheetFooter` structure
+- `SheetHeader`: Fixed at top with border separator
+- `SheetBody`: Scrollable content area with overflow handling
+- `SheetFooter`: Fixed at bottom with border separator
+
+**Spacing:**
+- Header: `px-6 pt-6 pb-4` with bottom border
+- Body: `px-6 py-6` with `flex-1 overflow-y-auto`
+- Footer: `px-6 py-4` with top border
+
+### Footer Button Patterns
+
+```tsx
+// ✅ STANDARD: Single action
+<SheetFooter>
+  <Button>Save</Button>
+</SheetFooter>
+
+// ✅ STANDARD: Cancel + Primary action
+<SheetFooter>
+  <Button variant="secondary" onClick={onClose}>Cancel</Button>
+  <Button>Save Changes</Button>
+</SheetFooter>
+
+// ✅ STANDARD: Destructive action
+<SheetFooter>
+  <Button variant="secondary" onClick={onClose}>Cancel</Button>
+  <Button variant="destructive">Delete Customer</Button>
+</SheetFooter>
+```
+
+### FormSheet - Reusable Wrapper Component
+
+For consistent form sheets across the app, use the `FormSheet` wrapper component:
+
+**Location:** `src/shared/ui/FormSheet/`
+
+```tsx
+import { FormSheet } from '@/shared/ui/FormSheet'
+
+// Simple form
+<FormSheet
+  open={isOpen}
+  onOpenChange={setIsOpen}
+  title="Add Note"
+  size="sm"
+  submitLabel="Save Note"
+  onSubmit={handleSave}
+  isSubmitting={saving}
+  hideCancelButton
+>
+  <div className="space-y-4">
+    <Textarea value={note} onChange={setNote} />
+  </div>
+</FormSheet>
+
+// Complex form with cancel button
+<FormSheet
+  open={isOpen}
+  onOpenChange={setIsOpen}
+  title="Edit Customer"
+  description="Update customer information"
+  size="lg"
+  submitLabel="Save Changes"
+  cancelLabel="Discard"
+  onSubmit={handleUpdate}
+  isSubmitting={updating}
+>
+  <CustomerForm data={customer} onChange={setCustomer} />
+</FormSheet>
+
+// Destructive action
+<FormSheet
+  open={isOpen}
+  onOpenChange={setIsOpen}
+  title="Delete Customer"
+  size="sm"
+  submitLabel="Delete"
+  submitVariant="destructive"
+  onSubmit={handleDelete}
+>
+  <p>Are you sure you want to delete {customer.name}?</p>
+</FormSheet>
+```
+
+**FormSheet Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | boolean | required | Whether sheet is open |
+| `onOpenChange` | function | required | Close handler |
+| `title` | string | required | Sheet title |
+| `description` | string | - | Optional subtitle |
+| `size` | sm/default/lg/xl/full | default | Sheet width |
+| `submitLabel` | string | "Save" | Submit button text |
+| `cancelLabel` | string | "Cancel" | Cancel button text |
+| `onSubmit` | function | - | Submit handler |
+| `isSubmitting` | boolean | false | Show loading state |
+| `isSubmitDisabled` | boolean | false | Disable submit |
+| `submitVariant` | default/destructive | default | Button variant |
+| `hideCancelButton` | boolean | false | Hide cancel button |
+| `hideFooter` | boolean | false | Hide entire footer |
+| `customFooter` | ReactNode | - | Custom footer content |
+
+### Production Example
+
+See `src/features/customers/components/CustomerNotesModal.tsx` for a production example using FormSheet.
+
+---
+
 ## File References
 
 **Key Files:**
 - `src/features/auth/components/AuthLayout.tsx` - Base layout with logo
 - `src/features/auth/pages/PersonalLoginPage.tsx` - Reference implementation
+- `src/features/customers/components/CustomerTable.tsx` - DataTable reference implementation
+- `src/shared/ui/DataTable/` - Reusable DataTable components
 - `index.html` - Logo preload configuration
 - `src/shared/ui/shadcn/button.tsx` - Button heights and variants
 - `src/shared/ui/shadcn/input.tsx` - Input heights and styling
 - `src/shared/ui/shadcn/card.tsx` - Card border radius
+- `src/index.css` - Scrollbar styles (`scrollbar-thin`)
 
 ---
 

@@ -16,8 +16,10 @@ This folder contains all comprehensive documentation for the project. For quick 
 - **[COMPONENT_VALIDATION.md](./COMPONENT_VALIDATION.md)** - Pre-commit validation rules
 - **[PRE_COMMIT_SETUP_COMPLETE.md](./PRE_COMMIT_SETUP_COMPLETE.md)** - Pre-commit setup summary
 - **[DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md)** - Code standards & best practices
+- **[UI_STANDARDS.md](./UI_STANDARDS.md)** - UI/UX standards & patterns
 
 ### Implementation Details
+- **[DATATABLE_GUIDE.md](./DATATABLE_GUIDE.md)** - Complete DataTable component guide
 - **[INPUT_STYLING_FIXES.md](./INPUT_STYLING_FIXES.md)** - Input/textarea styling improvements
 - **[BACKEND_INTEGRATION.md](./BACKEND_INTEGRATION.md)** - API integration patterns
 - **[EMAIL_CONFIRMATION_FLOW.md](./EMAIL_CONFIRMATION_FLOW.md)** - Auth flow documentation

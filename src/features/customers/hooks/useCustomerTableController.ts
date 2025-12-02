@@ -1,18 +1,14 @@
 import { useCallback, useMemo } from 'react'
 
+import { getStatusMeta, type StatusMeta } from '../utils'
+
 import type { CustomerResponse } from '@/shared/services/api/customer.service'
-import type { BadgeVariant } from '@/shared/ui'
 
 interface UseCustomerTableControllerParams {
   customers: CustomerResponse[]
   selectable?: boolean
   selectedIds?: string[]
   onSelectionChange?: (selectedIds: string[]) => void
-}
-
-interface StatusMeta {
-  label: string
-  variant: BadgeVariant
 }
 
 interface UseCustomerTableControllerReturn {
@@ -27,15 +23,6 @@ interface UseCustomerTableControllerReturn {
   selectionSummaryLabel: string
   clearSelection: () => void
 }
-
-const STATUS_MAP: Record<number, StatusMeta> = {
-  1: { label: 'Active', variant: 'default' },
-  2: { label: 'Inactive', variant: 'outline' },
-  3: { label: 'Suspended', variant: 'secondary' },
-  4: { label: 'Cancelled', variant: 'destructive' },
-}
-
-const defaultStatus: StatusMeta = STATUS_MAP[1]
 
 export const useCustomerTableController = ({
   customers,
@@ -87,11 +74,6 @@ export const useCustomerTableController = ({
     if (!selectable || !onSelectionChange) return
     onSelectionChange([])
   }, [onSelectionChange, selectable])
-
-  const getStatusMeta = useCallback((status: number | string) => {
-    const statusValue = typeof status === 'string' ? parseInt(status, 10) : status
-    return STATUS_MAP[statusValue] ?? defaultStatus
-  }, [])
 
   const formatDate = useCallback(
     (value: string) =>

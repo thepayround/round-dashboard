@@ -1,4 +1,4 @@
-import { User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Hash, Truck, Languages, AlertCircle } from 'lucide-react'
+import { User, Mail, Building2, MapPin, Globe, Settings, Tag, Save, Hash, Truck, Languages, AlertCircle, X } from 'lucide-react'
 import React from 'react'
 
 import { useAddCustomerModalController } from '../hooks/useAddCustomerModalController'
@@ -41,7 +41,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
     handlePhoneBlur,
     handleSameAsBillingChange,
     handleSubmit,
-  } = useAddCustomerModalController({ onClose, onCustomerAdded })
+  } = useAddCustomerModalController({ onClose, onCustomerAdded, isOpen })
 
   // Fetch dropdown data
   const { data: countries } = useCountries()
@@ -311,7 +311,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                   className="absolute right-1 top-1/2 -translate-y-1/2 rounded-sm opacity-70 hover:opacity-100"
                   aria-label={`Remove ${tag} tag`}
                 >
-                  ×
+                  <X className="h-3 w-3" />
                 </button>
               </Badge>
             ))}
@@ -389,8 +389,8 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
                   <Truck className="w-4 h-4 text-secondary" />
                 </div>
                 <div>
-                  <p className="text-white text-sm font-medium">Shipping address will be same as billing address</p>
-                  <p className="text-white/60 text-xs">Turn off the toggle above to enter a different shipping address</p>
+                  <p className="text-foreground text-sm font-medium">Shipping address will be same as billing address</p>
+                  <p className="text-muted-foreground text-xs">Turn off the toggle above to enter a different shipping address</p>
                 </div>
               </div>
             </div>
@@ -416,13 +416,13 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         {/* Customer Settings */}
         <div className="space-y-6">
           <div className="flex items-center space-x-2 mb-4">
-            <Settings className="w-5 h-5 text-[#FFC107]" />
+            <Settings className="w-5 h-5 text-warning" />
             <h3 className="text-lg font-semibold text-foreground">Customer Settings</h3>
           </div>
 
           <div className="grid grid-cols-1 gap-4">
             {/* Portal Access Setting */}
-            <div className="flex items-center justify-between p-4 bg-white/5 border border-border rounded-lg hover:bg-white/8 transition-all duration-200">
+            <div className="flex items-center justify-between p-4 bg-muted/50 border border-border rounded-lg hover:bg-muted transition-all duration-200">
               <div className="flex items-center space-x-3 flex-1">
                 <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
                   <User className="w-5 h-5 text-success" />
@@ -441,7 +441,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
             </div>
 
             {/* Auto Collection Setting */}
-            <div className="flex items-center justify-between p-4 bg-white/5 border border-border rounded-lg hover:bg-white/8 transition-all duration-200">
+            <div className="flex items-center justify-between p-4 bg-muted/50 border border-border rounded-lg hover:bg-muted transition-all duration-200">
               <div className="flex items-center space-x-3 flex-1">
                 <div className="w-10 h-10 rounded-lg bg-info/10 flex items-center justify-center">
                   <Settings className="w-5 h-5 text-info" />

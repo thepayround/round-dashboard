@@ -118,6 +118,25 @@ VITE_API_BASE_URL=http://localhost:5000/api
 4. Start development server: `npm run dev`
 5. Open [http://localhost:5173](http://localhost:5173)
 
+### Run All Services (Frontend + Backend)
+
+Use the convenience scripts to start both frontend and backend with one command:
+
+```bash
+# Windows
+.\scripts\run-all.bat
+
+# macOS/Linux
+./scripts/run-all.sh
+```
+
+These scripts will:
+
+- Detect which projects are available (frontend/backend)
+- Start available services automatically
+- Log status without failing if one project is missing
+- Display URLs for running services (Frontend: `http://localhost:5173`, Backend: `http://localhost:5000`)
+
 ### Explore Component Library
 
 ```bash

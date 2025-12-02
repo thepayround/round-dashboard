@@ -59,9 +59,6 @@ export const TeamManagementPage: React.FC = () => {
     handleCancelInvitation,
     refreshTeam,
     formatDate,
-    sortConfig,
-    handleSort,
-    sortedMembers,
   } = useTeamManagementController()
 
   const {
@@ -262,9 +259,7 @@ export const TeamManagementPage: React.FC = () => {
                 </div>
               ) : (
                 <TeamMembersTable
-                  members={sortedMembers}
-                  sortConfig={sortConfig}
-                  onSort={handleSort}
+                  members={filteredMembers}
                   onEditMember={openEditModal}
                   onRemoveMember={openDeleteConfirm}
                   isLoading={isLoading}

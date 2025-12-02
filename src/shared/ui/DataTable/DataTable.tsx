@@ -18,6 +18,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Search,
+  Settings2,
   X,
 } from 'lucide-react'
 import { useState } from 'react'
@@ -25,6 +26,14 @@ import { useState } from 'react'
 import { SimpleSelect } from '@/shared/ui/SimpleSelect'
 import { Button } from '@/shared/ui/shadcn/button'
 import { Checkbox } from '@/shared/ui/shadcn/checkbox'
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/ui/shadcn/dropdown-menu'
 import { Input } from '@/shared/ui/shadcn/input'
 import {
   Table,
@@ -58,6 +67,14 @@ interface DataTableProps<TData, TValue> {
   className?: string
   /** Custom empty state message */
   emptyMessage?: string
+  /** Show/hide column visibility toggle (internal) */
+  showColumnVisibility?: boolean
+  /** Initial column visibility state (uncontrolled) */
+  initialColumnVisibility?: VisibilityState
+  /** Controlled column visibility state */
+  columnVisibility?: VisibilityState
+  /** Callback when column visibility changes */
+  onColumnVisibilityChange?: (visibility: VisibilityState) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -73,10 +90,30 @@ export function DataTable<TData, TValue>({
   isLoading = false,
   className,
   emptyMessage = 'No results found.',
+  showColumnVisibility = false,
+  initialColumnVisibility = {},
+  columnVisibility: controlledColumnVisibility,
+  onColumnVisibilityChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [internalColumnVisibility, setInternalColumnVisibility] = useState<VisibilityState>(initialColumnVisibility)
+
+  // Support both controlled and uncontrolled modes
+  const columnVisibility = controlledColumnVisibility ?? internalColumnVisibility
+
+  // Handler that works with TanStack Table's updater pattern
+  const handleColumnVisibilityChange = (updaterOrValue: VisibilityState | ((old: VisibilityState) => VisibilityState)) => {
+    const newValue = typeof updaterOrValue === 'function'
+      ? updaterOrValue(columnVisibility)
+      : updaterOrValue
+
+    if (onColumnVisibilityChange) {
+      onColumnVisibilityChange(newValue)
+    } else {
+      setInternalColumnVisibility(newValue)
+    }
+  }
   const [rowSelection, setRowSelection] = useState({})
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -92,7 +129,7 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
+    onColumnVisibilityChange: handleColumnVisibilityChange,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
     state: {
@@ -107,6 +144,39 @@ export function DataTable<TData, TValue>({
   const selectedCount = table.getFilteredSelectedRowModel().rows.length
   const totalCount = table.getFilteredRowModel().rows.length
 
+  // Column visibility toggle component
+  const columnVisibilityToggle = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="default">
+          <Settings2 className="h-4 w-4 mr-2" />
+          Columns
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-[180px]">
+        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {table
+          .getAllColumns()
+          .filter((column) => column.getCanHide())
+          .map((column) => {
+            return (
+              <DropdownMenuCheckboxItem
+                key={column.id}
+                className="capitalize"
+                checked={column.getIsVisible()}
+                onCheckedChange={(value) =>
+                  column.toggleVisibility(!!value)
+                }
+              >
+                {column.id}
+              </DropdownMenuCheckboxItem>
+            )
+          })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+
   return (
     <div className={cn('space-y-4', className)}>
       {/* Search and Selection Summary */}
@@ -120,39 +190,55 @@ export function DataTable<TData, TValue>({
               onChange={(event) =>
                 table.getColumn(searchKey)?.setFilterValue(event.target.value)
               }
-              className="pl-9 bg-input"
+              className="pl-9 pr-9 bg-input"
             />
+            {(table.getColumn(searchKey)?.getFilterValue() as string) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+                onClick={() => table.getColumn(searchKey)?.setFilterValue('')}
+              >
+                <X className="h-4 w-4" />
+                <span className="sr-only">Clear search</span>
+              </Button>
+            )}
           </div>
         )}
 
         {/* Selection Summary */}
         {enableRowSelection && selectedCount > 0 && (
-          <div className="flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-md px-4 py-2">
+          <div className="flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-md px-4 h-9">
             <span className="text-sm font-medium text-foreground">
               {selectedCount} selected
             </span>
             <Button
               variant="ghost"
-              size="sm"
-              className="h-6 w-6 p-0"
+              size="icon"
+              className="h-7 w-7"
               onClick={() => table.resetRowSelection()}
             >
               <X className="h-4 w-4" />
             </Button>
           </div>
         )}
+
+        {/* Column Visibility Toggle - internal display */}
+        {showColumnVisibility && (
+          <div className="ml-auto">{columnVisibilityToggle}</div>
+        )}
       </div>
 
       {/* Table */}
       <div className="rounded-md border border-border bg-card overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto scrollbar-thin">
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-muted/50">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id} className="hover:bg-transparent border-border">
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id} className="text-foreground font-medium">
+                      <TableHead key={header.id} className="h-10 text-foreground font-medium text-xs uppercase tracking-wider">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -168,7 +254,7 @@ export function DataTable<TData, TValue>({
             <TableBody>
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
+                  <TableCell colSpan={columns.length} className="h-16 text-center text-muted-foreground">
                     Loading...
                   </TableCell>
                 </TableRow>
@@ -185,7 +271,7 @@ export function DataTable<TData, TValue>({
                     onClick={() => onRowClick?.(row.original)}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="text-muted-foreground">
+                      <TableCell key={cell.id} className="py-2 text-foreground">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
@@ -193,7 +279,7 @@ export function DataTable<TData, TValue>({
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
+                  <TableCell colSpan={columns.length} className="h-16 text-center text-muted-foreground">
                     {emptyMessage}
                   </TableCell>
                 </TableRow>
@@ -221,15 +307,16 @@ export function DataTable<TData, TValue>({
             <div className="flex items-center space-x-2">
               <p className="text-sm font-medium text-foreground">Rows per page</p>
               <SimpleSelect
-                options={[10, 20, 30, 40, 50, 100].map((pageSize) => ({
-                  value: `${pageSize}`,
-                  label: `${pageSize}`
+                options={[12, 24, 36, 48, 60, 120].map((size) => ({
+                  value: `${size}`,
+                  label: `${size}`
                 }))}
                 value={`${table.getState().pagination.pageSize}`}
                 onChange={(value) => {
                   table.setPageSize(Number(value))
                 }}
                 className="w-[70px]"
+                placeholder="12"
               />
             </div>
             <div className="flex w-[120px] items-center justify-center text-sm font-medium text-foreground">
@@ -239,7 +326,7 @@ export function DataTable<TData, TValue>({
             <div className="flex items-center space-x-2">
               <Button
                 variant="outline"
-                className="hidden h-8 w-8 p-0 lg:flex"
+                className="hidden h-9 w-9 p-0 lg:flex"
                 onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
                 title="First page"
@@ -249,7 +336,7 @@ export function DataTable<TData, TValue>({
               </Button>
               <Button
                 variant="outline"
-                className="h-8 w-8 p-0"
+                className="h-9 w-9 p-0"
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
                 title="Previous page"
@@ -259,7 +346,7 @@ export function DataTable<TData, TValue>({
               </Button>
               <Button
                 variant="outline"
-                className="h-8 w-8 p-0"
+                className="h-9 w-9 p-0"
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
                 title="Next page"
@@ -269,7 +356,7 @@ export function DataTable<TData, TValue>({
               </Button>
               <Button
                 variant="outline"
-                className="hidden h-8 w-8 p-0 lg:flex"
+                className="hidden h-9 w-9 p-0 lg:flex"
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                 disabled={!table.getCanNextPage()}
                 title="Last page"
@@ -337,4 +424,40 @@ export function DataTableSelectColumn<TData>(): ColumnDef<TData> {
     enableHiding: false,
   }
 }
+
+// Standalone column visibility toggle component for external use
+export interface ColumnVisibilityToggleProps {
+  columns: Array<{ id: string; visible: boolean }>
+  onToggle: (columnId: string, visible: boolean) => void
+}
+
+export function ColumnVisibilityToggle({ columns, onToggle }: Readonly<ColumnVisibilityToggleProps>) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="default">
+          <Settings2 className="h-4 w-4 mr-2" />
+          Columns
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-[180px]">
+        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {columns.map((column) => (
+          <DropdownMenuCheckboxItem
+            key={column.id}
+            className="capitalize"
+            checked={column.visible}
+            onCheckedChange={(value) => onToggle(column.id, !!value)}
+          >
+            {column.id}
+          </DropdownMenuCheckboxItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
 export type Column<TData> = ColumnDef<TData>
+export type { VisibilityState }
+export { SortableHeader } from './SortableHeader'

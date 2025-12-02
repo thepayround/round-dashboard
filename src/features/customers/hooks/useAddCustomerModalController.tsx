@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useGlobalToast } from '@/shared/contexts/ToastContext'
 import type { CustomerCreateRequest } from '@/shared/services/api/customer.service'
@@ -46,15 +46,54 @@ const initialFormData: CustomerCreateRequest = {
 interface UseAddCustomerModalControllerProps {
   onClose: () => void
   onCustomerAdded: () => void
+  isOpen?: boolean
 }
 
 export const useAddCustomerModalController = ({
   onClose,
   onCustomerAdded,
+  isOpen = false,
 }: UseAddCustomerModalControllerProps) => {
   const { showSuccess, showError } = useGlobalToast()
 
   const [formData, setFormData] = useState<CustomerCreateRequest>(initialFormData)
+
+  // Check for duplicate customer data when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      const duplicateDataStr = sessionStorage.getItem('duplicateCustomerData')
+      if (duplicateDataStr) {
+        try {
+          const duplicateData = JSON.parse(duplicateDataStr)
+          // Map the customer response to create request format
+          setFormData({
+            type: duplicateData.isBusinessCustomer ? CustomerType.Business : CustomerType.Individual,
+            email: duplicateData.email ?? '',
+            firstName: duplicateData.firstName ?? '',
+            lastName: duplicateData.lastName ?? '',
+            company: duplicateData.company ?? '',
+            phoneNumber: duplicateData.phoneNumber ?? '',
+            countryPhoneCode: duplicateData.countryPhoneCode ?? '',
+            taxNumber: duplicateData.taxNumber ?? '',
+            locale: duplicateData.locale ?? 'en',
+            timezone: duplicateData.timezone ?? '',
+            currency: duplicateData.currency ?? '',
+            portalAccess: duplicateData.portalAccess ?? true,
+            autoCollection: duplicateData.autoCollection ?? true,
+            tags: duplicateData.tags ?? [],
+            customFields: duplicateData.customFields ?? {},
+            billingAddress: duplicateData.billingAddress ?? initialFormData.billingAddress,
+            shippingAddress: duplicateData.shippingAddress ?? initialFormData.shippingAddress,
+          })
+          // Clear the session storage after loading
+          sessionStorage.removeItem('duplicateCustomerData')
+        } catch (e) {
+          console.error('Failed to parse duplicate customer data:', e)
+          sessionStorage.removeItem('duplicateCustomerData')
+        }
+      }
+    }
+  }, [isOpen])
   const [errors, setErrors] = useState<ValidationError[]>([])
   const [loading, setLoading] = useState(false)
   const [currentTag, setCurrentTag] = useState('')

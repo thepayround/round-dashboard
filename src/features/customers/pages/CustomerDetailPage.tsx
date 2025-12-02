@@ -1,3 +1,4 @@
+import type { ColumnDef } from '@tanstack/react-table'
 import { motion } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
 import {
@@ -12,6 +13,7 @@ import {
   Globe,
   Mail,
   MapPin,
+  MoreHorizontal,
   Phone,
   Plus,
   Shield,
@@ -22,7 +24,7 @@ import {
   Zap,
   Clock,
 } from 'lucide-react'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { CustomerDetailSkeleton } from '../components/CustomerDetailSkeleton'
@@ -33,11 +35,19 @@ import { EmailComposeModal } from '../components/EmailComposeModal'
 import { useCustomerDetailController, type CustomerDetailTab } from '../hooks/useCustomerDetailController'
 
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
+import type { CustomerNoteResponse } from '@/shared/types/customer.types'
+import { DataTable, SortableHeader } from '@/shared/ui/DataTable/DataTable'
 import { Button } from '@/shared/ui/shadcn/button'
 import { Card } from '@/shared/ui/shadcn/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/shadcn/table'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/shadcn/dropdown-menu'
 import { cn } from '@/shared/utils/cn'
 import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
+import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
 
 const DETAIL_TABS: { id: CustomerDetailTab; label: string }[] = [
   { id: 'overview', label: 'Overview' },
@@ -479,71 +489,147 @@ const CustomerDetailPage: React.FC = () => {
     )
   }
 
+  const notesColumns: ColumnDef<CustomerNoteResponse, unknown>[] = [
+    {
+      accessorKey: 'content',
+      header: ({ column }) => (
+        <SortableHeader column={column}>Note</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <div className="font-medium max-w-md truncate break-all">
+          {row.original.content}
+        </div>
+      ),
+      enableHiding: false,
+    },
+    {
+      accessorKey: 'author',
+      header: ({ column }) => (
+        <SortableHeader column={column}>Author</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <div className="text-muted-foreground">{row.original.author}</div>
+      ),
+    },
+    {
+      accessorKey: 'createdDate',
+      header: ({ column }) => (
+        <SortableHeader column={column} className="justify-end">Date</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <div className="text-muted-foreground text-right">
+          {formatDate(row.original.createdDate)}
+        </div>
+      ),
+    },
+    {
+      id: 'actions',
+      header: () => <div className="text-right">Actions</div>,
+      cell: ({ row }) => {
+        const note = row.original
+        return (
+          <div className="text-right">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    openNotesModal(note.id)
+                  }}
+                >
+                  <Edit className="h-4 w-4" />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    requestDeleteNote(note.id)
+                  }}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )
+      },
+      enableSorting: false,
+      enableHiding: false,
+    }
+  ]
+
+  // Notes search state
+  const [notesSearchQuery, setNotesSearchQuery] = useState('')
+  const [showNotesFilters, setShowNotesFilters] = useState(false)
+
+  // Filter notes based on search query
+  const filteredNotes = useMemo(() => {
+    if (!customer?.notes) return []
+    if (!notesSearchQuery) return customer.notes
+
+    const query = notesSearchQuery.toLowerCase()
+    return customer.notes.filter(note =>
+      note.content.toLowerCase().includes(query) ||
+      note.author.toLowerCase().includes(query)
+    )
+  }, [customer?.notes, notesSearchQuery])
+
   const renderNotesContent = () => {
     if (!customer) return null
 
     return (
       <div className="space-y-6">
-        <Card className="bg-bg-surface p-6">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <h2 className="text-lg font-medium text-white">Recent Notes</h2>
-              <p className="text-sm text-white/60">Keep track of context and conversations</p>
-            </div>
+        {/* Search toolbar with Add Note button */}
+        <SearchFilterToolbar
+          searchQuery={notesSearchQuery}
+          onSearchChange={setNotesSearchQuery}
+          searchPlaceholder="Search notes by content or author..."
+          searchResults={{
+            total: customer.notes.length,
+            filtered: filteredNotes.length
+          }}
+          showFilters={showNotesFilters}
+          onToggleFilters={() => setShowNotesFilters(!showNotesFilters)}
+          additionalActions={
             <Button type="button" onClick={() => openNotesModal()} variant="default" size="default" className="gap-2">
               <Plus className="w-4 h-4" />
               Add Note
             </Button>
-          </div>
+          }
+        />
 
-          {customer.notes.length > 0 ? (
-            <div className="border border-border rounded-lg overflow-hidden bg-bg-table">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Note</TableHead>
-                    <TableHead className="w-[150px]">Author</TableHead>
-                    <TableHead className="w-[150px] text-right">Date</TableHead>
-                    <TableHead className="w-[50px]"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {customer.notes.slice(0, 5).map(note => (
-                    <TableRow
-                      key={note.id}
-                      className="cursor-pointer hover:bg-white/5"
-                      onClick={() => openNotesModal(note.id)}
-                    >
-                      <TableCell className="font-medium max-w-md truncate break-all">{note.content}</TableCell>
-                      <TableCell className="text-fg-muted">{note.author}</TableCell>
-                      <TableCell className="text-right text-fg-muted">{formatDate(note.createdDate)}</TableCell>
-                      <TableCell onClick={(e) => e.stopPropagation()}>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          aria-label="Delete note"
-                          className="text-fg-muted hover:text-destructive hover:bg-destructive/10 h-8 w-8"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            requestDeleteNote(note.id)
-                          }}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          ) : (
-            <div className="text-center py-10 border border-dashed border-border rounded-xl">
-              <FileText className="w-10 h-10 text-white/60 mx-auto mb-4" />
-              <p className="text-sm text-white/60">No notes yet. Click &quot;Manage Notes&quot; to add one.</p>
-            </div>
-          )}
-        </Card>
+        {/* Notes table */}
+        {filteredNotes.length > 0 ? (
+          <DataTable
+            data={filteredNotes}
+            columns={notesColumns}
+            showPagination={true}
+            showSearch={false}
+            pageSize={10}
+            emptyMessage="No notes found."
+            onRowClick={(note) => openNotesModal(note.id)}
+          />
+        ) : (
+          <div className="text-center py-10 border border-dashed border-border rounded-xl">
+            <FileText className="w-10 h-10 text-white/60 mx-auto mb-4" />
+            <p className="text-sm text-white/60">
+              {notesSearchQuery ? 'No notes match your search.' : 'No notes yet. Click "Add Note" to create one.'}
+            </p>
+          </div>
+        )}
       </div>
     )
   }
@@ -659,11 +745,12 @@ const CustomerDetailPage: React.FC = () => {
 
         <div className="flex gap-6">
           {DETAIL_TABS.map(tab => (
-            <button
+            <Button
               key={tab.id}
+              variant="ghost"
               onClick={() => setCurrentTab(tab.id)}
               className={cn(
-                'pb-2 text-sm font-medium transition-colors relative',
+                'pb-2 px-0 text-sm font-medium transition-colors relative rounded-none hover:bg-transparent',
                 currentTab === tab.id
                   ? 'text-white'
                   : 'text-white/60 hover:text-white'
@@ -677,7 +764,7 @@ const CustomerDetailPage: React.FC = () => {
                   transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                 />
               )}
-            </button>
+            </Button>
           ))}
         </div>
 

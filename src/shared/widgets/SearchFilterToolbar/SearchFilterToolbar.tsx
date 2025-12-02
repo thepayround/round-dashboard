@@ -1,6 +1,7 @@
 import { Filter, RotateCcw, Search, X } from 'lucide-react'
 import React from 'react'
 
+import { LoadingSpinner } from '../../ui/LoadingSpinner'
 import { Button } from '../../ui/shadcn/button'
 import { Input } from '../../ui/shadcn/input'
 import { Drawer } from '../Drawer'
@@ -57,6 +58,9 @@ export interface SearchFilterToolbarProps {
   // Styling
   className?: string
 
+  // Column visibility toggle (optional)
+  columnsToggle?: React.ReactNode
+
   // Additional actions (optional)
   additionalActions?: React.ReactNode
 }
@@ -76,6 +80,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
   onViewModeChange,
   viewModeOptions,
   className = '',
+  columnsToggle,
   additionalActions
 }) => {
   const {
@@ -102,17 +107,19 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 {/* View Mode Toggle - First on left */}
                 {viewMode && onViewModeChange && viewModeOptions && (
-                  <div className="flex-shrink-0 inline-flex rounded-md border border-border bg-input p-1">
-                    {viewModeOptions.map((option) => {
+                  <div className="flex-shrink-0 inline-flex">
+                    {viewModeOptions.map((option, index) => {
                       const Icon = option.icon
+                      const isFirst = index === 0
+                      const isLast = index === viewModeOptions.length - 1
                       return (
                         <Button
                           key={option.value}
                           type="button"
                           onClick={() => onViewModeChange(option.value)}
-                          variant={viewMode === option.value ? 'default' : 'ghost'}
-                          size="sm"
-                          className="gap-2"
+                          variant={viewMode === option.value ? 'default' : 'outline'}
+                          size="default"
+                          className={`gap-2 ${isFirst ? 'rounded-r-none' : ''} ${isLast ? 'rounded-l-none' : ''} ${!isFirst && !isLast ? 'rounded-none' : ''} ${!isFirst ? '-ml-px' : ''}`}
                         >
                           <Icon className="h-4 w-4" />
                           {option.label}
@@ -131,20 +138,24 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
                     placeholder={searchPlaceholder}
                     className="pl-10 pr-10"
                   />
-                  {searchQuery && onClearSearch && (
+                  {searchQuery && (
                     <Button
                       type="button"
-                      onClick={onClearSearch}
+                      onClick={() => {
+                        onSearchChange('')
+                        onClearSearch?.()
+                      }}
                       variant="ghost"
                       size="icon"
                       className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
                     >
                       <X className="h-4 w-4" />
+                      <span className="sr-only">Clear search</span>
                     </Button>
                   )}
                   {isSearching && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <LoadingSpinner size="sm" inline />
                     </div>
                   )}
                 </div>
@@ -155,6 +166,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
                     type="button"
                     onClick={onToggleFilters}
                     variant="secondary"
+                    size="default"
                   >
                     <Filter className="mr-2 h-4 w-4" />
                     Filters
@@ -162,12 +174,11 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
                 )}
               </div>
 
-              {/* Right Section - Additional Actions stay at far right */}
-              {additionalActions && (
-                <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-                  {additionalActions}
-                </div>
-              )}
+              {/* Right Section - Columns Toggle and Additional Actions */}
+              <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
+                {columnsToggle}
+                {additionalActions}
+              </div>
             </div>
 
             {/* Search Results Info - Enhanced styling */}
@@ -175,14 +186,14 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
               <div className="flex items-center gap-4 text-sm -mt-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-secondary" />
-                  <span className="text-white/70">
+                  <span className="text-muted-foreground">
                     {searchSummaryLabel}
                   </span>
                 </div>
                 {searchQuery && (
                   <div className="flex items-center gap-2">
-                    <span className="text-white/50">•</span>
-                    <span className="text-white/50">for</span>
+                    <span className="text-muted-foreground/50">•</span>
+                    <span className="text-muted-foreground/50">for</span>
                     <span className="text-secondary font-medium bg-secondary/20 px-3 py-1 rounded-lg border border-secondary/30">
                       &quot;{searchQuery}&quot;
                     </span>
