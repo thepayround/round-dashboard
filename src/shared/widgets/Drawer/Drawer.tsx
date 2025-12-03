@@ -182,7 +182,15 @@ export const Drawer: React.FC<DrawerProps> = ({
             </div>
 
             {/* Content */}
-            <div className="flex-1 p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+            <div className={cn(
+              "flex-1 p-6 overflow-y-auto",
+              // Custom scrollbar styling
+              "[&::-webkit-scrollbar]:w-2",
+              "[&::-webkit-scrollbar-track]:bg-transparent",
+              "[&::-webkit-scrollbar-thumb]:bg-muted-foreground/20",
+              "[&::-webkit-scrollbar-thumb]:rounded-full",
+              "[&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground/40"
+            )}>
               {isLoading ? (
                 // Loading skeleton
                 <div className="space-y-6 animate-pulse">

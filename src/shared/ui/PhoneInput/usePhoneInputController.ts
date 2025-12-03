@@ -51,9 +51,6 @@ export const usePhoneInputController = ({
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 })
   const [isFocused, setIsFocused] = useState(false)
 
-  // Track which value we've already parsed to avoid re-parsing the same value
-  const lastParsedValueRef = useRef<string>('')
-
   const dropdownRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -68,58 +65,157 @@ export const usePhoneInputController = ({
   const errorId = `phone-error-${generatedErrorId}`
   const inputId = id || `phone-input-${generatedInputId}`
 
+  // Track the initial value at mount time for parsing
+  const initialValueRef = useRef(value)
+
+  // Track if initial parsing has been completed (to prevent re-parsing after user edits)
+  const hasCompletedInitialParseRef = useRef(false)
+
+  // Track if we're currently parsing to prevent race conditions
+  const isParsingRef = useRef(false)
+
   useEffect(() => {
-    const loadCountries = async () => {
+    let isCancelled = false
+
+    const loadCountriesAndParse = async () => {
       try {
         setIsLoading(true)
         const allCountries = await phoneValidationService.getCountries()
+
+        if (isCancelled) return
+
         setCountries(allCountries)
 
-        if (!selectedCountry) {
-          const defaultCountryInfo =
-            allCountries.find(country => country.countryCode === defaultCountry) ?? allCountries[0]
-          if (defaultCountryInfo) {
-            setSelectedCountry(defaultCountryInfo)
+        // Now that we have countries, parse initial value if present
+        const initialValue = initialValueRef.current
+
+        if (initialValue && !hasCompletedInitialParseRef.current && !isParsingRef.current) {
+          isParsingRef.current = true
+
+          if (initialValue.startsWith('+')) {
+            try {
+              const parsed = await phoneValidator.parseInternational(initialValue)
+
+              if (isCancelled) return
+
+              if (parsed.isValid && parsed.country) {
+                setSelectedCountry(parsed.country)
+                setPhoneNumber(parsed.localNumber ?? initialValue)
+              } else {
+                // Parsing failed - find country from phone code or use default
+                const phoneCode = initialValue.slice(1).match(/^\d+/)?.[0] ?? ''
+                const matchedCountry = allCountries.find(c => phoneCode.startsWith(c.phoneCode))
+                const countryToUse = matchedCountry ??
+                  allCountries.find(c => c.countryCode === defaultCountry) ??
+                  allCountries[0]
+
+                if (countryToUse) {
+                  setSelectedCountry(countryToUse)
+                }
+                // Remove the phone code from the number for display
+                const localPart = initialValue.replace(/^\+\d+\s*/, '')
+                setPhoneNumber(localPart || initialValue)
+              }
+            } catch (err) {
+              console.error('Failed to parse initial phone value:', err)
+              if (isCancelled) return
+
+              // Fallback: try to match phone code manually
+              const phoneCode = initialValue.slice(1).match(/^\d+/)?.[0] ?? ''
+              const matchedCountry = allCountries.find(c => phoneCode.startsWith(c.phoneCode))
+              const countryToUse = matchedCountry ??
+                allCountries.find(c => c.countryCode === defaultCountry) ??
+                allCountries[0]
+
+              if (countryToUse) {
+                setSelectedCountry(countryToUse)
+              }
+              setPhoneNumber(initialValue)
+            }
+          } else {
+            // Non-international value - use as-is with default country
+            const countryToUse = allCountries.find(c => c.countryCode === defaultCountry) ?? allCountries[0]
+            if (countryToUse) {
+              setSelectedCountry(countryToUse)
+            }
+            setPhoneNumber(initialValue)
+          }
+
+          hasCompletedInitialParseRef.current = true
+          isParsingRef.current = false
+        } else if (!initialValue) {
+          // No initial value - just set default country
+          const countryToUse = allCountries.find(c => c.countryCode === defaultCountry) ?? allCountries[0]
+          if (countryToUse && !selectedCountry) {
+            setSelectedCountry(countryToUse)
           }
         }
       } catch (err) {
         console.error('Failed to load countries:', err)
       } finally {
-        setIsLoading(false)
+        if (!isCancelled) {
+          setIsLoading(false)
+        }
       }
     }
 
-    loadCountries()
-  }, [defaultCountry, selectedCountry])
+    loadCountriesAndParse()
 
+    return () => {
+      isCancelled = true
+    }
+  // Only run on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Handle external value changes after initial parse
   useEffect(() => {
-    const parseInitialValue = async () => {
-      // Only parse if we have a value, countries are loaded, and we haven't parsed this value yet
-      if (value && countries.length > 0 && lastParsedValueRef.current !== value) {
-        lastParsedValueRef.current = value
+    // Skip if this is the initial mount (handled above) or if still loading
+    if (!hasCompletedInitialParseRef.current || countries.length === 0) {
+      return
+    }
+
+    // Handle external value clear
+    if (!value) {
+      setPhoneNumber('')
+      return
+    }
+
+    // If value changed significantly (e.g., different customer loaded), re-parse
+    // But only if the new value looks different from what we currently have
+    if (value.startsWith('+') && value !== initialValueRef.current) {
+      initialValueRef.current = value
+      hasCompletedInitialParseRef.current = false
+
+      const reparseValue = async () => {
+        if (isParsingRef.current) return
+        isParsingRef.current = true
+
         try {
           const parsed = await phoneValidator.parseInternational(value)
           if (parsed.isValid && parsed.country) {
             setSelectedCountry(parsed.country)
             setPhoneNumber(parsed.localNumber ?? value)
           } else {
-            // If parsing fails, just set the raw value as the phone number
+            // Fallback: try to match phone code manually
+            const phoneCode = value.slice(1).match(/^\d+/)?.[0] ?? ''
+            const matchedCountry = countries.find(c => phoneCode.startsWith(c.phoneCode))
+            if (matchedCountry) {
+              setSelectedCountry(matchedCountry)
+            }
             setPhoneNumber(value.replace(/^\+\d+\s*/, ''))
           }
         } catch (err) {
-          console.error('Failed to parse initial phone value:', err)
-          // On error, set the raw value
-          setPhoneNumber(value)
+          console.error('Failed to re-parse phone value:', err)
+        } finally {
+          hasCompletedInitialParseRef.current = true
+          isParsingRef.current = false
         }
-      } else if (!value && lastParsedValueRef.current) {
-        // Value was cleared - reset the parsed ref and phone number
-        lastParsedValueRef.current = ''
-        setPhoneNumber('')
       }
-    }
 
-    parseInitialValue()
-  }, [countries, value])
+      reparseValue()
+    }
+  }, [value, countries])
 
   useEffect(() => {
     if (error !== undefined) {

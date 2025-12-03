@@ -164,6 +164,7 @@ export const EditCustomerSheet: React.FC<EditCustomerSheetProps> = ({
           <div className="space-y-1.5">
             <Label htmlFor="phoneNumber">Phone</Label>
             <PhoneInput
+              key={`phone-business-${customer.id}`}
               id="phoneNumber"
               name="phoneNumber"
               value={formData.phoneNumber}
@@ -226,6 +227,7 @@ export const EditCustomerSheet: React.FC<EditCustomerSheetProps> = ({
           <div className="space-y-1.5">
             <Label htmlFor="phoneNumber">Phone</Label>
             <PhoneInput
+              key={`phone-individual-${customer.id}`}
               id="phoneNumber"
               name="phoneNumber"
               value={formData.phoneNumber}

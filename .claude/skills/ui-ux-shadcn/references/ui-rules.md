@@ -10,13 +10,24 @@ Round Dashboard uses **Shadcn UI with Zinc Dark Theme** as the foundation for al
 
 Always use CSS variables from `src/index.css`. Never hardcode colors.
 
-**Primary Colors:**
-- `--background` - Main background (240 10% 3.9%)
+**Primary Colors (Dark Mode):**
+- `--background` - Root background, sidebar (0 0% 3.9%) - **darkest**
 - `--foreground` - Main text color (0 0% 98%)
-- `--card` - Card background (240 5.9% 10%)
+- `--card` - Card/main content background (0 0% 7%) - **middle**
 - `--card-foreground` - Card text (0 0% 98%)
+- `--popover` - Dropdown/popover background (0 0% 9%) - **lightest (elevated)**
+- `--popover-foreground` - Popover text (0 0% 98%)
 - `--primary` - Primary accent (0 0% 98%)
 - `--primary-foreground` - Primary text (240 5.9% 10%)
+
+**Dark Mode Elevation Hierarchy:**
+```
+Background (3.9%) < Card (7%) < Popover (9%)
+     ↓              ↓            ↓
+  Sidebar     Main content   Dropdowns/Menus
+```
+
+This creates a subtle "lift" effect where floating elements (dropdowns, popovers, context menus) appear elevated above the content they overlay.
 
 **Semantic Colors:**
 - `--muted` / `--muted-foreground` - Muted/subtle elements
@@ -265,6 +276,84 @@ import { AlertCircle } from 'lucide-react'
 - ❌ Never use `text-red-*` hardcoded colors
 - ❌ Never use `text-primary` for errors
 
+## Scrollbar Styling
+
+All scrollable containers MUST use the custom scrollbar styling for visual consistency.
+
+### Standard Scrollbar Classes
+
+```tsx
+// For vertical scrollbars (most common)
+className={cn(
+  "overflow-y-auto",
+  "[&::-webkit-scrollbar]:w-2",
+  "[&::-webkit-scrollbar-track]:bg-transparent",
+  "[&::-webkit-scrollbar-thumb]:bg-muted-foreground/20",
+  "[&::-webkit-scrollbar-thumb]:rounded-full",
+  "[&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground/40"
+)}
+
+// For horizontal scrollbars (tables, etc.)
+className={cn(
+  "overflow-x-auto",
+  "[&::-webkit-scrollbar]:h-2",
+  "[&::-webkit-scrollbar-track]:bg-transparent",
+  "[&::-webkit-scrollbar-thumb]:bg-muted-foreground/20",
+  "[&::-webkit-scrollbar-thumb]:rounded-full",
+  "[&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground/40"
+)}
+```
+
+### Where to Apply
+
+| Component Type | Location | Notes |
+|----------------|----------|-------|
+| Main content area | `DashboardLayout.tsx` | Inner scrollable div |
+| Sheet/Drawer body | `SheetBody`, `DialogBody` | Already styled in shadcn components |
+| Dropdown lists | `Combobox`, `Select`, `PhoneInput` | Already styled |
+| Tables | `Table` wrapper div | Horizontal scroll |
+| Command palette | `CommandList` | Already styled |
+
+### Components with Built-in Scrollbar Styling
+
+These shadcn components already include proper scrollbar styling:
+
+- `SheetBody` - Sheet/drawer content area
+- `DialogBody` - Dialog content area
+- `SelectContent` - Select dropdown
+- `CommandList` - Command palette list
+- `Table` - Table wrapper (horizontal)
+
+### Rules
+
+✅ **ALWAYS** use the custom scrollbar classes on scrollable containers
+✅ **ALWAYS** use `w-2` for vertical scrollbars, `h-2` for horizontal
+✅ **ALWAYS** use `bg-muted-foreground/20` for thumb color
+✅ **ALWAYS** use `rounded-full` for thumb shape
+❌ **NEVER** use default browser scrollbars
+❌ **NEVER** use the legacy `scrollbar-thin` class (deprecated)
+❌ **NEVER** mix scrollbar styles (all must be consistent)
+
+### Preventing Double Scrollbars
+
+When creating scrollable containers, ensure only ONE element has scroll:
+
+```tsx
+// ✅ Correct - Only inner div scrolls
+<div className="h-screen overflow-hidden">
+  <div className="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 ...">
+    {content}
+  </div>
+</div>
+
+// ❌ Wrong - Both containers can scroll
+<div className="min-h-screen overflow-auto">
+  <div className="overflow-y-auto">
+    {content}
+  </div>
+</div>
+```
+
 ## Don't Do This
 
 ❌ Inline styles (except rare edge cases)
@@ -274,3 +363,4 @@ import { AlertCircle } from 'lucide-react'
 ❌ Missing dark theme support
 ❌ Non-semantic HTML
 ❌ Form validation on blur (use onSubmit)
+❌ Default browser scrollbars (use custom styling)

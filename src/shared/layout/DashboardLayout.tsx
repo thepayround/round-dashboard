@@ -102,7 +102,7 @@ export const DashboardLayout = memo(({
 
   return (
     <div
-      className="min-h-screen relative bg-background"
+      className="h-screen overflow-hidden relative bg-background"
       style={{
         '--sidebar-width': isCollapsed ? '64px' : '200px'
       } as React.CSSProperties}
@@ -161,7 +161,7 @@ export const DashboardLayout = memo(({
         transition={isSwiping ? { duration: 0 } : transitionConfigs.sidebar}
         className={cn(
           'fixed left-0 top-0 h-full flex flex-col',
-          'bg-zinc-950/95 border-r border-zinc-800/50',
+          'bg-zinc-950/95',
           isMobileView ? 'z-[70] shadow-2xl' : 'z-auto'
         )}
         aria-label="Sidebar navigation"
@@ -330,17 +330,17 @@ export const DashboardLayout = memo(({
               )}
             </AnimatePresence>
 
-            <div className="mx-2 border-t border-zinc-800/50" />
+            <div className="mx-2 border-t border-border" />
             <button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               className={cn(
-                "w-full flex items-center gap-2 hover:bg-zinc-800/30 transition-colors",
+                "w-full flex items-center gap-2",
                 isCollapsed ? "p-2 justify-center" : "px-2 py-2"
               )}
             >
               <div className={cn(
-                "rounded-full bg-zinc-800 flex items-center justify-center shrink-0 overflow-hidden",
-                isCollapsed ? "h-8 w-8" : "h-7 w-7"
+                "rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden",
+                isCollapsed ? "h-8 w-8" : "h-8 w-8"
               )}>
                 {userAvatar}
               </div>
@@ -348,12 +348,12 @@ export const DashboardLayout = memo(({
               {!isCollapsed && (
                 <>
                   <div className="flex-1 min-w-0 text-left">
-                    <p className="text-xs font-medium text-zinc-200 truncate">{userDisplayName}</p>
-                    <p className="text-[10px] text-zinc-500 truncate">{secondaryUserInfo}</p>
+                    <p className="text-sm font-medium text-foreground truncate">{userDisplayName}</p>
+                    <p className="text-xs text-muted-foreground truncate">{secondaryUserInfo}</p>
                   </div>
                   <ChevronUp
                     className={cn(
-                      "h-3 w-3 shrink-0 text-zinc-500 transition-transform duration-200",
+                      "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
                       showProfileDropdown ? "rotate-0" : "rotate-180"
                     )}
                   />
@@ -482,16 +482,22 @@ export const DashboardLayout = memo(({
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
         className={cn(
-          'relative z-10',
-          isMobileView ? 'mt-14 p-0' : 'py-2'
+          'relative z-10 bg-card',
+          isMobileView ? 'mt-14 p-0' : 'my-2 mr-2 rounded-lg border border-border'
         )}
         style={isMobileView ? {
           paddingBottom: 'max(1rem, var(--safe-area-inset-bottom))'
         } : undefined}
       >
         <div className={cn(
-          'bg-card overflow-y-auto',
-          isMobileView ? 'min-h-[calc(100vh-4rem)]' : 'h-[calc(100vh-1rem)] rounded-xl border border-border'
+          'overflow-y-auto',
+          isMobileView ? 'min-h-[calc(100vh-4rem)]' : 'h-[calc(100vh-1rem)]',
+          // Custom scrollbar styling
+          '[&::-webkit-scrollbar]:w-2',
+          '[&::-webkit-scrollbar-track]:bg-transparent',
+          '[&::-webkit-scrollbar-thumb]:bg-muted-foreground/20',
+          '[&::-webkit-scrollbar-thumb]:rounded-full',
+          '[&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground/40'
         )}>
           <div className={cn(
             'max-w-[1400px] mx-auto',
