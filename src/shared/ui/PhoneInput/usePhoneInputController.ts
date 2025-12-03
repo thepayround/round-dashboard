@@ -51,6 +51,9 @@ export const usePhoneInputController = ({
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 })
   const [isFocused, setIsFocused] = useState(false)
 
+  // Track which value we've already parsed to avoid re-parsing the same value
+  const lastParsedValueRef = useRef<string>('')
+
   const dropdownRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -91,21 +94,32 @@ export const usePhoneInputController = ({
 
   useEffect(() => {
     const parseInitialValue = async () => {
-      if (value && countries.length > 0 && !phoneNumber) {
+      // Only parse if we have a value, countries are loaded, and we haven't parsed this value yet
+      if (value && countries.length > 0 && lastParsedValueRef.current !== value) {
+        lastParsedValueRef.current = value
         try {
           const parsed = await phoneValidator.parseInternational(value)
           if (parsed.isValid && parsed.country) {
             setSelectedCountry(parsed.country)
             setPhoneNumber(parsed.localNumber ?? value)
+          } else {
+            // If parsing fails, just set the raw value as the phone number
+            setPhoneNumber(value.replace(/^\+\d+\s*/, ''))
           }
         } catch (err) {
           console.error('Failed to parse initial phone value:', err)
+          // On error, set the raw value
+          setPhoneNumber(value)
         }
+      } else if (!value && lastParsedValueRef.current) {
+        // Value was cleared - reset the parsed ref and phone number
+        lastParsedValueRef.current = ''
+        setPhoneNumber('')
       }
     }
 
     parseInitialValue()
-  }, [countries, phoneNumber, value])
+  }, [countries, value])
 
   useEffect(() => {
     if (error !== undefined) {

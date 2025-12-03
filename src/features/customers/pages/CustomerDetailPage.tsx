@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   Building2,
   CheckCircle,
+  Copy,
   CreditCard,
   Edit,
   FileText,
@@ -24,6 +25,8 @@ import { EditCustomerSheet, type EditCustomerSection } from '../components/EditC
 import { EmailComposeSheet } from '../components/EmailComposeSheet'
 import { useCustomerDetailController, type CustomerDetailTab } from '../hooks/useCustomerDetailController'
 
+import { useCountries, useCurrencies } from '@/shared/hooks/api/useCountryCurrency'
+import { useLanguages, useTimezones } from '@/shared/hooks/api/useUserSettingsOptions'
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { CustomerNoteResponse } from '@/shared/types/customer.types'
 import { DataTable, SortableHeader } from '@/shared/ui/DataTable/DataTable'
@@ -66,18 +69,18 @@ const SectionCard = ({
   children: React.ReactNode
   className?: string
 }) => (
-  <Card
-    className={cn(
-      'p-5 transition-colors',
-      onEdit && 'cursor-pointer hover:bg-muted/30',
-      className
-    )}
-    onClick={onEdit}
-  >
+  <Card className={cn('p-5', className)}>
     <div className="flex items-center justify-between mb-3">
       <h3 className="text-sm font-medium">{title}</h3>
       {onEdit && (
-        <Edit className="h-3.5 w-3.5 text-muted-foreground" />
+        <button
+          type="button"
+          onClick={onEdit}
+          className="p-1.5 rounded-md hover:bg-muted transition-colors"
+          aria-label={`Edit ${title}`}
+        >
+          <Edit className="h-3.5 w-3.5 text-muted-foreground" />
+        </button>
       )}
     </div>
     {children}
@@ -119,8 +122,59 @@ const CustomerDetailPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const hasOpenedEditModalFromQueryRef = useRef(false)
 
+  // Load countries, currencies, languages, and timezones for display names
+  const { data: countries } = useCountries()
+  const { data: currencies } = useCurrencies()
+  const { data: languages } = useLanguages()
+  const { data: timezones } = useTimezones()
+
+  // Helper to get full country name from code
+  const getCountryName = useCallback((code: string | undefined) => {
+    if (!code) return null
+    const country = countries.find(c => c.countryCodeAlpha2 === code)
+    return country?.countryName ?? code
+  }, [countries])
+
+  // Helper to get full currency name from code
+  const getCurrencyName = useCallback((code: string | undefined) => {
+    if (!code) return null
+    const currency = currencies.find(c => c.currencyCodeAlpha === code)
+    return currency ? `${currency.currencyName} (${currency.currencyCodeAlpha})` : code
+  }, [currencies])
+
+  // Helper to get full language name from code
+  const getLanguageName = useCallback((code: string | undefined) => {
+    if (!code) return null
+    const language = languages.find(l => l.value === code)
+    return language ? language.label : code
+  }, [languages])
+
+  // Helper to get timezone name with UTC offset from value
+  const getTimezoneName = useCallback((value: string | undefined) => {
+    if (!value) return null
+    const timezone = timezones.find(t => t.value === value)
+    return timezone ? timezone.label : value
+  }, [timezones])
+
   // Track which section to open in edit sheet
   const [editSection, setEditSection] = useState<EditCustomerSection | undefined>(undefined)
+
+  // Track address tab (billing or shipping)
+  const [addressTab, setAddressTab] = useState<'billing' | 'shipping'>('billing')
+
+  // Track copied state for customer ID
+  const [copiedId, setCopiedId] = useState(false)
+
+  const handleCopyCustomerId = useCallback(async () => {
+    if (!customer?.id) return
+    try {
+      await navigator.clipboard.writeText(customer.id)
+      setCopiedId(true)
+      setTimeout(() => setCopiedId(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }, [customer?.id])
 
   const handleBackNavigation = useCallback(() => {
     navigate('/customers', { replace: true })
@@ -157,6 +211,21 @@ const CustomerDetailPage: React.FC = () => {
     nextParams.delete('mode')
     setSearchParams(nextParams, { replace: true })
   }, [customer, openEditModal, searchParams, setSearchParams])
+
+  // Check if shipping address is same as billing
+  const isShippingSameAsBilling = useMemo(() => {
+    if (!customer?.billingAddress || !customer?.shippingAddress) return false
+    const billing = customer.billingAddress
+    const shipping = customer.shippingAddress
+    return (
+      billing.line1 === shipping.line1 &&
+      billing.line2 === shipping.line2 &&
+      billing.city === shipping.city &&
+      billing.state === shipping.state &&
+      billing.zipCode === shipping.zipCode &&
+      billing.country === shipping.country
+    )
+  }, [customer?.billingAddress, customer?.shippingAddress])
 
   const formatDate = (dateString: string) =>
     new Intl.DateTimeFormat('en-US', {
@@ -264,84 +333,116 @@ const CustomerDetailPage: React.FC = () => {
             <div className="divide-y divide-border">
               <InfoRow
                 label="Currency"
-                value={customer.currency || <span className="text-muted-foreground">Not set</span>}
+                value={getCurrencyName(customer.currency) || <span className="text-muted-foreground">Not set</span>}
               />
               <InfoRow
                 label="Language"
-                value={customer.locale || <span className="text-muted-foreground">Not set</span>}
+                value={getLanguageName(customer.locale) || <span className="text-muted-foreground">Not set</span>}
               />
               <InfoRow
                 label="Timezone"
-                value={customer.timezone || <span className="text-muted-foreground">Not set</span>}
+                value={getTimezoneName(customer.timezone) || <span className="text-muted-foreground">Not set</span>}
               />
             </div>
           </SectionCard>
 
-          {/* Billing Address */}
-          <SectionCard title="Billing Address" onEdit={() => openEditWithSection('billing-address')}>
-            {customer.billingAddress ? (
-              <div className="divide-y divide-border">
-                {customer.billingAddress.name && (
-                  <InfoRow label="Name" value={customer.billingAddress.name} />
-                )}
-                <InfoRow label="Address Line 1" value={customer.billingAddress.line1} />
-                {customer.billingAddress.line2 && (
-                  <InfoRow label="Address Line 2" value={customer.billingAddress.line2} />
-                )}
-                <InfoRow label="City" value={customer.billingAddress.city} />
-                {customer.billingAddress.state && (
-                  <InfoRow label="State / Province" value={customer.billingAddress.state} />
-                )}
-                <InfoRow label="ZIP / Postal Code" value={customer.billingAddress.zipCode} />
-                <InfoRow label="Country" value={customer.billingAddress.country} />
-                {customer.billingAddress.isPrimary && (
-                  <InfoRow
-                    label="Primary"
-                    value={
-                      <span className="text-xs px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500">
-                        Yes
-                      </span>
-                    }
-                  />
-                )}
+          {/* Addresses - Tabbed Card */}
+          <Card className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={() => setAddressTab('billing')}
+                  className={cn(
+                    'text-sm font-medium pb-1 border-b-2 transition-colors',
+                    addressTab === 'billing'
+                      ? 'text-foreground border-primary'
+                      : 'text-muted-foreground border-transparent hover:text-foreground'
+                  )}
+                >
+                  Billing
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAddressTab('shipping')}
+                  className={cn(
+                    'text-sm font-medium pb-1 border-b-2 transition-colors flex items-center gap-1.5',
+                    addressTab === 'shipping'
+                      ? 'text-foreground border-primary'
+                      : 'text-muted-foreground border-transparent hover:text-foreground'
+                  )}
+                >
+                  Shipping
+                  {isShippingSameAsBilling && customer.shippingAddress && (
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                      Same
+                    </span>
+                  )}
+                </button>
               </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">No billing address</p>
-            )}
-          </SectionCard>
+              <button
+                type="button"
+                onClick={() => openEditWithSection(addressTab === 'billing' ? 'billing-address' : 'shipping-address')}
+                className="p-1.5 rounded-md hover:bg-muted transition-colors"
+                aria-label={`Edit ${addressTab} address`}
+              >
+                <Edit className="h-3.5 w-3.5 text-muted-foreground" />
+              </button>
+            </div>
 
-          {/* Shipping Address */}
-          <SectionCard title="Shipping Address" onEdit={() => openEditWithSection('shipping-address')}>
-            {customer.shippingAddress ? (
-              <div className="divide-y divide-border">
-                {customer.shippingAddress.name && (
-                  <InfoRow label="Name" value={customer.shippingAddress.name} />
-                )}
-                <InfoRow label="Address Line 1" value={customer.shippingAddress.line1} />
-                {customer.shippingAddress.line2 && (
-                  <InfoRow label="Address Line 2" value={customer.shippingAddress.line2} />
-                )}
-                <InfoRow label="City" value={customer.shippingAddress.city} />
-                {customer.shippingAddress.state && (
-                  <InfoRow label="State / Province" value={customer.shippingAddress.state} />
-                )}
-                <InfoRow label="ZIP / Postal Code" value={customer.shippingAddress.zipCode} />
-                <InfoRow label="Country" value={customer.shippingAddress.country} />
-                {customer.shippingAddress.isPrimary && (
-                  <InfoRow
-                    label="Primary"
-                    value={
-                      <span className="text-xs px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500">
-                        Yes
-                      </span>
-                    }
-                  />
-                )}
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">No shipping address</p>
+            {/* Billing Address Content */}
+            {addressTab === 'billing' && (
+              customer.billingAddress ? (
+                <div className="divide-y divide-border">
+                  {customer.billingAddress.name && (
+                    <InfoRow label="Name" value={customer.billingAddress.name} />
+                  )}
+                  <InfoRow label="Address Line 1" value={customer.billingAddress.line1} />
+                  {customer.billingAddress.line2 && (
+                    <InfoRow label="Address Line 2" value={customer.billingAddress.line2} />
+                  )}
+                  <InfoRow label="City" value={customer.billingAddress.city} />
+                  {customer.billingAddress.state && (
+                    <InfoRow label="State / Province" value={customer.billingAddress.state} />
+                  )}
+                  <InfoRow label="ZIP / Postal Code" value={customer.billingAddress.zipCode} />
+                  <InfoRow label="Country" value={getCountryName(customer.billingAddress.country)} />
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No billing address</p>
+              )
             )}
-          </SectionCard>
+
+            {/* Shipping Address Content */}
+            {addressTab === 'shipping' && (
+              customer.shippingAddress ? (
+                isShippingSameAsBilling ? (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
+                    <CheckCircle className="h-4 w-4 text-emerald-500" />
+                    <span>Same as billing address</span>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-border">
+                    {customer.shippingAddress.name && (
+                      <InfoRow label="Name" value={customer.shippingAddress.name} />
+                    )}
+                    <InfoRow label="Address Line 1" value={customer.shippingAddress.line1} />
+                    {customer.shippingAddress.line2 && (
+                      <InfoRow label="Address Line 2" value={customer.shippingAddress.line2} />
+                    )}
+                    <InfoRow label="City" value={customer.shippingAddress.city} />
+                    {customer.shippingAddress.state && (
+                      <InfoRow label="State / Province" value={customer.shippingAddress.state} />
+                    )}
+                    <InfoRow label="ZIP / Postal Code" value={customer.shippingAddress.zipCode} />
+                    <InfoRow label="Country" value={getCountryName(customer.shippingAddress.country)} />
+                  </div>
+                )
+              ) : (
+                <p className="text-sm text-muted-foreground">No shipping address</p>
+              )
+            )}
+          </Card>
 
           {/* Additional Addresses (if any beyond billing/shipping) */}
           {customer.allAddresses.filter(
@@ -368,7 +469,7 @@ const CustomerDetailPage: React.FC = () => {
                       <InfoRow label="City" value={addr.city} />
                       {addr.state && <InfoRow label="State / Province" value={addr.state} />}
                       <InfoRow label="ZIP / Postal Code" value={addr.zipCode} />
-                      <InfoRow label="Country" value={addr.country} />
+                      <InfoRow label="Country" value={getCountryName(addr.country)} />
                     </div>
                   ))}
               </div>
@@ -462,7 +563,26 @@ const CustomerDetailPage: React.FC = () => {
           <Card className="p-5">
             <h3 className="text-sm font-medium mb-3">System Information</h3>
             <div className="divide-y divide-border">
-              <InfoRow label="Customer ID" value={<span className="font-mono text-xs">{customer.id}</span>} />
+              <InfoRow
+                label="Customer ID"
+                value={
+                  <span className="flex items-center gap-1.5">
+                    <span className="font-mono text-xs">{customer.id}</span>
+                    <button
+                      type="button"
+                      onClick={handleCopyCustomerId}
+                      className="p-1 rounded hover:bg-muted transition-colors"
+                      aria-label="Copy customer ID"
+                    >
+                      {copiedId ? (
+                        <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
+                      ) : (
+                        <Copy className="h-3.5 w-3.5 text-muted-foreground" />
+                      )}
+                    </button>
+                  </span>
+                }
+              />
               <InfoRow label="Customer Since" value={formatDate(customer.signupDate)} />
               {customer.lastActivityDate && (
                 <InfoRow label="Last Activity" value={formatDate(customer.lastActivityDate)} />
@@ -689,11 +809,7 @@ const CustomerDetailPage: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between"
-        >
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
               type="button"
@@ -759,7 +875,7 @@ const CustomerDetailPage: React.FC = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        </motion.div>
+        </div>
 
         {/* Tabs */}
         <div className="flex gap-6 border-b border-border">

@@ -64,19 +64,19 @@ export const NavigationItem = memo<NavigationItemProps>(({
   const itemIsActive = isParentActive(item)
   const isFocused = isKeyboardNavigating && focusedIndex === getAllNavItems.findIndex(navItem => navItem.id === item.id)
 
-  // Base styles for all nav items
+  // Base styles for all nav items - modern slim design
   const baseStyles = cn(
-    'group relative flex items-center w-full rounded-md transition-colors',
-    'text-sm font-medium',
-    'outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-    isCollapsed ? 'h-9 justify-center' : 'h-9 px-3 gap-3',
-    isFocused && 'ring-2 ring-ring'
+    'group relative flex items-center w-full rounded transition-colors',
+    'text-xs font-medium',
+    'outline-none focus-visible:ring-1 focus-visible:ring-zinc-500',
+    isCollapsed ? 'h-8 justify-center' : 'h-8 px-2.5 gap-2.5',
+    isFocused && 'ring-1 ring-zinc-500'
   )
 
-  // Active/hover state styles
+  // Active/hover state styles - dark modern theme
   const stateStyles = itemIsActive
-    ? 'bg-accent text-accent-foreground'
-    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+    ? 'bg-zinc-800/80 text-zinc-100'
+    : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'
 
   return (
     <div className="space-y-1">
@@ -98,19 +98,19 @@ export const NavigationItem = memo<NavigationItemProps>(({
           aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''} menu`}
           tabIndex={isKeyboardNavigating ? -1 : 0}
         >
-          <item.icon className="h-4 w-4 shrink-0" />
+          <item.icon className="h-3.5 w-3.5 shrink-0" />
 
           {!isCollapsed && (
             <>
               <span className="flex-1 text-left truncate">{item.label}</span>
               {item.badge && (
-                <span className="px-1.5 py-0.5 text-xs font-medium bg-primary text-primary-foreground rounded-full">
+                <span className="px-1.5 py-0.5 text-[10px] font-medium bg-primary text-primary-foreground rounded-full">
                   {item.badge}
                 </span>
               )}
               <ChevronDown
                 className={cn(
-                  'h-4 w-4 shrink-0 transition-transform duration-200',
+                  'h-3 w-3 shrink-0 transition-transform duration-200',
                   isExpanded && 'rotate-180'
                 )}
               />
@@ -127,13 +127,13 @@ export const NavigationItem = memo<NavigationItemProps>(({
           aria-label={`${item.label}${item.badge ? ` (${item.badge})` : ''}`}
           tabIndex={isKeyboardNavigating ? -1 : 0}
         >
-          <item.icon className="h-4 w-4 shrink-0" />
+          <item.icon className="h-3.5 w-3.5 shrink-0" />
 
           {!isCollapsed && (
             <>
               <span className="flex-1 truncate">{item.label}</span>
               {item.badge && (
-                <span className="px-1.5 py-0.5 text-xs font-medium bg-primary text-primary-foreground rounded-full">
+                <span className="px-1.5 py-0.5 text-[10px] font-medium bg-primary text-primary-foreground rounded-full">
                   {item.badge}
                 </span>
               )}
@@ -151,8 +151,8 @@ export const NavigationItem = memo<NavigationItemProps>(({
             className={cn(
               'overflow-hidden',
               isCollapsed
-                ? 'flex flex-col items-center space-y-1 pt-1'
-                : 'pl-4 space-y-1 border-l border-border ml-5'
+                ? 'flex flex-col items-center space-y-0.5 pt-1'
+                : 'pl-3 space-y-0.5 border-l border-zinc-800/50 ml-4'
             )}
           >
             {item.subItems.map((subItem) => {
@@ -165,21 +165,18 @@ export const NavigationItem = memo<NavigationItemProps>(({
                   onMouseEnter={(e) => isCollapsed && handleTooltipEnter(subItem.id, subItem.label, undefined, e)}
                   onMouseLeave={isCollapsed ? handleTooltipLeave : undefined}
                   className={cn(
-                    'group relative flex items-center rounded-md transition-colors',
-                    'text-sm font-medium',
-                    'outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                    'group relative flex items-center rounded transition-colors',
+                    'text-xs font-medium',
+                    'outline-none focus-visible:ring-1 focus-visible:ring-zinc-500',
                     isCollapsed
-                      ? 'h-8 w-8 justify-center'
-                      : 'h-9 px-3 gap-3',
+                      ? 'h-7 w-7 justify-center'
+                      : 'h-7 px-2 gap-2',
                     subItemIsActive
-                      ? 'bg-accent text-accent-foreground'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                      ? 'bg-zinc-800/80 text-zinc-100'
+                      : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-300'
                   )}
                 >
-                  <subItem.icon className={cn(
-                    'shrink-0',
-                    isCollapsed ? 'h-3.5 w-3.5' : 'h-4 w-4'
-                  )} />
+                  <subItem.icon className="h-3 w-3 shrink-0" />
 
                   {!isCollapsed && (
                     <span className="truncate">{subItem.label}</span>

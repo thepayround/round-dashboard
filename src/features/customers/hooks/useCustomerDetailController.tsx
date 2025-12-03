@@ -117,16 +117,12 @@ export const useCustomerDetailController = (customerId?: string): UseCustomerDet
   }, [loadCustomer])
 
   const openEditModal = useCallback(() => setIsEditModalOpen(true), [])
-  const closeEditModal = useCallback(() => {
-    setIsEditModalOpen(false)
-    void loadCustomer()
-  }, [loadCustomer])
+  const closeEditModal = useCallback(() => setIsEditModalOpen(false), [])
 
   const openDangerousActionsModal = useCallback(() => setIsDangerousActionsModalOpen(true), [])
   const closeDangerousActionsModal = useCallback(() => {
     setIsDangerousActionsModalOpen(false)
-    void loadCustomer()
-  }, [loadCustomer])
+  }, [])
 
   const requestDeleteNote = useCallback((noteId: string) => {
     setNoteToDelete(noteId)
@@ -141,7 +137,8 @@ export const useCustomerDetailController = (customerId?: string): UseCustomerDet
       showSuccess('Note deleted successfully')
       setIsDeleteNoteConfirmOpen(false)
       setNoteToDelete(null)
-      void loadCustomer()
+      // Use silent reload to update notes without showing loading skeleton
+      void loadCustomer({ silent: true })
     } catch (error) {
       console.error('Failed to delete note:', error)
       showError('Failed to delete note')

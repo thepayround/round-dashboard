@@ -104,7 +104,7 @@ export const DashboardLayout = memo(({
     <div
       className="min-h-screen relative bg-background"
       style={{
-        '--sidebar-width': isCollapsed ? '80px' : '220px'
+        '--sidebar-width': isCollapsed ? '64px' : '200px'
       } as React.CSSProperties}
     >
       {/* Skip to main content link for accessibility */}
@@ -160,7 +160,8 @@ export const DashboardLayout = memo(({
         }}
         transition={isSwiping ? { duration: 0 } : transitionConfigs.sidebar}
         className={cn(
-          'fixed left-0 top-0 h-full bg-background flex flex-col',
+          'fixed left-0 top-0 h-full flex flex-col',
+          'bg-zinc-950/95 border-r border-zinc-800/50',
           isMobileView ? 'z-[70] shadow-2xl' : 'z-auto'
         )}
         aria-label="Sidebar navigation"
@@ -177,14 +178,14 @@ export const DashboardLayout = memo(({
       >
         {/* Logo Section */}
         <div className={cn(
-          "flex-shrink-0 h-16 flex items-center",
-          isCollapsed ? "justify-center px-2" : "justify-between px-4"
+          "flex-shrink-0 h-12 flex items-center",
+          isCollapsed ? "justify-center px-2" : "justify-between px-3"
         )}>
           <Link
             to="/dashboard"
             className="flex items-center hover:opacity-80 transition-opacity"
           >
-            <img src={WhiteLogo} alt="Round Logo" className="h-8 w-8" />
+            <img src={WhiteLogo} alt="Round Logo" className="h-6 w-6" />
           </Link>
 
           {/* Collapse/Expand Button */}
@@ -193,25 +194,25 @@ export const DashboardLayout = memo(({
               onClick={toggleSidebar}
               variant="ghost"
               size="icon"
-              className="text-muted-foreground hover:text-foreground"
+              className="h-7 w-7 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
               aria-label="Collapse sidebar"
             >
-              <PanelLeftClose className="h-4 w-4" />
+              <PanelLeftClose className="h-3.5 w-3.5" />
             </Button>
           )}
         </div>
 
         {/* Expand Button - Only visible when collapsed */}
         {!isMobileView && isCollapsed && (
-          <div className="flex-shrink-0 py-2 flex items-center justify-center">
+          <div className="flex-shrink-0 py-1 flex items-center justify-center">
             <Button
               onClick={toggleSidebar}
               variant="ghost"
               size="icon"
-              className="text-muted-foreground hover:text-foreground"
+              className="h-7 w-7 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
               aria-label="Expand sidebar"
             >
-              <PanelLeft className="h-4 w-4" />
+              <PanelLeft className="h-3.5 w-3.5" />
             </Button>
           </div>
         )}
@@ -232,13 +233,13 @@ export const DashboardLayout = memo(({
         )}
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col overflow-hidden pt-4">
+        <div className="flex-1 flex flex-col overflow-hidden pt-2">
           {/* Navigation */}
           <nav
             ref={navigationRef}
             className={cn(
-              'flex-1 space-y-1 overflow-y-auto overflow-x-hidden',
-              isMobileView ? 'px-3' : (isCollapsed ? 'px-2' : 'px-3')
+              'flex-1 space-y-0.5 overflow-y-auto overflow-x-hidden',
+              isMobileView ? 'px-2' : (isCollapsed ? 'px-2' : 'px-2')
             )}
             role="navigation"
             aria-label="Main navigation"
@@ -265,8 +266,8 @@ export const DashboardLayout = memo(({
           {/* Bottom Navigation */}
           {resolvedBottomNavItems.length > 0 && (
             <div className={cn(
-              'space-y-1 pt-2 border-t border-border',
-              isMobileView ? 'px-3' : (isCollapsed ? 'px-2' : 'px-3')
+              'space-y-0.5 pt-2 border-t border-zinc-800/50',
+              isMobileView ? 'px-2' : 'px-2'
             )}>
               {resolvedBottomNavItems.map(item => (
                 <NavigationItem
@@ -299,29 +300,29 @@ export const DashboardLayout = memo(({
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.1 }}
                   className={cn(
-                    "absolute bottom-full mb-2 left-2 right-2 bg-popover border border-border rounded-lg shadow-lg overflow-hidden z-50"
+                    "absolute bottom-full mb-1 left-2 right-2 bg-zinc-900 border border-zinc-800 rounded-md shadow-lg overflow-hidden z-50"
                   )}
                 >
                   <div className="p-1">
                     <Link
                       to="/user-settings"
                       className={cn(
-                        "flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors",
+                        "flex items-center gap-2 px-2.5 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 rounded transition-colors",
                         isCollapsed && "justify-center px-2"
                       )}
                       onClick={() => setShowProfileDropdown(false)}
                     >
-                      <Settings className="h-4 w-4 shrink-0" />
+                      <Settings className="h-3.5 w-3.5 shrink-0" />
                       {!isCollapsed && <span>Settings</span>}
                     </Link>
                     <button
                       onClick={handleLogout}
                       className={cn(
-                        "w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors",
+                        "w-full flex items-center gap-2 px-2.5 py-1.5 text-xs text-red-400 hover:bg-red-500/10 rounded transition-colors",
                         isCollapsed && "justify-center px-2"
                       )}
                     >
-                      <LogOut className="h-4 w-4 shrink-0" />
+                      <LogOut className="h-3.5 w-3.5 shrink-0" />
                       {!isCollapsed && <span>Logout</span>}
                     </button>
                   </div>
@@ -329,17 +330,17 @@ export const DashboardLayout = memo(({
               )}
             </AnimatePresence>
 
-            <div className="mx-2 border-t border-border" />
+            <div className="mx-2 border-t border-zinc-800/50" />
             <button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               className={cn(
-                "w-full flex items-center gap-3",
-                isCollapsed ? "p-3 justify-center" : "p-4"
+                "w-full flex items-center gap-2 hover:bg-zinc-800/30 transition-colors",
+                isCollapsed ? "p-2 justify-center" : "px-2 py-2"
               )}
             >
               <div className={cn(
-                "rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden",
-                isCollapsed ? "h-10 w-10" : "h-8 w-8"
+                "rounded-full bg-zinc-800 flex items-center justify-center shrink-0 overflow-hidden",
+                isCollapsed ? "h-8 w-8" : "h-7 w-7"
               )}>
                 {userAvatar}
               </div>
@@ -347,12 +348,12 @@ export const DashboardLayout = memo(({
               {!isCollapsed && (
                 <>
                   <div className="flex-1 min-w-0 text-left">
-                    <p className="text-sm font-medium text-foreground truncate">{userDisplayName}</p>
-                    <p className="text-xs text-muted-foreground truncate">{secondaryUserInfo}</p>
+                    <p className="text-xs font-medium text-zinc-200 truncate">{userDisplayName}</p>
+                    <p className="text-[10px] text-zinc-500 truncate">{secondaryUserInfo}</p>
                   </div>
                   <ChevronUp
                     className={cn(
-                      "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
+                      "h-3 w-3 shrink-0 text-zinc-500 transition-transform duration-200",
                       showProfileDropdown ? "rotate-0" : "rotate-180"
                     )}
                   />
