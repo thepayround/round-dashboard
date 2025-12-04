@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion'
-import { Palette, Image, Loader2 } from 'lucide-react'
+import { Palette, Image, Loader2, Save } from 'lucide-react'
 import React from 'react'
 
 import { useBrandingController } from '../../hooks/useBrandingController'
 
 import { FileInput } from '@/shared/ui'
+import { DetailCard } from '@/shared/ui/DetailCard'
+import { Alert, AlertDescription } from '@/shared/ui/shadcn/alert'
 import { Button } from '@/shared/ui/shadcn/button'
-import { Card } from '@/shared/ui/shadcn/card'
-
 
 export const BrandingSection: React.FC = () => {
   const {
@@ -28,25 +28,33 @@ export const BrandingSection: React.FC = () => {
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <div>
-        <h1 className="text-lg font-medium text-white mb-4">
-          Branding <span className="text-primary">& Appearance</span>
-        </h1>
-        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
-          Customize your organization&apos;s visual identity and theme
+      <DetailCard
+        title="Logo & Assets"
+        icon={<Image className="h-4 w-4" />}
+        actions={
+          <Button
+            onClick={handleSaveBranding}
+            disabled={disableSave || isSaving}
+            variant="default"
+            size="sm"
+          >
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Save Branding
+              </>
+            )}
+          </Button>
+        }
+      >
+        <p className="text-sm text-muted-foreground mb-6">
+          Upload and manage your organization&apos;s visual assets
         </p>
-      </div>
-
-      <Card className="p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="p-2 bg-primary/20 rounded-lg">
-            <Image className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h3 className="text-sm font-normal tracking-tight text-white">Logo & Assets</h3>
-            <p className="text-xs text-gray-400">Upload and manage your organization&apos;s visual assets</p>
-          </div>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FileInput
@@ -82,28 +90,31 @@ export const BrandingSection: React.FC = () => {
           />
         </div>
 
-        {error && <p className="text-sm text-destructive mt-4">{error}</p>}
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+      </DetailCard>
 
-        <div className="flex justify-end mt-8">
-          <Button
-            onClick={handleSaveBranding}
-            disabled={disableSave || isSaving}
-            variant="default"
-          >
-            {isSaving ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Palette className="mr-2 h-4 w-4" />
-                Save Branding
-              </>
-            )}
-          </Button>
+      {/* Theme Settings - Coming Soon */}
+      <DetailCard
+        title="Theme Settings"
+        icon={<Palette className="h-4 w-4" />}
+      >
+        <div className="text-center py-8">
+          <Palette className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
+          <h3 className="text-sm font-medium text-foreground mb-2">
+            Theme Customization
+          </h3>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            Customize colors, fonts, and other visual elements to match your brand identity.
+          </p>
+          <p className="text-xs text-muted-foreground/70 mt-3">
+            This feature is coming soon...
+          </p>
         </div>
-      </Card>
+      </DetailCard>
     </motion.div>
   )
 }

@@ -95,18 +95,18 @@ export const TeamManagementPage: React.FC = () => {
 
   const roleLabels: Record<UserRole, { label: string; color: string; icon: React.ElementType }> = {
     SuperAdmin: { label: 'Super Admin', color: 'text-primary', icon: Crown },
-    Admin: { label: 'Admin', color: 'text-orange-400', icon: Shield },
-    TeamManager: { label: 'Team Manager', color: 'text-blue-400', icon: Shield },
+    Admin: { label: 'Admin', color: 'text-warning', icon: Shield },
+    TeamManager: { label: 'Team Manager', color: 'text-primary', icon: Shield },
     TeamMember: { label: 'Team Member', color: 'text-success', icon: Users },
-    Sales: { label: 'Sales', color: 'text-cyan-400', icon: Shield },
-    Finance: { label: 'Finance', color: 'text-yellow-400', icon: Shield },
-    Support: { label: 'Support', color: 'text-indigo-400', icon: Shield },
-    Viewer: { label: 'Viewer', color: 'text-gray-400', icon: Users }
+    Sales: { label: 'Sales', color: 'text-secondary', icon: Shield },
+    Finance: { label: 'Finance', color: 'text-warning', icon: Shield },
+    Support: { label: 'Support', color: 'text-primary', icon: Shield },
+    Viewer: { label: 'Viewer', color: 'text-muted-foreground', icon: Users }
   }
 
   const getInvitationStatus = (invitation: TeamInvitation) => {
     if (!invitation.expiresAt) {
-      return { label: invitation.status, icon: Clock, color: 'text-yellow-400' }
+      return { label: invitation.status, icon: Clock, color: 'text-warning' }
     }
     
     const now = new Date()
@@ -124,7 +124,7 @@ export const TeamManagementPage: React.FC = () => {
       case 'Expired':
         return { label: 'Expired', icon: XCircle, color: 'text-primary' }
       default:
-        return { label: 'Pending', icon: Clock, color: 'text-yellow-400' }
+        return { label: 'Pending', icon: Clock, color: 'text-warning' }
     }
   }
 
@@ -196,7 +196,7 @@ export const TeamManagementPage: React.FC = () => {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   variant={isActive ? 'default' : 'ghost'}
-                  className={`space-x-2 ${isActive ? 'bg-primary/20 border-white/20' : ''}`}
+                  className={`space-x-2 ${isActive ? 'bg-primary/20 border-border' : ''}`}
                 >
                   <IconComponent className="w-4 h-4" />
                   <span className="font-medium">{tab.label}</span>
@@ -345,14 +345,14 @@ export const TeamManagementPage: React.FC = () => {
                                     onClick={() => handleResendInvitation(invitation)}
                                     variant="ghost"
                                     size="sm"
-                                    className="bg-blue-500/20 text-blue-400 hover:bg-blue-500/30"
+                                    className="bg-primary/20 text-primary hover:bg-primary/30"
                                   >
                                     Resend
                                   </Button>
                                   <Button
                                     onClick={() => handleCancelInvitation(invitation)}
                                     variant="destructive"
-                                    className="bg-red-500/20"
+                                    className="bg-destructive/20"
                                   >
                                     Cancel
                                   </Button>

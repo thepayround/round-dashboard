@@ -76,7 +76,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         <div className="space-y-6">
           <div className="flex items-center space-x-2 mb-4">
             <User className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Basic Information</h3>
+            <h3 className="text-sm font-medium text-foreground">Basic Information</h3>
           </div>
           
           {/* Customer Type Selection */}
@@ -242,7 +242,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         <div className="space-y-6">
           <div className="flex items-center space-x-2 mb-4">
             <Globe className="w-5 h-5 text-secondary" />
-            <h3 className="text-lg font-semibold text-foreground">Preferences</h3>
+            <h3 className="text-sm font-medium text-foreground">Preferences</h3>
           </div>
           
           {/* Symmetric 3-column layout */}
@@ -294,7 +294,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         <div className="space-y-4">
           <div className="flex items-center space-x-2 mb-4">
             <Tag className="w-5 h-5 text-accent" />
-            <h3 className="text-lg font-semibold text-foreground">Tags</h3>
+            <h3 className="text-sm font-medium text-foreground">Tags</h3>
           </div>
           
           <div className="flex flex-wrap gap-2 mb-4">
@@ -341,7 +341,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         <div className="space-y-6">
           <div className="flex items-center space-x-2 mb-4">
             <MapPin className="w-5 h-5 text-success" />
-            <h3 className="text-lg font-semibold text-foreground">Billing Address</h3>
+            <h3 className="text-sm font-medium text-foreground">Billing Address</h3>
           </div>
 
           <AddressFormGroup
@@ -367,7 +367,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Truck className="w-5 h-5 text-secondary" />
-              <h3 className="text-lg font-semibold text-foreground">Shipping Address</h3>
+              <h3 className="text-sm font-medium text-foreground">Shipping Address</h3>
             </div>
 
             <div className="flex items-center space-x-2">
@@ -417,7 +417,7 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({ isOpen, onCl
         <div className="space-y-6">
           <div className="flex items-center space-x-2 mb-4">
             <Settings className="w-5 h-5 text-warning" />
-            <h3 className="text-lg font-semibold text-foreground">Customer Settings</h3>
+            <h3 className="text-sm font-medium text-foreground">Customer Settings</h3>
           </div>
 
           <div className="grid grid-cols-1 gap-4">

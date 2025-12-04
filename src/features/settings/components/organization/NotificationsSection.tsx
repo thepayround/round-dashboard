@@ -1,16 +1,40 @@
-﻿import { motion } from 'framer-motion'
-import { Bell, Mail, MessageSquare, Smartphone, Settings } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Bell, Mail, MessageSquare, Smartphone, Settings, Save } from 'lucide-react'
+import React from 'react'
 
 import { useOrganizationNotificationsController } from '../../hooks/useOrganizationNotificationsController'
 
+import { DetailCard } from '@/shared/ui/DetailCard'
 import { Button } from '@/shared/ui/shadcn/button'
-import { Card } from '@/shared/ui/shadcn/card'
 import { Checkbox } from '@/shared/ui/shadcn/checkbox'
 import { Label } from '@/shared/ui/shadcn/label'
 
-
 export const NotificationsSection: React.FC = () => {
   const { preferences, updatePreference } = useOrganizationNotificationsController()
+
+  const globalChannels = [
+    {
+      id: 'email',
+      label: 'Email Notifications',
+      icon: Mail,
+      iconColor: 'text-primary',
+      enabled: true,
+    },
+    {
+      id: 'push',
+      label: 'Push Notifications',
+      icon: MessageSquare,
+      iconColor: 'text-success',
+      enabled: true,
+    },
+    {
+      id: 'sms',
+      label: 'SMS Notifications',
+      icon: Smartphone,
+      iconColor: 'text-secondary',
+      enabled: false,
+    },
+  ]
 
   return (
     <motion.div
@@ -19,118 +43,99 @@ export const NotificationsSection: React.FC = () => {
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <div>
-        <h1 className="text-lg font-medium text-white mb-4">
-          Notification{' '}
-          <span className="text-primary">
-            Settings
-          </span>
-        </h1>
-        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
-          Configure organization-wide notification preferences
-        </p>
-      </div>
-
       {/* Global Settings */}
-      <Card className="p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="p-2 bg-primary/20 rounded-lg">
-            <Settings className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h3 className="text-sm font-normal tracking-tight text-white">Global Settings</h3>
-            <p className="text-xs text-gray-400">Organization-wide notification preferences</p>
-          </div>
-        </div>
+      <DetailCard
+        title="Global Settings"
+        icon={<Settings className="h-4 w-4" />}
+      >
+        <p className="text-sm text-muted-foreground mb-6">
+          Organization-wide notification preferences
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 bg-white/4 rounded-lg border border-white/8">
-            <div className="flex items-center gap-2 mb-4">
-              <Mail className="w-4 h-4 text-blue-400" />
-              <span className="text-xs font-normal tracking-tight text-white">Email Notifications</span>
+          {globalChannels.map((channel) => (
+            <div
+              key={channel.id}
+              className="p-4 bg-muted/50 rounded-lg border border-border"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <channel.icon className={`h-4 w-4 ${channel.iconColor}`} />
+                <span className="text-sm font-medium text-foreground">
+                  {channel.label}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id={`${channel.id}-global`}
+                  checked={channel.enabled}
+                  onCheckedChange={() => {}}
+                  className="h-4 w-4"
+                />
+                <Label
+                  htmlFor={`${channel.id}-global`}
+                  className="text-xs text-muted-foreground cursor-pointer"
+                >
+                  Enable for organization
+                </Label>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="email-global"
-                checked={true}
-                onCheckedChange={() => {}}
-                className="h-4 w-4"
-              />
-              <Label htmlFor="email-global" className="text-xs text-gray-300 cursor-pointer">
-                Enable for organization
-              </Label>
-            </div>
-          </div>
-
-          <div className="p-4 bg-white/4 rounded-lg border border-white/8">
-            <div className="flex items-center gap-2 mb-4">
-              <MessageSquare className="w-4 h-4 text-success" />
-              <span className="text-xs font-normal tracking-tight text-white">Push Notifications</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="push-global"
-                checked={true}
-                onCheckedChange={() => {}}
-                className="h-4 w-4"
-              />
-              <Label htmlFor="push-global" className="text-xs text-gray-300 cursor-pointer">
-                Enable for organization
-              </Label>
-            </div>
-          </div>
-
-          <div className="p-4 bg-white/4 rounded-lg border border-white/8">
-            <div className="flex items-center gap-2 mb-4">
-              <Smartphone className="w-4 h-4 text-purple-400" />
-              <span className="text-xs font-normal tracking-tight text-white">SMS Notifications</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="sms-global"
-                checked={false}
-                onCheckedChange={() => {}}
-                className="h-4 w-4"
-              />
-              <Label htmlFor="sms-global" className="text-xs text-gray-300 cursor-pointer">
-                Enable for organization
-              </Label>
-            </div>
-          </div>
+          ))}
         </div>
-      </Card>
+      </DetailCard>
 
       {/* Notification Preferences */}
-      <Card className="p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="p-2 bg-primary/20 rounded-lg">
-            <Bell className="w-5 h-5 text-secondary" />
-          </div>
-          <div>
-            <h3 className="text-sm font-normal tracking-tight text-white">Notification Types</h3>
-            <p className="text-xs text-gray-400">Configure specific notification preferences</p>
-          </div>
-        </div>
+      <DetailCard
+        title="Notification Types"
+        icon={<Bell className="h-4 w-4" />}
+        actions={
+          <Button variant="default" size="sm">
+            <Save className="h-4 w-4 mr-2" />
+            Save Settings
+          </Button>
+        }
+      >
+        <p className="text-sm text-muted-foreground mb-6">
+          Configure specific notification preferences
+        </p>
 
         <div className="space-y-4">
+          {/* Header row */}
           <div className="grid grid-cols-4 gap-4 pb-3 border-b border-border">
-            <div className="text-xs font-normal tracking-tight text-gray-300">Notification Type</div>
-            <div className="text-xs font-normal tracking-tight text-gray-300 text-center">Email</div>
-            <div className="text-xs font-normal tracking-tight text-gray-300 text-center">Push</div>
-            <div className="text-xs font-normal tracking-tight text-gray-300 text-center">SMS</div>
+            <div className="text-xs font-medium text-muted-foreground">
+              Notification Type
+            </div>
+            <div className="text-xs font-medium text-muted-foreground text-center">
+              Email
+            </div>
+            <div className="text-xs font-medium text-muted-foreground text-center">
+              Push
+            </div>
+            <div className="text-xs font-medium text-muted-foreground text-center">
+              SMS
+            </div>
           </div>
 
+          {/* Preference rows */}
           {preferences.map((pref) => (
-            <div key={pref.id} className="grid grid-cols-4 gap-4 py-3 items-center">
+            <div
+              key={pref.id}
+              className="grid grid-cols-4 gap-4 py-3 items-center"
+            >
               <div>
-                <h4 className="text-xs font-normal tracking-tight text-white">{pref.title}</h4>
-                <p className="text-xs text-gray-400 mt-1">{pref.description}</p>
+                <h4 className="text-sm font-medium text-foreground">
+                  {pref.title}
+                </h4>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {pref.description}
+                </p>
               </div>
               <div className="flex justify-center">
                 <Checkbox
                   id={`${pref.id}-email`}
                   checked={pref.email}
-                  onCheckedChange={(checked) => updatePreference(pref.id, 'email', checked === true)}
+                  onCheckedChange={(checked) =>
+                    updatePreference(pref.id, 'email', checked === true)
+                  }
                   className="h-4 w-4"
                   aria-label={`Enable email notifications for ${pref.title}`}
                 />
@@ -139,7 +144,9 @@ export const NotificationsSection: React.FC = () => {
                 <Checkbox
                   id={`${pref.id}-push`}
                   checked={pref.push}
-                  onCheckedChange={(checked) => updatePreference(pref.id, 'push', checked === true)}
+                  onCheckedChange={(checked) =>
+                    updatePreference(pref.id, 'push', checked === true)
+                  }
                   className="h-4 w-4"
                   aria-label={`Enable push notifications for ${pref.title}`}
                 />
@@ -148,7 +155,9 @@ export const NotificationsSection: React.FC = () => {
                 <Checkbox
                   id={`${pref.id}-sms`}
                   checked={pref.sms}
-                  onCheckedChange={(checked) => updatePreference(pref.id, 'sms', checked === true)}
+                  onCheckedChange={(checked) =>
+                    updatePreference(pref.id, 'sms', checked === true)
+                  }
                   className="h-4 w-4"
                   aria-label={`Enable SMS notifications for ${pref.title}`}
                 />
@@ -156,13 +165,7 @@ export const NotificationsSection: React.FC = () => {
             </div>
           ))}
         </div>
-
-        <div className="mt-6 pt-6 border-t border-border">
-          <Button variant="default" size="default">
-            Save Notification Settings
-          </Button>
-        </div>
-      </Card>
+      </DetailCard>
     </motion.div>
   )
 }

@@ -96,7 +96,7 @@ export const DashboardPage = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pb-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-3xl font-medium tracking-tight text-foreground">
             Welcome back, {welcomeName}!
           </h1>
         </div>
@@ -110,7 +110,7 @@ export const DashboardPage = () => {
               variant="outline"
               className={
                 roundAccount.status.toLowerCase() === 'active'
-                  ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 px-4 py-2'
+                  ? 'bg-success/10 text-success border-success/20 px-4 py-2'
                   : 'bg-muted text-muted-foreground border-border px-4 py-2'
               }
             >

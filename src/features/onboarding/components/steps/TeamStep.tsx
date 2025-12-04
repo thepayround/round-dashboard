@@ -42,7 +42,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-lg bg-secondary/20 border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-secondary/20 border border-secondary/20 flex items-center justify-center"
         >
           <Users className="w-8 h-8 text-secondary" />
         </motion.div>
@@ -152,7 +152,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                       variant="destructive"
                       size="icon"
                       aria-label="Remove invitation"
-                      className="h-8 w-8 hover:bg-red-400/10"
+                      className="h-8 w-8 hover:bg-destructive/10"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

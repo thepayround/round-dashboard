@@ -4,16 +4,26 @@ import {
   AlertCircle,
   ArrowLeft,
   Building2,
+  Calendar,
   CheckCircle,
+  Clock,
   Copy,
   CreditCard,
   Edit,
   FileText,
+  Globe,
+  Languages,
   Mail,
+  MapPin,
   MoreHorizontal,
+  Phone,
   Plus,
+  Receipt,
+  Settings,
+  StickyNote,
   Trash2,
   User,
+  Wallet,
 } from 'lucide-react'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -30,8 +40,9 @@ import { useLanguages, useTimezones } from '@/shared/hooks/api/useUserSettingsOp
 import { DashboardLayout } from '@/shared/layout/DashboardLayout'
 import type { CustomerNoteResponse } from '@/shared/types/customer.types'
 import { DataTable, SortableHeader } from '@/shared/ui/DataTable/DataTable'
+import { DetailCard, InfoItem, InfoList, MetricCard, StatusBadge } from '@/shared/ui/DetailCard'
 import { Button } from '@/shared/ui/shadcn/button'
-import { Card } from '@/shared/ui/shadcn/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/shadcn/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,6 +50,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/shadcn/dropdown-menu'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/shadcn/tabs'
 import { cn } from '@/shared/utils/cn'
 import { ConfirmDialog } from '@/shared/widgets/ConfirmDialog'
 import { SearchFilterToolbar } from '@/shared/widgets/SearchFilterToolbar'
@@ -48,44 +60,6 @@ const DETAIL_TABS: { id: CustomerDetailTab; label: string }[] = [
   { id: 'notes', label: 'Notes' },
   { id: 'invoices', label: 'Invoices' },
 ]
-
-/** Simple info row component */
-const InfoRow = ({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) => (
-  <div className="flex items-center justify-between py-2">
-    <span className="text-sm text-muted-foreground">{label}</span>
-    <span className={cn('text-sm text-foreground text-right', mono && 'font-mono')}>{value}</span>
-  </div>
-)
-
-/** Section card with optional edit action */
-const SectionCard = ({
-  title,
-  onEdit,
-  children,
-  className,
-}: {
-  title: string
-  onEdit?: () => void
-  children: React.ReactNode
-  className?: string
-}) => (
-  <Card className={cn('p-5', className)}>
-    <div className="flex items-center justify-between mb-3">
-      <h3 className="text-sm font-medium">{title}</h3>
-      {onEdit && (
-        <button
-          type="button"
-          onClick={onEdit}
-          className="p-1.5 rounded-md hover:bg-muted transition-colors"
-          aria-label={`Edit ${title}`}
-        >
-          <Edit className="h-3.5 w-3.5 text-muted-foreground" />
-        </button>
-      )}
-    </div>
-    {children}
-  </Card>
-)
 
 const CustomerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -247,9 +221,9 @@ const CustomerDetailPage: React.FC = () => {
     const statusValue = typeof status === 'string' ? parseInt(status, 10) : status
 
     const statusConfig = {
-      1: { className: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20', label: 'Active' },
+      1: { className: 'bg-success/10 text-success border-success/20', label: 'Active' },
       2: { className: 'bg-muted text-muted-foreground border-border', label: 'Inactive' },
-      3: { className: 'bg-amber-500/10 text-amber-500 border-amber-500/20', label: 'Suspended' },
+      3: { className: 'bg-warning/10 text-warning border-warning/20', label: 'Suspended' },
       4: { className: 'bg-destructive/10 text-destructive border-destructive/20', label: 'Cancelled' },
     } as const
 
@@ -270,326 +244,328 @@ const CustomerDetailPage: React.FC = () => {
         {/* Main content - 2 columns */}
         <div className="lg:col-span-2 space-y-6">
           {/* Contact Information */}
-          <SectionCard title="Contact Information" onEdit={() => openEditWithSection('contact')}>
-            <div className="divide-y divide-border">
-              <InfoRow label="Full Name" value={`${customer.firstName} ${customer.lastName}`} />
-              <InfoRow
+          <DetailCard
+            title="Contact Information"
+            icon={<User className="h-4 w-4" />}
+            onEdit={() => openEditWithSection('contact')}
+          >
+            <InfoList>
+              <InfoItem label="Full Name">
+                {customer.firstName} {customer.lastName}
+              </InfoItem>
+              <InfoItem
                 label="Email"
-                value={
-                  <a href={`mailto:${customer.email}`} className="text-primary hover:underline">
-                    {customer.email}
-                  </a>
-                }
-              />
-              <InfoRow
+                icon={<Mail className="h-3.5 w-3.5 text-muted-foreground" />}
+              >
+                <a
+                  href={`mailto:${customer.email}`}
+                  className="text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
+                >
+                  {customer.email}
+                </a>
+              </InfoItem>
+              <InfoItem
                 label="Phone"
-                value={
-                  customer.phoneNumber ? (
-                    <span className="flex items-center gap-1.5">
-                      {customer.phoneNumber}
-                      {customer.phoneNumberConfirmed && (
-                        <CheckCircle className="h-3 w-3 text-emerald-500" />
-                      )}
-                    </span>
+                icon={customer.phoneNumberConfirmed ? <CheckCircle className="h-3.5 w-3.5 text-success" /> : <Phone className="h-3.5 w-3.5 text-muted-foreground" />}
+              >
+                {customer.phoneNumber || <span className="text-muted-foreground">Not provided</span>}
+              </InfoItem>
+              {customer.company && (
+                <InfoItem
+                  label="Company"
+                  icon={<Building2 className="h-3.5 w-3.5 text-muted-foreground" />}
+                >
+                  {customer.company}
+                </InfoItem>
+              )}
+              <InfoItem label="Tax ID" mono>
+                {customer.taxNumber || <span className="text-muted-foreground font-sans">Not provided</span>}
+              </InfoItem>
+              <InfoItem label="Customer Type">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-xs">
+                  {customer.isBusinessCustomer ? (
+                    <>
+                      <Building2 className="h-3 w-3" />
+                      Business
+                    </>
                   ) : (
-                    <span className="text-muted-foreground">Not provided</span>
-                  )
-                }
-              />
-              {customer.company && <InfoRow label="Company" value={customer.company} />}
-              <InfoRow
-                label="Tax ID"
-                value={
-                  customer.taxNumber ? (
-                    <span className="font-mono">{customer.taxNumber}</span>
-                  ) : (
-                    <span className="text-muted-foreground">Not provided</span>
-                  )
-                }
-              />
-              <InfoRow
-                label="Customer Type"
-                value={
-                  <span className="flex items-center gap-1.5">
-                    {customer.isBusinessCustomer ? (
-                      <>
-                        <Building2 className="h-3.5 w-3.5" />
-                        Business
-                      </>
-                    ) : (
-                      <>
-                        <User className="h-3.5 w-3.5" />
-                        Individual
-                      </>
-                    )}
-                  </span>
-                }
-              />
-            </div>
-          </SectionCard>
+                    <>
+                      <User className="h-3 w-3" />
+                      Individual
+                    </>
+                  )}
+                </span>
+              </InfoItem>
+            </InfoList>
+          </DetailCard>
 
           {/* Preferences */}
-          <SectionCard title="Preferences" onEdit={() => openEditWithSection('preferences')}>
-            <div className="divide-y divide-border">
-              <InfoRow
+          <DetailCard
+            title="Preferences"
+            icon={<Settings className="h-4 w-4" />}
+            onEdit={() => openEditWithSection('preferences')}
+          >
+            <InfoList>
+              <InfoItem
                 label="Currency"
-                value={getCurrencyName(customer.currency) || <span className="text-muted-foreground">Not set</span>}
-              />
-              <InfoRow
+                icon={<Wallet className="h-3.5 w-3.5 text-muted-foreground" />}
+              >
+                {getCurrencyName(customer.currency) || <span className="text-muted-foreground">Not set</span>}
+              </InfoItem>
+              <InfoItem
                 label="Language"
-                value={getLanguageName(customer.locale) || <span className="text-muted-foreground">Not set</span>}
-              />
-              <InfoRow
+                icon={<Languages className="h-3.5 w-3.5 text-muted-foreground" />}
+              >
+                {getLanguageName(customer.locale) || <span className="text-muted-foreground">Not set</span>}
+              </InfoItem>
+              <InfoItem
                 label="Timezone"
-                value={getTimezoneName(customer.timezone) || <span className="text-muted-foreground">Not set</span>}
-              />
-            </div>
-          </SectionCard>
+                icon={<Globe className="h-3.5 w-3.5 text-muted-foreground" />}
+              >
+                {getTimezoneName(customer.timezone) || <span className="text-muted-foreground">Not set</span>}
+              </InfoItem>
+            </InfoList>
+          </DetailCard>
 
           {/* Addresses - Tabbed Card */}
-          <Card className="p-5">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => setAddressTab('billing')}
-                  className={cn(
-                    'text-sm font-medium pb-1 border-b-2 transition-colors',
-                    addressTab === 'billing'
-                      ? 'text-foreground border-primary'
-                      : 'text-muted-foreground border-transparent hover:text-foreground'
-                  )}
-                >
-                  Billing
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAddressTab('shipping')}
-                  className={cn(
-                    'text-sm font-medium pb-1 border-b-2 transition-colors flex items-center gap-1.5',
-                    addressTab === 'shipping'
-                      ? 'text-foreground border-primary'
-                      : 'text-muted-foreground border-transparent hover:text-foreground'
-                  )}
-                >
-                  Shipping
-                  {isShippingSameAsBilling && customer.shippingAddress && (
-                    <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
-                      Same
-                    </span>
-                  )}
-                </button>
-              </div>
-              <button
-                type="button"
-                onClick={() => openEditWithSection(addressTab === 'billing' ? 'billing-address' : 'shipping-address')}
-                className="p-1.5 rounded-md hover:bg-muted transition-colors"
-                aria-label={`Edit ${addressTab} address`}
-              >
-                <Edit className="h-3.5 w-3.5 text-muted-foreground" />
-              </button>
-            </div>
-
-            {/* Billing Address Content */}
-            {addressTab === 'billing' && (
-              customer.billingAddress ? (
-                <div className="divide-y divide-border">
-                  {customer.billingAddress.name && (
-                    <InfoRow label="Name" value={customer.billingAddress.name} />
-                  )}
-                  <InfoRow label="Address Line 1" value={customer.billingAddress.line1} />
-                  {customer.billingAddress.line2 && (
-                    <InfoRow label="Address Line 2" value={customer.billingAddress.line2} />
-                  )}
-                  <InfoRow label="City" value={customer.billingAddress.city} />
-                  {customer.billingAddress.state && (
-                    <InfoRow label="State / Province" value={customer.billingAddress.state} />
-                  )}
-                  <InfoRow label="ZIP / Postal Code" value={customer.billingAddress.zipCode} />
-                  <InfoRow label="Country" value={getCountryName(customer.billingAddress.country)} />
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium tracking-normal">Addresses</CardTitle>
                 </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">No billing address</p>
-              )
-            )}
-
-            {/* Shipping Address Content */}
-            {addressTab === 'shipping' && (
-              customer.shippingAddress ? (
-                isShippingSameAsBilling ? (
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
-                    <CheckCircle className="h-4 w-4 text-emerald-500" />
-                    <span>Same as billing address</span>
-                  </div>
-                ) : (
-                  <div className="divide-y divide-border">
-                    {customer.shippingAddress.name && (
-                      <InfoRow label="Name" value={customer.shippingAddress.name} />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => openEditWithSection(addressTab === 'billing' ? 'billing-address' : 'shipping-address')}
+                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  aria-label={`Edit ${addressTab} address`}
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <Tabs value={addressTab} onValueChange={(value) => setAddressTab(value as 'billing' | 'shipping')}>
+                <TabsList className="w-fit">
+                  <TabsTrigger value="billing">Billing</TabsTrigger>
+                  <TabsTrigger value="shipping" className="gap-1.5">
+                    Shipping
+                    {isShippingSameAsBilling && customer.shippingAddress && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-success/10 text-success font-normal">
+                        Same
+                      </span>
                     )}
-                    <InfoRow label="Address Line 1" value={customer.shippingAddress.line1} />
-                    {customer.shippingAddress.line2 && (
-                      <InfoRow label="Address Line 2" value={customer.shippingAddress.line2} />
-                    )}
-                    <InfoRow label="City" value={customer.shippingAddress.city} />
-                    {customer.shippingAddress.state && (
-                      <InfoRow label="State / Province" value={customer.shippingAddress.state} />
-                    )}
-                    <InfoRow label="ZIP / Postal Code" value={customer.shippingAddress.zipCode} />
-                    <InfoRow label="Country" value={getCountryName(customer.shippingAddress.country)} />
-                  </div>
-                )
-              ) : (
-                <p className="text-sm text-muted-foreground">No shipping address</p>
-              )
-            )}
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="billing" className="mt-4">
+                  {customer.billingAddress ? (
+                    <InfoList>
+                      {customer.billingAddress.name && (
+                        <InfoItem label="Name">{customer.billingAddress.name}</InfoItem>
+                      )}
+                      <InfoItem label="Street">{customer.billingAddress.line1}</InfoItem>
+                      {customer.billingAddress.line2 && (
+                        <InfoItem label="Line 2">{customer.billingAddress.line2}</InfoItem>
+                      )}
+                      <InfoItem label="City">{customer.billingAddress.city}</InfoItem>
+                      {customer.billingAddress.state && (
+                        <InfoItem label="State">{customer.billingAddress.state}</InfoItem>
+                      )}
+                      <InfoItem label="Postal Code">{customer.billingAddress.zipCode}</InfoItem>
+                      <InfoItem label="Country">{getCountryName(customer.billingAddress.country)}</InfoItem>
+                    </InfoList>
+                  ) : (
+                    <div className="py-8 text-center">
+                      <MapPin className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">No billing address</p>
+                    </div>
+                  )}
+                </TabsContent>
+                <TabsContent value="shipping" className="mt-4">
+                  {customer.shippingAddress ? (
+                    isShippingSameAsBilling ? (
+                      <div className="flex items-center gap-3 py-6 px-4 bg-success/5 rounded-lg border border-success/10">
+                        <CheckCircle className="h-5 w-5 text-success shrink-0" />
+                        <span className="text-sm text-foreground">Same as billing address</span>
+                      </div>
+                    ) : (
+                      <InfoList>
+                        {customer.shippingAddress.name && (
+                          <InfoItem label="Name">{customer.shippingAddress.name}</InfoItem>
+                        )}
+                        <InfoItem label="Street">{customer.shippingAddress.line1}</InfoItem>
+                        {customer.shippingAddress.line2 && (
+                          <InfoItem label="Line 2">{customer.shippingAddress.line2}</InfoItem>
+                        )}
+                        <InfoItem label="City">{customer.shippingAddress.city}</InfoItem>
+                        {customer.shippingAddress.state && (
+                          <InfoItem label="State">{customer.shippingAddress.state}</InfoItem>
+                        )}
+                        <InfoItem label="Postal Code">{customer.shippingAddress.zipCode}</InfoItem>
+                        <InfoItem label="Country">{getCountryName(customer.shippingAddress.country)}</InfoItem>
+                      </InfoList>
+                    )
+                  ) : (
+                    <div className="py-8 text-center">
+                      <MapPin className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">No shipping address</p>
+                    </div>
+                  )}
+                </TabsContent>
+              </Tabs>
+            </CardContent>
           </Card>
 
           {/* Additional Addresses (if any beyond billing/shipping) */}
           {customer.allAddresses.filter(
             addr => addr.id !== customer.billingAddress?.id && addr.id !== customer.shippingAddress?.id
           ).length > 0 && (
-            <SectionCard title="Other Addresses">
+            <DetailCard title="Other Addresses" icon={<MapPin className="h-4 w-4" />}>
               <div className="space-y-4">
                 {customer.allAddresses
                   .filter(addr => addr.id !== customer.billingAddress?.id && addr.id !== customer.shippingAddress?.id)
                   .map(addr => (
-                    <div key={addr.id} className="divide-y divide-border border border-border rounded-lg p-3">
-                      <div className="flex items-center justify-between pb-2">
+                    <div key={addr.id} className="rounded-lg border border-border p-4 bg-muted/20">
+                      <div className="flex items-center justify-between mb-3">
                         <span className="text-sm font-medium">
                           {addr.name || addr.type || 'Address'}
                         </span>
                         {addr.isPrimary && (
-                          <span className="text-xs px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500">
-                            Primary
-                          </span>
+                          <StatusBadge status="active" label="Primary" />
                         )}
                       </div>
-                      <InfoRow label="Address Line 1" value={addr.line1} />
-                      {addr.line2 && <InfoRow label="Address Line 2" value={addr.line2} />}
-                      <InfoRow label="City" value={addr.city} />
-                      {addr.state && <InfoRow label="State / Province" value={addr.state} />}
-                      <InfoRow label="ZIP / Postal Code" value={addr.zipCode} />
-                      <InfoRow label="Country" value={getCountryName(addr.country)} />
+                      <InfoList divided={false} className="space-y-1">
+                        <InfoItem label="Street">{addr.line1}</InfoItem>
+                        {addr.line2 && <InfoItem label="Line 2">{addr.line2}</InfoItem>}
+                        <InfoItem label="City">{addr.city}</InfoItem>
+                        {addr.state && <InfoItem label="State">{addr.state}</InfoItem>}
+                        <InfoItem label="Postal Code">{addr.zipCode}</InfoItem>
+                        <InfoItem label="Country">{getCountryName(addr.country)}</InfoItem>
+                      </InfoList>
                     </div>
                   ))}
               </div>
-            </SectionCard>
+            </DetailCard>
           )}
 
           {/* Tags */}
-          <SectionCard title="Tags" onEdit={() => openEditWithSection('tags')}>
+          <DetailCard
+            title="Tags"
+            icon={<StickyNote className="h-4 w-4" />}
+            onEdit={() => openEditWithSection('tags')}
+          >
             {customer.tags.length > 0 ? (
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {customer.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="px-2 py-0.5 bg-muted text-muted-foreground text-xs rounded-md"
+                    className="inline-flex items-center px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No tags</p>
+              <div className="py-6 text-center">
+                <StickyNote className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                <p className="text-sm text-muted-foreground">No tags added</p>
+              </div>
             )}
-          </SectionCard>
+          </DetailCard>
 
           {/* Custom Fields */}
           {Object.keys(customer.customFields).length > 0 && (
-            <SectionCard title="Custom Fields">
-              <div className="divide-y divide-border">
+            <DetailCard title="Custom Fields">
+              <InfoList>
                 {Object.entries(customer.customFields).map(([key, value]) => (
-                  <InfoRow key={key} label={key} value={value} />
+                  <InfoItem key={key} label={key}>{value}</InfoItem>
                 ))}
-              </div>
-            </SectionCard>
+              </InfoList>
+            </DetailCard>
           )}
         </div>
 
         {/* Sidebar - 1 column */}
         <div className="space-y-6">
           {/* Account Settings */}
-          <SectionCard title="Account Settings" onEdit={() => openEditWithSection('settings')}>
-            <div className="divide-y divide-border">
-              <InfoRow
-                label="Portal Access"
-                value={
-                  <span
-                    className={cn(
-                      'text-xs px-2 py-0.5 rounded-md',
-                      customer.portalAccess
-                        ? 'bg-emerald-500/10 text-emerald-500'
-                        : 'bg-muted text-muted-foreground'
-                    )}
-                  >
-                    {customer.portalAccess ? 'Enabled' : 'Disabled'}
-                  </span>
-                }
-              />
-              <InfoRow
-                label="Auto Collection"
-                value={
-                  <span
-                    className={cn(
-                      'text-xs px-2 py-0.5 rounded-md',
-                      customer.autoCollection
-                        ? 'bg-emerald-500/10 text-emerald-500'
-                        : 'bg-muted text-muted-foreground'
-                    )}
-                  >
-                    {customer.autoCollection ? 'Enabled' : 'Disabled'}
-                  </span>
-                }
-              />
-            </div>
-          </SectionCard>
+          <DetailCard
+            title="Account Settings"
+            icon={<Settings className="h-4 w-4" />}
+            onEdit={() => openEditWithSection('settings')}
+          >
+            <InfoList>
+              <InfoItem label="Portal Access">
+                <StatusBadge status={customer.portalAccess ? 'enabled' : 'disabled'} />
+              </InfoItem>
+              <InfoItem label="Auto Collection">
+                <StatusBadge status={customer.autoCollection ? 'enabled' : 'disabled'} />
+              </InfoItem>
+            </InfoList>
+          </DetailCard>
 
           {/* Activity Summary */}
-          <Card className="p-5">
-            <h3 className="text-sm font-medium mb-3">Activity</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="text-center p-3 bg-muted/50 rounded-lg">
-                <div className="text-2xl font-semibold">{customer.notes?.length || 0}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">Notes</div>
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium tracking-normal">Activity</CardTitle>
               </div>
-              <div className="text-center p-3 bg-muted/50 rounded-lg">
-                <div className="text-2xl font-semibold">0</div>
-                <div className="text-xs text-muted-foreground mt-0.5">Invoices</div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-2 gap-3">
+                <MetricCard
+                  value={customer.notes?.length || 0}
+                  label="Notes"
+                  icon={<StickyNote className="h-4 w-4" />}
+                  onClick={() => setCurrentTab('notes')}
+                />
+                <MetricCard
+                  value={0}
+                  label="Invoices"
+                  icon={<Receipt className="h-4 w-4" />}
+                  onClick={() => setCurrentTab('invoices')}
+                />
               </div>
-            </div>
+            </CardContent>
           </Card>
 
           {/* Dates & System Info */}
-          <Card className="p-5">
-            <h3 className="text-sm font-medium mb-3">System Information</h3>
-            <div className="divide-y divide-border">
-              <InfoRow
-                label="Customer ID"
-                value={
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium tracking-normal">System Information</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <InfoList>
+                <InfoItem label="Customer ID" mono>
                   <span className="flex items-center gap-1.5">
-                    <span className="font-mono text-xs">{customer.id}</span>
-                    <button
+                    <span className="truncate max-w-[140px]">{customer.id}</span>
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon"
                       onClick={handleCopyCustomerId}
-                      className="p-1 rounded hover:bg-muted transition-colors"
+                      className="h-6 w-6 shrink-0"
                       aria-label="Copy customer ID"
                     >
                       {copiedId ? (
-                        <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
+                        <CheckCircle className="h-3.5 w-3.5 text-success" />
                       ) : (
-                        <Copy className="h-3.5 w-3.5 text-muted-foreground" />
+                        <Copy className="h-3.5 w-3.5" />
                       )}
-                    </button>
+                    </Button>
                   </span>
-                }
-              />
-              <InfoRow label="Customer Since" value={formatDate(customer.signupDate)} />
-              {customer.lastActivityDate && (
-                <InfoRow label="Last Activity" value={formatDate(customer.lastActivityDate)} />
-              )}
-              <InfoRow label="Created" value={formatDateTime(customer.createdDate)} />
-              <InfoRow label="Modified" value={formatDateTime(customer.modifiedDate)} />
-            </div>
+                </InfoItem>
+                <InfoItem label="Customer Since">{formatDate(customer.signupDate)}</InfoItem>
+                <InfoItem label="Created">{formatDateTime(customer.createdDate)}</InfoItem>
+                <InfoItem label="Modified">{formatDateTime(customer.modifiedDate)}</InfoItem>
+              </InfoList>
+            </CardContent>
           </Card>
         </div>
       </div>

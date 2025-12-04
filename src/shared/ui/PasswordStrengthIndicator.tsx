@@ -51,19 +51,19 @@ export const PasswordStrengthIndicator = ({
 
     if (metRequirements === 0) {
       label = 'Very Weak'
-      color = 'text-red-500'
+      color = 'text-destructive'
     } else if (metRequirements <= 2) {
       label = 'Weak'
-      color = 'text-orange-500'
+      color = 'text-warning'
     } else if (metRequirements <= 3) {
       label = 'Fair'
-      color = 'text-yellow-500'
+      color = 'text-warning'
     } else if (metRequirements === 4) {
       label = 'Good'
-      color = 'text-blue-500'
+      color = 'text-primary'
     } else {
       label = 'Strong'
-      color = 'text-emerald-500'
+      color = 'text-success'
     }
 
     return { score: metRequirements, percentage, label, color }
@@ -87,11 +87,11 @@ export const PasswordStrengthIndicator = ({
             <div
               className={`h-full transition-all duration-300 ${
                 (() => {
-                  if (strength.percentage === 100) return 'bg-emerald-500'
-                  if (strength.percentage >= 80) return 'bg-blue-500'
-                  if (strength.percentage >= 60) return 'bg-yellow-500'
-                  if (strength.percentage >= 40) return 'bg-orange-500'
-                  return 'bg-red-500'
+                  if (strength.percentage === 100) return 'bg-success'
+                  if (strength.percentage >= 80) return 'bg-primary'
+                  if (strength.percentage >= 60) return 'bg-warning'
+                  if (strength.percentage >= 40) return 'bg-warning'
+                  return 'bg-destructive'
                 })()
               }`}
               style={{ width: `${strength.percentage}%` }}
@@ -112,7 +112,7 @@ export const PasswordStrengthIndicator = ({
               <li
                 key={requirement.label}
                 className={`flex items-center gap-2 text-xs transition-colors ${
-                  isMet ? 'text-emerald-400' : 'text-muted-foreground'
+                  isMet ? 'text-success' : 'text-muted-foreground'
                 }`}
               >
                 {isMet ? (

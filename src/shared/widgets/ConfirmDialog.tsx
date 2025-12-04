@@ -45,27 +45,27 @@ export const ConfirmDialog = ({
       case 'danger':
         return {
           icon: Trash2,
-          buttonClass: 'bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-600/30 font-medium'
+          buttonClass: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-lg shadow-destructive/30 font-medium'
         }
       case 'warning':
         return {
           icon: AlertTriangle,
-          buttonClass: 'bg-yellow-600 text-white hover:bg-yellow-700 shadow-lg shadow-yellow-600/30 font-medium'
+          buttonClass: 'bg-warning text-warning-foreground hover:bg-warning/90 shadow-lg shadow-warning/30 font-medium'
         }
       case 'info':
         return {
           icon: Info,
-          buttonClass: 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30 font-medium'
+          buttonClass: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/30 font-medium'
         }
       case 'success':
         return {
           icon: CheckCircle,
-          buttonClass: 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/30 font-medium'
+          buttonClass: 'bg-success text-success-foreground hover:bg-success/90 shadow-lg shadow-success/30 font-medium'
         }
       case 'neutral':
         return {
           icon: HelpCircle,
-          buttonClass: 'bg-white/20 text-white hover:bg-white/30 shadow-lg font-medium'
+          buttonClass: 'bg-muted text-muted-foreground hover:bg-muted/80 shadow-lg font-medium'
         }
     }
   }

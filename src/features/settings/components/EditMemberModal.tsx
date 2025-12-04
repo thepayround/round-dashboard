@@ -21,7 +21,6 @@ const ROLE_OPTIONS: ComboboxOption<UserRole>[] = [
   { value: 'Viewer', label: 'Viewer - Read-only access' },
 ]
 
-
 interface EditMemberModalProps {
   isOpen: boolean
   onClose: () => void
@@ -62,18 +61,18 @@ export const EditMemberModal = ({
           }}
           className="space-y-6 pt-4"
         >
-          <div className="bg-white/[0.06] border border-white/15 rounded-lg p-4">
+          <div className="bg-muted/50 border border-border rounded-lg p-4">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-medium text-lg">
+                <span className="text-primary-foreground font-medium text-lg">
                   {member.firstName[0]}
                   {member.lastName[0]}
                 </span>
               </div>
               <div className="flex-1">
                 <div className="flex items-center space-x-2 mb-1">
-                  <h3 className="text-white font-medium">{member.fullName}</h3>
-                  {member.isOwner && <Crown className="w-4 h-4 text-yellow-400" />}
+                  <h3 className="text-foreground font-medium">{member.fullName}</h3>
+                  {member.isOwner && <Crown className="w-4 h-4 text-warning" />}
                 </div>
                 <p className="text-muted-foreground text-sm mb-2">{member.email}</p>
                 <div className="flex items-center space-x-2">
@@ -87,9 +86,11 @@ export const EditMemberModal = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="member-role">Select New Role</Label>
+            <Label htmlFor="member-role">
+              Select New Role <span className="text-destructive">*</span>
+            </Label>
             <div className="mb-4">
-              <span className="text-xs text-muted-foreground bg-white/[0.08] px-2 py-1 rounded-lg border border-white/15">
+              <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-lg border border-border">
                 Current: <span className="text-foreground font-medium">{member.roleName}</span>
               </span>
             </div>
@@ -97,7 +98,7 @@ export const EditMemberModal = ({
               id="member-role"
               options={ROLE_OPTIONS}
               value={selectedRole}
-              onChange={value => handleRoleChange((value ?? selectedRole) as UserRole)}
+              onChange={value => handleRoleChange(value ?? selectedRole)}
               placeholder="Select a role"
               disabled={isEditingSelf}
               searchable={true}
@@ -106,16 +107,16 @@ export const EditMemberModal = ({
           </div>
 
           {isEditingSelf && (
-            <Alert className="bg-amber-500/10 border-amber-500/30">
-              <AlertCircle className="h-4 w-4 text-amber-400" />
-              <AlertDescription className="text-amber-50">
+            <Alert className="bg-warning/10 border-warning/30" role="alert">
+              <AlertCircle className="h-4 w-4 text-warning" />
+              <AlertDescription className="text-warning-foreground">
                 You cannot change your own role. Ask another administrator to update your role.
               </AlertDescription>
             </Alert>
           )}
 
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" role="alert" aria-live="polite">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
@@ -125,7 +126,12 @@ export const EditMemberModal = ({
             <Button type="button" onClick={handleClose} variant="ghost" disabled={isLoading}>
               Cancel
             </Button>
-            <Button type="button" onClick={handleSubmit} disabled={isLoading || !canSubmit}>
+            <Button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isLoading || !canSubmit}
+              aria-busy={isLoading}
+            >
               {isLoading ? (
                 <>
                   <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

@@ -119,13 +119,13 @@ export const EmailComposeSheet = ({
               </Button>
               {formData.isHtml && (
                 <>
-                  <Button type="button" variant="ghost" size="icon">
+                  <Button type="button" variant="ghost" size="icon" aria-label="Bold text">
                     <Bold className="h-4 w-4" />
                   </Button>
-                  <Button type="button" variant="ghost" size="icon">
+                  <Button type="button" variant="ghost" size="icon" aria-label="Italic text">
                     <Italic className="h-4 w-4" />
                   </Button>
-                  <Button type="button" variant="ghost" size="icon">
+                  <Button type="button" variant="ghost" size="icon" aria-label="Insert link">
                     <LinkIcon className="h-4 w-4" />
                   </Button>
                 </>

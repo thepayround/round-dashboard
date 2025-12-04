@@ -254,8 +254,8 @@ export const FileInput: React.FC<FileInputProps> = ({
           isDragging && !disabled
             ? 'border-primary bg-primary/5'
             : hasError
-            ? 'border-red-500/50 bg-red-500/5'
-            : 'border-white/20 hover:border-white/40',
+            ? 'border-destructive/50 bg-destructive/5'
+            : 'border-border hover:border-muted-foreground/50',
           disabled && 'opacity-50 cursor-not-allowed',
           !hasValue && 'p-6'
         )}

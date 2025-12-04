@@ -82,7 +82,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
           <div className="space-y-6">
             <div className="flex items-center space-x-2 mb-4">
               <User className="w-5 h-5 text-secondary" />
-              <h3 className="text-lg font-semibold text-foreground">Basic Information</h3>
+              <h3 className="text-sm font-medium text-foreground">Basic Information</h3>
             </div>
 
             {/* Customer Information - Type Specific */}
@@ -288,7 +288,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
           <div className="space-y-6">
             <div className="flex items-center space-x-2 mb-4">
               <Globe className="w-5 h-5 text-primary" />
-              <h3 className="text-lg font-semibold text-foreground">Preferences & Settings</h3>
+              <h3 className="text-sm font-medium text-foreground">Preferences & Settings</h3>
             </div>
 
             {/* Locale, Currency, Timezone Row */}
@@ -381,7 +381,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
           <div className="space-y-6">
             <div className="flex items-center space-x-2 mb-4">
               <MapPin className="w-5 h-5 text-success" />
-              <h3 className="text-lg font-semibold text-foreground">Addresses</h3>
+              <h3 className="text-sm font-medium text-foreground">Addresses</h3>
             </div>
 
             {/* Billing Address */}
@@ -440,7 +440,7 @@ export const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
           <div className="space-y-4">
             <div className="flex items-center space-x-2 mb-4">
               <MapPin className="w-5 h-5 text-primary" />
-              <h3 className="text-lg font-semibold text-foreground">Tags</h3>
+              <h3 className="text-sm font-medium text-foreground">Tags</h3>
             </div>
 
             <div className="flex flex-wrap gap-2">

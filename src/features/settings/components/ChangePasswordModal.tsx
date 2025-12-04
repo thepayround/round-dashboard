@@ -49,15 +49,15 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
 
         <form onSubmit={event => handleSubmit(event)} className="space-y-6 pt-4">
           {isSuccess && (
-            <Alert className="bg-emerald-500/10 border-emerald-500/30">
-              <AlertDescription className="text-emerald-50">
+            <Alert className="bg-success/10 border-success/20" role="alert">
+              <AlertDescription className="text-success">
                 Your password has been updated successfully.
               </AlertDescription>
             </Alert>
           )}
 
           {apiError && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" role="alert" aria-live="polite">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{apiError}</AlertDescription>
             </Alert>
@@ -65,7 +65,9 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="modal-current-password">Current Password</Label>
+              <Label htmlFor="modal-current-password">
+                Current Password <span className="text-destructive">*</span>
+              </Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -78,6 +80,13 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
                   placeholder="Enter current password"
                   className="pl-10 pr-10"
                   required
+                  aria-required="true"
+                  aria-invalid={hasFieldError(errors, 'currentPassword')}
+                  aria-describedby={
+                    hasFieldError(errors, 'currentPassword')
+                      ? 'modal-current-password-error'
+                      : undefined
+                  }
                   disabled={isLoading}
                 />
                 <button
@@ -90,12 +99,20 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
                 </button>
               </div>
               {hasFieldError(errors, 'currentPassword') && (
-                <p className="text-sm text-destructive">{getFieldError(errors, 'currentPassword')?.message}</p>
+                <p
+                  id="modal-current-password-error"
+                  className="text-sm text-destructive"
+                  role="alert"
+                >
+                  {getFieldError(errors, 'currentPassword')?.message}
+                </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="modal-new-password">New Password</Label>
+              <Label htmlFor="modal-new-password">
+                New Password <span className="text-destructive">*</span>
+              </Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -108,6 +125,13 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
                   placeholder="Create new password"
                   className="pl-10 pr-10"
                   required
+                  aria-required="true"
+                  aria-invalid={hasFieldError(errors, 'newPassword')}
+                  aria-describedby={
+                    hasFieldError(errors, 'newPassword')
+                      ? 'modal-new-password-error'
+                      : 'modal-new-password-strength'
+                  }
                   disabled={isLoading}
                 />
                 <button
@@ -120,17 +144,25 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
                 </button>
               </div>
               {hasFieldError(errors, 'newPassword') && (
-                <p className="text-sm text-destructive">{getFieldError(errors, 'newPassword')?.message}</p>
+                <p
+                  id="modal-new-password-error"
+                  className="text-sm text-destructive"
+                  role="alert"
+                >
+                  {getFieldError(errors, 'newPassword')?.message}
+                </p>
               )}
               {formData.newPassword && (
-                <div className="mt-3">
+                <div className="mt-3" id="modal-new-password-strength">
                   <PasswordStrengthIndicator password={formData.newPassword} showStrengthBar />
                 </div>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="modal-confirm-password">Confirm Password</Label>
+              <Label htmlFor="modal-confirm-password">
+                Confirm Password <span className="text-destructive">*</span>
+              </Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -143,6 +175,13 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
                   placeholder="Confirm new password"
                   className="pl-10 pr-10"
                   required
+                  aria-required="true"
+                  aria-invalid={hasFieldError(errors, 'confirmPassword')}
+                  aria-describedby={
+                    hasFieldError(errors, 'confirmPassword')
+                      ? 'modal-confirm-password-error'
+                      : undefined
+                  }
                   disabled={isLoading}
                 />
                 <button
@@ -155,7 +194,13 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
                 </button>
               </div>
               {hasFieldError(errors, 'confirmPassword') && (
-                <p className="text-sm text-destructive">{getFieldError(errors, 'confirmPassword')?.message}</p>
+                <p
+                  id="modal-confirm-password-error"
+                  className="text-sm text-destructive"
+                  role="alert"
+                >
+                  {getFieldError(errors, 'confirmPassword')?.message}
+                </p>
               )}
             </div>
           </div>
@@ -168,6 +213,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProp
               type="button"
               onClick={() => handleSubmit()}
               disabled={disableSubmit}
+              aria-busy={isLoading}
             >
               {isLoading ? (
                 <>

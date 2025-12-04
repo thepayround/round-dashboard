@@ -14,9 +14,13 @@
         "src/shared/ui/Modal/",
         "src/shared/ui/Combobox/",
         "src/shared/ui/PhoneInput/",
+        "src/shared/ui/DetailCard/",
+        "src/shared/layout/DashboardLayout.tsx",
         "src/features/auth/",
         "src/features/customers/components/AddCustomerModal.tsx",
         "src/features/customers/components/EditCustomerModal.tsx",
+        "src/features/customers/pages/CustomerDetailPage.tsx",
+        "src/features/settings/components/ChangePasswordModal.tsx",
         "*.test.tsx",
         "*.test.ts",
         "*.spec.tsx",
@@ -136,8 +140,15 @@
         "src/shared/ui/ApiDropdown/",
         "src/shared/ui/Combobox/",
         "src/shared/widgets/forms/OrganizationForm.tsx",
+        "src/shared/widgets/ConfirmDialog.tsx",
+        "src/features/auth/",
+        "src/features/dashboard/pages/DashboardPage.tsx",
+        "src/features/onboarding/",
         "src/features/settings/components/EditMemberModal.tsx",
         "src/features/settings/components/InviteMemberModal.tsx",
+        "src/features/settings/components/ChangePasswordModal.tsx",
+        "src/features/settings/components/OrganizationSettingsForm.tsx",
+        "src/features/settings/components/organization/BrandingSection.tsx",
         "src/features/customers/components/AddCustomerModal.tsx",
         "src/features/customers/components/EditCustomerModal.tsx",
         "*.test.tsx",
@@ -315,6 +326,150 @@
         "*.spec.ts",
         "*.stories.tsx",
         "*.stories.ts"
+      ]
+    },
+    {
+      "name": "No Tailwind emerald color classes",
+      "pattern": "text-emerald-|bg-emerald-|border-emerald-",
+      "message": "Use semantic 'success' token instead of Tailwind emerald colors",
+      "suggestion": "Replace text-emerald-* with text-success, bg-emerald-* with bg-success or bg-success/10, border-emerald-* with border-success",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No Tailwind blue color classes",
+      "pattern": "text-blue-|bg-blue-|border-blue-",
+      "message": "Use semantic 'primary' or 'secondary' token instead of Tailwind blue colors",
+      "suggestion": "Replace text-blue-* with text-primary or text-secondary, bg-blue-* with bg-primary/10 or bg-secondary/10",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No Tailwind red color classes",
+      "pattern": "text-red-|bg-red-|border-red-",
+      "message": "Use semantic 'destructive' token instead of Tailwind red colors",
+      "suggestion": "Replace text-red-* with text-destructive, bg-red-* with bg-destructive or bg-destructive/10, border-red-* with border-destructive",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No Tailwind yellow/amber color classes",
+      "pattern": "text-yellow-|bg-yellow-|border-yellow-|text-amber-|bg-amber-|border-amber-",
+      "message": "Use semantic 'warning' token instead of Tailwind yellow/amber colors",
+      "suggestion": "Replace text-yellow-*/text-amber-* with text-warning, bg-yellow-*/bg-amber-* with bg-warning or bg-warning/10",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No Tailwind green color classes",
+      "pattern": "text-green-|bg-green-|border-green-",
+      "message": "Use semantic 'success' token instead of Tailwind green colors",
+      "suggestion": "Replace text-green-* with text-success, bg-green-* with bg-success or bg-success/10",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No Tailwind purple/violet color classes",
+      "pattern": "text-purple-|bg-purple-|border-purple-|text-violet-|bg-violet-|border-violet-",
+      "message": "Use semantic 'accent' token instead of Tailwind purple/violet colors",
+      "suggestion": "Replace text-purple-*/text-violet-* with text-accent, bg-purple-*/bg-violet-* with bg-accent or bg-accent/10",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No font-semibold in UI components",
+      "pattern": "font-semibold",
+      "message": "Use font-medium instead of font-semibold. Maximum font weight in UI is 500 (font-medium).",
+      "suggestion": "Replace font-semibold with font-medium",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/shadcn/",
+        "src/features/auth/",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No font-bold in UI components",
+      "pattern": "font-bold",
+      "message": "Use font-medium instead of font-bold. Maximum font weight in UI is 500 (font-medium).",
+      "suggestion": "Replace font-bold with font-medium",
+      "severity": "warning",
+      "excludePaths": [
+        "src/shared/ui/shadcn/",
+        "src/features/auth/",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No border-white in components",
+      "pattern": "border-white/|border-white\\s",
+      "message": "Use semantic border-border or border-primary/20 instead of border-white",
+      "suggestion": "Replace border-white/* with border-border or border-primary/20",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "Use gap-2 for button groups",
+      "pattern": "flex.*gap-3.*Button|gap-3.*flex.*Button",
+      "message": "Use gap-2 for button groups instead of gap-3 for consistent spacing",
+      "suggestion": "Replace gap-3 with gap-2 in button group containers",
+      "severity": "warning",
+      "excludePaths": [
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
       ]
     }
   ]

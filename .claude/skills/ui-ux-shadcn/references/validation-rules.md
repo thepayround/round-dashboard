@@ -252,6 +252,50 @@ All interactive elements MUST have visible focus states:
 - Form inputs MUST have associated labels
 - Dialogs MUST have `aria-labelledby` or title
 
+## Semantic Color Token Validation
+
+### Required Token Usage
+
+All color usage MUST use semantic tokens. Run validation before commit.
+
+| Pattern to Find | Replace With | Severity |
+|-----------------|--------------|----------|
+| `text-emerald-*` | `text-success` | Error |
+| `text-green-*` | `text-success` | Error |
+| `text-red-*` | `text-destructive` | Error |
+| `text-yellow-*`, `text-amber-*` | `text-warning` | Error |
+| `text-blue-*` | `text-primary` or `text-secondary` | Error |
+| `text-purple-*`, `text-violet-*` | `text-accent` | Error |
+| `bg-emerald-*` | `bg-success` or `bg-success/10` | Error |
+| `bg-red-*` | `bg-destructive` or `bg-destructive/10` | Error |
+| `border-white/*` | `border-border` or `border-primary/20` | Error |
+
+### Semantic Token Checklist
+
+- [ ] No raw Tailwind color classes (emerald, blue, red, yellow, green, purple)
+- [ ] All success states use `text-success` / `bg-success`
+- [ ] All error states use `text-destructive` / `bg-destructive`
+- [ ] All warning states use `text-warning` / `bg-warning`
+- [ ] All borders use `border-border` or semantic variants
+- [ ] No `border-white/*` patterns
+
+## Typography Validation
+
+### Font Weight Rules
+
+- [ ] No `font-semibold` usage (use `font-medium` instead)
+- [ ] No `font-bold` usage (use `font-medium` instead)
+- [ ] Maximum font weight is `font-medium` (500)
+
+### Where Font Weight Issues Commonly Occur
+
+| Component Type | Common Issue | Correct Value |
+|----------------|--------------|---------------|
+| Card titles | `font-semibold` | `font-medium` |
+| Modal titles | `font-semibold` | `font-medium` |
+| KPI/Metric values | `font-bold` | `font-medium` |
+| Section headers | `font-semibold` | `font-medium` |
+
 ## Component-Specific Validation
 
 ### Buttons
@@ -259,6 +303,8 @@ All interactive elements MUST have visible focus states:
 - [ ] Uses `Button` from `@/shared/ui/shadcn/button`
 - [ ] Correct variant for context (default, secondary, destructive, ghost)
 - [ ] Loading state shows spinner, not just disabled
+- [ ] Form submit buttons use `size="default"` (NOT `size="sm"`)
+- [ ] Button groups use `gap-2` spacing (NOT `gap-3`)
 
 ### Forms
 

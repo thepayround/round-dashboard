@@ -127,7 +127,7 @@ export const BusinessLoginPage = () => {
             </div>
 
             <div className="flex flex-col gap-4">
-              <Button type="submit" disabled={isLoading || !isFormFilled} className="w-full">
+              <Button type="submit" disabled={isLoading || !isFormFilled} aria-busy={isLoading} className="w-full">
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </Button>
               <GoogleLoginButton

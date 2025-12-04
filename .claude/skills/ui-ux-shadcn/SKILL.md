@@ -43,14 +43,29 @@ You strictly follow the project's Shadcn UI + Zinc dark theme design system.
 
 - ✅ **ONLY** use Tailwind utility classes
 - ✅ **ONLY** use CSS variables from `src/index.css` (--background, --foreground, --card, etc.)
+- ✅ **ONLY** use semantic color tokens (text-success, text-destructive, text-warning, etc.)
 - ❌ **NEVER** use inline styles (`style={{}}`) except extremely rare cases
 - ❌ **NEVER** hardcode hex/rgb colors
+- ❌ **NEVER** use raw Tailwind colors (text-emerald-*, text-blue-*, text-red-*, etc.)
 - ❌ **NEVER** introduce other CSS frameworks (MUI, Chakra, Antd, Daisy, etc.)
+
+### Semantic Color Token Mapping
+
+| Intent | Use This | NOT This |
+|--------|----------|----------|
+| Success/Active | `text-success`, `bg-success/10` | `text-emerald-*`, `text-green-*` |
+| Error/Danger | `text-destructive`, `bg-destructive/10` | `text-red-*` |
+| Warning | `text-warning`, `bg-warning/10` | `text-yellow-*`, `text-amber-*` |
+| Primary | `text-primary`, `bg-primary/10` | `text-blue-*` |
+| Accent | `text-accent`, `bg-accent/10` | `text-purple-*`, `text-violet-*` |
+| Borders | `border-border`, `border-primary/20` | `border-white/*` |
 
 Correct:
 ```tsx
 <div className="bg-card text-foreground border-border rounded-lg p-6">
   <p className="text-muted-foreground">Secondary text</p>
+  <span className="text-success">Active</span>
+  <span className="text-destructive">Error</span>
 </div>
 ```
 
@@ -59,6 +74,9 @@ Wrong:
 <div style={{ background: '#1a1a1a', color: 'white' }}>
   <p style={{ color: '#888' }}>Secondary text</p>
 </div>
+// Also wrong - raw Tailwind colors:
+<span className="text-emerald-500">Active</span>
+<span className="text-red-500">Error</span>
 ```
 
 ## 2. Layout Standards
@@ -118,6 +136,43 @@ import { Button } from '@/shared/ui/shadcn/button'
 <Button variant="secondary">Secondary</Button>
 <Button variant="destructive">Delete</Button>
 <Button variant="ghost">Minimal</Button>
+```
+
+**Button Sizing:**
+
+| Context | Size | Usage |
+|---------|------|-------|
+| Form submit | `default` (h-9) | Save, Submit, Change Password |
+| Page actions | `default` (h-9) | Create, Export, primary CTA |
+| Table row/inline | `sm` (h-8) | Edit, Delete row actions |
+
+❌ **NEVER** use `size="sm"` for form submit buttons
+
+**Button Group Spacing:**
+```tsx
+// ✅ Correct - gap-2
+<div className="flex gap-2">
+  <Button variant="outline">Cancel</Button>
+  <Button>Save</Button>
+</div>
+
+// ❌ Wrong - gap-3 is too wide
+<div className="flex gap-3">
+```
+
+### Typography Weight
+
+**Maximum font weight is `font-medium` (500)**
+
+- ❌ **NEVER** use `font-semibold` or `font-bold` in UI components
+- ✅ Use `font-medium` for titles, headings, labels, KPI values
+
+```tsx
+// ✅ Correct
+<h3 className="text-base font-medium">Card Title</h3>
+
+// ❌ Wrong
+<h3 className="text-base font-semibold">Card Title</h3>
 ```
 
 ### Data Tables

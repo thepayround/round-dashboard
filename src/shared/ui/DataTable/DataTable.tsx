@@ -217,6 +217,7 @@ export function DataTable<TData, TValue>({
               size="icon"
               className="h-7 w-7"
               onClick={() => table.resetRowSelection()}
+              aria-label="Clear selection"
             >
               <X className="h-4 w-4" />
             </Button>

@@ -31,7 +31,7 @@ export const Stepper = ({
       {/* Progress Bar */}
       <div className="relative mb-8">
         {/* Background Line */}
-        <div className="absolute top-5 left-0 right-0 h-0.5 bg-white/10" style={{ marginLeft: '20px', marginRight: '20px' }} />
+        <div className="absolute top-5 left-0 right-0 h-0.5 bg-border" style={{ marginLeft: '20px', marginRight: '20px' }} />
 
         {/* Active Progress Line */}
         <div className="absolute top-5 left-0 right-0 h-0.5 overflow-hidden" style={{ marginLeft: '20px', marginRight: '20px' }}>

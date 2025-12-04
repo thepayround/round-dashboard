@@ -6,16 +6,14 @@ import {
   Smartphone,
   MessageCircle,
   CreditCard,
-  Shield
+  Shield,
 } from 'lucide-react'
 import React from 'react'
 
 import { useAdvancedNotificationsController } from '../../../hooks/useAdvancedNotificationsController'
 
-import { Card } from '@/shared/ui/shadcn/card'
+import { DetailCard } from '@/shared/ui/DetailCard'
 import { Switch } from '@/shared/ui/shadcn/switch'
-
-
 
 interface NotificationPreference {
   notificationType: string
@@ -27,7 +25,11 @@ interface NotificationPreference {
 
 interface NotificationsSectionProps {
   notifications: NotificationPreference[]
-  updateNotificationPreference: (type: string, enabled: boolean, channel?: 'email' | 'inApp' | 'push' | 'sms') => Promise<boolean>
+  updateNotificationPreference: (
+    type: string,
+    enabled: boolean,
+    channel?: 'email' | 'inApp' | 'push' | 'sms'
+  ) => Promise<boolean>
 }
 
 export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
@@ -41,49 +43,59 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
     })
 
   const notificationTypes = [
-    { 
-      id: 'billing', 
-      label: 'Billing & Payments', 
-      description: 'Payment confirmations, invoice reminders, and billing updates',
+    {
+      id: 'billing',
+      label: 'Billing & Payments',
+      description:
+        'Payment confirmations, invoice reminders, and billing updates',
       icon: CreditCard,
-      iconColor: 'text-success',
-      bgColor: 'from-green-500/15 to-emerald-500/15',
-      borderColor: 'border-success/20'
     },
-    { 
-      id: 'security', 
-      label: 'Security Alerts', 
+    {
+      id: 'security',
+      label: 'Security Alerts',
       description: 'Login attempts, password changes, and account security',
       icon: Shield,
-      iconColor: 'text-primary',
-      bgColor: 'from-red-500/15 to-pink-500/15',
-      borderColor: 'border-red-500/20'
     },
-    { 
-      id: 'product', 
-      label: 'Product Updates', 
+    {
+      id: 'product',
+      label: 'Product Updates',
       description: 'New features, improvements, and platform announcements',
       icon: Bell,
-      iconColor: 'text-blue-400',
-      bgColor: 'from-blue-500/15 to-cyan-500/15',
-      borderColor: 'border-blue-500/20'
     },
-    { 
-      id: 'marketing', 
-      label: 'Marketing Communications', 
-      description: 'Newsletters, promotional content, and educational resources',
+    {
+      id: 'marketing',
+      label: 'Marketing Communications',
+      description:
+        'Newsletters, promotional content, and educational resources',
       icon: Mail,
-      iconColor: 'text-purple-400',
-      bgColor: 'from-purple-500/15 to-violet-500/15',
-      borderColor: 'border-purple-500/20'
-    }
+    },
   ]
 
   const channels = [
-    { id: 'email', label: 'Email', icon: Mail, description: 'Receive notifications via email' },
-    { id: 'inApp', label: 'In-App', icon: Monitor, description: 'Show notifications in the dashboard' },
-    { id: 'push', label: 'Push', icon: Smartphone, description: 'Browser push notifications' },
-    { id: 'sms', label: 'SMS', icon: MessageCircle, description: 'Text message notifications' }
+    {
+      id: 'email',
+      label: 'Email',
+      icon: Mail,
+      description: 'Receive notifications via email',
+    },
+    {
+      id: 'inApp',
+      label: 'In-App',
+      icon: Monitor,
+      description: 'Show notifications in the dashboard',
+    },
+    {
+      id: 'push',
+      label: 'Push',
+      icon: Smartphone,
+      description: 'Browser push notifications',
+    },
+    {
+      id: 'sms',
+      label: 'SMS',
+      icon: MessageCircle,
+      description: 'Text message notifications',
+    },
   ]
 
   return (
@@ -91,56 +103,65 @@ export const NotificationsSection: React.FC<NotificationsSectionProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="space-y-4"
+      className="space-y-6"
     >
-      {/* Notification Types */}
-      <div className="space-y-4">
-        <AnimatePresence>
-          {notificationTypes.map((type, index) => (
-            <motion.div
-              key={type.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+      <AnimatePresence>
+        {notificationTypes.map((type, index) => (
+          <motion.div
+            key={type.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+          >
+            <DetailCard
+              title={type.label}
+              icon={<type.icon className="h-4 w-4" />}
             >
-              <Card className="p-4 bg-white/5 border border-border">
-                <div className="space-y-4">
-                  {/* Type Header */}
-                  <div className="flex items-start gap-4">
-                    <div className={`p-2 bg- ${type.bgColor} rounded-lg border ${type.borderColor}`}>
-                      <type.icon className={`w-3.5 h-3.5 ${type.iconColor}`} />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-sm font-normal tracking-tight text-white mb-1">{type.label}</h3>
-                      <p className="text-xs text-gray-400 leading-relaxed">{type.description}</p>
-                    </div>
-                  </div>
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  {type.description}
+                </p>
 
-                  {/* Channel Controls */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {channels.map((channel) => (
-                      <div key={`${type.id}-${channel.id}`} className="p-3 bg-white/5 border border-border rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-1.5">
-                            <channel.icon className="w-3 h-3 text-gray-300" />
-                            <span className="text-xs font-normal tracking-tight text-white">{channel.label}</span>
-                          </div>
-                          <Switch
-                            checked={getNotificationSetting(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms')}
-                            onCheckedChange={(checked) => handleToggleChange(type.id, channel.id as 'email' | 'inApp' | 'push' | 'sms', checked)}
-                            aria-label={`Enable ${channel.label} notifications for ${type.label}`}
-                          />
+                {/* Channel Controls */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {channels.map((channel) => (
+                    <div
+                      key={`${type.id}-${channel.id}`}
+                      className="p-3 bg-muted/50 border border-border rounded-lg"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-1.5">
+                          <channel.icon className="h-3.5 w-3.5 text-muted-foreground" />
+                          <span className="text-sm font-medium text-foreground">
+                            {channel.label}
+                          </span>
                         </div>
-                        <p className="text-xs text-gray-400">{channel.description}</p>
+                        <Switch
+                          checked={getNotificationSetting(
+                            type.id,
+                            channel.id as 'email' | 'inApp' | 'push' | 'sms'
+                          )}
+                          onCheckedChange={(checked) =>
+                            handleToggleChange(
+                              type.id,
+                              channel.id as 'email' | 'inApp' | 'push' | 'sms',
+                              checked
+                            )
+                          }
+                          aria-label={`Enable ${channel.label} notifications for ${type.label}`}
+                        />
                       </div>
-                    ))}
-                  </div>
+                      <p className="text-xs text-muted-foreground">
+                        {channel.description}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-              </Card>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+              </div>
+            </DetailCard>
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </motion.div>
   )
 }

@@ -1,193 +1,161 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   CreditCard,
   Download,
-  Edit3,
   Plus,
   CheckCircle,
-  Building
+  Building,
+  FileText,
 } from 'lucide-react'
 import React from 'react'
 
+import {
+  DetailCard,
+  StatusBadge,
+} from '@/shared/ui/DetailCard'
 import { Button } from '@/shared/ui/shadcn/button'
-import { Card } from '@/shared/ui/shadcn/card'
 import { Label } from '@/shared/ui/shadcn/label'
 import { Switch } from '@/shared/ui/shadcn/switch'
 
-
 export const BillingSection: React.FC = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-      className="space-y-4"
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.2 }}
+    className="space-y-6"
+  >
+    {/* Billing Overview */}
+    <DetailCard
+      title="Current Plan"
+      icon={<CreditCard className="h-4 w-4" />}
     >
-      {/* Billing Overview */}
-      <Card className="p-4">
-        <div className="flex items-start gap-4 mb-4">
-          <div className="p-2 bg-primary/15 rounded-lg border border-success/20">
-            <CreditCard className="w-4 h-4 text-success" />
-          </div>
-          <div className="flex-1">
-            <h2 className="text-xs font-normal tracking-tight text-white mb-1">Billing & Payments</h2>
-            <p className="text-sm text-white/90">
-              Manage your payment methods and billing information
+      <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h3 className="text-sm font-medium text-foreground">
+              Professional Plan
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Billed monthly &bull; Next billing: March 15, 2024
             </p>
           </div>
-        </div>
-
-        {/* Current Plan */}
-        <div className="p-3 bg-primary/5 border border-blue-500/20 rounded-lg mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <h3 className="text-xs font-normal tracking-tight text-white mb-0.5">Professional Plan</h3>
-              <p className="text-xs text-white/90">Billed monthly β€Ά Next billing: March 15, 2024</p>
-            </div>
-            <div className="text-right">
-              <div className="text-sm font-normal tracking-tight text-white">$49</div>
-              <div className="text-xs text-white/90">per month</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 text-success">
-            <CheckCircle className="w-2.5 h-2.5" />
-            <span className="text-sm font-normal">Active subscription</span>
+          <div className="text-right">
+            <div className="text-lg font-medium text-foreground">$49</div>
+            <div className="text-xs text-muted-foreground">per month</div>
           </div>
         </div>
-      </Card>
-
-      {/* Payment Methods */}
-      <Card className="p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-xs font-normal tracking-tight text-white mb-1">Payment Methods</h3>
-            <p className="text-sm text-white/90">Manage your saved payment methods</p>
-          </div>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => {}}
-            className="h-7 px-3 text-sm"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Payment Method
-          </Button>
+        <div className="flex items-center gap-1.5 text-success">
+          <CheckCircle className="h-4 w-4" />
+          <span className="text-sm font-medium">Active subscription</span>
         </div>
+      </div>
+    </DetailCard>
 
-        {/* Payment Method Card */}
-        <div className="space-y-4">
-          <div className="p-3 bg-white/5 border border-border rounded-lg">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="p-1.5 bg-blue-500/20 rounded-lg">
-                  <CreditCard className="w-4 h-4 text-blue-400" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-white font-medium text-xs">β€Άβ€Άβ€Άβ€Ά β€Άβ€Άβ€Άβ€Ά β€Άβ€Άβ€Άβ€Ά 4242</span>
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-success/15 border border-success/20 rounded-full text-success text-xs">
-                      <div className="w-1 h-1 bg-success rounded-full" />
-                      Primary
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-white/90">
-                    <span>Expires 12/24</span>
-                    <span>Visa</span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <button className="text-primary hover:text-[#BD2CD0] text-sm font-normal transition-colors duration-200">
-                  Edit
-                </button>
-                <button className="text-white/90 hover:text-white text-sm font-normal transition-colors duration-200">
-                  Remove
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      {/* Billing Details */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Billing Address */}
-        <Card className="p-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <Building className="w-4 h-4 text-purple-400" />
+    {/* Payment Methods */}
+    <DetailCard
+      title="Payment Methods"
+      icon={<CreditCard className="h-4 w-4" />}
+      actions={
+        <Button variant="outline" size="sm">
+          <Plus className="h-4 w-4 mr-2" />
+          Add Payment Method
+        </Button>
+      }
+    >
+      <div className="space-y-3">
+        <div className="p-4 bg-muted/50 border border-border rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <CreditCard className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <h3 className="text-xs font-normal tracking-tight text-white">Billing Address</h3>
-                <p className="text-sm text-white/90">Your billing information</p>
-              </div>
-            </div>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => {}}
-            >
-              <Edit3 className="w-4 h-4 mr-2" />
-              Edit
-            </Button>
-          </div>
-
-          <div className="p-3 bg-white/5 border border-border rounded-lg">
-            <div className="space-y-1 text-sm text-white/90">
-              <p className="text-white font-medium text-xs">Acme Corporation</p>
-              <p>123 Business Street</p>
-              <p>Suite 100</p>
-              <p>San Francisco, CA 94105</p>
-              <p>United States</p>
-            </div>
-          </div>
-        </Card>
-
-        {/* Invoice Preferences */}
-        <Card className="p-4">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="p-2 bg-orange-500/20 rounded-lg">
-              <Download className="w-4 h-4 text-orange-400" />
-            </div>
-            <div>
-              <h3 className="text-xs font-normal tracking-tight text-white">Invoice Preferences</h3>
-              <p className="text-sm text-white/90">How you receive invoices</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-white/5 border border-border rounded-lg">
-              <div className="flex items-center gap-4">
-                <div className="p-1.5 bg-blue-500/20 rounded-lg">
-                  <Download className="w-4 h-4 text-blue-400" />
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="text-sm font-medium text-foreground font-mono">
+                    &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 4242
+                  </span>
+                  <StatusBadge status="active" label="Primary" />
                 </div>
-                <Label htmlFor="email-invoices" className="cursor-pointer">
-                  <p className="text-xs font-normal tracking-tight text-white">Email invoices</p>
-                  <p className="text-sm text-white/90">Receive invoices via email</p>
-                </Label>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <span>Expires 12/24</span>
+                  <span>Visa</span>
+                </div>
               </div>
-              <Switch
-                id="email-invoices"
-                checked={true}
-                onCheckedChange={() => {}}
-                aria-label="Enable email invoices"
-              />
             </div>
-
-            <div className="flex gap-4">
+            <div className="flex items-center gap-2">
               <Button
-                variant="secondary"
+                variant="ghost"
                 size="sm"
-                onClick={() => {}}
-                className="text-sm"
+                className="text-primary hover:text-primary/80"
               >
-                <Download className="w-4 h-4 mr-2" />
-                Download Latest Invoice
+                Edit
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Remove
               </Button>
             </div>
           </div>
-        </Card>
+        </div>
       </div>
-    </motion.div>
-  )
+    </DetailCard>
 
+    {/* Billing Details Grid */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Billing Address */}
+      <DetailCard
+        title="Billing Address"
+        icon={<Building className="h-4 w-4" />}
+        onEdit={() => {}}
+      >
+        <div className="p-4 bg-muted/50 border border-border rounded-lg">
+          <div className="space-y-1 text-sm">
+            <p className="font-medium text-foreground">Acme Corporation</p>
+            <p className="text-muted-foreground">123 Business Street</p>
+            <p className="text-muted-foreground">Suite 100</p>
+            <p className="text-muted-foreground">San Francisco, CA 94105</p>
+            <p className="text-muted-foreground">United States</p>
+          </div>
+        </div>
+      </DetailCard>
+
+      {/* Invoice Preferences */}
+      <DetailCard
+        title="Invoice Preferences"
+        icon={<FileText className="h-4 w-4" />}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-4 bg-muted/50 border border-border rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <Download className="h-4 w-4 text-primary" />
+              </div>
+              <Label htmlFor="email-invoices" className="cursor-pointer">
+                <p className="text-sm font-medium text-foreground">
+                  Email invoices
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Receive invoices via email
+                </p>
+              </Label>
+            </div>
+            <Switch
+              id="email-invoices"
+              checked={true}
+              onCheckedChange={() => {}}
+              aria-label="Enable email invoices"
+            />
+          </div>
+
+          <Button variant="outline" size="sm">
+            <Download className="h-4 w-4 mr-2" />
+            Download Latest Invoice
+          </Button>
+        </div>
+      </DetailCard>
+    </div>
+  </motion.div>
+)

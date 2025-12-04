@@ -318,7 +318,7 @@ export const DashboardLayout = memo(({
                     <button
                       onClick={handleLogout}
                       className={cn(
-                        "w-full flex items-center gap-2 px-2.5 py-1.5 text-xs text-red-400 hover:bg-red-500/10 rounded transition-colors",
+                        "w-full flex items-center gap-2 px-2.5 py-1.5 text-xs text-destructive hover:bg-destructive/10 rounded transition-colors",
                         isCollapsed && "justify-center px-2"
                       )}
                     >
@@ -415,7 +415,7 @@ export const DashboardLayout = memo(({
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold">Keyboard Shortcuts</h3>
+                <h3 className="text-lg font-medium">Keyboard Shortcuts</h3>
                 <Button
                   onClick={() => setShowShortcuts(false)}
                   variant="ghost"

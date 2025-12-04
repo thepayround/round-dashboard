@@ -28,7 +28,7 @@ interface DetailsListProps {
 
 const badgeVariantStyles = {
   default: 'bg-primary/10 text-primary border-primary/20',
-  success: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  success: 'bg-success/10 text-success border-success/20',
   destructive: 'bg-destructive/10 text-destructive border-destructive/20',
   outline: 'bg-transparent text-foreground border-border',
   secondary: 'bg-muted text-muted-foreground border-border',

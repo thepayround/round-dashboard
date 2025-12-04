@@ -285,7 +285,7 @@ export const EmailConfirmationPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-6"
               >
-                <Alert className="bg-blue-500/10 border-blue-500/20 text-blue-400">
+                <Alert className="bg-primary/10 border-primary/20 text-primary">
                   <Mail className="h-4 w-4" />
                   <AlertDescription>{resendMessage}</AlertDescription>
                 </Alert>

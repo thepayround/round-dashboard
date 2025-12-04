@@ -30,10 +30,10 @@ const toastVariants = cva(
         default: "border bg-background text-foreground",
         destructive:
           "destructive group border-destructive bg-destructive text-destructive-foreground",
-        success: "border-green-500/50 bg-green-950/50 text-green-100",
-        error: "border-red-500/50 bg-red-950/50 text-red-100",
-        warning: "border-yellow-500/50 bg-yellow-950/50 text-yellow-100",
-        info: "border-blue-500/50 bg-blue-950/50 text-blue-100",
+        success: "border-success/50 bg-success/10 text-success",
+        error: "border-destructive/50 bg-destructive/10 text-destructive",
+        warning: "border-warning/50 bg-warning/10 text-warning",
+        info: "border-primary/50 bg-primary/10 text-primary",
       },
     },
     defaultVariants: {
@@ -79,7 +79,7 @@ const ToastClose = React.forwardRef<
   <ToastPrimitives.Close
     ref={ref}
     className={cn(
-      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
+      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-destructive-foreground group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive group-[.destructive]:focus:ring-offset-destructive",
       className
     )}
     toast-close=""
@@ -96,7 +96,7 @@ const ToastTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Title
     ref={ref}
-    className={cn("text-sm font-semibold", className)}
+    className={cn("text-sm font-medium", className)}
     {...props}
   />
 ))

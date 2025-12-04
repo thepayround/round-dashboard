@@ -42,7 +42,7 @@ export const AddressCard = ({ address }: AddressCardProps) => {
           {address.isPrimary && (
             <Badge
               variant="outline"
-              className="text-[10px] uppercase tracking-wider font-medium bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+              className="text-[10px] uppercase tracking-wider font-medium bg-success/10 text-success border-success/20"
             >
               Primary
             </Badge>

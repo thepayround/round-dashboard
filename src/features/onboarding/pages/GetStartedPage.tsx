@@ -121,9 +121,9 @@ export const GetStartedPage = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 mb-6"
+              className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 mb-6"
             >
-              <div className="flex items-center space-x-2 text-primary">
+              <div className="flex items-center space-x-2 text-destructive">
                 <AlertCircle className="w-5 h-5" />
                 <span className="text-sm font-medium">{apiError}</span>
               </div>

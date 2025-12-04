@@ -27,6 +27,7 @@ export const SocialLoginButton = ({
       type={type}
       variant="outline"
       disabled={disabled || isLoading}
+      aria-busy={isLoading}
       className={cn('w-full', className)}
       {...props}
     >

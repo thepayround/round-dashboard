@@ -1,97 +1,80 @@
-﻿import { motion } from 'framer-motion'
-import { Lock, Eye, AlertTriangle, Key, Users } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Shield, Eye, Key, Users } from 'lucide-react'
 import React from 'react'
 
+import { DetailCard, StatusBadge } from '@/shared/ui/DetailCard'
 import { Button } from '@/shared/ui/shadcn/button'
-import { Card } from '@/shared/ui/shadcn/card'
-
 
 export const SecuritySection: React.FC = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="space-y-6"
-    >
-      <div>
-        <h1 className="text-lg font-medium text-white mb-4">
-          Security{' '}
-          <span className="text-primary">
-            Settings
-          </span>
-        </h1>
-        <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
-          Manage security policies, authentication, and audit logs
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="space-y-6"
+  >
+    {/* Security Policies */}
+    <DetailCard title="Security Policies" icon={<Shield className="h-4 w-4" />}>
+      <p className="text-sm text-muted-foreground mb-6">
+        Configure organization-wide security settings
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-4 bg-muted/50 border border-border rounded-lg">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Key className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium text-foreground">
+                Two-Factor Authentication
+              </span>
+            </div>
+            <StatusBadge status="disabled" />
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Require 2FA for all organization members
+          </p>
+          <Button variant="default" size="sm" className="w-full">
+            Enable 2FA
+          </Button>
+        </div>
+
+        <div className="p-4 bg-muted/50 border border-border rounded-lg">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-success" />
+              <span className="text-sm font-medium text-foreground">
+                SSO Integration
+              </span>
+            </div>
+            <StatusBadge status="active" />
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Single Sign-On with Google Workspace
+          </p>
+          <Button variant="outline" size="sm" className="w-full">
+            Configure SSO
+          </Button>
+        </div>
+      </div>
+    </DetailCard>
+
+    {/* Audit Logs */}
+    <DetailCard title="Audit Logs" icon={<Eye className="h-4 w-4" />}>
+      <p className="text-sm text-muted-foreground mb-6">
+        Recent security events and user activities
+      </p>
+
+      <div className="text-center py-12">
+        <Eye className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
+        <h3 className="text-sm font-medium text-foreground mb-2">
+          Security Monitoring
+        </h3>
+        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+          Configure security policies, audit logs, and access controls.
+        </p>
+        <p className="text-xs text-muted-foreground/70 mt-3">
+          This section is coming soon...
         </p>
       </div>
-
-      {/* Security Policies */}
-      <Card className="p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="p-2 bg-primary/20 rounded-lg">
-            <Lock className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h3 className="text-sm font-normal tracking-tight text-white">Security Policies</h3>
-            <p className="text-xs text-gray-400">Configure organization-wide security settings</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="p-6 bg-white/5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Key className="w-4 h-4 text-blue-400" />
-                <span className="text-xs font-normal tracking-tight text-white">Two-Factor Authentication</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-red-400 rounded-full" />
-                <span className="text-xs text-gray-400">Disabled</span>
-              </div>
-            </div>
-            <p className="text-xs text-gray-400 mb-4">Require 2FA for all organization members</p>
-            <Button variant="default" className="w-full">
-              Enable 2FA
-            </Button>
-          </Card>
-
-          <Card className="p-6 bg-white/5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-success" />
-                <span className="text-xs font-normal tracking-tight text-white">SSO Integration</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-success rounded-full" />
-                <span className="text-xs text-gray-400">Active</span>
-              </div>
-            </div>
-            <p className="text-xs text-gray-400 mb-4">Single Sign-On with Google Workspace</p>
-            <Button variant="ghost" className="w-full">
-              Configure SSO
-            </Button>
-          </Card>
-        </div>
-      </Card>
-
-      {/* Audit Logs */}
-      <Card className="p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="p-2 bg-primary/20 rounded-lg">
-            <Eye className="w-5 h-5 text-secondary" />
-          </div>
-          <div>
-            <h3 className="text-sm font-normal tracking-tight text-white">Audit Logs</h3>
-            <p className="text-xs text-gray-400">Recent security events and user activities</p>
-          </div>
-        </div>
-
-        <div className="text-center py-12">
-          <AlertTriangle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-white mb-2">Security Monitoring</h3>
-          <p className="text-gray-400 mb-4">Configure security policies, audit logs, and access controls.</p>
-          <p className="text-gray-500 dark:text-polar-500 leading-snug">This section is coming soon...</p>
-        </div>
-      </Card>
-    </motion.div>
-  )
+    </DetailCard>
+  </motion.div>
+)

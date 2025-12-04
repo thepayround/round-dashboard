@@ -53,6 +53,33 @@ This creates a subtle "lift" effect where floating elements (dropdowns, popovers
 <div style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>
 ```
 
+### Semantic Color Token Mapping
+
+**CRITICAL:** Never use raw Tailwind color classes. Always use semantic tokens.
+
+| Intent | Semantic Token | ❌ Do NOT Use |
+|--------|---------------|---------------|
+| Success/Active | `text-success`, `bg-success/10` | `text-emerald-*`, `text-green-*` |
+| Error/Danger | `text-destructive`, `bg-destructive/10` | `text-red-*` |
+| Warning | `text-warning`, `bg-warning/10` | `text-yellow-*`, `text-amber-*` |
+| Primary brand | `text-primary`, `bg-primary/10` | `text-blue-*` |
+| Secondary | `text-secondary`, `bg-secondary/10` | `text-cyan-*`, `text-sky-*` |
+| Accent | `text-accent`, `bg-accent/10` | `text-purple-*`, `text-violet-*` |
+| Muted/Disabled | `text-muted-foreground` | `text-gray-*`, `text-zinc-*` |
+| Borders | `border-border` | `border-white/*`, `border-zinc-*` |
+
+```tsx
+// ✅ Correct - Semantic tokens
+<span className="text-success">Active</span>
+<span className="text-destructive">Error</span>
+<div className="border-border">Content</div>
+
+// ❌ Wrong - Raw Tailwind colors
+<span className="text-emerald-500">Active</span>
+<span className="text-red-500">Error</span>
+<div className="border-white/10">Content</div>
+```
+
 ## Typography
 
 ### Font Family
@@ -69,8 +96,15 @@ This creates a subtle "lift" effect where floating elements (dropdowns, popovers
 
 ### Font Weights
 - `font-normal` - 400 (body text)
-- `font-medium` - 500 (labels, emphasized text)
-- `font-semibold` - 600 (headings, important labels)
+- `font-medium` - 500 (labels, emphasized text, **maximum weight for UI**)
+
+**IMPORTANT:** Do NOT use `font-semibold` or `font-bold` in UI components. The maximum font weight is `font-medium` (500) for visual consistency. This applies to:
+
+- Card titles and headers
+- Modal titles
+- Section headings
+- Labels and emphasized text
+- KPI values and metrics
 
 ### Letter Spacing
 - `tracking-tight` - -0.01em (default for headings)
@@ -155,6 +189,30 @@ import { Button } from '@/shared/ui/shadcn/button'
 
 // Ghost/minimal
 <Button variant="ghost">Close</Button>
+```
+
+**Button Sizing Standards:**
+
+| Context | Size | Height | Usage |
+|---------|------|--------|-------|
+| Form submit buttons | `default` | h-9 (36px) | Save, Submit, Change Password |
+| Page actions | `default` | h-9 (36px) | Create, Export, primary CTA |
+| Inline/compact | `sm` | h-8 (32px) | Table row actions, inline edits |
+| Icon-only | `icon` | h-9 w-9 | Toggle buttons, close buttons |
+
+**IMPORTANT:** Do NOT use `size="sm"` for form submit buttons. Form actions should use default size for better accessibility and visual hierarchy.
+
+**Button Group Spacing:**
+
+```tsx
+// ✅ Correct - gap-2 for button groups
+<div className="flex justify-end gap-2">
+  <Button variant="outline">Cancel</Button>
+  <Button>Save</Button>
+</div>
+
+// ❌ Wrong - gap-3 is too wide
+<div className="flex justify-end gap-3">
 ```
 
 ### Inputs

@@ -20,7 +20,7 @@ export const KPICard = ({ label, value, delta, trend, icon }: KPICardProps) => {
   const trendConfig = {
     up: {
       icon: TrendingUp,
-      className: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
+      className: 'text-success bg-success/10 border-success/20',
     },
     down: {
       icon: TrendingDown,
@@ -61,7 +61,7 @@ export const KPICard = ({ label, value, delta, trend, icon }: KPICardProps) => {
               </span>
             </div>
           </div>
-          <p className="text-3xl font-semibold tracking-tight text-foreground">
+          <p className="text-3xl font-medium tracking-tight text-foreground">
             {value}
           </p>
         </div>

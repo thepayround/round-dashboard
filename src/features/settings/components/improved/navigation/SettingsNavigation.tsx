@@ -2,6 +2,7 @@
 import { Settings } from 'lucide-react'
 import React from 'react'
 
+import { Button } from '@/shared/ui/shadcn/button'
 import { Card } from '@/shared/ui/shadcn/card'
 
 
@@ -30,7 +31,7 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
       className="lg:sticky lg:top-6 lg:self-start"
     >
       <Card className="overflow-hidden p-0">
-        <div className="p-3 border-b border-white/8">
+        <div className="p-3 border-b border-border">
           <div className="flex items-center gap-2">
             <Settings className="w-3 h-3 text-gray-400" />
             <span className="text-sm font-normal text-gray-300 tracking-tight">Settings</span>
@@ -43,32 +44,33 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
             const isActive = activeSection === section.id
             
             return (
-              <button
+              <Button
                 key={section.id}
+                variant="ghost"
                 onClick={() => onSectionChange(section.id)}
-                className={`w-full flex items-center justify-between p-3 rounded-lg transition-all duration-200 group text-left mb-1 ${
+                className={`w-full h-auto justify-start p-3 mb-1 group ${
                   isActive
-                    ? 'bg-primary/10 text-white border border-primary/20 shadow-glass-sm'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
+                    ? 'bg-primary/10 text-foreground border border-primary/20'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted border border-transparent'
                 }`}
               >
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <div className={`p-1.5 rounded-lg transition-all duration-200 ${
-                    isActive 
-                      ? 'bg-primary/20' 
-                      : 'bg-white/5 group-hover:bg-white/10'
+                    isActive
+                      ? 'bg-primary/20'
+                      : 'bg-muted group-hover:bg-muted/80'
                   }`}>
                     <IconComponent className={`w-3 h-3 transition-all duration-200 ${
-                      isActive 
-                        ? 'text-primary' 
-                        : 'group-hover:text-white'
+                      isActive
+                        ? 'text-primary'
+                        : 'text-muted-foreground group-hover:text-foreground'
                     }`} />
                   </div>
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 flex-1 text-left">
                     <p className="text-xs font-normal tracking-tight truncate">{section.label}</p>
                   </div>
                 </div>
-              </button>
+              </Button>
             )
           })}
         </nav>

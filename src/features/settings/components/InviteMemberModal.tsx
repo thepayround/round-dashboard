@@ -65,7 +65,9 @@ export const InviteMemberModal = ({
           className="space-y-6 pt-4"
         >
           <div className="space-y-2">
-            <Label htmlFor="invite-email">Email Address</Label>
+            <Label htmlFor="invite-email">
+              Email Address <span className="text-destructive">*</span>
+            </Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -76,12 +78,17 @@ export const InviteMemberModal = ({
                 placeholder="colleague@company.com"
                 className="pl-10"
                 required
+                aria-required="true"
+                aria-invalid={!!error}
+                aria-describedby={error ? 'invite-error' : undefined}
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="invite-role">Select Role</Label>
+            <Label htmlFor="invite-role">
+              Select Role <span className="text-destructive">*</span>
+            </Label>
             <Combobox
               id="invite-role"
               options={ROLE_OPTIONS}
@@ -94,8 +101,8 @@ export const InviteMemberModal = ({
           </div>
 
           {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
+            <Alert variant="destructive" role="alert" aria-live="polite">
+              <AlertDescription id="invite-error">{error}</AlertDescription>
             </Alert>
           )}
 
@@ -112,6 +119,7 @@ export const InviteMemberModal = ({
               type="button"
               onClick={handleSubmit}
               disabled={isLoading || isSubmitDisabled}
+              aria-busy={isLoading}
             >
               {isLoading ? (
                 <>
