@@ -128,7 +128,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                   key={invitation.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-3 rounded-lg bg-muted border border-[#2c2d31]"
+                  className="p-3 rounded-lg bg-muted border border-border"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">

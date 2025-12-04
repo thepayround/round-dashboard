@@ -72,7 +72,7 @@ export const useSearchFilterToolbarController = ({
       case 'custom':
         return (
           <div key={field.id}>
-            <span className="block text-sm font-normal text-white/80 tracking-tight mb-2">
+            <span className="block text-sm font-normal text-muted-foreground tracking-tight mb-2">
               {field.label}
             </span>
             {field.component}

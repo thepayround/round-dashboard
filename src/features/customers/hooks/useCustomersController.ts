@@ -179,15 +179,27 @@ export const useCustomersController = (): UseCustomersControllerResult => {
       const response = await customerService.getAll(searchParams)
 
       const filteredItems = response.items.filter((customer) => {
-        if (typeFilter && customer.type !== typeFilter) return false
+        // Type filter: case-insensitive comparison
+        if (typeFilter) {
+          const customerType = customer.type?.toLowerCase() ?? ''
+          const filterType = typeFilter.toLowerCase()
+          if (customerType !== filterType) return false
+        }
 
+        // Status filter: uses normalization function for label mapping
         if (statusLabelFilter) {
           const customerStatus = normalizeStatus(String(customer.status))
           if (customerStatus !== statusLabelFilter && String(customer.status) !== statusFilter) return false
         }
 
-        if (currencyFilter && customer.currency !== currencyFilter) return false
+        // Currency filter: case-insensitive comparison
+        if (currencyFilter) {
+          const customerCurrency = customer.currency?.toUpperCase() ?? ''
+          const filterCurrency = currencyFilter.toUpperCase()
+          if (customerCurrency !== filterCurrency) return false
+        }
 
+        // Portal access filter: boolean comparison (string to boolean conversion)
         if (portalAccessFilter) {
           const wantsPortalAccess = portalAccessFilter === 'true'
           if (customer.portalAccess !== wantsPortalAccess) return false

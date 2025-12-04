@@ -150,8 +150,8 @@ export const Drawer: React.FC<DrawerProps> = ({
             transition={panelTransition}
             className={cn(
               "fixed inset-y-0 right-0 w-full md:w-[400px] lg:w-[450px]",
-              "bg-input",
-              "border-l border-[#1e1f22]",
+              "bg-card",
+              "border-l border-border",
               "z-[70]",
               "flex flex-col",
               className
@@ -161,10 +161,10 @@ export const Drawer: React.FC<DrawerProps> = ({
             aria-labelledby="drawer-title"
           >
             {/* Header */}
-            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-[#1e1f22] sticky top-0 bg-input z-10">
+            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-border sticky top-0 bg-card z-10">
               <h2
                 id="drawer-title"
-                className="text-xl font-medium tracking-tight text-white"
+                className="text-xl font-medium tracking-tight text-foreground"
               >
                 {title}
               </h2>
@@ -175,7 +175,7 @@ export const Drawer: React.FC<DrawerProps> = ({
                 variant="ghost"
                 size="icon"
                 aria-label={`Close ${title.toLowerCase()}`}
-                className="hover:bg-white/10"
+                className="hover:bg-muted"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -196,8 +196,8 @@ export const Drawer: React.FC<DrawerProps> = ({
                 <div className="space-y-6 animate-pulse">
                   {[1, 2, 3].map((i) => (
                     <div key={i}>
-                      <div className="h-4 bg-white/10 rounded w-24 mb-2" />
-                      <div className="h-10 bg-white/10 rounded" />
+                      <div className="h-4 bg-muted rounded w-24 mb-2" />
+                      <div className="h-10 bg-muted rounded" />
                     </div>
                   ))}
                 </div>

@@ -225,7 +225,7 @@ export const SearchFilterToolbar: React.FC<SearchFilterToolbarProps> = ({
 
         {/* Clear All Button inside panel */}
         {onClearFilters && hasActiveFilters && (
-          <div className="mt-6 pt-6 border-t border-[#1e1f22]">
+          <div className="mt-6 pt-6 border-t border-border">
             <Button
               type="button"
               onClick={onClearFilters}

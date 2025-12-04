@@ -40,10 +40,10 @@ export const FilterChipsBar: React.FC<FilterChipsBarProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       className={`flex flex-wrap items-center gap-2 p-4
-                 bg-input border border-[#1e1f22] rounded-lg
+                 bg-card border border-border rounded-lg
                  ${className}`}
     >
-      <span className="text-sm text-white/60 mr-1">Active filters:</span>
+      <span className="text-sm text-muted-foreground mr-1">Active filters:</span>
 
       <AnimatePresence mode="popLayout">
         {filters.map((filter) => (

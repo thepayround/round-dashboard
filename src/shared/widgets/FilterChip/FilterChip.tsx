@@ -24,21 +24,21 @@ export const FilterChip = React.forwardRef<HTMLDivElement, FilterChipProps>(
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.15 }}
         className="inline-flex items-center gap-2 px-3 py-1.5
-                 bg-primary/10
-                 border border-primary/20
-                 rounded-lg text-sm text-white/90
-                 hover:bg-primary/15 hover:border-primary/30 transition-all group"
+                 bg-secondary/10
+                 border border-secondary/20
+                 rounded-lg text-sm text-foreground
+                 hover:bg-secondary/15 hover:border-secondary/30 transition-all group"
       >
-        <span className="font-medium text-white/70">{label}:</span>
-        <span className="text-white">{value}</span>
+        <span className="font-medium text-muted-foreground">{label}:</span>
+        <span className="text-foreground">{value}</span>
         <Button
           onClick={onRemove}
           variant="ghost"
           size="icon"
-          className="p-0.5 hover:bg-white/10 rounded transition-colors ml-1 h-5 w-5"
+          className="p-0.5 hover:bg-muted rounded transition-colors ml-1 h-5 w-5"
           aria-label={`Remove ${label} filter`}
         >
-          <X className="w-3.5 h-3.5 text-white/60 group-hover:text-white transition-colors" />
+          <X className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
         </Button>
       </motion.div>
     )
