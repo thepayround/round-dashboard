@@ -10,7 +10,6 @@ export const HomePage = () => (
         alt="Round Logo"
         className="h-24 w-24"
         loading="eager"
-        fetchPriority="high"
       />
       <div className="text-center">
         <h1 className="text-5xl font-semibold text-foreground mb-4 tracking-tight">Round</h1>

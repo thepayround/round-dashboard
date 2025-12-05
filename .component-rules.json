@@ -471,6 +471,118 @@
         "*.test.tsx",
         "*.stories.tsx"
       ]
+    },
+    {
+      "name": "No text-white in UI components",
+      "pattern": "text-white[^/]|text-white$",
+      "message": "Use text-foreground instead of text-white for semantic color consistency",
+      "suggestion": "Replace text-white with text-foreground",
+      "severity": "error",
+      "excludePaths": [
+        "src/shared/constants/designTokens.ts",
+        "src/shared/ui/shadcn/",
+        "src/shared/widgets/Stepper/",
+        "src/features/auth/",
+        "tailwind.config.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No text-gray-* in UI components",
+      "pattern": "text-gray-[0-9]+",
+      "message": "Use text-muted-foreground instead of text-gray-* for semantic color consistency",
+      "suggestion": "Replace text-gray-* with text-muted-foreground",
+      "severity": "error",
+      "excludePaths": [
+        "src/shared/constants/designTokens.ts",
+        "src/shared/ui/shadcn/",
+        "src/features/auth/",
+        "tailwind.config.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No bg-gray-* in UI components",
+      "pattern": "bg-gray-[0-9]+",
+      "message": "Use bg-muted or bg-card instead of bg-gray-* for semantic color consistency",
+      "suggestion": "Replace bg-gray-* with bg-muted or bg-card",
+      "severity": "error",
+      "excludePaths": [
+        "src/shared/constants/designTokens.ts",
+        "src/shared/ui/shadcn/",
+        "src/features/auth/",
+        "tailwind.config.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No legacy text-fg token",
+      "pattern": "text-fg[^-r]|text-fg$",
+      "message": "Use text-foreground instead of legacy text-fg token",
+      "suggestion": "Replace text-fg with text-foreground",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No legacy text-fg-muted token",
+      "pattern": "text-fg-muted",
+      "message": "Use text-muted-foreground instead of legacy text-fg-muted token",
+      "suggestion": "Replace text-fg-muted with text-muted-foreground",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No hardcoded hex colors in className",
+      "pattern": "text-\\[#[0-9A-Fa-f]+\\]|bg-\\[#[0-9A-Fa-f]+\\]|border-\\[#[0-9A-Fa-f]+\\]",
+      "message": "Use semantic color tokens instead of hardcoded hex colors in className",
+      "suggestion": "Replace with semantic tokens: text-primary, text-secondary, text-accent, etc.",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "src/shared/constants/designTokens.ts",
+        "src/shared/ui/shadcn/",
+        "src/features/auth/",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
+    },
+    {
+      "name": "No Tailwind orange color classes",
+      "pattern": "text-orange-|bg-orange-|border-orange-",
+      "message": "Use semantic 'warning' token instead of Tailwind orange colors",
+      "suggestion": "Replace text-orange-* with text-warning, bg-orange-* with bg-warning or bg-warning/20, border-orange-* with border-warning",
+      "severity": "error",
+      "excludePaths": [
+        "tailwind.config.ts",
+        "tailwind.config.js",
+        "src/index.css",
+        "*.md",
+        "*.test.tsx",
+        "*.stories.tsx"
+      ]
     }
   ]
 }

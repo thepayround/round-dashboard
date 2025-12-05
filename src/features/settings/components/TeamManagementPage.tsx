@@ -133,7 +133,7 @@ export const TeamManagementPage: React.FC = () => {
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
           <LoadingSpinner size="lg" />
-          <p className="text-white/70 mt-4">Loading team data...</p>
+          <p className="text-muted-foreground mt-4">Loading team data...</p>
         </div>
       </div>
     )
@@ -144,8 +144,8 @@ export const TeamManagementPage: React.FC = () => {
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-white mb-2">Error Loading Team</h3>
-          <p className="text-gray-400 mb-4">{error}</p>
+          <h3 className="text-lg font-medium text-foreground mb-2">Error Loading Team</h3>
+          <p className="text-muted-foreground mb-4">{error}</p>
           <Button
             onClick={refreshTeam}
             variant="secondary"
@@ -164,13 +164,13 @@ export const TeamManagementPage: React.FC = () => {
         <div>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-lg font-medium text-white mb-4">
+              <h1 className="text-lg font-medium text-foreground mb-4">
                 Team{' '}
                 <span className="text-primary">
                   Management
                 </span>
               </h1>
-              <p className="text-gray-500 dark:text-polar-500 leading-snug mb-4">
+              <p className="text-muted-foreground leading-snug mb-4">
                 Manage team members, roles, and invitations
               </p>
             </div>
@@ -232,16 +232,16 @@ export const TeamManagementPage: React.FC = () => {
           {activeTab === 'members' ? (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-medium text-white">Team Members ({filteredMembers.length})</h2>
+                <h2 className="text-lg font-medium text-foreground">Team Members ({filteredMembers.length})</h2>
               </div>
 
               {filteredMembers.length === 0 ? (
                 <div className="text-center py-12">
-                  <Users className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white mb-2">
+                  <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-foreground mb-2">
                     {currentSearchQuery || roleFilter !== 'all' ? 'No members found' : 'No team members yet'}
                   </h3>
-                  <p className="text-gray-400 mb-6">
+                  <p className="text-muted-foreground mb-6">
                     {currentSearchQuery || roleFilter !== 'all'
                       ? 'Try adjusting your search or filter criteria'
                       : 'Start building your team by inviting members'
@@ -269,16 +269,16 @@ export const TeamManagementPage: React.FC = () => {
           ) : (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-medium text-white">Invitations ({filteredInvitations.length})</h2>
+                <h2 className="text-lg font-medium text-foreground">Invitations ({filteredInvitations.length})</h2>
               </div>
 
               {filteredInvitations.length === 0 ? (
                 <div className="text-center py-12">
-                  <Mail className="w-16 h-16 text-gray-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white mb-2">
+                  <Mail className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-foreground mb-2">
                     {currentSearchQuery || roleFilter !== 'all' ? 'No invitations found' : 'No pending invitations'}
                   </h3>
-                  <p className="text-gray-400 mb-6">
+                  <p className="text-muted-foreground mb-6">
                     {currentSearchQuery || roleFilter !== 'all'
                       ? 'Try adjusting your search or filter criteria'
                       : 'All team members are already active'
@@ -302,11 +302,11 @@ export const TeamManagementPage: React.FC = () => {
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center">
-                              <Mail className="w-6 h-6 text-gray-400" />
+                            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
+                              <Mail className="w-6 h-6 text-muted-foreground" />
                             </div>
                             <div>
-                              <h3 className="text-white font-medium">{invitation.email}</h3>
+                              <h3 className="text-foreground font-medium">{invitation.email}</h3>
                               <div className="flex items-center space-x-4 mt-1">
                                 <div className="flex items-center space-x-1">
                                   <RoleIcon className={`w-4 h-4 ${roleConfig.color}`} />
@@ -322,7 +322,7 @@ export const TeamManagementPage: React.FC = () => {
                                 </div>
                               </div>
                               {invitation.invitedByName && (
-                                <p className="text-xs text-gray-400 mt-1">
+                                <p className="text-xs text-muted-foreground mt-1">
                                   Invited by {invitation.invitedByName}
                                 </p>
                               )}
@@ -330,10 +330,10 @@ export const TeamManagementPage: React.FC = () => {
                           </div>
                           <div className="flex items-center space-x-4">
                             <div className="text-right">
-                              <p className="text-xs text-gray-400">Invited</p>
-                              <p className="text-sm text-white">{formatDate(invitation.invitedAt)}</p>
+                              <p className="text-xs text-muted-foreground">Invited</p>
+                              <p className="text-sm text-foreground">{formatDate(invitation.invitedAt)}</p>
                               {invitation.expiresAt && (
-                                <p className="text-xs text-gray-400 mt-1">
+                                <p className="text-xs text-muted-foreground mt-1">
                                   Expires {formatDate(invitation.expiresAt)}
                                 </p>
                               )}

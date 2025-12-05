@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 
-import { Button } from '../../ui/shadcn/button'
+import { cn } from '@/shared/utils/cn'
 
 export interface StepIndicatorProps {
   number: number
@@ -20,86 +20,66 @@ export const StepIndicator = ({
   onClick,
   label,
 }: StepIndicatorProps) => {
-  const circleConfig = (() => {
+  const getCircleStyles = () => {
     if (isActive) {
-      return {
-        variant: 'primary' as const,
-        glow: true,
-        className: '!text-white hover:scale-110 active:scale-95',
-      }
+      return 'bg-primary text-primary-foreground border-primary'
     }
     if (isCompleted) {
-      return {
-        variant: 'success' as const,
-        glow: false,
-        className: '!text-white hover:scale-105',
-      }
+      return 'bg-primary text-primary-foreground border-primary'
     }
-    if (isClickable) {
-      return {
-        variant: 'ghost' as const,
-        glow: false,
-        className: '!text-white hover:scale-105',
-      }
-    }
-    return {
-      variant: 'outline' as const,
-      glow: false,
-      className: '!text-white/60 cursor-default',
-    }
-  })()
+    // Future steps (clickable or not)
+    return 'bg-muted text-muted-foreground border-border'
+  }
 
-  const labelClasses = (() => {
-    if (isActive || isCompleted) {
-      return '!text-white font-medium'
+  const getLabelStyles = () => {
+    if (isActive) {
+      return 'text-foreground'
     }
-    if (isClickable) {
-      return '!text-white/70 hover:!text-white'
+    if (isCompleted) {
+      return 'text-foreground'
     }
-    return '!text-white/60 cursor-default'
-  })()
+    return 'text-muted-foreground'
+  }
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      {/* Circular Indicator Button */}
-      <Button
+    <div className="flex flex-col items-center gap-3">
+      {/* Circular Indicator */}
+      <motion.button
         type="button"
-        onClick={onClick}
+        onClick={isClickable ? onClick : undefined}
         disabled={!isClickable}
-        className={`h-12 w-12 rounded-full p-0 transition-all duration-300 ease-out focus-visible:ring-primary/60 focus-visible:ring-offset-[#000000] ${circleConfig.className}`}
-        variant={circleConfig.variant === 'primary' ? 'default' : circleConfig.variant === 'success' ? 'default' : circleConfig.variant}
+        className={cn(
+          'h-10 w-10 rounded-full border-2 flex items-center justify-center transition-all duration-200',
+          getCircleStyles(),
+          isClickable && 'cursor-pointer hover:scale-105',
+          !isClickable && 'cursor-default'
+        )}
+        whileHover={isClickable ? { scale: 1.05 } : undefined}
+        whileTap={isClickable ? { scale: 0.95 } : undefined}
         aria-label={`Step ${number}: ${label}${isCompleted ? ' (completed)' : ''}${isActive ? ' (current)' : ''}`}
         aria-current={isActive ? 'step' : undefined}
       >
-        <motion.div
-          initial={false}
-          animate={{
-            scale: isActive ? 1.05 : 1,
-          }}
-          transition={{ duration: 0.2 }}
-          className="flex items-center justify-center"
-        >
-          {isCompleted ? (
-            <Check className="w-5 h-5" strokeWidth={3} />
-          ) : (
-            <span className="text-sm font-medium">
-              {number}
-            </span>
-          )}
-        </motion.div>
-      </Button>
+        {isCompleted ? (
+          <Check className="w-5 h-5" strokeWidth={2.5} />
+        ) : (
+          <span className="text-sm font-medium">{number}</span>
+        )}
+      </motion.button>
 
       {/* Label */}
-      <Button
+      <button
         type="button"
-        onClick={onClick}
+        onClick={isClickable ? onClick : undefined}
         disabled={!isClickable}
-        className={`text-xs font-normal text-center max-w-[120px] rounded-full ${labelClasses}`}
-        size="sm"
-        variant={isActive || isCompleted ? 'secondary' : 'ghost'}
+        className={cn(
+          'text-sm text-center px-3 py-1 rounded-md transition-colors',
+          getLabelStyles(),
+          isClickable && 'cursor-pointer hover:text-foreground',
+          !isClickable && 'cursor-default'
+        )}
       >
         {label}
-      </Button>
+      </button>
     </div>
   )
 }

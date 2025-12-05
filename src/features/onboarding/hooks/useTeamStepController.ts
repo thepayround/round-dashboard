@@ -66,7 +66,7 @@ const getRoleBadgeColor = (role: string): string => {
     return 'bg-secondary/20 text-secondary border-secondary/30'
   }
   if (roleLower.includes('viewer') || roleLower.includes('guest')) {
-    return 'bg-gray-400/20 text-gray-400 border-gray-400/30'
+    return 'bg-muted text-muted-foreground border-border'
   }
 
   return 'bg-secondary/20 text-secondary border-secondary/30'

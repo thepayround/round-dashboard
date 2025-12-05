@@ -17,7 +17,6 @@ export const AuthLayout = ({ children }: AuthLayoutProps = {}) => (
           alt="Round Logo"
           className="h-10 w-10"
           loading="eager"
-          fetchPriority="high"
         />
       </Link>
     </div>

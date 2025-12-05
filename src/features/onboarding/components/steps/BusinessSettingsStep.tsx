@@ -6,6 +6,7 @@ import type { BusinessSettings } from '../../types/onboarding'
 
 import { Combobox } from '@/shared/ui/Combobox'
 import type { ComboboxOption } from '@/shared/ui/Combobox/types'
+import { Label } from '@/shared/ui/shadcn/label'
 
 // Timezone options
 const timezoneOptions: ComboboxOption<string>[] = [
@@ -61,22 +62,22 @@ export const BusinessSettingsStep = ({
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-lg bg-accent/20 border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-accent/20 border border-accent/20 flex items-center justify-center"
         >
           <Settings className="w-8 h-8 text-accent" />
         </motion.div>
 
         <div>
-          <h2 className="text-lg font-medium tracking-tight text-white mb-2">Business Settings</h2>
-          <p className="text-gray-400 text-sm">Configure your business preferences</p>
+          <h2 className="text-lg font-medium tracking-tight text-foreground mb-2">Business Settings</h2>
+          <p className="text-muted-foreground text-sm">Configure your business preferences</p>
         </div>
       </div>
 
       {/* Form */}
-      <div className="max-w-[420px] mx-auto space-y-6">
+      <div className="max-w-[520px] mx-auto space-y-5">
         {/* Timezone */}
-        <div className="grid gap-2">
-          <span className="block text-sm font-normal tracking-tight text-gray-300">Timezone</span>
+        <div className="space-y-2">
+          <Label htmlFor="timezone">Timezone</Label>
           <Combobox
             options={timezoneOptions}
             value={data.timezone}
@@ -89,8 +90,8 @@ export const BusinessSettingsStep = ({
         </div>
 
         {/* Fiscal Year Start */}
-        <div className="grid gap-2">
-          <span className="block text-sm font-normal tracking-tight text-gray-300">Fiscal Year Start</span>
+        <div className="space-y-2">
+          <Label htmlFor="fiscal-year-start">Fiscal Year Start</Label>
           <Combobox
             options={fiscalYearOptions}
             value={data.fiscalYearStart}

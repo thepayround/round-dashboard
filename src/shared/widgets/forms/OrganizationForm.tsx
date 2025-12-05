@@ -121,14 +121,14 @@ export const OrganizationForm = ({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+            className="w-16 h-16 mx-auto rounded-lg bg-gradient-to-br from-secondary/20 to-accent/20 backdrop-blur-sm border border-secondary/20 flex items-center justify-center"
           >
             <Building className="w-8 h-8 text-secondary" />
           </motion.div>
 
           <div>
-            <h2 className="text-lg font-bold text-white mb-2">{headerTitle}</h2>
-            <p className="text-gray-400 text-sm">{headerSubtitle}</p>
+            <h2 className="text-lg font-medium text-foreground mb-2">{headerTitle}</h2>
+            <p className="text-muted-foreground text-sm">{headerSubtitle}</p>
           </div>
         </div>
       )}
@@ -148,15 +148,15 @@ export const OrganizationForm = ({
               <Building className="w-5 h-5 text-secondary" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-fg">Company Identity</h3>
-              <p className="text-xs text-fg-muted">Basic company information</p>
+              <h3 className="text-sm font-medium text-foreground">Company Identity</h3>
+              <p className="text-xs text-muted-foreground">Basic company information</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Company Name */}
             <div className="space-y-2">
-              <Label htmlFor="companyName" className="text-fg-muted">
+              <Label htmlFor="companyName">
                 Company Name <span className="text-destructive">*</span>
               </Label>
               <div className="relative">
@@ -177,7 +177,7 @@ export const OrganizationForm = ({
 
             {/* Website */}
             <div className="space-y-2">
-              <Label htmlFor="website" className="text-fg-muted">
+              <Label htmlFor="website">
                 Website
               </Label>
               <div className="relative">
@@ -198,7 +198,7 @@ export const OrganizationForm = ({
 
             {/* Description - Full Width */}
             <div className="md:col-span-2 space-y-2">
-              <Label htmlFor="description" className="text-fg-muted">
+              <Label htmlFor="description">
                 Description
               </Label>
               <Textarea
@@ -228,15 +228,15 @@ export const OrganizationForm = ({
               <Building className="w-5 h-5 text-secondary" />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-fg">Business Details</h3>
-              <p className="text-xs text-fg-muted">Industry and company classification</p>
+              <h3 className="text-sm font-medium text-foreground">Business Details</h3>
+              <p className="text-xs text-muted-foreground">Industry and company classification</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Country */}
             <div className="space-y-2">
-              <Label htmlFor="country" className="text-fg-muted">
+              <Label htmlFor="country">
                 Country <span className="text-destructive">*</span>
               </Label>
               <CountrySelect
@@ -252,7 +252,7 @@ export const OrganizationForm = ({
 
             {/* Industry */}
             <div className="space-y-2">
-              <Label htmlFor="industry" className="text-fg-muted">
+              <Label htmlFor="industry">
                 Industry <span className="text-destructive">*</span>
               </Label>
               <Combobox
@@ -271,7 +271,7 @@ export const OrganizationForm = ({
 
             {/* Company Size */}
             <div className="space-y-2">
-              <Label htmlFor="companySize" className="text-fg-muted">
+              <Label htmlFor="companySize">
                 Company Size <span className="text-destructive">*</span>
               </Label>
               <Combobox
@@ -290,7 +290,7 @@ export const OrganizationForm = ({
 
             {/* Organization Type */}
             <div className="space-y-2">
-              <Label htmlFor="organizationType" className="text-fg-muted">
+              <Label htmlFor="organizationType">
                 Organization Type <span className="text-destructive">*</span>
               </Label>
               <Combobox
@@ -309,7 +309,7 @@ export const OrganizationForm = ({
 
             {/* Registration Number */}
             <div className="space-y-2">
-              <Label htmlFor="registrationNumber" className="text-fg-muted">
+              <Label htmlFor="registrationNumber">
                 Registration Number <span className="text-destructive">*</span>
               </Label>
               <Input
@@ -327,7 +327,7 @@ export const OrganizationForm = ({
 
             {/* Tax ID */}
             <div className="space-y-2">
-              <Label htmlFor="taxId" className="text-fg-muted">
+              <Label htmlFor="taxId">
                 Tax ID <span className="text-destructive">*</span>
               </Label>
               <Input
@@ -358,15 +358,15 @@ export const OrganizationForm = ({
                 <span className="text-sm font-semibold text-accent">{currencySymbol}</span>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-fg">Financial Information</h3>
-                <p className="text-xs text-fg-muted">Revenue and currency settings</p>
+                <h3 className="text-sm font-medium text-foreground">Financial Information</h3>
+                <p className="text-xs text-muted-foreground">Revenue and currency settings</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Currency */}
               <div className="space-y-2">
-                <Label htmlFor="currency" className="text-fg-muted">
+                <Label htmlFor="currency">
                   Currency <span className="text-destructive">*</span>
                 </Label>
                 <CurrencySelect
@@ -381,9 +381,8 @@ export const OrganizationForm = ({
 
               {/* Revenue */}
               <div className="space-y-2">
-                <Label htmlFor="revenue" className="text-fg-muted">
-                  Annual Revenue
-                  <span className="text-fg-subtle ml-2">({data.currency || 'USD'})</span>
+                <Label htmlFor="revenue">
+                  Annual Revenue <span className="text-muted-foreground">({data.currency || 'USD'})</span>
                 </Label>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center z-10">
@@ -425,15 +424,15 @@ export const OrganizationForm = ({
                 <span className="text-sm font-semibold text-primary">🌍</span>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-fg">Regional Settings</h3>
-                <p className="text-xs text-fg-muted">Time zone and fiscal year settings</p>
+                <h3 className="text-sm font-medium text-foreground">Regional Settings</h3>
+                <p className="text-xs text-muted-foreground">Time zone and fiscal year settings</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Time Zone */}
               <div className="space-y-2">
-                <Label htmlFor="timeZone" className="text-fg-muted">
+                <Label htmlFor="timeZone">
                   Time Zone
                 </Label>
                 <Combobox
@@ -451,7 +450,7 @@ export const OrganizationForm = ({
 
               {/* Fiscal Year Start */}
               <div className="space-y-2">
-                <Label htmlFor="fiscalYearStart" className="text-fg-muted">
+                <Label htmlFor="fiscalYearStart">
                   Fiscal Year Start
                 </Label>
                 <Combobox

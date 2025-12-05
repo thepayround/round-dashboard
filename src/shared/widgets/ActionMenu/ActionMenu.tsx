@@ -194,7 +194,7 @@ export const ActionMenu = ({
                         ? `${variantClasses[item.variant ?? 'default']} ${
                             isFocused ? 'bg-white/20' : ''
                           }`
-                        : 'text-gray-500 cursor-not-allowed'
+                        : 'text-muted-foreground cursor-not-allowed'
                     }`}
                     role="menuitem"
                     tabIndex={isEnabled ? 0 : -1}

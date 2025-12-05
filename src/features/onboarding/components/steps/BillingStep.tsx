@@ -25,14 +25,14 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          className="w-16 h-16 mx-auto rounded-lg bg-primary/20 border border-white/20 flex items-center justify-center"
+          className="w-16 h-16 mx-auto rounded-lg bg-primary/20 border border-primary/20 flex items-center justify-center"
         >
-          <CreditCard className="w-8 h-8 text-[#BD2CD0]" />
+          <CreditCard className="w-8 h-8 text-primary" />
         </motion.div>
 
         <div>
-          <h2 className="text-lg font-medium tracking-tight text-white mb-2">Billing</h2>
-          <p className="text-gray-400 text-sm">Connect your payment method</p>
+          <h2 className="text-lg font-medium tracking-tight text-foreground mb-2">Billing</h2>
+          <p className="text-muted-foreground text-sm">Connect your payment method</p>
         </div>
       </div>
 
@@ -53,8 +53,8 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                     </svg>
                   </div>
                   <div className="text-left">
-                    <h3 className="text-sm font-normal tracking-tight text-white">Connect with Stripe</h3>
-                    <p className="text-gray-400 text-xs">Secure payment processing for your business</p>
+                    <h3 className="text-sm font-normal tracking-tight text-foreground">Connect with Stripe</h3>
+                    <p className="text-muted-foreground text-xs">Secure payment processing for your business</p>
                   </div>
                 </div>
 
@@ -62,19 +62,19 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="w-5 h-5 text-success" />
-                    <span className="text-sm text-gray-300">Accept credit & debit cards</span>
+                    <span className="text-sm text-muted-foreground">Accept credit & debit cards</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="w-5 h-5 text-success" />
-                    <span className="text-sm text-gray-300">Automated recurring billing</span>
+                    <span className="text-sm text-muted-foreground">Automated recurring billing</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="w-5 h-5 text-success" />
-                    <span className="text-sm text-gray-300">Global payment methods</span>
+                    <span className="text-sm text-muted-foreground">Global payment methods</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="w-5 h-5 text-success" />
-                    <span className="text-sm text-gray-300">Advanced fraud protection</span>
+                    <span className="text-sm text-muted-foreground">Advanced fraud protection</span>
                   </div>
                 </div>
 
@@ -102,10 +102,10 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-normal tracking-tight text-white mb-2">
+                  <h3 className="text-sm font-normal tracking-tight text-foreground mb-2">
                     Payment Method Connected
                   </h3>
-                  <p className="text-gray-400">
+                  <p className="text-muted-foreground">
                     Your Stripe account has been successfully connected. You&apos;re ready to start
                     accepting payments!
                   </p>
@@ -122,7 +122,7 @@ export const BillingStep = ({ data, onChange }: BillingStepProps) => {
 
         {/* Skip Option */}
         <div className="text-center">
-          <p className="text-gray-500 dark:text-polar-500 leading-snug">
+          <p className="text-muted-foreground leading-snug">
             You can set up payment processing later in your billing settings
           </p>
         </div>

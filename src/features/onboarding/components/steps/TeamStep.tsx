@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Users, UserPlus, Mail, Trash2, Loader2 } from 'lucide-react'
+import { Users, UserPlus, Trash2, Loader2, Mail } from 'lucide-react'
 
 import type { StepComponentProps } from '../../config/types'
 import { useTeamStepController } from '../../hooks/useTeamStepController'
@@ -48,70 +48,59 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
         </motion.div>
 
         <div>
-          <h2 className="text-lg font-medium tracking-tight text-white mb-2">Team</h2>
-          <p className="text-gray-400 text-sm">Invite your team members</p>
+          <h2 className="text-lg font-medium tracking-tight text-foreground mb-2">Team</h2>
+          <p className="text-muted-foreground text-sm">Invite your team members</p>
         </div>
       </div>
 
-      <div className="space-y-6">
-        <div className="p-4">
-          <div className="space-y-4">
-            <div className="flex gap-4 items-end">
-              <div className="flex-1 space-y-2">
-                <Label htmlFor="inviteEmail" className="text-xs font-normal text-gray-400">
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="inviteEmail"
-                    type="email"
-                    value={inviteEmail}
-                    onChange={event => handleInviteEmailChange(event.target.value)}
-                    placeholder="colleague@example.com"
-                    className="pl-10 h-9"
-                  />
-                </div>
-              </div>
-              <div className="w-40 space-y-2">
-                <Label htmlFor="inviteRole" className="text-xs font-normal text-gray-400">
-                  Role
-                </Label>
-                <SimpleSelect
-                  id="inviteRole"
-                  options={[
-                    { value: 'TeamMember', label: 'Team Member' },
-                    { value: 'TeamManager', label: 'Team Manager' },
-                    { value: 'TeamOwner', label: 'Team Owner' },
-                    { value: 'Admin', label: 'Admin' },
-                    { value: 'Viewer', label: 'Viewer' }
-                  ]}
-                  value={inviteRole}
-                  onChange={handleInviteRoleChange}
-                  placeholder="Select role"
-                  className="h-9"
-                />
-              </div>
-              <Button
-                onClick={handleInviteTeamMember}
-                disabled={!canInvite}
-                variant="secondary"
-                size="default"
-                className="shrink-0 h-9"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <UserPlus className="w-4 h-4" />
-                    Invite
-                  </>
-                )}
-              </Button>
+      <div className="max-w-[520px] mx-auto space-y-6">
+        <div className="space-y-4">
+          <div className="grid grid-cols-[1fr_140px_auto] gap-4 items-end">
+            <div className="space-y-2">
+              <Label htmlFor="inviteEmail">Email Address</Label>
+              <Input
+                id="inviteEmail"
+                type="email"
+                value={inviteEmail}
+                onChange={event => handleInviteEmailChange(event.target.value)}
+                placeholder="colleague@example.com"
+              />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="inviteRole">Role</Label>
+              <SimpleSelect
+                id="inviteRole"
+                options={[
+                  { value: 'TeamMember', label: 'Team Member' },
+                  { value: 'TeamManager', label: 'Team Manager' },
+                  { value: 'TeamOwner', label: 'Team Owner' },
+                  { value: 'Admin', label: 'Admin' },
+                  { value: 'Viewer', label: 'Viewer' }
+                ]}
+                value={inviteRole}
+                onChange={handleInviteRoleChange}
+                placeholder="Select role"
+              />
+            </div>
+            <Button
+              onClick={handleInviteTeamMember}
+              disabled={!canInvite}
+              variant="secondary"
+              size="default"
+              className="shrink-0"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <UserPlus className="w-4 h-4" />
+                  Invite
+                </>
+              )}
+            </Button>
           </div>
         </div>
 
@@ -121,7 +110,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            <h4 className="text-xs font-normal tracking-tight text-white">Pending invitations</h4>
+            <h4 className="text-xs font-normal tracking-tight text-foreground">Pending invitations</h4>
             <div className="space-y-2">
               {pendingInvitations.map(invitation => (
                 <motion.div
@@ -136,14 +125,14 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
                         <Mail className="w-3 h-3 text-secondary" />
                       </div>
                       <div>
-                        <p className="text-xs font-normal tracking-tight text-white">{invitation.email}</p>
+                        <p className="text-xs font-normal tracking-tight text-foreground">{invitation.email}</p>
                         <div className="flex items-center space-x-2">
                           <span
                             className={`text-xs px-1.5 py-0.5 rounded border ${getRoleBadgeColor(invitation.role)}`}
                           >
                             {invitation.role}
                           </span>
-                          <span className="text-xs text-white/90">{invitation.status}</span>
+                          <span className="text-xs text-muted-foreground">{invitation.status}</span>
                         </div>
                       </div>
                     </div>
@@ -164,7 +153,7 @@ export const TeamStep = ({ data, onChange, showSuccess, showError }: TeamStepPro
         )}
 
         <div className="text-center">
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-muted-foreground">
             You can invite team members later from your team management page
           </p>
         </div>

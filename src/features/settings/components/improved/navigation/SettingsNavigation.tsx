@@ -33,8 +33,8 @@ export const SettingsNavigation: React.FC<SettingsNavigationProps> = ({
       <Card className="overflow-hidden p-0">
         <div className="p-3 border-b border-border">
           <div className="flex items-center gap-2">
-            <Settings className="w-3 h-3 text-gray-400" />
-            <span className="text-sm font-normal text-gray-300 tracking-tight">Settings</span>
+            <Settings className="w-3 h-3 text-muted-foreground" />
+            <span className="text-sm font-normal text-muted-foreground tracking-tight">Settings</span>
           </div>
         </div>
         

@@ -44,12 +44,12 @@ export const stepsConfig: StepsRegistry = [
       const { address } = data
       if (!address?.billingAddress) return false
       const billing = address.billingAddress
+      // Required: name, street address, city, zip code, country
+      // Optional: unit number, state (not all countries have states)
       return (
         billing.name?.trim() !== '' &&
         billing.addressLine1?.trim() !== '' &&
-        billing.number?.trim() !== '' &&
         billing.city?.trim() !== '' &&
-        billing.state?.trim() !== '' &&
         billing.zipCode?.trim() !== '' &&
         billing.country !== ''
       )

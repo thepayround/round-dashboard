@@ -90,10 +90,10 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
         >
           <Card className="p-6 text-center">
             <LoadingSpinner size="lg" className="mx-auto mb-4" />
-            <h3 className="text-sm font-medium tracking-tight text-fg mb-2">
+            <h3 className="text-sm font-medium tracking-tight text-foreground mb-2">
               {isLoadingOptions ? 'Loading Settings...' : 'Initializing...'}
             </h3>
-            <p className="text-xs text-fg-muted">
+            <p className="text-xs text-muted-foreground">
               {isLoadingOptions ? 'Preparing your preferences' : 'Setting up your account'}
             </p>
           </Card>
@@ -113,8 +113,8 @@ const UserSettingsPage: React.FC<UserSettingsPageProps> = () => {
             <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-full w-fit mx-auto mb-6">
               <AlertCircle className="w-8 h-8 text-destructive" />
             </div>
-            <h3 className="text-lg font-medium text-fg mb-2">Settings Unavailable</h3>
-            <p className="text-fg-muted mb-6">{error}</p>
+            <h3 className="text-lg font-medium text-foreground mb-2">Settings Unavailable</h3>
+            <p className="text-muted-foreground mb-6">{error}</p>
             <Button
               onClick={clearError}
               variant="default"

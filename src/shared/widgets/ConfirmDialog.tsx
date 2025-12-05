@@ -83,7 +83,7 @@ export const ConfirmDialog = ({
           </div>
           <DialogDescription asChild>
             <div className="space-y-4 pt-2">
-              <p className="text-white/70 text-[15px] leading-relaxed">
+              <p className="text-muted-foreground text-[15px] leading-relaxed">
                 {message}
               </p>
 
@@ -91,8 +91,8 @@ export const ConfirmDialog = ({
               {details && details.length > 0 && (
                 <ul className="space-y-2 ml-1">
                   {details.map((detail, index) => (
-                    <li key={index} className="flex items-start gap-2 text-white/60 text-sm">
-                      <span className="text-white/60 mt-0.5">•</span>
+                    <li key={index} className="flex items-start gap-2 text-muted-foreground/80 text-sm">
+                      <span className="text-muted-foreground/80 mt-0.5">•</span>
                       <span>{detail}</span>
                     </li>
                   ))}
@@ -106,7 +106,7 @@ export const ConfirmDialog = ({
             onClick={onClose}
             variant="ghost"
             disabled={isLoading}
-            className="text-white/70 hover:text-white hover:bg-white/5 font-medium px-6"
+            className="text-muted-foreground hover:text-foreground hover:bg-muted font-medium px-6"
           >
             {cancelLabel}
           </Button>

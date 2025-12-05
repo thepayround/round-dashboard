@@ -14,8 +14,8 @@ export const FullScreenLoader = () => (
         className="w-12 h-12 mx-auto border-[3px] border-border border-t-secondary rounded-full"
       />
       <div className="space-y-1">
-        <p className="text-sm font-normal text-white/70 tracking-tight">Loading interface</p>
-        <p className="text-xs font-light text-white/60 tracking-tight">Please wait a second</p>
+        <p className="text-sm font-normal text-muted-foreground tracking-tight">Loading interface</p>
+        <p className="text-xs font-light text-muted-foreground/80 tracking-tight">Please wait a second</p>
       </div>
     </motion.div>
   </div>

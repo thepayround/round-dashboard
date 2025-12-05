@@ -31,8 +31,8 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
         </motion.div>
 
         <div>
-          <h2 className="text-lg font-medium tracking-tight text-white mb-2">Products</h2>
-          <p className="text-gray-400 text-sm">Set up your product catalog</p>
+          <h2 className="text-lg font-medium tracking-tight text-foreground mb-2">Products</h2>
+          <p className="text-muted-foreground text-sm">Set up your product catalog</p>
         </div>
       </div>
 
@@ -46,8 +46,8 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
               </div>
 
               <div>
-                <h3 className="font-medium text-white mb-2 tracking-tight">Add Your First Product</h3>
-                <p className="text-gray-400">
+                <h3 className="font-medium text-foreground mb-2 tracking-tight">Add Your First Product</h3>
+                <p className="text-muted-foreground">
                   Create your first product to start managing your catalog and pricing.
                 </p>
               </div>
@@ -69,7 +69,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            <h4 className="text-lg font-medium text-white">Your Products</h4>
+            <h4 className="text-lg font-medium text-foreground">Your Products</h4>
             <div className="space-y-4">
               {products.map(product => (
                 <div
@@ -78,11 +78,11 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h5 className="font-medium text-white">{product.name}</h5>
-                      <p className="text-gray-500 dark:text-polar-500 leading-snug">{product.description}</p>
+                      <h5 className="font-medium text-foreground">{product.name}</h5>
+                      <p className="text-muted-foreground leading-snug">{product.description}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium text-white">${product.price}</p>
+                      <p className="font-medium text-foreground">${product.price}</p>
                     </div>
                   </div>
                 </div>
@@ -93,7 +93,7 @@ export const ProductsStep = ({ data, onChange }: ProductsStepProps) => {
 
         {/* Skip Option */}
         <div className="text-center">
-          <p className="text-gray-400">
+          <p className="text-muted-foreground">
             You can always add products later in your dashboard
           </p>
         </div>

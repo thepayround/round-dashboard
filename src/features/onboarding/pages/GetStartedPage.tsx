@@ -51,7 +51,7 @@ export const GetStartedPage = () => {
         return (
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
-            <p className="text-sm text-fg-muted">Loading {stepConfig.title.toLowerCase()} data...</p>
+            <p className="text-sm text-muted-foreground">Loading {stepConfig.title.toLowerCase()} data...</p>
           </div>
         )
       }
@@ -102,10 +102,10 @@ export const GetStartedPage = () => {
       <div className="min-h-screen p-8">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <h1 className="text-lg font-medium text-fg mb-4">
+            <h1 className="text-lg font-medium text-foreground mb-4">
               Welcome to <span className="text-primary">Round</span>
             </h1>
-            <p className="text-fg-muted leading-snug mb-4">Let&apos;s set up your account in just a few steps</p>
+            <p className="text-muted-foreground leading-snug mb-4">Let&apos;s set up your account in just a few steps</p>
           </motion.div>
 
           <div className="mb-12">
