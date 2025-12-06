@@ -164,7 +164,7 @@ export const ResendConfirmationPage = () => {
         <div className="text-center mt-8">
           <Link
             to="/login"
-            className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px inline-flex items-center space-x-2"
+            className="text-auth-primary/90 font-medium no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px inline-flex items-center space-x-2"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Login</span>

@@ -350,7 +350,7 @@ export const InvitationAcceptancePage = () => {
             <div className="text-center">
               <p className="text-sm text-white/85">
                 By joining, you accept the organization&apos;s terms and Round&apos;s{' '}
-                <a href="/terms" className="text-auth-primary/90 font-semibold no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">terms of service</a>
+                <a href="/terms" className="text-auth-primary/90 font-medium no-underline transition-all duration-300 hover:text-auth-primary hover:-translate-y-px">terms of service</a>
               </p>
             </div>
           </form>

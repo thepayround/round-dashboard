@@ -197,7 +197,7 @@ export const ConfirmationPendingPage = () => {
             <div className="flex items-center justify-center">
               <Link
                 to="/login"
-                className="text-primary font-semibold no-underline transition-all duration-300 hover:text-primary/80 flex items-center space-x-2"
+                className="text-primary font-medium no-underline transition-all duration-300 hover:text-primary/80 flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Login</span>

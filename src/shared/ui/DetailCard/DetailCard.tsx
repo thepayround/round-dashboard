@@ -92,36 +92,36 @@ interface InfoItemProps {
   mono?: boolean
   /** Optional icon to display before the value */
   icon?: React.ReactNode
-  /** Make the entire row clickable */
+  /** Make the entire item clickable */
   onClick?: () => void
   /** Custom class for the container */
   className?: string
 }
 
 /**
- * InfoItem - A consistent label-value pair for detail cards
+ * InfoItem - A stacked label-value pair for detail cards
  *
- * Features:
- * - Proper semantic structure
- * - Responsive layout (stacks on mobile if needed)
- * - Support for icons and custom formatting
- * - Accessible focus states for interactive items
+ * Modern stacked layout:
+ * - Label on top (smaller, muted)
+ * - Value below (larger, prominent)
+ * - No eye-travel issue - label and value are vertically aligned
+ * - Used by Linear, Stripe, Notion
  */
 export const InfoItem = React.forwardRef<HTMLDivElement, InfoItemProps>(
   ({ label, children, mono, icon, onClick, className }, ref) => {
     const content = (
-      <>
-        <dt className="text-sm text-muted-foreground">{label}</dt>
+      <div className="flex flex-col gap-1">
+        <dt className="text-xs text-muted-foreground">{label}</dt>
         <dd
           className={cn(
-            'text-sm text-foreground text-right flex items-center justify-end gap-1.5',
+            'text-sm text-foreground flex items-center gap-1.5',
             mono && 'font-mono text-xs'
           )}
         >
           {icon && <span className="shrink-0">{icon}</span>}
           {children}
         </dd>
-      </>
+      </div>
     )
 
     if (onClick) {
@@ -131,7 +131,7 @@ export const InfoItem = React.forwardRef<HTMLDivElement, InfoItemProps>(
           type="button"
           onClick={onClick}
           className={cn(
-            'w-full flex items-center justify-between py-3 -mx-1 px-1 rounded-md',
+            'w-full text-left p-2 -m-2 rounded-md',
             'transition-colors hover:bg-muted/50',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card',
             className
@@ -143,10 +143,7 @@ export const InfoItem = React.forwardRef<HTMLDivElement, InfoItemProps>(
     }
 
     return (
-      <div
-        ref={ref}
-        className={cn('flex items-center justify-between py-3', className)}
-      >
+      <div ref={ref} className={className}>
         {content}
       </div>
     )
@@ -157,22 +154,26 @@ InfoItem.displayName = 'InfoItem'
 interface InfoListProps {
   children: React.ReactNode
   className?: string
-  /** Use dividers between items */
-  divided?: boolean
+  /** Number of columns for grid layout (1 or 2) */
+  columns?: 1 | 2
 }
 
 /**
- * InfoList - A semantic list container for InfoItems
+ * InfoList - A grid container for InfoItems
  *
- * Uses proper <dl> semantic markup for accessibility
+ * Modern design:
+ * - Uses CSS grid for consistent column layout
+ * - Proper spacing between items
+ * - Responsive: can use 1 or 2 columns
  */
 export const InfoList = React.forwardRef<HTMLDListElement, InfoListProps>(
-  ({ children, className, divided = true }, ref) => {
+  ({ children, className, columns = 1 }, ref) => {
     return (
       <dl
         ref={ref}
         className={cn(
-          divided && '[&>*:not(:last-child)]:border-b [&>*:not(:last-child)]:border-border',
+          'grid gap-4',
+          columns === 2 && 'grid-cols-2',
           className
         )}
       >
@@ -249,6 +250,8 @@ interface MetricCardProps {
 
 /**
  * MetricCard - Display a metric/statistic with optional click action
+ *
+ * Modern design: subtle background, no border, uses spacing for hierarchy
  */
 export const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
   ({ value, label, icon, onClick, className }, ref) => {
@@ -257,13 +260,13 @@ export const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
         {icon && (
           <div className="text-muted-foreground mb-2">{icon}</div>
         )}
-        <div className="text-2xl font-medium tabular-nums">{value}</div>
+        <div className="text-2xl font-medium tabular-nums text-foreground">{value}</div>
         <div className="text-xs text-muted-foreground mt-1">{label}</div>
       </>
     )
 
     const baseClasses = cn(
-      'text-center p-4 rounded-lg bg-muted/30 border border-border/50',
+      'text-center p-4 rounded-lg bg-muted/50',
       className
     )
 
@@ -275,7 +278,7 @@ export const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
           onClick={onClick}
           className={cn(
             baseClasses,
-            'w-full transition-colors hover:bg-muted/50',
+            'w-full transition-all hover:bg-muted',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card'
           )}
         >

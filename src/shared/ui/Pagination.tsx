@@ -86,14 +86,14 @@ const Pagination: React.FC<PaginationProps> = ({
     <div className={`flex items-center justify-between border-t border-border px-6 py-4 ${className}`}>
       {/* Items info and per-page selector */}
       <div className="flex items-center space-x-6">
-        <div className="text-sm text-white/70">
-          Showing <span className="text-white font-normal tracking-tight">{startItem}-{endItem}</span> of{' '}
-          <span className="text-white font-normal tracking-tight">{totalItems}</span> items
+        <div className="text-sm text-muted-foreground">
+          Showing <span className="text-foreground font-normal tracking-tight">{startItem}-{endItem}</span> of{' '}
+          <span className="text-foreground font-normal tracking-tight">{totalItems}</span> items
         </div>
 
         {showItemsPerPage && (
           <div className="flex items-center space-x-2">
-            <Label htmlFor="items-per-page" className="text-sm text-white/70 whitespace-nowrap">Items per page:</Label>
+            <Label htmlFor="items-per-page" className="text-sm text-muted-foreground whitespace-nowrap">Items per page:</Label>
             <SimpleSelect
               id="items-per-page"
               options={pageSizeOptions.map(size => ({
@@ -111,7 +111,7 @@ const Pagination: React.FC<PaginationProps> = ({
       {/* Pagination controls */}
       {totalPages > 1 && (
         <div className="flex items-center space-x-2">
-          <div className="text-sm text-white/70 mr-4">
+          <div className="text-sm text-muted-foreground mr-4">
             Page {currentPage} of {totalPages}
           </div>
 
@@ -145,7 +145,7 @@ const Pagination: React.FC<PaginationProps> = ({
             {pageNumbers.map((page, index) => (
               <div key={index}>
                 {page === '...' ? (
-                  <span className="px-2 py-2 text-white/60" aria-label="More pages">...</span>
+                  <span className="px-2 py-2 text-muted-foreground" aria-label="More pages">...</span>
                 ) : (
                   <Button
                     onClick={() => onPageChange(page as number)}

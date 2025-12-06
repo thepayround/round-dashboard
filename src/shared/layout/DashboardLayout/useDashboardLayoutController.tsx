@@ -214,7 +214,7 @@ export const useDashboardLayoutController = ({
 
       return (
         <Avatar className="h-8 w-8">
-          <AvatarFallback className="bg-primary/20 text-white text-xs">
+          <AvatarFallback className="bg-primary/20 text-primary-foreground text-xs">
             {name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
           </AvatarFallback>
         </Avatar>
@@ -222,9 +222,9 @@ export const useDashboardLayoutController = ({
     }
 
     return (
-      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
         <svg
-          className="w-4 h-4 text-white/60"
+          className="w-4 h-4 text-muted-foreground"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

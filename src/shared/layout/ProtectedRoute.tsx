@@ -35,8 +35,8 @@ export const ProtectedRoute = ({ children, requireOnboarding = false }: Protecte
 
           {/* Loading Text */}
           <div className="space-y-1">
-            <h2 className="text-lg font-normal tracking-tight text-white">Loading...</h2>
-            <p className="text-sm text-white/60">Checking your session</p>
+            <h2 className="text-lg font-normal tracking-tight text-foreground">Loading...</h2>
+            <p className="text-sm text-muted-foreground">Checking your session</p>
           </div>
         </motion.div>
       </div>

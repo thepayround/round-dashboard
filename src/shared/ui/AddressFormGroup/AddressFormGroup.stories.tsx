@@ -125,9 +125,9 @@ export const Interactive: Story = {
           required
           countries={countries}
         />
-        <div className="p-4 bg-white/5 rounded-lg border border-border">
-          <h4 className="text-sm font-medium text-white mb-2">Address Data:</h4>
-          <pre className="text-xs text-white/70">
+        <div className="p-4 bg-muted rounded-lg border border-border">
+          <h4 className="text-sm font-medium text-foreground mb-2">Address Data:</h4>
+          <pre className="text-xs text-muted-foreground">
             {JSON.stringify(address, null, 2)}
           </pre>
         </div>

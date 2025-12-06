@@ -52,22 +52,22 @@ export class ErrorBoundary extends Component<Props, State> {
 
       // Default error UI
       return (
-        <div className="min-h-screen bg-[#101011] flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-input border border-destructive/20 rounded-lg p-8 text-center">
+        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-card border border-destructive/20 rounded-lg p-8 text-center">
             <div className="w-16 h-16 bg-destructive/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertTriangle className="w-8 h-8 text-destructive" />
             </div>
-            
-            <h1 className="text-2xl font-medium text-white mb-2">
+
+            <h1 className="text-2xl font-medium text-foreground mb-2">
               Something went wrong
             </h1>
-            
-            <p className="text-white/60 mb-6">
+
+            <p className="text-muted-foreground mb-6">
               We encountered an unexpected error. Please try refreshing the page or contact support if the problem persists.
             </p>
 
             {import.meta.env.DEV && this.state.error && (
-              <div className="mb-6 p-4 bg-black/40 rounded-lg text-left">
+              <div className="mb-6 p-4 bg-muted rounded-lg text-left">
                 <p className="text-xs font-mono text-primary break-all">
                   {this.state.error.toString()}
                 </p>

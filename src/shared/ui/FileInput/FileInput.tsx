@@ -238,7 +238,7 @@ export const FileInput: React.FC<FileInputProps> = ({
   return (
     <div className={cn('space-y-2', containerClassName)}>
       {label && (
-        <label htmlFor={inputId} className="block text-xs font-normal tracking-tight text-white">
+        <label htmlFor={inputId} className="block text-xs font-normal tracking-tight text-foreground">
           {label}
           {required && <span className="text-primary ml-1">*</span>}
         </label>
@@ -264,14 +264,14 @@ export const FileInput: React.FC<FileInputProps> = ({
           <div className="text-center space-y-4">
             <Upload className={cn(
               'w-8 h-8 mx-auto transition-colors',
-              isDragging ? 'text-primary' : 'text-gray-400'
+              isDragging ? 'text-primary' : 'text-muted-foreground'
             )} />
             <div>
               <label htmlFor={inputId} className="cursor-pointer">
-                <span className="text-xs text-primary hover:text-[#BD2CD0] transition-colors">
+                <span className="text-xs text-primary hover:text-primary/80 transition-colors">
                   Click to upload
                 </span>
-                <span className="text-xs text-gray-400"> or drag and drop</span>
+                <span className="text-xs text-muted-foreground"> or drag and drop</span>
               </label>
               <input
                 ref={inputRef}
@@ -288,7 +288,7 @@ export const FileInput: React.FC<FileInputProps> = ({
               />
             </div>
             {helperText && !error && (
-              <p id={helperId} className="text-xs text-gray-400">
+              <p id={helperId} className="text-xs text-muted-foreground">
                 {helperText}
               </p>
             )}
@@ -311,14 +311,14 @@ export const FileInput: React.FC<FileInputProps> = ({
 
             {!showPreview && (
               <div className="flex items-center justify-center mb-4">
-                <File className="w-8 h-8 text-gray-400" />
+                <File className="w-8 h-8 text-muted-foreground" />
               </div>
             )}
 
             <div className="text-center space-y-2">
-              <p className="text-xs font-normal text-white">{getFileName()}</p>
+              <p className="text-xs font-normal text-foreground">{getFileName()}</p>
               {getFileSize() && (
-                <p className="text-xs text-gray-400">{getFileSize()}</p>
+                <p className="text-xs text-muted-foreground">{getFileSize()}</p>
               )}
 
               {showActions && (

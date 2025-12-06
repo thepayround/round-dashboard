@@ -355,7 +355,7 @@ export const OrganizationForm = ({
           >
             <div className="flex items-center gap-4 mb-6">
               <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-                <span className="text-sm font-semibold text-accent">{currencySymbol}</span>
+                <span className="text-sm font-medium text-accent">{currencySymbol}</span>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-foreground">Financial Information</h3>
@@ -389,7 +389,7 @@ export const OrganizationForm = ({
                     {currenciesLoading ? (
                       <Loader2 className="h-4 w-4 animate-spin text-secondary" />
                     ) : (
-                      <span className="text-sm font-semibold text-secondary">
+                      <span className="text-sm font-medium text-secondary">
                         {currencySymbol}
                       </span>
                     )}
@@ -421,7 +421,7 @@ export const OrganizationForm = ({
           >
             <div className="flex items-center gap-4 mb-6">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <span className="text-sm font-semibold text-primary">🌍</span>
+                <span className="text-sm font-medium text-primary">🌍</span>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-foreground">Regional Settings</h3>

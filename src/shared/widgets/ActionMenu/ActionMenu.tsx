@@ -171,7 +171,7 @@ export const ActionMenu = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.15 }}
-            className={`absolute top-full mt-1 z-50 bg-black/90 border border-border rounded-lg py-1 min-w-[160px] shadow-xl ${positionClasses[position]}`}
+            className={`absolute top-full mt-1 z-50 bg-popover border border-border rounded-lg py-1 min-w-[160px] shadow-xl ${positionClasses[position]}`}
             role="menu"
             aria-orientation="vertical"
           >
@@ -183,7 +183,7 @@ export const ActionMenu = ({
               return (
                 <div key={item.id}>
                   {item.divider && (
-                    <div className="h-px bg-white/10 my-1" role="separator" />
+                    <div className="h-px bg-border my-1" role="separator" />
                   )}
                   <Button
                     onClick={() => handleItemClick(item)}
@@ -192,7 +192,7 @@ export const ActionMenu = ({
                     className={`w-full justify-start gap-2 px-3 py-2 text-sm transition-colors rounded-md mx-1 h-auto ${
                       isEnabled
                         ? `${variantClasses[item.variant ?? 'default']} ${
-                            isFocused ? 'bg-white/20' : ''
+                            isFocused ? 'bg-accent' : ''
                           }`
                         : 'text-muted-foreground cursor-not-allowed'
                     }`}

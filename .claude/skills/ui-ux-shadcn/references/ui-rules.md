@@ -10,24 +10,66 @@ Round Dashboard uses **Shadcn UI with Zinc Dark Theme** as the foundation for al
 
 Always use CSS variables from `src/index.css`. Never hardcode colors.
 
+**4-Tier Background Hierarchy (Dark Mode):**
+
+| Tier | Variable | Lightness | Tailwind Class | Use For |
+|------|----------|-----------|----------------|---------|
+| 1 (darkest) | `--sidebar` | 2% | `bg-sidebar` | Sidebar, outer frame |
+| 2 | `--background` | 3.9% | `bg-background` | Main content panel |
+| 3 | `--table-row` | 5.5% | `bg-table-row` | Table body rows (not header) |
+| 4 (lightest) | `--card` | 7% | `bg-card` | Cards, table wrappers |
+
+```
+Sidebar (2%) < Background (3.9%) < Table Body (5.5%) < Card/Header (7%) < Popover (9%)
+     ↓              ↓                    ↓                  ↓                 ↓
+Outer frame   Main content        Table body rows    Cards/Headers    Dropdowns/Menus
+```
+
 **Primary Colors (Dark Mode):**
-- `--background` - Root background, sidebar (0 0% 3.9%) - **darkest**
+
+- `--sidebar` - Sidebar/outer frame (0 0% 2%) - **darkest**
+- `--background` - Main content area (0 0% 3.9%)
+- `--table-row` - Table row backgrounds (0 0% 5.5%)
 - `--foreground` - Main text color (0 0% 98%)
-- `--card` - Card/main content background (0 0% 7%) - **middle**
+- `--card` - Cards/elevated surfaces (0 0% 7%) - **lightest**
 - `--card-foreground` - Card text (0 0% 98%)
-- `--popover` - Dropdown/popover background (0 0% 9%) - **lightest (elevated)**
+- `--popover` - Dropdown/popover background (0 0% 9%)
 - `--popover-foreground` - Popover text (0 0% 98%)
 - `--primary` - Primary accent (0 0% 98%)
 - `--primary-foreground` - Primary text (240 5.9% 10%)
 
-**Dark Mode Elevation Hierarchy:**
-```
-Background (3.9%) < Card (7%) < Popover (9%)
-     ↓              ↓            ↓
-  Sidebar     Main content   Dropdowns/Menus
+**Sidebar Colors (Dark Mode):**
+
+- `--sidebar` - Sidebar background (0 0% 2%)
+- `--sidebar-foreground` - Sidebar text (0 0% 98%)
+- `--sidebar-primary` - Sidebar primary accent (0 0% 98%)
+- `--sidebar-accent` - Sidebar hover/active (0 0% 10%)
+- `--sidebar-border` - Sidebar borders (0 0% 12%)
+
+**Background Usage Rules:**
+
+```tsx
+// ✅ Correct - 4-tier hierarchy
+<div className="bg-sidebar">           {/* Tier 1: Sidebar/frame */}
+  <main className="bg-background">     {/* Tier 2: Main content */}
+    <Card className="bg-card">         {/* Tier 4: Card wrapper */}
+      <Table>
+        <TableRow />                   {/* Tier 3: Table rows (automatic) */}
+      </Table>
+    </Card>
+  </main>
+</div>
+
+// ❌ Wrong - same background for content and cards (no separation)
+<main className="bg-card">
+  <Card className="bg-card">
+</main>
+
+// ❌ Wrong - using bg-background for cards
+<Card className="bg-background">
 ```
 
-This creates a subtle "lift" effect where floating elements (dropdowns, popovers, context menus) appear elevated above the content they overlay.
+This creates proper visual hierarchy where cards "lift" off the main content area, and table rows have subtle depth within cards.
 
 **Semantic Colors:**
 - `--muted` / `--muted-foreground` - Muted/subtle elements

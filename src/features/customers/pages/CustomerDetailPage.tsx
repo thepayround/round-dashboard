@@ -249,7 +249,7 @@ const CustomerDetailPage: React.FC = () => {
             icon={<User className="h-4 w-4" />}
             onEdit={() => openEditWithSection('contact')}
           >
-            <InfoList>
+            <InfoList columns={2}>
               <InfoItem label="Full Name">
                 {customer.firstName} {customer.lastName}
               </InfoItem>
@@ -362,7 +362,7 @@ const CustomerDetailPage: React.FC = () => {
                 </TabsList>
                 <TabsContent value="billing" className="mt-4">
                   {customer.billingAddress ? (
-                    <InfoList>
+                    <InfoList columns={2}>
                       {customer.billingAddress.name && (
                         <InfoItem label="Name">{customer.billingAddress.name}</InfoItem>
                       )}
@@ -392,7 +392,7 @@ const CustomerDetailPage: React.FC = () => {
                         <span className="text-sm text-foreground">Same as billing address</span>
                       </div>
                     ) : (
-                      <InfoList>
+                      <InfoList columns={2}>
                         {customer.shippingAddress.name && (
                           <InfoItem label="Name">{customer.shippingAddress.name}</InfoItem>
                         )}
@@ -437,7 +437,7 @@ const CustomerDetailPage: React.FC = () => {
                           <StatusBadge status="active" label="Primary" />
                         )}
                       </div>
-                      <InfoList divided={false} className="space-y-1">
+                      <InfoList columns={2}>
                         <InfoItem label="Street">{addr.line1}</InfoItem>
                         {addr.line2 && <InfoItem label="Line 2">{addr.line2}</InfoItem>}
                         <InfoItem label="City">{addr.city}</InfoItem>

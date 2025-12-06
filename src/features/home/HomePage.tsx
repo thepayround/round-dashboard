@@ -12,7 +12,7 @@ export const HomePage = () => (
         loading="eager"
       />
       <div className="text-center">
-        <h1 className="text-5xl font-semibold text-foreground mb-4 tracking-tight">Round</h1>
+        <h1 className="text-5xl font-medium text-foreground mb-4 tracking-tight">Round</h1>
         <p className="text-xl text-muted-foreground max-w-lg">Your billing and customer intelligence platform</p>
       </div>
     </div>

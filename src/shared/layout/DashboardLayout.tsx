@@ -22,7 +22,7 @@ const MobileHeader = memo(({
   isMenuOpen: boolean
 }) => (
   <header
-    className="fixed top-0 left-0 right-0 h-14 bg-background border-b border-border z-50 flex items-center justify-between px-4"
+    className="fixed top-0 left-0 right-0 h-14 bg-sidebar border-b border-sidebar-border z-50 flex items-center justify-between px-4"
     role="banner"
     aria-label="Mobile header"
     style={{
@@ -102,7 +102,7 @@ export const DashboardLayout = memo(({
 
   return (
     <div
-      className="h-screen overflow-hidden relative bg-background"
+      className="h-screen overflow-hidden relative bg-sidebar"
       style={{
         '--sidebar-width': isCollapsed ? '64px' : '200px'
       } as React.CSSProperties}
@@ -161,7 +161,7 @@ export const DashboardLayout = memo(({
         transition={isSwiping ? { duration: 0 } : transitionConfigs.sidebar}
         className={cn(
           'fixed left-0 top-0 h-full flex flex-col',
-          'bg-zinc-950/95',
+          'bg-sidebar',
           isMobileView ? 'z-[70] shadow-2xl' : 'z-auto'
         )}
         aria-label="Sidebar navigation"
@@ -194,7 +194,7 @@ export const DashboardLayout = memo(({
               onClick={toggleSidebar}
               variant="ghost"
               size="icon"
-              className="h-7 w-7 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
+              className="h-7 w-7 text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
               aria-label="Collapse sidebar"
             >
               <PanelLeftClose className="h-3.5 w-3.5" />
@@ -209,7 +209,7 @@ export const DashboardLayout = memo(({
               onClick={toggleSidebar}
               variant="ghost"
               size="icon"
-              className="h-7 w-7 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
+              className="h-7 w-7 text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
               aria-label="Expand sidebar"
             >
               <PanelLeft className="h-3.5 w-3.5" />
@@ -266,7 +266,7 @@ export const DashboardLayout = memo(({
           {/* Bottom Navigation */}
           {resolvedBottomNavItems.length > 0 && (
             <div className={cn(
-              'space-y-0.5 pt-2 border-t border-zinc-800/50',
+              'space-y-0.5 pt-2 border-t border-sidebar-border',
               isMobileView ? 'px-2' : 'px-2'
             )}>
               {resolvedBottomNavItems.map(item => (
@@ -300,14 +300,14 @@ export const DashboardLayout = memo(({
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.1 }}
                   className={cn(
-                    "absolute bottom-full mb-1 left-2 right-2 bg-zinc-900 border border-zinc-800 rounded-md shadow-lg overflow-hidden z-50"
+                    "absolute bottom-full mb-1 left-2 right-2 bg-popover border border-sidebar-border rounded-md shadow-lg overflow-hidden z-50"
                   )}
                 >
                   <div className="p-1">
                     <Link
                       to="/user-settings"
                       className={cn(
-                        "flex items-center gap-2 px-2.5 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 rounded transition-colors",
+                        "flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent rounded transition-colors",
                         isCollapsed && "justify-center px-2"
                       )}
                       onClick={() => setShowProfileDropdown(false)}
@@ -482,7 +482,7 @@ export const DashboardLayout = memo(({
         }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
         className={cn(
-          'relative z-10 bg-card',
+          'relative z-10 bg-background',
           isMobileView ? 'mt-14 p-0' : 'my-2 mr-2 rounded-lg border border-border'
         )}
         style={isMobileView ? {

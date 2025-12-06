@@ -68,15 +68,15 @@ export const NavigationItem = memo<NavigationItemProps>(({
   const baseStyles = cn(
     'group relative flex items-center w-full rounded transition-colors',
     'text-xs font-medium',
-    'outline-none focus-visible:ring-1 focus-visible:ring-zinc-500',
+    'outline-none focus-visible:ring-1 focus-visible:ring-ring',
     isCollapsed ? 'h-8 justify-center' : 'h-8 px-2.5 gap-2.5',
-    isFocused && 'ring-1 ring-zinc-500'
+    isFocused && 'ring-1 ring-ring'
   )
 
   // Active/hover state styles - dark modern theme
   const stateStyles = itemIsActive
-    ? 'bg-zinc-800/80 text-zinc-100'
-    : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'
+    ? 'bg-sidebar-accent text-sidebar-foreground'
+    : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
 
   return (
     <div className="space-y-1">
@@ -152,7 +152,7 @@ export const NavigationItem = memo<NavigationItemProps>(({
               'overflow-hidden',
               isCollapsed
                 ? 'flex flex-col items-center space-y-0.5 pt-1'
-                : 'pl-3 space-y-0.5 border-l border-zinc-800/50 ml-4'
+                : 'pl-3 space-y-0.5 border-l border-sidebar-border ml-4'
             )}
           >
             {item.subItems.map((subItem) => {
@@ -167,13 +167,13 @@ export const NavigationItem = memo<NavigationItemProps>(({
                   className={cn(
                     'group relative flex items-center rounded transition-colors',
                     'text-xs font-medium',
-                    'outline-none focus-visible:ring-1 focus-visible:ring-zinc-500',
+                    'outline-none focus-visible:ring-1 focus-visible:ring-ring',
                     isCollapsed
                       ? 'h-7 w-7 justify-center'
                       : 'h-7 px-2 gap-2',
                     subItemIsActive
-                      ? 'bg-zinc-800/80 text-zinc-100'
-                      : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-300'
+                      ? 'bg-sidebar-accent text-sidebar-foreground'
+                      : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
                   )}
                 >
                   <subItem.icon className="h-3 w-3 shrink-0" />

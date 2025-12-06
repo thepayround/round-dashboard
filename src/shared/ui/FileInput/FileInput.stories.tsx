@@ -105,10 +105,10 @@ export const Interactive: Story = {
           maxSize={2}
         />
         {file && (
-          <div className="mt-4 p-4 bg-input border border-[#333333] rounded-lg">
-            <p className="text-xs text-white/60">File selected:</p>
-            <p className="text-sm text-white">{file.name}</p>
-            <p className="text-xs text-white/60">
+          <div className="mt-4 p-4 bg-input border border-border rounded-lg">
+            <p className="text-xs text-muted-foreground">File selected:</p>
+            <p className="text-sm text-foreground">{file.name}</p>
+            <p className="text-xs text-muted-foreground">
               {(file.size / 1024 / 1024).toFixed(2)} MB
             </p>
           </div>

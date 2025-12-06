@@ -81,6 +81,47 @@ Wrong:
 
 ## 2. Layout Standards
 
+### 4-Tier Background Hierarchy (CRITICAL)
+
+The dashboard uses a **4-tier background system** following shadcn conventions:
+
+| Tier | Element | Class | Dark Mode | Purpose |
+|------|---------|-------|-----------|---------|
+| 1 (darkest) | Sidebar/outer frame | `bg-sidebar` | 2% lightness | Outermost layer |
+| 2 | Main content panel | `bg-background` | 3.9% lightness | Page content area |
+| 3 | Table body rows | `bg-table-row` | 5.5% lightness | Table body rows only |
+| 4 (lightest) | Cards/headers | `bg-card` | 7% lightness | Cards, table headers |
+
+```tsx
+// ✅ Correct - 4-tier hierarchy
+<div className="bg-sidebar">           {/* Tier 1: Sidebar/frame */}
+  <main className="bg-background">     {/* Tier 2: Main content */}
+    <Card className="bg-card">         {/* Tier 4: Card wrapper */}
+      <Table>
+        <TableHeader />                {/* Tier 4: Header stays at card level */}
+        <TableBody>                    {/* Tier 3: Body rows get bg-table-row */}
+          <TableRow />
+        </TableBody>
+      </Table>
+    </Card>
+  </main>
+</div>
+
+// ❌ Wrong - same background for content and cards
+<main className="bg-card">
+  <Card className="bg-card">  {/* No visual separation! */}
+</main>
+```
+
+**Rules:**
+
+- ✅ Sidebar and outer frame: `bg-sidebar`
+- ✅ Main content areas inside DashboardLayout: `bg-background`
+- ✅ Table rows (applied automatically): `bg-table-row`
+- ✅ Cards, panels, table wrappers: `bg-card`
+- ❌ NEVER use `bg-card` for main content areas
+- ❌ NEVER use `bg-background` for cards
+
 ### Page Container
 ```tsx
 <div className="max-w-6xl mx-auto px-6 py-6">
@@ -333,8 +374,60 @@ When designing or refactoring, CHECK THESE FIRST:
 - `references/ui-rules.md` - Complete UI rules, spacing, typography
 - `references/shadcn-components.md` - Available components and patterns
 - `references/component-strategy.md` - When to use Shadcn vs custom wrappers
+- `references/color-validation.md` - **Color validation rules and automated checks**
 
 **Project rules override anything else.**
+
+## 6. Validation Rules
+
+### Forbidden Patterns (Auto-Reject)
+
+These patterns MUST NOT appear in any `.tsx` file:
+
+```regex
+# Hardcoded colors - NEVER use
+bg-\[#[0-9a-fA-F]+\]
+text-\[#[0-9a-fA-F]+\]
+bg-black[^/]
+bg-white[^/]
+text-white[^/]
+text-black
+
+# Raw Tailwind palette - NEVER use
+zinc-\d+
+slate-\d+
+gray-\d+
+neutral-\d+
+emerald-\d+
+red-\d+
+blue-\d+
+yellow-\d+
+amber-\d+
+green-\d+
+```
+
+### Required Semantic Tokens
+
+| Intent | Correct | Wrong |
+|--------|---------|-------|
+| Main text | `text-foreground` | `text-white` |
+| Secondary text | `text-muted-foreground` | `text-gray-*` |
+| Success | `text-success` | `text-emerald-*`, `text-green-*` |
+| Error | `text-destructive` | `text-red-*` |
+| Warning | `text-warning` | `text-yellow-*` |
+| Borders | `border-border` | `border-zinc-*`, `border-white/*` |
+| Icons | `text-muted-foreground` | `text-gray-*` |
+
+### Pre-Code Review Checklist
+
+Before submitting any UI code:
+
+- [ ] No hardcoded hex colors
+- [ ] No raw Tailwind palette colors
+- [ ] Background hierarchy follows 4-tier system
+- [ ] Font weights ≤ `font-medium` (except shadcn badge/menu)
+- [ ] All text uses semantic color tokens
+- [ ] All borders use `border-border` or semantic variants
 
 # Response Format
 
